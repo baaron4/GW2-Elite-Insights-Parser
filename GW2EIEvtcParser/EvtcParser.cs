@@ -470,7 +470,7 @@ public class EvtcParser
             // 68 bytes: name
             string name = GetString(reader, 68, false);
             //Save
-            Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation)); //TODO(Rennorb) @perf: Drop the 3 wrappers around what we are actually doing here.
+            Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation)); //TODO_PERF(Rennorb): Drop the 3 wrappers around what we are actually doing here.
             AgentItem.AgentType type;
             ushort ID = 0;
             switch (agentProf)

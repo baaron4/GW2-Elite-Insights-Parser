@@ -108,7 +108,6 @@ public class Player : PlayerActor
             foreach (var player in relevantPlayers)
             {
                 IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
-                //TODO(Rennorb) @perf: find average complexity
                 var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
@@ -143,7 +142,6 @@ public class Player : PlayerActor
                 return CommanderStates;
             }
 
-            //TODO(Rennorb) @perf: find average complexity
             var states = new List<(AgentItem p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
             foreach (var (player, state) in statesByPlayer)
             {

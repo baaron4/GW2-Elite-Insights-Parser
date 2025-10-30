@@ -136,7 +136,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             throw new ArgumentException($"minimumLength should not be negative, was {minimumLength}");
         }
 
-        buffer = new T[minimumLength]; //TODO(Rennorb) @perf: skip initialization
+        buffer = new T[minimumLength]; //TODO_PERF(Rennorb): skip initialization
         return buffer;
     }
 

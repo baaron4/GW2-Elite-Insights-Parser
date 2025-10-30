@@ -48,7 +48,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
         };
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonHealingDist = new EXTJsonHealingDist
@@ -98,7 +98,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
         return jsonHealingDist;
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<EXTJsonHealingDist>();

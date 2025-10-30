@@ -49,7 +49,7 @@ internal static class GW2APIUtilities
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsByteArrayAsync().Result;
-                var json = JsonDocument.Parse(data); //TODO(Rennorb) @perf: use utf8reader in a loop for each object and avoid the array allocation
+                var json = JsonDocument.Parse(data); //TODO_PERF(Rennorb): use utf8reader in a loop for each object and avoid the array allocation
                 T[] responseArray = JsonSerializer.Deserialize<T[]>(json, DeserializerSettings);
                 itemList.AddRange(responseArray);
             }

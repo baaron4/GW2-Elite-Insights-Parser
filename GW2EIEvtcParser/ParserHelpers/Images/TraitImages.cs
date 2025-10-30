@@ -3,7 +3,6 @@
 #pragma warning disable CA1823 // Unused field
 internal static class TraitImages
 {
-    // TODO: organize this
     #region Elementalist
     public const string EarthenBlast = "https://render.guildwars2.com/file/2531DCAFAEAB452C90C4572E1ADCE8236DCF5636/1012304.png";
     public const string ElectricDischarge = "https://render.guildwars2.com/file/F4622EE8300028599369D4084EA7A2774D250DEA/1012280.png";

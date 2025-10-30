@@ -320,7 +320,7 @@ partial class SingleActor
 
     private BuffDistribution ComputeBuffDistribution(ParsedEvtcLog log, Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
     {
-        var res = new BuffDistribution(buffSimulators.Count, 8); //TODO(Rennorb) @perf: find capacity dependencies
+        var res = new BuffDistribution(buffSimulators.Count, 8); //TODO_PERF(Rennorb) @find capacity dependencies
         foreach (var (buff, simulator) in buffSimulators)
         {
             foreach (BuffSimulationItem simul in GetBuffGenerationSimulationItems(log, simulator, start, end))
@@ -440,7 +440,7 @@ partial class SingleActor
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         SimulateBuffsAndComputeGraphs(log);
-        _buffGraphsPerAgent ??= new(8); //TODO(Rennorb) @perf: find capacity dependencies
+        _buffGraphsPerAgent ??= new(8); //TODO_PERF(Rennorb) @find capacity dependencies
         AgentItem agent = by.AgentItem;
         if (!_buffGraphsPerAgent.TryGetValue(agent, out var result))
         {
@@ -639,7 +639,7 @@ partial class SingleActor
     /// <exception cref="InvalidOperationException"></exception>
     public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs, long start, long end)
     {
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         var result = new List<Segment>();
         foreach (long id in buffIDs)
         {

@@ -19,7 +19,6 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
 
         if (_vindicatorDodges == null)
         {
-            //TODO(Rennorb) @perf: find average complexity
             _vindicatorDodges = new List<CastEvent>(log.PlayerList.Count(p => p.Spec == ParserHelper.Spec.Vindicator) * 50);
             foreach (Player p in log.PlayerList)
             {

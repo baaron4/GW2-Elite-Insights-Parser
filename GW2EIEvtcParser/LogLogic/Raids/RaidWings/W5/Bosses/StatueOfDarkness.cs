@@ -156,13 +156,13 @@ internal class StatueOfDarkness : HallOfChains
 
     internal static bool HasIntersectingLastGrasps(CombatData combatData, SingleActor eyeFate, SingleActor eyeJudgement, out long intersectTime)
     {
-        var lastGraspsJudgement = GetBuffApplyRemoveSequence(combatData, LastGraspJudgment, eyeJudgement, true, true).ToList(); //TODO(Rennorb) @perf
+        var lastGraspsJudgement = GetBuffApplyRemoveSequence(combatData, LastGraspJudgment, eyeJudgement, true, true).ToList(); //TODO_PERF(Rennorb)
         var lastGraspsJudgementSegments = new List<Segment>(lastGraspsJudgement.Count / 2);
         for (int i = 0; i < lastGraspsJudgement.Count; i += 2)
         {
             lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
         }
-        var lastGraspsFate = GetBuffApplyRemoveSequence(combatData, LastGraspFate, eyeFate, true, true).ToList(); //TODO(Rennorb) @perf
+        var lastGraspsFate = GetBuffApplyRemoveSequence(combatData, LastGraspFate, eyeFate, true, true).ToList(); //TODO_PERF(Rennorb)
         var lastGraspsFateSegments = new List<Segment>(lastGraspsFate.Count / 2);
         for (int i = 0; i < lastGraspsFate.Count; i += 2)
         {

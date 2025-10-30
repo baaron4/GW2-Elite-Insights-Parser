@@ -23,7 +23,7 @@ public class RawFormatBuilder
     /// </summary>
     public JsonLog GetJson()
     {
-        //TODO(Rennorb) @perf: What in the javascript is this...
+        //TODO_PERF(Rennorb) @perf: What in the javascript is this...
         return JsonSerializer.Deserialize<JsonLog>(JsonSerializer.Serialize(_jsonLog, SerializerSettings.Default)!, SerializerSettings.Default)!;
     }
 

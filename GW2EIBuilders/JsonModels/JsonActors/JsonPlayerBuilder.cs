@@ -199,7 +199,7 @@ internal static class JsonPlayerBuilder
         return jsonPlayer;
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private static List<JsonPlayerBuffsGeneration>? GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, BuffStatistics>> buffs, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
@@ -293,7 +293,7 @@ internal static class JsonPlayerBuilder
         return res;
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private static List<JsonPlayerBuffOutgoingVolumes>? GetPlayerBuffOutgoingVolumes(List<IReadOnlyDictionary<long, BuffVolumeStatistics>> buffVolumes, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);

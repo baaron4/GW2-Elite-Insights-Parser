@@ -32,7 +32,7 @@ internal class QueueLogic : StackingLogic
     }
     public override void Activate(List<BuffStackItem> stacks, BuffStackItem stackItem)
     {
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         stacks.Remove(stackItem);
         stacks.Insert(0, stackItem);
     }

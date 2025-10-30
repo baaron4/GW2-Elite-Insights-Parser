@@ -83,7 +83,7 @@ public class BuffGraph
         }
         else
         {
-            //TODO(Rennorb) @perf
+            //TODO_PERF(Rennorb)
             var segmentsToFill = new LinkedList<Segment>(_buffChart.Values);
             var node = segmentsToFill.First;
             foreach (Segment seg in from)

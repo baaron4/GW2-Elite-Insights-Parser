@@ -36,7 +36,7 @@ public class Minions : Actor
     {
         if (DamageEventByDst == null)
         {
-            var damageEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var damageEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 damageEvents.AddRange(minion.GetDamageEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -50,7 +50,7 @@ public class Minions : Actor
     {
         if (DamageTakenEventsBySrc == null)
         {
-            var damageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var damageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 damageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -68,7 +68,7 @@ public class Minions : Actor
     {
         if (BreakbarDamageEventsByDst == null)
         {
-            var breakbarDamageEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var breakbarDamageEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 breakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -83,7 +83,7 @@ public class Minions : Actor
     {
         if (BreakbarDamageTakenEventsBySrc == null)
         {
-            var breakbarDamageTakenEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var breakbarDamageTakenEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 breakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -102,7 +102,7 @@ public class Minions : Actor
     {
         if (OutgoingCrowdControlEventsByDst == null)
         {
-            var outgoingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var outgoingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 outgoingCrowdControlEvents.AddRange(minion.GetOutgoingCrowdControlEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -116,7 +116,7 @@ public class Minions : Actor
     {
         if (IncomingCrowdControlEventsBySrc == null)
         {
-            var incomingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var incomingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
             foreach (NPC minion in _minionList)
             {
                 incomingCrowdControlEvents.AddRange(minion.GetIncomingCrowdControlEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -131,7 +131,7 @@ public class Minions : Actor
     #region CAST
     protected override void InitCastEvents(ParsedEvtcLog log)
     {
-        CastEvents = new List<CastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+        CastEvents = new List<CastEvent>(_minionList.Count); //TODO_PERF(Rennorb) @find average complexity
         foreach (NPC minion in _minionList)
         {
             CastEvents.AddRange(minion.GetCastEvents(log, Master.FirstAware, Master.LastAware));

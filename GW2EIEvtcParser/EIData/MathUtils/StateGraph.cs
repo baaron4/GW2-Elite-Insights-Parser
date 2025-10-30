@@ -17,7 +17,7 @@ public class StateGraph<T>
     }
 
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     /// <summary>
     /// Fuse consecutive segments with same value
     /// </summary>

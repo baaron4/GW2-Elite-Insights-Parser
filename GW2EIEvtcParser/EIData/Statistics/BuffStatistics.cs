@@ -19,7 +19,7 @@ public class BuffStatistics
     {
         long phaseDuration = end - start;
 
-        //TODO(Rennorb) @perf: find complexity
+        //TODO_PERF(Rennorb): find complexity
         var buffDistributionPerPlayer = new Dictionary<Player, BuffDistribution>();
         var playerCount = 0;
         foreach (Player p in players)

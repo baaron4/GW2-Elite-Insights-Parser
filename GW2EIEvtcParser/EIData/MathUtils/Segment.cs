@@ -22,7 +22,7 @@ public static class SegmentExt {
         for(int i = 1; i < segments.Count; i++)
         {
             var current = segments[i];
-            //TODO(Rennorb) perf
+            //TODO_PERF(Rennorb)
             if (current.IsEmpty())
             {
                 continue;

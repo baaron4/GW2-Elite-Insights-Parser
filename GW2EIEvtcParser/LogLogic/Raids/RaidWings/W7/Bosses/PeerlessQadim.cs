@@ -637,7 +637,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 if (effect.Time - previousTime > 1000)
                 {
                     previousTime = effect.Time;
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     dict[previousTime] = [];
                 }
                 dict[previousTime].Add(effect);

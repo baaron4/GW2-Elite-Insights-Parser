@@ -198,7 +198,7 @@ public class BuffsContainer
                             {
                                 foreach (BuffRemoveSingleEvent remove in removePair)
                                 {
-                                    BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
+                                    BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO_PERF(Rennorb)
                                     if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
                                     {
                                         int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;

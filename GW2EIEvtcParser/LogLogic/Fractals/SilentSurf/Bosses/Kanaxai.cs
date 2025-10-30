@@ -457,7 +457,7 @@ internal class Kanaxai : SilentSurf
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out var axeAoEs))
         {
             // Get Axe AoE Buffs
-            //TODO(Rennorb) @perf: find average complexity
+            //TODO_PERF(Rennorb): find average complexity
             var axes = new List<BuffEvent>(50);
             axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
             axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());

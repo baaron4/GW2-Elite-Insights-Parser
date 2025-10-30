@@ -18,9 +18,9 @@ internal class MinionSpawnCastFinder : CheckedCastFinder<SpawnEvent>
 
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
     {
-        //TODO(Rennorb) @perf <ComputeInstanceCast result>
+        //TODO_PERF(Rennorb)
         var result = new List<InstantCastEvent>(10);
-        //TODO(Rennorb) @perf <ComputeInstanceCast minions>
+        //TODO_PERF(Rennorb)
         var minions = new List<AgentItem>(10);
         foreach (int id in SpeciesIDs)
         {

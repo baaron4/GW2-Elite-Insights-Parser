@@ -262,10 +262,10 @@ public abstract class LogLogic
         {
             _targets.AddRange(agentData.GetNPCsByID(TargetID.Instance).Select(a => new NPC(a)));
         }
-        //TODO(Rennorb) @perf @cleanup: is this required?
+        //TODO_PERF(Rennorb) @cleanup: is this required?
         _targets.SortByFirstAware();
         var targetSortIDs = GetTargetsSortIDs();
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         _targets = _targets.OrderBy(x =>
         {
             if (targetSortIDs.TryGetValue(GetTargetID(x.ID), out int sortKey))
@@ -369,7 +369,7 @@ public abstract class LogLogic
             return [ ];
         }
 
-        //TODO(Rennorb) @perf: find average complexity
+        //TODO_PERF(Rennorb): find average complexity
         var breakbarPhases = new List<PhaseData>(Targets.Count);
         var noBreakbarSpecies = ForbidBreakbarPhasesFor();
         foreach (SingleActor target in Targets)
@@ -401,7 +401,6 @@ public abstract class LogLogic
     internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        // TODO: To be removed once all specific instance logics are implemented
         if (IsInstance)
         {
             var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration);
@@ -513,7 +512,7 @@ public abstract class LogLogic
     {
         if (EnvironmentDecorations == null)
         {
-            //TODO(Rennorb) @perf: capacity
+            //TODO_PERF(Rennorb): capacity
             EnvironmentDecorations = new(DecorationCache);
             ComputeEnvironmentCombatReplayDecorations(log, EnvironmentDecorations);
         }

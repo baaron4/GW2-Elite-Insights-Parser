@@ -10,7 +10,7 @@ public abstract class EXTActorHealingHelper
     protected Dictionary<AgentItem, List<EXTHealingEvent>>? HealEventsByDst;
     protected Dictionary<AgentItem, List<EXTHealingEvent>>? HealReceivedEventsBySrc;
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>> _typedHealEvents = [];
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>> _typedIncomingHealEvents = [];
 

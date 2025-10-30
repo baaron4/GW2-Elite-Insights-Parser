@@ -28,7 +28,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         };
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonBarrierDist = new EXTJsonBarrierDist

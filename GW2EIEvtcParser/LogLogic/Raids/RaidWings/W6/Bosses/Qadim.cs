@@ -1172,7 +1172,7 @@ internal class Qadim : MythwrightGambit
         long finalPhaseTime = int.MaxValue;
         if (phases.Count > 6)
         {
-            //TODO(Rennorb) @perf: Why was there an unused reference to last phase here?
+            //TODO_PERF(Rennorb): Why was there an unused reference to last phase here?
             foreach (var pos in qadim.GetCombatReplayNonPolledPositions(log))
             {
                 if ((pos.XYZ.XY() - qadimFinalXY).LengthSquared() < 25)
@@ -1263,11 +1263,11 @@ internal class Qadim : MythwrightGambit
                 destroyerPhaseTime, 15000, new[]
                 {
                     (xDestroyerLeftLeftLeft, yMid, zDefault, 0, 1f),
-                    (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xGapsRightRight, yGapsUpUp, zDefault, 0, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, hiddenOpacity),
+                    (xGapsRightRight, yGapsUpUp, zDefault, 0, hiddenOpacity),
                     (xDestroyerRightRightRight, yMid, zDefault, MathF.PI, 1f),
-                    (xGapsRightRight, yGapsDownDown, zDefault, 0, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xGapsLeftLeft, yGapsDownDown, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xGapsRightRight, yGapsDownDown, zDefault, 0, hiddenOpacity),
+                    (xGapsLeftLeft, yGapsDownDown, zDefault, MathF.PI, hiddenOpacity),
                     (xDestroyerLeftLeft, yMid, zDefault, MathF.PI, 1f),
                     (xDestroyerLeft, yUp, zDefault, 0, isCM ? hiddenOpacity : 1f),
                     (xDestroyerRight, yUp, zDefault, MathF.PI, 1f),
@@ -1299,10 +1299,10 @@ internal class Qadim : MythwrightGambit
                 // Wyvern phase
                 wyvernPhaseTime, 11000, new[]
                 {
-                    (protectionPyre2.X, protectionPyre2.Y, zDefault, 0f, hiddenOpacity), // TODO: Unknown position while hidden
+                    (protectionPyre2.X, protectionPyre2.Y, zDefault, 0f, hiddenOpacity),
                     (-9704, 15323, zDefault, MathF.PI, 1f),
                     (-7425, 15312, zDefault, 0, 1f),
-                    (-5160, yMid, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
+                    (-5160, yMid, zDefault, MathF.PI, hiddenOpacity),
                     (-5169, 8846, zDefault, 0, isCM ? hiddenOpacity : 1f),
                     (-7414, 8846, zDefault, MathF.PI, hiddenOpacity),
                     (-7728, 11535, zDefault, MathF.PI + wyvernPhaseMiddleRotation, 1f),

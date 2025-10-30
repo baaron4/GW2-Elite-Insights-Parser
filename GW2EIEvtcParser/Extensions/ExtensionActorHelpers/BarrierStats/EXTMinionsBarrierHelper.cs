@@ -20,7 +20,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
     {
         if (BarrierEventsByDst == null)
         {
-            var barrierEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var barrierEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO_PERF(Rennorb): find average complexity
             foreach (NPC minion in _minionList)
             {
                 barrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, Master.FirstAware, Master.LastAware));
@@ -35,7 +35,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
     {
         if (BarrierReceivedEventsBySrc == null)
         {
-            var barrierReceivedEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            var barrierReceivedEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO_PERF(Rennorb): find average complexity
             foreach (NPC minion in _minionList)
             {
                 barrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, Master.FirstAware, Master.LastAware));
