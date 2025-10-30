@@ -796,7 +796,7 @@ internal static class ProfHelper
             var phantasmalForceStatus = minion.GetBuffStatus(log, PhantasmalForce).Where(x => x.Value > 0);
             replay.Decorations.AddRotatedOverheadIconsWithValueAsText(phantasmalForceStatus, minion, TraitImages.PhantasmalForce_Mistrust, 90, 15);
         }
-        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem))
+        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem) || RitualistHelper.IsSpiritMinion(minion.AgentItem))
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
         }

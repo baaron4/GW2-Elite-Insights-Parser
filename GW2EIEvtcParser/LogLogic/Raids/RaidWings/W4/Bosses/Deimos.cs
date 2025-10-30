@@ -77,7 +77,6 @@ internal class Deimos : BastionOfThePenitent
         Icon = EncounterIconDeimos;
         LogCategoryInformation.InSubCategoryOrder = 3;
         LogID |= 0x000004;
-        // TODO: verify this works even in demonic realm
         ChestID = ChestID.SaulsTreasureChest;
     }
 

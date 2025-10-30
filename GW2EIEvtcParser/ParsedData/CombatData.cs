@@ -442,7 +442,6 @@ public partial class CombatData
                 .GroupBy(x => x.BuffInstance);
             if (dictExtensions.Any())
             {
-                //TODO(Rennorb) @perf: wtf
                 var dictApply = events.OfType<BuffApplyEvent>()
                     .Where(x => x.BuffInstance != 0)
                     .GroupBy(x => x.BuffInstance)

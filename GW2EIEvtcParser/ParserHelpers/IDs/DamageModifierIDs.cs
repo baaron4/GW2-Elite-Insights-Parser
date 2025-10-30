@@ -394,4 +394,5 @@ public static class DamageModifierIDs
     public const int Mod_ResilientWeapon20 = 381;
     public const int Mod_ExplosiveGrowth = 382;
     public const int Mod_LingeringSpiritsAnguish = 383;
+    public const int Mod_PainfulBond = 384;
 }

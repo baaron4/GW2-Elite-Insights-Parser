@@ -379,7 +379,6 @@ internal class Slothasor : SalvationPass
         {
             foreach (var sporeReleaseImpact in sporeReleaseImpacts)
             {
-                // TODO: confirm size
                 var lifespan = sporeReleaseImpact.ComputeLifespan(log, 1000);
                 var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(sporeReleaseImpact.Position));
                 environmentDecorations.Add(circle);

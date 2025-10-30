@@ -95,8 +95,7 @@ internal static class JsonMinionsBuilder
         }
         //
         var minionCastEvents = minions.GetIntersectingCastEvents(log);
-        //TODO(Rennorb) @perf
-        if (minionCastEvents.Any())
+        if (minionCastEvents.Count > 0)
         {
             jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), skillMap).ToList();
         }

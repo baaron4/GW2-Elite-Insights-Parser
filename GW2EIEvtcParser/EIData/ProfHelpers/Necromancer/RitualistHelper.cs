@@ -1,8 +1,10 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.NecromancerHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -26,7 +28,14 @@ internal static class RitualistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
-        // TODO Check how to add Painful Bond from Anguish https://wiki.guildwars2.com/wiki/Anguish
+        new BuffOnFoeDamageModifier(Mod_PainfulBond, PainfulBond, "Painful Bond", "10%", DamageSource.PetsOnly, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsUndeadMinion(x.ReferenceAgentItem) || IsSpiritMinion(x.ReferenceAgentItem)) || log.CombatData.GetBuffApplyDataByIDBySrc(PainfulBond, a.AgentItem).Count == 0)
+            .UsingChecker((x, log) =>
+            {
+                var src = log.FindActor(x.CreditedFrom);
+                var dst = log.FindActor(x.To);
+                return (IsUndeadMinion(x.From) || IsSpiritMinion(x.From)) && dst.HasBuff(log, src, PainfulBond, x.Time);
+            }),
         // Lingering Spirits
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.sPvPWvW),
@@ -84,6 +93,14 @@ internal static class RitualistHelper
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);
+    }
+    internal static bool IsSpiritMinion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return IsKnownMinionID(agentItem.ID);
     }
 
     private static readonly HashSet<long> _ritualistShroudTransform = 

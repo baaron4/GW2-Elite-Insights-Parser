@@ -9,7 +9,6 @@ public abstract class IDToGUIDEvent : MetaDataEvent
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        //TODO(Rennorb) @explain: Why do the source and destination get packed here?
         ContentGUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
         ContentID = evtcItem.SkillID;
     }

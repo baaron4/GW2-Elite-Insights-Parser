@@ -111,7 +111,6 @@ public class AnimatedCastEvent : CastEvent
     {
         if (Skill.ID == skillData.DodgeID)
         {
-            // TODO: vindicator dodge duration
             ExpectedDuration = 750;
         }
         ActualDuration = ExpectedDuration;

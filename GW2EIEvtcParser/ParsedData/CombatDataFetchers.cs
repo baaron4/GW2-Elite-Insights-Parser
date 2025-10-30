@@ -571,7 +571,7 @@ partial class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsByGUIDs(Span<GUID> effects, out List<EffectEvent> effectEvents)
     {
-        //TODO(Rennorb) @perf: fid average complexity
+        //TODO(Rennorb) @perf: find average complexity
         effectEvents = new(effects.Length * 10);
         foreach (var effectGUID in effects)
         {
