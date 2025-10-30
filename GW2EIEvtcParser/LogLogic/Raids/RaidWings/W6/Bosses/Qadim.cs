@@ -1172,7 +1172,6 @@ internal class Qadim : MythwrightGambit
         long finalPhaseTime = int.MaxValue;
         if (phases.Count > 6)
         {
-            //TODO_PERF(Rennorb): Why was there an unused reference to last phase here?
             foreach (var pos in qadim.GetCombatReplayNonPolledPositions(log))
             {
                 if ((pos.XYZ.XY() - qadimFinalXY).LengthSquared() < 25)

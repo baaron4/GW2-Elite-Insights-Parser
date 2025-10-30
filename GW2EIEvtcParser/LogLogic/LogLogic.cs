@@ -262,7 +262,6 @@ public abstract class LogLogic
         {
             _targets.AddRange(agentData.GetNPCsByID(TargetID.Instance).Select(a => new NPC(a)));
         }
-        //TODO_PERF(Rennorb) @cleanup: is this required?
         _targets.SortByFirstAware();
         var targetSortIDs = GetTargetsSortIDs();
         //TODO_PERF(Rennorb)
