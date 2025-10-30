@@ -747,7 +747,7 @@ public class SkillItem
             { SandSwellBarrierInteraction, SkillImages.SandSwell },
             { SplinterWeaponSkill, SkillImages.SplinterWeapon },
             { Anguish2, SkillImages.Anguish },
-            { ExplosiveGrowth, TraitImages.ExplosiveGrowth },
+            { ExplosiveGrowthSkill, TraitImages.ExplosiveGrowth },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger

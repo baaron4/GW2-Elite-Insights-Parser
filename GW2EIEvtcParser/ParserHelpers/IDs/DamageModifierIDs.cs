@@ -390,4 +390,8 @@ public static class DamageModifierIDs
     public const int Mod_FieryMight = 377;
     public const int Mod_PiercingStance = 378;
     public const int Mod_BirdOfPrey = 379;
+    public const int Mod_ResilientWeapon10 = 380;
+    public const int Mod_ResilientWeapon20 = 381;
+    public const int Mod_ExplosiveGrowth = 382;
+    public const int Mod_LingeringSpiritsAnguish = 383;
 }

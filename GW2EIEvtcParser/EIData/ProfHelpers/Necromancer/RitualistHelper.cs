@@ -20,13 +20,19 @@ internal static class RitualistHelper
         new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingBuff),
         new BuffGiveCastFinder(WeaponOfRemedy, WeaponOfRemedyBuff),
         new BuffGiveCastFinder(XinraeWeapon, XinraesWeaponBuff),
-        new DamageCastFinder(ExplosiveGrowth, ExplosiveGrowth)
+        new DamageCastFinder(ExplosiveGrowthSkill, ExplosiveGrowthSkill)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // TODO Check how to add Painful Bond from Anguish https://wiki.guildwars2.com/wiki/Anguish
+        // Lingering Spirits
+        new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.sPvPWvW),
+        // Explosive Growth
+        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Resilient Weapon", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Resilient Weapon", "7%", DamageSource.NoPets, 7, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
@@ -34,6 +40,11 @@ internal static class RitualistHelper
         // Ritualist's Shroud
         new BuffOnActorDamageModifier(Mod_RitualistsShroud, RitualistsShroud, "Ritualist's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.RitualistShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_RitualistsShroud, RitualistsShroud, "Ritualist's Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.RitualistShroud, DamageModifierMode.sPvPWvW),
+        // Weapons
+        new BuffOnActorDamageModifier(Mod_ResilientWeapon10, ResilientWeaponBuff, "Resilient Weapon", "-10% above 50% hp", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+            .UsingChecker((dhe, log) => !dhe.AgainstUnderFifty),
+        new BuffOnActorDamageModifier(Mod_ResilientWeapon20, ResilientWeaponBuff, "Resilient Weapon", "-20% below 50% hp", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+            .UsingChecker((dhe, log) => dhe.AgainstUnderFifty),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -50,8 +61,12 @@ internal static class RitualistHelper
         new Buff("Xinrae's Weapon", XinraesWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Defensive, SkillImages.XinraesWeapon),
         new Buff("Resilient Weapon", ResilientWeaponBuff, Source.Ritualist, BuffClassification.Defensive, SkillImages.ResilientWeapon),
         new Buff("Splinter Weapon", SplinterWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, SkillImages.SplinterWeapon),
-        //
+        // Traits
         new Buff("Lingering Spirits", LingeringSpirits, Source.Ritualist, BuffClassification.Other, TraitImages.LingeringSpirits),
+        new Buff("Lingering Spirits (Preservation)", LingeringSpiritsPreservation, Source.Ritualist, BuffClassification.Other, SkillImages.Preservation),
+        new Buff("Lingering Spirits (Anguish)", LingeringSpiritsAnguish, Source.Ritualist, BuffClassification.Other, SkillImages.Anguish),
+        new Buff("Lingering Spirits (WanderLust)", LingeringSpiritsWanderlust, Source.Ritualist, BuffClassification.Other, SkillImages.Wanderlust),
+        new Buff("Explosive Growth", ExplosiveGrowthBuff, Source.Ritualist, BuffStackType.Queue, 10, BuffClassification.Other, TraitImages.ExplosiveGrowth),
         // Spirits
         new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Detonate Shelter", DetonateShelter, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),

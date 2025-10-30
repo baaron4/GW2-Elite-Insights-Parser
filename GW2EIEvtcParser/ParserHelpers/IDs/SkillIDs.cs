@@ -5130,7 +5130,7 @@ public static class SkillIDs
     public const long NeverSurrender = 76769;
     public const long POV_Motivation = 76770; // PoV buff for Paragon's Motivation
     public const long ChantOfRecuperationSkill = 76782;
-    public const long ExplosiveGrowth = 76783;
+    public const long ExplosiveGrowthSkill = 76783;
     public const long CombatHigh = 76785;
     public const long SummonCycloneBow = 76787;
     public const long DefensiveProtocolCleanse = 76798;
@@ -5331,5 +5331,9 @@ public static class SkillIDs
     public const long CookingGolem = 77572;
     public const long QuickplayBoost = 77676;
     public const long BagOfPoppedCandyCorn = 77728;
+    public const long LingeringSpiritsPreservation = 77976;
+    public const long LingeringSpiritsAnguish = 78172;
+    public const long LingeringSpiritsWanderlust = 78987;
+    public const long ExplosiveGrowthBuff = 79105;
     #endregion
 }

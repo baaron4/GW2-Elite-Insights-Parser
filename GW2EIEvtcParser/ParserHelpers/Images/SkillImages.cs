@@ -410,6 +410,9 @@ internal static class SkillImages
     public const string WeaponOfWarding = "https://render.guildwars2.com/file/3D185FB008E701F359D3E5FCDE9477309C5C3530/3680183.png";
     public const string XinraesWeapon = "https://render.guildwars2.com/file/1AC290EA0B56F4B1141A53F062140F0AFB65D6CE/3680168.png";
     public const string Anguish = "https://render.guildwars2.com/file/9CA8D4479BEE9A28C810CCB0E234BAC7712104A0/3680170.png";
+    // TODO: update this once the API is back
+    public const string Preservation = "https://render.guildwars2.com/file/9CA8D4479BEE9A28C810CCB0E234BAC7712104A0/3680170.png";
+    public const string Wanderlust = "https://render.guildwars2.com/file/9CA8D4479BEE9A28C810CCB0E234BAC7712104A0/3680170.png";
     #endregion Necromancer
     #region Ranger
     // Signets
