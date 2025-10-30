@@ -40,8 +40,8 @@ internal static class RitualistHelper
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.sPvPWvW),
         // Explosive Growth
-        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Resilient Weapon", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Resilient Weapon", "7%", DamageSource.NoPets, 7, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Explosive Growth", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ExplosiveGrowth, ExplosiveGrowthBuff, "Explosive Growth", "7%", DamageSource.NoPets, 7, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
