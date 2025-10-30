@@ -29,12 +29,12 @@ internal static class RitualistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         new BuffOnFoeDamageModifier(Mod_PainfulBond, PainfulBond, "Painful Bond", "10%", DamageSource.PetsOnly, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.All)
-            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsUndeadMinion(x.ReferenceAgentItem) || IsSpiritMinion(x.ReferenceAgentItem)) || log.CombatData.GetBuffApplyDataByIDBySrc(PainfulBond, a.AgentItem).Count == 0)
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsSummonedCreature(x.ReferenceAgentItem)) || log.CombatData.GetBuffApplyDataByIDBySrc(PainfulBond, a.AgentItem).Count == 0)
             .UsingChecker((x, log) =>
             {
                 var src = log.FindActor(x.CreditedFrom);
                 var dst = log.FindActor(x.To);
-                return (IsUndeadMinion(x.From) || IsSpiritMinion(x.From)) && dst.HasBuff(log, src, PainfulBond, x.Time);
+                return IsSummonedCreature(x.From) && dst.HasBuff(log, src, PainfulBond, x.Time);
             }),
         // Lingering Spirits
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE),
@@ -101,6 +101,11 @@ internal static class RitualistHelper
             return false;
         }
         return IsKnownMinionID(agentItem.ID);
+    }
+
+    internal static bool IsSummonedCreature(AgentItem agentItem)
+    {
+        return IsSpiritMinion(agentItem) || IsUndeadMinion(agentItem);
     }
 
     private static readonly HashSet<long> _ritualistShroudTransform = 
