@@ -17,6 +17,7 @@ public abstract partial class SingleActor : Actor
     public int UniqueID => AgentItem.UniqueID;
     public long LastAware => AgentItem.LastAware;
     public long FirstAware => AgentItem.FirstAware;
+    public long HalfAware => AgentItem.HalfAware;
     public ushort InstID => AgentItem.EnglobingAgentItem.InstID;
 
     public AgentItem EnglobingAgentItem => AgentItem.EnglobingAgentItem;
@@ -71,7 +72,7 @@ public abstract partial class SingleActor : Actor
             if (maxHpUpdates.Any())
             {
                 HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
-                long timeCheck = (FirstAware + LastAware) / 2;
+                long timeCheck = HalfAware;
                 if (lastDamage != null)
                 {
                     timeCheck = Math.Max(timeCheck, Math.Max(FirstAware, lastDamage.Time - 5000));

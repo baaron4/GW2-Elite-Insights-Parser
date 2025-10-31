@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.LogLogic.OpenWorld;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
 using static GW2EIEvtcParser.SkillIDs;
@@ -315,9 +316,9 @@ public class LogData
         return new UnknownBossLogic(id);
     }
 
-    internal void CompleteLogName(CombatData combatData, AgentData agentData)
+    internal void CompleteLogName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
-        LogNameNoMode = Logic.GetLogicName(combatData, agentData);
+        LogNameNoMode = Logic.GetLogicName(combatData, agentData, apiController);
         LogName = LogNameNoMode
             + (Mode == LogMode.CM ? " CM" : "")
             + (Mode == LogMode.LegendaryCM ? " LCM" : "")

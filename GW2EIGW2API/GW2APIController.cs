@@ -8,6 +8,7 @@ public class GW2APIController
     private readonly GW2SkillAPIController skillAPIController = new();
     private readonly GW2SpecAPIController specAPIController = new();
     private readonly GW2TraitAPIController traitAPIController = new();
+    private readonly GW2MapAPIController mapAPIController = new();
     /// <summary>
     /// API Cache init with a cache file locations, 
     /// If the files are present, the content will be used to initialize the API caches
@@ -16,10 +17,12 @@ public class GW2APIController
     /// <param name="skillLocation"></param>
     /// <param name="specLocation"></param>
     /// <param name="traitLocation"></param>
-    public GW2APIController(string skillLocation, string specLocation, string traitLocation)
+    /// <param name="mapLocation"></param>
+    public GW2APIController(string skillLocation, string specLocation, string traitLocation, string mapLocation)
     {
         skillAPIController.GetAPISkills(skillLocation);
         specAPIController.GetAPISpecs(specLocation);
+        mapAPIController.GetAPIMaps(mapLocation);
         //traitAPIController.GetAPITraits(traitLocation);
     }
 
@@ -30,6 +33,7 @@ public class GW2APIController
     {
         skillAPIController.GetAPISkills(null);
         specAPIController.GetAPISpecs(null);
+        mapAPIController.GetAPIMaps(null);
         //traitAPIController.GetAPITraits(null);
     }
 
@@ -68,6 +72,24 @@ public class GW2APIController
     public void WriteAPISpecsToFile(string filePath)
     {
         specAPIController.WriteAPISpecsToFile(filePath);
+    }
+
+    //----------------------------------------------------------------------------- MAPS
+    /// <summary>
+    /// Returns GW2APIMap item
+    /// Warning: this method is not thread safe, 
+    /// Make sure to initialize the cache before hand if you intend to call this method from different threads
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public GW2APIMap GetAPIMap(int id)
+    {
+        return mapAPIController.GetAPIMaps(null).Items.TryGetValue(id, out GW2APIMap map) ? map : null;
+    }
+
+    public void WriteAPIMapsToFile(string filePath)
+    {
+        mapAPIController.WriteAPIMapsToFile(filePath);
     }
 
     //----------------------------------------------------------------------------- TRAITS
