@@ -28,14 +28,6 @@ internal static class RitualistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
-        new BuffOnFoeDamageModifier(Mod_PainfulBond, PainfulBond, "Painful Bond", "10%", DamageSource.PetsOnly, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.All)
-            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsSummonedCreature(x.ReferenceAgentItem)) || log.CombatData.GetBuffApplyDataByIDBySrc(PainfulBond, a.AgentItem).Count == 0)
-            .UsingChecker((x, log) =>
-            {
-                var src = log.FindActor(x.CreditedFrom);
-                var dst = log.FindActor(x.To);
-                return IsSummonedCreature(x.From) && dst.HasBuff(log, src, PainfulBond, x.Time);
-            }),
         // Lingering Spirits
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.sPvPWvW),
