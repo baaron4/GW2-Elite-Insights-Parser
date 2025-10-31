@@ -137,7 +137,7 @@ internal static class BuffInfoSolver
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExpertiseSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggiePizza },
         //
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Ferocity).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfTheWild },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FerocitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfZucchiniChili },
+        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FerocitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfSweetAndSpicyButternutSquashSoup },
         //
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AllStatsPercent).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ElementalEmpowerment },
         //
@@ -210,13 +210,6 @@ internal static class BuffInfoSolver
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), PerfectWeave },
         // Experience from kills
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), StrawberryCookie },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), MeatballDinner },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), BowlOfIceWurmBisque },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), VeggiePizza },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), VeggieBurger },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), SoulPastry },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), BowlOfSimpleVegetableSoup },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), PlateOfIslandPudding },
         // Experience from all
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
         // HealingEffectivenessRec2
