@@ -66,8 +66,7 @@ internal static class EvokerHelper
             .UsingChecker(ZapChecker)
             .UsingApproximate(),
         // Adept
-        // TODO: check value
-        new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "10% strike damage against burning foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "5% strike damage against burning foes", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
 
     ];
 
