@@ -23,7 +23,11 @@ internal static class RitualistHelper
         new BuffGiveCastFinder(WeaponOfRemedy, WeaponOfRemedyBuff),
         new BuffGiveCastFinder(XinraeWeapon, XinraesWeaponBuff),
         new DamageCastFinder(ExplosiveGrowthSkill, ExplosiveGrowthSkill)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffGainCastFinder(ExplosiveGrowthBuff, ExplosiveGrowthSkill)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
