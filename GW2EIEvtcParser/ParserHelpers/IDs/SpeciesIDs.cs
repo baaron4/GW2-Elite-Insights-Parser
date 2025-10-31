@@ -979,7 +979,7 @@ public static class SpeciesIDs
         // Antiquary
         KryptisTurret = SpeciesIDs.KryptisTurret,
         HoloDancer = SpeciesIDs.HoloDancer,
-        SkrittThievesGuild = 27026, // TODO Find this ID
+        SkrittThievesGuild = 27026,
         // Elementalist Summons
         LesserAirElemental = 8711,
         LesserEarthElemental = 8712,

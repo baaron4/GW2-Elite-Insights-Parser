@@ -732,7 +732,7 @@ public static class SkillItemOverrides
             { SandSwellBarrierInteraction, SkillImages.SandSwell },
             { SplinterWeaponSkill, SkillImages.SplinterWeapon },
             { Anguish2, SkillImages.Anguish },
-            { ExplosiveGrowth, TraitImages.ExplosiveGrowth },
+            { ExplosiveGrowthBuff, TraitImages.ExplosiveGrowth },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -1369,7 +1369,7 @@ public static class SkillItemOverrides
             { RealmPortalSpikeFinisher, ItemImages.RealmPortalSpikeFinisher },
             { AvatarOfDeathFinisher, ItemImages.AvatarOfDeathFinisher },
             { HonorGuardFinisher, ItemImages.HonorGuardFinisher },
-	    #endregion FinisherIcons
+        #endregion FinisherIcons
     };
 
     internal static readonly Dictionary<long, ulong> NonCritableSkills = new()

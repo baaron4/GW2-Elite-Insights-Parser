@@ -29,6 +29,9 @@ internal static class GaleshotHelper
         // Gale Force
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.sPvPWvW),
+        // Bird of Prey
+        new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "10% while under swiftness or superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

@@ -25,7 +25,7 @@ public class BuffVolumeStatistics
             playerCount++;
         }
 
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         var buffs = new Dictionary<long, BuffVolumeStatistics>();
         var activeBuffs = new Dictionary<long, BuffVolumeStatistics>();
 
@@ -75,7 +75,7 @@ public class BuffVolumeStatistics
             totalOutgoing /= phaseDuration;
             totalOutgoingByExtension /= phaseDuration;
 
-            //TODO(Rennorb) @perf
+            //TODO_PERF(Rennorb)
             var uptime = new BuffVolumeStatistics();
             var uptimeActive = new BuffVolumeStatistics();
             buffs[buff.ID] = uptime;

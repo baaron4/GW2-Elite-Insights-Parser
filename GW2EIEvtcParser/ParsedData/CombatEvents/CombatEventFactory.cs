@@ -509,7 +509,7 @@ internal static class CombatEventFactory
     public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData)
     {
         using var _t = new AutoTrace("CreateCastEvents");
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         var res = new List<AnimatedCastEvent>();
         foreach (var castEvents in castEventsBySrcAgent.Values)
         {

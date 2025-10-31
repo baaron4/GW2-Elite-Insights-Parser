@@ -18,10 +18,16 @@ internal static class AmalgamHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Willing Host
-        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "7% strike and condition damage", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "10% strike and condition damage", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.sPvPWvW),
         // Plasmatic State
-        new BuffOnActorDamageModifier(Mod_PlasmaticState, PlasmaticStateBuff, "Plasmatic State", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, SkillImages.PlasmaticState, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_PlasmaticState, PlasmaticStateBuff, "Plasmatic State", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, SkillImages.PlasmaticState, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_PlasmaticState, PlasmaticStateBuff, "Plasmatic State", "7% strike and condition damage", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, SkillImages.PlasmaticState, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

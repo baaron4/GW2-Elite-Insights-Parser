@@ -75,7 +75,6 @@ partial class SingleActor
     #region STATUS
     private void GetAgentStatus(ParsedEvtcLog log, List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
-        //TODO(Rennorb) @perf: find average complexity
         var downEvents = combatData.GetDownEvents(AgentItem);
         var aliveEvents = combatData.GetAliveEvents(AgentItem);
         var deadEvents = combatData.GetDeadEvents(AgentItem);
@@ -156,12 +155,12 @@ partial class SingleActor
     [MemberNotNull(nameof(_deads))]
     public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(ParsedEvtcLog log)
     {
-        _downs ??= [];
-        _dcs ??= [];
-        _actives ??= [];
-        if (_deads == null)
+        _downs ??= new(log.CombatData.GetDownEvents(AgentItem).Count);
+        _dcs ??= new(log.CombatData.GetDespawnEvents(AgentItem).Count);
+        _deads = new(log.CombatData.GetDeadEvents(AgentItem).Count);
+        if (_actives == null)
         {
-            _deads = [];
+            _actives = new(_downs.Capacity + _dcs.Capacity + _deads.Capacity);
             GetAgentStatus(log, _deads, _downs, _dcs, _actives, log.CombatData);
         }
         return (_deads, _downs, _dcs, _actives);

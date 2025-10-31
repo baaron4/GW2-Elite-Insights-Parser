@@ -86,7 +86,7 @@ partial class SingleActor
             return [ ];
         }
 
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         var res = new List<Segment>(stateCount);
         double lastValue = states.First().State;
         foreach ((long start, double state) in states)
@@ -103,8 +103,8 @@ partial class SingleActor
             lastValue = state;
         }
         res.Add(new Segment(res.Last().End, logEnd, lastValue));
-        
-        //TODO(Rennorb) @perf
+
+        //TODO_PERF(Rennorb)
         res.RemoveAll(x => x.Start >= x.End);
         res.FuseConsecutive();
 

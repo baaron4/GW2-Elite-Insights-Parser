@@ -19,7 +19,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
     {
         if (HealEventsByDst == null)
         {
-            //TODO(Rennorb) @perf: find average complexity
+            //TODO_PERF(Rennorb): find average complexity
             var healEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {
@@ -36,7 +36,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
     {
         if (HealReceivedEventsBySrc == null)
         {
-            //TODO(Rennorb) @perf: find average complexity
+            //TODO_PERF(Rennorb): find average complexity
             var healReceivedEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {

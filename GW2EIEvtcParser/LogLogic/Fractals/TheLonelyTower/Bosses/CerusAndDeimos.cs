@@ -44,7 +44,6 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        // TODO: verify this
         long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
         {

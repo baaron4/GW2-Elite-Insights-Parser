@@ -11,7 +11,7 @@ internal class BuffStackItem
     public bool IsExtension { get; private set; }
     public long StackID { get; private set; }
 
-    public long TotalDuration //TODO(Rennorb) @perf
+    public long TotalDuration //TODO_PERF(Rennorb)
     {
         get
         {

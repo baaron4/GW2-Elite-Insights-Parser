@@ -11,7 +11,6 @@ public class InstanceStartEvent : MetaDataEvent
         TimeOffsetFromInstanceCreation = logStart - (long)evtcItem.SrcAgent;
         if (evtcItem.Value != 0)
         {
-            // TODO: verify format
             long item1 = (evtcItem.Value & 0xFF000000) >> 24;
             long item2 = (evtcItem.Value & 0x00FF0000) >> 16;
             long item3 = (evtcItem.Value & 0x0000FF00) >> 8;

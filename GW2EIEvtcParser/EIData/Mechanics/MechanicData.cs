@@ -31,7 +31,7 @@ public class MechanicData
     private void CheckConfiguration(ParsedEvtcLog log)
     {
         var logMechanics = _mechanicLogs;
-        //TODO(Rennorb) @perf: find average complexity
+        //TODO_PERF(Rennorb) @find average complexity
         var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(logMechanics.Count / 2);
         var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(logMechanics.Count);
         foreach (Mechanic m in logMechanics.Keys)
@@ -40,19 +40,19 @@ public class MechanicData
             {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     colorDict = [];
                     errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
                 }
                 if (!colorDict.TryGetValue(m.PlotlySetting.Color, out var sizeDict))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     sizeDict = [];
                     colorDict[m.PlotlySetting.Color] = sizeDict;
                 }
                 if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out var mList))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     mList = [];
                     sizeDict[m.PlotlySetting.Size] = mList;
                 }
@@ -65,19 +65,19 @@ public class MechanicData
             {
                 if (!errorMechanicNaming.TryGetValue(m.FullName, out var shortNameDict))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     shortNameDict = [];
                     errorMechanicNaming[m.FullName] = shortNameDict;
                 }
                 if (!shortNameDict.TryGetValue(m.ShortName, out var descriptionDict))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     descriptionDict = [];
                     shortNameDict[m.ShortName] = descriptionDict;
                 }
                 if (!descriptionDict.TryGetValue(m.Description, out var mList))
                 {
-                    //TODO(Rennorb) @perf
+                    //TODO_PERF(Rennorb)
                     mList = [];
                     descriptionDict[m.Description] = mList;
                 }
@@ -95,7 +95,7 @@ public class MechanicData
 
     private void ComputeMechanics(ParsedEvtcLog log)
     {
-        //TODO(Rennorb) @perf <regroupedMobs> = 0
+        //TODO_PERF(Rennorb) <regroupedMobs> = 0
         var regroupedMobs = new Dictionary<int, SingleActor>();
         foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) 
         { 

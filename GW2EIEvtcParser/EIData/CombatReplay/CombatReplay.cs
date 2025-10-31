@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 public class CombatReplay
 {
 
-    //TODO(Rennorb) @perf: capacity
+    //TODO_PERF(Rennorb) @capacity
     internal IReadOnlyList<ParametricPoint3D> Positions => _Positions;
     internal IReadOnlyList<ParametricPoint3D> PolledPositions => _PolledPositions;
     internal IReadOnlyList<ParametricPoint3D> Velocities => _Velocities;
@@ -33,7 +33,7 @@ public class CombatReplay
     {
         _start = log.LogData.LogStart;
         _end = log.LogData.LogEnd;
-        //TODO(Rennorb) @perf: capacity
+        //TODO_PERF(Rennorb) @capacity
         Decorations = new(log.LogData.Logic.DecorationCache);
     }
 

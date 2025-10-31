@@ -10,7 +10,7 @@ public struct GenericSegment<T>(long start, long end, T? value)
 {
     public long Start = start;
     public long End   = end;
-    public T?   Value = value; //TODO(Rennorb) @perf @cleanup
+    public T?   Value = value; //TODO_PERF(Rennorb) @cleanup
     public readonly (long, long) TimeSpan => (Start, End);
 
     public GenericSegment((long start, long end) lifespan, T? value) : this(lifespan.start, lifespan.end, value)

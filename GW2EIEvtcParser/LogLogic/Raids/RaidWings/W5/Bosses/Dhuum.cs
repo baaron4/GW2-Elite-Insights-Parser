@@ -123,7 +123,7 @@ internal class Dhuum : HallOfChains
         ];
     }
 
-    //TODO(Rennorb) @perf
+    //TODO_PERF(Rennorb)
     private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillID == MajorSoulSplit);

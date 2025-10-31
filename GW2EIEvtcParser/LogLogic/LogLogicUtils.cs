@@ -343,13 +343,13 @@ internal static class LogLogicUtils
     /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
     internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IEnumerable<EffectEvent> startEffects, IEnumerable<EffectEvent> endEffects)
     {
-        var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO(Rennorb) @perf
+        var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO_PERF(Rennorb)
         foreach (EffectEvent startEffect in startEffects)
         {
             var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000);
             if (candidateEffectEvents.Any())
             {
-                EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => (x.Position - startEffect.Position).LengthSquared()); //TODO(Rennorb) @perf
+                EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => (x.Position - startEffect.Position).LengthSquared()); //TODO_PERF(Rennorb)
                 float minimalDistance = (matchedEffect.Position - startEffect.Position).Length();
                 matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
             }

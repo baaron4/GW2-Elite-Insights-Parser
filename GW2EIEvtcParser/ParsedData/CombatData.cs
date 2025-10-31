@@ -84,7 +84,7 @@ public partial class CombatData
 
     private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, LogData logData, EvtcVersionEvent evtcVersion)
     {
-        //TODO(Rennorb) @perf @mem: find average complexity
+        //TODO_PERF(Rennorb) @find average complexity
         var toAdd = new List<BuffEvent>(players.Count * 10);
         foreach (AgentItem p in players)
         {
@@ -112,7 +112,7 @@ public partial class CombatData
         var buffSrcAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
         foreach (BuffEvent bf in toAdd)
         {
-            //TODO(Rennorb) @perf @mem: find average complexity
+            //TODO_PERF(Rennorb) @find average complexity
             _buffDataByDst.AddToList(bf.To, bf, toAdd.Count / 4);
             buffDstAgentsToSort.Add(bf.To);
             if (bf is not BuffExtensionEvent)
@@ -121,7 +121,7 @@ public partial class CombatData
                 buffSrcAgentsToSort.Add(bf.By);
             }
 
-            //TODO(Rennorb) @perf @mem: find average complexity
+            //TODO_PERF(Rennorb) @find average complexity
             _buffData.AddToList(bf.BuffID, bf, toAdd.Count / 4);
             buffIDsToSort.Add(bf.BuffID);
         }
@@ -156,15 +156,15 @@ public partial class CombatData
         var srcToSort = new HashSet<AgentItem>(toAdd.Count);
         foreach (HealthDamageEvent de in toAdd)
         {
-            //TODO(Rennorb) @perf @mem: find average complexity
+            //TODO_PERF(Rennorb) @find average complexity
             _damageTakenData.AddToList(de.To, de, toAdd.Count / 4);
             dstToSort.Add(de.To);
 
-            //TODO(Rennorb) @perf @mem: find average complexity
+            //TODO_PERF(Rennorb) @find average complexity
             _damageData.AddToList(de.From, de, toAdd.Count / 4);
             srcToSort.Add(de.From);
 
-            //TODO(Rennorb) @perf @mem: find average complexity
+            //TODO_PERF(Rennorb) @find average complexity
             _damageDataByID.AddToList(de.SkillID, de);
             idsToSort.Add(de.SkillID);
         }
@@ -187,7 +187,7 @@ public partial class CombatData
 
     private List<InstantCastEvent> ComputeInstantCastEventsFromFinders(AgentData agentData, SkillData skillData, HashSet<InstantCastFinder> instantCastFinders)
     {
-        //TODO(Rennorb) @perf @mem: find average complexity
+        //TODO_PERF(Rennorb) @find average complexity
         var res = new List<InstantCastEvent>();
         foreach (InstantCastFinder icf in instantCastFinders)
         {
@@ -278,29 +278,29 @@ public partial class CombatData
         {
             if (cast is AnimatedCastEvent ace)
             {
-                //TODO(Rennorb) @perf @mem: find average complexity
+                //TODO_PERF(Rennorb) @find average complexity
                 _animatedCastData.AddToList(ace.Caster, ace, toAdd.Count / (players.Count + 2));
                 castAgentsToSort.Add(ace.Caster);
 
-                //TODO(Rennorb) @perf @mem: find average complexity
+                //TODO_PERF(Rennorb) @find average complexity
                 _animatedCastDataByID.AddToList(ace.SkillID, ace, 10);
                 castIDsToSort.Add(ace.SkillID);
             }
 
             if (cast is WeaponSwapEvent wse)
             {
-                //TODO(Rennorb) @perf @mem: find average complexity
+                //TODO_PERF(Rennorb) @find average complexity
                 _weaponSwapData.AddToList(wse.Caster, wse, toAdd.Count / (players.Count + 2));
                 wepSwapAgentsToSort.Add(wse.Caster);
             }
 
             if (cast is InstantCastEvent ice)
             {
-                //TODO(Rennorb) @perf @mem: find average complexity
+                //TODO_PERF(Rennorb) @find average complexity
                 _instantCastData.AddToList(ice.Caster, ice, toAdd.Count / (players.Count + 2));
                 instantAgentsToSort.Add(ice.Caster);
 
-                //TODO(Rennorb) @perf @mem: find average complexity
+                //TODO_PERF(Rennorb) @find average complexity
                 _instantCastDataByID.AddToList(ice.SkillID, ice, 10);
                 instantIDsToSort.Add(ice.SkillID);
             }
@@ -442,7 +442,6 @@ public partial class CombatData
                 .GroupBy(x => x.BuffInstance);
             if (dictExtensions.Any())
             {
-                //TODO(Rennorb) @perf: wtf
                 var dictApply = events.OfType<BuffApplyEvent>()
                     .Where(x => x.BuffInstance != 0)
                     .GroupBy(x => x.BuffInstance)
@@ -499,7 +498,7 @@ public partial class CombatData
         var combatEvents = allCombatItems.ToList();
         combatEvents.SortByTime();
 
-        //TODO(Rennorb) @perf: find average complexity
+        //TODO_PERF(Rennorb): find average complexity
         _skillIDs = new HashSet<long>(combatEvents.Count / 2);
         var castCombatEvents = new Dictionary<ulong, List<CombatItem>>(combatEvents.Count / 5);
         var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
@@ -592,7 +591,7 @@ public partial class CombatData
         List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, logData);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
-        //TODO(Rennorb) @perf
+        //TODO_PERF(Rennorb)
         _instantCastData = [];
         _instantCastDataByID = [];
         _animatedCastDataByID = animatedCastData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
@@ -682,7 +681,7 @@ public partial class CombatData
         );
         _buffRemoveAllDataBySrc = _buffDataBySrc.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         _buffExtensionData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffExtensionEvent>().ToList());
-        //TODO(Rennorb) @perf @mem: find average complexity
+        //TODO_PERF(Rennorb) @find average complexity
         _buffDataByInstanceID = new(_buffData.Count / 10);
         foreach (var buffEvents in _buffData.Values)
         {
@@ -690,7 +689,7 @@ public partial class CombatData
             {
                 if (!_buffDataByInstanceID.TryGetValue(abe.BuffID, out var dict))
                 {
-                    //TODO(Rennorb) @perf @mem: find average complexity
+                    //TODO_PERF(Rennorb) @find average complexity
                     dict = new(10);
                     _buffDataByInstanceID[abe.BuffID] = dict;
                 }

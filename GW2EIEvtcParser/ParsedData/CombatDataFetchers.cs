@@ -571,7 +571,7 @@ partial class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsByGUIDs(Span<GUID> effects, out List<EffectEvent> effectEvents)
     {
-        //TODO(Rennorb) @perf: fid average complexity
+        //TODO_PERF(Rennorb): find average complexity
         effectEvents = new(effects.Length * 10);
         foreach (var effectGUID in effects)
         {
@@ -695,7 +695,7 @@ partial class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
     {
-        //TODO(Rennorb) @perf: find average complexity
+        //TODO_PERF(Rennorb): find average complexity
         effectEvents = new List<EffectEvent>(effects.Length * 10);
         foreach (var effectGUID in effects)
         {
@@ -710,7 +710,7 @@ partial class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
     {
-        //TODO(Rennorb) @perf: find average complexity
+        //TODO_PERF(Rennorb): find average complexity
         effectEvents = new List<EffectEvent>(effects.Length * 10);
         foreach (var effectGUID in effects)
         {

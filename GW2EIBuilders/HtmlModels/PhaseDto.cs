@@ -99,7 +99,7 @@ using SupportStatDataItem = List<double>;
     double removedStunDuration
 );*/
 
-//TODO(Rennorb) @perf: IF we wanted more performance we could try to just get rid of this json data step all together.
+//TODO_PERF(Rennorb) @IF we wanted more performance we could try to just get rid of this json data step all together.
 // It should be doable to just merge it with existing structures, as to not need to copy everything..
 // If this is reasonably possible it should give time savings around 20-30%
 internal class PhaseDto

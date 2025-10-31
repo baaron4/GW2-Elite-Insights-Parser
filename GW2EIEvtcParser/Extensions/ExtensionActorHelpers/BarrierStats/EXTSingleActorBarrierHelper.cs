@@ -24,7 +24,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         if (BarrierEventsByDst == null)
         {
             var barrierEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
-            var minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
+            var minions = _actor.GetMinions(log); //TODO_PERF(Rennorb): Find average complexity for reserving elements in barrier events
             foreach (Minions minion in minions)
             {
                 barrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log));

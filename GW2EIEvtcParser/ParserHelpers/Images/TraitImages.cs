@@ -3,7 +3,6 @@
 #pragma warning disable CA1823 // Unused field
 internal static class TraitImages
 {
-    // TODO: organize this
     #region Elementalist
     public const string EarthenBlast = "https://render.guildwars2.com/file/2531DCAFAEAB452C90C4572E1ADCE8236DCF5636/1012304.png";
     public const string ElectricDischarge = "https://render.guildwars2.com/file/F4622EE8300028599369D4084EA7A2774D250DEA/1012280.png";
@@ -38,6 +37,7 @@ internal static class TraitImages
     public const string ElementalBalance = "https://render.guildwars2.com/file/6B625B190E65062542F7CCF9B1565D2AF403C2C6/3679935.png";
     public const string FamiliarsProwess = "https://render.guildwars2.com/file/18964AD8371C1FB3160A7779D0AA0120B9FFABBB/3679942.png";
     public const string FamiliarsFocus = "https://render.guildwars2.com/file/F9FE2E9559AD4700D0737EACCF3608CED3E50BA6/3679937.png";
+    public const string FieryMight = "https://render.guildwars2.com/file/F9FE2E9559AD4700D0737EACCF3608CED3E50BA6/3679937.png";
     #endregion
     #region Engineer
     public const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";

@@ -113,7 +113,6 @@ internal static class UntamedHelper
         new Buff("Biorythm", RestorativeStrikesAndBiorythm, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.RestorativeStrikesAndBiorythm)
             .WithBuilds(GW2Builds.June2025Balance),
         new Buff("Vow of the Untamed (Biorythm)", VowOfTheUntamedBiorythm, Source.Untamed, BuffClassification.Other, TraitImages.VowOfTheUntamed),
-        // Todo Biorythm
     ];
 
 }

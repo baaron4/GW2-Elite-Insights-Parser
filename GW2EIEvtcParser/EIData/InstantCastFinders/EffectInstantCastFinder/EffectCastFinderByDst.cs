@@ -12,8 +12,6 @@ internal class EffectCastFinderByDst : EffectCastFinder
     {
         return effectEvent.Src;
     }
-
-    //TODO(Rennorb) @perf @cleanup: move to tests? 
     protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Dst).Where(x => Math.Abs(x.Time - evt.Time) <= ParserHelper.ServerDelayConstant && x.EffectID != evt.EffectID);

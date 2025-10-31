@@ -238,7 +238,7 @@ public class StatisticsHelper
             return [ ];
         }
 
-        var commanders = new List<GenericSegment<Player>>(log.PlayerList.Count); //TODO(Rennorb) @perf: find average complexity
+        var commanders = new List<GenericSegment<Player>>(log.PlayerList.Count); //TODO_PERF(Rennorb): find average complexity
         foreach (Player player in log.PlayerList)
         {
             var newStates = player.GetCommanderStates(log);

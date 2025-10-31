@@ -23,6 +23,7 @@ internal static class ConduitHelper
         new BuffOnActorDamageModifier(Mod_ShieldingHands, ShieldingHandsBuff, "Shielding Hands", "-75% strike and condition damage", DamageSource.Incoming, -75, DamageType.StrikeAndCondition, DamageType.All, Source.Conduit, ByPresence, SkillImages.ShieldingHands, DamageModifierMode.All),
     ];
 
+    // TODO: check if new buffs with the rework
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Legendary Entity Stance", LegendaryEntityStanceBuff, Source.Conduit, BuffClassification.Other, SkillImages.LegendaryEntityStance),

@@ -5072,7 +5072,7 @@ public static class SkillIDs
     public const long LegendaryEntityStanceSkill = 76610;
     public const long TaleOfTheHonorableRogue = 76611;
     public const long SymbioticShielding = 76613;
-    public const long ExitRadiantShroud = 76616;
+    public const long ExitRadiantForge = 76616;
     public const long LightningBlitzPetSequentialSkill = 76618;
     public const long Whirlwind = 76619;
     public const long ResoluteStanceSkill = 76621;
@@ -5130,7 +5130,7 @@ public static class SkillIDs
     public const long NeverSurrender = 76769;
     public const long POV_Motivation = 76770; // PoV buff for Paragon's Motivation
     public const long ChantOfRecuperationSkill = 76782;
-    public const long ExplosiveGrowth = 76783;
+    public const long ExplosiveGrowthSkill = 76783;
     public const long CombatHigh = 76785;
     public const long SummonCycloneBow = 76787;
     public const long DefensiveProtocolCleanse = 76798;
@@ -5177,7 +5177,7 @@ public static class SkillIDs
     public const long LightningBlitzPetSkill = 76914;
     public const long BeguilingHaze2 = 76917;
     public const long LingeringSpirits = 76920;
-    public const long HaresAgilityBuff = 76922;
+    public const long ElectricEnchantment = 76922;
     public const long NightmareWeaponBuff = 76923;
     public const long GleamingBlade = 76924;
     public const long CalcifyPetSkill = 76925;
@@ -5228,7 +5228,7 @@ public static class SkillIDs
     public const long InnervatingAlloy = 77062;
     public const long TaleOfTheTorturedMastermind = 77066;
     public const long SolidStateSkill = 77069;
-    public const long EnterRadiantShroud = 77073;
+    public const long EnterRadiantForge = 77073;
     public const long ConflagrationPetSkill = 77074;
     public const long HarmoniousHarp = 77077;
     public const long PiercingStanceSkill = 77078;
@@ -5250,7 +5250,7 @@ public static class SkillIDs
     public const long PainfulBond = 77128;
     public const long RestorativeGlowSkill = 77136;
     public const long BeguilingHaze3 = 77141;
-    public const long RadiantShroud = 77142;
+    public const long RadiantForge = 77142;
     public const long PiercingStanceBuff = 77143;
     public const long Mayhem = 77148;
     public const long KryptisTurretBuff2 = 77150; // Buff applied by Antiquary to Kryptis Turret minion gadget
@@ -5331,5 +5331,9 @@ public static class SkillIDs
     public const long CookingGolem = 77572;
     public const long QuickplayBoost = 77676;
     public const long BagOfPoppedCandyCorn = 77728;
+    public const long LingeringSpiritsPreservation = 77976;
+    public const long LingeringSpiritsAnguish = 78172;
+    public const long LingeringSpiritsWanderlust = 78987;
+    public const long ExplosiveGrowthBuff = 79105;
     #endregion
 }

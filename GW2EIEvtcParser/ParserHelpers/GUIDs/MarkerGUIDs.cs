@@ -32,7 +32,7 @@ public static class MarkerGUIDs
     public static readonly GUID TriangleOverhead = new("46EBC4397F8A3740B900333B591F6183");
     public static readonly GUID        XOverhead = new("8BDCF5C47F8A8340A251F102AF3B5905");
 
-    //TODO(Rennorb) @perf: Potential to use sorted lists instead for unconditional O(log(n)), instaed of computing hashes.
+    //TODO_PERF(Rennorb): Potential to use sorted lists instead for unconditional O(log(n)), instaed of computing hashes.
 
     /// <summary>
     /// HashSet containing the types of Commander Tag GUIDs.

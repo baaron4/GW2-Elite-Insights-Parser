@@ -6,6 +6,6 @@ public class PositionConnectorDescription : GeographicalConnectorDescription
     internal PositionConnectorDescription(PositionConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
         (float x, float y) = map.GetMapCoordRounded(connector.Position.XY());
-        Position = [x, y]; //TODO(Rennorb) @perf
+        Position = [x, y]; //TODO_PERF(Rennorb)
     }
 }
