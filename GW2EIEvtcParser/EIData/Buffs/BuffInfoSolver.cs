@@ -105,52 +105,61 @@ internal static class BuffInfoSolver
     private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new()
     {
         
-        //
+        // Attack Speed
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AttackSpeed).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Quickness },
-        //
+        // Power
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMightBuff },
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+        // Power Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PowerSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfColdWurmStew },
-        //
+        // Condition Damage
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfDomination },
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+        // Condition Damage Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggieBurger },
-        //
+        // Precision
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfFuryBuff },
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfAgilityBuff },
+        // Precision Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PrecisionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfIceWurmBisque },
-        //
+        // Toughness
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), DolyakSignetBuff },
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
+        // Toughness side kick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ToughnessSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), MeatballDinner },
-        //
+        // Vitality
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Vitality).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
+        // Vitality Sidekic
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfDolyakStew },
-        //
+        // Healing
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Healing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
+        // Healing Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), StrawberryCookie },
-        //
+        // Concentration
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Concentration).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMercyBuff },
+        // Concentration Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConcentrationSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), SoulPastry },
-        //
+        // Expertise
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Expertise).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMidnightBuff },
+        // Expertise Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExpertiseSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggiePizza },
-        //
+        // Ferocity
         {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Ferocity).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfTheWild },
+        // Ferocity Sidekick
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FerocitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfSweetAndSpicyButternutSquashSoup },
-        //
+        // All stats
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AllStatsPercent).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ElementalEmpowerment },
-        //
+        // Inc Phys Additive
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
-        //
+        // Inc Cond Additive
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
-        //
+        // Phys Out
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
-        //
+        // Cond Out
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
-        // 
+        // Phys Inc Mult 
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Protection },
-        //
+        // Cond Inc Mult
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Resolution },
         // CriticalChance
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
@@ -208,8 +217,6 @@ internal static class BuffInfoSolver
         // BoonDurationIncrease
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), WovenWater },
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), PerfectWeave },
-        // Experience from kills
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), StrawberryCookie },
         // Experience from all
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
         // HealingEffectivenessRec2
