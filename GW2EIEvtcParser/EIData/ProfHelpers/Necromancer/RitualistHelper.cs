@@ -64,9 +64,9 @@ internal static class RitualistHelper
         new Buff("Splinter Weapon", SplinterWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, SkillImages.SplinterWeapon),
         // Traits
         new Buff("Lingering Spirits", LingeringSpirits, Source.Ritualist, BuffClassification.Other, TraitImages.LingeringSpirits),
-        new Buff("Lingering Spirits (Preservation)", LingeringSpiritsPreservation, Source.Ritualist, BuffClassification.Other, SkillImages.Preservation),
-        new Buff("Lingering Spirits (Anguish)", LingeringSpiritsAnguish, Source.Ritualist, BuffClassification.Other, SkillImages.Anguish),
-        new Buff("Lingering Spirits (WanderLust)", LingeringSpiritsWanderlust, Source.Ritualist, BuffClassification.Other, SkillImages.Wanderlust),
+        new Buff("Lingering Spirits (Preservation)", LingeringSpiritsPreservation, Source.Ritualist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.Preservation),
+        new Buff("Lingering Spirits (Anguish)", LingeringSpiritsAnguish, Source.Ritualist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.Anguish),
+        new Buff("Lingering Spirits (WanderLust)", LingeringSpiritsWanderlust, Source.Ritualist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.Wanderlust),
         new Buff("Explosive Growth", ExplosiveGrowthBuff, Source.Ritualist, BuffStackType.Queue, 10, BuffClassification.Other, TraitImages.ExplosiveGrowth),
         // Spirits
         new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
