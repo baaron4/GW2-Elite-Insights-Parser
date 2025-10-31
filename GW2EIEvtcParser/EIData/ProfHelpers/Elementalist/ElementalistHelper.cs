@@ -151,6 +151,10 @@ internal static class ElementalistHelper
         new BuffOnFoeDamageModifier(Mod_StormSoul, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, TraitImages.Stormsoul, DamageModifierMode.All)
             .WithBuilds(GW2Builds.December2018Balance)
             .UsingApproximate(),
+        new BuffOnFoeDamageModifier(Mod_StormSoulDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to defiant foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByAbsence, TraitImages.Stormsoul, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+            .WithBuilds(GW2Builds.November2022Balance)
+            .UsingApproximate(),
 
         // Hammer
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
