@@ -64,6 +64,14 @@
                         Max <img :src="UIIcons.Damage" alt="Damage"
                         class="icon">
                     </th>
+                    <th class="damage-dist-cell" v-if="wvw && actor !== null" :class="getHeaderClass('Data', 22)" @click="sortBy('Data', 22, x => getDownContribution(x))"
+                        data-original-title="Down Contribution">
+                         <img :src="UIIcons.Damage" alt="Damage"
+                            class="icon">
+                        /
+                        <img :src="UIIcons.DownedEnemy" alt="Down"
+                            class="icon">
+                    </th> 
                     <th v-if="hasBreakbarDamage" class="damage-dist-cell"  
                         :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getBreakbarDamage(x))"    
                         data-original-title="% Breakbar Damage">
@@ -139,14 +147,6 @@
                         <img :src="UIIcons.AgainstMoving"
                             alt="Against Moving" class="icon icon-hover">
                     </th>
-                    <th class="damage-dist-cell" v-if="wvw && actor !== null" :class="getHeaderClass('Data', 22)" @click="sortBy('Data', 22, x => getDownContribution(x))"
-                        data-original-title="Down Contribution">
-                         <img :src="UIIcons.Damage" alt="Damage"
-                            class="icon">
-                        /
-                        <img :src="UIIcons.DownedEnemy" alt="Down"
-                            class="icon">
-                    </th> 
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 16)" @click="sortBy('Data', 16, x => getCastTimeWasted(x))"
                         data-original-title="Time wasted interupting skill casts">
@@ -187,6 +187,9 @@
                     </td>
                     <td :class="getBodyClass('Data', 5)">
                         {{ getMaxDamage(row) }}
+                    </td>
+                    <td v-if="wvw && actor !== null" :class="getBodyClass('Data', 22)">
+                        {{getDownContribution(row) < 0 ? 'N/A' : getDownContribution(row)}}
                     </td>
                     <td :class="getBodyClass('Data', 6)" v-if="hasBreakbarDamage">
                         {{ round3(100*getBreakbarDamage(row)/dmgdist.contributedBreakbarDamage) }}%
@@ -235,9 +238,6 @@
                         :data-original-title="getAgainstMovingHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s)'">
                         {{getConnectedHits(row) ? (round2(100 * getAgainstMovingHits(row)/getConnectedHits(row)) + '%') : ''}}
                     </td>
-                    <td v-if="wvw && actor !== null" :class="getBodyClass('Data', 22)">
-                        {{getDownContribution(row) < 0 ? 'N/A' : getDownContribution(row)}}
-                    </td>
                     <td :class="getBodyClass('Data', 16)"  v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
                         {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
@@ -263,6 +263,9 @@
                     <td></td>
                     <td></td>
                     <td></td>   
+                    <td v-if="wvw && actor !== null">
+                        {{dmgdist.contributedDownContribution >= 0 ? dmgdist.contributedDownContribution : ''}}
+                    </td>
                     <td v-if="hasBreakbarDamage"></td>
                     <td v-if="hasBreakbarDamage" :data-original-title="Math.round(dmgdist.contributedBreakbarDamage/phase.durationS) +' bps'">
                         {{dmgdist.contributedBreakbarDamage}}
@@ -278,10 +281,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td v-if="wvw && actor !== null">
-                        {{dmgdist.contributedDownContribution >= 0 ? dmgdist.contributedDownContribution : ''}}
-                    </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
                 </tr>
