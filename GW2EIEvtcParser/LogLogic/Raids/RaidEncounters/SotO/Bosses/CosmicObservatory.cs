@@ -558,7 +558,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                         }
                     }
                 }
-                if (buffCounter == playerCounter && aliveCounter == playerCounter)
+                if (playerCounter == 10 && buffCounter == playerCounter && aliveCounter == playerCounter)
                 {
                     instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityPrecisionAnxiety], 1, encounterPhase));
                 }
