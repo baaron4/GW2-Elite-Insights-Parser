@@ -547,12 +547,9 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                     {
                         playerCounter++;
                         IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
-                        if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out var bgm))
+                        if (player.HasBuff(log, AchievementEligibilityPrecisionAnxiety, encounterPhase.End - ServerDelayConstant))
                         {
-                            if (bgm.Values.Any(x => x.Value == 1))
-                            {
-                                buffCounter++;
-                            }
+                            buffCounter++;
                         }
                         IReadOnlyList<DeadEvent> deaths = log.CombatData.GetDeadEvents(player.AgentItem);
                         if (deaths.Count == 0)
@@ -563,7 +560,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 }
                 if (buffCounter == playerCounter && aliveCounter == playerCounter)
                 {
-                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityPrecisionAnxiety));
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityPrecisionAnxiety], 1, encounterPhase));
                 }
             }
         }
