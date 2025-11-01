@@ -11,7 +11,7 @@ internal class DamageDistributionDto
     public static readonly DamageDistributionDto EmptyInstance = new();
 
     public long            ContributedDamage;
-    public long            ContributedDownContribution;
+    public long            ContributedDownContribution = - 1;
     public double          ContributedBreakbarDamage;
     public long            ContributedShieldDamage;
     public long            TotalDamage;
