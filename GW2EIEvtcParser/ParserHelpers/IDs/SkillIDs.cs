@@ -5159,7 +5159,7 @@ public static class SkillIDs
     public const long TaleOfTheSoulkeeper = 76850;
     public const long WindForce = 76855;
     public const long RadiantArmamentsStaffLingering = 76858;
-    public const long CHantOfRecuperationSkill2 = 76863;
+    public const long ChantOfRecuperationSkill2 = 76863;
     public const long Anguish = 76864;
     public const long ChantOfActionBuff = 76865;
     public const long OffensiveProtocolShred1 = 76866;
