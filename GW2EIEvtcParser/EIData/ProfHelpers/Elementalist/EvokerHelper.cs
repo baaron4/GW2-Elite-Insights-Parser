@@ -101,10 +101,16 @@ internal static class EvokerHelper
         new Buff("Evoker's Stone Spirit Aura (3)", EvokerStoneSpiritAura3, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (4)", EvokerStoneSpiritAura4, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (5)", EvokerStoneSpiritAura5, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Electric Enchantment", ElectricEnchantment, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
+        new Buff("Electric Enchantment", ElectricEnchantmentBuff, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
         new Buff("Zap (To Target)", ZapBuffPlayerToTarget, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Zap (To Player)", ZapBuffTargetToPlayer, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Toad Block", ToadBlock, Source.Evoker, BuffClassification.Other, SkillImages.ToadsFortitude),
+        new Buff("Elemental Balance", ElementalBalanceBuff, Source.Evoker, BuffClassification.Other, TraitImages.ElementalBalance)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new Buff("Fox Passive", FoxPassive, Source.Evoker, BuffClassification.Other, SkillImages.Ignite),
+        new Buff("Otter Passive", OtterPassive, Source.Evoker, BuffClassification.Other, SkillImages.Splash),
+        new Buff("Hare Passive", HarePassive, Source.Evoker, BuffClassification.Other, SkillImages.Zap),
+        new Buff("Toad Passive", ToadPassive, Source.Evoker, BuffClassification.Other, SkillImages.Calcify),
     ];
 
     private static readonly HashSet<int> Minions = 

@@ -396,4 +396,7 @@ public static class DamageModifierIDs
     public const int Mod_LingeringSpiritsAnguish = 383;
     public const int Mod_PainfulBond = 384;
     public const int Mod_StormSoulDefiant = 385;
+    public const int Mod_BriskPacingTier1 = 386;
+    public const int Mod_BriskPacingTier2 = 387;
+    public const int Mod_BriskPacingTier3 = 388;
 }

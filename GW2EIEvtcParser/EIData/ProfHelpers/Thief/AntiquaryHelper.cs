@@ -29,6 +29,14 @@ internal static class AntiquaryHelper
         new Buff("Kryptis Turret (2)", KryptisTurretBuff2, Source.Antiquary, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Exhilarating Ephemera", ExhilaratingEphemera, Source.Antiquary, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.ExhilaratingEphemera),
         new Buff("Prodigious Pincher", ProdigiousPincher, Source.Antiquary, BuffStackType.Stacking, 15, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Unstable Skritt Bomb", UnstableSkrittBombBuff, Source.Antiquary, BuffClassification.Other, SkillImages.UnstableSkrittBomb),
+        new Buff("Forged Surfer Dash", ForgedSurferDashBuff, Source.Antiquary, BuffClassification.Other, SkillImages.ForgedSurferDash),
+        new Buff("Zephyrite Sun Crystal", ZephyriteSunCrystalBuff, Source.Antiquary, BuffStackType.Stacking, 2, BuffClassification.Other, SkillImages.ZephyriteSunCrystal),
+        new Buff("Holo-Dancer Decoy", HoloDancerDecoyBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Other, SkillImages.HoloDancerDecoy),
+        new Buff("Summon Kryptis Turret", SummonKryptisTurretBuff, Source.Antiquary, BuffClassification.Other, SkillImages.SummonKryptisTurret),
+        new Buff("Metal Legion Guitar", MetalLegionGuitarBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 4, BuffClassification.Other, SkillImages.MetalLegionGuitar),
+        new Buff("Mistburn Mortar", MistburnMortarBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 7, BuffClassification.Other, SkillImages.MistburnMortar),
+        new Buff("Exalted Hammer", ExaltedHammerBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Other, SkillImages.ExaltedHammer),
     ];
 
     private static readonly HashSet<int> Minions = 

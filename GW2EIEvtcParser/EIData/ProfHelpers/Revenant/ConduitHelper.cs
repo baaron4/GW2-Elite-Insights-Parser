@@ -33,8 +33,14 @@ internal static class ConduitHelper
         new Buff("Form of the Assassin (Shiro Passive)", FormOfTheAssassinShiroPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
         new Buff("Form of the Mesmer (Mallyx Active)", FormOfTheMesmerMallyxActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
         new Buff("Form of the Mesmer (Mallyx Passive)", FormOfTheMesmerMallyxPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
-        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk),
-        new Buff("Form of the Monk (Ventari Passive)", FormOfTheMonkVentariPassiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk),
+        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new Buff("Form of the Monk (Ventari Passive)", FormOfTheMonkVentariPassiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMonk)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new Buff("Form of the Monk (Ventari Passive)", FormOfTheMonkVentariPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMonk)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         new Buff("Form of the Warrior (Jalis Active)", FormOfTheWarriorJalisActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
         new Buff("Form of the Warrior (Jalis Passive)", FormOfTheWarriorJalisPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
         new Buff("Shielding Hands", ShieldingHandsBuff, Source.Conduit, BuffClassification.Other, SkillImages.ShieldingHands),
