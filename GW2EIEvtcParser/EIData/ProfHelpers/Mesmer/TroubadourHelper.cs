@@ -23,22 +23,22 @@ internal static class TroubadourHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Altered Chord
-        new BuffOnActorDamageModifier(Mod_AlteredChord, AlteredChord, "Altered Chord", "25% strike damage", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.AlteredChord, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_AlteredChord, AlteredChord, "Altered Chord", "15% strike damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.AlteredChord, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_AlteredChord, AlteredChord, "Altered Chord", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.AlteredChord, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_AlteredChord, AlteredChord, "Altered Chord", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.AlteredChord, DamageModifierMode.sPvPWvW),
         
         // Lute Playing
-        new BuffOnActorDamageModifier(Mod_LutePlaying, LutePlaying, "Lute Playing", "4% strike and condition damage", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Troubadour, ByPresence, TraitImages.ReverberatingLute, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_LutePlaying, LutePlaying, "Lute Playing", "4%", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Troubadour, ByPresence, TraitImages.ReverberatingLute, DamageModifierMode.All),
         
         // Harmonize
         // TODO Verify if only strike damage or also condition
         new BuffOnActorDamageModifier(Mod_Harmonize, [LutePlaying, FlutePlaying, DrumPlaying, HarpPlaying], "Harmonize", "4% per instrument playing", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByMultiPresence, TraitImages.Harmonize, DamageModifierMode.All),
         
         // Shredding
-        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "20% strike damage", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "20%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "15% strike damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.sPvPWvW),
         // TODO: add symphonic resonance Lute
     ];
 

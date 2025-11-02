@@ -85,11 +85,11 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(Mod_RelicOfFire, FireAura, "Relic of Fire", "7% under fire aura", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfFire, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2025W8CMReleaseAndNewCoreRelics),
         // Relic of Bloodstone
-        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "15% strike damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2025Balance, GW2Builds.July2025BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2025Balance, GW2Builds.July2025BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2025BalanceHotFix),
         //
         new DamageLogDamageModifier(Mod_RelicOfTheEagle,"Relic of the Eagle", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.RelicOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)

@@ -43,15 +43,15 @@ internal static class EvokerHelper
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
         // Familiar's Prowess (Fox)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFox, FamiliarsProwessFox, "Familiar's Prowess (Fox)", "10% condition damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFox, FamiliarsProwessFox, "Familiar's Prowess (Fox)", "10% after familiar skill", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
         // Familiar's Prowess + Familiar's Focus (Fox)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "25% condition damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "20% condition damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "25% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "20% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // Familiar's Prowess (Hare)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessHare, FamiliarsProwessHare, "Familiar's Prowess (Hare)", "10% strike damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessHare, FamiliarsProwessHare, "Familiar's Prowess (Hare)", "10% after familiar skill", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
         // Familiar's Prowess + Familiar's Focus (Hare)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "25% strike damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "20% strike damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "25% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "20% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // Zap
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.PvE)
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
@@ -68,7 +68,7 @@ internal static class EvokerHelper
             .UsingChecker(ZapChecker)
             .UsingApproximate(),
         // Adept
-        new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "5% strike damage against burning foes", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "5% against burning foes", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
 
     ];
 
