@@ -403,6 +403,7 @@ public static class ArcDPSEnums
         ConditionSidekick = -43,
         ConcentrationSidekick = -44,
         ExpertiseSidekick = -45,
+        HealingEffectivenessOutgoingAdditive2 = -46,
     }
 
     public static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
