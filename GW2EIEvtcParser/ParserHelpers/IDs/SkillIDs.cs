@@ -5349,6 +5349,7 @@ public static class SkillIDs
     public const long ZephyriteSunCrystalBuff = 77876;
     public const long SummonKryptisTurretBuff = 77931;
     public const long LingeringSpiritsPreservation = 77976;
+    public const long PoV_RelicOfTheFirstRevenant = 78005; // relic gear and condi damage reduction buff
     public const long RelicOfTheBiomancer = 78041; // Healing buff
     public const long HoloDancerDecoyBuff = 78060;
     public const long RelicOfCastora = 78087; // Healing buff

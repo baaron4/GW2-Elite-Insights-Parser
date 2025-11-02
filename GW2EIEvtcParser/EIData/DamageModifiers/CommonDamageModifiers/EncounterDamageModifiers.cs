@@ -10,7 +10,8 @@ internal static class EncounterDamageModifiers
 {
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_UnnaturalSignet, UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
+        new BuffOnFoeDamageModifier(Mod_UnnaturalSignet, UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Mod_Compromised, Compromised, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.Compromised, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Mod_ErraticEnergy, ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.Unstable, DamageModifierMode.PvE)
             .UsingGainAdjuster(VulnerabilityAdjuster),
@@ -142,9 +143,12 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(Mod_UnstrippableProtection, ProtectionUnstrippable, "Protection (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Protection, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Mod_UnstrippableResolution, ResolutionUnstrippable, "Resolution (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Resolution, DamageModifierMode.PvE),
         // Enrages
-        new BuffOnFoeDamageModifier(Mod_Enraged_inc25, Enraged_100_strike_25_reduc, "Enraged (-25%)", "-25%, stacks additively with Vulnerability", DamageSource.All, -25, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
-        new BuffOnFoeDamageModifier(Mod_Enraged_inc50, Enraged_200_strike_50_reduc, "Enraged (-50%)", "-50%, stacks additively with Vulnerability", DamageSource.All, -50, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
-        new BuffOnFoeDamageModifier(Mod_Enraged_inc75, Enraged_300_strike_75_reduc, "Enraged (-75%)", "-75%, stacks additively with Vulnerability", DamageSource.All, -75, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
+        new BuffOnFoeDamageModifier(Mod_Enraged_inc25, Enraged_100_strike_25_reduc, "Enraged (-25%)", "-25%, stacks additively with Vulnerability", DamageSource.All, -25, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster),
+        new BuffOnFoeDamageModifier(Mod_Enraged_inc50, Enraged_200_strike_50_reduc, "Enraged (-50%)", "-50%, stacks additively with Vulnerability", DamageSource.All, -50, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster),
+        new BuffOnFoeDamageModifier(Mod_Enraged_inc75, Enraged_300_strike_75_reduc, "Enraged (-75%)", "-75%, stacks additively with Vulnerability", DamageSource.All, -75, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
