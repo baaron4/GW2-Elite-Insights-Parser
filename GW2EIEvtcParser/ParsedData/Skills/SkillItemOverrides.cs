@@ -514,6 +514,9 @@ public static class SkillItemOverrides
         { RelicPrivateerSpawn, ItemImages.RelicOfThePrivateer },
         { RelicOfTheSteamshrieker, ItemImages.RelicOfTheSteamshrieker },
         { BloodstoneExplosion, ItemImages.RelicOfBloodstone },
+        { RelicOfTheMistStranger, ItemImages.RelicOfTheMistStranger },
+        { RelicOfCastora, ItemImages.RelicOfCastora },
+        { RelicOfTheBiomancer, ItemImages.RelicOfTheBiomancer },
 #endregion RelicIcons
         #region ElementalistIcons
         { EarthenBlast, TraitImages.EarthenBlast },

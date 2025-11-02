@@ -385,7 +385,7 @@ internal static class EncounterBuffs
             new Buff("Nova Shield", NovaShield, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Nova Shield CM", NovaShieldCM, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.Tracked),
-            new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
+            new Buff("Galvanic Sensitivity", GalvanicSensitivityBuff, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
             new Buff("Thrumming Presence", ThrummingPresenceBuff, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
             new Buff("Thrumming Presence CM", ThrummingPresenceBuffCM, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
             new Buff("Charge (Decima)", ChargeDecima, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),

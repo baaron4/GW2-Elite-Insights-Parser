@@ -150,7 +150,7 @@ public class Buff : IVersionable
         }
         if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
         {
-            var message = "Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType;
+            var message = "Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType + " with stacks " + buffInfoEvent.MaxStacks;
 #if DEBUG
             // I don't exactly remember when stack type on buff info event was fixed on arc's side
             if (versionEvent.Build > 20240600 && IsIncompatibleStackLogic(buffInfoEvent.StackingType))

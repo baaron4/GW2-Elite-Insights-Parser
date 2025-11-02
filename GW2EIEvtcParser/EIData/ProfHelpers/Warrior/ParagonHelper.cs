@@ -20,6 +20,13 @@ internal static class ParagonHelper
         // Chant of Action
         new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20% strike and condition damage", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
+        // Brisk Pacing
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "7.5% strike and condition damage", DamageSource.NoPets, 7.5, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "5.0% strike and condition damage", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "10% strike and condition damage", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "25% strike and condition damage", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "20% strike and condition damage", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
@@ -35,5 +42,8 @@ internal static class ParagonHelper
         new Buff("Chant of Recuperation", ChantOfRecuperationBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfRecuperation),
         new Buff("Chant of Freedom", ChantOfFreedomBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfFreedom),
         new Buff("\"We Will Never Yield!\"", WeWillNeverYieldBuff, Source.Paragon, BuffClassification.Support, SkillImages.WeWillNeverYield),
+        new Buff("Brisk Pacing (Tier 1)", BriskPacingTier1, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
+        new Buff("Brisk Pacing (Tier 2)", BriskPacingTier2, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
+        new Buff("Brisk Pacing (Tier 3)", BriskPacingTier3, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
     ];
 }

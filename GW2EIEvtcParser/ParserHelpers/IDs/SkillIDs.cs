@@ -4730,7 +4730,7 @@ public static class SkillIDs
     public const long PhantasmalLancerDamage = 74619;
     public const long ResoluteEvasion = 74632;
     public const long SeismicCrashNM = 74653;
-    public const long GalvanicSensitivity = 74659;
+    public const long GalvanicSensitivityBuff = 74659;
     public const long FluxlanceFusillade = 74660;
     public const long Propel = 74669;
     public const long CalibratedEssence = 74674;
@@ -4802,6 +4802,7 @@ public static class SkillIDs
     public const long DecimaConduitWallBuff = 74962;
     public const long Slam = 74965;
     public const long PressureRelease = 74966;
+    public const long GalvanicSensitivityNM = 74970;
     public const long FluxlanceSalvo4 = 74973;
     public const long EruptionOfRot = 74976;
     public const long ThrummingPresenceBuff = 74982;
@@ -4905,6 +4906,7 @@ public static class SkillIDs
     public const long LinkedDecimaAdd1 = 75420;
     public const long SeismicCrashCM = 75422;
     public const long RotTheWorldCM = 75425;
+    public const long GalvanicSensitivityCM = 75428;
     public const long RelicOfThorns = 75432;
     public const long EnlightenedConduitGadgetChargeTier2BuffCM = 75433;
     public const long LinkedDecima1 = 75436;
@@ -5054,7 +5056,7 @@ public static class SkillIDs
     #endregion
     #region Visions of Eternity
     public const long SplinterWeaponSkill = 76549;
-    public const long ReverberatingLute = 76552;
+    public const long LivelyLute = 76552; // Legacy beta name - Reverberating Lute
     public const long EvokerStoneSpiritAura1 = 76557; // Reused buff from Stone Spirit for Evoker's Pets
     public const long FormOfTheMonkVentariActiveBuff = 76559;
     public const long WeWillNeverYieldSkill = 76562;
@@ -5077,7 +5079,7 @@ public static class SkillIDs
     public const long Whirlwind = 76619;
     public const long ResoluteStanceSkill = 76621;
     public const long HarpPlaying = 76624;
-    public const long ForgedSurferDash = 76633;
+    public const long ForgedSurferDashSkill1 = 76633;
     public const long Rejuvenate = 76634;
     public const long FamiliarsProwessHare = 76639;
     public const long CosmicWisdomMesmer = 76641;
@@ -5106,8 +5108,8 @@ public static class SkillIDs
     public const long SeismicImpactPlayerSkill = 76707;
     public const long LuminousStaff = 76708;
     public const long SplashPetSkill = 76709;
-    public const long EvokerHealingRain = 76710; // Buff - should be Otter's Compassion
-    public const long FoxsFury1 = 76711;
+    public const long OttersCompassionBuff = 76710; // Legacy beta name - Healing Rain
+    public const long FoxsFury = 76711;
     public const long DrumPlaying = 76719;
     public const long Pelt = 76722;
     public const long StoneSummitCannon = 76725;
@@ -5133,6 +5135,7 @@ public static class SkillIDs
     public const long ExplosiveGrowthSkill = 76783;
     public const long CombatHigh = 76785;
     public const long SummonCycloneBow = 76787;
+    public const long HarePassive = 76792;
     public const long DefensiveProtocolCleanse = 76798;
     public const long ZapPetSkill = 76803;
     public const long RadiantArmamentsShield = 76804;
@@ -5156,6 +5159,7 @@ public static class SkillIDs
     public const long TaleOfTheSoulkeeper = 76850;
     public const long WindForce = 76855;
     public const long RadiantArmamentsStaffLingering = 76858;
+    public const long CHantOfRecuperationSkill2 = 76863;
     public const long Anguish = 76864;
     public const long ChantOfActionBuff = 76865;
     public const long OffensiveProtocolShred1 = 76866;
@@ -5165,6 +5169,7 @@ public static class SkillIDs
     public const long WillingHost = 76885;
     public const long AntivenomDraught = 76886;
     public const long RapaciousStrain = 76888;
+    public const long ZephyriteSunCrystal = 76895;
     public const long FormOfTheDervishRazahActiveBuff = 76896;
     public const long OffensiveProtocolObliterate2 = 76901;
     public const long RitualistCallLightning = 76903;
@@ -5172,12 +5177,12 @@ public static class SkillIDs
     public const long DetonateAnguish = 76906;
     public const long FormOfTheMesmerMallyxActiveBuff = 76907;
     public const long LiquidState = 76908;
-    public const long UnstableSkrittBomb = 76909;
+    public const long UnstableSkrittBombSkill = 76909;
     public const long ShiningSPin = 76910;
     public const long LightningBlitzPetSkill = 76914;
     public const long BeguilingHaze2 = 76917;
     public const long LingeringSpirits = 76920;
-    public const long ElectricEnchantment = 76922;
+    public const long ElectricEnchantmentBuff = 76922; // Legacy beta name - Hare's Agility
     public const long NightmareWeaponBuff = 76923;
     public const long GleamingBlade = 76924;
     public const long CalcifyPetSkill = 76925;
@@ -5213,6 +5218,7 @@ public static class SkillIDs
     public const long EvokerStoneSpiritAura3 = 77016; // Reused buff from Stone Spirit for Evoker's Pets
     public const long GaseousStateSkill = 77018;
     public const long RestorativeGlowBuff1 = 77020;
+    public const long Mistfire = 77021;
     public const long WeaponOfRemedy = 77022;
     public const long HoloDancerDecoy2 = 77028;
     public const long Anguish2 = 77029;
@@ -5224,11 +5230,12 @@ public static class SkillIDs
     public const long FormOfTheWarriorJalisPassiveBuff = 77049;
     public const long RuptureAnguish = 77050;
     public const long PlasmaticStateBuff = 77052;
-    public const long EssenceBLast = 77061;
+    public const long OtterPassive = 77060;
+    public const long EssenceBlast = 77061;
     public const long InnervatingAlloy = 77062;
     public const long TaleOfTheTorturedMastermind = 77066;
     public const long SolidStateSkill = 77069;
-    public const long EnterRadiantForge = 77073;
+    public const long EnterRadiantForge = 77073; // Legacy beta name - Radiant Shroud
     public const long ConflagrationPetSkill = 77074;
     public const long HarmoniousHarp = 77077;
     public const long PiercingStanceSkill = 77078;
@@ -5249,6 +5256,7 @@ public static class SkillIDs
     public const long ZapBuffPlayerToTarget = 77123; // Buff applied from the player to the target
     public const long PainfulBond = 77128;
     public const long RestorativeGlowSkill = 77136;
+    public const long ToadPassive = 77139;
     public const long BeguilingHaze3 = 77141;
     public const long RadiantForge = 77142;
     public const long PiercingStanceBuff = 77143;
@@ -5262,6 +5270,7 @@ public static class SkillIDs
     public const long FormOfTheMonkVentariPassiveBuff = 77167;
     public const long EmpoweredArmaments = 77169;
     public const long SupersonicArrow = 77174;
+    public const long FoxPassive = 77175;
     public const long RitualistHealingRain = 77177; // Buff - Reused ele skill?
     public const long TaleOfTheValiantMarshal = 77178;
     public const long ZapBuffTargetToPlayer = 77180; // Buff applied from the target to the player
@@ -5295,7 +5304,7 @@ public static class SkillIDs
     public const long Affinity = 77274;
     public const long RadiantArmamentsShieldLingering = 77276;
     public const long MistburnMortar = 77277;
-    public const long FoxsFury2 = 77282;
+    public const long FoxsFury_FireSpecializedElement = 77282;
     public const long Thorns = 77283;
     public const long GladiatorsDefense = 77291;
     public const long RestorativeGlowBuff3 = 77292;
@@ -5323,7 +5332,7 @@ public static class SkillIDs
     public const long CosmicWisdomMonk = 77371;
     public const long ChantOfRecuperationBuff = 77378;
     public const long EvokerStoneSpiritAura5 = 77382; // Reused buff from Stone Spirit for Evoker's Pets
-    public const long HaresAgilitySkill3 = 77387;
+    public const long ElectricEnchantmentSkill = 77387; // Legacy beta name - Hare's Agility
     public const long ChannelFormOfTheWarrior2 = 77389;
     public const long FamiliarsProwessToad = 77391;
     public const long SkrittSwipe = 77397;
@@ -5331,9 +5340,43 @@ public static class SkillIDs
     public const long CookingGolem = 77572;
     public const long QuickplayBoost = 77676;
     public const long BagOfPoppedCandyCorn = 77728;
+    public const long ExaltedHammerSkill = 77746;
+    public const long ForgedSurferDashBuff = 77749;
+    public const long ExaltedHammerBuff = 77830;
+    public const long MistburnMortarBuff = 77835;
+    public const long SummonSpiritsSkill1 = 77860;
+    public const long MetalLegionGuitarBuff = 77875;
+    public const long ZephyriteSunCrystalBuff = 77876;
+    public const long SummonKryptisTurretBuff = 77931;
     public const long LingeringSpiritsPreservation = 77976;
+    public const long RelicOfTheBiomancer = 78041; // Healing buff
+    public const long HoloDancerDecoyBuff = 78060;
+    public const long RelicOfCastora = 78087; // Healing buff
     public const long LingeringSpiritsAnguish = 78172;
+    public const long EmbraceTheDarkness_Conduit = 78191;
+    public const long CallToAnguish_Conduit = 78203;
+    public const long SaurianMight = 78204;
+    public const long ChakShieldBuff = 78288;
+    public const long PossessiveHoarder = 78307;
+    public const long ZephyriteSunCrystalSkill = 78309;
+    public const long UnyieldingImpact_Conduit = 78351;
+    public const long ForgedSurferDashSkill2 = 78440;
+    public const long BriskPacingTier2 = 78486;
+    public const long BanishEnchantment_Conduit = 78587;
+    public const long ReleasePotentialMesmer = 78615;
+    public const long ElementalBalanceBuff = 78631;
+    public const long SummonSpiritsSkill2 = 78660;
+    public const long ReleasePotentialDervish = 78661;
+    public const long EmpoweringMisery = 78681;
+    public const long BriskPacingTier3 = 78740;
+    public const long RelicOfTheMistStranger = 78806; // Lifesteal healing buff
+    public const long SplinterWeaponBuff2 = 78857; // TODO Verify what this is
+    public const long PiercingShriek = 78873;
+    public const long UnstableSkrittBombBuff = 78896;
     public const long LingeringSpiritsWanderlust = 78987;
+    public const long BriskPacingTier1 = 79083;
     public const long ExplosiveGrowthBuff = 79105;
+    public const long POV_ElementalBalance = 79230; // Trait buff?
+    public const long SummonSpiritsSkill3 = 79246;
     #endregion
 }
