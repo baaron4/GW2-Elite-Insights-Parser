@@ -282,7 +282,7 @@ internal class Cairn : BastionOfThePenitent
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetSkills().Contains(Countdown) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return combatData.GetBuffApplyData(Countdown).Any(x => x.Time > 0) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)

@@ -399,7 +399,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetSkills().Contains(AchievementEligibilityDownDownDowned) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return combatData.GetBuffApplyData(AchievementEligibilityDownDownDowned).Any(x => x.Time > -100) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
