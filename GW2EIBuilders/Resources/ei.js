@@ -206,6 +206,9 @@ function mainLoad() {
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
     }
+    if (!activeFound) {
+        reactiveLogdata.players[0].active = true;
+    }
     compileTemplates();
     if (!!crData) {
         compileCRTemplates();
