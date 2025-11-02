@@ -681,6 +681,12 @@ internal static class SkillImages
     public const string MetalLegionGuitar = "https://render.guildwars2.com/file/02727B1807CF0FEF31037FD9E307BABB2055AE3C/3680214.png";
     public const string InquestPortalDevice = "https://render.guildwars2.com/file/99210D96EB449F7A975920410C4EAEEECB41BC06/3680221.png";
     public const string HoloDancerDecoy = "https://render.guildwars2.com/file/CEE6340604724A060D7C570709C4B05DFAD56617/3680212.png";
+    public const string UnstableSkrittBomb = "https://render.guildwars2.com/file/0FBFB6FA27C9BEBD1872DAACDB040AEA71A616A9/3680208.png";
+    public const string ForgedSurferDash = "https://render.guildwars2.com/file/696501BA136CA660BD22D0D0A3B19741D4A77529/3680211.png";
+    public const string ZephyriteSunCrystal = "https://render.guildwars2.com/file/3C1B2075B7B164EB2ABE4F6650F553D40F689E53/3680218.png";
+    public const string SummonKryptisTurret = "https://render.guildwars2.com/file/2DC92035E3A36CBCDB62C84E65BEF69BFA0BDD02/3680213.png";
+    public const string MistburnMortar = "https://render.guildwars2.com/file/4519AE3A9032E03F2F14AAA1B5EEE10F1AF1EEAE/3680215.png";
+    public const string ExaltedHammer = "https://render.guildwars2.com/file/57A193E75618661CE3F51DC44AC59F7BA72E6169/3680210.png";
     #endregion Thief
     #region Warrior
     // Signets

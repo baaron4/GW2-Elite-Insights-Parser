@@ -306,6 +306,7 @@ internal static class TraitImages
     public const string MercilessHammer = "https://render.guildwars2.com/file/203E0DEC94900B5305F309A1337D03D70FF9426E/1012804.png";
     public const string SignetMastery = "https://render.guildwars2.com/file/3D117C0158CD7A55BE740D6B072807A3121C90A1/1012775.png";
     public const string GunsAndGlory = "https://render.guildwars2.com/file/0B2291AEBD4B3755F0CD9A38987797763AD34790/2491554.png";
+    public const string BriskPacing = "https://render.guildwars2.com/file/9D35A3CED107B068AD4D20A3782BF6262FE36610/3680030.png";
     #endregion
 }
 #pragma warning restore CA1823 // Unused field

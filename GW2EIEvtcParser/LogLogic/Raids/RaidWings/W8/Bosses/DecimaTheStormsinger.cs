@@ -73,7 +73,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstHealthDamageHitMechanic([SparkingAuraTier2, SparkingAuraTier2CM], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightMilitaryGreen), "SparkAura2.H", "Sparking Aura (Absorbed Tier 2 Green Damage)", "Absorbed Tier 2 Green", 0),
                 new PlayerDstHealthDamageHitMechanic([SparkingAuraTier3, SparkingAuraTier3CM], new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "SparkAura3.H", "Sparking Aura (Absorbed Tier 3 Green Damage)", "Absorbed Tier 3 Green", 0),
                 new PlayerDstHealthDamageHitMechanic([SparkingAuraTier1, SparkingAuraTier1CM, SparkingAuraTier2, SparkingAuraTier2CM, SparkingAuraTier3, SparkingAuraTier3CM], new MechanicPlotlySetting(Symbols.CircleX, Colors.MilitaryGreen), "SparkAuraInc.H", "Hit by Sparking Aura with Galvanic Sensitivity", "Sparking Aura with Galvanic Sensitivity Hit", 0)
-                    .UsingChecker((hde, log) => hde.To.HasBuff(log, GalvanicSensitivity, hde.Time, ServerDelayConstant)),
+                    .UsingChecker((hde, log) => hde.To.HasBuff(log, GalvanicSensitivityBuff, hde.Time, ServerDelayConstant)),
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([FulgentFence, FulgentFenceCM], new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
