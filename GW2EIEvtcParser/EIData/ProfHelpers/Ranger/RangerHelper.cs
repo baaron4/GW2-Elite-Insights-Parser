@@ -134,6 +134,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileJanthiriBee,
+        (int)MinionID.JuvenileRaptorSwiftwing,
     }
     .Union(JuvenileFelinePetIDs)
     .Union(JuvenileBirdPetIDs)

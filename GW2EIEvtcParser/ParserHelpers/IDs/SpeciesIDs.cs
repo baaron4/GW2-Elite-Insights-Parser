@@ -918,6 +918,7 @@ public static class SpeciesIDs
         JuvenileSpinegazer = 26220,
         JuvenileWarclaw = 26628,
         JuvenileJanthiriBee = 26851,
+        JuvenileRaptorSwiftwing = 27259,
         // Guardian Weapon Summons
         BowOfTruth = 6383,
         HammerOfWisdom = 5791,
