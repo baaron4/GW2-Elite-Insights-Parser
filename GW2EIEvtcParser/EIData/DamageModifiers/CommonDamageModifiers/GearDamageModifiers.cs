@@ -110,9 +110,12 @@ internal static class GearDamageModifiers
                 && (currentPosition - currentTargetPosition).Length() >= 600.0
             , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Mod_RuneOfPerplexity, Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new BuffOnFoeDamageModifier(Mod_RuneOfPerplexity, Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfPerplexity, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         // Relics
         new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfNourys, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheSorrow, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheFirstRevenant, Resistance, "Relic of the First Revenant", "-33% under resistance", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheFirstRevenant, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 }

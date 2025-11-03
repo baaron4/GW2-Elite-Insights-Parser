@@ -399,4 +399,5 @@ public static class DamageModifierIDs
     public const int Mod_BriskPacingTier1 = 386;
     public const int Mod_BriskPacingTier2 = 387;
     public const int Mod_BriskPacingTier3 = 388;
+    public const int Mod_RelicOfTheFirstRevenant = 389;
 }
