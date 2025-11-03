@@ -133,6 +133,10 @@ internal static class SkillImages
     public const string RingOfFire = "https://render.guildwars2.com/file/CD08FDC23B56EBB19C90B909C65D9EE4D9FFF8C8/103183.png";
     public const string DebrisTornado = "https://render.guildwars2.com/file/F20A7D6B7FB71D520B4643CF120AF6A50DF7A2B0/102914.png";
     public const string LavaFont = "https://render.guildwars2.com/file/CFA80DB42022C240001D249CED6235CEF70C9042/103135.png";
+    public const string ScorchingShot = "https://render.guildwars2.com/file/DA6E9962EC9966CDBBC776F23347D16298AF4ADE/3256325.png";
+    public const string SoothingSplash = "https://render.guildwars2.com/file/D2092BE1DA1F2D1D93F67E07EE010BB113794C44/3256326.png";
+    public const string ElectricExposure = "https://render.guildwars2.com/file/575D6048F7B2660A3BC0D3A93CECFD49EEB1C0D1/3256323.png";
+    public const string PiercingPebble = "https://render.guildwars2.com/file/4F217D25EBBFC017B4621C966BD26A7C4C6CD81C/3256324.png";
     // Evoker
     // - Fox
     public const string Ignite = "https://render.guildwars2.com/file/3C20D2FF75DA624828651AD5CEB463AC90A01207/3680117.png";

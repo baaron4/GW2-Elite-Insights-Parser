@@ -262,13 +262,13 @@ internal static class ElementalistHelper
         new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, SkillImages.RockyLoop)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Pistol
-        new Buff("Fire Bullet", FireBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+        new Buff("Fire Bullet", FireBullet, Source.Elementalist, BuffClassification.Other, SkillImages.ScorchingShot)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Ice Bullet", IceBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+        new Buff("Ice Bullet", IceBullet, Source.Elementalist, BuffClassification.Other, SkillImages.SoothingSplash)
             .WithBuilds( GW2Builds.February2024NewWeapons),
-        new Buff("Air Bullet", AirBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+        new Buff("Air Bullet", AirBullet, Source.Elementalist, BuffClassification.Other, SkillImages.ElectricExposure)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Earth Bullet", EarthBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+        new Buff("Earth Bullet", EarthBullet, Source.Elementalist, BuffClassification.Other, SkillImages.PiercingPebble)
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new Buff("Raging Ricochet", RagingRichochetBuff, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.RagingRicochet)
             .WithBuilds( GW2Builds.February2024NewWeapons),
