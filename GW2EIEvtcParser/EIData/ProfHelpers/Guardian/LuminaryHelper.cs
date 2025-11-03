@@ -39,7 +39,7 @@ internal static class LuminaryHelper
                 return false;
             })
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Empowered Armaments", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Radiant Armaments (Hammer)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.All)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         // Piercing Stance   
         new BuffOnActorDamageModifier(Mod_PiercingStance, PiercingStanceBuff, "Piercing Stance", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, SkillImages.PiercingStance, DamageModifierMode.All)
@@ -54,6 +54,11 @@ internal static class LuminaryHelper
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-7%", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        // Luminary's Blessing Traited
+        new BuffOnActorDamageModifier(Mod_LuminarysBlessingResoluteBlessing, LuminarysBlessing, "Resolute Blessing", "-10% under Luminary's Blessing while traited", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Luminary, ByPresence, TraitImages.ResoluteBlessing, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_LuminarysBlessingResoluteBlessing, LuminarysBlessing, "Resolute Blessing", "-7% under Luminary's Blessing while traited", DamageSource.Incoming, -7.0, DamageType.Condition, DamageType.All, Source.Luminary, ByPresence, TraitImages.ResoluteBlessing, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         // Radiant Armaments
         new BuffOnActorDamageModifier(Mod_RadiantArmamentsShield, RadiantArmamentsShield, "Radiant Armaments (Shield)", "-15%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsShield, DamageModifierMode.PvE),

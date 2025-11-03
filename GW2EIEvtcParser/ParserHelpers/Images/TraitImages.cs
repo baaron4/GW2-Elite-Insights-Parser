@@ -98,6 +98,7 @@ internal static class TraitImages
     public const string SelflessDaring = "https://render.guildwars2.com/file/32BAB20860259FF3E8214E784E6BE7521213089C/1012412.png";
     public const string LightsGift = "https://render.guildwars2.com/file/6C920751304B14ADFFB6A70CACEA1B80D2ABFC59/3679965.png";
     public const string EmpoweredArmaments = "https://render.guildwars2.com/file/37424E9DD0A3ADC61DD56BB180C96201DB61099C/3679960.png";
+    public const string ResoluteBlessing = "https://render.guildwars2.com/file/3580BB0C4F3E9BBC96080454BE9491CC934A6C55/3679956.png";
     #endregion
     #region Mesmer
     public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";
