@@ -82,11 +82,11 @@ internal static class EvokerHelper
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
         // Familiar's Prowess (Toad)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike after familiar skill", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-10% strike after familiar skill", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% after familiar skill", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-10% after familiar skill", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // Familiar's Prowess + Familiar's Focus (Toad)
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-10% strike and condi after familiar skill", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-15% after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-10% after familiar skill", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
