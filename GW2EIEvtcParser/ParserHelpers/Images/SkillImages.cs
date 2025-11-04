@@ -237,6 +237,10 @@ internal static class SkillImages
     public const string RushingJustice = "https://render.guildwars2.com/file/2F3E006427F17D3EF747BF0F0B0E0A941964572F/2479367.png";
     public const string FlowingResolve = "https://render.guildwars2.com/file/E7DB54CE0FA25D3476405E083DBA25033C18FDA3/2479368.png";
     public const string CrashingCourage = "https://render.guildwars2.com/file/3AD50BA43AA00EA97C6152D5EC6092FE0F0979D0/2479369.png";
+    // Luminary F Skills
+    public const string RadiantJustice = "https://render.guildwars2.com/file/4AA777300AE7D0681907353CA69FBAFD7E649253/3713157.png";
+    public const string RadiantResolve = "https://render.guildwars2.com/file/FA9E0C3E1024084F9E0F5505DAD826E242580C58/3713158.png";
+    public const string RadiantCourage = "https://render.guildwars2.com/file/61FA2B39C018F8930B38D1FC0FE5CE9C49BA681A/3713156.png";
     // Firebrand Tome F1 Skills
     public const string Chapter1SearingSpell = "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png";
     public const string Chapter2IgnitingBurst = "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png";
@@ -301,6 +305,7 @@ internal static class SkillImages
     public const string EffulgentStance = "https://render.guildwars2.com/file/59A7E145B5D6DC4CB9642F80007644791D302FA2/3680156.png";
     public const string PiercingStance = "https://render.guildwars2.com/file/E5805F3477ED5618E348043475FFA442C7C791E3/3680154.png";
     public const string DaringAdvance = "https://render.guildwars2.com/file/2E24D2089501C663801BF7CC567E1CC0F5714AD7/3680140.png";
+    public const string RestorativeGlow = "https://render.guildwars2.com/file/9B72587791FE50B415B94BE92AA9050F43F6A848/3680149.png";
     #endregion Guardian
     #region Mesmer
     // Signets

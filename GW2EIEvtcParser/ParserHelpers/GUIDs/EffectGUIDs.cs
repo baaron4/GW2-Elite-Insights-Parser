@@ -351,6 +351,12 @@ public static class EffectGUIDs
     public static readonly GUID DragonhunterFragmentsOfFaith = new("C84644DDAA59E542989FDB98CD69134C");
     public static readonly GUID DragonhunterHuntersWardCage = new("F70A6157503537478331C8F82C0AB76E");
     public static readonly GUID DragonhunterSymbolOfEnergy = new("8493CB203B40E04BAE5DC6F141B40743");
+    public static readonly GUID LuminaryRadiantJustice1 = new("FB78801BB31CAF488B55F2F57EF9B070");
+    public static readonly GUID LuminaryRadiantJustice2 = new("7535B4CB815232418B69092F3390A7AB");
+    public static readonly GUID LuminaryRadiantResolve1 = new("4A83F0B627B75C47894941C4D35BA89F");
+    public static readonly GUID LuminaryRadiantResolve2 = new("FBA4C4F041E78748AC1CA5FF5D37D2DA");
+    public static readonly GUID LuminaryRadiantCourage1 = new("03850757F14FD44A9998D4CAD71CC589");
+    public static readonly GUID LuminaryRadiantCourage2 = new("08E6D231507CDD458EDECF67D264228C");
     #endregion
 
     #region Engineer

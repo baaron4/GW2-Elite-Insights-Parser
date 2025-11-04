@@ -584,12 +584,14 @@ public static class SkillItemOverrides
         { OffensiveProtocolObliterate2, SkillImages.OffensiveProtocolObliterate },
         { OffensiveProtocolObliterate3, SkillImages.OffensiveProtocolObliterate },
         { DefensiveProtocolThorns2, SkillImages.DefensiveProtocolThorns },
+        { DefensiveProtocolThorns3, SkillImages.DefensiveProtocolThorns },
         { OffensiveProtocolShred1, SkillImages.OffensiveProtocolShred },
         { OffensiveProtocolShred3, SkillImages.OffensiveProtocolShred },
         { OffensiveProtocolPierce2, SkillImages.OffensiveProtocolPierce },
         { OffensiveProtocolPierce3, SkillImages.OffensiveProtocolPierce },
         { PlasmaticStateSkill2, SkillImages.PlasmaticState },
         { RapaciousStrain2, SkillImages.DefensiveProtocolThorns },
+        { ThornsSkill, SkillImages.DefensiveProtocolThorns },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
@@ -640,6 +642,7 @@ public static class SkillItemOverrides
             { SolarStormIlluminatedHealing, SkillImages.SolarStorm },
             { HammerOfWisdom, SkillImages.HammerOfWisdom },
             { EffulgentStanceDamage, SkillImages.EffulgentStance },
+            { RestorativeGlowHealingBuff, SkillImages.RestorativeGlow },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, TraitImages.HealingPrism },
