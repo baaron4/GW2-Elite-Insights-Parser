@@ -12,6 +12,14 @@ internal static class LuminaryHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
+        // Virtues
+        new EffectCastFinder(RadiantJusticeSkill, EffectGUIDs.LuminaryRadiantJustice1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantJustice2),
+        new EffectCastFinder(RadiantResolveSkill, EffectGUIDs.LuminaryRadiantResolve1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantResolve2),
+        new EffectCastFinder(RadiantCourageSkill, EffectGUIDs.LuminaryRadiantCourage1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantCourage2),
+        // Radiant Forge
         new BuffGainCastFinder(EnterRadiantForge, RadiantForge)
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitRadiantForge, RadiantForge)
@@ -71,7 +79,9 @@ internal static class LuminaryHelper
         // Forge
         new Buff("Radiant Forge", RadiantForge, Source.Luminary, BuffClassification.Other, BuffImages.RadiantForge),
         // Virtues
-        // TODO: add new radiant virtues
+        new Buff("Radiant Justice", RadiantJusticeBuff, Source.Luminary, BuffClassification.Other, SkillImages.RadiantJustice),
+        new Buff("Radiant Resolve", RadiantResolveBuff, Source.Luminary, BuffClassification.Other, SkillImages.RadiantResolve),
+        new Buff("Radiant Courage", RadiantCourageBuff, Source.Luminary, BuffClassification.Other, SkillImages.RadiantCourage),
         // Radiant Armaments
         new Buff("Radiant Armaments (Hammer)", RadiantArmamentsHammer, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
         new Buff("Radiant Armaments (Hammer Lingering)", RadiantArmamentsHammerLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
@@ -94,5 +104,7 @@ internal static class LuminaryHelper
         new Buff("Empowered Armaments", EmpoweredArmaments, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.EmpoweredArmaments),
         // Others
         new Buff("Counterattack (Luminary Shield)", CounterattackLuminary, Source.Luminary, BuffClassification.Other, SkillImages.Counterblow),
+        new Buff("Restorative Glow (Personal)", RestorativeGlowPersonalBuff, Source.Luminary, BuffClassification.Other, SkillImages.RestorativeGlow),
+        new Buff("Restorative Glow (Shared)", RestorativeGlowSharedBuff, Source.Luminary, BuffClassification.Defensive, SkillImages.RestorativeGlow),
     ];
 }

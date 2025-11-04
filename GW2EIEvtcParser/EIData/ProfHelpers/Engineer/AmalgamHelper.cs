@@ -38,7 +38,7 @@ internal static class AmalgamHelper
         new Buff("Berserker Strain", BerserkerStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolDemolish),
         new Buff("Titanic Strain", TitanicStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolObliterate),
         new Buff("Rapacious Strain", RapaciousStrain, Source.Amalgam, BuffClassification.Other, SkillImages.DefensiveProtocolThorns),
-        new Buff("Thorns", Thorns, Source.Amalgam, BuffClassification.Other, SkillImages.DefensiveProtocolThorns),
+        new Buff("Thorns", ThornsBuff, Source.Amalgam, BuffClassification.Other, SkillImages.DefensiveProtocolThorns),
         new Buff("Replicating Strain", ReplicatingStrain, Source.Amalgam, BuffClassification.Other, SkillImages.DefensiveProtocolCleanse),
         new Buff("Evolved", Evolved, Source.Amalgam, BuffClassification.Other, BuffImages.Evolved),
         // Utility Skills

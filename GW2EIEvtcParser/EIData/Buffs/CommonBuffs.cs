@@ -216,6 +216,7 @@ internal static class CommonBuffs
         new Buff("Bloodstone Volatility", BloodstoneVolatility, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, ItemImages.RelicOfBloodstone),
         new Buff("Bloodstone Fervor", BloodstoneFervor, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, ItemImages.RelicOfBloodstone),
         new Buff("Agony of the choir", AgonyOfTheChoir, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
+        new Buff("Relic of the Scoundrel", RelicOfTheScoundrel, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheScoundrel),
     ];
 
 }

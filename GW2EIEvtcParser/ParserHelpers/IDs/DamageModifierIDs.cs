@@ -390,8 +390,8 @@ public static class DamageModifierIDs
     public const int Mod_FieryMight = 377;
     public const int Mod_PiercingStance = 378;
     public const int Mod_BirdOfPrey = 379;
-    public const int Mod_ResilientWeapon10 = 380;
-    public const int Mod_ResilientWeapon20 = 381;
+    public const int Mod_ResilientWeaponShared10 = 380;
+    public const int Mod_ResilientWeaponShared20 = 381;
     public const int Mod_ExplosiveGrowth = 382;
     public const int Mod_LingeringSpiritsAnguish = 383;
     public const int Mod_PainfulBond = 384;
@@ -401,4 +401,6 @@ public static class DamageModifierIDs
     public const int Mod_BriskPacingTier3 = 388;
     public const int Mod_RelicOfTheFirstRevenant = 389;
     public const int Mod_LuminarysBlessingResoluteBlessing = 390;
+    public const int Mod_ResilientWeaponPersonal10 = 391;
+    public const int Mod_ResilientWeaponPersonal20 = 392;
 }
