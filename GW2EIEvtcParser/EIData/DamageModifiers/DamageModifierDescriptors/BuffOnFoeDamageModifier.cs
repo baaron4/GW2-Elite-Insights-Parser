@@ -19,28 +19,28 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
     {
     }
 
-    internal BuffOnFoeDamageModifier UsingSrcCheckerByAbsence(long buffOnSourceID)
+    internal BuffOnFoeDamageModifier UsingSelfCheckerByAbsence(long buffOnSourceID)
     {
         _trackerSource = new BuffsTrackerSingle(buffOnSourceID);
         _gainComputerSource = ByAbsence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSrcCheckerByAbsence(HashSet<long> buffOnSourceIDs)
+    internal BuffOnFoeDamageModifier UsingSelfCheckerByAbsence(HashSet<long> buffOnSourceIDs)
     {
         _trackerSource = new BuffsTrackerMulti(buffOnSourceIDs);
         _gainComputerSource = ByAbsence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSrcCheckerByPresence(long buffOnSourceID)
+    internal BuffOnFoeDamageModifier UsingSelfCheckerByPresence(long buffOnSourceID)
     {
         _trackerSource = new BuffsTrackerSingle(buffOnSourceID);
         _gainComputerSource = ByPresence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSrcCheckerByPresence(HashSet<long> buffOnSourceIDs)
+    internal BuffOnFoeDamageModifier UsingSelfCheckerByPresence(HashSet<long> buffOnSourceIDs)
     {
         _trackerSource = new BuffsTrackerMulti(buffOnSourceIDs);
         _gainComputerSource = ByPresence;
