@@ -115,19 +115,19 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         // - Piercing Shards
         new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingSelfCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingSelfCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingActorCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.sPvPWvW)
-            .UsingSelfCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.sPvPWvW)
-            .UsingSelfCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingActorCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingSelfCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         // - Flow like Water
         new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)

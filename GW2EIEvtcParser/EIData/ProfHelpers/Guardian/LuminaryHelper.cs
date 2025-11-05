@@ -38,7 +38,7 @@ internal static class LuminaryHelper
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.sPvPWvW),
         // Radiant Armaments
         new BuffOnFoeDamageModifier(Mod_RadiantArmamentsHammer, [Stun, Daze, Knockdown, Fear, Taunt, Immobile], "Radiant Armaments (Hammer)", "15% against controlled or immobilized foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsHammer, DamageModifierMode.All)
-            .UsingSelfCheckerByPresence([RadiantArmamentsHammer, RadiantArmamentsHammerLingering])
+            .UsingActorCheckerByPresence([RadiantArmamentsHammer, RadiantArmamentsHammerLingering])
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Radiant Armaments (Hammer)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.All)
             .WithBuilds(GW2Builds.OctoberVoERelease),

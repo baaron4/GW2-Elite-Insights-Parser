@@ -65,7 +65,7 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
             var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {
-                var minionOrActor = log.FindActor(damageModifier.GetSelf(evt));
+                var minionOrActor = log.FindActor(damageModifier.GetActor(evt));
                 if (ignoredSources.Contains(minionOrActor))
                 {
                     continue;

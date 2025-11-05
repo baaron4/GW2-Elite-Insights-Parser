@@ -48,10 +48,10 @@ internal static class SpellbreakerHelper
             .WithBuilds(GW2Builds.August2022Balance),
         // Magebane Tether
         new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly)
-            .WithBuffOnFoeFromSelf()
+            .WithBuffOnFoeFromActor()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly)
-            .WithBuffOnFoeFromSelf()
+            .WithBuffOnFoeFromActor()
             .WithBuilds(GW2Builds.August2022Balance),
     ];
 

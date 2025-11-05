@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.LogLogic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -19,28 +18,28 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
     {
     }
 
-    internal BuffOnFoeDamageModifier UsingSelfCheckerByAbsence(long buffOnSourceID)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByAbsence(long buffOnSourceID)
     {
         _trackerSource = new BuffsTrackerSingle(buffOnSourceID);
         _gainComputerSource = ByAbsence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSelfCheckerByAbsence(HashSet<long> buffOnSourceIDs)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByAbsence(HashSet<long> buffOnSourceIDs)
     {
         _trackerSource = new BuffsTrackerMulti(buffOnSourceIDs);
         _gainComputerSource = ByAbsence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSelfCheckerByPresence(long buffOnSourceID)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByPresence(long buffOnSourceID)
     {
         _trackerSource = new BuffsTrackerSingle(buffOnSourceID);
         _gainComputerSource = ByPresence;
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingSelfCheckerByPresence(HashSet<long> buffOnSourceIDs)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByPresence(HashSet<long> buffOnSourceIDs)
     {
         _trackerSource = new BuffsTrackerMulti(buffOnSourceIDs);
         _gainComputerSource = ByPresence;
@@ -60,7 +59,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return this;
     }
 
-    internal DamageModifierDescriptor WithBuffOnFoeFromSelf()
+    internal DamageModifierDescriptor WithBuffOnFoeFromActor()
     {
         if (GainComputer == ByAbsence)
         {
@@ -117,11 +116,11 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
             }
             if (FromDst)
             {
-                bgmsSource = log.FindActor(damageModifier.GetSelf(evt)).GetBuffGraphs(log, target);
+                bgmsSource = log.FindActor(damageModifier.GetActor(evt)).GetBuffGraphs(log, target);
             }
             if (FromSrc)
             {
-                bgms = target.GetBuffGraphs(log, damageModifier.GetSelf(evt).GetMainSingleActorWhenAttackTarget(log));
+                bgms = target.GetBuffGraphs(log, damageModifier.GetActor(evt).GetMainSingleActorWhenAttackTarget(log));
             }
             if (CheckActor(bgmsSource, evt.Time) && ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
             {
