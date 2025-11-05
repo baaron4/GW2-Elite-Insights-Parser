@@ -108,6 +108,14 @@ public abstract class Actor
     {
         return AgentItem.IsAnySpecies(ids);
     }
+    internal AgentItem GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
+    {
+        return AgentItem.GetMainAgentWhenAttackTarget(log);
+    }
+    internal SingleActor GetMainSingleActorWhenAttackTarget(ParsedEvtcLog log)
+    {
+        return AgentItem.GetMainSingleActorWhenAttackTarget(log);
+    }
     #endregion Species
 
     #region Damage
