@@ -18,17 +18,6 @@ internal static class DeadeyeHelper
             .UsingDstSpecChecker(Spec.Deadeye),
     ];
 
-    private static bool DeadeyesGazeFromDst(DamageEvent x, ParsedEvtcLog log)
-    {
-        AgentItem src = x.From;
-        var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
-        if (effectApply != null)
-        {
-            return x.To.Is(effectApply.By.GetMainAgentWhenAttackTarget(log));
-        }
-        return false;
-    }
-
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Premeditation
@@ -42,16 +31,16 @@ internal static class DeadeyeHelper
             .WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
         // Iron Sight
         new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.All)
-            .UsingChecker(DeadeyesGazeFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.sPvPWvW)
-            .UsingChecker(DeadeyesGazeFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
         new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.PvE)
-            .UsingChecker(DeadeyesGazeFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
         new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.All)
-            .UsingChecker(DeadeyesGazeFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];
 

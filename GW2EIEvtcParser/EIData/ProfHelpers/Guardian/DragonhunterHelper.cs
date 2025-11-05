@@ -22,18 +22,9 @@ internal static class DragonhunterHelper
     private const long BigGameHunterJusticeDuration = 12000;
     private static bool CheckTether(ParsedEvtcLog log, AgentItem src, AgentItem dst, long time)
     {
-        // Verify dst has justice from src
-        if (log.FindActor(dst).HasBuff(log, log.FindActor(src), JusticeDragonhunter, time))
-        {
-            var lastBigGameHunterApplyOnDst = log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src)
-                    .LastOrDefault(bae => bae.Time <= time && bae.To.Is(dst) && Math.Abs(bae.AppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant);
-            if (lastBigGameHunterApplyOnDst != null)
-            {
-                // Check that last applied stack did not run out
-                return time - lastBigGameHunterApplyOnDst.Time < BigGameHunterJusticeDuration + ServerDelayConstant;
-            }
-        }
-        return false;
+        var lastBigGameHunterApplyOnDst = log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src)
+                .LastOrDefault(bae => bae.Time <= time && bae.To.Is(dst) && Math.Abs(bae.AppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant);
+        return lastBigGameHunterApplyOnDst != null;
     }
 
     private static bool TetherEarlyExit(SingleActor src, ParsedEvtcLog log)
@@ -49,22 +40,27 @@ internal static class DragonhunterHelper
         new BuffOnFoeDamageModifier(Mod_ZealotsAggression, Crippled, "Zealot's Aggression", "10% on crippled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.ZealotsAggression, DamageModifierMode.All),
         // Big Game Hunter
         new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuffOnFoeFromSelf()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance)
             .UsingEarlyExit(TetherEarlyExit)
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),
         new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuffOnFoeFromSelf()
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance)
             .UsingEarlyExit(TetherEarlyExit)
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),
         new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuffOnFoeFromSelf()
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2023Balance)
             .UsingEarlyExit(TetherEarlyExit)
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),
         new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuffOnFoeFromSelf()
             .WithBuilds(GW2Builds.May2023Balance, GW2Builds.February2025Balance)
             .UsingEarlyExit(TetherEarlyExit)
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),
         new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "25% to tethered target", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuffOnFoeFromSelf()
             .WithBuilds(GW2Builds.February2025Balance)
             .UsingEarlyExit(TetherEarlyExit)
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),

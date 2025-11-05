@@ -65,16 +65,20 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
             var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {
-                var singleActor = log.FindActor(evt.From);
-                if (ignoredSources.Contains(singleActor))
+                var minionOrActor = log.FindActor(damageModifier.GetSelf(evt));
+                if (ignoredSources.Contains(minionOrActor))
                 {
                     continue;
                 }
-                var bgms = singleActor.GetBuffGraphs(log);
+                var bgms = minionOrActor.GetBuffGraphs(log);
                 if (Skip(Tracker, bgms, GainComputer))
                 {
-                    ignoredSources.Add(singleActor);
+                    ignoredSources.Add(minionOrActor);
                     continue;
+                }
+                if (FromDst)
+                {
+                    bgms = minionOrActor.GetBuffGraphs(log, damageModifier.GetFoe(evt).GetMainSingleActorWhenAttackTarget(log));
                 }
                 if (ComputeGain(bgms, evt, log, out double gain) && CheckConditionWithBuffRemove(buffRemovesByDstWithCurrentIndex, log, evt))
                 {
@@ -91,6 +95,10 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
             }
             foreach (HealthDamageEvent evt in typeHits)
             {
+                if (FromDst)
+                {
+                    bgms = actor.GetBuffGraphs(log, damageModifier.GetFoe(evt).GetMainSingleActorWhenAttackTarget(log));
+                }
                 if (ComputeGain(bgms, evt, log, out double gain) && CheckConditionWithBuffRemove(buffRemovesByDstWithCurrentIndex, log, evt))
                 {
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));

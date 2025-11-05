@@ -309,17 +309,6 @@ internal static class RangerHelper
             .UsingNotAccurate(),
     ];
 
-    private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
-    {
-        AgentItem src = x.From;
-        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).LastOrDefault(y => y is BuffApplyEvent && y.Time <= x.Time);
-        if (effectApply != null)
-        {
-            return x.To.Is(effectApply.By.GetMainAgentWhenAttackTarget(log));
-        }
-        return false;
-    }
-
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
     {
         return x.Skill.IsWeaponSkill && TargetWithinRangeChecker(x, log, 600);
@@ -334,13 +323,13 @@ internal static class RangerHelper
         // Skills
         // - Sic 'Em
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE)
-            .UsingChecker(SicEmFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.sPvPWvW)
-            .UsingChecker(SicEmFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
-            .UsingChecker(SicEmFromDst)
+            .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em!", "40% Pet", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
         // - Frost Spirit

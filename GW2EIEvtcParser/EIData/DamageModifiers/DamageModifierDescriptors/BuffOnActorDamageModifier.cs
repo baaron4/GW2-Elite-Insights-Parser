@@ -8,6 +8,8 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 {
     internal delegate double DamageGainAdjuster(HealthDamageEvent dl, ParsedEvtcLog log);
 
+    protected bool FromDst = false;
+
     internal BuffsTracker Tracker;
     internal DamageGainAdjuster? GainAdjuster;
 
@@ -24,6 +26,16 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
     internal virtual DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
     {
         GainAdjuster = gainAdjuster;
+        return this;
+    }
+
+    internal virtual DamageModifierDescriptor WithBuffOnActorFromFoe()
+    {
+        if (GainComputer == ByAbsence)
+        {
+            throw new InvalidOperationException("Unsupported mode when using ByAbsence");
+        }
+        FromDst = true;
         return this;
     }
 
@@ -57,16 +69,20 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
             var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {
-                var singleActor = log.FindActor(evt.From);
-                if (ignoredSources.Contains(singleActor))
+                var minionOrActor = log.FindActor(damageModifier.GetSelf(evt));
+                if (ignoredSources.Contains(minionOrActor))
                 {
                     continue;
                 }
-                var bgms = singleActor.GetBuffGraphs(log);
+                var bgms = minionOrActor.GetBuffGraphs(log);
                 if (Skip(Tracker, bgms, GainComputer))
                 {
-                    ignoredSources.Add(singleActor);
+                    ignoredSources.Add(minionOrActor);
                     continue;
+                }
+                if (FromDst)
+                {
+                    bgms = minionOrActor.GetBuffGraphs(log, damageModifier.GetFoe(evt).GetMainSingleActorWhenAttackTarget(log));
                 }
                 if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
@@ -83,6 +99,10 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
             }
             foreach (HealthDamageEvent evt in typeHits)
             {
+                if (FromDst)
+                {
+                    bgms = actor.GetBuffGraphs(log, damageModifier.GetFoe(evt).GetMainSingleActorWhenAttackTarget(log));
+                }
                 if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));

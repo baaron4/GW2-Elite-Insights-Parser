@@ -9,6 +9,8 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 {
     private BuffsTracker? _trackerSource = null;
     private GainComputer? _gainComputerSource = null;
+
+    protected bool FromSrc = false;
     internal BuffOnFoeDamageModifier(int id, long buffID, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, buffID, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
@@ -42,6 +44,29 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
     {
         _trackerSource = new BuffsTrackerMulti(buffOnSourceIDs);
         _gainComputerSource = ByPresence;
+        return this;
+    }
+    internal override DamageModifierDescriptor WithBuffOnActorFromFoe()
+    {
+        if (_gainComputerSource == null )
+        {
+            throw new InvalidOperationException("Unsupported mode when not using src checker");
+        }
+        if (_gainComputerSource == ByAbsence)
+        {
+            throw new InvalidOperationException("Unsupported mode when using ByAbsence");
+        }
+        FromDst = true;
+        return this;
+    }
+
+    internal DamageModifierDescriptor WithBuffOnFoeFromSelf()
+    {
+        if (GainComputer == ByAbsence)
+        {
+            throw new InvalidOperationException("Unsupported mode when using ByAbsence");
+        }
+        FromSrc = true;
         return this;
     }
 
@@ -89,6 +114,14 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
             {
                 ignoredTargets.Add(target);
                 continue;
+            }
+            if (FromDst)
+            {
+                bgmsSource = log.FindActor(damageModifier.GetSelf(evt)).GetBuffGraphs(log, target);
+            }
+            if (FromSrc)
+            {
+                bgms = target.GetBuffGraphs(log, damageModifier.GetSelf(evt).GetMainSingleActorWhenAttackTarget(log));
             }
             if (CheckActor(bgmsSource, evt.Time) && ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
             {

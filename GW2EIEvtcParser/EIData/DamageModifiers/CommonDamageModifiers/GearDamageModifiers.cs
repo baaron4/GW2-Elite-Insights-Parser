@@ -42,31 +42,16 @@ internal static class GearDamageModifiers
         new BuffOnFoeDamageModifier(Mod_ImpactSigil, [Stun, Knockdown], "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.SuperiorSigilOfImpact, DamageModifierMode.All),
         // Relics
         new BuffOnFoeDamageModifier(Mod_RelicOfTheDragonhunter, RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfTheDragonhunter, DamageModifierMode.All)
+            .WithBuffOnFoeFromSelf()
             .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(RelicOfTheDragonhunterTargetBuff, a.AgentItem).Count == 0)
-            .UsingChecker((x, log) =>
-            {
-                var src = log.FindActor(x.From);
-                var dst = log.FindActor(x.To);
-                return dst.HasBuff(log, src, RelicOfTheDragonhunterTargetBuff, x.Time);
-            })
             .UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(Mod_RelicOfIsgarren, RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfIsgarren, DamageModifierMode.All)
+            .WithBuffOnFoeFromSelf()
             .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(RelicOfIsgarrenTargetBuff, a.AgentItem).Count == 0)
-            .UsingChecker((x, log) =>
-            {
-                var src = log.FindActor(x.From);
-                var dst = log.FindActor(x.To);
-                return dst.HasBuff(log, src, RelicOfIsgarrenTargetBuff, x.Time);
-            })
             .UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(Mod_RelicOfPeitha, RelicOfPeithaTargetBuff, "Relic of Peitha", "10% after blade hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfPeitha, DamageModifierMode.All)
+            .WithBuffOnFoeFromSelf()
             .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(RelicOfPeithaTargetBuff, a.AgentItem).Count == 0)
-            .UsingChecker((x, log) =>
-            {
-                var src = log.FindActor(x.From);
-                var dst = log.FindActor(x.To);
-                return dst.HasBuff(log, src, RelicOfPeithaTargetBuff, x.Time);
-            })
             .WithBuilds(GW2Builds.November2023Balance)
             .UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnActorDamageModifier(Mod_RelicOfTheThief, RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, ItemImages.RelicOfTheThief, DamageModifierMode.All),
