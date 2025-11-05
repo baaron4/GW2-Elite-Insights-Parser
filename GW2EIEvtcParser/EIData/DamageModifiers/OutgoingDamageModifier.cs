@@ -151,4 +151,9 @@ public class OutgoingDamageModifier : DamageModifier
     {
         return evt.To;
     }
+
+    internal override AgentItem GetSelf(HealthDamageEvent evt)
+    {
+        return evt.From;
+    }
 }

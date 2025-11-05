@@ -40,4 +40,9 @@ public class IncomingDamageModifier : DamageModifier
     {
         return evt.From;
     }
+
+    internal override AgentItem GetSelf(HealthDamageEvent evt)
+    {
+        return evt.To;
+    }
 }
