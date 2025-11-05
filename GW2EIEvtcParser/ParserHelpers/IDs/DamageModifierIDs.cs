@@ -403,4 +403,4 @@ public static class DamageModifierIDs
     public const int Mod_LuminarysBlessingResoluteBlessing = 390;
     public const int Mod_ResilientWeaponPersonal10 = 391;
     public const int Mod_ResilientWeaponPersonal20 = 392;
-}
+    public const int Mod_FamiliarsEnhancedPotencyToad = 393;
