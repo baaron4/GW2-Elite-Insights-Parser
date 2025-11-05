@@ -13,6 +13,8 @@ internal static class AmalgamHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
         new BuffGainCastFinder(GaseousStateSkill, GaseousStateBuff),
+        new BuffGainCastFinder(DefensiveProtocolThorns1, ThornsBuff)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
