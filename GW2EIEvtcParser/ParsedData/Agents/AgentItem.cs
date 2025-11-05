@@ -250,6 +250,11 @@ public class AgentItem
         var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
         return atEvent?.Src ?? this;
     }
+    internal SingleActor GetMainSingleActorWhenAttackTarget(ParsedEvtcLog log)
+    {
+        var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
+        return log.FindActor(atEvent?.Src ?? this);
+    }
     public bool Is(AgentItem? ag)
     {
         if (ag == null)
