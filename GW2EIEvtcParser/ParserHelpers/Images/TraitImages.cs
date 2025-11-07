@@ -129,6 +129,7 @@ internal static class TraitImages
     public const string Harmonize = "https://render.guildwars2.com/file/4BE6ED63233DEB2D5801D5D66BB202E202A6A27F/3679977.png";
     public const string Shredding = "https://render.guildwars2.com/file/EF2D16FDF29BDCFEEC96503E0145BE1A9846F04C/3679970.png";
     public const string Syncopate = "https://render.guildwars2.com/file/42C9802D696B9670A0155DDF0FD2480CD9FBC473/3679969.png";
+    public const string SymphonicResonance = "https://render.guildwars2.com/file/AF276ECB07996BF5343A513FF2E52F3BE1CBAD0B/3679978.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://render.guildwars2.com/file/22B370D754AC1D69A8FE66DCCB36BE940455E5EA/1012539.png";

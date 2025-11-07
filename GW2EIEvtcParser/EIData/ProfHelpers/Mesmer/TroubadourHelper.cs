@@ -39,7 +39,8 @@ internal static class TroubadourHelper
         new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_Shredding, LutePlaying, "Shredding", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.Shredding, DamageModifierMode.sPvPWvW),
-        // TODO: add symphonic resonance Lute
+        // Symphonic resonance Lute
+        new BuffOnActorDamageModifier(Mod_SymphonicResonanceLute, LutePlaying, "Symphonic Resonance (Lute Playing)", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Troubadour, ByPresence, TraitImages.SymphonicResonance, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
