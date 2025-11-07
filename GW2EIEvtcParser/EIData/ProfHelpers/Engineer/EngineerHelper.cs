@@ -15,6 +15,8 @@ internal static class EngineerHelper
 {
     private class EngineerKitFinder : WeaponSwapCastFinder
     {
+        private readonly Dictionary<AgentItem, int> WeaponSwapIndexByCaster = [];
+        private readonly Dictionary<AgentItem, int> AnimatedCastIndexByCaster = [];
         public EngineerKitFinder(long skillID) : base(skillID, WeaponSetIDs.KitSet)
         {
             UsingChecker((swap, combatData, agentData, skillData) =>
@@ -24,10 +26,47 @@ internal static class EngineerHelper
                 {
                     return false;
                 }
-                WeaponSwapEvent? nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
+                if (!WeaponSwapIndexByCaster.TryGetValue(swap.Caster, out var swapIndex))
+                {
+                    swapIndex = 0;
+                }
+                var swaps = combatData.GetWeaponSwapData(swap.Caster);
+                WeaponSwapEvent? nextSwap = null;
+                for (var i = swapIndex; i < swaps.Count; i++)
+                {
+                    var curSwap = swaps[i];
+                    if (curSwap.Time > swap.Time + ServerDelayConstant)
+                    {
+                        swapIndex = i;
+                        nextSwap = curSwap;
+                        break;
+                    }
+                }
+                WeaponSwapIndexByCaster[swap.Caster] = swapIndex;
                 long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
-                var castIDs = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillID));
-                return skill.ApiSkill.BundleSkills.Intersect(castIDs).Any();
+                if (!AnimatedCastIndexByCaster.TryGetValue(swap.Caster, out var castIndex))
+                {
+                    castIndex = 0;
+                }
+                var animatedCastData = combatData.GetAnimatedCastData(swap.Caster);
+                for (var i = castIndex; i < animatedCastData.Count; i++)
+                {
+                    var cast = animatedCastData[i];
+                    if (cast.Time >= swap.Time + WeaponSwapDelayConstant)
+                    {
+                        if (cast.Time > nextSwapTime)
+                        {
+                            AnimatedCastIndexByCaster[swap.Caster] = i - 1;
+                            break;
+                        }
+                        if (skill.ApiSkill.BundleSkills.Contains(cast.SkillID))
+                        {
+                            AnimatedCastIndexByCaster[swap.Caster] = i + 1;
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
             UsingNotAccurate();
         }
