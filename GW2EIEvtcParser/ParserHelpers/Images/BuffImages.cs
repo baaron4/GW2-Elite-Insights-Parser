@@ -492,6 +492,7 @@ public static class BuffImages
     public const string FormOfTheMonk = "https://render.guildwars2.com/file/43E1C29C447FFFFE067DB83CE53E099D3C091D2A/3680048.png";
     public const string FormOfTheAssassin = "https://render.guildwars2.com/file/FA48DB2E91CC6C964B3B774C36B2CC6F12CA3205/3680045.png";
     public const string FormOfTheWarrior = "https://render.guildwars2.com/file/08D392BC0416E0B9409A0CBFB7DA6E1ED80CDE30/3680049.png";
+    public const string CosmicWisdom = "https://render.guildwars2.com/file/5DA12A719EBDBFA95C7F416BAC7101D035DEBC22/3680202.png";
     #endregion
     #region Thief
     public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/CE22E9489B9754A65A750A2F07351222FDCAA17B/3680053.png";

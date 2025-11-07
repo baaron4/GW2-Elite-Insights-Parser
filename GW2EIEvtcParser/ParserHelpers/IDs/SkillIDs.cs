@@ -5058,7 +5058,8 @@ public static class SkillIDs
     public const long SplinterWeaponSkill = 76549;
     public const long LivelyLute = 76552; // Legacy beta name - Reverberating Lute
     public const long EvokerStoneSpiritAura1 = 76557; // Reused buff from Stone Spirit for Evoker's Pets
-    public const long FormOfTheMonkVentariActiveBuff = 76559;
+    public const long CosmicWisdomBuff = 76559;
+    public const long FormOfTheMonkVentariActiveBuff_Beta = 76559;
     public const long WeWillNeverYieldSkill = 76562;
     public const long WeaponOfRemedySharedBuff = 76565;
     public const long SplinterWeaponSharedBuff = 76566;
@@ -5084,10 +5085,10 @@ public static class SkillIDs
     public const long Rejuvenate = 76634;
     public const long FamiliarsProwessHare = 76639;
     public const long DefensiveProtocolThorns3 = 76640;
-    public const long CosmicWisdomMesmer = 76641;
+    public const long CosmicWisdomMesmer_Beta = 76641;
     public const long Evolve = 76642;
     public const long IgnitePlayerSkill = 76643;
-    public const long COsmicWisdomDervish = 76644;
+    public const long COsmicWisdomDervish_Beta = 76644;
     public const long FormOfTheAssassinShiroPassiveBuff = 76650;
     public const long Hawkeye = 76664;
     public const long BerserkerStrain = 76667;
@@ -5297,7 +5298,7 @@ public static class SkillIDs
     public const long WeWillNeverYieldBuff = 77242;
     public const long HexEaterVortex = 77243;
     public const long WutheringWindBuff = 77244;
-    public const long CosmicWisdomAssassin1 = 77251;
+    public const long CosmicWisdomAssassin1_Beta = 77251;
     public const long SkrittScuffle = 77255;
     public const long FamiliarsFocus = 77256; // POV trait buff but also healing in statistics
     public const long ResilientWeaponSkill = 77259;
@@ -5317,7 +5318,7 @@ public static class SkillIDs
     public const long ValorousStanceSkill = 77300;
     public const long EvokerStoneSpiritAura4 = 77301; // Reused buff from Stone Spirit for Evoker's Pets
     public const long PlasmaticStateSkill2 = 77307;
-    public const long CosmicWisdomAssassin2 = 77312;
+    public const long CosmicWisdomAssassin2_Beta = 77312;
     public const long Bluster = 77319;
     public const long ToadsFortitude = 77320;
     public const long StalwartStanceSkill = 77321;
@@ -5334,7 +5335,8 @@ public static class SkillIDs
     public const long LucentThrust = 77366;
     public const long ChannelFormOfTheWarrior1 = 77368;
     public const long ZapPlayerSkill = 77370;
-    public const long CosmicWisdomMonk = 77371;
+    public const long CosmicWisdomSkill = 77371;
+    public const long CosmicWisdomMonk_Beta = 77371;
     public const long ChantOfRecuperationBuff = 77378;
     public const long EvokerStoneSpiritAura5 = 77382; // Reused buff from Stone Spirit for Evoker's Pets
     public const long ElectricEnchantmentSkill = 77387; // Legacy beta name - Hare's Agility
@@ -5394,6 +5396,7 @@ public static class SkillIDs
     public const long SplinterWeaponPersonalBuff = 78857;
     public const long PiercingShriek = 78873;
     public const long UnstableSkrittBombBuff = 78896;
+    public const long FormOfTheMonkVentariActiveBuff = 78930;
     public const long LingeringSpiritsWanderlust = 78987;
     public const long NightmareWeaponPersonalBuff = 79077;
     public const long BriskPacingTier1 = 79083;

@@ -13,6 +13,13 @@ internal static class ConduitHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
         new BuffGainCastFinder(LegendaryEntityStanceSkill, LegendaryEntityStanceBuff),
+        new BuffGainCastFinder(CosmicWisdomSkill, CosmicWisdomBuff)
+            .UsingChecker((evt, combatData, agentData, skillData) => {
+                return evt.AppliedDuration == 7000;
+            })
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new DamageCastFinder(Mistfire, Mistfire) // TODO: check if there is an effect
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
@@ -27,23 +34,32 @@ internal static class ConduitHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Legendary Entity Stance", LegendaryEntityStanceBuff, Source.Conduit, BuffClassification.Other, SkillImages.LegendaryEntityStance),
+        new Buff("Cosmic Wisdom", CosmicWisdomBuff, Source.Conduit, BuffClassification.Other, BuffImages.CosmicWisdom)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        // Razah
         new Buff("Form of the Dervish (Razah Active)", FormOfTheDervishRazahActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
         new Buff("Form of the Dervish (Razah Passive)", FormOfTheDervishRazahPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
+        // Shiro
         new Buff("Form of the Assassin (Shiro Active)", FormOfTheAssassinShiroActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
         new Buff("Form of the Assassin (Shiro Passive)", FormOfTheAssassinShiroPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
+        // Mallxy
         new Buff("Form of the Mesmer (Mallyx Active)", FormOfTheMesmerMallyxActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
         new Buff("Form of the Mesmer (Mallyx Passive)", FormOfTheMesmerMallyxPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
-        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk)
+        // Ventari
+        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff_Beta, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         new Buff("Form of the Monk (Ventari Passive)", FormOfTheMonkVentariPassiveBuff, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMonk)
-            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new Buff("Form of the Monk (Ventari Active)", FormOfTheMonkVentariActiveBuff, Source.Conduit, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.FormOfTheMonk)
+            .WithBuilds(GW2Builds.OctoberVoERelease),// Why is this an intensity buff Anet?
         new Buff("Form of the Monk (Ventari Passive)", FormOfTheMonkVentariPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMonk)
             .WithBuilds(GW2Builds.OctoberVoERelease),
+        // Jalis
         new Buff("Form of the Warrior (Jalis Active)", FormOfTheWarriorJalisActiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
         new Buff("Form of the Warrior (Jalis Passive)", FormOfTheWarriorJalisPassiveBuff, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
+        // Skills
         new Buff("Shielding Hands", ShieldingHandsBuff, Source.Conduit, BuffClassification.Other, SkillImages.ShieldingHands),
+        // Traits
         new Buff("Lingering Determination", LingeringDetermination, Source.Conduit, BuffClassification.Other, TraitImages.LingeringDetermination),
     ];
 
