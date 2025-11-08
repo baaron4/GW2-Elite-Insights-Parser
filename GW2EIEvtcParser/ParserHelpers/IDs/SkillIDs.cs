@@ -5230,7 +5230,7 @@ public static class SkillIDs
     public const long WeaponOfRemedy = 77022;
     public const long HoloDancerDecoy2 = 77028;
     public const long Anguish2 = 77029;
-    public const long HaresAgilitySkill2 = 77038;
+    public const long HaresAgilitySkill = 77038;
     public const long FindTheirWeakness = 77040;
     public const long RitualistStormSpiritAura3 = 77042; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ShieldingHandsSkill = 77043;

@@ -1,8 +1,11 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -51,5 +54,21 @@ internal static class GaleshotHelper
     public static bool IsCycloneBowTransformation(long id)
     {
         return _cycloneBows.Contains(id);
+    }
+
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
+    {
+        Color color = Colors.Ranger;
+
+        // Mistral
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GaleshotMistral, out var mistral))
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Galeshot, MistralSkill);
+            foreach (EffectEvent effect in mistral)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 6000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, EffectImages.EffectMistral);
+            }
+        }
     }
 }

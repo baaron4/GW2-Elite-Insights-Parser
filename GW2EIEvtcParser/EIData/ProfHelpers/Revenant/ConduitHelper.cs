@@ -13,6 +13,7 @@ internal static class ConduitHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
         new BuffGainCastFinder(LegendaryEntityStanceSkill, LegendaryEntityStanceBuff),
+        // TODO verify https://wiki.guildwars2.com/wiki/Gladiator's_Defense
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];

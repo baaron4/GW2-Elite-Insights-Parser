@@ -181,15 +181,6 @@ public static class EffectGUIDs
     public static readonly GUID RitualistInnervateWanderlust2 = new("A8FA2AFABB3FC840893E441F47693524");
     public static readonly GUID RitualistInnervatePreservation1 = new("81146A66FCE3A342B00D4D2EB2A7643E");
     public static readonly GUID RitualistInnervatePreservation2 = new("9F62B1407B5E2A45B068967C0F176315");
-    // and
-    // {98E9E5F26FF76F449A181654E4F39695} 
-    // {A170A1C61CD09742A79848D143749003} 
-    // wand
-    // {BEFD0FD6AC4AE24096590DCDC655F16C} 
-    // {A8FA2AFABB3FC840893E441F47693524} 
-    // pres
-    // {81146A66FCE3A342B00D4D2EB2A7643E} 
-    // {9F62B1407B5E2A45B068967C0F176315} 
     #endregion
 
     #region Elementalist
@@ -251,6 +242,10 @@ public static class EffectGUIDs
     public static readonly GUID CatalystDeployEarthJadeSphere = new("A674D3E7BC0C4342BC7A4EF0EE8FF8F0");
     public static readonly GUID EvokerOttersCompassion1 = new("A30DE35C04E1454EB3B0DCC0BCF9BD9A");
     public static readonly GUID EvokerOttersCompassion2 = new("6507424A0B7C384A9C6DB125E4724854");
+    public static readonly GUID EvokerHaresAgility1 = new("CA9899BBDAC8C348B9011250945C9A7B");
+    public static readonly GUID EvokerHaresAgility2 = new("FF3DE8D09A6FE846B24A7CDFACB8078C");
+    public static readonly GUID EvokerHaresAgility3 = new("49D88C81A3FD384A854186A78B0B4615");
+    public static readonly GUID EvokerHaresAgility4 = new("227B4A35A1AB6E459DA5E1FA42786B2D");
     #endregion
 
     #region Warrior
@@ -447,6 +442,7 @@ public static class EffectGUIDs
     public static readonly GUID UntamedEnvelopingHaze = new("F2B1B61970FC59418AC049BF3A07FFD4");
     public static readonly GUID GaleshotSummonCycloneBow = new("C1F1E386CC1E0B448435269DBBFB34D7"); // Duration 2333 - IsAroundDst
     public static readonly GUID GaleshotDismissCycloneBow = new("9242D10B4F04274EB6E9EBCDB2262181"); // Duration 0 - IsAroundDst
+    public static readonly GUID GaleshotMistral = new("CA7B7C8E95211940AB47CDBC13586A65"); // Duration 6000
     #endregion
 
     #region Thief
@@ -486,6 +482,7 @@ public static class EffectGUIDs
     public static readonly GUID SpecterWellOfSorrow3 = new("1B56F702912BE7428182CA57036AEE99"); // ~1240ms delay
     public static readonly GUID SpecterShadowfall1 = new("FB21A6E213C240459BD8E9524088FA66");
     public static readonly GUID SpecterShadowfall2 = new("D8E380E80E843A4092C8DD53C5A51F0F"); // ~880ms delay
+    public static readonly GUID AntiquarySkrittScuffle = new("4AD741FD431EBD42B88D26173DA0234A"); // 15000 duration, has end time
     #endregion
 
     #region Fractals

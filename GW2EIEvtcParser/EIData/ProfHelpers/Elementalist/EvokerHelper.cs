@@ -14,12 +14,17 @@ internal static class EvokerHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
+        // Familiar Skills
         new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill),
         new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill),
         new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill),
         new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
+        // Meditations
         new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
             .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2),
+        new EffectCastFinder(HaresAgilitySkill, EffectGUIDs.EvokerHaresAgility1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerHaresAgility2)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
