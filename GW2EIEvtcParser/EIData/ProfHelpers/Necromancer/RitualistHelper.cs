@@ -20,6 +20,7 @@ internal static class RitualistHelper
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitRitualistsShroud, RitualistsShroud)
             .UsingBeforeWeaponSwap(),
+        new EffectCastFinder(SummonSpirits, EffectGUIDs.RitualistSummonSpirits),
         // Weapon Spells
         new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingSharedBuff)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
@@ -40,6 +41,13 @@ internal static class RitualistHelper
         new BuffGainCastFinder(ExplosiveGrowthBuff, ExplosiveGrowthSkill)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional)
             .WithBuilds(GW2Builds.OctoberVoERelease),
+        // Innervate
+        new EffectCastFinder(InnervateAnguishSkill, EffectGUIDs.RitualistInnervateAnguish1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervateAnguish2),
+        new EffectCastFinder(InnervateWanderlustSkill, EffectGUIDs.RitualistInnervateWanderlust1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervateWanderlust2),
+        new EffectCastFinder(InnervatePreservationSkill, EffectGUIDs.RitualistInnervatePreservation1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervatePreservation2),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

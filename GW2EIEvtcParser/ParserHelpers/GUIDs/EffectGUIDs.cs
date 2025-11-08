@@ -174,6 +174,22 @@ public static class EffectGUIDs
     public static readonly GUID HarbingerDoomApproaches = new("88C0010F0B7148469B88E2A1B4500DCC");
     public static readonly GUID HarbingerVitalDrawSelfDst = new("667EAEE89766E14E883E6ECA5D3D267B"); // Target self
     public static readonly GUID HarbingerVitalDrawAoE = new("859611F71893924989B056F6A011C160"); // Ground effect
+    public static readonly GUID RitualistSummonSpirits = new("0BC4AABB74F2AC43963CBB7B52993559"); // Around dst = src
+    public static readonly GUID RitualistInnervateAnguish1 = new("98E9E5F26FF76F449A181654E4F39695");
+    public static readonly GUID RitualistInnervateAnguish2 = new("A170A1C61CD09742A79848D143749003");
+    public static readonly GUID RitualistInnervateWanderlust1 = new("BEFD0FD6AC4AE24096590DCDC655F16C");
+    public static readonly GUID RitualistInnervateWanderlust2 = new("A8FA2AFABB3FC840893E441F47693524");
+    public static readonly GUID RitualistInnervatePreservation1 = new("81146A66FCE3A342B00D4D2EB2A7643E");
+    public static readonly GUID RitualistInnervatePreservation2 = new("9F62B1407B5E2A45B068967C0F176315");
+    // and
+    // {98E9E5F26FF76F449A181654E4F39695} 
+    // {A170A1C61CD09742A79848D143749003} 
+    // wand
+    // {BEFD0FD6AC4AE24096590DCDC655F16C} 
+    // {A8FA2AFABB3FC840893E441F47693524} 
+    // pres
+    // {81146A66FCE3A342B00D4D2EB2A7643E} 
+    // {9F62B1407B5E2A45B068967C0F176315} 
     #endregion
 
     #region Elementalist
@@ -390,6 +406,10 @@ public static class EffectGUIDs
     public static readonly GUID MechanistShiftSignet1 = new("E1C1DD7F866B4149A1BADD216C9AA69D"); // happens twice, without owner at destination, with owner at origin?
     public static readonly GUID MechanistShiftSignet2 = new("DB22850AE209B34BBD11372F56D42D43");
     public static readonly GUID MechanistOverclockSignet = new("734834E7EB7CD74EB129ACBCE5C64C1D");
+    public static readonly GUID AmalgamDefensiveProtocolCleanse1 = new("F2FB8A03178A2B43B82E0113F20DF932"); // 1s duration
+    public static readonly GUID AmalgamDefensiveProtocolCleanse2 = new("ADBBEC856C76A94C85E688B6687E625E"); // Audio effect, might be POV only
+    public static readonly GUID AmalgamSymbioticShielding1 = new("842F977C318FDC4F96C99C385C1D0672"); // 1s duration
+    public static readonly GUID AmalgamSymbioticShielding2 = new("3CEE0C49EDF847489C66B898D8B828A5"); // Audio effect, might be POV only
     #endregion
 
     #region Ranger
