@@ -906,6 +906,7 @@ public static class SkillItemOverrides
             { FormOfTheDervishSkill1, BuffImages.FormOfTheDervish },
             { FormOfTheDervishSkill2, BuffImages.FormOfTheDervish },
         { BeguilingHaze6, SkillImages.BeguilingHaze },
+        { Mistfire, TraitImages.Mistfire },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },

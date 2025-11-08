@@ -75,6 +75,9 @@ public class SkillItem
         {
             Name = ApiSkill.Name;
         }
+#if DEBUG
+        Name = ID + "-" + Name;
+#endif
         if (SkillItemOverrides.OverridenSkillIcons.TryGetValue(ID, out var icon))
         {
             Icon = icon;
@@ -106,9 +109,6 @@ public class SkillItem
                 AA = AA && !ApiSkill.Description.Contains("Ambush.");
             }
         }
-#if DEBUG
-        Name = ID + "-" + Name;
-#endif
     }
 
     public static bool CanCrit(long id, ulong gw2Build)
@@ -122,7 +122,14 @@ public class SkillItem
 
     internal void OverrideFromBuff(Buff buff)
     {
-        Name = buff.Name;
+        // Buff has priority override OverridenSkillNames
+        if (UnknownSkill || Name.All(char.IsDigit) || SkillItemOverrides.OverridenSkillNames.ContainsKey(ID)) 
+        {
+            Name = buff.Name;
+#if DEBUG
+            Name = ID + "-" + Name;
+#endif
+        }
         Icon = buff.Link;
     }
 
