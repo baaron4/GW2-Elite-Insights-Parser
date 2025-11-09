@@ -54,7 +54,20 @@ public class SkillItem
 
     internal const string DefaultName = "UNKNOWN";
 
+#if DEBUG
+    public bool UnknownSkill => Name.Contains(DefaultName);
+#else
     public bool UnknownSkill => Name == DefaultName;
+#endif
+
+#if DEBUG
+    // Buff has priority override OverridenSkillNames
+    private bool CanOverrideFromBuffs => UnknownSkill || Name.Replace("-", "").All(char.IsDigit) || SkillItemOverrides.OverridenSkillNames.ContainsKey(ID);
+
+#else
+    // Buff has priority override OverridenSkillNames
+    private bool CanOverrideFromBuffs => UnknownSkill || Name.All(char.IsDigit) || SkillItemOverrides.OverridenSkillNames.ContainsKey(ID);
+#endif
 
     // Constructor
 
@@ -122,8 +135,7 @@ public class SkillItem
 
     internal void OverrideFromBuff(Buff buff)
     {
-        // Buff has priority override OverridenSkillNames
-        if (UnknownSkill || Name.All(char.IsDigit) || SkillItemOverrides.OverridenSkillNames.ContainsKey(ID)) 
+        if (CanOverrideFromBuffs) 
         {
             Name = buff.Name;
 #if DEBUG

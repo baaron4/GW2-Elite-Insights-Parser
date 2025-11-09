@@ -49,6 +49,11 @@ public abstract class CastEvent : TimeCombatEvent
     {
         return GetInterruptedByBuffTime(log, SkillIDs.Stun);
     }
+
+    internal void OverrideSkill(SkillItem skill)
+    {
+        Skill = skill;
+    }
 }
 
 public static partial class ListExt

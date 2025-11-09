@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -20,7 +21,6 @@ internal static class ConduitHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new DamageCastFinder(Mistfire, Mistfire) // TODO: check if there is an effect
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
-        // TODO verify https://wiki.guildwars2.com/wiki/Gladiator's_Defense
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
@@ -63,6 +63,22 @@ internal static class ConduitHelper
         // Traits
         new Buff("Lingering Determination", LingeringDetermination, Source.Conduit, BuffClassification.Other, TraitImages.LingeringDetermination),
     ];
+
+    internal static void RedirectGladiatorsDefenseCastEvents(CombatData combatData, SkillData skillData, Dictionary<long, List<AnimatedCastEvent>> animatedCastDataByID)
+    {
+        var casts = combatData.GetAnimatedCastData(GladiatorsDefenseAnimation);
+        if (casts.Count == 0)
+        {
+            return;
+        }
+        var skill = skillData.Get(GladiatorsDefense);
+        foreach (var cast in casts)
+        {
+            cast.OverrideSkill(skill);
+        }
+        animatedCastDataByID.Remove(GladiatorsDefenseAnimation);
+        animatedCastDataByID.Add(GladiatorsDefense, casts.ToList());
+    }
 
     public static bool IsLegendSwap(long id)
     {

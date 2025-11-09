@@ -222,6 +222,11 @@ public partial class CombatData
     {
         List<CastEvent> toAdd = logData.Logic.SpecialCastEventProcess(this, skillData);
         ulong gw2Build = GetGW2BuildEvent().Build;
+        // Redirections
+        {
+            ConduitHelper.RedirectGladiatorsDefenseCastEvents(this, skillData, _animatedCastDataByID);
+        }
+
         foreach (AgentItem p in players)
         {
             switch (p.Spec)

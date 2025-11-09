@@ -5115,6 +5115,7 @@ public static class SkillIDs
     public const long SplashPetSkill = 76709;
     public const long OttersCompassionBuff = 76710; // Legacy beta name - Healing Rain
     public const long FoxsFury = 76711;
+    public const long GladiatorsDefenseAnimation = 76718;
     public const long DrumPlaying = 76719;
     public const long Pelt = 76722;
     public const long StoneSummitCannon = 76725;
