@@ -49,6 +49,7 @@ internal static class EngineerHelper
                     castIndex = 0;
                 }
                 var animatedCastData = combatData.GetAnimatedCastData(swap.Caster);
+                bool atLeastOneProcessed = false;
                 for (var i = castIndex; i < animatedCastData.Count; i++)
                 {
                     var cast = animatedCastData[i];
@@ -56,9 +57,13 @@ internal static class EngineerHelper
                     {
                         if (cast.Time > nextSwapTime)
                         {
-                            AnimatedCastIndexByCaster[swap.Caster] = i - 1;
+                            if (atLeastOneProcessed)
+                            {
+                                AnimatedCastIndexByCaster[swap.Caster] = i - 1;
+                            }
                             break;
                         }
+                        atLeastOneProcessed = true;
                         if (skill.ApiSkill.BundleSkills.Contains(cast.SkillID))
                         {
                             AnimatedCastIndexByCaster[swap.Caster] = i + 1;
