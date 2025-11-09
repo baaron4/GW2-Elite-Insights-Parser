@@ -4,6 +4,8 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -13,6 +15,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class AntiquaryHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = [];
+    // TODO Exalted Hammer, Chak Shield, Unstable Skritt Bomb, Inquest Portal Device Backfired, Emergency Jade Shield (and backfire), Canach-Coin Toss
+    // Verify if any of them already work https://wiki.guildwars2.com/wiki/Antiquary
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
@@ -72,6 +76,22 @@ internal static class AntiquaryHelper
                     gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
                     gadget.OverrideID(MinionID.HoloDancer, agentData);
                 }
+            }
+        }
+    }
+
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
+    {
+        Color color = Colors.Thief;
+
+        // Skritt Scuffle
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.AntiquarySkrittScuffle, out var skrittScuffle))
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Antiquary, SkrittScuffle);
+            foreach (EffectEvent effect in skrittScuffle)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 15000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSkrittScuffle);
             }
         }
     }

@@ -20,6 +20,7 @@ internal static class ConduitHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new DamageCastFinder(Mistfire, Mistfire) // TODO: check if there is an effect
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+        // TODO verify https://wiki.guildwars2.com/wiki/Gladiator's_Defense
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];

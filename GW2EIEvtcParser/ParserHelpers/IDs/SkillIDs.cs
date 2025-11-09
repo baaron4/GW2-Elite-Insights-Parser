@@ -5072,6 +5072,8 @@ public static class SkillIDs
     public const long ScionsReprieve = 76595;
     public const long MetalLegionGuitar2 = 76596;
     public const long SorrowAutoattack = 76598;
+    public const long InnervatePreservationSkill = 76602;
+    public const long SummonSpirits = 76607;
     public const long FamiliarsProwessOtter = 76608;
     public const long LegendaryEntityStanceSkill = 76610;
     public const long TaleOfTheHonorableRogue = 76611;
@@ -5119,6 +5121,7 @@ public static class SkillIDs
     public const long TwinMoonSweep3 = 76726;
     public const long EffulgentStanceDamage = 76730;
     public const long DetonateSorrow = 76731;
+    public const long InnervateWanderlustSkill = 76732;
     public const long ValorousStanceBuff = 76736;
     public const long MitoticStateSkill = 76738;
     public const long NightmareWeaponSkill = 76739;
@@ -5214,6 +5217,7 @@ public static class SkillIDs
     public const long EvokerStoneSpiritAura2 = 76991; // Reused buff from Stone Spirit for Evoker's Pets
     public const long FluxState = 76993;
     public const long TwinMoonSweep2 = 77001;
+    public const long InnervateAnguishSkill = 77003;
     public const long OffensiveProtocolPierce2 = 77005;
     public const long Evolved = 77008;
     public const long WeaponOfWardingSharedBuff = 77011;
@@ -5227,7 +5231,7 @@ public static class SkillIDs
     public const long WeaponOfRemedy = 77022;
     public const long HoloDancerDecoy2 = 77028;
     public const long Anguish2 = 77029;
-    public const long HaresAgilitySkill2 = 77038;
+    public const long HaresAgilitySkill = 77038;
     public const long FindTheirWeakness = 77040;
     public const long RitualistStormSpiritAura3 = 77042; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ShieldingHandsSkill = 77043;

@@ -642,8 +642,11 @@ internal static class ProfHelper
                 break;
             case Spec.Soulbeast:
             case Spec.Untamed:
+                RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                break;
             case Spec.Galeshot:
                 RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                GaleshotHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Revenant
             case Spec.Revenant:
@@ -670,6 +673,7 @@ internal static class ProfHelper
                 break;
             case Spec.Antiquary:
                 ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                AntiquaryHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Warrior
             case Spec.Warrior:
