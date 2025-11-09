@@ -8,6 +8,6 @@ var searchData=
   ['resurrects_5',['Resurrects',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a6118e3a2b81a703f76f6390f88c1ca46',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
   ['resurrecttime_6',['ResurrectTime',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#aa8df84edc2ba638f3e9b16dc6196c09b',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
   ['revision_7',['Revision',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html#a42d2e13eba89ed61367b1959b55d9307',1,'GW2EIJSON::JsonLog::ExtensionDesc']]],
-  ['rotation_8',['rotation',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#adf72b9fd94acd44d0376197e003eca13',1,'GW2EIJSON.JsonActor.Rotation'],['../class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a5154642da2c51a1b323b2506b4f95edb',1,'GW2EIJSON.JsonMinions.Rotation']]],
+  ['rotation_8',['Rotation',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#adf72b9fd94acd44d0376197e003eca13',1,'GW2EIJSON.JsonActor.Rotation'],['../class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a5154642da2c51a1b323b2506b4f95edb',1,'GW2EIJSON.JsonMinions.Rotation']]],
   ['runningextension_9',['RunningExtension',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html#a7a125fc576d581e8e73d73f326fbcca2',1,'GW2EIJSON::JsonLog::ExtensionDesc']]]
 ];

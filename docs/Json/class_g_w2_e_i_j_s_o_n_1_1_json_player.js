@@ -52,5 +52,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_player =
     [ "TargetDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aa7b179df3645cdf07756bca649aeedf5", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aef542a4c7fef69d6241918b5a3adb026", null ],
     [ "TargetPowerDamage1S", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a89a23bf1cb0c325afa8778a962845874", null ],
-    [ "Weapons", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a73c3b6690930f732071ab5087069eeb4", null ]
+    [ "Weapons", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a73c3b6690930f732071ab5087069eeb4", null ],
+    [ "WeaponSets", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a7161b20bcedcfb965e5f10a3ff9a8546", null ]
 ];

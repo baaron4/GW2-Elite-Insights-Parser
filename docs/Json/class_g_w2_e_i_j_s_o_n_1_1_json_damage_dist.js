@@ -5,6 +5,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist =
     [ "ConnectedHits", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#ab5f5975e64aab937214fba3e851908fe", null ],
     [ "Crit", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a59c747c099e61b5ec126e0e1225a5ec4", null ],
     [ "CritDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a9221174c53f531bab6351fe6f576f17f", null ],
+    [ "DownContribution", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#ae936217b70992212f69b55aebf452a64", null ],
     [ "Evaded", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a68cbb180f4e2ded5f3252d4de0b7e7fb", null ],
     [ "Flank", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a89a82095fb77ff16b55511c3d2d7d833", null ],
     [ "Glance", "class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a141c233a1d5f8b3529903be52fd41542", null ],

@@ -31,5 +31,6 @@ var searchData=
   ['jsonplayersupport_28',['JsonPlayerSupport',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html',1,'GW2EIJSON::JsonStatistics']]],
   ['jsonrotation_29',['JsonRotation',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html',1,'GW2EIJSON']]],
   ['jsonskill_30',['JsonSkill',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html',1,'GW2EIJSON::JsonRotation']]],
-  ['jsonstatistics_31',['JsonStatistics',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics.html',1,'GW2EIJSON']]]
+  ['jsonstatistics_31',['JsonStatistics',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics.html',1,'GW2EIJSON']]],
+  ['jsonweaponset_32',['JsonWeaponSet',['../class_g_w2_e_i_j_s_o_n_1_1_json_weapon_set.html',1,'GW2EIJSON']]]
 ];

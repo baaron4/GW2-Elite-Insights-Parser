@@ -1,9 +1,9 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_log =
 [
-    [ "BuffDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc" ],
-    [ "DamageModDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc" ],
-    [ "ExtensionDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc" ],
     [ "SkillDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc" ],
+    [ "BuffDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc" ],
+    [ "ExtensionDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc" ],
+    [ "DamageModDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc" ],
     [ "Anonymous", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a43a0aac09135663213e64ed1614c8d5c", null ],
     [ "ArcRevision", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1e8752c0834d45a8c5b667a75b348c7e", null ],
     [ "ArcVersion", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aa5c3d5102de9dc3b33bbad15f6ee1f7d", null ],
