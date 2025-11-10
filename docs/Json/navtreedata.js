@@ -44,10 +44,11 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afe5b9eec1c6d795718679f1385ce4848",
-"class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad098dd22fd0d4b2fbe7075bc6e826221",
-"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a610ff5a4870b1d6f4740867189d5c592",
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7d59581c781df1480ad4a9bd11d314f6"
+"class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8",
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a58389e62071ed03a20dd6f284d308ea0",
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7261d1c8772f753122d129cafc639fc9"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'click to disable panel synchronization';
+var SYNCOFFMSG = 'click to enable panel synchronization';
+var LISTOFALLMEMBERS = 'List of all members';

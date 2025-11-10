@@ -50,5 +50,6 @@ var hierarchy =
     [ "GW2EIJSON.JsonRotation", "class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html", null ],
     [ "GW2EIJSON.JsonRotation.JsonSkill", "class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html", null ],
     [ "GW2EIJSON.JsonStatistics", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics.html", null ],
+    [ "GW2EIJSON.JsonWeaponSet", "class_g_w2_e_i_j_s_o_n_1_1_json_weapon_set.html", null ],
     [ "GW2EIJSON.JsonLog.SkillDesc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html", null ]
 ];
