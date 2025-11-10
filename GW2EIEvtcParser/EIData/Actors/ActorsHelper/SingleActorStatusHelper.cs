@@ -157,7 +157,7 @@ partial class SingleActor
     {
         _downs ??= new(log.CombatData.GetDownEvents(AgentItem).Count);
         _dcs ??= new(log.CombatData.GetDespawnEvents(AgentItem).Count);
-        _deads = new(log.CombatData.GetDeadEvents(AgentItem).Count);
+        _deads ??= new(log.CombatData.GetDeadEvents(AgentItem).Count);
         if (_actives == null)
         {
             _actives = new(_downs.Capacity + _dcs.Capacity + _deads.Capacity);
