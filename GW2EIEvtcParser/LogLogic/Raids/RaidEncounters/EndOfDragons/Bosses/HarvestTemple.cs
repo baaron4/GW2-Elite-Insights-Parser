@@ -1530,7 +1530,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             case (int)TargetID.VoidWarforged1:
             case (int)TargetID.VoidWarforged2:
 #if DEBUG_EFFECTS
-                    CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
+                    CombatReplay.DebugEffects(target, log, replay.Decorations, [], target.FirstAware, target.LastAware);
 #endif
                 break;
             case (int)TargetID.ZhaitansReach:

@@ -205,7 +205,7 @@ internal class Cairn : BastionOfThePenitent
                     }
                 }
                 #if DEBUG_EFFECTS
-                    CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
+                    CombatReplay.DebugAllNPCEffects(log, replay.Decorations, [], 50000, 63000);
                 #endif
                 break;
             default:

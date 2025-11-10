@@ -221,8 +221,8 @@ internal class ValeGuardian : SpiritVale
                     }
                 }
                 #if DEBUG_EFFECTS
-                    CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
-                    CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                    CombatReplay.DebugEffects(target, log, replay.Decorations, [], target.FirstAware, target.LastAware);
+                    CombatReplay.DebugUnknownEffects(log, replay.Decorations, [], target.FirstAware, target.LastAware);
                 #endif
                 break;
             case (int)TargetID.BlueGuardian:

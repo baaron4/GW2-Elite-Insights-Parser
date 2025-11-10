@@ -692,10 +692,10 @@ internal static class ProfHelper
     }
 
     #if DEBUG_EFFECTS
-    internal static void DEBUG_ComputeProfessionCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal static void DEBUG_ComputeProfessionCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        var knownEffects = new HashSet<long>();
-        CombatReplay.DebugEffects(p, log, replay, knownEffects);
+        var knownEffects = new HashSet<GUID>();
+        CombatReplay.DebugEffects(p, log, replay.Decorations, knownEffects);
     }
     #endif
 
