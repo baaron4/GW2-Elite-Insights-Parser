@@ -7,11 +7,11 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class DstEffectMechanic : EffectMechanic
 {
 
-    protected override AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
+    protected override AgentItem GetAgentItemInternal(EffectEvent effectEvt, AgentData agentData)
     {
         if (!effectEvt.IsAroundDst || effectEvt.Dst.IsUnamedSpecies())
         {
-            return agentData.GetNPCsByID(TargetID.Environment).FirstOrDefault()!;
+            return agentData.GetNPCsByID(TargetID.Environment).First();
         }
         return effectEvt.Dst;
     }

@@ -6,8 +6,22 @@ namespace GW2EIEvtcParser.EIData;
 
 internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 {
+    private int ForcedSpeciesID = int.MinValue;
 
-    protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
+    private AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
+    {
+        if (ForcedSpeciesID != int.MinValue)
+        {
+            var foundSpecies = agentData.GetNPCsByID(ForcedSpeciesID).FirstOrDefault(x => x.InAwareTimes(effectEvt.Time));
+            if (foundSpecies != null)
+            {
+                return foundSpecies;
+            }
+        }
+        return GetAgentItemInternal(effectEvt, agentData);
+    }
+
+    protected abstract AgentItem GetAgentItemInternal(EffectEvent effectEvt, AgentData agentData);
 
     public EffectMechanic(GUID effect, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effect ], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -16,6 +30,13 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
     public EffectMechanic(ReadOnlySpan<GUID> effects, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effects, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
         UsingEnable(log => log.CombatData.HasEffectData);
+    }
+
+    public EffectMechanic UsingSpeciesRedirection(int speciesID)
+    {
+        ForcedSpeciesID = speciesID;
+        UsingEnable(log => log.AgentData.GetNPCsByID(ForcedSpeciesID).Count > 0);
+        return this;
     }
 
     protected void PlayerChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
