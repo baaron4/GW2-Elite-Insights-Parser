@@ -238,7 +238,7 @@ internal class BanditTrio : SalvationPass
         SingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
         SingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
         phases[0].AddTargets(Targets, log);
-        ComputePhases(log, berg, zane, narella, (EncounterPhaseData)phases[0], requirePhases);
+        phases.AddRange(ComputePhases(log, berg, zane, narella, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
