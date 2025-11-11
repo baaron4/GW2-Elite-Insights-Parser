@@ -175,7 +175,7 @@ function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, activePl
                 if (tarId >= 0) {
                     var health = phaseGraphData.targets[j].healthStates;
                     for (var k = 0; k < pts.length; k++) {
-                        chart.push(findState(health, pts[k], 0, health.length - 1) * max / 100.0);
+                        chart.push(findState(health, pts[k][0], 0, health.length - 1) * max / 100.0);
                     }
                 } else {
                     for (var k = 0; k < pts.length; k++) {
