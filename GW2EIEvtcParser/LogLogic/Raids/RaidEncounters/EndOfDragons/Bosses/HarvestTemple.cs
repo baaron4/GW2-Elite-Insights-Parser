@@ -1173,6 +1173,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         }
                     }
                 }
+                replay.Decorations.AddNonHomingMissiles(log, log.CombatData.GetMissileEventsBySkillID(CrystalBarrage), Colors.DarkPurple, 0.3, 100);
                 break;
             case (int)TargetID.DragonBodyVoidAmalgamate:
                 break;
