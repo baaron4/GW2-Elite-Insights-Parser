@@ -112,9 +112,9 @@ internal class KinfallInstance : Kinfall
         return _whisperingShadow.SpecialBuffEventProcess(combatData, skillData);
     }
 
-    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        return _whisperingShadow.SpecialCastEventProcess(combatData, skillData);
+        return _whisperingShadow.SpecialCastEventProcess(combatData, agentData, skillData);
     }
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)

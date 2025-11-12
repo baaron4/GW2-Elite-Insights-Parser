@@ -72,9 +72,9 @@ internal class AetherbladeHideoutInstance : EndOfDragonsRaidEncounter
         return _aetherbladeHideout.SpecialBuffEventProcess(combatData, skillData);
     }
 
-    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        return _aetherbladeHideout.SpecialCastEventProcess(combatData, skillData);
+        return _aetherbladeHideout.SpecialCastEventProcess(combatData, agentData, skillData);
     }
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
