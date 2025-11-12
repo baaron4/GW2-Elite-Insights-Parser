@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class SrcEffectMechanic : EffectMechanic
 {
 
-    protected override AgentItem GetAgentItemInternal(EffectEvent effectEvt, AgentData agentData)
+    protected override AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
     {
         if (effectEvt.Src.IsUnamedSpecies())
         {
