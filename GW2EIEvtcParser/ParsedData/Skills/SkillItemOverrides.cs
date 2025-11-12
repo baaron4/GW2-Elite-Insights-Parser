@@ -276,6 +276,19 @@ public static class SkillItemOverrides
         { KodanTeleport, "Kodan Teleport" },
         // Mai Trin (Aetherblade Hideout)
         { ReverseThePolaritySAK, "Reverse the Polarity!" },
+        // Harvest Temple
+        { BreathOfJormagCenter, "Breath of Jormag (Center)" },
+        { BreathOfJormagNorth, "Breath of Jormag (North)" },
+        { BreathOfJormagSouth, "Breath of Jormag (South)" },
+        { LavaSlam, "Lava Slam" },
+        { JawsOfDestruction, "Jaws of Destruction" },
+        { CrystalBarrage, "Crystal Barrage" },
+        { BrandingBeam, "Branding Beam" },
+        { ZhaitanTailSlam, "Tail Slam" },
+        { TsunamiSlamTailOrb, "Tsunami Slam Orbs (Tail)" },
+        { TsunamiSlamClawOrb, "Tsunami Slam Orbs (Claw)" },
+        { TsunamiSlamTail, "Tsunami Slam (Tail)" },
+        { TsunaniSlamClaw, "Tsunami Slam (Claw)" },
         // Cerus
         // - Normal Mode
         { CrushingRegretNM, "Crushing Regret (NM)" },

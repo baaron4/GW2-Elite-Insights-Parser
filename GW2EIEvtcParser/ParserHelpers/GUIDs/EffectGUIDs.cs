@@ -960,8 +960,8 @@ public static class EffectGUIDs
     public static readonly GUID HarvestTemplePurificationOrbSpawns = new("4F982CD060507C44A25844BF0ADFCB54");
     public static readonly GUID HarvestTempleVoidPoolOrbGettingReadyToBeDangerous = new("D11320204E28E643A48469AA8E4845BA");
     public static readonly GUID HarvestTempleInfluenceOfTheVoidPool = new("912F68E45158C14E9A30D6011B7B0C7F");
-    public static readonly GUID HarvestTempleSooWonClaw = new("CB877C57D1423240BACDF8D6B52A440F");
-    public static readonly GUID HarvestTempleSooWonVoidOrbs1 = new("F6964A4DE51DF04CA7E0F011BEE7D854"); // 2080 duration - these are the orbs spawning just before the claw swipe
+    public static readonly GUID HarvestTempleSooWonClawSlap = new("CB877C57D1423240BACDF8D6B52A440F");
+    public static readonly GUID HarvestTempleSooWonClawSlapOrbs = new("F6964A4DE51DF04CA7E0F011BEE7D854"); // 2080 duration - these are the orbs spawning just before the claw swipe
     public static readonly GUID HarvestTempleSooWonVoidOrbs2 = new("88E9C3112BF6DA4486845A0433782E9C"); // 2080 duration - these are the orbs spawning just before the claw swipe
     public static readonly GUID HarvestTempleTormentOfTheVoidClawIndicator = new("3F24896D3EF8D5459B399DAC8D0AD150"); // AoE indicator for bouncing orbs after Soo-Won's Claw Slap attack
     public static readonly GUID HarvestTempleScalableOrangeAoE = new("C1A523D71A841048897211B1020B8D95"); // Generic orange aoe - variable radius - variable duration
@@ -969,8 +969,8 @@ public static class EffectGUIDs
     public static readonly GUID HarvestTempleTsunami1 = new("8F96447526A09B4F8545CBEA1B0046D4"); // There are multiple effects when the Tsunami goes off
     public static readonly GUID HarvestTempleTsunami2 = new("C2CF236673BC0141B6EE5A918869728A"); // There are multiple effects when the Tsunami goes off
     public static readonly GUID HarvestTempleTsunami3 = new("E4700E828E058649B9B94F170DEF8659"); // There are multiple effects when the Tsunami goes off
-    public static readonly GUID HarvestTempleSooWonTsunamiSlamIndicator = new("0D594F550B0BF043B0B299FC26A8463B");
-    public static readonly GUID HarvestTempleTailSlamIndicator = new("49BD7FF8309E4047B4D17C83E660A461");
+    public static readonly GUID HarvestTempleSooWonTsunamiSlamClawIndicator = new("0D594F550B0BF043B0B299FC26A8463B");
+    public static readonly GUID HarvestTempleTsunamiSlamTailIndicator = new("49BD7FF8309E4047B4D17C83E660A461");
     public static readonly GUID HarvestTempleVoidBrandbomberBrandedArtillery = new("3ED61C8A1C2E594A8AD2E2E69AF16322"); // duration 2310
     public static readonly GUID HarvestTempleVoidExplosion = new("A478BD35F568974091FC99670B5A9700"); // Last Laugh AoE - Same effect for all sizes - 2050 duration
     public static readonly GUID HarvestTempleVoidStormseerIceSpike = new("2B9395E6BDE51E4C90AD3A9CA78FBCE7"); // duration 5000
