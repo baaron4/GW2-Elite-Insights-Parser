@@ -173,7 +173,7 @@ internal static class JsonPlayerBuilder
         jsonPlayer.OffGroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, buffMap);
         jsonPlayer.SquadBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, buffMap);
         //
-        IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, log.LogData.LogStart, log.LogData.LogEnd);
+        IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log);
         if (consumables.Count > 0)
         {
             var consumablesJSON = new List<JsonConsumable>(consumables.Count);

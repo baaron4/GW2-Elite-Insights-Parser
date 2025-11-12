@@ -6,7 +6,7 @@
                 <li v-for="initial in data.start">
                     {{initial.name}} <img class="icon" :alt="initial.name" :data-original-title="initial.description"
                         :src="initial.icon">
-                    {{initial.stack > 1 ? "("+initial.stack+")" : ""}} ({{initial.duration}}
+                    {{initial.stack > 1 ? "("+initial.stack+")" : ""}} ({{round3(initial.duration)}}
                     seconds remaining)
                 </li>
             </ul>
@@ -19,7 +19,7 @@
                     <img class="icon" :alt="refresh.name" :data-original-title="refresh.description"
                         :src="refresh.icon">
                     {{refresh.stack > 1 ? "("+refresh.stack+")" : ""}}
-                    at {{round3(refresh.time - phase.start)}}s ({{refresh.duration}}
+                    at {{round3(refresh.time)}}s ({{round3(refresh.duration)}}
                     seconds)
                 </li>
             </ul>
@@ -51,26 +51,43 @@
                 if (this.cache.has(this.phase)) {
                     return this.cache.get(this.phase);
                 }
-                var res = {
+                const res = {
                     start: [],
                     refreshed: []
                 };
-                for (var k = 0; k < this.food.length; k++) {
-                    var foodData = this.food[k];
+
+                const encounteredStartIDs = new Set();
+                const encounteredStartUniqueSlots = new Set();
+
+                for (let k = this.food.length - 1; k >= 0; k--) {
+                    const foodData = this.food[k];
                     if (!foodData.name) {
                         var skill = findSkill(true, foodData.id);
                         foodData.name = skill.name;
                         foodData.icon = skill.icon;
                         foodData.description = skill.description;
                     }
-                    if (foodData.time >= this.phase.start && foodData.time <= this.phase.end) {
-                        if (foodData.time === 0) {
-                            res.start.push(foodData);
-                        } else {
-                            res.refreshed.push(foodData);
+                    let phaseFood = {};
+                    Object.assign(phaseFood, foodData);
+                    if (phaseFood.time <= this.phase.start && phaseFood.time + phaseFood.duration >= this.phase.start) {
+                        if (encounteredStartIDs.has(foodData.id)) {
+                            continue;
                         }
+                        if (foodData.uniqueSlot > 0 && encounteredStartUniqueSlots.has(foodData.uniqueSlot)) {
+                            continue;
+                        }
+                        encounteredStartIDs.add(foodData.id);
+                        encounteredStartUniqueSlots.add(foodData.uniqueSlot);
+                        phaseFood.duration -= (this.phase.start - phaseFood.time);
+                        phaseFood.time = this.phase.start;
+                        res.start.push(phaseFood);
+                    } else if (phaseFood.time >= this.phase.start && phaseFood.time <= this.phase.end) {
+                        phaseFood.time -= this.phase.start;
+                        res.refreshed.push(phaseFood);
                     }
                 }
+                res.start.sort((x,y) => x.time - y.time);
+                res.refreshed.sort((x,y) => x.time - y.time);
                 this.cache.set(this.phase, res);
                 return res;
             }

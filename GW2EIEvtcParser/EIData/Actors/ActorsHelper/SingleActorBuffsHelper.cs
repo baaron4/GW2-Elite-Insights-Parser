@@ -1044,11 +1044,16 @@ partial class SingleActor
     #region CONSUMABLES
     public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
     {
+        return GetConsumablesList(log).Where(x => x.Time >= start && x.Time <= end).ToList();
+    }
+
+    public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log)
+    {
         if (_consumeList == null)
         {
             SetConsumablesList(log);
         }
-        return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
+        return _consumeList;
     }
 
     [MemberNotNull((nameof(_consumeList)))]
@@ -1066,14 +1071,10 @@ partial class SingleActor
                 {
                     continue;
                 }
-                long time = 0;
-                if (!ba.Initial)
-                {
-                    time = ba.Time;
-                }
+                long time = ba.Time;
                 if (time <= log.LogData.LogEnd)
                 {
-                    Consumable? existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
+                    Consumable? existing = _consumeList.Find(x => Math.Abs(x.Time - time) < ServerDelayConstant && x.Buff.ID == consumable.ID);
                     if (existing != null)
                     {
                         existing.Stack++;
