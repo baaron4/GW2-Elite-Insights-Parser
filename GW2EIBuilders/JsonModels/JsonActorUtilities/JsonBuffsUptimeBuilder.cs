@@ -50,27 +50,27 @@ internal static class JsonBuffsUptimeBuilder
         }
         if (settings.RawFormatTimelineArrays)
         {
-            jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]).ToList();
+            jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
             IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.LogData.LogStart, log.LogData.LogEnd);
             if (buffDicts.TryGetValue(buffID, out var buffDict))
             {
                 var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<long>>>(buffDict.GeneratedBy.Count);
                 foreach (SingleActor source in buffDict.GeneratedBy.Keys)
                 {
-                    statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]).ToList();
+                    statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
                 }
                 jsonBuffsUptime.StatesPerSource = statesPerSource;
             }
         }
         return jsonBuffsUptime;
     }
-    public static IEnumerable<IReadOnlyList<long>> GetBuffStates(BuffGraph? bgm)
+    public static IReadOnlyList<IReadOnlyList<long>> GetBuffStates(BuffGraph? bgm)
     {
         if (bgm == null || bgm.Values.Count == 0)
         {
             return [];
         }
 
-        return bgm.Values.Select(x => new List<long>() { x.Start, (int)x.Value });
+        return bgm.Values.Select(x => new List<long>() { x.Start, (int)x.Value }).ToList();
     }
 }

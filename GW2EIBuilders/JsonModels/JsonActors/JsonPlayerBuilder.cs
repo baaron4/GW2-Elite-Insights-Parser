@@ -130,11 +130,11 @@ internal static class JsonPlayerBuilder
             IReadOnlyDictionary<long, BuffGraph> buffGraphs = player.GetBuffGraphs(log);
             if (buffGraphs.TryGetValue(SkillIDs.NumberOfClones, out var states))
             {
-                jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
+                jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states);
             }
             if (buffGraphs.TryGetValue(SkillIDs.NumberOfRangerPets, out states))
             {
-                jsonPlayer.ActiveRangerPets = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
+                jsonPlayer.ActiveRangerPets = JsonBuffsUptimeBuilder.GetBuffStates(states);
             }
         }
         jsonPlayer.TargetDamageDist = targetDamageDist;

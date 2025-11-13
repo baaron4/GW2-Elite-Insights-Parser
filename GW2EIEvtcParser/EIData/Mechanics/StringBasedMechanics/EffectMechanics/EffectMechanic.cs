@@ -6,8 +6,6 @@ namespace GW2EIEvtcParser.EIData;
 
 internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 {
-    private int ForcedSpeciesID = int.MinValue;
-
     protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
 
     public EffectMechanic(GUID effect, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effect ], plotlySetting, shortName, description, fullName, internalCoolDown)
