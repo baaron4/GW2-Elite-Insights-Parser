@@ -185,10 +185,14 @@ public static class EffectGUIDs
 
     #region Elementalist
     public static readonly GUID ElementalistArmorOfEarth1 = new("D43DC34DEF81B746BC130F7A0393AAC7");
-    public static readonly GUID ElementalistArmorOfEarth2 = new("D0C072102FAA6A4EA8A16CB73F3B96DD"); // happens at the same time as the other, could be relevant to check should collisions appear
-    //public static readonly GUID ElementalistCleansingFire              = new("5FA6527231BB8041AC783396142C6200"); // also used with mesmer the prestige, collides with some air traits
+    public static readonly GUID ElementalistArmorOfEarth2 = new("D0C072102FAA6A4EA8A16CB73F3B96DD"); // happens at the same time as the other, collides with Fire Shield and gaining Fire Aura
+    public static readonly GUID ElementalistCleansingFire1 = new("BFFE3477ECFA26458D69E93EE76EFF6B");
+    public static readonly GUID ElementalistCleansingFire2 = new("61F5669F9FAC1F48B47635C9F3833CEF");
+    public static readonly GUID ElementalistCleansingFire3 = new("ABF2332D28C7D6449A5B822E5714ADA4"); // Reused on mesmer Mantra of Resolve / Power Cleanse
+    public static readonly GUID ElementalistCleansingFire4 = new("5FA6527231BB8041AC783396142C6200"); // Also used with mesmer the prestige, collides with some air traits, mesmer and necromancer
+    // public static readonly GUID ElementalistFireShield = new("D0C072102FAA6A4EA8A16CB73F3B96DD"); // Conflicts with Armor of Earth and Fire Aura
     public static readonly GUID ElementalistSignetOfAir = new("30A96C0E559DBD489FEE36DA96CC374A");
-    //public static readonly GUID ElementalistLightningFlash             = new("40818C8E9CC6EF4388C2821FCC26A9EC"); // Conflicts with certain field combos, thief teleport skills, guardian judges/merciful intervention
+    // public static readonly GUID ElementalistLightningFlash = new("40818C8E9CC6EF4388C2821FCC26A9EC"); // Conflicts with certain field combos, thief teleport skills, guardian judges/merciful intervention
     public static readonly GUID ElementalistMeteorShowerCircle = new("0F42F49776A5F74E8A0CADC4BCF53904");
     public static readonly GUID ElementalistMeteorShowerMeteor = new("F3DD685A8E52124A9FCC653C90EA789A");
     public static readonly GUID ElementalistStaticFieldStaff = new("1ED1C9E57048CF419AFB9C31329FF51E");
