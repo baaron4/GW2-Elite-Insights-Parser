@@ -18,36 +18,44 @@ internal static class ElementalistHelper
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
+        // Attunements
         new BuffGainCastFinder(FireAttunementSkill, FireAttunementBuff),
         new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementBuff),
         new BuffGainCastFinder(AirAttunementSkill, AirAttunementBuff),
         new BuffGainCastFinder(EarthAttunementSkill, EarthAttunementBuff),
-
+        // Glyphs
         new BuffGainCastFinder(GlyphOfElementalPowerFireSkill, GlyphOfElementalPowerFireBuff),
         new BuffGainCastFinder(GlyphOfElementalPowerWaterSkill, GlyphOfElementalPowerWaterBuff),
         new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirBuff),
         new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthBuff),
+        // Arcane
         new DamageCastFinder(ArcaneBlast, ArcaneBlast),
         new BuffGiveCastFinder(ArcanePowerSkill, ArcanePowerBuff),
         new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldBuff),
         new DamageCastFinder(ArcaneWave, ArcaneWave),
+        // Cantrips
+        new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.ElementalistCleansingFire2)
+            .UsingSecondaryEffectChecker(EffectGUIDs.ElementalistCleansingFire3)
+            .UsingDstBaseSpecChecker(Spec.Elementalist),
         new BuffGainCastFinder(MistForm, MistForm),
+        new DamageCastFinder(LightningFlash, LightningFlash),
+        new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
+            .UsingDstBaseSpecChecker(Spec.Elementalist),
+        // Signets
         new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill)
             .UsingDisableWithEffectData(),
+        new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir)
+            .UsingDstBaseSpecChecker(Spec.Elementalist),
+        // Traits
         new DamageCastFinder(Sunspot, Sunspot)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(FlameExpulsion, FlameExpulsion)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(EarthenBlast, EarthenBlast)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
-        new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir)
-            .UsingDstBaseSpecChecker(Spec.Elementalist),
         new DamageCastFinder(LightningRod, LightningRod)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new DamageCastFinder(LightningFlash, LightningFlash),
-        new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
-            .UsingDstBaseSpecChecker(Spec.Elementalist),
-        //new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
         new EXTHealingCastFinder(HealingRipple, HealingRipple)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new EXTHealingCastFinder(HealingRippleWvW, HealingRippleWvW)

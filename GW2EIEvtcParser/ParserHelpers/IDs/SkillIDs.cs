@@ -243,6 +243,7 @@ public static class SkillIDs
     public const long ObsidianFlesh = 5667;
     public const long StaticFieldStaff = 5671;
     public const long FireAura = 5677;
+    public const long FireShield = 5678;
     public const long GeyserStaffElementalist = 5681;
     public const long MagneticAura = 5684;
     public const long Updraft = 5687;
