@@ -496,6 +496,13 @@ public static class BuffImages
     #endregion
     #region Thief
     public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/CE22E9489B9754A65A750A2F07351222FDCAA17B/3680053.png";
+    public const string ScoundrelsLuck = "https://render.guildwars2.com/file/6F4E6201D89B35DDAD47EDEC453C51B70DFA409F/3680052.png";
+    public const string ProdigiousPincher = "https://render.guildwars2.com/file/092ED8ABB495EFD759DA0BE64D1C285A21076D15/3680054.png";
+    public const string CombatHigh = "https://render.guildwars2.com/file/394C98BFA71163D6DCB75F2294CD2B56B8126BC7/3680055.png";
+    public const string CanachCoinTossHead = "https://i.imgur.com/2m630qZ.png";
+    public const string CanachCoinTossTail = "https://i.imgur.com/lxeruPM.png";
+    public const string CanachCoinTossBackfiredHead = "https://i.imgur.com/l7SjOSw.png";
+    public const string CanachCoinTossBackfiredTail = "https://i.imgur.com/0VuijTx.png";
     #endregion
     #region Warrior
     #endregion

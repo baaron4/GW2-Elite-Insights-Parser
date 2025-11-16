@@ -199,6 +199,12 @@ public static class SkillItemOverrides
         { BarbedSpearMelee, "Barbed Spear (Melee)" },
         { BarbedSpearRanged, "Barbed Spear (Ranged)" },
         { DebilitatingArcRoll, "Debilitating Arc (Roll backwards)" },
+        { CanachCoinTossBackfired, "Canach-Coin Toss (Backfired)" },
+        { StoneSummitCannonBackfired, "Stone Summit Cannon (Backfired)" },
+        { EmergencyJadeShieldBackfiredSkill, "Emergency Jade Shield (Backfired)" },
+        { MetalLegionGuitarRockOut, "Metal Legion Guitar (Rockout)" },
+        { MetalLegionGuitarSmash, "Metal Legion Guitar (Smash)" },
+        { ForgedSurferDashSkillAdditionalBombs, "Forged Surfer Dash (Additional Bombs)" },
         #endregion Thief
         #region Warrior
         { RushDamage, "Rush (Hit)" },
@@ -973,9 +979,14 @@ public static class SkillItemOverrides
             { ThousandNeedlesDamage, SkillImages.ThousandNeedles },
             { ThrowLavaRock, SkillImages.ThrowLavaRock },
             { ImpalingLotusDamage, TraitImages.LotusTraining },
-            { MetalLegionGuitar2, SkillImages.MetalLegionGuitar },
+            { MetalLegionGuitarSmash, SkillImages.MetalLegionGuitar },
             { InquestPortalDevice1, SkillImages.InquestPortalDevice },
             { HoloDancerDecoy2, SkillImages.HoloDancerDecoy },
+            { EmergencyJadeShieldBarrierBuff, SkillImages.EmergencyJadeShield },
+            { EmergencyJadeShieldBackfiredDamageAndBarrierBuff, SkillImages.EmergencyJadeShield },
+            { AntivenomDraughtHealing, SkillImages.AntivenomDraught },
+            { MagpiesDefenseBarrierBuff, TraitImages.MagpiesDefense },
+            { ForgedSurferDashSkillAdditionalBombs, SkillImages.ForgedSurferDash },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },

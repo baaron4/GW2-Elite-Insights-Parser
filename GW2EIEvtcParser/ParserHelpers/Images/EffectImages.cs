@@ -133,6 +133,7 @@ internal static class EffectImages
     internal const string EffectMirageMirror = "https://i.imgur.com/Z4zkqQ8.png";
     internal const string EffectMistral = "https://i.imgur.com/LpWeCXT.png";
     internal const string EffectSkrittScuffle = "https://i.imgur.com/sT8NVtY.png";
+    internal const string EffectChakShield = "https://i.imgur.com/mtw1oya.png";
 }
 
 #pragma warning restore CA1823 // Unused field
