@@ -57,6 +57,16 @@ internal static class AntiquaryHelper
 
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData, AgentData agentData)
     {
+        var kryptisTurrets = combatData.GetBuffApplyData(KryptisTurretBuff1).ToList().Concat(combatData.GetBuffApplyData(KryptisTurretBuff2)).Select(x => x.To).Distinct();
+        foreach (var kryptisTurret in kryptisTurrets)
+        {
+            if (kryptisTurret.Type == AgentItem.AgentType.Gadget)
+            {
+                kryptisTurret.OverrideType(AgentItem.AgentType.NPC, agentData);
+                kryptisTurret.OverrideID(MinionID.KryptisTurret, agentData);
+                kryptisTurret.OverrideName("Kryptis Turret");
+            }
+        }
         // TODO Improve this if necessary
         var gadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in gadgets)
@@ -64,12 +74,6 @@ internal static class AntiquaryHelper
             var master = gadget.GetFinalMaster();
             if (master.IsPlayer && master.Spec == Spec.Antiquary)
             {
-                if (gadget.HitboxWidth == 40 && gadget.HitboxHeight == 0)
-                {
-                    gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    gadget.OverrideID(MinionID.KryptisTurret, agentData);
-                    gadget.OverrideName("Kryptis Turret");
-                }
                 if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
                 {
                     // The Holo-Dancer is correctly named
