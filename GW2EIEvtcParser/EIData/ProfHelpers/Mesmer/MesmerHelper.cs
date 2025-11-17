@@ -234,6 +234,8 @@ internal static class MesmerHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
         new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Defensive, SkillImages.Distortion)
             .WithBuilds(GW2Builds.OctoberVoERelease),
+        new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, SkillImages.Distortion)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
         new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, SkillImages.Mirror),
         new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
         new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryCounter),

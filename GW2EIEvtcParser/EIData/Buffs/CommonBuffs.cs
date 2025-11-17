@@ -87,6 +87,9 @@ internal static class CommonBuffs
         new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
         new Buff("Revive Sickness", ReviveSickness, Source.Common, BuffClassification.Other, BuffImages.ReviveSickness),
         new Buff("Portal Interact Cooldown", PortalInteractCooldown, Source.Common, BuffClassification.Other, BuffImages.CooldownNegative),
+        //
+        new Buff("Blur", Blur, [Source.Mesmer, Source.Evoker], BuffClassification.Other, SkillImages.Distortion)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         // Auras
         new Buff("Chaos Aura", ChaosAura, Source.Common, BuffClassification.Support, BuffImages.ChaosAura),
         new Buff("Fire Aura", FireAura, Source.Common, BuffClassification.Support, BuffImages.FireAura),
