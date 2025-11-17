@@ -435,7 +435,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
         if (agentData.GetNPCsByID(TargetID.Deimos).Any(deimos =>
         {
-            var lastMaxHPUpdate = combatData.GetMaxHealthUpdateEvents(deimos).LastOrDefault(x => x.Time < deimos.HalfAware);
+            var lastMaxHPUpdate = combatData.GetMaxHealthUpdateEventsBySrc(deimos).LastOrDefault(x => x.Time < deimos.HalfAware);
             if (lastMaxHPUpdate != null)
             {
                 return lastMaxHPUpdate.MaxHealth < 40e6;

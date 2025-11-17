@@ -68,7 +68,7 @@ public abstract partial class SingleActor : Actor
         if (Health == -2)
         {
             Health = -1;
-            IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(EnglobingAgentItem);
+            IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEventsBySrc(EnglobingAgentItem);
             if (maxHpUpdates.Any())
             {
                 HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);

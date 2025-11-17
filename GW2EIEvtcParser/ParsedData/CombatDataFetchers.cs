@@ -252,9 +252,13 @@ partial class CombatData
         return GetTimeValueOrEmpty(_statusEvents.BarrierUpdateEvents, src);
     }
 
-    public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem src)
+    public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEventsBySrc(AgentItem src)
     {
         return GetTimeValueOrEmpty(_statusEvents.MaxHealthUpdateEvents, src);
+    }
+    public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEventsByMaxHP(long maxHP)
+    {
+        return _statusEvents.MaxHealthUpdateEventsByMaxHP.GetValueOrEmpty(maxHP);
     }
     public IReadOnlyList<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem src)
     {

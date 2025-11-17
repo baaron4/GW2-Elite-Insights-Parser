@@ -65,8 +65,8 @@ internal static class AntiquaryHelper
         new Buff("Exalted Hammer", ExaltedHammerBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Other, SkillImages.ExaltedHammer),
         new Buff("Summon Kryptis Turret (Player)", SummonKryptisTurretPlayerBuff, Source.Antiquary, BuffClassification.Other, SkillImages.SummonKryptisTurret),
         new Buff("Summon Kryptis Turret (Target)", SummonKryptisTurretTargetBuff, Source.Antiquary, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.SummonKryptisTurret),
-        new Buff("Kryptis Turret (1)", KryptisTurretBuff1, Source.Antiquary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Kryptis Turret (2)", KryptisTurretBuff2, Source.Antiquary, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Kryptis Turret (1)", KryptisTurretBuff1, Source.Antiquary, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Kryptis Turret (2)", KryptisTurretBuff2, Source.Antiquary, BuffClassification.Hidden, BuffImages.Unknown),
         // Double Edge
         new Buff("Canach-Coin Toss (Head 1)", CanachCoinTossHead1, Source.Antiquary, BuffClassification.Other, BuffImages.CanachCoinTossHead),
         new Buff("Canach-Coin Toss (Tail 1)", CanachCoinTossTail1, Source.Antiquary, BuffClassification.Other, BuffImages.CanachCoinTossTail),
@@ -109,18 +109,20 @@ internal static class AntiquaryHelper
                 kryptisTurret.OverrideName("Kryptis Turret");
             }
         }
-        // TODO Improve this if necessary
-        var gadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget);
-        foreach (AgentItem gadget in gadgets)
+        foreach (var maxHP in combatData.GetMaxHealthUpdateEventsByMaxHP(7470))
         {
-            var master = gadget.GetFinalMaster();
-            if (master.IsPlayer && master.Spec == Spec.Antiquary)
+            var gadget = maxHP.Src;
+            if (gadget.Type == AgentItem.AgentType.Gadget)
             {
-                if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
+                var master = gadget.GetFinalMaster();
+                if (master.IsPlayer && master.Spec == Spec.Antiquary)
                 {
-                    // The Holo-Dancer is correctly named
-                    gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    gadget.OverrideID(MinionID.HoloDancer, agentData);
+                    if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
+                    {
+                        // The Holo-Dancer is correctly named
+                        gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+                        gadget.OverrideID(MinionID.HoloDancer, agentData);
+                    }
                 }
             }
         }

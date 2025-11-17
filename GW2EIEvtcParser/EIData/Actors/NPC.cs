@@ -65,7 +65,7 @@ public class NPC : SingleActor
     }
     public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
     {
-        MaxHealthUpdateEvent? currentMaxHealth = log.CombatData.GetMaxHealthUpdateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time <= time);
+        MaxHealthUpdateEvent? currentMaxHealth = log.CombatData.GetMaxHealthUpdateEventsBySrc(EnglobingAgentItem).LastOrDefault(x => x.Time <= time);
         if (currentMaxHealth == null || currentBarrierPercent < 0)
         {
             return -1;

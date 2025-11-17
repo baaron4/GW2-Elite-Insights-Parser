@@ -78,6 +78,7 @@ internal static class CombatEventFactory
             case StateChange.MaxHealthUpdate:
                 var maxHealthEvt = new MaxHealthUpdateEvent(stateChangeEvent, agentData);
                 Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
+                Add(statusEvents.MaxHealthUpdateEventsByMaxHP, maxHealthEvt.MaxHealth, maxHealthEvt);
                 break;
             case StateChange.PointOfView:
                 if (settings.AnonymousPlayers || stateChangeEvent.SrcAgent == 0)

@@ -18,6 +18,7 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<HealthUpdateEvent>> HealthUpdateEvents = [];
     public readonly Dictionary<AgentItem, List<BarrierUpdateEvent>> BarrierUpdateEvents = [];
     public readonly Dictionary<AgentItem, List<MaxHealthUpdateEvent>> MaxHealthUpdateEvents = [];
+    public readonly Dictionary<long, List<MaxHealthUpdateEvent>> MaxHealthUpdateEventsByMaxHP = [];
 
     public readonly Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents = [];
 
