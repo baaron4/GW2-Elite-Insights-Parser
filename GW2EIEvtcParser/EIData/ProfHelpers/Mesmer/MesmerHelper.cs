@@ -230,8 +230,10 @@ internal static class MesmerHelper
         new Buff("Signet of Midnight", SignetOfMidnightBuff, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfMidnight),
         new Buff("Signet of Humility", SignetOfHumility, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfHumility),
         // Skills
-        new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.Distortion),
-        new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, SkillImages.Distortion),
+        new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.Distortion)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
+        new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Defensive, SkillImages.Distortion)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, SkillImages.Mirror),
         new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
         new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryCounter),
