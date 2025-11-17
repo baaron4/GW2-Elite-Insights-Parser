@@ -119,7 +119,7 @@ public class SkillItem
             }
             if (ApiSkill?.Description != null)
             {
-                AA = AA && !ApiSkill.Description.Contains("Ambush.");
+                AA = AA && !ApiSkill.Description.Contains("Ambush.") && !ApiSkill.Description.Contains("Artifact.") && !ApiSkill.Description.Contains("Backfire.");
             }
         }
     }
