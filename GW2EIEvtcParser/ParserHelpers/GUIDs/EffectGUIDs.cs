@@ -487,6 +487,12 @@ public static class EffectGUIDs
     public static readonly GUID SpecterShadowfall1 = new("FB21A6E213C240459BD8E9524088FA66");
     public static readonly GUID SpecterShadowfall2 = new("D8E380E80E843A4092C8DD53C5A51F0F"); // ~880ms delay
     public static readonly GUID AntiquarySkrittScuffle = new("4AD741FD431EBD42B88D26173DA0234A"); // 15000 duration, has end time
+    public static readonly GUID AntiquaryUnstableSkrittBomb1 = new("F0A23BA5903B91409D3940AD3335DEF1"); // 3800 duration - ground effect
+    public static readonly GUID AntiquaryUnstableSkrittBomb2 = new("CBB8CA160E3DCC419317DD54FDDF679A"); // 0 duration - around dst = src
+    public static readonly GUID AntiquaryChakShield1 = new("1B48B91A5B0EC540BEA2765583412CBC"); // Duration 4000
+    public static readonly GUID AntiquaryChakShield2 = new("ABF301D245327B4D80C3C058FA1CFB35"); // Duration 0 - dst agent
+    public static readonly GUID AntiquaryChakShield3 = new("F011BC77BB1D4D40BDE0C0788F51224B"); // Duration 3000
+    public static readonly GUID AntiquaryChakShield4 = new("EE180AE86C6D314E90A6E35D6C9BA5C6"); // Duration 5500
     #endregion
 
     #region Fractals

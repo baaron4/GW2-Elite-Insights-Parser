@@ -274,6 +274,8 @@ internal static class TraitImages
     public const string ShadowSavior = "https://render.guildwars2.com/file/D3070EE4956FF44628AD3ED06FD60C7D94F20296/2175055.png";
     public const string ShieldingRestoration = "https://render.guildwars2.com/file/3B7C573FBF124EC43F4102D530DE5E333F31014F/1012750.png";
     public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/08475BFD2DA578D96933C0D42FB33770AF68A454/3680020.png";
+    public const string CombatHigh = "https://render.guildwars2.com/file/EDF09834A4A650256C98A3680C2DF4A4C5339BAC/3680023.png";
+    public const string MagpiesDefense = "https://render.guildwars2.com/file/3A4DAC71019B64EA1893E06638234E1BE4DB6251/3680025.png";
     #endregion
     #region Warrior
     public const string RousingResilience = "https://render.guildwars2.com/file/630279C914D8BF414C2358281F1A37EDF86B203B/1012794.png";

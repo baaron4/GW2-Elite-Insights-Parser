@@ -696,6 +696,8 @@ internal static class SkillImages
     public const string SummonKryptisTurret = "https://render.guildwars2.com/file/2DC92035E3A36CBCDB62C84E65BEF69BFA0BDD02/3680213.png";
     public const string MistburnMortar = "https://render.guildwars2.com/file/4519AE3A9032E03F2F14AAA1B5EEE10F1AF1EEAE/3680215.png";
     public const string ExaltedHammer = "https://render.guildwars2.com/file/57A193E75618661CE3F51DC44AC59F7BA72E6169/3680210.png";
+    public const string EmergencyJadeShield = "https://render.guildwars2.com/file/B719629A506EBA0444060E2D56A1DDB4183FCAD3/3680222.png";
+    public const string AntivenomDraught = "https://render.guildwars2.com/file/51322CD33E32D80B7B341167E6C8A294143264A2/3680207.png";
     #endregion Thief
     #region Warrior
     // Signets
