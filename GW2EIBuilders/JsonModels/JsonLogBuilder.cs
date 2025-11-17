@@ -209,7 +209,7 @@ internal static class JsonLogBuilder
                 {
                     buffMap[buff.ID] = buff;
                 }
-                if (buff.Source == ParserHelper.Source.FractalInstability)
+                if (buff.Sources.Contains(ParserHelper.Source.FractalInstability))
                 {
                     presentFractalInstabilities.Add(buff.ID);
                 }

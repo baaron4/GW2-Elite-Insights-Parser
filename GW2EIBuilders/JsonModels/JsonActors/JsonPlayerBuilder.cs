@@ -281,7 +281,7 @@ internal static class JsonPlayerBuilder
                     data.Add(value);
                 }
             }
-            if (buff.Classification == Buff.BuffClassification.Other && profEnums.Contains(buff.Source))
+            if (buff.Classification == Buff.BuffClassification.Other && profEnums.Intersect(buff.Sources).Any())
             {
                 if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                 {
@@ -375,7 +375,7 @@ internal static class JsonPlayerBuilder
                     data.Add(value);
                 }
             }
-            if (buff.Classification == Buff.BuffClassification.Other && profEnums.Contains(buff.Source))
+            if (buff.Classification == Buff.BuffClassification.Other && profEnums.Intersect(buff.Sources).Any())
             {
                 if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                 {

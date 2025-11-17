@@ -15,7 +15,7 @@ internal class BuffDto : IDItemDto
     {
         Stacking = (buff.Type == Buff.BuffType.Intensity);
         Consumable = (buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.OtherConsumable);
-        EncounterSpecific = (buff.Source == ParserHelper.Source.EncounterSpecific || buff.Source == ParserHelper.Source.FractalInstability);
+        EncounterSpecific = (buff.Sources.Contains(ParserHelper.Source.EncounterSpecific) || buff.Sources.Contains(ParserHelper.Source.FractalInstability));
         BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
         if (buffInfoEvent != null)
         {
