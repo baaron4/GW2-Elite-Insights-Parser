@@ -486,6 +486,7 @@ public static class SpeciesIDs
         TheDragonVoidSooWon = SpeciesIDs.TheDragonVoidSooWon,
         TheDragonVoidPrimordus = SpeciesIDs.TheDragonVoidPrimordus,
         TheDragonVoidMordremoth = SpeciesIDs.TheDragonVoidMordremoth,
+        TheDragonVoidUnknown = SpeciesIDs.TheDragonVoidUnknown,
         PushableVoidAmalgamate = SpeciesIDs.PushableVoidAmalgamate,
         VoidAmalgamate = 24375,
         KillableVoidAmalgamate = 23956,
@@ -501,8 +502,8 @@ public static class SpeciesIDs
         VoidTimeCaster = 25025,
         VoidBrandbomber = 24783,
         VoidBurster = 24464,
-        VoidWarforged1 = 24129,
-        VoidWarforged2 = 24855,
+        VoidWarforgedElite = 24129,
+        VoidWarforgedVeteran = 24855,
         VoidStormseer = 24677,
         VoidMelter = 24223,
         VoidGoliath = 24761,
@@ -1206,6 +1207,7 @@ public static class SpeciesIDs
     private const int HoloDancer = -106;
     private const int ParentAiKeeperOfThePeak = -107;
     private const int PlayerSlubling = -108;
+    private const int TheDragonVoidUnknown = -109;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

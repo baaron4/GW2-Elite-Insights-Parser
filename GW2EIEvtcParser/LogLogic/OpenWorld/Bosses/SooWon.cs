@@ -303,7 +303,7 @@ internal class SooWon : OpenWorldLogic
             TargetID.VoidTanglerOW,
             TargetID.VoidThornheartOW1,
             TargetID.VoidThornheartOW2,
-            TargetID.VoidWarforged2,
+            TargetID.VoidWarforgedVeteran,
             TargetID.VoidWormOW,
         ];
     }
