@@ -66,7 +66,7 @@ internal class SooWon : OpenWorldLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SooWonOW));
-        SingleActor? tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SooWonTail));
+        SingleActor? tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SooWonTailOW));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -176,8 +176,8 @@ internal class SooWon : OpenWorldLogic
                 case 5:
                     phase.Name = "First Champions";
                     phase.AddTargets(Targets.Where(x =>
-                        x.IsSpecies(TargetID.VoidGiant2) ||
-                        x.IsSpecies(TargetID.VoidTimeCaster2)), log);
+                        x.IsSpecies(TargetID.VoidGiantOW) ||
+                        x.IsSpecies(TargetID.VoidTimeCasterOW)), log);
                     break;
                 case 6:
                     phase.Name = "60% - 40%";
@@ -200,9 +200,9 @@ internal class SooWon : OpenWorldLogic
                 case 10:
                     phase.Name = "Second Champions";
                     phase.AddTargets(Targets.Where(x =>
-                        x.IsSpecies(TargetID.VoidBrandstalker) ||
-                        x.IsSpecies(TargetID.VoidColdsteel2) ||
-                        x.IsSpecies(TargetID.VoidObliterator2)), log);
+                        x.IsSpecies(TargetID.VoidBrandstalkerOW) ||
+                        x.IsSpecies(TargetID.VoidColdsteelOW1) ||
+                        x.IsSpecies(TargetID.VoidObliteratorOW)), log);
                     break;
                 case 11:
                     phase.Name = "20% - 0%";
@@ -228,11 +228,11 @@ internal class SooWon : OpenWorldLogic
             sooWon.OverrideID(TargetID.SooWonOW, agentData);
         }
 
-        IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(TargetID.SooWonTail);
+        IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(TargetID.SooWonTailOW);
         foreach (AgentItem sooWonTail in sooWonTails)
         {
             sooWonTail.OverrideType(AgentItem.AgentType.NPC, agentData);
-            sooWonTail.OverrideID(TargetID.SooWonTail, agentData);
+            sooWonTail.OverrideID(TargetID.SooWonTailOW, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
@@ -252,12 +252,12 @@ internal class SooWon : OpenWorldLogic
         return
         [
             TargetID.SooWonOW,
-            TargetID.SooWonTail,
-            TargetID.VoidGiant2,
-            TargetID.VoidTimeCaster2,
-            TargetID.VoidBrandstalker,
-            TargetID.VoidColdsteel2,
-            TargetID.VoidObliterator2,
+            TargetID.SooWonTailOW,
+            TargetID.VoidGiantOW,
+            TargetID.VoidTimeCasterOW,
+            TargetID.VoidBrandstalkerOW,
+            TargetID.VoidColdsteelOW1,
+            TargetID.VoidObliteratorOW,
         ];
     }
 
@@ -266,45 +266,45 @@ internal class SooWon : OpenWorldLogic
         return
         [
             TargetID.VoidAbomination,
-            TargetID.VoidAbomination2,
-            TargetID.VoidBomber,
-            TargetID.VoidBrandbeast,
-            TargetID.VoidBrandcharger1,
-            TargetID.VoidBrandcharger2,
-            TargetID.VoidBrandfang1,
-            TargetID.VoidBrandfang2,
-            TargetID.VoidBrandscale1,
-            TargetID.VoidBrandscale2,
+            TargetID.VoidAbominationOW,
+            TargetID.VoidBomberOW,
+            TargetID.VoidBrandbeastOW,
+            TargetID.VoidBrandchargerOW1,
+            TargetID.VoidBrandchargerOW2,
+            TargetID.VoidBrandfangOW1,
+            TargetID.VoidBrandfangOW2,
+            TargetID.VoidBrandscaleOW1,
+            TargetID.VoidBrandscaleOW2,
             TargetID.VoidColdsteel,
-            TargetID.VoidColdsteel3,
-            TargetID.VoidCorpseknitter1,
-            TargetID.VoidCorpseknitter2,
-            TargetID.VoidDespoiler1,
-            TargetID.VoidDespoiler2,
-            TargetID.VoidFiend1,
-            TargetID.VoidFiend2,
-            TargetID.VoidFoulmaw,
-            TargetID.VoidFrostwing,
-            TargetID.VoidGlacier1,
-            TargetID.VoidGlacier2,
-            TargetID.VoidInfested1,
-            TargetID.VoidInfested2,
-            TargetID.VoidMelter1,
-            TargetID.VoidMelter2,
-            TargetID.VoidRimewolf1,
-            TargetID.VoidRimewolf2,
-            TargetID.VoidRotspinner1,
+            TargetID.VoidColdsteelOW2,
+            TargetID.VoidCorpseknitterOW1,
+            TargetID.VoidCorpseknitterOW2,
+            TargetID.VoidDespoilerOW1,
+            TargetID.VoidDespoilerOW2,
+            TargetID.VoidFiendOW1,
+            TargetID.VoidFiendOW2,
+            TargetID.VoidFoulmawOW,
+            TargetID.VoidFrostwingOW,
+            TargetID.VoidGlacierOW1,
+            TargetID.VoidGlacierOW2,
+            TargetID.VoidInfestedOW1,
+            TargetID.VoidInfestedOW2,
+            TargetID.VoidMelterOW1,
+            TargetID.VoidMelterOW2,
+            TargetID.VoidRimewolfOW1,
+            TargetID.VoidRimewolfOW2,
+            TargetID.VoidRotspinnerOW1,
             TargetID.VoidRotswarmer,
-            TargetID.VoidStorm,
+            TargetID.VoidStormOW,
             TargetID.VoidStormseer,
-            TargetID.VoidStormseer2,
-            TargetID.VoidStormseer3,
+            TargetID.VoidStormseerOW1,
+            TargetID.VoidStormseerOW2,
             TargetID.VoidTangler,
-            TargetID.VoidTangler2,
-            TargetID.VoidThornheart1,
-            TargetID.VoidThornheart2,
+            TargetID.VoidTanglerOW,
+            TargetID.VoidThornheartOW1,
+            TargetID.VoidThornheartOW2,
             TargetID.VoidWarforged2,
-            TargetID.VoidWorm,
+            TargetID.VoidWormOW,
         ];
     }
 }
