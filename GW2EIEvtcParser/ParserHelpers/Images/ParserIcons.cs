@@ -932,6 +932,7 @@ internal static class ParserIcons
         { TargetID.TheDragonVoidPrimordus, TargetTheDragonVoidPrimordus },
         { TargetID.TheDragonVoidSooWon, TargetTheDragonVoidSooWon },
         { TargetID.TheDragonVoidZhaitan, TargetTheDragonVoidZhaitan },
+        { TargetID.TheDragonVoidUnknown, TrashGenericRedEnemySkull },
         { TargetID.SooWonOW, TargetSooWonOW },
         { TargetID.PrototypeVermilion, TargetPrototypeVermilion },
         { TargetID.PrototypeVermilionCM, TargetPrototypeVermilion },

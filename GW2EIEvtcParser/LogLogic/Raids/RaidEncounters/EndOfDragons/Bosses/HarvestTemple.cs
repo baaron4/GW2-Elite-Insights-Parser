@@ -329,7 +329,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return startToUse;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -389,8 +389,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             TargetID.VoidSkullpiercer,
             TargetID.VoidStormseer,
             TargetID.VoidTangler,
-            TargetID.VoidWarforged1,
-            TargetID.VoidWarforged2,
+            TargetID.VoidWarforgedElite,
+            TargetID.VoidWarforgedVeteran,
             TargetID.DragonEnergyOrb,
             TargetID.GravityBall,
             TargetID.JormagMovingFrostBeam,
@@ -465,7 +465,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         var res = new List<CastEvent>();
         foreach (var target in Targets)
         {
-            switch(target.ID)
+            switch (target.ID)
             {
                 case (int)TargetID.TheDragonVoidJormag:
                     var northBeamSkill = skillData.Get(BreathOfJormagNorth);
@@ -1723,8 +1723,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 var orbs = log.CombatData.GetMissileEventsBySkillID(GraspOfTheVoid);
                 replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.Black, 0.5, 40);
                 break;
-            case (int)TargetID.VoidWarforged1:
-            case (int)TargetID.VoidWarforged2:
+            case (int)TargetID.VoidWarforgedElite:
+            case (int)TargetID.VoidWarforgedVeteran:
 #if DEBUG_EFFECTS
                     CombatReplay.DebugEffects(target, log, replay.Decorations, [], target.FirstAware, target.LastAware);
 #endif
