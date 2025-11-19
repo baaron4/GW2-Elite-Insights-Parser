@@ -891,78 +891,9 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 {
                     end = targetOff.Time;
                 }
-                // Jormag
-                if (
-                    (usefulMissileEvents.TryGetValue(BreathOfJormagSouth, out var jormagBreaths) && jormagBreaths.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulMissileEvents.TryGetValue(GraspOfJormag, out var graspsOfJormags) && graspsOfJormags.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamNorth).Any(x => x.InAwareTimes(start, end)))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamCenter).Any(x => x.InAwareTimes(start, end)))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.VoidStormseer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
-                )
-                {
-                    AgentItem jormagVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidJormag, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    jormagVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                }
-                // Primordus
-                else if (
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusLavaSlamIndicator, out var lavaSlams) && lavaSlams.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionIndicator, out var jawsIndicator) && jawsIndicator.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionDamage, out var jawsDamage) && jawsDamage.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (agentData.GetNPCsByIDs([TargetID.VoidWarforgedElite, TargetID.VoidBurster]).Any(x => start - 9000 <= x.FirstAware && end >= x.FirstAware))
-                )
-                {
-                    AgentItem primodusVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidPrimordus, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    primodusVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                }
-                // Kralkatorrik
-                else if (
-                    (usefulMissileEvents.TryGetValue(CrystalBarrage, out var crystalBarrages) && crystalBarrages.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator, out var kralkBeam) && kralkBeam.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.VoidBrandbomber).Any(x => start - 11000 <= x.FirstAware && end >= x.FirstAware))
-                )
-                {
-                    AgentItem kralkatorrikVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidKralkatorrik, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    kralkatorrikVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                }
-                // Mordremoth
-                else if (
-                    (usefulMissileEvents.TryGetValue(PoisonRoar, out var poisonRoars) && poisonRoars.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleMordremothShockwave1, out var mordShockwaves) && mordShockwaves.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.VoidSkullpiercer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
-                )
-                {
-                    AgentItem mordremothVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidMordremoth, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    mordremothVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                }
-                // Zhaitan
-                else if (
-                    (usefulMissileEvents.TryGetValue(PutridDeluge, out var putridDeluges) && putridDeluges.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanScreamIndicator, out var zhaiScreams) && zhaiScreams.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanTailSlamImpact, out var shaiTailSlams) && shaiTailSlams.Any(x => x.Time >= start && x.Time <= end))
-                    ||
-                    (agentData.GetNPCsByID(TargetID.VoidGiant).Any(x => start - 17000 <= x.FirstAware && end >= x.FirstAware))
-                    ||
-                    (agentData.GetNPCsByIDs([TargetID.VoidRotswarmer, TargetID.ZhaitansReach]).Any(x => start <= x.FirstAware && end >= x.FirstAware))
-                )
-                {
-                    AgentItem zhatainVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidZhaitan, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    zhatainVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                }
+                var id = TargetID.TheDragonVoidUnknown;
                 // SooWon
-                else if (
+                if (
                     (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleSooWonClawSlap, out var soowonClaws) && soowonClaws.Any(x => x.Time >= start && x.Time <= end))
                     ||
                     (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleTsunamiSlamTailIndicator, out var soowonTail) && soowonTail.Any(x => x.Time >= start && x.Time <= end))
@@ -988,14 +919,76 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                             end = nextEnd;
                         }
                     }
-                    AgentItem sooWonVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidSooWon, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    sooWonVoid.SetEnglobingAgentItem(dragonVoid, agentData);
-                } 
-                else
-                {
-                    AgentItem sooWonVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidSooWon, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    sooWonVoid.SetEnglobingAgentItem(dragonVoid, agentData);
+                    id = TargetID.TheDragonVoidSooWon;
                 }
+                // Zhaitan
+                else if (
+                    (usefulMissileEvents.TryGetValue(PutridDeluge, out var putridDeluges) && putridDeluges.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanScreamIndicator, out var zhaiScreams) && zhaiScreams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanTailSlamImpact, out var shaiTailSlams) && shaiTailSlams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidGiant).Any(x => start - 17000 <= x.FirstAware && end >= x.FirstAware))
+                    ||
+                    (agentData.GetNPCsByIDs([TargetID.VoidRotswarmer, TargetID.ZhaitansReach]).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidZhaitan;
+                }
+                // Mordremoth
+                else if (
+                    (usefulMissileEvents.TryGetValue(PoisonRoar, out var poisonRoars) && poisonRoars.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleMordremothShockwave1, out var mordShockwaves) && mordShockwaves.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidSkullpiercer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    AgentItem primodusVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidPrimordus, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
+                    primodusVoid.SetEnglobingAgentItem(dragonVoid, agentData);
+                }
+                // Kralkatorrik
+                else if (
+                    (usefulMissileEvents.TryGetValue(CrystalBarrage, out var crystalBarrages) && crystalBarrages.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator, out var kralkBeam) && kralkBeam.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidBrandbomber).Any(x => start - 11000 <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidKralkatorrik;
+                }
+                // Primordus
+                else if (
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusLavaSlamIndicator, out var lavaSlams) && lavaSlams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionIndicator, out var jawsIndicator) && jawsIndicator.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionDamage, out var jawsDamage) && jawsDamage.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByIDs([TargetID.VoidWarforgedElite, TargetID.VoidBurster]).Any(x => start - 9000 <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidPrimordus;
+                }
+                // Jormag
+                else if (
+                    (usefulMissileEvents.TryGetValue(BreathOfJormagSouth, out var jormagBreaths) && jormagBreaths.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulMissileEvents.TryGetValue(GraspOfJormag, out var graspsOfJormags) && graspsOfJormags.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamNorth).Any(x => x.InAwareTimes(start, end)))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamCenter).Any(x => x.InAwareTimes(start, end)))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidStormseer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidJormag;
+                }
+                AgentItem elderDragonVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
+                elderDragonVoid.SetEnglobingAgentItem(dragonVoid, agentData);
             }
         }
         var expectedNextIDDict = new Dictionary<int, int>()
