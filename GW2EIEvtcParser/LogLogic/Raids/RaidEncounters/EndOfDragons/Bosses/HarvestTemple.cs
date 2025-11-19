@@ -959,8 +959,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     (agentData.GetNPCsByID(TargetID.VoidSkullpiercer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
                 )
                 {
-                    AgentItem primodusVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)TargetID.TheDragonVoidPrimordus, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
-                    primodusVoid.SetEnglobingAgentItem(dragonVoid, agentData);
+                    id = TargetID.TheDragonVoidMordremoth;
                 }
                 // Kralkatorrik
                 else if (
