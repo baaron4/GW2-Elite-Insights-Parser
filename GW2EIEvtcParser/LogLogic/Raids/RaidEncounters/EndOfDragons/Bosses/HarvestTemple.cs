@@ -311,18 +311,33 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
 
     internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (combatData.GetEvtcVersionEvent().Build > ArcDPSBuilds.MissilesIntroduced)
+        var jormagVoid = agentData.GetNPCsByID(TargetID.TheDragonVoidJormag).FirstOrDefault();
+        var otherVoids = agentData.GetNPCsByIDs([
+            TargetID.TheDragonVoidPrimordus,
+            TargetID.TheDragonVoidKralkatorrik,
+            TargetID.TheDragonVoidMordremoth,
+            TargetID.TheDragonVoidZhaitan,
+            TargetID.TheDragonVoidSooWon,
+        ]);
+        long pushableOrbCheckThreshold = logData.LogEnd;
+        if (jormagVoid != null)
         {
-            var jormagVoid = agentData.GetNPCsByID(TargetID.TheDragonVoidJormag).FirstOrDefault();
-            if (jormagVoid == null)
+            pushableOrbCheckThreshold = jormagVoid.FirstAware;
+        } 
+        else if (otherVoids.Count > 0)
             {
                 return LogData.LogStartStatus.Late;
             }
-            var pushableOrb = agentData.GetNPCsByID(TargetID.PushableVoidAmalgamate).LastOrDefault(x => x.FirstAware <= jormagVoid.FirstAware);
+        var pushableOrb = agentData.GetNPCsByID(TargetID.PushableVoidAmalgamate).LastOrDefault(x => x.FirstAware <= pushableOrbCheckThreshold);
             if (pushableOrb == null)
             {
                 return LogData.LogStartStatus.Late;
             }
+        var voidShellApplies = combatData.GetBuffApplyDataByIDByDst(VoidShell, pushableOrb);
+        if (voidShellApplies.Count < 3)
+        {
+            return LogData.LogStartStatus.Late;
+        }
             var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
             if (firstNonZeroVelocity == null)
             {
@@ -334,11 +349,10 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 return LogData.LogStartStatus.Late;
             }
             var position = firstPositionAfterVelocity.GetPoint3D();
-            if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 10)
+        if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 50)
             {
                 return LogData.LogStartStatus.Late;
             }
-        }
         return LogData.LogStartStatus.Normal;
     }
 
