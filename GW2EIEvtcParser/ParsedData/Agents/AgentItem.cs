@@ -38,7 +38,7 @@ public class AgentItem
     public AgentItem EnglobingAgentItem => _englobingAgentItem ?? this;
     private List<AgentItem>? _englobedAgentItems;
     public IReadOnlyList<AgentItem> EnglobedAgentItems => _englobedAgentItems ?? [];
-    public AgentItem? GeographicallyAttachedAgentItem { get; private set; }
+    public AgentItem? PositionAttachedAgentItem { get; private set; }
     public bool IsEnglobingAgent => _englobedAgentItems != null;
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
@@ -567,9 +567,9 @@ public class AgentItem
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty | AgentData.AgentDataDirtyStatus.SpeciesDirty);
     }
 
-    internal void GeographicallyAttachTo(AgentItem geographicallyAttached)
+    internal void PositionAttachTo(AgentItem geographicallyAttached)
     {
-        GeographicallyAttachedAgentItem = geographicallyAttached;
+        PositionAttachedAgentItem = geographicallyAttached;
     }
     internal void SetEnglobingAgentItem(AgentItem parent, AgentData agentData)
     {
