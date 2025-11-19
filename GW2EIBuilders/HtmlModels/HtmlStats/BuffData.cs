@@ -45,13 +45,15 @@ internal class BuffData
                         toUse.WastedFrom[actor],
                         toUse.UnknownExtensionFrom[actor],
                         toUse.ExtensionBy[actor],
-                        toUse.ExtendedFrom[actor]
+                        toUse.ExtendedFrom[actor],
+                        toUse.GeneratedPresenceBy[actor]
                     ]);
             }
             else
             {
                 Data.Add(
                     [
+                        0,
                         0,
                         0,
                         0,

@@ -27,6 +27,7 @@ internal static class JsonBuffsUptimeBuilder
             Uptime = buffs.Uptime,
             Presence = buffs.Presence,
             Generated = ConvertKeys(buffsDictionary.GeneratedBy),
+            GeneratedPresence = ConvertKeys(buffsDictionary.GeneratedPresenceBy),
             Overstacked = ConvertKeys(buffsDictionary.OverstackedBy),
             Wasted = ConvertKeys(buffsDictionary.WastedFrom),
             UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtensionFrom),

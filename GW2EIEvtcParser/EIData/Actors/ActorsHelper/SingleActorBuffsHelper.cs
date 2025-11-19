@@ -838,14 +838,12 @@ partial class SingleActor
         BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
         var rates = new Dictionary<long, BuffByActorStatistics>();
         var ratesActive = new Dictionary<long, BuffByActorStatistics>();
-        long duration = end - start;
-        long activeDuration = GetActiveDuration(log, start, end);
 
         foreach (Buff buff in GetTrackedBuffs(log))
         {
             if (buffDistribution.HasBuffID(buff.ID))
             {
-                (rates[buff.ID], ratesActive[buff.ID]) = BuffByActorStatistics.GetBuffByActor(log, buff, buffDistribution, duration, activeDuration);
+                (rates[buff.ID], ratesActive[buff.ID]) = BuffByActorStatistics.GetBuffByActor(log, buff, this, start, end, buffDistribution);
             }
         }
         return (rates, ratesActive);
