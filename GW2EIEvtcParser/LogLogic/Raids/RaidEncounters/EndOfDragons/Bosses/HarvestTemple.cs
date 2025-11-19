@@ -207,14 +207,26 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target, log);
+                    var killableAmalgamates = Targets.Where(x => x.IsSpecies(TargetID.KillableVoidAmalgamate));
+                    var prevKillableAmalgamates = killableAmalgamates.FirstOrDefault(x => x.FirstAware < phaseStart && x.FirstAware >= log.LogData.LogStart - ServerDelayConstant);
+                    if (prevKillableAmalgamates != null)
+                    {
+                        phaseStart = Math.Max(prevKillableAmalgamates.FirstAware, log.LogData.LogStart);
+                    }
                     subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
-                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).Where(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware)).FirstOrDefault();
+                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).Where(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware && y.Time <= target.LastAware)).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
-                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware);
-                        var targetOns = targetables.Where(x => x.Targetable);
+                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                        var targetOns = targetables.Where(x => x.Targetable).ToList();
                         var targetOffs = targetables.Where(x => !x.Targetable);
-                        int id = 0;
+                        // Starts with 2nd soo won phase
+                        int id = targetOns.Count == 1 && prevKillableAmalgamates != null ? 1 : 0;
+                        // No purification phase, we don't need any subphase
+                        if (prevKillableAmalgamates == null && targetOns.Count == 1 && !killableAmalgamates.Any(x => x.FirstAware > targetOns[0].Time))
+                        {
+                            break;
+                        }
                         foreach (TargetableEvent targetOn in targetOns)
                         {
                             long start = targetOn.Time;
@@ -325,34 +337,34 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             pushableOrbCheckThreshold = jormagVoid.FirstAware;
         } 
         else if (otherVoids.Count > 0)
-            {
-                return LogData.LogStartStatus.Late;
-            }
+        {
+            return LogData.LogStartStatus.Late;
+        }
         var pushableOrb = agentData.GetNPCsByID(TargetID.PushableVoidAmalgamate).LastOrDefault(x => x.FirstAware <= pushableOrbCheckThreshold);
-            if (pushableOrb == null)
-            {
-                return LogData.LogStartStatus.Late;
-            }
+        if (pushableOrb == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
         var voidShellApplies = combatData.GetBuffApplyDataByIDByDst(VoidShell, pushableOrb);
         if (voidShellApplies.Count < 3)
         {
             return LogData.LogStartStatus.Late;
         }
-            var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
-            if (firstNonZeroVelocity == null)
-            {
-                return LogData.LogStartStatus.Late;
-            }
-            var firstPositionAfterVelocity = combatData.GetMovementData(pushableOrb).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= firstNonZeroVelocity.Time);
-            if (firstPositionAfterVelocity == null)
-            {
-                return LogData.LogStartStatus.Late;
-            }
-            var position = firstPositionAfterVelocity.GetPoint3D();
+        var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
+        if (firstNonZeroVelocity == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var firstPositionAfterVelocity = combatData.GetMovementData(pushableOrb).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= firstNonZeroVelocity.Time);
+        if (firstPositionAfterVelocity == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var position = firstPositionAfterVelocity.GetPoint3D();
         if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 50)
-            {
-                return LogData.LogStartStatus.Late;
-            }
+        {
+            return LogData.LogStartStatus.Late;
+        }
         return LogData.LogStartStatus.Normal;
     }
 
