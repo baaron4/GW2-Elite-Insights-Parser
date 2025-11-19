@@ -5075,10 +5075,10 @@ public static class SkillIDs
     public const long ConflagrationPlayerSkill = 76585;
     public const long ScionsReprieve = 76595;
     public const long MetalLegionGuitarSmash = 76596;
-    public const long SorrowAutoattack = 76598;
+    public const long SorrowAutoattack_Anguish = 76598; // Incorrect in game mapping, called Sorrow Autoattack but fired off Spirit of Anguish
     public const long ExaltedHammerSkill = 76601;
     public const long InnervatePreservationSkill = 76602;
-    public const long SummonSpirits = 76607;
+    public const long SummonSpiritsPlayerSkill = 76607;
     public const long FamiliarsProwessOtter = 76608;
     public const long LegendaryEntityStanceSkill = 76610;
     public const long TaleOfTheHonorableRogue = 76611;
@@ -5137,6 +5137,7 @@ public static class SkillIDs
     public const long ValorousStanceBuff = 76736;
     public const long MitoticStateSkill = 76738;
     public const long NightmareWeaponSkill = 76739;
+    public const long WanderlustPlayerUnderwaterSkill = 76741;
     public const long CanachCoinTossBackfired = 76744;
     public const long FlusteringFlute = 76746;
     public const long DetonateShelter = 76748;
@@ -5151,7 +5152,7 @@ public static class SkillIDs
     public const long NeverSurrender = 76769;
     public const long POV_Motivation = 76770; // PoV buff for Paragon's Motivation
     public const long ChantOfRecuperationSkill = 76782;
-    public const long ExplosiveGrowthSkill = 76783;
+    public const long ExplosiveGrowthDamageSkill = 76783;
     public const long EmergencyJadeShieldBackfiredSkill = 76784;
     public const long CombatHigh = 76785;
     public const long SummonCycloneBow = 76787;
@@ -5220,13 +5221,13 @@ public static class SkillIDs
     public const long ResilientWeaponSharedBuff = 76936;
     public const long XinraeWeapon = 76941;
     public const long CanachCoinTossBackfiredTail3 = 76946;
-    public const long PreservationBuff = 76947;
+    public const long PreservationHealingBuff = 76947;
     public const long GlaringBurst2 = 76950;
     public const long PreservationAutoattack = 76953;
     public const long OffensiveProtocolDemolish1 = 76954;
     public const long RitualistsShroud = 76958;
     public const long DefensiveProtocolProtect = 76959;
-    public const long Wanterlust1 = 76961;
+    public const long WanderlustPlayerSkill = 76961;
     public const long TwinMoonSweep1 = 76968;
     public const long TakeOfTheAugustQueen = 76971;
     public const long ChantOfFreedomBuff = 76972;
@@ -5288,7 +5289,7 @@ public static class SkillIDs
     public const long OnYourKnees = 77114;
     public const long FormOfTheDervishSkill2 = 77116;
     public const long FlutePlaying = 77118;
-    public const long Wanterlust2 = 77120;
+    public const long WanderlustDamage = 77120;
     public const long ZapBuffPlayerToTarget = 77123; // Buff applied from the player to the target
     public const long PainfulBond = 77128;
     public const long RestorativeGlowSkill = 77136;
@@ -5307,11 +5308,12 @@ public static class SkillIDs
     public const long EmpoweredArmaments = 77169;
     public const long SupersonicArrow = 77174;
     public const long FoxPassive = 77175;
-    public const long RitualistHealingRain = 77177; // Buff - Reused ele skill?
+    public const long RitualistHealingRain = 77177; // Buff - Applied by Summon Spirits skill with Preservation summoned
     public const long TaleOfTheValiantMarshal = 77178;
     public const long ZapBuffTargetToPlayer = 77180; // Buff applied from the target to the player
     public const long KeenShot = 77183;
     public const long OttersCompassion = 77190;
+    public const long SummonSpiritsPlayerUnderwaterSkill = 77191;
     public const long SummonKryptisTurretSkill = 77192;
     public const long RadiantBulwark = 77197;
     public const long RadiantArmamentsHammer = 77207;
@@ -5322,7 +5324,7 @@ public static class SkillIDs
     public const long SplashPlayerSkill = 77225;
     public const long CalcifyPlayerSkill = 77226;
     public const long CanachCoinToss = 77230;
-    public const long AnguishAutoattack = 77231;
+    public const long AnguishAutoattack_Wanderlust = 77231; // Incorrect in game mapping, called Anguish Autoattack but fired off Spirit of Wanderlust
     public const long ReplicatingStrain = 77232;
     public const long LegendaryEntityStanceBuff = 77234;
     public const long EnterRitualistsShroud = 77238;
@@ -5390,7 +5392,7 @@ public static class SkillIDs
     public const long ExaltedHammerBuff = 77830;
     public const long MistburnMortarBuff = 77835;
     public const long RadiantResolveBuff = 77855;
-    public const long SummonSpiritsSkill1 = 77860;
+    public const long SummonSpiritsWanderlustSkill = 77860;
     public const long MetalLegionGuitarBuff = 77875;
     public const long ZephyriteSunCrystalBuff = 77876;
     public const long RadiantCourageBuff = 77893;
@@ -5421,7 +5423,7 @@ public static class SkillIDs
     public const long ReleasePotentialMesmer = 78615;
     public const long WeaponOfWardingPersonalBuff = 78624;
     public const long ElementalBalanceBuff = 78631;
-    public const long SummonSpiritsSkill2 = 78660;
+    public const long SummonSpiritsAnguishSkill1 = 78660;
     public const long ReleasePotentialDervish = 78661;
     public const long GlaringBurst4 = 78674;
     public const long EmpoweringMisery = 78681;
@@ -5440,7 +5442,7 @@ public static class SkillIDs
     public const long BriskPacingTier1 = 79083;
     public const long ExplosiveGrowthBuff = 79105;
     public const long POV_ElementalBalance = 79230; // Trait buff?
-    public const long SummonSpiritsSkill3 = 79246;
+    public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
     #endregion
 }

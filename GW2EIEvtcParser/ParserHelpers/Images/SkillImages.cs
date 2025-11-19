@@ -421,6 +421,7 @@ internal static class SkillImages
     public const string Anguish = "https://render.guildwars2.com/file/9CA8D4479BEE9A28C810CCB0E234BAC7712104A0/3680170.png";
     public const string Preservation = "https://render.guildwars2.com/file/473E92AE33757816B7205C4759F1F3065346E600/3680173.png";
     public const string Wanderlust = "https://render.guildwars2.com/file/604BAC974ED4C76FE95E32BEE6BDB3DE594F9F6C/3680178.png";
+    public const string SummonSpirits = "https://render.guildwars2.com/file/CF9C5D79940CB74DAA650476DAE9DC012202B86C/3680177.png";
     #endregion Necromancer
     #region Ranger
     // Signets
