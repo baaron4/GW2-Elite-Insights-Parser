@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -264,6 +265,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     bodyAtHideStart = noInvul.End;
                 }
                 replay.Hidden.Add(new Segment(bodyAtHideStart, log.LogData.LogEnd));
+                if (replay.Rotations.Count != 0)
+                {
+                    replay.Decorations.Add(new ActorOrientationDecoration((target.FirstAware, target.LastAware), target.AgentItem));
+                }
                 break;
             case (int)TargetID.CALeftArmAttackTarget:
             case (int)TargetID.CARightArmAttackTarget:
@@ -281,6 +286,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     }
                 }
                 replay.Hidden.Add(new Segment(armAtHideStart, log.LogData.LogEnd));
+                if (replay.Rotations.Count != 0)
+                {
+                    replay.Decorations.Add(new ActorOrientationDecoration((target.FirstAware, target.LastAware), target.AgentItem));
+                }
                 break;
             case (int)TargetID.ConjuredGreatsword:
                 break;
