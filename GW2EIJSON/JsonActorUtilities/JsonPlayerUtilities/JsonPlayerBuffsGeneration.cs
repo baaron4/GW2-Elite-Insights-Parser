@@ -14,6 +14,10 @@ public class JsonPlayerBuffsGeneration
         /// Generation done
         /// </summary>
         public double Generation;
+        /// <summary>
+        /// Generation done as presence, only relevant for intensity stacking buffs, will be 0 for duration stacking buffs
+        /// </summary>
+        public double GenerationPresence;
 
         /// <summary>
         /// Generation with overstack
