@@ -368,11 +368,20 @@ public abstract partial class SingleActor : Actor
         } 
         else
         {
-            foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
+            if (AgentItem.GeographicallyAttachedAgentItem != null)
             {
-                movementEvent.AddPoint3D(CombatReplay);
+                var attachedActor = log.FindActor(AgentItem.GeographicallyAttachedAgentItem);
+                attachedActor.InitCombatReplay(log);
+                CombatReplay.CopyFrom(attachedActor.CombatReplay);
             }
-            CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
+            else
+            {
+                foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
+                {
+                    movementEvent.AddPoint3D(CombatReplay);
+                }
+                CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
+            }
         }
         TrimCombatReplay(log, CombatReplay);
         if (!IsFakeActor && !AgentItem.IsEnglobingAgent)

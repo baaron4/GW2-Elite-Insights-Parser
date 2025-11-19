@@ -903,6 +903,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 continue;
             }
             AgentItem dragonVoid = attackTargetEvent.Src;
+            dragonVoid.GeographicallyAttachTo(atAgent);
             processedAttackTargets.Add(atAgent);
             var targetOns = targetables.Where(x => x.Targetable).ToList();
             var targetOffs = targetables.Where(x => !x.Targetable).ToList();

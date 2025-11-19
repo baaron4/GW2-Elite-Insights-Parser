@@ -115,7 +115,7 @@ internal class Adina : TheKeyOfAhdashim
 
             processedAttackTargets.Add(atAgent);
             AgentItem hand = attackTargetEvent.Src;
-            var copyEventsFrom = new List<AgentItem>() { hand };
+            hand.GeographicallyAttachTo(atAgent);
             var attackOns = targetables.Where(x => x.Targetable);
             var attackOffs = targetables.Where(x => !x.Targetable);
             CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == StateChange.Position);
