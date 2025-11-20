@@ -9,16 +9,17 @@ public class BuffStatistics
     public double Uptime { get; internal set; }
     public double Presence { get; internal set; }
     public double Generation { get; internal set; }
+    public double GenerationPresence { get; internal set; }
     public double Overstack { get; internal set; }
     public double Wasted { get; internal set; }
     public double UnknownExtended { get; internal set; }
     public double ByExtension { get; internal set; }
     public double Extended { get; internal set; }
 
-    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, SingleActor srcActor, long start, long end)
     {
         long phaseDuration = end - start;
-
+        var srcAgentItem = srcActor.AgentItem;
         //TODO_PERF(Rennorb): find complexity
         var buffDistributionPerPlayer = new Dictionary<Player, BuffDistribution>();
         var playerCount = 0;
@@ -36,6 +37,7 @@ public class BuffStatistics
         foreach (Buff boon in buffsToTrack)
         {
             double totalGeneration = 0;
+            double totalGenerationPresence = 0;
             double totalOverstack = 0;
             double totalWasted = 0;
             double totalUnknownExtension = 0;
@@ -43,6 +45,7 @@ public class BuffStatistics
             double totalExtended = 0;
 
             double totalActiveGeneration = 0;
+            double totalActiveGenerationPresence = 0;
             double totalActiveOverstack = 0;
             double totalActiveWasted = 0;
             double totalActiveUnknownExtension = 0;
@@ -59,6 +62,11 @@ public class BuffStatistics
                 {
                     hasGeneration = hasGeneration || buffDistribution.HasSrc(boon.ID, srcAgentItem);
                     double generation = buffDistribution.GetGeneration(boon.ID, srcAgentItem);
+                    double generationPresence = 0;
+                    if (boon.Type == BuffType.Intensity && buffDistributionByPlayer.Key.GetBuffPresence(log, start, end, srcActor).TryGetValue(boon.ID, out var value))
+                    {
+                        generationPresence = value;
+                    }
                     double overstack = buffDistribution.GetOverstack(boon.ID, srcAgentItem);
                     double wasted = buffDistribution.GetWaste(boon.ID, srcAgentItem);
                     double unknownExtension = buffDistribution.GetUnknownExtension(boon.ID, srcAgentItem);
@@ -66,6 +74,7 @@ public class BuffStatistics
                     double extended = buffDistribution.GetExtended(boon.ID, srcAgentItem);
 
                     totalGeneration += generation;
+                    totalGenerationPresence += generationPresence;
                     totalOverstack += overstack;
                     totalWasted += wasted;
                     totalUnknownExtension += unknownExtension;
@@ -75,6 +84,7 @@ public class BuffStatistics
                     {
                         activePlayerCount++;
                         totalActiveGeneration += generation / playerActiveDuration;
+                        totalActiveGenerationPresence += generationPresence / playerActiveDuration;
                         totalActiveOverstack += overstack / playerActiveDuration;
                         totalActiveWasted += wasted / playerActiveDuration;
                         totalActiveUnknownExtension += unknownExtension / playerActiveDuration;
@@ -86,12 +96,13 @@ public class BuffStatistics
 
             if (hasGeneration)
             {
-                totalGeneration       /= phaseDuration;
-                totalOverstack        /= phaseDuration;
-                totalWasted           /= phaseDuration;
-                totalUnknownExtension /= phaseDuration;
-                totalExtension        /= phaseDuration;
-                totalExtended         /= phaseDuration;
+                totalGeneration         /= phaseDuration;
+                totalGenerationPresence /= phaseDuration;
+                totalOverstack          /= phaseDuration;
+                totalWasted             /= phaseDuration;
+                totalUnknownExtension   /= phaseDuration;
+                totalExtension          /= phaseDuration;
+                totalExtended           /= phaseDuration;
 
                 var uptime = new BuffStatistics();
                 var uptimeActive = new BuffStatistics();
@@ -119,6 +130,7 @@ public class BuffStatistics
                 else if (boon.Type == BuffType.Intensity)
                 {
                     uptime.Generation = Math.Round(totalGeneration / playerCount, ParserHelper.BuffDigit);
+                    uptime.GenerationPresence = Math.Round(100.0 * totalGenerationPresence / playerCount, ParserHelper.BuffDigit);
                     uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerCount, ParserHelper.BuffDigit);
                     uptime.Wasted = Math.Round((totalWasted) / playerCount, ParserHelper.BuffDigit);
                     uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerCount, ParserHelper.BuffDigit);
@@ -128,6 +140,7 @@ public class BuffStatistics
                     if (activePlayerCount > 0)
                     {
                         uptimeActive.Generation = Math.Round(totalActiveGeneration / activePlayerCount, ParserHelper.BuffDigit);
+                        uptimeActive.GenerationPresence = Math.Round(100.0 * totalActiveGenerationPresence / activePlayerCount, ParserHelper.BuffDigit);
                         uptimeActive.Overstack = Math.Round((totalActiveOverstack + totalActiveGeneration) / activePlayerCount, ParserHelper.BuffDigit);
                         uptimeActive.Wasted = Math.Round((totalActiveWasted) / activePlayerCount, ParserHelper.BuffDigit);
                         uptimeActive.UnknownExtended = Math.Round((totalActiveUnknownExtension) / activePlayerCount, ParserHelper.BuffDigit);
@@ -149,6 +162,7 @@ public class BuffStatistics
 
         BuffDistribution buffDistribution = dstActor.GetBuffDistribution(log, start, end);
         IReadOnlyDictionary<long, long> buffPresence = dstActor.GetBuffPresence(log, start, end);
+        IReadOnlyDictionary<long, long> buffPresenceBy = dstActor.GetBuffPresence(log, start, end, dstActor);
 
         long phaseDuration = end - start;
         long playerActiveDuration = dstActor.GetActiveDuration(log, start, end);
@@ -156,26 +170,8 @@ public class BuffStatistics
         {
             if (buffDistribution.HasBuffID(buff.ID))
             {
-                var uptime = new BuffStatistics
-                {
-                    Uptime = 0,
-                    Generation = 0,
-                    Overstack = 0,
-                    Wasted = 0,
-                    UnknownExtended = 0,
-                    ByExtension = 0,
-                    Extended = 0
-                };
-                var uptimeActive = new BuffStatistics
-                {
-                    Uptime = 0,
-                    Generation = 0,
-                    Overstack = 0,
-                    Wasted = 0,
-                    UnknownExtended = 0,
-                    ByExtension = 0,
-                    Extended = 0
-                };
+                var uptime = new BuffStatistics();
+                var uptimeActive = new BuffStatistics();
                 buffs[buff.ID] = uptime;
                 activeBuffs[buff.ID] = uptimeActive;
                 double generationValue = buffDistribution.GetGeneration(buff.ID, dstActor.AgentItem);
@@ -234,6 +230,15 @@ public class BuffStatistics
                         if (playerActiveDuration > 0)
                         {
                             uptimeActive.Presence = Math.Round(100.0 * presenceValueBoon / playerActiveDuration, ParserHelper.BuffDigit);
+                        }
+                    }
+                    if (buffPresenceBy.TryGetValue(buff.ID, out long presenceValueByBoon))
+                    {
+                        uptime.GenerationPresence = Math.Round(100.0 * presenceValueByBoon / phaseDuration, ParserHelper.BuffDigit);
+                        //
+                        if (playerActiveDuration > 0)
+                        {
+                            uptimeActive.GenerationPresence = Math.Round(100.0 * presenceValueByBoon / playerActiveDuration, ParserHelper.BuffDigit);
                         }
                     }
                 }

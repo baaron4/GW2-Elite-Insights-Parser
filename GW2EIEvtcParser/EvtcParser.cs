@@ -222,6 +222,17 @@ public class EvtcParser
                             foreach (var englobed in englobeds)
                             {
                                 englobed.GetBuffPresence(log, phase.Start, phase.End);
+                                // We need Buff Presence by other players for Buff generation statistics
+                                if (englobed is Player)
+                                {
+                                    foreach (var other in friendliesAndTargets)
+                                    {
+                                        if (other is Player)
+                                        {
+                                            englobed.GetBuffPresence(log, phase.Start, phase.End, other);
+                                        }
+                                    }
+                                }
                             }
                         }
                     });
@@ -230,6 +241,17 @@ public class EvtcParser
                         foreach (PhaseData phase in phases)
                         {
                             actor.GetBuffPresence(log, phase.Start, phase.End);
+                            // We need Buff Presence by other players for Buff generation statistics
+                            if (actor is Player)
+                            {
+                                foreach (var other in friendliesAndTargets)
+                                {
+                                    if (other is Player)
+                                    {
+                                        actor.GetBuffPresence(log, phase.Start, phase.End, other);
+                                    }
+                                }
+                            }
                         }
                     });
                     _t.Log("friendliesAndTargets GetBuffPresence");
@@ -264,6 +286,17 @@ public class EvtcParser
                         foreach (PhaseData phase in phases)
                         {
                             actor.GetBuffPresence(log, phase.Start, phase.End);
+                            // We need Buff Presence by other players for Buff generation statistics
+                            if (actor is Player)
+                            {
+                                foreach (var other in friendliesAndTargets)
+                                {
+                                    if (other is Player)
+                                    {
+                                        actor.GetBuffPresence(log, phase.Start, phase.End, other);
+                                    }
+                                }
+                            }
                         }
                     });
                     _t.Log("friendliesAndTargets GetBuffPresence");
