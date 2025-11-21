@@ -148,6 +148,9 @@ public static class SkillItemOverrides
         { SummonSpiritsAnguishSkill2, "Summon Spirits (Anguish 2)" },
         { SorrowAutoattack_Anguish, "Anguish Autoattack" }, // Incorrect in game mapping, called Sorrow Autoattack but fired off Spirit of Anguish
         { AnguishAutoattack_Wanderlust, "Wanderlust Autoattack" }, // Incorrect in game mapping, called Anguish Autoattack but fired off Spirit of Wanderlust
+        { WanderlustPlayerSkill, "Wanderlust (Player)" },
+        { WanderlustPlayerUnderwaterSkill, "Wanderlust (Player)" },
+        { WanderlustDamage, "Wanderlust (Spirit)" },
         #endregion Necromancer
         #region Ranger
         { WindborneNotes, "Windborne Notes" },
@@ -186,6 +189,12 @@ public static class SkillItemOverrides
         { GenerousAbundanceOther, "Generous Abundance (Other)" },
         { BlitzMinesDrop, "Blitz Mines (Drop)" },
         { BlitzMines, "Blitz Mines (Detonation)" },
+        { BanishEnchantmentCosmicWisdom, "Banish Enchantment (Cosmic Wisdom)" },
+        { CallToAnguishCosmicWisdom, "Call to Anguish (Cosmic Wisdom)" },
+        { EmbraceTheDarknessCosmicWisdom, "Embrace the Darkness (Cosmic Wisdom)" },
+        { EmpoweringMiseryCosmicWisdom, "Empowering Misery (Cosmic Wisdom)" },
+        { PainAbsorptionCosmicWisdom, "Pain Absorption (Cosmic Wisdom)" },
+        { UnyieldingImpactCosmicWisdom, "Unyielding Impact (Cosmic Wisdom)" },
         #endregion Revenant
         #region Thief
         { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
@@ -935,8 +944,8 @@ public static class SkillItemOverrides
             { ManiacalPulse, TraitImages.ManiacalPersistence },
             { BeguilingHaze5, SkillImages.BeguilingHaze },
             { TwinMoonSweep3, SkillImages.TwinMoonSweep },
-            { FormOfTheDervishSkill1, BuffImages.FormOfTheDervish },
-            { FormOfTheDervishSkill2, BuffImages.FormOfTheDervish },
+            { FormOfTheDervishDamage, BuffImages.FormOfTheDervish },
+            { FormOfTheDervishDamageElite, BuffImages.FormOfTheDervish },
         { BeguilingHaze6, SkillImages.BeguilingHaze },
         { Mistfire, TraitImages.Mistfire },
             #endregion RevenantIcons
@@ -1000,6 +1009,8 @@ public static class SkillItemOverrides
             { AntivenomDraughtHealing, SkillImages.AntivenomDraught },
             { MagpiesDefenseBarrierBuff, TraitImages.MagpiesDefense },
             { ForgedSurferDashSkillAdditionalBombs, SkillImages.ForgedSurferDash },
+            { EternalNightHealing, SkillImages.EternalNight },
+            { LarcenousTormentSiphonHealing, TraitImages.LarcenousTorment },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },
