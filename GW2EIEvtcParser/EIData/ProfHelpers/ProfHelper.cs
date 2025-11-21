@@ -179,7 +179,7 @@ internal static class ProfHelper
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheBeehive, EffectGUIDs.RelicWhiteCircle)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheBeehive1, 1000, ServerDelayConstant)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheBeehive1, 1000)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfMountBalrior, EffectGUIDs.RelicOfMountBalrior1)
             .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfMountBalrior2)
