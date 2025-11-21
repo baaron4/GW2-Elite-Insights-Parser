@@ -1530,6 +1530,7 @@ public static class SkillIDs
     public const long LegendaryCentaurStanceBuff = 27972;
     public const long FacetOfChaosBuff = 27983;
     public const long EmbraceTheDarkness = 28001;
+    public const long RapidFlowHealing = 28009;
     public const long FacetOfDarknessBuff = 28036;
     public const long LegendaryDragonStanceSkill = 28085;
     public const long DropTheHammer = 28110;

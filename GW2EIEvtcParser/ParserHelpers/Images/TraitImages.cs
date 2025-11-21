@@ -252,6 +252,7 @@ internal static class TraitImages
     public const string ManiacalPersistence = "https://wiki.guildwars2.com/images/0/03/Maniacal_Persistence.png";
     public const string LingeringDetermination = "https://render.guildwars2.com/file/C20A447DB7AC6F014BEA6A67DBC8CA5A557FA849/3680007.png";
     public const string Mistfire = "https://render.guildwars2.com/file/AD98A272DA5375CCD6109217CB39ED4C50441E3E/3680009.png";
+    public const string RapidFlow = "https://render.guildwars2.com/file/ECF6AFAA0B2966663D21755110900ECCFC071208/1012684.png";
     #endregion
     #region Thief
     public const string ExposedWeakness = "https://render.guildwars2.com/file/B6765208D0266538000932E40ED202D95701276B/1012749.png";

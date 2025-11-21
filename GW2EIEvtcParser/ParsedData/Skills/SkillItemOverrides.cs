@@ -195,6 +195,7 @@ public static class SkillItemOverrides
         { EmpoweringMiseryCosmicWisdom, "Empowering Misery (Cosmic Wisdom)" },
         { PainAbsorptionCosmicWisdom, "Pain Absorption (Cosmic Wisdom)" },
         { UnyieldingImpactCosmicWisdom, "Unyielding Impact (Cosmic Wisdom)" },
+        { FormOfTheDervishDamageElite, "Form of the Dervish (Elite)" },
         #endregion Revenant
         #region Thief
         { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
@@ -946,8 +947,9 @@ public static class SkillItemOverrides
             { TwinMoonSweep3, SkillImages.TwinMoonSweep },
             { FormOfTheDervishDamage, BuffImages.FormOfTheDervish },
             { FormOfTheDervishDamageElite, BuffImages.FormOfTheDervish },
-        { BeguilingHaze6, SkillImages.BeguilingHaze },
-        { Mistfire, TraitImages.Mistfire },
+            { RapidFlowHealing, TraitImages.RapidFlow },
+            { BeguilingHaze6, SkillImages.BeguilingHaze },
+            { Mistfire, TraitImages.Mistfire },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
