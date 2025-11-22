@@ -43,7 +43,7 @@ internal static class GuardianHelper
         // Shouts
         new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
             .UsingDstBaseSpecChecker(Spec.Guardian)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.GuardianShout),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.GuardianShout),
         // distinguish by boons, check duration/stacks to counteract pure of voice
         new EffectCastFinderByDst(Advance, EffectGUIDs.GuardianShout)
             .UsingDstBaseSpecChecker(Spec.Guardian)

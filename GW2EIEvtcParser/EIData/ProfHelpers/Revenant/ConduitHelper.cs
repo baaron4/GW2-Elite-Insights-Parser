@@ -25,7 +25,7 @@ internal static class ConduitHelper
         new EffectCastFinder(FormOfTheDervishDamage, EffectGUIDs.ConduitFormOfTheDervishScythe)                 
             .UsingIsAroundDstChecker()
             // In this we check any ground effects to be present. If there are, we use the other cast finder.
-            .UsingNoSecondaryEffectCheckerSameSrcInvertedType(EffectGUIDs.ConduitFormOfTheDervishScythe)
+            .UsingNoSecondaryEffectSameSrcInvertedTypeChecker(EffectGUIDs.ConduitFormOfTheDervishScythe)
             .UsingICD(10),
         // The scythe effect appears only once around the player and once on the ground when using the elite skill.
         new EffectCastFinder(FormOfTheDervishDamageElite, EffectGUIDs.ConduitFormOfTheDervishScythe)

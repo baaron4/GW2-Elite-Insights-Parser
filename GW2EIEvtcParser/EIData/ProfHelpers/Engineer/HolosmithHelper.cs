@@ -25,7 +25,7 @@ internal static class HolosmithHelper
             .UsingDstSpecChecker(Spec.Holosmith),
         new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1)
             .UsingDstSpecChecker(Spec.Holosmith)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2)
             .UsingDisableWithMissileData(),
         new MissileCastFinder(BladeBurst, BladeBurst),
         new MissileCastFinder(ParticleAccelerator, ParticleAccelerator),

@@ -32,15 +32,15 @@ internal static class ThiefHelper
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoECollision)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.ThiefThousandNeedlesAoE1, 280)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.ThiefThousandNeedlesAoE2, 280)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE1, 280)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE2, 280)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedBuff),
         new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1)
             .UsingDstBaseSpecChecker(Spec.Thief)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.ThiefInfiltratorsSignet2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefInfiltratorsSignet2),
         new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility)
             .UsingDstBaseSpecChecker(Spec.Thief),
         new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows)

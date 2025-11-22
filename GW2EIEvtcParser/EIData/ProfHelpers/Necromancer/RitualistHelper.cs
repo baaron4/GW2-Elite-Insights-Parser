@@ -43,11 +43,11 @@ internal static class RitualistHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
         // Innervate
         new EffectCastFinder(InnervateAnguishSkill, EffectGUIDs.RitualistInnervateAnguish1)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.RitualistInnervateAnguish2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervateAnguish2),
         new EffectCastFinder(InnervateWanderlustSkill, EffectGUIDs.RitualistInnervateWanderlust1)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.RitualistInnervateWanderlust2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervateWanderlust2),
         new EffectCastFinder(InnervatePreservationSkill, EffectGUIDs.RitualistInnervatePreservation1)
-            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.RitualistInnervatePreservation2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervatePreservation2),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
