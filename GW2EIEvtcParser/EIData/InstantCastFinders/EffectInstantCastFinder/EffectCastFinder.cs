@@ -112,7 +112,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectCheckerSameSrc(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -137,6 +137,59 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
+    internal EffectCastFinder UsingSecondaryEffectCheckerSameSrcInvertedType(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) =>
+        {
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
+            {
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+            }
+            return false;
+        });
+        return this;
+    }
+
+    internal EffectCastFinder UsingSecondaryEffectCheckerInvertedSrcInvertedType(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) =>
+        {
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
+            {
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+            }
+            return false;
+        });
+        return this;
+    }
+
+    internal EffectCastFinder UsingSecondaryEffectCheckerSameSrcSameType(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) =>
+        {
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
+            {
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+            }
+            return false;
+        });
+        return this;
+    }
+
+    internal EffectCastFinder UsingSecondaryEffectCheckerInvertedSrcSameType(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) =>
+        {
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
+            {
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+            }
+            return false;
+        });
+        return this;
+    }
+
+#if DEBUG
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
@@ -151,6 +204,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         UsingChecker(DebugEffectChecker);
         return this;
     }
+#endif
 
     internal EffectCastFinder UsingAgentRedirectionIfUnknown(int speciesID)
     {

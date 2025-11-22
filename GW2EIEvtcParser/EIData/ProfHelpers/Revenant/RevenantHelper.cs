@@ -72,7 +72,7 @@ internal static class RevenantHelper
         new EffectCastFinder(BlitzMinesDrop, EffectGUIDs.RevenantSpearBlitzMines1)
             .UsingSrcBaseSpecChecker(Spec.Revenant),
         new EffectCastFinder(BlitzMines, EffectGUIDs.RevenantSpearBlitzMinesDetonation1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)
             .UsingSrcBaseSpecChecker(Spec.Revenant),
     ];
 

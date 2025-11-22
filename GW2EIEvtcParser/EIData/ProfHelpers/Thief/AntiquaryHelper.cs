@@ -19,8 +19,8 @@ internal static class AntiquaryHelper
         // Artifacts
         new EffectCastFinder(UnstableSkrittBombSkill, EffectGUIDs.AntiquaryUnstableSkrittBomb1),
         new EffectCastFinder(ChakShield, EffectGUIDs.AntiquaryChakShield1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.AntiquaryChakShield3)
-            .UsingSecondaryEffectChecker(EffectGUIDs.AntiquaryChakShield4),
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.AntiquaryChakShield3)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.AntiquaryChakShield4),
         // Double Edge
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossHead1),
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossTail1),

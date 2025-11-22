@@ -22,8 +22,8 @@ internal static class ReaperHelper
             .UsingDisableWithEffectData(),
         new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1)
             .UsingSrcSpecChecker(Spec.Reaper)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings2)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings3),
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.ReaperYouAreAllWeaklings2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.ReaperYouAreAllWeaklings3),
         new DamageCastFinder(Suffer, Suffer)
             .UsingDisableWithEffectData(),
         new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer)

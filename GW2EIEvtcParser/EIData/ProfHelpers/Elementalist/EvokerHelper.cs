@@ -21,9 +21,9 @@ internal static class EvokerHelper
         new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
         // Meditations
         new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2),
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.EvokerOttersCompassion2),
         new EffectCastFinder(HaresAgilitySkill, EffectGUIDs.EvokerHaresAgility1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerHaresAgility2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.EvokerHaresAgility2)
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 

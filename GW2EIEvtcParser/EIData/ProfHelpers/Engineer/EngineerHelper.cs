@@ -134,21 +134,21 @@ internal static class EngineerHelper
         new EffectCastFinderByDst(HealingMistOrSoothingDetonation, EffectGUIDs.EngineerHealingMist)
             .UsingDstBaseSpecChecker(Spec.Engineer),
         new EffectCastFinder(DetonateThrowMineOrMineField, EffectGUIDs.EngineerMineExplosion1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
                 return MineDetonationInstantCastChecker(effect, combatData, false, [ EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 ]);
             }),
         new EffectCastFinder(DetonateMineField, EffectGUIDs.EngineerMineExplosion1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
                 return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ]);
             }),
         new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.

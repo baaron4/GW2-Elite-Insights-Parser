@@ -18,8 +18,8 @@ internal static class MirageHelper
         new DamageCastFinder(Jaunt, Jaunt)
             .UsingDisableWithEffectData(),
         new EffectCastFinder(Jaunt, EffectGUIDs.MirageJaunt)
-            .UsingSecondaryEffectChecker(EffectGUIDs.MirageJauntConflict1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.MirageJauntConflict2)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.MirageJauntConflict1)
+            .UsingSecondaryEffectCheckerSameSrc(EffectGUIDs.MirageJauntConflict2)
             .UsingSrcSpecChecker(Spec.Mirage),
         new BuffGainCastFinder(MirageCloakDodge, MirageCloak),
         // Illusionary Ambush not trackable due to conflicting effects with Jaunt and Axe of Symmetry
