@@ -16,11 +16,11 @@ public class CombatReplay
     internal IReadOnlyList<ParametricPoint3D> Rotations => _Rotations;
     internal IReadOnlyList<ParametricPoint3D> PolledRotations => _PolledRotations;
 
-    private List<ParametricPoint3D> _Positions = [];
-    private ParametricPoint3D[] _PolledPositions = [];
-    private List<ParametricPoint3D> _Velocities = [];
-    private List<ParametricPoint3D> _Rotations = [];
-    private ParametricPoint3D[] _PolledRotations = [];
+    protected List<ParametricPoint3D> _Positions = [];
+    protected ParametricPoint3D[] _PolledPositions = [];
+    protected List<ParametricPoint3D> _Velocities = [];
+    protected List<ParametricPoint3D> _Rotations = [];
+    protected ParametricPoint3D[] _PolledRotations = [];
 
     internal readonly List<Segment> Hidden = [];
     private long _start = -1;
@@ -37,28 +37,32 @@ public class CombatReplay
         Decorations = new(log.LogData.Logic.DecorationCache);
     }
 
-    internal void AddPosition(ParametricPoint3D position)
+    internal virtual void AddPosition(ParametricPoint3D position)
     {
         _Positions.Add(position);
     }
 
-    internal void AddVelocity(ParametricPoint3D velocity)
+    internal virtual void AddVelocity(ParametricPoint3D velocity)
     {
         _Velocities.Add(velocity);
     }
 
-    internal void AddRotation(ParametricPoint3D rotation)
+    internal virtual void AddRotation(ParametricPoint3D rotation)
     {
         _Rotations.Add(rotation);
     }
 
-    internal void CopyFrom(CombatReplay other)
+    internal virtual void CopyFrom(CombatReplay other)
     {
         _Positions = other.Positions.ToList();
         _PolledPositions = other.PolledPositions.ToArray();
         _Rotations = other.Rotations.ToList();
         _PolledRotations = other.PolledRotations.ToArray();
         _Velocities = other.Velocities.ToList();
+    }
+
+    internal virtual void CopyPositionsFrom(CombatReplay other)
+    {
     }
 
     internal void Trim(long start, long end)
@@ -94,7 +98,7 @@ public class CombatReplay
         return res - 1;
     }
 
-    private void HandlePosition(long t, ref int polledPositionTableIndex, ref int positionTableIndex, ref int velocityTableIndex, int rate)
+    protected void HandlePosition(long t, ref int polledPositionTableIndex, ref int positionTableIndex, ref int velocityTableIndex, int rate)
     {
         ParametricPoint3D pos = _Positions[positionTableIndex];
         if (t <= pos.Time)
@@ -140,7 +144,7 @@ public class CombatReplay
         }
     }
 
-    private void  HandleRotation(long t, ref int polledRotationTableIndex, ref int rotationTableIndex, int rate)
+    protected void HandleRotation(long t, ref int polledRotationTableIndex, ref int rotationTableIndex, int rate)
     {
         var rot = _Rotations[rotationTableIndex];
         if (t <= rot.Time)
@@ -179,7 +183,7 @@ public class CombatReplay
         }
     }
 
-    internal void PollingRate(long logDuration, bool forcePolling)
+    internal virtual void PollingRate(long logDuration, bool forcePolling)
     {
         if (_Positions.Count == 0 && forcePolling)
         {

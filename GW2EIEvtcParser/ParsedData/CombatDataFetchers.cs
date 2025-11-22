@@ -92,7 +92,7 @@ partial class CombatData
 
     public AttackTargetEvent? GetAttackTargetEventByAttackTarget(AgentItem attackTarget)
     {
-        if (_metaDataEvents.AttackTargetEventByAttackTarget.TryGetValue(attackTarget, out var attackTargetEvent)) 
+        if (_metaDataEvents.AttackTargetEventByAttackTarget.TryGetValue(attackTarget.EnglobingAgentItem, out var attackTargetEvent)) 
         {
             return attackTargetEvent;
         }

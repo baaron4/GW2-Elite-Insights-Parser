@@ -353,7 +353,7 @@ public abstract partial class SingleActor : Actor
         {
             return CombatReplay;
         }
-        CombatReplay = new CombatReplay(log);
+        CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log) : new CombatReplay(log);
         if (!log.CombatData.HasMovementData)
         {
             // no combat replay support on log
@@ -368,6 +368,12 @@ public abstract partial class SingleActor : Actor
         } 
         else
         {
+            if (AgentItem.PositionAttachedAgentItem != null)
+            {
+                var attachedActor = log.FindActor(AgentItem.PositionAttachedAgentItem);
+                attachedActor.InitCombatReplay(log);
+                CombatReplay.CopyPositionsFrom(attachedActor.CombatReplay);
+            }
             foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
             {
                 movementEvent.AddPoint3D(CombatReplay);

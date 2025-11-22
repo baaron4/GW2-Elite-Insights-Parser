@@ -32,6 +32,7 @@ public static class ArcDPSEnums
         public const int ExtraDataInGUIDEvents = 20241030;
         public const int LogStartLogEndPerCombatSequenceOnInstanceLogs = 20250315;
         public const int SpeciesSkillGUIDs = 20250428;
+        public const int MissilesIntroduced = 20250525;
         public const int BuffFormulaOriginalAttribute = 20250913;
         //
         public const int EndOfLife = int.MaxValue;
