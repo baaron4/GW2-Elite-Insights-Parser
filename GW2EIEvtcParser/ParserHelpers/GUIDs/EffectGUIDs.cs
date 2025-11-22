@@ -296,6 +296,7 @@ public static class EffectGUIDs
     public static readonly GUID RenegadeRazorclawsRage = new("71B04F91F9B3DF4A8954059FCFAD630E");
     public static readonly GUID RenegadeDarkrazorsDaring = new("C8FDB04E59C1034CABEFBECE470AA1BC");
     public static readonly GUID RenegadeIcerazorsIre = new("E725FC2FD486A84EBEAC403DB4DA30DE");
+    public static readonly GUID ConduitFormOfTheDervishScythe = new("B0CF6359EBF9BF4EB94E1A2A347E5ECD"); // Duration 1166, can be around Dst and Ground
     #endregion
 
     #region Guardian
