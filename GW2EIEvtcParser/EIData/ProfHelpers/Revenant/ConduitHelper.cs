@@ -21,30 +21,15 @@ internal static class ConduitHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new DamageCastFinder(Mistfire, Mistfire) // TODO: check if there is an effect
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
-        new EffectCastFinder(FormOfTheDervishDamage, EffectGUIDs.ConduitFormOfTheDervishScythe)
-            .UsingChecker((effectEvent, combatData, agentData, skillData) =>
-            {
-                // The scythe effect appears twice around the player when using skills 6-9 in Razah with Form of the Dervish buff active.
-                // The effect appears only once around the player and once on the ground when using the elite skill.
-                // In this we check any ground effects to be present. If there are, we use the other cast finder.
-                if (!effectEvent.IsAroundDst || 
-                (
-                    effectEvent.IsAroundDst && 
-                    combatData.TryGetEffectEventsBySrcWithGUID(effectEvent.Src, EffectGUIDs.ConduitFormOfTheDervishScythe, out var otherEffects) && 
-                    otherEffects.Any(x => !x.IsAroundDst && Math.Abs(x.Time - effectEvent.Time) < ServerDelayConstant)
-                ))
-                {
-                    return false;
-                }
-                return true;
-            })
+        // The scythe effect appears twice around the player when using skills 6-9 in Razah with Form of the Dervish buff active.
+        new EffectCastFinder(FormOfTheDervishDamage, EffectGUIDs.ConduitFormOfTheDervishScythe)                 
+            .UsingIsAroundDstChecker()
+            // In this we check any ground effects to be present. If there are, we use the other cast finder.
+            .UsingNoSecondaryEffectCheckerSameSrcInvertedType(EffectGUIDs.ConduitFormOfTheDervishScythe)
             .UsingICD(10),
+        // The scythe effect appears only once around the player and once on the ground when using the elite skill.
         new EffectCastFinder(FormOfTheDervishDamageElite, EffectGUIDs.ConduitFormOfTheDervishScythe)
-            .UsingChecker((effectEvent, combatData, agentData, skillData) =>
-            {
-                // Use this only when there is a ground effect.
-                return !effectEvent.IsAroundDst;
-            })
+            .UsingNotIsAroundDstChecker()
             .UsingICD(10),
     ];
 
