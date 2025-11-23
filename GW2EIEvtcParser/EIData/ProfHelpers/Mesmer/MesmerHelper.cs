@@ -85,7 +85,7 @@ internal static class MesmerHelper
         new EffectCastFinderByDst(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse2)
             .UsingSrcNotBaseSpecChecker(Spec.Mesmer)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
-            .UsingSecondaryEffectCheckerInvertedSrc(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
+            .UsingSecondaryEffectInvertedSrcChecker(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
@@ -96,7 +96,7 @@ internal static class MesmerHelper
         // Rifle
         new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
         new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
-            .UsingSecondaryEffectChecker(EffectGUIDs.MesmerRifleAbstraction2)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.MesmerRifleAbstraction2)
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
     ];
 

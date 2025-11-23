@@ -35,8 +35,8 @@ internal static class ElementalistHelper
         new DamageCastFinder(ArcaneWave, ArcaneWave),
         // Cantrips
         new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ElementalistCleansingFire2)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ElementalistCleansingFire3)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ElementalistCleansingFire2)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ElementalistCleansingFire3)
             .UsingDstBaseSpecChecker(Spec.Elementalist),
         new BuffGainCastFinder(MistForm, MistForm),
         new DamageCastFinder(LightningFlash, LightningFlash),

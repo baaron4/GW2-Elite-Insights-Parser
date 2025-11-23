@@ -205,7 +205,7 @@ public abstract partial class SingleActor : Actor
         {
             BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
             BuffEnum.Squad =>
-                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, this, start, end),
             _ => BuffStatistics.GetBuffsForSelf(log, this, start, end),
         };
     }

@@ -23,7 +23,7 @@ internal class BuffData
             if (buffs.TryGetValue(buff.ID, out var uptime))
             {
                 buffVals.Add(uptime.Uptime);
-                if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
+                if (uptime.Presence > 0)
                 {
                     buffVals.Add(uptime.Presence);
                 }
@@ -45,13 +45,15 @@ internal class BuffData
                         toUse.WastedFrom[actor],
                         toUse.UnknownExtensionFrom[actor],
                         toUse.ExtensionBy[actor],
-                        toUse.ExtendedFrom[actor]
+                        toUse.ExtendedFrom[actor],
+                        toUse.GeneratedPresenceBy[actor]
                     ]);
             }
             else
             {
                 Data.Add(
                     [
+                        0,
                         0,
                         0,
                         0,
@@ -77,13 +79,15 @@ internal class BuffData
                         uptime.Wasted,
                         uptime.UnknownExtended,
                         uptime.ByExtension,
-                        uptime.Extended
+                        uptime.Extended,
+                        uptime.GenerationPresence
                     ]);
             }
             else
             {
                 Data.Add(
                     [
+                        0,
                         0,
                         0,
                         0,
@@ -105,7 +109,7 @@ internal class BuffData
             if (uptimes.TryGetValue(buff.ID, out var uptime))
             {
                 boonVals.Add(uptime.Uptime);
-                if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
+                if (uptime.Presence > 0)
                 {
                     boonVals.Add(uptime.Presence);
                 }

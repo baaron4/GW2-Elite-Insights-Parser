@@ -6,6 +6,8 @@ public class BuffByActorStatistics
 {
     private readonly Dictionary<SingleActor, double> _generatedBy = [];
     public IReadOnlyDictionary<SingleActor, double> GeneratedBy => _generatedBy;
+    private readonly Dictionary<SingleActor, double> _generatedPresenceBy = [];
+    public IReadOnlyDictionary<SingleActor, double> GeneratedPresenceBy => _generatedPresenceBy;
     private readonly Dictionary<SingleActor, double> _overstackedBy = [];
     public IReadOnlyDictionary<SingleActor, double> OverstackedBy => _overstackedBy;
     private readonly Dictionary<SingleActor, double> _wastedFrom = [];
@@ -18,14 +20,17 @@ public class BuffByActorStatistics
     public IReadOnlyDictionary<SingleActor, double> ExtendedFrom => _extendedFrom;
 
 
-    internal static (BuffByActorStatistics, BuffByActorStatistics) GetBuffByActor(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
+    internal static (BuffByActorStatistics, BuffByActorStatistics) GetBuffByActor(ParsedEvtcLog log, Buff buff, SingleActor dst, long start, long end, BuffDistribution buffDistribution)
     {
+        long phaseDuration = end - start;
+        long activePhaseDuration = dst.GetActiveDuration(log, start, end);
         var buffs = new BuffByActorStatistics();
         var buffsActive = new BuffByActorStatistics();
         foreach (SingleActor actor in buffDistribution.GetSrcs(buff.ID, log))
         {
             long gen = buffDistribution.GetGeneration(buff.ID, actor.AgentItem);
             double generated = gen;
+            double generatedPresence = 0;
             double overstacked = (buffDistribution.GetOverstack(buff.ID, actor.AgentItem) + gen);
             double wasted = buffDistribution.GetWaste(buff.ID, actor.AgentItem);
             double unknownExtension = buffDistribution.GetUnknownExtension(buff.ID, actor.AgentItem);
@@ -41,8 +46,13 @@ public class BuffByActorStatistics
                 unknownExtension *= 100.0;
                 extension *= 100.0;
                 extended *= 100.0;
+            } 
+            else if (dst.GetBuffPresence(log, start, end, actor).TryGetValue(buff.ID, out var presenceValue)) 
+            {
+                generatedPresence = 100.0 * presenceValue;
             }
             buffs._generatedBy[actor] = Math.Round(generated / phaseDuration, ParserHelper.BuffDigit);
+            buffs._generatedPresenceBy[actor] = Math.Round(generatedPresence / phaseDuration, ParserHelper.BuffDigit);
             buffs._overstackedBy[actor] = Math.Round(overstacked / phaseDuration, ParserHelper.BuffDigit);
             buffs._wastedFrom[actor] = Math.Round(wasted / phaseDuration, ParserHelper.BuffDigit);
             buffs._unknownExtensionFrom[actor] = Math.Round(unknownExtension / phaseDuration, ParserHelper.BuffDigit);
@@ -51,6 +61,7 @@ public class BuffByActorStatistics
             if (activePhaseDuration > 0)
             {
                 buffsActive._generatedBy[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
+                buffsActive._generatedPresenceBy[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._overstackedBy[actor] = Math.Round(overstacked / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._wastedFrom[actor] = Math.Round(wasted / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._unknownExtensionFrom[actor] = Math.Round(unknownExtension / activePhaseDuration, ParserHelper.BuffDigit);
@@ -60,6 +71,7 @@ public class BuffByActorStatistics
             else
             {
                 buffsActive._generatedBy[actor] = 0.0;
+                buffsActive._generatedPresenceBy[actor] = 0.0;
                 buffsActive._overstackedBy[actor] = 0.0;
                 buffsActive._wastedFrom[actor] = 0.0;
                 buffsActive._unknownExtensionFrom[actor] = 0.0;

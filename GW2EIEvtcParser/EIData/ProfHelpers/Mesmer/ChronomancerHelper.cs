@@ -18,13 +18,13 @@ internal static class ChronomancerHelper
         new BuffGainCastFinder(ContinuumSplit, TimeAnchored),
         new BuffLossCastFinder(ContinuumShift, TimeAnchored),
         new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
             .UsingSrcSpecChecker(Spec.Chronomancer),
         new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
             .UsingSrcSpecChecker(Spec.Chronomancer),
         new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
             .UsingSrcSpecChecker(Spec.Chronomancer),
     ];
 

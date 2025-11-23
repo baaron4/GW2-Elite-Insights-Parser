@@ -60,11 +60,11 @@ public class Player : PlayerActor
         return (type) switch 
         {
             BuffEnum.Group =>
-                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, AgentItem, start, end),
+                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, this, start, end),
             BuffEnum.OffGroup => 
-                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group != Group), log, AgentItem, start, end),
+                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group != Group), log, this, start, end),
             BuffEnum.Squad =>
-                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, this, start, end),
             _ =>  BuffStatistics.GetBuffsForSelf(log, this, start, end),
         };
     }

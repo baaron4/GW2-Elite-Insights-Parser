@@ -13,6 +13,7 @@ internal static class JsonPlayerBuffsGenerationBuilder
         var jsonBuffsGenerationData = new JsonBuffsGenerationData
         {
             Generation = stats.Generation,
+            GenerationPresence = stats.GenerationPresence,
             Overstack = stats.Overstack,
             Wasted = stats.Wasted,
             UnknownExtended = stats.UnknownExtended,

@@ -14,11 +14,11 @@ internal static class LuminaryHelper
     [
         // Virtues
         new EffectCastFinder(RadiantJusticeSkill, EffectGUIDs.LuminaryRadiantJustice1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantJustice2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.LuminaryRadiantJustice2),
         new EffectCastFinder(RadiantResolveSkill, EffectGUIDs.LuminaryRadiantResolve1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantResolve2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.LuminaryRadiantResolve2),
         new EffectCastFinder(RadiantCourageSkill, EffectGUIDs.LuminaryRadiantCourage1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.LuminaryRadiantCourage2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.LuminaryRadiantCourage2),
         // Radiant Forge
         new BuffGainCastFinder(EnterRadiantForge, RadiantForge)
             .UsingBeforeWeaponSwap(),

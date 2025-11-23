@@ -289,7 +289,7 @@ internal static class ParserIcons
     private const string TrashWyvernPatriarch = "https://i.imgur.com/vjjNSpI.png";
     private const string TrashApocalypseBringer = "https://i.imgur.com/0LGKCn2.png";
     private const string TrashConjuredGreatsword = "https://i.imgur.com/vHka0QN.png";
-    private const string TrashConjuredPlayerSword = "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
+    private const string TrashConjuredPlayerSword = "https://render.guildwars2.com/file/3C4AA1BD79DAB49201C81D934AC7567B286E711B/631658.png";
     private const string TrashConjuredShield = "https://i.imgur.com/wUiI19S.png";
     private const string TrashConjuredAmalgamateAttackTarget = "https://i.imgur.com/Dr3grlm.png";
     private const string TrashCALeftArmAttackTarget = "https://i.imgur.com/QUe8eQf.png";

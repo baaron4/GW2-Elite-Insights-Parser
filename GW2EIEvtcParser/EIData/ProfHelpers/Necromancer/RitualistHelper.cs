@@ -20,7 +20,7 @@ internal static class RitualistHelper
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitRitualistsShroud, RitualistsShroud)
             .UsingBeforeWeaponSwap(),
-        new EffectCastFinder(SummonSpirits, EffectGUIDs.RitualistSummonSpirits),
+        new EffectCastFinder(SummonSpiritsPlayerSkill, EffectGUIDs.RitualistSummonSpirits),
         // Weapon Spells
         new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingSharedBuff)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
@@ -35,19 +35,19 @@ internal static class RitualistHelper
         new BuffGainCastFinder(XinraeWeapon, XinraesWeaponPersonalBuff)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         // Traits
-        new DamageCastFinder(ExplosiveGrowthSkill, ExplosiveGrowthSkill)
+        new DamageCastFinder(ExplosiveGrowthDamageSkill, ExplosiveGrowthDamageSkill)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new BuffGainCastFinder(ExplosiveGrowthBuff, ExplosiveGrowthSkill)
+        new BuffGainCastFinder(ExplosiveGrowthBuff, ExplosiveGrowthDamageSkill)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         // Innervate
         new EffectCastFinder(InnervateAnguishSkill, EffectGUIDs.RitualistInnervateAnguish1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervateAnguish2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervateAnguish2),
         new EffectCastFinder(InnervateWanderlustSkill, EffectGUIDs.RitualistInnervateWanderlust1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervateWanderlust2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervateWanderlust2),
         new EffectCastFinder(InnervatePreservationSkill, EffectGUIDs.RitualistInnervatePreservation1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RitualistInnervatePreservation2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervatePreservation2),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
@@ -80,9 +80,9 @@ internal static class RitualistHelper
     [
         new Buff("Ritualist Shroud", RitualistsShroud, Source.Ritualist, BuffClassification.Other, SkillImages.RitualistShroud),
         new Buff("Painful Bond", PainfulBond, Source.Ritualist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Anguish),
-        new Buff("Ritualist's Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Ritualist's Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Ritualist's Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         // Weapons
         new Buff("Weapon of Remedy (Personal)", WeaponOfRemedyPersonalBuff, Source.Ritualist, BuffClassification.Other, SkillImages.WeaponOfRemedy),
         new Buff("Weapon of Remedy (Shared)", WeaponOfRemedySharedBuff, Source.Ritualist, BuffClassification.Defensive, SkillImages.WeaponOfRemedy),
@@ -103,9 +103,9 @@ internal static class RitualistHelper
         new Buff("Lingering Spirits (WanderLust)", LingeringSpiritsWanderlust, Source.Ritualist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.Wanderlust),
         new Buff("Explosive Growth", ExplosiveGrowthBuff, Source.Ritualist, BuffStackType.Queue, 10, BuffClassification.Other, TraitImages.ExplosiveGrowth),
         // Spirits
-        new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Detonate Shelter", DetonateShelter, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Detonate Sorrow", DetonateSorrow, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Detonate Shelter", DetonateShelter, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Detonate Sorrow", DetonateSorrow, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Dark Stalker (Ritualist)", RitualistDarkStalker, Source.Ritualist, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
     ];
 

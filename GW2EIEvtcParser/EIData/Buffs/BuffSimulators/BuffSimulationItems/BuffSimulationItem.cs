@@ -28,6 +28,19 @@ internal abstract class BuffSimulationItem : SimulationItem
         return Math.Max(0, Math.Clamp(End, start, end) - Math.Clamp(Start, start, end));
     }
 
+    public long GetClampedDuration(long start, long end, SingleActor actor)
+    {
+        if (start >= end || start >= End || Start >= end)
+        {
+            return 0;
+        }
+        if (GetActiveStacks(actor) == 0)
+        {
+            return 0;
+        }
+        return Math.Max(0, Math.Clamp(End, start, end) - Math.Clamp(Start, start, end));
+    }
+
     public Segment ToSegment()
     {
         return new Segment(Start, End, GetActiveStacks());

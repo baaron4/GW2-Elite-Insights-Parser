@@ -12,6 +12,7 @@ internal class EffectCastFinderByDst : EffectCastFinder
     {
         return effectEvent.Src;
     }
+#if DEBUG
     protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Dst).Where(x => Math.Abs(x.Time - evt.Time) <= ParserHelper.ServerDelayConstant && x.EffectID != evt.EffectID);
@@ -20,6 +21,7 @@ internal class EffectCastFinderByDst : EffectCastFinder
         var test2GUIDs = test2.Select(x => x.GUIDEvent);
         return true;
     }
+#endif
 
     public EffectCastFinderByDst(long skillID, GUID effectGUID) : base(skillID, effectGUID)
     {

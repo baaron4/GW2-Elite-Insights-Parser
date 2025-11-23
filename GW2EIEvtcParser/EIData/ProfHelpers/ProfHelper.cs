@@ -166,7 +166,7 @@ internal static class ProfHelper
         //    return effects != null && effects.Any(x => x.Time > evt.Time);
         //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RelicOfTheWizardsTower)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheTwinGenerals, EffectGUIDs.RelicOfTheTwinGenerals)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -179,10 +179,10 @@ internal static class ProfHelper
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheBeehive, EffectGUIDs.RelicWhiteCircle)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheBeehive1, 1000, ServerDelayConstant)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RelicOfTheBeehive1, 1000)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfMountBalrior, EffectGUIDs.RelicOfMountBalrior1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfMountBalrior2)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RelicOfMountBalrior2)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheHolosmith, EffectGUIDs.RelicOfTheHolosmith)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -230,7 +230,7 @@ internal static class ProfHelper
         new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),
         new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
         new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.SkyscaleBlast2),
     ];
 
     internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
