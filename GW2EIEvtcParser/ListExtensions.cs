@@ -151,9 +151,42 @@ public static partial class ListExt
     public static void SortStable<T>(this Span<T> span, Func<T, T, int> cmp)
     {
         StableSort<T>.fluxsort(span, cmp);
-        if(!typeof(T).IsValueType)
+        if (!typeof(T).IsValueType)
         {
             ClearableSharedArrayPool<T>.Shared.ClearAllThreadLocal(); // make sure to not mess with other threads pools
+#if VALIDATE_SORT_STABLE
+            // TODO(Eliphas): there is a nasty bug in this sort algorithm sometimes same elements are inserted multiple times in the span, overriding existing values and effectively deleting them
+            // I'm forcing in StableSort for the algo to fall into quadsort and tail_swap immediately, seems to work fine, although less efficient, better than OrderBy.
+            var encounteredElements = new HashSet<T>();
+            int dupes = 0;
+            int badOrder = 0;
+            T? prev = default;
+            foreach (var element in span)
+            {
+                if (prev != null)
+                {
+                    if (cmp(prev, element) > 0)
+                    {
+                        badOrder++;
+                    }
+                }
+                prev = element;
+                if (encounteredElements.Contains(element))
+                {
+                    dupes++;
+                    //throw new InvalidDataException("Stable sort has failed");
+                }
+                encounteredElements.Add(element);
+            }
+            if (badOrder > 0)
+            {
+                throw new InvalidDataException("Stable sort has failed: not properly ordered");
+            }
+            if (dupes > 0)
+            {
+                throw new InvalidDataException("Stable sort has failed: some elements have been duplicated");
+            }
+#endif
         }
     }
 
