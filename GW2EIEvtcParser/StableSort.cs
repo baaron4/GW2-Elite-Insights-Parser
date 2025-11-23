@@ -1151,9 +1151,9 @@ public static unsafe class StableSort<T>
 
     static void quadsort(Span<T> array, Func<T, T, int> cmp)
     {
-        if (array.Length < 32)
+        if (true || array.Length < 32)
         {
-            using var swap = new ArrayPoolReturner<T>(32, StableSort<T>.Pool);
+            using var swap = new ArrayPoolReturner<T>(Math.Max(array.Length, 32), StableSort<T>.Pool);
             tail_swap(array, swap, cmp);
         }
         else if (quad_swap(array, cmp) == 0)
@@ -1658,7 +1658,7 @@ public static unsafe class StableSort<T>
     /// The cmp function must be a complete compare operation. (int)(A - B) is not enough (that might overflow and violate transitivity).
     public static void fluxsort(Span<T> array, Func<T, T, int> cmp)
     {
-        if (array.Length <= 132)
+        if (true || array.Length <= 132)
         {
             quadsort(array, cmp);
         }

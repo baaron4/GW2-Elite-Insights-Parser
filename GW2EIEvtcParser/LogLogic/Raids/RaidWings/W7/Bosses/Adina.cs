@@ -68,13 +68,14 @@ internal class Adina : TheKeyOfAhdashim
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    // note: these are the attack target not gadget locations
+    // Gadget Locations
     static readonly List<(string, Vector2)> HandLocations =
     [
-        ("NW", new(14359.6f, -789.288f)), // erosion
-        ("NE", new(15502.5f, -841.978f)), // eruption
-        ("SW", new(14316.6f, -2080.17f)), // eruption
-        ("SE", new(15478.0f, -2156.67f)), // erosion
+        ("NW", new(14303.9f, -720.807f)), // erosion
+        ("NE", new(15570.5f, -693.111f)), // eruption
+        ("SW", new(14277.2f, -2202.52f)), // eruption
+        ("SE", new(15541.6f, -2226.77f)), // erosion
+
     ];
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
@@ -115,7 +116,7 @@ internal class Adina : TheKeyOfAhdashim
 
             processedAttackTargets.Add(atAgent);
             AgentItem hand = attackTargetEvent.Src;
-            var copyEventsFrom = new List<AgentItem>() { hand };
+            hand.PositionAttachTo(atAgent);
             var attackOns = targetables.Where(x => x.Targetable);
             var attackOffs = targetables.Where(x => !x.Targetable);
             CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == StateChange.Position);

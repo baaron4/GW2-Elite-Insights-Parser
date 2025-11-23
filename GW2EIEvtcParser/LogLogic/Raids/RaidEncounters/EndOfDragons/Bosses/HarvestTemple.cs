@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -18,7 +19,7 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class HarvestTemple : EndOfDragonsRaidEncounter
 {
 
-    private IEnumerable<SingleActor> FirstAwareSortedTargets = [];
+    private IReadOnlyList<SingleActor> FirstAwareSortedDragons = [];
     public HarvestTemple(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
@@ -206,14 +207,26 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target, log);
+                    var killableAmalgamates = Targets.Where(x => x.IsSpecies(TargetID.KillableVoidAmalgamate));
+                    var prevKillableAmalgamates = killableAmalgamates.FirstOrDefault(x => x.FirstAware < phaseStart && x.FirstAware >= log.LogData.LogStart - ServerDelayConstant);
+                    if (prevKillableAmalgamates != null)
+                    {
+                        phaseStart = Math.Max(prevKillableAmalgamates.FirstAware, log.LogData.LogStart);
+                    }
                     subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
-                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).Where(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware)).FirstOrDefault();
+                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).Where(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware && y.Time <= target.LastAware)).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
-                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware);
-                        var targetOns = targetables.Where(x => x.Targetable);
+                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                        var targetOns = targetables.Where(x => x.Targetable).ToList();
                         var targetOffs = targetables.Where(x => !x.Targetable);
-                        int id = 0;
+                        // Starts with 2nd soo won phase
+                        int id = targetOns.Count == 1 && prevKillableAmalgamates != null ? 1 : 0;
+                        // No purification phase, we don't need any subphase
+                        if (prevKillableAmalgamates == null && targetOns.Count == 1 && !killableAmalgamates.Any(x => x.FirstAware > targetOns[0].Time))
+                        {
+                            break;
+                        }
                         foreach (TargetableEvent targetOn in targetOns)
                         {
                             long start = targetOn.Time;
@@ -310,7 +323,48 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
 
     internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        // To investigate
+        var jormagVoid = agentData.GetNPCsByID(TargetID.TheDragonVoidJormag).FirstOrDefault();
+        var otherVoids = agentData.GetNPCsByIDs([
+            TargetID.TheDragonVoidPrimordus,
+            TargetID.TheDragonVoidKralkatorrik,
+            TargetID.TheDragonVoidMordremoth,
+            TargetID.TheDragonVoidZhaitan,
+            TargetID.TheDragonVoidSooWon,
+        ]);
+        long pushableOrbCheckThreshold = logData.LogEnd;
+        if (jormagVoid != null)
+        {
+            pushableOrbCheckThreshold = jormagVoid.FirstAware;
+        } 
+        else if (otherVoids.Count > 0)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var pushableOrb = agentData.GetNPCsByID(TargetID.PushableVoidAmalgamate).LastOrDefault(x => x.FirstAware <= pushableOrbCheckThreshold);
+        if (pushableOrb == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var voidShellApplies = combatData.GetBuffApplyDataByIDByDst(VoidShell, pushableOrb);
+        if (voidShellApplies.Count < 3)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
+        if (firstNonZeroVelocity == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var firstPositionAfterVelocity = combatData.GetMovementData(pushableOrb).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= firstNonZeroVelocity.Time);
+        if (firstPositionAfterVelocity == null)
+        {
+            return LogData.LogStartStatus.Late;
+        }
+        var position = firstPositionAfterVelocity.GetPoint3D();
+        if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 50)
+        {
+            return LogData.LogStartStatus.Late;
+        }
         return LogData.LogStartStatus.Normal;
     }
 
@@ -329,7 +383,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return startToUse;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -339,6 +393,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             TargetID.TheDragonVoidPrimordus,
             TargetID.TheDragonVoidSooWon,
             TargetID.TheDragonVoidZhaitan,
+            TargetID.TheDragonVoidUnknown,
             TargetID.VoidSaltsprayDragon,
             TargetID.VoidObliterator,
             TargetID.VoidGoliath,
@@ -359,18 +414,19 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return new Dictionary<TargetID, int>()
         {
             {TargetID.TheDragonVoidJormag, 0 },
-            {TargetID.TheDragonVoidPrimordus, 1 },
-            {TargetID.TheDragonVoidKralkatorrik, 2},
-            {TargetID.TheDragonVoidMordremoth, 3 },
-            {TargetID.TheDragonVoidZhaitan, 4 },
-            {TargetID.TheDragonVoidSooWon, 5 },
-            {TargetID.PushableVoidAmalgamate, 6 },
-            {TargetID.KillableVoidAmalgamate, 6 },
-            {TargetID.VoidSaltsprayDragon, 6 },
-            {TargetID.VoidObliterator, 6 },
-            {TargetID.VoidGoliath, 6 },
-            {TargetID.VoidTimeCaster, 6 },
-            {TargetID.VoidGiant, 6},
+            {TargetID.TheDragonVoidPrimordus, 0 },
+            {TargetID.TheDragonVoidKralkatorrik, 0},
+            {TargetID.TheDragonVoidMordremoth, 0 },
+            {TargetID.TheDragonVoidZhaitan, 0 },
+            {TargetID.TheDragonVoidSooWon, 0 },
+            {TargetID.TheDragonVoidUnknown, 0 },
+            {TargetID.PushableVoidAmalgamate, 1 },
+            {TargetID.KillableVoidAmalgamate, 1 },
+            {TargetID.VoidSaltsprayDragon, 1 },
+            {TargetID.VoidObliterator, 1 },
+            {TargetID.VoidGoliath, 1 },
+            {TargetID.VoidTimeCaster, 1 },
+            {TargetID.VoidGiant, 1},
         };
     }
 
@@ -389,9 +445,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             TargetID.VoidSkullpiercer,
             TargetID.VoidStormseer,
             TargetID.VoidTangler,
-            TargetID.VoidWarforged1,
-            TargetID.VoidWarforged2,
-            TargetID.DragonBodyVoidAmalgamate,
+            TargetID.VoidWarforgedElite,
+            TargetID.VoidWarforgedVeteran,
             TargetID.DragonEnergyOrb,
             TargetID.GravityBall,
             TargetID.JormagMovingFrostBeam,
@@ -466,7 +521,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         var res = new List<CastEvent>();
         foreach (var target in Targets)
         {
-            switch(target.ID)
+            switch (target.ID)
             {
                 case (int)TargetID.TheDragonVoidJormag:
                     var northBeamSkill = skillData.Get(BreathOfJormagNorth);
@@ -646,7 +701,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return res;
     }
 
-    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private static void LegacyHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var idsToUse = new List<TargetID> {
             TargetID.TheDragonVoidJormag,
@@ -760,6 +815,306 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
     }
 
+    internal static void PostMissilesHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var usefulMissileIDs = new HashSet<long>()
+        {
+            // Jormag
+            BreathOfJormagSouth,
+            GraspOfJormag,
+            // Kralkatorrik
+            CrystalBarrage,
+            // Mordremoth
+            PoisonRoar,
+            // Zhaitan
+            PutridDeluge
+        };
+        var usefulMissileEvents = combatData.Where(x => x.IsStateChange == StateChange.MissileCreate && usefulMissileIDs.Contains(x.SkillID)).GroupBy(x => x.SkillID).ToDictionary(x => (long)x.Key, x => x.ToList());
+        var usefulEffectGUIDs = new HashSet<GUID>()
+        {
+            // Primordus
+            EffectGUIDs.HarvestTemplePrimordusLavaSlamIndicator,
+            EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionIndicator,
+            EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionDamage,
+            // Kralkatorrik
+            EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator,
+            // Mordremoth
+            EffectGUIDs.HarvestTempleMordremothShockwave1,
+            // Zhaitan
+            EffectGUIDs.HarvestTempleZhaitanScreamIndicator,
+            EffectGUIDs.HarvestTempleZhaitanTailSlamImpact,
+            // Soo Won
+            EffectGUIDs.HarvestTempleSooWonClawSlap,
+            EffectGUIDs.HarvestTempleTsunamiSlamTailIndicator,
+            EffectGUIDs.HarvestTempleSooWonTsunamiSlamClawIndicator
+        };
+        var usefulEffectEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
+                usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent)))
+            .Select(x => new EffectGUIDEvent(x, evtcVersion))
+            .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.ContentID)))
+            .GroupBy(x => x.Item1)
+            .ToDictionary(x => x.Key.ContentGUID, x => x.SelectMany(x => x.Item2));
+        // Attack targets
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
+        foreach (var attackTarget in attackTargetEvents)
+        {
+            if (targetableEvents.ContainsKey(attackTarget.AttackTarget))
+            {
+                throw new EvtcCombatEventException("Duplicated attack target events");
+            }
+            targetableEvents[attackTarget.AttackTarget] = attackTarget.GetTargetableEvents(combatData, agentData);
+        }
+        attackTargetEvents = attackTargetEvents.Where(x =>
+        {
+            AgentItem atAgent = x.AttackTarget;
+            if (targetableEvents.TryGetValue(atAgent, out var targetables))
+            {
+                return targetables.Any(y => y.Targetable);
+            }
+            return false;
+        }).ToList();
+        var attackTargetSortID = new Dictionary<AgentItem, long>();
+        foreach (var attackTargetEvent in attackTargetEvents)
+        {
+            AgentItem atAgent = attackTargetEvent.AttackTarget;
+            if (!targetableEvents.TryGetValue(atAgent, out var targetables))
+            {
+                attackTargetSortID[atAgent] = long.MaxValue;
+                continue;
+            }
+            var targetOns = targetables.Where(x => x.Targetable);
+            if (!targetOns.Any())
+            {
+                attackTargetSortID[atAgent] = long.MaxValue;
+                continue;
+            }
+            attackTargetSortID[atAgent] = targetOns.Min(x => x.Time);
+        }
+        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
+        var processedAttackTargets = new HashSet<AgentItem>();
+        foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
+        {
+            AgentItem atAgent = attackTargetEvent.AttackTarget;
+            if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out var targetables))
+            {
+                continue;
+            }
+            AgentItem dragonVoid = attackTargetEvent.Src;
+            dragonVoid.PositionAttachTo(atAgent);
+            processedAttackTargets.Add(atAgent);
+            var targetOns = targetables.Where(x => x.Targetable).ToList();
+            var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+            for (var i = 0; i < targetOns.Count; i++)
+            {
+                // TODO: find a way to use attack target geographical events instead of gadgets'
+                var targetOn = targetOns[i];
+                long start = targetOn.Time;
+                long end = dragonVoid.LastAware;
+                TargetableEvent? targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                if (targetOff != null)
+                {
+                    end = targetOff.Time;
+                }
+                var id = TargetID.TheDragonVoidUnknown;
+                // SooWon
+                if (
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleSooWonClawSlap, out var soowonClaws) && soowonClaws.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleTsunamiSlamTailIndicator, out var soowonTail) && soowonTail.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleSooWonTsunamiSlamClawIndicator, out var soowonTsunami) && soowonTsunami.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByIDs([TargetID.VoidAbomination, TargetID.VoidColdsteel, TargetID.VoidTangler, TargetID.VoidWarforgedVeteran, TargetID.VoidObliterator, TargetID.VoidGoliath]).Any(x => start <= x.FirstAware && end >= x.FirstAware)))
+                {
+
+                    if (i < targetOns.Count - 1)
+                    {
+                        var nextStart = targetOns[i + 1].Time;
+                        long nextEnd = dragonVoid.LastAware;
+                        TargetableEvent? nextTargetOff = targetOffs.FirstOrDefault(x => x.Time > nextStart);
+                        if (nextTargetOff != null)
+                        {
+                            nextEnd = nextTargetOff.Time;
+                        }
+                        // Check if split happened, otherwise only one phase and the next targetable in a soo won from another encounter
+                        if (agentData.GetNPCsByID(TargetID.KillableVoidAmalgamate).Any(x => x.InAwareTimes(end, nextStart)))
+                        {
+                            i++;
+                            end = nextEnd;
+                        }
+                    }
+                    id = TargetID.TheDragonVoidSooWon;
+                }
+                // Zhaitan
+                else if (
+                    (usefulMissileEvents.TryGetValue(PutridDeluge, out var putridDeluges) && putridDeluges.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanScreamIndicator, out var zhaiScreams) && zhaiScreams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleZhaitanTailSlamImpact, out var shaiTailSlams) && shaiTailSlams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidGiant).Any(x => start - 17000 <= x.FirstAware && end >= x.FirstAware))
+                    ||
+                    (agentData.GetNPCsByIDs([TargetID.VoidRotswarmer, TargetID.ZhaitansReach]).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidZhaitan;
+                }
+                // Mordremoth
+                else if (
+                    (usefulMissileEvents.TryGetValue(PoisonRoar, out var poisonRoars) && poisonRoars.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleMordremothShockwave1, out var mordShockwaves) && mordShockwaves.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidSkullpiercer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidMordremoth;
+                }
+                // Kralkatorrik
+                else if (
+                    (usefulMissileEvents.TryGetValue(CrystalBarrage, out var crystalBarrages) && crystalBarrages.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator, out var kralkBeam) && kralkBeam.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidBrandbomber).Any(x => start - 11000 <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidKralkatorrik;
+                }
+                // Primordus
+                else if (
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusLavaSlamIndicator, out var lavaSlams) && lavaSlams.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionIndicator, out var jawsIndicator) && jawsIndicator.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulEffectEvents.TryGetValue(EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionDamage, out var jawsDamage) && jawsDamage.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByIDs([TargetID.VoidWarforgedElite, TargetID.VoidBurster]).Any(x => start - 9000 <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidPrimordus;
+                }
+                // Jormag
+                else if (
+                    (usefulMissileEvents.TryGetValue(BreathOfJormagSouth, out var jormagBreaths) && jormagBreaths.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (usefulMissileEvents.TryGetValue(GraspOfJormag, out var graspsOfJormags) && graspsOfJormags.Any(x => x.Time >= start && x.Time <= end))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamNorth).Any(x => x.InAwareTimes(start, end)))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamCenter).Any(x => x.InAwareTimes(start, end)))
+                    ||
+                    (agentData.GetNPCsByID(TargetID.VoidStormseer).Any(x => start <= x.FirstAware && end >= x.FirstAware))
+                )
+                {
+                    id = TargetID.TheDragonVoidJormag;
+                }
+                AgentItem elderDragonVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
+                elderDragonVoid.SetEnglobingAgentItem(dragonVoid, agentData);
+            }
+        }
+        var expectedNextIDDict = new Dictionary<int, int>()
+        {
+            { (int)TargetID.TheDragonVoidJormag, (int)TargetID.TheDragonVoidPrimordus },
+            { (int)TargetID.TheDragonVoidPrimordus, (int)TargetID.TheDragonVoidKralkatorrik },
+            { (int)TargetID.TheDragonVoidKralkatorrik, (int)TargetID.TheDragonVoidMordremoth },
+            { (int)TargetID.TheDragonVoidMordremoth, (int)TargetID.TheDragonVoidZhaitan },
+            { (int)TargetID.TheDragonVoidZhaitan, (int)TargetID.TheDragonVoidSooWon },
+            { (int)TargetID.TheDragonVoidSooWon, (int)TargetID.Unknown },
+            { (int)TargetID.TheDragonVoidUnknown, (int)TargetID.Unknown },
+        };
+        // Add missing dragons (only forward, back ward missing dragons are ignored)
+        var sortedDragons = agentData.GetNPCsByIDs([
+            TargetID.TheDragonVoidJormag,
+            TargetID.TheDragonVoidPrimordus,
+            TargetID.TheDragonVoidKralkatorrik,
+            TargetID.TheDragonVoidMordremoth,
+            TargetID.TheDragonVoidZhaitan,
+            TargetID.TheDragonVoidSooWon,
+            TargetID.TheDragonVoidUnknown
+        ]).ToList();
+        sortedDragons.SortByFirstAware();
+        for (var i = 0; i < sortedDragons.Count; i++)
+        {
+            var curDragon = sortedDragons[i];
+            var nextExpected = expectedNextIDDict[curDragon.ID];
+            if (i < sortedDragons.Count - 1)
+            {
+                var nextDragon = sortedDragons[i + 1];
+                if (nextDragon.ID == nextExpected)
+                {
+                    continue;
+                }
+            }
+            if (nextExpected != (int)TargetID.Unknown)
+            {
+                List<TargetID> idsToAdd;
+                switch (nextExpected)
+                {
+                    case (int)TargetID.TheDragonVoidPrimordus:
+                        idsToAdd = [
+                            TargetID.TheDragonVoidPrimordus,
+                            TargetID.TheDragonVoidKralkatorrik,
+                            TargetID.TheDragonVoidMordremoth,
+                            TargetID.TheDragonVoidZhaitan,
+                            TargetID.TheDragonVoidSooWon
+                        ];
+                        break;
+                    case (int)TargetID.TheDragonVoidKralkatorrik:
+                        idsToAdd = [
+                            TargetID.TheDragonVoidKralkatorrik,
+                            TargetID.TheDragonVoidMordremoth,
+                            TargetID.TheDragonVoidZhaitan,
+                            TargetID.TheDragonVoidSooWon
+                        ];
+                        break;
+                    case (int)TargetID.TheDragonVoidMordremoth:
+                        idsToAdd = [
+                            TargetID.TheDragonVoidMordremoth,
+                            TargetID.TheDragonVoidZhaitan,
+                            TargetID.TheDragonVoidSooWon
+                        ];
+                        break;
+                    case (int)TargetID.TheDragonVoidZhaitan:
+                        idsToAdd = [
+                            TargetID.TheDragonVoidZhaitan,
+                            TargetID.TheDragonVoidSooWon
+                        ];
+                        break;
+                    case (int)TargetID.TheDragonVoidSooWon:
+                        idsToAdd = [
+                            TargetID.TheDragonVoidSooWon
+                        ];
+                        break;
+                    default:
+                        continue;
+                }
+                long lastLastAware = curDragon.LastAware;
+                int delta = idsToAdd.Count;
+                for (var j = 0; i < idsToAdd.Count; i++)
+                {
+                    agentData.AddCustomNPCAgent(lastLastAware - delta + j, lastLastAware - delta + j + 1, "Dragonvoid", Spec.NPC, idsToAdd[i], false);
+                }
+            }
+        }
+    }
+
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        if (evtcVersion.Build >= ArcDPSBuilds.MissilesIntroduced)
+        {
+            PostMissilesHandleCriticalAgents(evtcVersion, logData, agentData, combatData, extensions);
+        }
+        else
+        {
+            LegacyHandleCriticalAgents(evtcVersion, logData, agentData, combatData, extensions);
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
@@ -791,25 +1146,20 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 voidAmal.OverrideID(TargetID.PushableVoidAmalgamate, agentData);
             }
         }
-        AgentItem dragonBodyVoidAmalgamate = voidAmalgamates.MaxBy(x => x.LastAware - x.FirstAware);
-        if (dragonBodyVoidAmalgamate != null)
-        {
-            dragonBodyVoidAmalgamate.OverrideID(TargetID.DragonBodyVoidAmalgamate, agentData);
-        }
         // Gravity Ball - Timecaster gadget
         if (agentData.TryGetFirstAgentItem(TargetID.VoidTimeCaster, out var timecaster))
         {
             if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
             {
-                var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src);
-                var candidateVelocities = combatData.Where(x => x.IsStateChange == StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y)));
+                var gravityBallCandidates = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src);
+                var candidateVelocities = combatData.Where(x => x.IsStateChange == StateChange.Velocity && gravityBallCandidates.Any(y => x.SrcMatchesAgent(y)));
                 const int referenceLength = 200;
-                var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
-                foreach (AgentItem ball in gravityBalls_)
+                var gravityBalls = gravityBallCandidates.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
+                foreach (AgentItem gravityBall in gravityBalls)
                 {
-                    ball.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    ball.OverrideID(TargetID.GravityBall, agentData);
-                    ball.SetMaster(timecaster);
+                    gravityBall.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    gravityBall.OverrideID(TargetID.GravityBall, agentData);
+                    gravityBall.SetMaster(timecaster);
                 }
             }
         }
@@ -968,7 +1318,23 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 }
             }
         }
-        FirstAwareSortedTargets = Targets.OrderBy(x => x.FirstAware);
+        InitFirstAwareSortedDragons(Targets);
+    }
+
+    internal void InitFirstAwareSortedDragons(IReadOnlyList<SingleActor> targets)
+    {
+        FirstAwareSortedDragons = targets
+            .Where(x => x.IsAnySpecies([
+                TargetID.TheDragonVoidJormag,
+                TargetID.TheDragonVoidPrimordus,
+                TargetID.TheDragonVoidKralkatorrik,
+                TargetID.TheDragonVoidMordremoth,
+                TargetID.TheDragonVoidZhaitan,
+                TargetID.TheDragonVoidUnknown,
+                TargetID.TheDragonVoidSooWon,
+            ]))
+            .OrderBy(x => x.FirstAware)
+            .ToList();
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
@@ -1360,8 +1726,6 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 }
                 replay.Decorations.AddNonHomingMissiles(log, log.CombatData.GetMissileEventsBySkillID(CrystalBarrage), Colors.DarkPurple, 0.3, 100);
                 break;
-            case (int)TargetID.DragonBodyVoidAmalgamate:
-                break;
             case (int)TargetID.VoidAmalgamate:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleInfluenceOfTheVoidPool, out var poolEffects))
                 {
@@ -1716,8 +2080,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 var orbs = log.CombatData.GetMissileEventsBySkillID(GraspOfTheVoid);
                 replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.Black, 0.5, 40);
                 break;
-            case (int)TargetID.VoidWarforged1:
-            case (int)TargetID.VoidWarforged2:
+            case (int)TargetID.VoidWarforgedElite:
+            case (int)TargetID.VoidWarforgedVeteran:
 #if DEBUG_EFFECTS
                     CombatReplay.DebugEffects(target, log, replay.Decorations, [], target.FirstAware, target.LastAware);
 #endif
@@ -2137,16 +2501,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
 
     private SingleActor? FindActiveOrNextDragonVoid(long time)
     {
-        var dragonVoidIDs = new List<int> {
-            (int)TargetID.TheDragonVoidJormag,
-            (int)TargetID.TheDragonVoidPrimordus,
-            (int)TargetID.TheDragonVoidKralkatorrik,
-            (int)TargetID.TheDragonVoidMordremoth,
-            (int)TargetID.TheDragonVoidZhaitan,
-            (int)TargetID.TheDragonVoidSooWon,
-        };
-        SingleActor? activeDragon = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
-        return activeDragon ?? FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware >= time);
+        SingleActor? activeDragon = FirstAwareSortedDragons.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time);
+        return activeDragon ?? FirstAwareSortedDragons.FirstOrDefault(x => x.FirstAware >= time);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
