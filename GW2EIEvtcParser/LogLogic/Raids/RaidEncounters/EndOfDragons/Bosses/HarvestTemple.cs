@@ -701,7 +701,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return res;
     }
 
-    private void LegacyHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private static void LegacyHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var idsToUse = new List<TargetID> {
             TargetID.TheDragonVoidJormag,
@@ -815,7 +815,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
     }
 
-    internal void PostMissilesHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void PostMissilesHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var usefulMissileIDs = new HashSet<long>()
         {
