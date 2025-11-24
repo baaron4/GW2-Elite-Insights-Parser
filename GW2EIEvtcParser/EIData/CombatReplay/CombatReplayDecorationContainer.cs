@@ -575,7 +575,7 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Add a missile going from a Point A to Point B, supports multi launches
+    /// Add a missile going from a Point A to Point B, supports multi launches, uses CircleDecoration
     /// </summary>
     /// <param name="log">Evtc log</param>
     /// <param name="missileEvent"></param>
@@ -601,7 +601,33 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Add a missile rotating around Targeted Agent, supports multi launches
+    /// Add a missile going from a Point A to Point B, supports multi launches, uses IconDecorations
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="imageUrl"></param>
+    /// <param name="opacity"></param>
+    /// <param name="worldSize"></param>
+    internal void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, string imageUrl, float opacity, uint worldSize)
+    {
+        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
+        for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+        {
+            var launch = missileEvent.LaunchEvents[i];
+            (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
+            Add(
+                new IconDecoration(imageUrl, 0, worldSize, opacity, trajectoryLifeSpan, new InterpolationConnector([
+                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                        launch.GetFinalPosition(trajectoryLifeSpan)
+                    ],
+                    Connector.InterpolationMethod.Linear)
+                )
+            );
+        }
+    }
+
+    /// <summary>
+    /// Add a missile rotating around Targeted Agent, supports multi launches, uses CircleDecoration
     /// </summary>
     /// <param name="log">Evtc log</param>
     /// <param name="missileEvent"></param>
@@ -645,7 +671,7 @@ internal class CombatReplayDecorationContainer
         }
     }
     /// <summary>
-    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches, uses CircleDecoration
     /// </summary>
     /// <param name="log">Evtc log</param>
     /// <param name="missileEvent"></param>
@@ -678,7 +704,7 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Add missiles going from a Point A to Point B, supports multi launches
+    /// Add missiles going from a Point A to Point B, supports multi launches, uses CircleDecoration
     /// </summary>
     /// <param name="log">Evtc log</param>
     /// <param name="missileEvents">Missile events to process</param>
@@ -690,6 +716,22 @@ internal class CombatReplayDecorationContainer
         foreach (MissileEvent missileEvent in missileEvents)
         {
             AddNonHomingMissile(log, missileEvent, color, opacity, radius);
+        }
+    }
+
+    /// <summary>
+    /// Add missiles going from a Point A to Point B, supports multi launches, uses IconDecorations
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvents">Missile events to process</param>
+    /// <param name="imageUrl"></param>
+    /// <param name="opacity"></param>
+    /// <param name="worldSize"></param>
+    internal void AddNonHomingMissiles(ParsedEvtcLog log, IEnumerable<MissileEvent> missileEvents, string imageUrl, float opacity, uint worldSize)
+    {
+        foreach (MissileEvent missileEvent in missileEvents)
+        {
+            AddNonHomingMissile(log, missileEvent, imageUrl, opacity, worldSize);
         }
     }
 
