@@ -217,6 +217,8 @@ internal class Samarog : BastionOfThePenitent
                     replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 15000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
+                var spearMissiles = log.CombatData.GetMissileEventsBySkillID(SpearReturn);
+                replay.Decorations.AddNonHomingMissiles(log, spearMissiles, ParserIcons.TargetNPCIcons[TargetID.SpearAggressionRevulsion], 1.0f, 100);
                 break;
             case (int)TargetID.Rigom:
             case (int)TargetID.Guldhem:
