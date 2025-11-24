@@ -197,38 +197,44 @@ internal class SoullessHorror : HallOfChains
             case (int)TargetID.SoullessHorror:
                 var cls = target.GetCastEvents(log);
                 // arena reduction
-                var center = new Vector3(-10581, 825, -817);
-                List<(double, uint, uint)> destroyedRings;
-                if (log.LogData.IsCM)
+                var encounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target));     
+                if (encounterPhase != null)
                 {
-                    destroyedRings =
-                        [
-                            (100, 1330, 1550),
-                            (90, 1120, 1330),
-                            (66, 910, 1120),
-                            (33, 720, 910)
-                        ];
-                }
-                else
-                {
-                    destroyedRings =
-                        [
-                            (90, 1330, 1550),
-                            (66, 1120, 1330),
-                            (33, 910, 1120),
-                        ];
-                }
-                foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
-                {
-                    Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
-                    if (hpUpdate != null)
+                    var center = new Vector3(-10581, 825, -817);
+                    List<(double, uint, uint)> destroyedRings;
+                    if (encounterPhase.IsCM)
                     {
-                        var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, target.LastAware), Colors.Orange, 0.3, new PositionConnector(center));
-                        replay.Decorations.AddWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
+                        destroyedRings =
+                            [
+                                (100, 1330, 1550),
+                                (90, 1120, 1330),
+                                (66, 910, 1120),
+                                (33, 720, 910)
+                            ];
                     }
                     else
                     {
-                        break;
+                        destroyedRings =
+                            [
+                                (90, 1330, 1550),
+                                (66, 1120, 1330),
+                                (33, 910, 1120),
+                            ];
+                    }
+                    foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
+                    {
+                        long end = Math.Min(encounterPhase.End, target.LastAware);
+                        Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
+                        if (hpUpdate != null)
+                        {
+                            long ringStart = Math.Max(hpUpdate.Value.Start, encounterPhase.Start);
+                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (ringStart, end), Colors.Orange, 0.3, new PositionConnector(center));
+                            replay.Decorations.AddWithGrowing(doughnut, ringStart + 3000);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
 

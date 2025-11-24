@@ -616,7 +616,7 @@ internal class Qadim : MythwrightGambit
             case "05":
             case "5":
                 bool doNormalPlat5 = true;
-                if (log.LogData.IsCM)
+                if (isCM)
                 {
                     doNormalPlat5 = false;
                     if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-8.0078125f, 0, 0), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
@@ -712,7 +712,7 @@ internal class Qadim : MythwrightGambit
                             }
                             if (doNormalPlat10)
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.LogData.IsCM ? NoOpacity : HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), isCM ? NoOpacity : HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
                                 {
                                     AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
                                 }
@@ -1091,7 +1091,7 @@ internal class Qadim : MythwrightGambit
         const string platformImageUrl = ParserIcons.QadimPlatform;
         const float hiddenOpacity = 0.1f;
 
-        bool isCM = log.LogData.IsCM;
+        bool isCM = qadim.GetHealth(log.CombatData) > 21e6;
 
         const float xLeft = -7975;
         const float xLeftLeft = -8537;

@@ -94,7 +94,7 @@ partial class SingleActor
             long end = Math.Min(Math.Max(start, logStart), logEnd);
             if (res.Count == 0)
             {
-                res.Add(new Segment(0, end, lastValue));
+                res.Add(new Segment(logStart, end, lastValue));
             }
             else
             {
