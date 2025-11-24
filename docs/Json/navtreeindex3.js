@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a57a1c847eb5ebcf2d39f1496a00f7d76":[1,0,0,3,33],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a58389e62071ed03a20dd6f284d308ea0":[0,0,0,3,32],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a58389e62071ed03a20dd6f284d308ea0":[1,0,0,3,32],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a610ff5a4870b1d6f4740867189d5c592":[0,0,0,3,10],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a610ff5a4870b1d6f4740867189d5c592":[1,0,0,3,10],
@@ -89,12 +91,14 @@ var NAVTREEINDEX3 =
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html":[1,0,0,12,0],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a0ea596019fc12af22a27b6379de4c235":[0,0,0,12,0,0],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a0ea596019fc12af22a27b6379de4c235":[1,0,0,12,0,0],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a395c9a81bdd0341049cdbe0883004e7a":[0,0,0,12,0,5],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a395c9a81bdd0341049cdbe0883004e7a":[1,0,0,12,0,5],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a702715f2b35526c6013392ebec5d4a78":[0,0,0,12,0,4],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a702715f2b35526c6013392ebec5d4a78":[1,0,0,12,0,4],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#ab890933516040d7a4c41b6366419b8f9":[0,0,0,12,0,3],
-"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#ab890933516040d7a4c41b6366419b8f9":[1,0,0,12,0,3],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a395c9a81bdd0341049cdbe0883004e7a":[0,0,0,12,0,6],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a395c9a81bdd0341049cdbe0883004e7a":[1,0,0,12,0,6],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a702715f2b35526c6013392ebec5d4a78":[0,0,0,12,0,5],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a702715f2b35526c6013392ebec5d4a78":[1,0,0,12,0,5],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#aa45f09229d7705e6f00e3be06c4af029":[0,0,0,12,0,3],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#aa45f09229d7705e6f00e3be06c4af029":[1,0,0,12,0,3],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#ab890933516040d7a4c41b6366419b8f9":[0,0,0,12,0,4],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#ab890933516040d7a4c41b6366419b8f9":[1,0,0,12,0,4],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#abf40f36b01f8c4f7f80409cec9cf2e53":[0,0,0,12,0,2],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#abf40f36b01f8c4f7f80409cec9cf2e53":[1,0,0,12,0,2],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#aca2c2b167634ca1b44f972c4e04b7b20":[0,0,0,12,0,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX3 =
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a624c5f9a3ad7c3455f63400e34f4f6c1":[1,0,0,14,2,30],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a6fc43dff6329068d8c97803663052d33":[0,0,0,14,2,12],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a6fc43dff6329068d8c97803663052d33":[1,0,0,14,2,12],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7011cafd155417f25127126de1d92911":[0,0,0,14,2,32],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7011cafd155417f25127126de1d92911":[1,0,0,14,2,32],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a704be3fb4ed5736bf4b95a3e3eb282d3":[0,0,0,14,2,18],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a704be3fb4ed5736bf4b95a3e3eb282d3":[1,0,0,14,2,18],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7261d1c8772f753122d129cafc639fc9":[0,0,0,14,2,1]
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7011cafd155417f25127126de1d92911":[0,0,0,14,2,32]
 };

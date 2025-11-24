@@ -1,5 +1,9 @@
 var NAVTREEINDEX4 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7011cafd155417f25127126de1d92911":[1,0,0,14,2,32],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a704be3fb4ed5736bf4b95a3e3eb282d3":[0,0,0,14,2,18],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a704be3fb4ed5736bf4b95a3e3eb282d3":[1,0,0,14,2,18],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7261d1c8772f753122d129cafc639fc9":[0,0,0,14,2,1],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7261d1c8772f753122d129cafc639fc9":[1,0,0,14,2,1],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7b9ff058afc0ee10bbad58360c9a335b":[0,0,0,14,2,35],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7b9ff058afc0ee10bbad58360c9a335b":[1,0,0,14,2,35],
