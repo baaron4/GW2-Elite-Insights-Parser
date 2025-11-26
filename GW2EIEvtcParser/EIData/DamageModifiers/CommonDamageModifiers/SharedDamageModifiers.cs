@@ -63,5 +63,8 @@ internal static class SharedDamageModifiers
         new BuffOnActorDamageModifier(Mod_FrostAura, FrostAura, "Frost Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostAura, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_LightAura, LightAura, "Light Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.LightAura, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_DarkAura, DarkAura, "Dark Aura", "-20%", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.DarkAura, DamageModifierMode.All),
+        // Distortion
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, SkillImages.Distortion, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.OctoberVoERelease)
     ];
 }
