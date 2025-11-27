@@ -912,7 +912,6 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             var dragonVoidHPEvents = hpEvents.Where(x => x.SrcMatchesAgent(dragonVoid));
             for (var i = 0; i < targetOns.Count; i++)
             {
-                // TODO: find a way to use attack target geographical events instead of gadgets'
                 var targetOn = targetOns[i];
                 long start = targetOn.Time;
                 long end = dragonVoid.LastAware;
