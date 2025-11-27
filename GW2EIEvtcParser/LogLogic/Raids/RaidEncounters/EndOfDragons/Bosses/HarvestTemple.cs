@@ -895,6 +895,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
         attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
         var processedAttackTargets = new HashSet<AgentItem>();
+        bool needSortByTime = false;
+        var hpEvents = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate).ToList();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
             AgentItem atAgent = attackTargetEvent.AttackTarget;
@@ -907,6 +909,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             processedAttackTargets.Add(atAgent);
             var targetOns = targetables.Where(x => x.Targetable).ToList();
             var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+            var dragonVoidHPEvents = hpEvents.Where(x => x.SrcMatchesAgent(dragonVoid));
             for (var i = 0; i < targetOns.Count; i++)
             {
                 // TODO: find a way to use attack target geographical events instead of gadgets'
@@ -918,6 +921,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 {
                     end = targetOff.Time;
                 }
+                var lastHPEventBeforeEnd = dragonVoidHPEvents.LastOrDefault(x => x.Time >= (end - start) / 2 && x.Time <= end);
                 var id = TargetID.TheDragonVoidUnknown;
                 // SooWon
                 if (
@@ -938,6 +942,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         if (nextTargetOff != null)
                         {
                             nextEnd = nextTargetOff.Time;
+                            lastHPEventBeforeEnd = dragonVoidHPEvents.LastOrDefault(x => x.Time >= (end - start) / 2 && x.Time <= end);
                         }
                         // Check if split happened, otherwise only one phase and the next targetable in a soo won from another encounter
                         if (agentData.GetNPCsByID(TargetID.KillableVoidAmalgamate).Any(x => x.InAwareTimes(end, nextStart)))
@@ -1013,9 +1018,25 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 {
                     id = TargetID.TheDragonVoidJormag;
                 }
+                // Avoid making the gadget go back to 100% hp on "death"
+                // Regenerating back to full HP
+                // use mid life check to allow hp going back up to 100% around first aware
+                if (lastHPEventBeforeEnd != null && HealthUpdateEvent.GetHealthPercent(lastHPEventBeforeEnd) > 99)
+                {
+                    var prevHPEvent = dragonVoidHPEvents.LastOrDefault(x => x.Time < lastHPEventBeforeEnd.Time);
+                    if (prevHPEvent != null && HealthUpdateEvent.GetHealthPercent(prevHPEvent) < HealthUpdateEvent.GetHealthPercent(lastHPEventBeforeEnd))
+                    {
+                        lastHPEventBeforeEnd.OverrideTime(end + 1);
+                        needSortByTime = true;
+                    }
+                }
                 AgentItem elderDragonVoid = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, (int)id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? dragonVoid.HitboxWidth : 800, dragonVoid.HitboxHeight);
                 elderDragonVoid.SetEnglobingAgentItem(dragonVoid, agentData);
             }
+        }
+        if (needSortByTime)
+        {
+            combatData.SortByTime();
         }
         var expectedNextIDDict = new Dictionary<int, int>()
         {
