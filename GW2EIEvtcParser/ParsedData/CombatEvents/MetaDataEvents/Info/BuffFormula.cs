@@ -112,8 +112,8 @@ public class BuffFormula
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
             ByteAttr2 = (byte)formulaFloats[2];
-            Attr1 = GetBuffAttribute(ByteAttr1, evtcVersion.Build);
-            Attr2 = GetBuffAttribute(ByteAttr2, evtcVersion.Build);
+            Attr1 = GetBuffAttribute(ByteAttr1, Type, evtcVersion.Build);
+            Attr2 = GetBuffAttribute(ByteAttr2, Type,evtcVersion.Build);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];
