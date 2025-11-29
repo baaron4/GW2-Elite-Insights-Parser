@@ -10,7 +10,7 @@ internal static class BuffInfoSolver
 {
     private const int AnyPositive = int.MinValue;
     private const int AnyNegative = int.MaxValue;
-    private class BuffFormulaDescriptor : IVersionable
+    private abstract class BuffFormulaDescriptor : IVersionable
     {
         private readonly float _constantOffset;
         private readonly float _levelOffset;
@@ -23,7 +23,7 @@ internal static class BuffInfoSolver
         private ulong _maxBuild = GW2Builds.EndOfLife;
         private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
         private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
-        private readonly BuffAttribute _result;
+        protected readonly BuffAttribute _result;
 
         public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, BuffAttribute result)
         {
@@ -65,32 +65,23 @@ internal static class BuffInfoSolver
             return false;
         }
 
-        public bool Match(BuffFormula formula, Dictionary<byte, BuffAttribute> toFill)
+        protected bool ConditionMatches(BuffFormula formula)
         {
-            // No need to match anything if we already associated the result
-            if (toFill.ContainsValue(_result))
+            if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
             {
-                return true;
-            }
-            if (formula.Attr1 == BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
-            {
-                if (formula.ConstantOffset == _constantOffset || (formula.ConstantOffset > 0 && _constantOffset == AnyPositive) || (formula.ConstantOffset < 0 && _constantOffset == AnyNegative))
+                if (formula.LevelOffset == _levelOffset || (formula.LevelOffset > 0 && _levelOffset == AnyPositive) || (formula.LevelOffset < 0 && _levelOffset == AnyNegative))
                 {
-                    if (formula.LevelOffset == _levelOffset || (formula.LevelOffset > 0 && _levelOffset == AnyPositive) || (formula.LevelOffset < 0 && _levelOffset == AnyNegative))
+                    if (formula.Variable == _variable || (formula.Variable > 0 && _variable == AnyPositive) || (formula.Variable < 0 && _variable == AnyNegative))
                     {
-                        if (formula.Variable == _variable || (formula.Variable > 0 && _variable == AnyPositive) || (formula.Variable < 0 && _variable == AnyNegative))
+                        if (formula.TraitSelf == _traitSelf || (formula.TraitSelf > 0 && _traitSelf == AnyPositive) || (formula.TraitSelf < 0 && _traitSelf == AnyNegative))
                         {
-                            if (formula.TraitSelf == _traitSelf || (formula.TraitSelf > 0 && _traitSelf == AnyPositive) || (formula.TraitSelf < 0 && _traitSelf == AnyNegative))
+                            if (formula.TraitSrc == _traitSrc || (formula.TraitSrc > 0 && _traitSrc == AnyPositive) || (formula.TraitSrc < 0 && _traitSrc == AnyNegative))
                             {
-                                if (formula.TraitSrc == _traitSrc || (formula.TraitSrc > 0 && _traitSrc == AnyPositive) || (formula.TraitSrc < 0 && _traitSrc == AnyNegative))
+                                if (formula.BuffSrc == _buffSrc || (formula.BuffSrc > 0 && _buffSrc == AnyPositive) || (formula.BuffSrc < 0 && _buffSrc == AnyNegative))
                                 {
-                                    if (formula.BuffSrc == _buffSrc || (formula.BuffSrc > 0 && _buffSrc == AnyPositive) || (formula.BuffSrc < 0 && _buffSrc == AnyNegative))
+                                    if (formula.BuffSelf == _buffSelf || (formula.BuffSelf > 0 && _buffSelf == AnyPositive) || (formula.BuffSelf < 0 && _buffSelf == AnyNegative))
                                     {
-                                        if (formula.BuffSelf == _buffSelf || (formula.BuffSelf > 0 && _buffSelf == AnyPositive) || (formula.BuffSelf < 0 && _buffSelf == AnyNegative))
-                                        {
-                                            toFill[formula.ByteAttr1] = _result;
-                                            return true;
-                                        }
+                                        return true;
                                     }
                                 }
                             }
@@ -100,147 +91,199 @@ internal static class BuffInfoSolver
             }
             return false;
         }
+
+        public abstract bool Match(BuffFormula formula, Dictionary<byte, BuffAttribute> toFill);
     }
+
+    private class BuffFormulaDescriptorAttr1 : BuffFormulaDescriptor
+    {
+
+        public BuffFormulaDescriptorAttr1(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, BuffAttribute result) : base(constantOffset, levelOffset, variable, traitSelf, traitSrc, buffSelf, buffSrc, result)
+        {
+        }
+        public override bool Match(BuffFormula formula, Dictionary<byte, BuffAttribute> toFill)
+        {
+            // No need to match anything if we already associated the result
+            if (toFill.ContainsValue(_result))
+            {
+                return true;
+            }
+            if (formula.Attr1 == BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr1))
+            {
+                if (ConditionMatches(formula))
+                {
+                    toFill[formula.ByteAttr1] = _result;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    private class BuffFormulaDescriptorAttr2 : BuffFormulaDescriptor
+    {
+        public BuffFormulaDescriptorAttr2(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, BuffAttribute result) : base(constantOffset, levelOffset, variable, traitSelf, traitSrc, buffSelf, buffSrc, result)
+        {
+        }
+        public override bool Match(BuffFormula formula, Dictionary<byte, BuffAttribute> toFill)
+        {
+            // No need to match anything if we already associated the result
+            if (toFill.ContainsValue(_result))
+            {
+                return true;
+            }
+            if (formula.Attr2 == BuffAttribute.Unknown && !toFill.ContainsKey(formula.ByteAttr2))
+            {
+                if (ConditionMatches(formula))
+                {
+                    toFill[formula.ByteAttr2] = _result;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
     private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new()
     {
         
         // Attack Speed
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AttackSpeed).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Quickness },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AttackSpeed).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Quickness },
         // Power
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMightBuff },
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMightBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
         // Power Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PowerSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfColdWurmStew },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PowerSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfColdWurmStew },
         // Condition Damage
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfDomination },
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfDomination },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
         // Condition Damage Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggieBurger },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggieBurger },
         // Precision
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfFuryBuff },
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfAgilityBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfFuryBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfAgilityBuff },
         // Precision Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PrecisionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfIceWurmBisque },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PrecisionSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfIceWurmBisque },
         // Toughness
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), DolyakSignetBuff },
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), DolyakSignetBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithBuilds(GW2Builds.October2024Balance).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
         // Toughness side kick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ToughnessSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), MeatballDinner },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ToughnessSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), MeatballDinner },
         // Vitality
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Vitality).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Vitality).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
         // Vitality Sidekic
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfDolyakStew },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfDolyakStew },
         // Healing
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Healing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Healing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
         // Healing Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), StrawberryCookie },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), StrawberryCookie },
         // Concentration
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Concentration).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMercyBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Concentration).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMercyBuff },
         // Concentration Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConcentrationSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), SoulPastry },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConcentrationSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), SoulPastry },
         // Expertise
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Expertise).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMidnightBuff },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Expertise).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMidnightBuff },
         // Expertise Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExpertiseSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggiePizza },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExpertiseSidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), VeggiePizza },
         // Ferocity
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Ferocity).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfTheWild },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Ferocity).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfTheWild },
         // Ferocity Sidekick
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FerocitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfSweetAndSpicyButternutSquashSoup },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FerocitySidekick).WithEvtcBuilds(ArcDPSBuilds.BuffFormulaOriginalAttribute), BowlOfSweetAndSpicyButternutSquashSoup },
         // All stats
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AllStatsPercent).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ElementalEmpowerment },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AllStatsPercent).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ElementalEmpowerment },
         // Inc Phys Additive
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
         // Inc Cond Additive
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
         // Phys Out
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
         // Cond Out
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
         // Phys Inc Mult 
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Protection },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Protection },
         // Cond Inc Mult
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Resolution },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Resolution },
         // CriticalChance
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
         // Fishing Power      
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfImperialPalaceSpecial },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfCrispyFishPancakes },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfJadeSeaBounty },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfEchovaldHotpot },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfImperialPalaceSpecial },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), PlateOfCrispyFishPancakes },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfJadeSeaBounty },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfEchovaldHotpot },
         // Life Leech      
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), KallasFervor },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), ImprovedKallasFervor },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), KallasFervor },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), ImprovedKallasFervor },
         // ConditionDurationIncrease
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing), Fury },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing), Fury },
         // SkillRechargeSpeedIncrease
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SkillRechargeSpeedIncrease), Alacrity },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SkillRechargeSpeedIncrease), Alacrity },
         // HealingOutputFormula
-        {new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.HealingOutputFormula), Regeneration },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.HealingOutputFormula), Regeneration },
         // EnduranceRegeneration
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.EnduranceRegeneration), Vigor },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.EnduranceRegeneration), Vigor },
         // MovementSpeed
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeed), Swiftness },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeed), Swiftness },
         // DamageFormulaSquaredLevel
-        {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormulaSquaredLevel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance), Retaliation },
+        {  new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormulaSquaredLevel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance), Retaliation },
         // DamageFormula
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Bleeding },
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Burning },
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Poison },
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.DamageFormula), Confusion },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Bleeding },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Burning },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Poison },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.DamageFormula), Confusion },
         // SkillActivationDamageFormula
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.SkillActivationDamageFormula), Confusion },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.SkillActivationDamageFormula), Confusion },
         // MovementActivationDamageFormula
-        { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, 0, 0, BuffAttribute.MovementActivationDamageFormula), Torment },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, AnyPositive, AnyPositive, 0, AnyPositive, 0, 0, BuffAttribute.MovementActivationDamageFormula), Torment },
         // IncomingHealingEffectiveness
-        { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingNonStacking), Poison },
+        { new BuffFormulaDescriptorAttr1(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingNonStacking), Poison },
         // GlancingBlow
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.GlancingBlow), Weakness },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.GlancingBlow), Weakness },
         // OutgoingHealingEffectivenessFlatInc
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), SuperiorRuneOfTheMonk },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), RelicOfTheMonk },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), DeliciousRiceBall },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), InvokingHarmony },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), CelestialAvatar },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), NaturalMender },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), SuperiorRuneOfTheMonk },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), RelicOfTheMonk },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), DeliciousRiceBall },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), InvokingHarmony },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), CelestialAvatar },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), NaturalMender },
         //
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive2), BountifulMaintenanceOil },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive2), BountifulMaintenanceOil },
         // HealingEffectivenessIncomingMultiplicative
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingMultiplicative), Infirmity },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingMultiplicative), Infirmity },
         // SiphonIncomingAdditive
-        { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonIncomingAdditive2), Infirmity },
+        { new BuffFormulaDescriptorAttr1(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonIncomingAdditive2), Infirmity },
         // Condition to HP
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), BloodReckoning },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), LitanyOfWrath },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), BloodReckoning },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDamageToHP), LitanyOfWrath },
         // Damage to HP
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), BloodReckoning },
-        { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), LitanyOfWrath },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), BloodReckoning },
+        { new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), LitanyOfWrath },
         // BoonDurationIncrease
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), WovenWater },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), PerfectWeave },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), WovenWater },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.BoonDurationOutgoing), PerfectWeave },
         // Experience from kills
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), StrawberryCookie },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromKills), StrawberryCookie },
         // Experience from all
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ExperienceFromAll), RedLentilSaobosa },
         // HealingEffectivenessRec2
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingAdditive), EternalOasis },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingAdditive), EternalOasis },
         // Karma Bonus
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.KarmaBonus), PlateOfIslandPudding },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.KarmaBonus), PlateOfIslandPudding },
         // MagicFind
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MagicFind), GuildItemResearch },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MagicFind), PlateOfIslandPudding },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MagicFind), GuildItemResearch },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MagicFind), PlateOfIslandPudding },
         // Stacking Movement Speed
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking), RisingMomentum },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), FormUpAndAdvance },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), UnseenBurden },
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), Hamstrung },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking), RisingMomentum },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), FormUpAndAdvance },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), UnseenBurden },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeedStacking2), Hamstrung },
         // Maximum HP
-        {new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, MistlockInstabilityBoonOverload, 0, BuffAttribute.MaximumHP), Might },
+        {new BuffFormulaDescriptorAttr1(AnyNegative, 0, 0, 0, 0, MistlockInstabilityBoonOverload, 0, BuffAttribute.MaximumHP), Might },
         // Vitality Percent
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalityPercent), ReinforcedArmor },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.VitalityPercent), ReinforcedArmor },
         // Defense Percent
-        {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.DefensePercent), ReinforcedArmor },
+        {new BuffFormulaDescriptorAttr1(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.DefensePercent), ReinforcedArmor },
     };
 
     public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
