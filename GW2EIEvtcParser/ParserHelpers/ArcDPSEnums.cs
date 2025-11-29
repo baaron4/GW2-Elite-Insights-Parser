@@ -405,21 +405,31 @@ public static class ArcDPSEnums
         ConcentrationSidekick = -44,
         ExpertiseSidekick = -45,
         HealingEffectivenessOutgoingAdditive2 = -46,
+        AboveHealth = -47,
     }
+
+    private const int ATTR_FORM_CUSTOM_STAT_TO_STAT = 40;
+    private const int ATTR_WRITS_TO_STAT = 41;
 
     public static BuffAttribute GetBuffAttribute(short bt, int type, int evtcBuild)
     {
         // ArcDPS type 40 is ATTR_FORM_CUSTOM_STAT_TO_STAT, may change in the future
         // Current max value for type seems to be in the range's of 20
-        if (evtcBuild >= ArcDPSBuilds.BuffFormulaOriginalAttribute && type == 40)
+        if (type >= ATTR_FORM_CUSTOM_STAT_TO_STAT)
         {
+            // Writs TBC? 
+            if (type == ATTR_WRITS_TO_STAT && bt == 2)
+            {
+                return BuffAttribute.AboveHealth;
+            }
             // Restrict it to stat attributes for now
             if (bt >= 1 && bt <= 9)
             {
                 return (BuffAttribute)(bt);
             }
-            return BuffAttribute.Unknown;
+            return BuffAttribute.None;
         }
+
         if (evtcBuild >= ArcDPSBuilds.EICanDoManualBuffAttributes)
         {
             return bt == 0 ? BuffAttribute.None : BuffAttribute.Unknown;

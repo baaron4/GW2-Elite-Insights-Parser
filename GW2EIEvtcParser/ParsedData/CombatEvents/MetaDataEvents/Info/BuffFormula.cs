@@ -33,7 +33,7 @@ public class BuffFormula
 
     private static string GetPercent(BuffAttribute attribute1, BuffAttribute attribute2)
     {
-        if (attribute2 != Unknown && attribute2 != None)
+        if (attribute2 != Unknown && attribute2 != None && attribute2 != AboveHealth)
         {
             return "%";
         }
@@ -72,12 +72,16 @@ public class BuffFormula
 
     private bool IsFlippedFormula => Attr1 == PhysIncomingMultiplicative || Attr1 == CondIncomingMultiplicative || Attr1 == HealingEffectivenessIncomingMultiplicative;
 
-    private bool MultiplyBy100 => Attr2 != None || Attr1 == HealingEffectivenessIncomingMultiplicative;
+    private bool MultiplyBy100 => (Attr2 != None && Attr2 != AboveHealth)|| Attr1 == HealingEffectivenessIncomingMultiplicative;
 
     private string? _solvedDescription = null;
 
 
-    private int Level(Buff buff) => buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
+    private int LevelFactor(Buff buff) => 
+            buff.Classification == Buff.BuffClassification.Enhancement || 
+            buff.Classification == Buff.BuffClassification.Nourishment || 
+            buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : 
+                 (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
     internal unsafe BuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
     {
@@ -113,7 +117,7 @@ public class BuffFormula
             ByteAttr1 = (byte)formulaFloats[1];
             ByteAttr2 = (byte)formulaFloats[2];
             Attr1 = GetBuffAttribute(ByteAttr1, Type, evtcVersion.Build);
-            Attr2 = GetBuffAttribute(ByteAttr2, Type,evtcVersion.Build);
+            Attr2 = GetBuffAttribute(ByteAttr2, Type, evtcVersion.Build);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];
@@ -157,27 +161,34 @@ public class BuffFormula
         string stat1 = GetAttributeString(Attr1);
         if (Attr1 == Unknown)
         {
-            stat1 += " " + ByteAttr1;
+            stat1 += $" {ByteAttr1}";
         }
         if (IsExtraNumberBuffID)
         {
             if (buffsByIDs.TryGetValue(ExtraNumber, out var otherBuff))
             {
-                stat1 += " (" + otherBuff.Name + ")";
+                stat1 += $" ({otherBuff.Name})";
             }
         }
         string stat2 = GetAttributeString(Attr2);
         if (Attr2 == Unknown)
         {
-            stat2 += " " + ByteAttr2;
+            stat2 += $" {ByteAttr2}";
         }
         _solvedDescription += stat1;
         double variable = Math.Round(Variable, 6);
-        double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);
+        double totalOffset = Math.Round(LevelFactor(buff) * LevelOffset + ConstantOffset, 6);
         bool addParenthesis = totalOffset != 0 && Variable != 0;
         if (Attr2 != None)
         {
-            _solvedDescription += " from " + stat2;
+            if (Attr2 == AboveHealth)
+            {
+                _solvedDescription += $" above {LevelOffset * 100}% {stat2}";
+            } 
+            else
+            {
+                _solvedDescription += $" from {stat2}";
+            }
         }
         if (MultiplyBy100)
         {
@@ -197,7 +208,7 @@ public class BuffFormula
         bool prefix = false;
         if (Variable != 0)
         {
-            _solvedDescription += variable + " * " + GetVariableStat(Attr1, Type);
+            _solvedDescription += $"{variable} * {GetVariableStat(Attr1, Type)}";
             prefix = true;
         }
         if (totalOffset != 0)
@@ -219,19 +230,19 @@ public class BuffFormula
         }
         if (TraitSelf > 0)
         {
-            _solvedDescription += ", using " + TraitSelf;
+            _solvedDescription += $", using {TraitSelf}";
         }
         if (TraitSrc > 0)
         {
-            _solvedDescription += ", source using " + TraitSrc;
+            _solvedDescription += $", source using {TraitSrc}";
         }
         if (BuffSelf > 0)
         {
-            _solvedDescription += ", under " + BuffSelf;
+            _solvedDescription += $", under {BuffSelf}";
         }
         if (BuffSrc > 0)
         {
-            _solvedDescription += ", source under " + BuffSrc;
+            _solvedDescription += $", source under {BuffSrc}";
         }
         return _solvedDescription;
     }
