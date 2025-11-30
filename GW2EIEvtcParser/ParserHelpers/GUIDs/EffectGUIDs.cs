@@ -169,6 +169,7 @@ public static class EffectGUIDs
     public static readonly GUID ScourgeShadeSandSavant = new("63F69C50B031A2469C5971744A9E003A");
     public static readonly GUID ScourgeShadeStrike = new("C8B109540159AA429E83D0AA98EF3E90");
     public static readonly GUID ScourgeSandSwellPortal = new("086CF7823EB13047B2187E7933639703");
+    public static readonly GUID ScourgeSandCascade = new("44092AEF6D619F4093FEA4E9D9142D01");
     public static readonly GUID HarbingerCascadingCorruption = new("EEDCAB61CD35E840909B03D398878B1C");
     public static readonly GUID HarbingerDeathlyHaste = new("9C06D9D9B0E22247A1752C426808CD80");
     public static readonly GUID HarbingerDoomApproaches = new("88C0010F0B7148469B88E2A1B4500DCC");
