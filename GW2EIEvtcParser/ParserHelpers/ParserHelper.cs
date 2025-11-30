@@ -559,6 +559,7 @@ public static class ParserHelper
         { BuffAttribute.SkillRechargeSpeedIncrease, "Skill Recharge Speed Increase" },
         { BuffAttribute.MagicFind, "Magic Find" },
         { BuffAttribute.WXP, "WXP" },
+        { BuffAttribute.AboveHealth, "Health" },
         { BuffAttribute.Unknown, "Unknown" },
     };
 
