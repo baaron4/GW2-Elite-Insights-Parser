@@ -122,6 +122,22 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID.Skorvald, 0 },
+            {TargetID.FluxAnomaly1, 1 },
+            {TargetID.FluxAnomalyCM1, 1 },
+            {TargetID.FluxAnomaly2, 1 },
+            {TargetID.FluxAnomalyCM2, 1 },
+            {TargetID.FluxAnomaly3, 1 },
+            {TargetID.FluxAnomalyCM3, 1 },
+            {TargetID.FluxAnomaly4, 1 },
+            {TargetID.FluxAnomalyCM4, 1 },
+        };
+    }
+
     internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets)
     {
         int[] nameCount = [0, 0, 0, 0];
