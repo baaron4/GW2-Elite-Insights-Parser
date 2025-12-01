@@ -17,14 +17,19 @@ internal static class ScourgeHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
+        // Utilities
         new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishBuff),
+        // Shades
         new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
+        new EffectCastFinder(SandCascadeSkill, EffectGUIDs.ScourgeSandCascade),
+        new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier)
+            .UsingDisableWithEffectData(),
         new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
         new BuffGainCastFinder(DesertShroud, DesertShroudBuff)
             .UsingDurationChecker(6000),
         new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff)
             .UsingDurationChecker(3500),
-        new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
+        // Traits
         new BuffGainCastFinder(SadisticSearing, SadisticSearing)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing)
