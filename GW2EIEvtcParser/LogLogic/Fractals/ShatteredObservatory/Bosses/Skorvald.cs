@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -138,29 +139,28 @@ internal class Skorvald : ShatteredObservatory
         };
     }
 
-    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets)
+    static readonly List<(string, Vector2)> AnomalyLocations =
+    [
+        ("NW", new(-21216.896f, 16050.098f)), // NE
+        ("NE", new(-17991.695f, 16026.498f)), // NW
+        ("SW", new(-21327.797f, 19302.596f)), // SW
+        ("SE", new(-17718.096f, 19303.496f)), // SE
+
+    ];
+
+    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
     {
-        int[] nameCount = [0, 0, 0, 0];
+        var nameCount = new Dictionary<string, int> { { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
         foreach (SingleActor target in targets)
         {
-            switch (target.ID)
+            if (target.IsAnySpecies(FluxAnomalies))
             {
-                case (int)TargetID.FluxAnomaly1:
-                case (int)TargetID.FluxAnomalyCM1:
-                    target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
-                    break;
-                case (int)TargetID.FluxAnomaly2:
-                case (int)TargetID.FluxAnomalyCM2:
-                    target.OverrideName(target.Character + " " + (2 + 4 * nameCount[1]++));
-                    break;
-                case (int)TargetID.FluxAnomaly3:
-                case (int)TargetID.FluxAnomalyCM3:
-                    target.OverrideName(target.Character + " " + (3 + 4 * nameCount[2]++));
-                    break;
-                case (int)TargetID.FluxAnomaly4:
-                case (int)TargetID.FluxAnomalyCM4:
-                    target.OverrideName(target.Character + " " + (4 + 4 * nameCount[3]++));
-                    break;
+                string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, AnomalyLocations, 100);
+                if (suffix != null && nameCount.ContainsKey(suffix))
+                {
+                    // deduplicate name
+                    target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+                }
             }
         }
     }
@@ -182,7 +182,7 @@ internal class Skorvald : ShatteredObservatory
             combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
             // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
         }
-        RenameAnomalies(Targets);
+        RenameAnomalies(Targets, combatData);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

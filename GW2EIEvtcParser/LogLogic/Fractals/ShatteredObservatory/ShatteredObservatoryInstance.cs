@@ -267,7 +267,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         Skorvald.DetectUnknownAnomalies(agentData, combatData);
         Artsariiv.DetectCloneArtsariivs(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        Skorvald.RenameAnomalies(Targets);
+        Skorvald.RenameAnomalies(Targets, combatData);
         Artsariiv.RenameSmallArtsariivs(TrashMobs);
         Artsariiv.RenameCloneArtsariivs(Targets, combatData);
     }
