@@ -22,11 +22,13 @@ internal static class AmalgamHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Willing Host
-        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_WillingHost_StrikeCondition, WillingHost, "Willing Host", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "7%", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_WillingHost_Condition, WillingHost, "Willing Host (Condition)", "7%", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_WillingHost, WillingHost, "Willing Host", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_WillingHost_Strike, WillingHost, "Willing Host (Strike)", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_WillingHost_StrikeCondition, WillingHost, "Willing Host", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.sPvPWvW),
         // Plasmatic State
         new BuffOnActorDamageModifier(Mod_PlasmaticState, PlasmaticStateBuff, "Plasmatic State", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, SkillImages.PlasmaticState, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
@@ -38,6 +40,8 @@ internal static class AmalgamHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
     [
+        // Traits     
+        new Buff("Willing Host", WillingHost, Source.Amalgam, BuffClassification.Other, TraitImages.WillingHost),
         // Morth Skills
         new Buff("Berserker Strain", BerserkerStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolDemolish),
         new Buff("Titanic Strain", TitanicStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolObliterate),

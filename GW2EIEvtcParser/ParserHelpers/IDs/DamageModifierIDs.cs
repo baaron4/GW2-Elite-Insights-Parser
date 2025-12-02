@@ -381,7 +381,7 @@ public static class DamageModifierIDs
     public const int Mod_LuminarysBlessing = 368;
     public const int Mod_ChantOfAction = 369;
     public const int Mod_ChantOfRecuperation = 370;
-    public const int Mod_WillingHost = 371;
+    public const int Mod_WillingHost_StrikeCondition = 371;
     public const int Mod_PlasmaticState = 372;
     public const int Mod_ShieldingHands = 373;
     public const int Mod_RadiantArmamentsHammer = 374;
@@ -407,4 +407,6 @@ public static class DamageModifierIDs
     public const int Mod_SymphonicResonanceLute = 394;
     public const int Mod_CombatHigh = 395;
     public const int Mod_SummonKryptisTurret = 396;
+    public const int Mod_WillingHost_Strike = 397;
+    public const int Mod_WillingHost_Condition = 398;
 }
