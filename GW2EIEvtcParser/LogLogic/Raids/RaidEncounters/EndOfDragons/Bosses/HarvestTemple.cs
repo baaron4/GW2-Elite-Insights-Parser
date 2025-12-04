@@ -1058,13 +1058,13 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             TargetID.TheDragonVoidUnknown
         ]).ToList();
         sortedDragons.SortByFirstAware();
-        for (var i = 0; i < sortedDragons.Count; i++)
+        for (var curDragonIndex = 0; curDragonIndex < sortedDragons.Count; curDragonIndex++)
         {
-            var curDragon = sortedDragons[i];
+            var curDragon = sortedDragons[curDragonIndex];
             var nextExpected = expectedNextIDDict[curDragon.ID];
-            if (i < sortedDragons.Count - 1)
+            if (curDragonIndex < sortedDragons.Count - 1)
             {
-                var nextDragon = sortedDragons[i + 1];
+                var nextDragon = sortedDragons[curDragonIndex + 1];
                 if (nextDragon.ID == nextExpected)
                 {
                     continue;
@@ -1115,9 +1115,9 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 }
                 long lastLastAware = curDragon.LastAware;
                 int delta = idsToAdd.Count;
-                for (var j = 0; j < idsToAdd.Count; j++)
+                for (var extraIDIndex = 0; extraIDIndex < idsToAdd.Count; extraIDIndex++)
                 {
-                    agentData.AddCustomNPCAgent(lastLastAware - delta + j, lastLastAware - delta + j + 1, "Dragonvoid", Spec.NPC, idsToAdd[j], false);
+                    agentData.AddCustomNPCAgent(lastLastAware - delta + extraIDIndex, lastLastAware - delta + extraIDIndex + 1, "Dragonvoid", Spec.NPC, idsToAdd[extraIDIndex], false);
                 }
             }
         }
