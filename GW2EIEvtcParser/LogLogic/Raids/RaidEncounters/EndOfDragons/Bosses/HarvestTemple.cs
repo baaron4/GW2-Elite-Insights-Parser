@@ -1115,9 +1115,9 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 }
                 long lastLastAware = curDragon.LastAware;
                 int delta = idsToAdd.Count;
-                for (var j = 0; i < idsToAdd.Count; i++)
+                for (var j = 0; j < idsToAdd.Count; j++)
                 {
-                    agentData.AddCustomNPCAgent(lastLastAware - delta + j, lastLastAware - delta + j + 1, "Dragonvoid", Spec.NPC, idsToAdd[i], false);
+                    agentData.AddCustomNPCAgent(lastLastAware - delta + j, lastLastAware - delta + j + 1, "Dragonvoid", Spec.NPC, idsToAdd[j], false);
                 }
             }
         }
