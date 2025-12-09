@@ -33,8 +33,12 @@ internal static class GaleshotHelper
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.sPvPWvW),
         // Bird of Prey
-        new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "10% while under swiftness or superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "10% while under swiftness or superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "10% while under swiftness or superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "5% while under swiftness or superspeed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.December2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
