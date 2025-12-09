@@ -36,8 +36,12 @@ internal static class AntiquaryHelper
         new BuffOnActorDamageModifier(Mod_ExhilaratingEphemera, ExhilaratingEphemera, "Exhilarating Ephemera", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Antiquary, ByPresence, TraitImages.ExhilaratingEphemera, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ExhilaratingEphemera, ExhilaratingEphemera, "Exhilarating Ephemera", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Antiquary, ByPresence, TraitImages.ExhilaratingEphemera, DamageModifierMode.sPvPWvW),
         // Combat High
-        new BuffOnActorDamageModifier(Mod_CombatHigh, CombatHigh, "Combat High", "30%", DamageSource.NoPets, 30.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, ByPresence, TraitImages.CombatHigh, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_CombatHigh, CombatHigh, "Combat High", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, ByPresence, TraitImages.CombatHigh, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_CombatHigh, CombatHigh, "Combat High", "3%", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, ByStack, TraitImages.CombatHigh, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_CombatHigh, CombatHigh, "Combat High", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, ByStack, TraitImages.CombatHigh, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_CombatHigh, CombatHigh, "Combat High", "2%", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, ByStack, TraitImages.CombatHigh, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.December2025Balance),
         // Summon Kriptis Turret
         new BuffOnFoeDamageModifier(Mod_SummonKryptisTurret, SummonKryptisTurretTargetBuff, "Kryptis Turret", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Antiquary, ByPresence, SkillImages.SummonKryptisTurret, DamageModifierMode.All)
             .UsingActorCheckerByPresence(SummonKryptisTurretPlayerBuff)
