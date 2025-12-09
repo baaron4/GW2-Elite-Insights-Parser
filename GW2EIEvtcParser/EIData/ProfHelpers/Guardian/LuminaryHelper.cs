@@ -41,7 +41,11 @@ internal static class LuminaryHelper
             .UsingActorCheckerByPresence([RadiantArmamentsHammer, RadiantArmamentsHammerLingering])
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Radiant Armaments (Hammer)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.OctoberVoERelease),
+            .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Radiant Armaments (Hammer)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsHammer, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], "Radiant Armaments (Hammer)", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.December2025Balance),
         // Piercing Stance   
         new BuffOnActorDamageModifier(Mod_PiercingStance, PiercingStanceBuff, "Piercing Stance", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, SkillImages.PiercingStance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.OctoberVoERelease),
