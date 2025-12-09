@@ -21,13 +21,22 @@ internal static class ParagonHelper
         new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
         // Brisk Pacing 1
-        new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "7.5%", DamageSource.NoPets, 7.5, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "7.5%", DamageSource.NoPets, 7.5, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "5.0%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
         // Brisk Pacing 2
-        new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_BriskPacingTier2, BriskPacingTier2, "Brisk Pacing", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
         // Brisk Pacing 3
-        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "30%", DamageSource.NoPets, 30.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
     ];
 
