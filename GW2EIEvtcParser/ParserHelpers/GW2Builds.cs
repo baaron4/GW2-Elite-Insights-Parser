@@ -230,6 +230,8 @@ public static class GW2Builds
     public const ulong OctoberVoERelease = 190000;
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-11-18
     public const ulong November2025Balance = 191204;
+    // url to be added
+    public const ulong December2025Balance = 192224;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }
