@@ -634,6 +634,7 @@ internal static class ItemImages
     public const string FlaskOfPumpkinOil = "https://wiki.guildwars2.com/images/7/71/Flask_of_Pumpkin_Oil.png";
     public const string LumpOfCrystallizedNougat = "https://wiki.guildwars2.com/images/8/8f/Lump_of_Crystallized_Nougat.png";
     public const string DecadeEnhancement = "https://wiki.guildwars2.com/images/7/76/Decade_Enhancement_Station.png";
+    public const string SnowDiamondOrnament = "https://render.guildwars2.com/file/DE210AD99255070E7638763C4EF9E8D162E42FB9/3734078.png";
     #endregion Utility
     #region Writ
     public const string WritOfBasicStrength = "https://wiki.guildwars2.com/images/7/7e/Writ_of_Basic_Strength.png";

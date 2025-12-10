@@ -69,7 +69,7 @@ internal static class RevenantHelper
         new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
             .UsingSrcBaseSpecChecker(Spec.Revenant)
             .UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
-        new EffectCastFinder(BlitzMinesDrop, EffectGUIDs.RevenantSpearBlitzMines1)
+        new EffectCastFinder(BlitzMinesDrop, EffectGUIDs.RevenantSpearAbyssalBlitz1)
             .UsingSrcBaseSpecChecker(Spec.Revenant),
         new EffectCastFinder(BlitzMines, EffectGUIDs.RevenantSpearBlitzMinesDetonation1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)

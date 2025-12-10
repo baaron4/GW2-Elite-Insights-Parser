@@ -281,7 +281,7 @@ public static class EffectGUIDs
     public static readonly GUID RevenantDropTheHammer = new("A4311C8684668348B427FA0162992E6C");
     public static readonly GUID RevenantSpearAbyssalBlitz1 = new("25908EB455863D43AE70FB3F4A22D6E4"); // Duration 500 - Black smoke
     public static readonly GUID RevenantSpearAbyssalBlitz2 = new("EA6D96295971F34094FB70A765204A02"); // Duration 0
-    public static readonly GUID RevenantSpearBlitzMines1 = new("0E5D42F70AF65E4ABBB7EE94C3D5BD1C"); // Infinite duration - Mine spawn
+    public static readonly GUID RevenantSpearBlitzMines1 = new("0E5D42F70AF65E4ABBB7EE94C3D5BD1C"); // Infinite duration - Mine spawn // Collides with Warclaw dash
     public static readonly GUID RevenantSpearBlitzMines2 = new("834EE816C77EFD4C99C001D9BAE6DDD7"); // Infinite duration - Mine
     public static readonly GUID RevenantSpearBlitzMinesDetonation1 = new("40C9F5FE5BD3BD449B5E48DF1E5FD348"); // Duration 0 - Mine detonation
     public static readonly GUID RevenantSpearBlitzMinesDetonation2 = new("1B3ACEE36F61DE42AB1C24BD33B5B5AD"); // Duration 0 - Mine detonation
