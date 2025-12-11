@@ -63,6 +63,7 @@ internal static class UtilityBuffs
         new Buff("Lump of Crystallized Nougat", LumpOfCrystallizedNougat, Source.Item, BuffClassification.Enhancement, ItemImages.LumpOfCrystallizedNougat),
         new Buff("Decade Enhancement", DecadeEnhancement, Source.Item, BuffClassification.Enhancement, ItemImages.DecadeEnhancement),
         new Buff("Sharpening Golem", SharpeningGolem, Source.Item, BuffClassification.Enhancement, ItemImages.NourishmentEffect),
+        new Buff("Snow Diamond Ornament", SnowDiamondOrnament, Source.Item, BuffClassification.Enhancement, ItemImages.SnowDiamondOrnament),
     ];
 
     internal static readonly IReadOnlyList<Buff> OtherConsumables =
