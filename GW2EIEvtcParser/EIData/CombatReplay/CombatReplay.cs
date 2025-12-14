@@ -514,7 +514,7 @@ public class CombatReplay
     internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
-            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.IsNPC);
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.GetFinalMaster().IsNPC);
         decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
     #endregion DEBUG MISSILES

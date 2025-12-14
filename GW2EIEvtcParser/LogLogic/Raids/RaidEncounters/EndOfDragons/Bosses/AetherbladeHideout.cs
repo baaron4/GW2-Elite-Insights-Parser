@@ -524,6 +524,12 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         // Toxic Orb
         var toxicOrbs = log.CombatData.GetMissileEventsBySkillID(ToxicOrb);
         environmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
+
+        // Toxic Bullets
+        var toxicBullets = log.CombatData.GetMissileEventsBySkillID(ToxicBulletCM);
+        environmentDecorations.AddNonHomingMissiles(log, toxicBullets, Colors.DarkRed, 0.18, 30);
+        toxicBullets = log.CombatData.GetMissileEventsBySkillIDs([ToxicBulletNMCM1, ToxicBulletNMCM2]);
+        environmentDecorations.AddNonHomingMissiles(log, toxicBullets, Colors.DarkRed, 0.3, 40);
     }
 
     private SingleActor? GetEchoOfScarletBriar(LogData logData)
