@@ -236,7 +236,7 @@ public class BuffsContainer
 
     internal AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, uint buffInstance)
     {
-        return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID, buffInstance);
+        return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID, buffInstance).EnglobingAgentItem;
     }
 
     // Non shareable buffs

@@ -16,7 +16,7 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
         {
             return base.CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
         }
-        if (dst.Spec == ParserHelper.Spec.Soulbeast && extension <= EssenceOfSpeed + ParserHelper.BuffSimulatorStackActiveDelayConstant)
+        if (IsSoulbeast(dst, time) && extension <= EssenceOfSpeed + ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
             if (GetIDs(log, buffID, extension).Count != 0)
             {

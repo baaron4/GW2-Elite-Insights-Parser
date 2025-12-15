@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Security.Cryptography;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
@@ -25,6 +26,15 @@ internal abstract class BuffSourceFinder
         _boonIDs = boonIDs;
     }
 
+    protected static bool IsSoulbeast(AgentItem agent, long time)
+    {
+        if (agent.EnglobedAgentItems.Count > 0)
+        {
+            return agent.EnglobedAgentItems.Any(x => x.Spec == ParserHelper.Spec.Soulbeast && x.InAwareTimes(time));
+        }
+        return agent.Spec == ParserHelper.Spec.Soulbeast;
+    }
+
     private IEnumerable<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
     {
         if (_extensionSkills == null)
@@ -41,7 +51,7 @@ internal abstract class BuffSourceFinder
 
     protected virtual Certainty CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        if (dst.Spec == ParserHelper.Spec.Soulbeast && Math.Abs(extension - EssenceOfSpeed) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
+        if (IsSoulbeast(dst, time) && Math.Abs(extension - EssenceOfSpeed) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
             if (GetIDs(log, buffID, extension).Count != 0)
             {
@@ -64,10 +74,10 @@ internal abstract class BuffSourceFinder
     {
         if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out var tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
-            var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
+            var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && !x.CreditedBy.Is(agent)).Select(x => x.CreditedBy));
             foreach (SingleActor tempest in tempests)
             {
-                if (magAuraApplications.Contains(tempest.AgentItem))
+                if (magAuraApplications.Any(x => tempest.AgentItem.Is(x) && x.InAwareTimes(tempest)))
                 {
                     return true;
                 }
@@ -95,7 +105,7 @@ internal abstract class BuffSourceFinder
         return res;
     }
 
-    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, Certainty essenceOfSpeedCheck, IEnumerable<AgentItem> impertialImpactAgents)
+    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, Certainty essenceOfSpeedCheck, IEnumerable<AgentItem> imperialImpactAgents)
     {
         // If uncertainty due to imbued melodies, return unknown
         if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
@@ -103,16 +113,16 @@ internal abstract class BuffSourceFinder
             return ParserHelper._unknownAgent;
         }
         // uncertainty due to essence of speed but not due to imperial impact
-        if (essenceOfSpeedCheck == Certainty.Uncertain && !impertialImpactAgents.Any())
+        if (essenceOfSpeedCheck == Certainty.Uncertain && !imperialImpactAgents.Any())
         {
             // the soulbeast
             return dst;
         }
         // uncertainty due to imperial impact but not due to essence of speed
-        if (essenceOfSpeedCheck == Certainty.NotApplicable && impertialImpactAgents.Count() == 1)
+        if (essenceOfSpeedCheck == Certainty.NotApplicable && imperialImpactAgents.Count() == 1)
         {
             // the vindicator
-            return impertialImpactAgents.First();
+            return imperialImpactAgents.First();
         }
         return ParserHelper._unknownAgent;
     }
@@ -125,7 +135,7 @@ internal abstract class BuffSourceFinder
         {
             if (buffInstance > 0)
             {
-                BuffApplyEvent? seedApply = log.CombatData.GetBuffDataByInstanceID(buffID, buffInstance).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
+                BuffApplyEvent? seedApply = log.CombatData.GetBuffDataByInstanceID(buffID, buffInstance).OfType<BuffApplyEvent>().LastOrDefault(x => x.Time <= time);
                 if (seedApply != null)
                 {
                     return seedApply.By;
