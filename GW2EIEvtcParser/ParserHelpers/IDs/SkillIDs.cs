@@ -140,6 +140,7 @@ public static class SkillIDs
     public const long Determined895 = 895;
     public const long PortalInteractCooldown = 901;
     public const long RighteousIndignation = 903;
+    public const long AuraOfRestoration = 909; // signet of restoration with written in stone
     public const long Poisoned = 910;
     public const long NourishmentGuildBanquetTable = 937;
     public const long SkaleVenomConsumable = 972;
@@ -259,6 +260,10 @@ public static class SkillIDs
     public const long RenewalOfFire = 5764;
     public const long ConeOfColdHealing = 5767;
     public const long Hurl = 5780;
+    public const long SignetOfAirBuff_WrittenInStone = 5796;
+    public const long SignetOfEarthBuff_WrittenInStone = 5797;
+    public const long SignetOfFireBuff_WrittenInStone = 5798;
+    public const long SignetOfWaterBuff_WrittenInStone = 5799;
     public const long MedKitSkill = 5802;
     public const long BombKit = 5812;
     public const long RifleTurretCast = 5818;
