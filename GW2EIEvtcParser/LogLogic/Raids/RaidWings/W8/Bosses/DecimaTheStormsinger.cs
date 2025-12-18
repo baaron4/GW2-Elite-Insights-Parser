@@ -607,10 +607,10 @@ internal class DecimaTheStormsinger : MountBalrior
                 break;
             case (int)TargetID.EnlightenedConduit:
                 AddThunderAoE(target, log, replay, target.AgentItem);
-                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuffCM, DecimaConduitWallBuff);
+                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuff, DecimaConduitWallBuff);
                 break;
             case (int)TargetID.EnlightenedConduitCM:
-                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuffCM1, DecimaConduitWallWarningBuff, DecimaConduitWallBuffCM);
+                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuffCM1, DecimaConduitWallWarningBuffCM, DecimaConduitWallBuffCM);
                 break;
             case (int)TargetID.EnlightenedConduitGadget:
                 AgentConnector gadgetEffectConnector;
