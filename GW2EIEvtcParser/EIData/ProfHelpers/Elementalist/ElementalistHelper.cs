@@ -108,15 +108,15 @@ internal static class ElementalistHelper
         // - Burning Rage
         new BuffOnFoeDamageModifier(Mod_BurningRage, Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.BurningRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        
+
         // Air
         // - Bolt to the Heart
         new DamageLogDamageModifier(Mod_BoltToTheHeart, "Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
-        
+
         // Earth
         // - Serrated Stones
         new BuffOnFoeDamageModifier(Mod_SerratedStones, Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.SerratedStones, DamageModifierMode.All),
-        
+
         // Water
         // - Aquamancer's Training
         new DamageLogDamageModifier(Mod_AquamancersTraining, "Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
@@ -184,7 +184,7 @@ internal static class ElementalistHelper
         // Skills
         // - Signet of Earth
         new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
-        
+
         // Earth
         // - Stone Flesh
         new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.Incoming, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneFlesh, DamageModifierMode.All),
@@ -202,13 +202,18 @@ internal static class ElementalistHelper
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
-    [       
+    [
         // Signets
         new Buff("Signet of Restoration", SignetOfRestoration, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfRestoration),
         new Buff("Signet of Air", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfAir),
         new Buff("Signet of Earth", SignetOfEarth, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfEarth),
         new Buff("Signet of Fire", SignetOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
         new Buff("Signet of Water", SignetOfWater, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
+        new Buff("Aura of Restoration", AuraOfRestoration, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfRestoration),
+        new Buff("Signet of Air (Written in Stone)", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfAir),
+        new Buff("Signet of Earth (Written in Stone)", SignetOfEarthBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfEarth),
+        new Buff("Signet of Fire (Written in Stone)", SignetOfFireBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
+        new Buff("Signet of Water (Written in Stone)", SignetOfWaterBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
         // Attunements
         new Buff("Fire Attunement", FireAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FireAttunement),
         new Buff("Water Attunement", WaterAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.WaterAttunement),
@@ -457,7 +462,7 @@ internal static class ElementalistHelper
         }
 
         // Etching: Volcano
-        var etchingVolcanoEffects = new []
+        var etchingVolcanoEffects = new[]
         {
             EffectGUIDs.ElementalistEtchingVolcanoTier0,
             EffectGUIDs.ElementalistEtchingVolcanoTier1,
