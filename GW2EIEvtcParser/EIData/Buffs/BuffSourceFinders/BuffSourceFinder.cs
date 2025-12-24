@@ -28,11 +28,7 @@ internal abstract class BuffSourceFinder
 
     protected static bool IsSoulbeast(AgentItem agent, long time)
     {
-        if (agent.EnglobedAgentItems.Count > 0)
-        {
-            return agent.EnglobedAgentItems.Any(x => x.Spec == ParserHelper.Spec.Soulbeast && x.InAwareTimes(time));
-        }
-        return agent.Spec == ParserHelper.Spec.Soulbeast;
+        return agent.FindEnglobedAgentItem(time).Spec == ParserHelper.Spec.Soulbeast;
     }
 
     private IEnumerable<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
