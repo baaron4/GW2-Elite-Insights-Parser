@@ -210,7 +210,7 @@ internal static class ElementalistHelper
         new Buff("Signet of Fire", SignetOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
         new Buff("Signet of Water", SignetOfWater, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
         new Buff("Aura of Restoration", AuraOfRestoration, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfRestoration),
-        new Buff("Signet of Air (Written in Stone)", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfAir),
+        new Buff("Signet of Air (Written in Stone)", SignetOfAirBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfAir),
         new Buff("Signet of Earth (Written in Stone)", SignetOfEarthBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfEarth),
         new Buff("Signet of Fire (Written in Stone)", SignetOfFireBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
         new Buff("Signet of Water (Written in Stone)", SignetOfWaterBuff_WrittenInStone, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
