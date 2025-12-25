@@ -100,16 +100,22 @@ public sealed class ProgramHelper : IDisposable
     }
     public void ExecuteMemoryCheckTask()
     {
-        if (Settings.MemoryLimit == 0 && RunningMemoryCheck != null)
+        if (Settings.MemoryLimit < 0 && RunningMemoryCheck != null)
         {
             RunningMemoryCheck.Cancel();
             RunningMemoryCheck.Dispose();
             RunningMemoryCheck = null;
         }
 
-        if (Settings.MemoryLimit == 0 || RunningMemoryCheck != null)
+        if (Settings.MemoryLimit < 0 || RunningMemoryCheck != null)
         {
             return;
+        }
+
+        double memoryLimit = Settings.MemoryLimit;
+        if (memoryLimit == 0)
+        {
+            memoryLimit = (int)(GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024L * 1024L)) * 0.9;
         }
 
         RunningMemoryCheck = new CancellationTokenSource();// Prepare task
@@ -122,7 +128,7 @@ public sealed class ProgramHelper : IDisposable
                 await Task.Delay(500).ConfigureAwait(false);
                 //NOTE(Rennorb): cannot wait for GC here because this is just a task (not a thread) and we would potentially be blocking other things from happening.
                 proc.Refresh();
-                if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1024L * 1024L)
+                if (proc.PrivateMemorySize64 > Math.Max(memoryLimit, 100) * 1024L * 1024L)
                 {
                     Environment.Exit(2);
                 }

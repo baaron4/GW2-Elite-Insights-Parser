@@ -167,13 +167,13 @@ partial class SettingsForm
         // 
         NumericCustomTooShort.Location = new Point(170, 155);
         NumericCustomTooShort.Margin = new Padding(4, 3, 4, 3);
-        NumericCustomTooShort.Maximum = new decimal(new int[] { 86400000, 0, 0, 0 });
-        NumericCustomTooShort.Minimum = new decimal(new int[] { 2200, 0, 0, 0 });
+        NumericCustomTooShort.Maximum = 86400000;
+        NumericCustomTooShort.Minimum = ParserHelper.MinimumInCombatDuration;
         NumericCustomTooShort.Name = "NumericCustomTooShort";
         NumericCustomTooShort.Size = new Size(84, 23);
         NumericCustomTooShort.TabIndex = 15;
         NumericCustomTooShort.TextAlign = HorizontalAlignment.Right;
-        NumericCustomTooShort.Value = new decimal(new int[] { 2200, 0, 0, 0 });
+        NumericCustomTooShort.Value = ParserHelper.MinimumInCombatDuration;
         NumericCustomTooShort.ValueChanged += NumericCustomTooShortValueChanged;
         // 
         // LblCustomTooShort
@@ -190,13 +190,13 @@ partial class SettingsForm
         // 
         NumericCustomTooBig.Location = new Point(251, 183);
         NumericCustomTooBig.Margin = new Padding(4, 3, 4, 3);
-        NumericCustomTooBig.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-        NumericCustomTooBig.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
+        NumericCustomTooBig.Maximum = 10000;
+        NumericCustomTooBig.Minimum = ParserHelper.MinimumFileSizeMB;
         NumericCustomTooBig.Name = "NumericCustomTooBig";
         NumericCustomTooBig.Size = new Size(61, 23);
         NumericCustomTooBig.TabIndex = 15;
         NumericCustomTooBig.TextAlign = HorizontalAlignment.Right;
-        NumericCustomTooBig.Value = new decimal(new int[] { 400, 0, 0, 0 });
+        NumericCustomTooBig.Value = 400;
         NumericCustomTooBig.ValueChanged += NumericCustomTooBigValueChanged;
         // 
         // LblCustomTooBig
@@ -213,7 +213,8 @@ partial class SettingsForm
         // 
         NumericMemoryLimit.Location = new Point(246, 395);
         NumericMemoryLimit.Margin = new Padding(4, 3, 4, 3);
-        NumericMemoryLimit.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
+        NumericMemoryLimit.Maximum = int.MaxValue;
+        NumericMemoryLimit.Minimum = -1;
         NumericMemoryLimit.Name = "NumericMemoryLimit";
         NumericMemoryLimit.Size = new Size(105, 23);
         NumericMemoryLimit.TabIndex = 15;
@@ -229,7 +230,7 @@ partial class SettingsForm
         LblMemoryLimit.Size = new Size(232, 15);
         LblMemoryLimit.TabIndex = 17;
         LblMemoryLimit.Text = "Kill Application if using more than (in MB):";
-        TlpSettings.SetToolTip(LblMemoryLimit, "Keep default value if unsure (0).");
+        TlpSettings.SetToolTip(LblMemoryLimit, "Keep default value if unsure (0, will default to 90% of total RAM). Use negative values for no limit.");
         // 
         // BtnCustomSaveLocSelect
         // 

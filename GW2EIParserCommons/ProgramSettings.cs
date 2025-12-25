@@ -62,7 +62,7 @@ public class ProgramSettings
         {
             count = Environment.ProcessorCount;
         }
-        if (MemoryLimit > 0)
+        if (MemoryLimit >= 0)
         {
             return count - 1;
         }
