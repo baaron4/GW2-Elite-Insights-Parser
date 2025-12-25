@@ -148,6 +148,7 @@ public static class CustomSettingsManager
             Anonymous = Properties.Settings.Default.Anonymous,
             SkipFailedTries = Properties.Settings.Default.SkipFailedTries,
             CustomTooShort = Properties.Settings.Default.CustomTooShort,
+            CustomTooBig = Properties.Settings.Default.CustomTooBig,
             DetailledWvW = Properties.Settings.Default.DetailledWvW,
             ParsePhases = Properties.Settings.Default.ParsePhases,
             ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay,

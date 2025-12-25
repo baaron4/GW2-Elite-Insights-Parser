@@ -23,6 +23,7 @@ public class ProgramSettings
     public bool Anonymous { get; set; } = false;
     public bool SkipFailedTries { get; set; } = false;
     public long CustomTooShort { get; set; } = ParserHelper.MinimumInCombatDuration;
+    public int CustomTooBig { get; set; } = 400;
     public bool DetailledWvW { get; set; } = false;
     public bool ParsePhases { get; set; } = true;
     public bool ParseCombatReplay { get; set; } = true;

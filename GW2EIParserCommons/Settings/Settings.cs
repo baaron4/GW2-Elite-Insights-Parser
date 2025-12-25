@@ -554,6 +554,22 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
         }
     }
 
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("400")]
+    public int CustomTooBig
+    {
+        get
+        {
+            return (int)this[nameof(CustomTooBig)];
+        }
+        set
+        {
+            this[nameof(CustomTooBig)] = value;
+        }
+    }
+
     [global::System.Configuration.UserScopedSettingAttribute()]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Configuration.DefaultSettingValueAttribute("0")]

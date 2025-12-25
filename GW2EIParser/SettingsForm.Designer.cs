@@ -1,4 +1,6 @@
-﻿namespace GW2EIParser;
+﻿using GW2EIEvtcParser;
+
+namespace GW2EIParser;
 
 partial class SettingsForm
 {
@@ -35,6 +37,8 @@ partial class SettingsForm
         TxtCustomSaveLocation = new TextBox();
         NumericCustomTooShort = new NumericUpDown();
         LblCustomTooShort = new Label();
+        NumericCustomTooBig = new NumericUpDown();
+        LblCustomTooBig = new Label();
         NumericMemoryLimit = new NumericUpDown();
         LblMemoryLimit = new Label();
         BtnCustomSaveLocSelect = new Button();
@@ -96,14 +100,15 @@ partial class SettingsForm
         TabUpload = new TabPage();
         DPSReportUserTokenLabel = new Label();
         TabAPI = new TabPage();
+        LblResetMap = new Label();
         LblResetSkill = new Label();
         LblResetTrait = new Label();
         LblResetSpec = new Label();
         BtnClose = new Button();
         BtnDumpSettings = new Button();
         BtnLoadSettings = new Button();
-        LblResetMap = new Label();
         ((System.ComponentModel.ISupportInitialize)NumericCustomTooShort).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)NumericCustomTooBig).BeginInit();
         ((System.ComponentModel.ISupportInitialize)NumericMemoryLimit).BeginInit();
         GroupWebhookSettings.SuspendLayout();
         TabControl.SuspendLayout();
@@ -127,7 +132,7 @@ partial class SettingsForm
         // 
         LblSettingsInfoMsg.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
         LblSettingsInfoMsg.AutoSize = true;
-        LblSettingsInfoMsg.Location = new Point(10, 442);
+        LblSettingsInfoMsg.Location = new Point(10, 472);
         LblSettingsInfoMsg.Margin = new Padding(4, 0, 4, 0);
         LblSettingsInfoMsg.Name = "LblSettingsInfoMsg";
         LblSettingsInfoMsg.Size = new Size(285, 15);
@@ -160,12 +165,12 @@ partial class SettingsForm
         // 
         // NumericCustomTooShort
         // 
-        NumericCustomTooShort.Location = new Point(182, 155);
+        NumericCustomTooShort.Location = new Point(170, 155);
         NumericCustomTooShort.Margin = new Padding(4, 3, 4, 3);
         NumericCustomTooShort.Maximum = new decimal(new int[] { 86400000, 0, 0, 0 });
         NumericCustomTooShort.Minimum = new decimal(new int[] { 2200, 0, 0, 0 });
         NumericCustomTooShort.Name = "NumericCustomTooShort";
-        NumericCustomTooShort.Size = new Size(105, 23);
+        NumericCustomTooShort.Size = new Size(84, 23);
         NumericCustomTooShort.TabIndex = 15;
         NumericCustomTooShort.TextAlign = HorizontalAlignment.Right;
         NumericCustomTooShort.Value = new decimal(new int[] { 2200, 0, 0, 0 });
@@ -181,9 +186,32 @@ partial class SettingsForm
         LblCustomTooShort.TabIndex = 17;
         LblCustomTooShort.Text = "Skip logs shorter than (in ms):";
         // 
+        // NumericCustomTooBig
+        // 
+        NumericCustomTooBig.Location = new Point(251, 183);
+        NumericCustomTooBig.Margin = new Padding(4, 3, 4, 3);
+        NumericCustomTooBig.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+        NumericCustomTooBig.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
+        NumericCustomTooBig.Name = "NumericCustomTooBig";
+        NumericCustomTooBig.Size = new Size(61, 23);
+        NumericCustomTooBig.TabIndex = 15;
+        NumericCustomTooBig.TextAlign = HorizontalAlignment.Right;
+        NumericCustomTooBig.Value = new decimal(new int[] { 400, 0, 0, 0 });
+        NumericCustomTooBig.ValueChanged += NumericCustomTooBigValueChanged;
+        // 
+        // LblCustomTooBig
+        // 
+        LblCustomTooBig.AutoSize = true;
+        LblCustomTooBig.Location = new Point(7, 185);
+        LblCustomTooBig.Margin = new Padding(4, 0, 4, 0);
+        LblCustomTooBig.Name = "LblCustomTooBig";
+        LblCustomTooBig.Size = new Size(247, 15);
+        LblCustomTooBig.TabIndex = 17;
+        LblCustomTooBig.Text = "Skip logs bigger than (in mb, uncompressed):";
+        // 
         // NumericMemoryLimit
         // 
-        NumericMemoryLimit.Location = new Point(252, 361);
+        NumericMemoryLimit.Location = new Point(246, 395);
         NumericMemoryLimit.Margin = new Padding(4, 3, 4, 3);
         NumericMemoryLimit.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
         NumericMemoryLimit.Name = "NumericMemoryLimit";
@@ -195,7 +223,7 @@ partial class SettingsForm
         // LblMemoryLimit
         // 
         LblMemoryLimit.AutoSize = true;
-        LblMemoryLimit.Location = new Point(18, 363);
+        LblMemoryLimit.Location = new Point(14, 397);
         LblMemoryLimit.Margin = new Padding(4, 0, 4, 0);
         LblMemoryLimit.Name = "LblMemoryLimit";
         LblMemoryLimit.Size = new Size(232, 15);
@@ -615,7 +643,7 @@ partial class SettingsForm
         TabControl.Multiline = true;
         TabControl.Name = "TabControl";
         TabControl.SelectedIndex = 0;
-        TabControl.Size = new Size(559, 425);
+        TabControl.Size = new Size(559, 455);
         TabControl.TabIndex = 47;
         // 
         // TabGeneral
@@ -629,7 +657,7 @@ partial class SettingsForm
         TabGeneral.Margin = new Padding(4, 3, 4, 3);
         TabGeneral.Name = "TabGeneral";
         TabGeneral.Padding = new Padding(4, 3, 4, 3);
-        TabGeneral.Size = new Size(551, 397);
+        TabGeneral.Size = new Size(551, 427);
         TabGeneral.TabIndex = 0;
         TabGeneral.Text = "General";
         TabGeneral.UseVisualStyleBackColor = true;
@@ -643,11 +671,13 @@ partial class SettingsForm
         GroupParsing.Controls.Add(ChkSkipFailedTries);
         GroupParsing.Controls.Add(NumericCustomTooShort);
         GroupParsing.Controls.Add(LblCustomTooShort);
-        GroupParsing.Location = new Point(239, 9);
+        GroupParsing.Controls.Add(NumericCustomTooBig);
+        GroupParsing.Controls.Add(LblCustomTooBig);
+        GroupParsing.Location = new Point(212, 9);
         GroupParsing.Margin = new Padding(4, 3, 4, 3);
         GroupParsing.Name = "GroupParsing";
         GroupParsing.Padding = new Padding(4, 3, 4, 3);
-        GroupParsing.Size = new Size(293, 185);
+        GroupParsing.Size = new Size(320, 225);
         GroupParsing.TabIndex = 41;
         GroupParsing.TabStop = false;
         GroupParsing.Text = "Parsing";
@@ -698,7 +728,7 @@ partial class SettingsForm
         GroupOutput.Controls.Add(BtnCustomSaveLocSelect);
         GroupOutput.Controls.Add(TxtCustomSaveLocation);
         GroupOutput.Controls.Add(LblCustomSaveLoc);
-        GroupOutput.Location = new Point(14, 201);
+        GroupOutput.Location = new Point(14, 240);
         GroupOutput.Margin = new Padding(4, 3, 4, 3);
         GroupOutput.Name = "GroupOutput";
         GroupOutput.Padding = new Padding(4, 3, 4, 3);
@@ -741,7 +771,7 @@ partial class SettingsForm
         GroupLog.Margin = new Padding(4, 3, 4, 3);
         GroupLog.Name = "GroupLog";
         GroupLog.Padding = new Padding(4, 3, 4, 3);
-        GroupLog.Size = new Size(218, 185);
+        GroupLog.Size = new Size(190, 225);
         GroupLog.TabIndex = 36;
         GroupLog.TabStop = false;
         GroupLog.Text = "Log";
@@ -755,7 +785,7 @@ partial class SettingsForm
         TabHTML.Margin = new Padding(4, 3, 4, 3);
         TabHTML.Name = "TabHTML";
         TabHTML.Padding = new Padding(4, 3, 4, 3);
-        TabHTML.Size = new Size(551, 397);
+        TabHTML.Size = new Size(551, 427);
         TabHTML.TabIndex = 1;
         TabHTML.Text = "HTML";
         TabHTML.UseVisualStyleBackColor = true;
@@ -839,7 +869,7 @@ partial class SettingsForm
         TabCSV.Location = new Point(4, 24);
         TabCSV.Margin = new Padding(4, 3, 4, 3);
         TabCSV.Name = "TabCSV";
-        TabCSV.Size = new Size(551, 397);
+        TabCSV.Size = new Size(551, 427);
         TabCSV.TabIndex = 2;
         TabCSV.Text = "CSV";
         TabCSV.UseVisualStyleBackColor = true;
@@ -852,7 +882,7 @@ partial class SettingsForm
         TabRaw.Location = new Point(4, 24);
         TabRaw.Margin = new Padding(4, 3, 4, 3);
         TabRaw.Name = "TabRaw";
-        TabRaw.Size = new Size(551, 397);
+        TabRaw.Size = new Size(551, 427);
         TabRaw.TabIndex = 3;
         TabRaw.Text = "Raw formats";
         TabRaw.UseVisualStyleBackColor = true;
@@ -901,7 +931,7 @@ partial class SettingsForm
         TabUpload.Location = new Point(4, 24);
         TabUpload.Margin = new Padding(4, 3, 4, 3);
         TabUpload.Name = "TabUpload";
-        TabUpload.Size = new Size(551, 397);
+        TabUpload.Size = new Size(551, 427);
         TabUpload.TabIndex = 4;
         TabUpload.Text = "Upload";
         TabUpload.UseVisualStyleBackColor = true;
@@ -929,7 +959,7 @@ partial class SettingsForm
         TabAPI.Location = new Point(4, 24);
         TabAPI.Margin = new Padding(4, 3, 4, 3);
         TabAPI.Name = "TabAPI";
-        TabAPI.Size = new Size(551, 397);
+        TabAPI.Size = new Size(551, 427);
         TabAPI.TabIndex = 5;
         TabAPI.Text = "Maintenance";
         TabAPI.UseVisualStyleBackColor = true;
@@ -940,7 +970,7 @@ partial class SettingsForm
         LblResetMap.Location = new Point(31, 192);
         LblResetMap.Margin = new Padding(4, 0, 4, 0);
         LblResetMap.Name = "LblResetMap";
-        LblResetMap.Size = new Size(324, 15);
+        LblResetMap.Size = new Size(332, 15);
         LblResetMap.TabIndex = 29;
         LblResetMap.Text = "Resets the local map list and loads all maps from the GW2 API";
         // 
@@ -977,7 +1007,7 @@ partial class SettingsForm
         // BtnClose
         // 
         BtnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnClose.Location = new Point(481, 465);
+        BtnClose.Location = new Point(481, 495);
         BtnClose.Margin = new Padding(4, 3, 4, 3);
         BtnClose.Name = "BtnClose";
         BtnClose.Size = new Size(98, 28);
@@ -989,7 +1019,7 @@ partial class SettingsForm
         // BtnDumpSettings
         // 
         BtnDumpSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnDumpSettings.Location = new Point(376, 465);
+        BtnDumpSettings.Location = new Point(376, 495);
         BtnDumpSettings.Margin = new Padding(4, 3, 4, 3);
         BtnDumpSettings.Name = "BtnDumpSettings";
         BtnDumpSettings.Size = new Size(98, 28);
@@ -1001,7 +1031,7 @@ partial class SettingsForm
         // BtnLoadSettings
         // 
         BtnLoadSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnLoadSettings.Location = new Point(271, 465);
+        BtnLoadSettings.Location = new Point(271, 495);
         BtnLoadSettings.Margin = new Padding(4, 3, 4, 3);
         BtnLoadSettings.Name = "BtnLoadSettings";
         BtnLoadSettings.Size = new Size(98, 28);
@@ -1015,7 +1045,7 @@ partial class SettingsForm
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         AutoScroll = true;
-        ClientSize = new Size(587, 507);
+        ClientSize = new Size(587, 537);
         Controls.Add(BtnLoadSettings);
         Controls.Add(BtnDumpSettings);
         Controls.Add(BtnClose);
@@ -1030,6 +1060,7 @@ partial class SettingsForm
         FormClosing += SettingsFormFormClosing;
         VisibleChanged += SettingsFormLoad;
         ((System.ComponentModel.ISupportInitialize)NumericCustomTooShort).EndInit();
+        ((System.ComponentModel.ISupportInitialize)NumericCustomTooBig).EndInit();
         ((System.ComponentModel.ISupportInitialize)NumericMemoryLimit).EndInit();
         GroupWebhookSettings.ResumeLayout(false);
         GroupWebhookSettings.PerformLayout();
@@ -1082,6 +1113,8 @@ partial class SettingsForm
     private System.Windows.Forms.CheckBox ChkSingleThreaded;
     private System.Windows.Forms.Label LblCustomTooShort;
     private System.Windows.Forms.NumericUpDown NumericCustomTooShort;
+    private System.Windows.Forms.Label LblCustomTooBig;
+    private System.Windows.Forms.NumericUpDown NumericCustomTooBig;
     private System.Windows.Forms.Label LblMemoryLimit;
     private System.Windows.Forms.NumericUpDown NumericMemoryLimit;
     private System.Windows.Forms.CheckBox ChkCombatReplay;

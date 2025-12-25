@@ -70,6 +70,7 @@ public partial class SettingsForm : Form
         ChkDefaultOutputLoc.Checked = _programSettings.SaveAtOut;
         TxtCustomSaveLocation.Text = _programSettings.OutLocation;
         NumericCustomTooShort.Value = _programSettings.CustomTooShort;
+        NumericCustomTooBig.Value = _programSettings.CustomTooBig;
         NumericMemoryLimit.Value = _programSettings.MemoryLimit;
         ChkOutputHtml.Checked = _programSettings.SaveOutHTML;
         ChkOutputCsv.Checked = _programSettings.SaveOutCSV;
@@ -149,6 +150,12 @@ public partial class SettingsForm : Form
     {
         _programSettings.CustomTooShort = (long)NumericCustomTooShort.Value;
         Settings.Default.CustomTooShort = _programSettings.CustomTooShort;
+    }
+
+    private void NumericCustomTooBigValueChanged(object sender, EventArgs e)
+    {
+        _programSettings.CustomTooBig = (int)NumericCustomTooBig.Value;
+        Settings.Default.CustomTooBig = _programSettings.CustomTooBig;
     }
 
     private void NumericMemoryLimitValueChanged(object sender, EventArgs e)

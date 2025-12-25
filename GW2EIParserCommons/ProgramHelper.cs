@@ -307,6 +307,7 @@ public sealed class ProgramHelper : IDisposable
                                             Settings.ParseCombatReplay,
                                             Settings.ComputeDamageModifiers,
                                             Settings.CustomTooShort,
+                                            Settings.CustomTooBig,
                                             Settings.DetailledWvW),
                                         APIController);
 

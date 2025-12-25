@@ -89,11 +89,19 @@ public class EvtcParser
                 using Stream data = arch.Entries[0].Open();
                 using var ms = new MemoryStream();
                 data.CopyTo(ms);
+                if (ms.Length / (1024L * 1024L) > _parserSettings.TooBigLimit)
+                {
+                    throw new TooBigException(ms.Length / (1024L * 1024L), _parserSettings.TooBigLimit);
+                }
                 ms.Position = 0;
                 evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAcceleration);
             }
             else
             {
+                if (evtc.Length / (1024L * 1024L) > _parserSettings.TooBigLimit)
+                {
+                    throw new TooBigException(evtc.Length / (1024L * 1024L), _parserSettings.TooBigLimit);
+                }
                 evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAcceleration);
             }
             return evtcLog;

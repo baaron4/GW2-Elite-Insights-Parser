@@ -16,7 +16,7 @@ public static class TestHelper
         NamingStrategy = new CamelCaseNamingStrategy()
     };
     private static readonly Version Version = new(1, 0);
-    public static readonly EvtcParserSettings ParserSettings = new(false, false, true, true, true, 2200, true);
+    public static readonly EvtcParserSettings ParserSettings = new(false, false, true, true, true, 2200, 800, true);
     private static readonly HTMLSettings htmlSettings = new(false, false);
     private static readonly RawFormatSettings rawSettings = new(true);
     private static readonly CSVSettings csvSettings = new(",");

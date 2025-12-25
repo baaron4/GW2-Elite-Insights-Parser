@@ -37,6 +37,7 @@ public static class ParserHelper
     internal const long InchDistanceThreshold = 10;
 
     public const long MinimumInCombatDuration = 2200;
+    public const int MinimumFileSizeMB = 100;
 
     internal const int PhaseTimeLimit = 1000;
     internal const int BreakbarPhaseTimeBuildup = 2000;
