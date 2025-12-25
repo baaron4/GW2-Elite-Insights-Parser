@@ -70,7 +70,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
-                    .UsingAchievementEligibility().UsingEnable(x => x.LogData.IsCM),
+                    .UsingAchievementEligibility()
+                    .UsingEnable(x => x.LogData.IsCM),
             ]),
         ])
         );

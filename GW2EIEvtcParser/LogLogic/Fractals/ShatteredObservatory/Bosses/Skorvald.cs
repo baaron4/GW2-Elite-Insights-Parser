@@ -283,7 +283,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
@@ -518,7 +518,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
@@ -563,7 +563,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
@@ -574,7 +574,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }

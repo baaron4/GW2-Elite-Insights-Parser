@@ -200,7 +200,7 @@ internal static class LogLogicPhaseUtils
 
     internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
     {
-        if (log.LogData.Logic.IsInstance)
+        if (log.LogData.IsInstance)
         {
             return
             [

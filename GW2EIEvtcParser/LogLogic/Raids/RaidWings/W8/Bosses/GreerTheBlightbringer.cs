@@ -46,7 +46,8 @@ internal class GreerTheBlightbringer : MountBalrior
                 new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
                 new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
                 new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Eligibility: Guaranteed Plague Free", "Achiv Unplagued", 0)
-                    .UsingEnable(log => log.LogData.IsCM).UsingAchievementEligibility(),
+                    .UsingEnable(log => log.LogData.IsCM)
+                    .UsingAchievementEligibility(),
             ]),
             new PlayerDstHealthDamageHitMechanic(WaveOfCorruption, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new MechanicGroup([
@@ -328,7 +329,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
@@ -436,7 +437,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputePlayerCombatReplayActors(player, log, replay);
         }
@@ -472,7 +473,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
@@ -823,7 +824,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }

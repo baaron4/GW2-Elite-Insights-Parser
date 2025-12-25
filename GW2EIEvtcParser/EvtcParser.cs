@@ -1232,7 +1232,7 @@ public class EvtcParser
         }
 
         _logData = new LogData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
-        bool splitByEnterCombatEvents = _logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld;
+        bool splitByEnterCombatEvents = _logData.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld;
         if (splitByEnterCombatEvents || _agentData.GetAgentByType(AgentItem.AgentType.Player).Any(x => x.Regrouped.Count > 0))
         {
             var enterAndExitCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat);

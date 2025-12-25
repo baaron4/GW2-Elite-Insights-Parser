@@ -18,6 +18,9 @@ public class LogData
     public readonly LogLogic.LogLogic Logic;
 
     public bool IsInstance => Logic.IsInstance;
+    public bool AllowDuplicateMechanicConfigs => Logic.IsInstance;
+
+    internal bool IgnoreBaseCalls => Logic.IsInstance;
     public long LogEnd { get; private set; } = long.MaxValue;
     public readonly long LogStart = 0;
     public long LogDuration => LogEnd;

@@ -17,7 +17,8 @@ internal class SpiritRace : SpiritVale
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
-            new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(),
+            new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0)
+                .UsingAchievementEligibility(),
         ]);
     public SpiritRace(int triggerID) : base(triggerID)
     {
@@ -239,7 +240,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
@@ -247,7 +248,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
@@ -272,14 +273,14 @@ internal class SpiritRace : SpiritVale
     }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
     }
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }

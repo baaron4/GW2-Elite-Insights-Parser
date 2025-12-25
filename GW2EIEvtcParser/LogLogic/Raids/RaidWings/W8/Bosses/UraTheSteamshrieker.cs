@@ -27,7 +27,8 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
                 new PlayerDstHealthDamageHitMechanic([EruptionVent, SulfuricEruption], new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
-                    .UsingEnable(log => log.LogData.IsCM || log.LogData.IsLegendaryCM).UsingAchievementEligibility(),
+                    .UsingEnable(log => log.LogData.IsCM || log.LogData.IsLegendaryCM)
+                    .UsingAchievementEligibility(),
             ]),
             // Titanspawn Geysers
             new MechanicGroup([
@@ -379,7 +380,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
@@ -629,7 +630,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputePlayerCombatReplayActors(player, log, replay);
         }
@@ -682,7 +683,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
@@ -714,7 +715,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }

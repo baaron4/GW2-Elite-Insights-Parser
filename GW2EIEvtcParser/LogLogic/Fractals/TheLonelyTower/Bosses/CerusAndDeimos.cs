@@ -145,7 +145,7 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
@@ -179,7 +179,7 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (!log.LogData.IsInstance)
+        if (!log.LogData.IgnoreBaseCalls)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
