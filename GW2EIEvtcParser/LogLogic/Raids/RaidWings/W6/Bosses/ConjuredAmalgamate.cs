@@ -389,9 +389,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
             int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
             var targetablesL = GetTargetableTimes(log, leftArm, TargetID.CALeftArmAttackTarget, start, end);
             var targetablesR = GetTargetableTimes(log, rightArm, TargetID.CARightArmAttackTarget, start, end);
-            for (int i = 0; i < phases.Count; i++)
+            foreach (var phase in phases)
             {
-                PhaseData phase = phases[i];
                 var leftExists = targetablesL.Exists(x => phase.InInterval(x));
                 var rightExists = targetablesR.Exists(x => phase.InInterval(x));
                 if (phase.Name.Contains("Arm"))

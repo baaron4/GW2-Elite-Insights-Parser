@@ -664,7 +664,7 @@ partial class SingleActor
     public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs, long start, long end)
     {
         //TODO_PERF(Rennorb)
-        var result = new List<Segment>();
+        List<Segment> result = [];
         foreach (long id in buffIDs)
         {
             result.AddRange(GetBuffStatus(log, id, start, end));

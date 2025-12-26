@@ -50,7 +50,7 @@ internal class Adina : TheKeyOfAhdashim
     {
         return
         [
-            new DamageCastFinder(SeismicSuffering, SeismicSuffering), // Seismic Suffering
+            new DamageCastFinder(SeismicSuffering, SeismicSuffering),
         ];
     }
 

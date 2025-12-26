@@ -15,9 +15,7 @@ internal static class ConduitHelper
     [
         new BuffGainCastFinder(LegendaryEntityStanceSkill, LegendaryEntityStanceBuff),
         new BuffGainCastFinder(CosmicWisdomSkill, CosmicWisdomBuff)
-            .UsingChecker((evt, combatData, agentData, skillData) => {
-                return evt.AppliedDuration == 7000;
-            })
+            .UsingChecker((evt, combatData, agentData, skillData) => evt.AppliedDuration == 7000)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new DamageCastFinder(Mistfire, Mistfire) // TODO: check if there is an effect
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),

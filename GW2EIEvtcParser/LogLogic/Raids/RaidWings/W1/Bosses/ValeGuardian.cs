@@ -97,12 +97,12 @@ internal class ValeGuardian : SpiritVale
         };
     }
 
-    private static readonly List<TargetID> SplitGuardianIDs = new List<TargetID>
-    {
+    private static readonly List<TargetID> SplitGuardianIDs =
+    [
         TargetID.BlueGuardian,
         TargetID.GreenGuardian,
         TargetID.RedGuardian
-    };
+    ];
 
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor valeGuardian, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {

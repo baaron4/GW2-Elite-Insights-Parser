@@ -112,11 +112,11 @@ internal class Samarog : BastionOfThePenitent
         return [];
     }
 
-    private static readonly List<TargetID> RigomAndGuldhemIDs = new List<TargetID>
-    {
+    private static readonly List<TargetID> RigomAndGuldhemIDs =
+    [
         TargetID.Rigom,
         TargetID.Guldhem
-    };
+    ];
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
@@ -185,7 +185,7 @@ internal class Samarog : BastionOfThePenitent
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.Samarog, 0 },
             {TargetID.Rigom, 1 },
@@ -195,7 +195,8 @@ internal class Samarog : BastionOfThePenitent
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return [
+        return
+        [
             TargetID.SpearAggressionRevulsion
         ];
     }

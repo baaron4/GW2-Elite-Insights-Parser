@@ -92,7 +92,7 @@ public class BuffsContainer
             CatalystHelper.Buffs,
             EvokerHelper.Buffs,
         };
-        var currentBuffs = new List<Buff>();
+        List<Buff> currentBuffs = [];
         foreach (IReadOnlyList<Buff> buffs in AllBuffs)
         {
             currentBuffs.AddRange(buffs.Where(x => x.Available(combatData)));

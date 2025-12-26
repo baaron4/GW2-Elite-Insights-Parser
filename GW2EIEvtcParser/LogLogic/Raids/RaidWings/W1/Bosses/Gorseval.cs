@@ -58,10 +58,10 @@ internal class Gorseval : SpiritVale
         ];
     }
 
-    private static readonly List<TargetID> ChargedSoulIDs = new List<TargetID>
-    {
-        TargetID.ChargedSoul
-    };
+    private static readonly List<TargetID> ChargedSoulIDs = 
+    [
+        TargetID.ChargedSoul,
+    ];
 
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {

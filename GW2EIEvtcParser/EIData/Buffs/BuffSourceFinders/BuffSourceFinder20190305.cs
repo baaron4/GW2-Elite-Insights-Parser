@@ -8,8 +8,8 @@ internal class BuffSourceFinder20190305 : BuffSourceFinder20181211
     {
         DurationToIDs = new Dictionary<long, HashSet<long>>
         {
-            {3000, new HashSet<long> { TrueNatureDragon , SignetOfInspirationSkill , SandSquall } }, // SoI, Treated TN, SandSquall
-            {2000, new HashSet<long> { TrueNatureDragon } }, // TN
+            {3000, [TrueNatureDragon, SignetOfInspirationSkill, SandSquall] }, // SoI, Treated TN, SandSquall
+            {2000, [TrueNatureDragon] }, // TN
         };
     }
 }

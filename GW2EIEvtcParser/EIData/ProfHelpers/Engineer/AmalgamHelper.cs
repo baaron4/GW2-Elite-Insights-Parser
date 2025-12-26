@@ -44,7 +44,7 @@ internal static class AmalgamHelper
     [
         // Traits     
         new Buff("Willing Host", WillingHost, Source.Amalgam, BuffClassification.Other, TraitImages.WillingHost),
-        // Morth Skills
+        // Morph Skills
         new Buff("Berserker Strain", BerserkerStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolDemolish),
         new Buff("Titanic Strain", TitanicStrain, Source.Amalgam, BuffClassification.Other, SkillImages.OffensiveProtocolObliterate),
         new Buff("Rapacious Strain", RapaciousStrain, Source.Amalgam, BuffClassification.Other, SkillImages.DefensiveProtocolThorns),

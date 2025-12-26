@@ -204,7 +204,7 @@ public class MechanicData
         _presentMechanics!.Set(start, end, presentMechanics);
         _presentOnEnemyMechanics!.Set(start, end, presentOnEnemyMechanics);
         _presentOnFriendliesMechanics!.Set(start, end, presentOnFriendliesMechanics);
-        _enemyList!.Set(start, end, new List<SingleActor>(enemyHash));
+        _enemyList!.Set(start, end, [..enemyHash]);
     }
 
     public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)

@@ -252,7 +252,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         // first cast or fallback to regular offset (combat enter) for dark ai
         // old elemental ai will always end up with fallback due to idle time
         var start = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
-        var firstCast = combatData.Where(x => x.StartCasting() && x.SrcMatchesAgent(ai)).FirstOrDefault();
+        var firstCast = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(ai));
         if (firstCast != null)
         {
             return Math.Min(start, firstCast.Time);
@@ -365,10 +365,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     internal static PhaseData GetFightPhase(ParsedEvtcLog log, SingleActor ai, PhaseData parentPhase, string name)
     {
-        BuffApplyEvent? invul895Gain = log.CombatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem)
+        BuffApplyEvent? invul895Gain = log.CombatData
+            .GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem)
             .OfType<BuffApplyEvent>()
-            .Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess)
-            .FirstOrDefault();
+            .FirstOrDefault(x => x.AppliedDuration > Determined895DurationCheckForSuccess);
         long start = Math.Max(ai.FirstAware, parentPhase.Start);
         long end = invul895Gain != null ? Math.Min(invul895Gain.Time + ServerDelayConstant, parentPhase.End) : parentPhase.End;
         var fightPhase = new SubPhasePhaseData(start, end, name);
@@ -443,7 +443,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             case 1:
             case 2:
                 var ai = Targets[0];
-                BuffApplyEvent? invul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess).FirstOrDefault();
+                BuffApplyEvent? invul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.AppliedDuration > Determined895DurationCheckForSuccess);
                 if (invul895Gain != null)
                 {
                     logData.SetSuccess(true, invul895Gain.Time);
@@ -455,7 +455,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 break;
             case 3:
                 var darkAi = Targets.First(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak));
-                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess).FirstOrDefault();
+                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.AppliedDuration > Determined895DurationCheckForSuccess);
                 if (darkInvul895Gain != null)
                 {
                     logData.SetSuccess(true, darkInvul895Gain.Time);
@@ -842,7 +842,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             foreach (EffectEvent effect in groundIndicators)
             {
                 (long, long) lifespan = (effect.Time, effect.Time + 6000);
-                GeographicalConnector position = effect.IsAroundDst ? new AgentConnector(effect.Dst) : (GeographicalConnector)new PositionConnector(effect.Position);
+                GeographicalConnector position = effect.IsAroundDst ? new AgentConnector(effect.Dst) : new PositionConnector(effect.Position);
                 AddMeteorIndicatorDecoration(lifespan, position, Colors.Orange, environmentDecorations);
                 environmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));
             }

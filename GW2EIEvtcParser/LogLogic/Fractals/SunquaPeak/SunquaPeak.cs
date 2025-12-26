@@ -16,11 +16,10 @@ internal abstract class SunquaPeak : FractalLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
-        AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
-        {
+        AddFractalScaleEvent(gw2Build, combatData, [
             ( GW2Builds.September2020SunquaPeakRelease, 100),
             ( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, 99),
-        });
+         ]);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 }

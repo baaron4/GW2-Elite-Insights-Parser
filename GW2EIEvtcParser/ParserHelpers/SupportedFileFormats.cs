@@ -43,10 +43,7 @@ public static class SupportedFileFormats
     /// <item>.evtc</item>
     /// </list>
     /// </summary>
-    private static readonly HashSet<string> _supportedFiles = new(_compressedFiles)
-    {
-        ".evtc"
-    };
+    private static readonly HashSet<string> _supportedFiles = [.._compressedFiles, ".evtc"];
 
     /// <summary>
     /// Supported file formats.

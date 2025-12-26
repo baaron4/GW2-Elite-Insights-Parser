@@ -92,7 +92,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOldLionsCourt, crMap);
         return crMap;
     }
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -436,16 +436,8 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                         foreach (EffectEvent effect in horizonWhite)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                            FormDecoration white;
-                            if (effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner)
-                            {
-                                white = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
-                            } 
-                            else
-                            {
-                                white = new DoughnutDecoration(440, 500, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
-                            }
-                            replay.Decorations.Add(white);
+                            (uint inner, uint outer) radius = ((uint, uint))(effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner ? (300, 340) : (440, 500));
+                            replay.Decorations.Add(new DoughnutDecoration(radius.inner, radius.outer, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)));
                         }
                     }
                 }
@@ -734,7 +726,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         {
             long start = bae.Time;
             var removal = removals.FirstOrDefault(x => x.Time > start);
-            long end = removal != null ? removal.Time : log.LogData.EvtcLogEnd;
+            long end = removal?.Time ?? log.LogData.EvtcLogEnd;
             replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
         }
     }

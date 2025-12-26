@@ -15,9 +15,9 @@ internal class BuffSourceFinder20181211 : BuffSourceFinder
         ];
         DurationToIDs = new Dictionary<long, HashSet<long>>
         {
-            {5000, new HashSet<long> { SignetOfInspirationSkill } }, // SoI
-            {3000, new HashSet<long> { TrueNatureDragon } }, // Treated TN
-            {2000, new HashSet<long> { TrueNatureDragon, SandSquall } }, // TN, SandSquall
+            {5000, [SignetOfInspirationSkill] }, // SoI
+            {3000, [TrueNatureDragon] }, // Treated TN
+            {2000, [TrueNatureDragon, SandSquall] }, // TN, SandSquall
         };
         EssenceOfSpeed = 2000;
         ImbuedMelodies = 2000;

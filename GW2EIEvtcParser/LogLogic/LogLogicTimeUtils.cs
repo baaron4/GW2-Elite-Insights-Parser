@@ -170,7 +170,7 @@ internal static class LogLogicTimeUtils
             ExitCombatEvent? exitCombat;
             if (enterCombat != null)
             {
-                exitCombat = combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time).LastOrDefault();
+                exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault(x => x.Time > enterCombat.Time);
             }
             else
             {

@@ -130,7 +130,7 @@ internal class SpiritValeInstance : SpiritVale
                     var firstOfPack = currentPack.First();
                     if (!(firstOfPack.FirstAware <= etherealBarrier.FirstAware && firstOfPack.LastAware >= etherealBarrier.FirstAware))
                     {
-                        currentPack = new List<SingleActor>();
+                        currentPack = [];
                         packedEtherealBarriers.Add(currentPack);
                     }
                     currentPack.Add(etherealBarrier);

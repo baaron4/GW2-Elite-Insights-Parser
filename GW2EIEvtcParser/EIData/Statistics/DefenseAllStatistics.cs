@@ -26,7 +26,7 @@ public class DefenseAllStatistics : DefensePerTargetStatistics
             }
             else
             {
-                DownCount = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent).Count();
+                DownCount = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Count(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent);
             }
         }
         else

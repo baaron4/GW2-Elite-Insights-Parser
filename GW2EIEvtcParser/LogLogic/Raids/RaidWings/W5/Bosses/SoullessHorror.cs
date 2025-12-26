@@ -107,7 +107,7 @@ internal class SoullessHorror : HallOfChains
         if (!logData.Success)
         {
             SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
-            BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
+            BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).LastOrDefault(x => x is BuffApplyEvent);
             if (buffOnDeath != null)
             {
                 if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
@@ -335,12 +335,10 @@ internal class SoullessHorror : HallOfChains
                 if (firstPos.X < -12000 || firstPos.X > -9250)
                 {
                     replay.Decorations.Add(new RectangleDecoration(240, 660, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
-                    break;
                 }
                 else if (firstPos.Y < -525 || firstPos.Y > 2275)
                 {
                     replay.Decorations.Add(new RectangleDecoration(645, 238, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
-                    break;
                 }
                 break;
 

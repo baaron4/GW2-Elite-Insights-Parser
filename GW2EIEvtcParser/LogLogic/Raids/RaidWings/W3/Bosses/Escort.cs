@@ -267,7 +267,8 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return [
+        return
+        [
             TargetID.MushroomCharger,
             TargetID.MushroomKing,
             TargetID.MushroomSpikeThrower,

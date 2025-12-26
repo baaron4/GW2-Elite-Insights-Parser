@@ -209,9 +209,9 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    private static readonly Vector2[] ProtectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
-    private static readonly Vector2[] StabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
-    private static readonly Vector2[] ResolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
+    private static readonly Vector2[] ProtectPyrePositions = [new(-8947, 14728), new(-10834, 12477)];
+    private static readonly Vector2[] StabilityPyrePositions = [new(-4356, 12076), new(-5889, 14723), new(-7851, 13550)];
+    private static readonly Vector2[] ResolutionRetaliationPyrePositions = [new(-8951, 9429), new(-5716, 9325), new(-7846, 10612)];
 
     internal static void FindPyres(ulong gw2Build, AgentData agentData, List<CombatItem> combatData)
     {
@@ -280,13 +280,13 @@ internal class Qadim : MythwrightGambit
         return [new DamageCastFinder(BurningCrucible, BurningCrucible)];
     }
 
-    private static readonly HashSet<TargetID> SecondaryTargetIDs = new HashSet<TargetID>
-    {
+    private static readonly HashSet<TargetID> SecondaryTargetIDs =
+    [
         TargetID.WyvernMatriarch,
         TargetID.WyvernPatriarch,
         TargetID.AncientInvokedHydra,
         TargetID.ApocalypseBringer,
-    };
+    ];
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
@@ -456,7 +456,8 @@ internal class Qadim : MythwrightGambit
     }
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
-        return [
+        return
+        [
             (int)TargetID.QadimPlatform
         ];
     }
@@ -1213,8 +1214,7 @@ internal class Qadim : MythwrightGambit
             (
                 // Initial position, all platforms tightly packed
 
-                startOffset, 0, new[]
-                {
+                startOffset, 0, [
                     (xLeftLeftLeft, yMid, zDefault, 0, 1f),
                     (xLeftLeft, yUpUp, zDefault, MathF.PI, 1f),
                     (xRightRight, yUpUp, zDefault, 0, 1f),
@@ -1227,12 +1227,11 @@ internal class Qadim : MythwrightGambit
                     (xRightRight, yMid, zDefault, 0, 1f),
                     (xRight, yDown, zDefault, MathF.PI, 1f),
                     (xLeft, yDown, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // Hydra phase, all platforms have a small gap between them
-                startOffset, 12000, new[]
-                {
+                startOffset, 12000, [
                     (xGapsLeftLeftLeft, yMid, zDefault, 0, 1f),
                     (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, 1f),
                     (xGapsRightRight, yGapsUpUp, zDefault, 0, 1f),
@@ -1245,12 +1244,11 @@ internal class Qadim : MythwrightGambit
                     (xGapsRightRight, yMid, zDefault, 0, 1f),
                     (xGapsRight, yGapsDown, zDefault, MathF.PI, 1f),
                     (xGapsLeft, yGapsDown, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // First Qadim phase, packed together except for pyre platforms
-                qadimPhase1Time, 10000, new[]
-                {
+                qadimPhase1Time, 10000, [
                     (xLeftLeftLeft, yMid, zDefault, 0, 1f),
                     (protectionPyre1.X, protectionPyre1.Y, zDefault, MathF.PI, 1f),
                     (xRightRight, yUpUp, zDefault, 0, 1f),
@@ -1263,12 +1261,11 @@ internal class Qadim : MythwrightGambit
                     (xRightRight, yMid, zDefault, 0, 1f),
                     (xRight, yDown, zDefault, MathF.PI, 1f),
                     (xLeft, yDown, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // Destroyer phase, packed together, bigger vertical gap in the middle, 4 platforms hidden
-                destroyerPhaseTime, 15000, new[]
-                {
+                destroyerPhaseTime, 15000, [
                     (xDestroyerLeftLeftLeft, yMid, zDefault, 0, 1f),
                     (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, hiddenOpacity),
                     (xGapsRightRight, yGapsUpUp, zDefault, 0, hiddenOpacity),
@@ -1281,12 +1278,11 @@ internal class Qadim : MythwrightGambit
                     (xDestroyerRightRight, yMid, zDefault, 0, 1f),
                     (xDestroyerRight, yDown, zDefault, MathF.PI, 1f),
                     (xDestroyerLeft, yDown, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // Second Qadim phase
-                qadimPhase2Time, 10000, new[]
-                {
+                qadimPhase2Time, 10000, [
                     (protectionPyre2.X, protectionPyre2.Y, zDefault, 0, 1f),
                     (-8540, 14222, zDefault, MathF.PI, 1f),
                     (stabilityPyre2.X, stabilityPyre2.Y, zDefault, 0, 1f),
@@ -1299,13 +1295,12 @@ internal class Qadim : MythwrightGambit
                     (-6284, yMid, zDefault, 0, 1f),
                     (retaliationPyre2.X - 1931 / 2, retaliationPyre2.Y + 1672, zDefault, MathF.PI, 1f),
                     (-7807, 10613, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // TODO: Heights are not correct, they differ here, currently not important for the replay
                 // Wyvern phase
-                wyvernPhaseTime, 11000, new[]
-                {
+                wyvernPhaseTime, 11000, [
                     (protectionPyre2.X, protectionPyre2.Y, zDefault, 0f, hiddenOpacity),
                     (-9704, 15323, zDefault, MathF.PI, 1f),
                     (-7425, 15312, zDefault, 0, 1f),
@@ -1318,12 +1313,11 @@ internal class Qadim : MythwrightGambit
                     (-7106, 12619, zDefault, wyvernPhaseMiddleRotation, 1f),
                     (-5729, 9821, zDefault, MathF.PI, 1f),
                     (-6854, 9821, zDefault, 0, 1f),
-                }
+                ]
             ),
             (
                 // Jumping puzzle preparation, platforms hide
-                jumpingPuzzleTime - 500, 0, new[]
-                {
+                jumpingPuzzleTime - 500, 0, [
                     (protectionPyre2.X, protectionPyre2.Y, zDefault, 0, hiddenOpacity),
                     (-9704f, 15323f, zDefault, MathF.PI, hiddenOpacity),
                     (-7425, 15312, zDefault, 0, hiddenOpacity),
@@ -1336,12 +1330,11 @@ internal class Qadim : MythwrightGambit
                     (-7106, 12619, zDefault, wyvernPhaseMiddleRotation, hiddenOpacity),
                     (-5729, 9821, zDefault, MathF.PI, 1f),
                     (-6854, 9821, zDefault, 0, hiddenOpacity),
-                }
+                ]
             ),
             (
                 // Jumping puzzle, platforms move
-                jumpingPuzzleTime, jumpingPuzzleShuffleDuration - 1, new[]
-                {
+                jumpingPuzzleTime, jumpingPuzzleShuffleDuration - 1, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, hiddenOpacity),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, hiddenOpacity),
@@ -1354,12 +1347,11 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
-                }
+                ]
             ),
             (
                 // Jumping puzzle, platforms appear
-                jumpingPuzzleTime + jumpingPuzzleShuffleDuration - 1, 1, new[]
-                {
+                jumpingPuzzleTime + jumpingPuzzleShuffleDuration - 1, 1, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI, 1f),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, 1f),
@@ -1372,13 +1364,12 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
-                }
+                ]
             ),
             (
                 // Jumping puzzle appears, platforms rotate...
                 // Jumping puzzle platform breaks are not shown for now because their timing is rather tricky.
-                jumpingPuzzleTime + jumpingPuzzleShuffleDuration, jumpingPuzzleDuration, new[]
-                {
+                jumpingPuzzleTime + jumpingPuzzleShuffleDuration, jumpingPuzzleDuration, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0f, 1f),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
@@ -1391,12 +1382,11 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
-                }
+                ]
             ),
             (
                 // Final phase preparation.
-                finalPhaseTime - lastPhasePreparationDuration, lastPhasePreparationDuration, new[]
-                {
+                finalPhaseTime - lastPhasePreparationDuration, lastPhasePreparationDuration, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
@@ -1409,12 +1399,11 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
-                }
+                ]
             ),
             (
                 // Final phase.
-                finalPhaseTime, 0, new[]
-                {
+                finalPhaseTime, 0, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
@@ -1427,12 +1416,11 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
-                }
+                ]
             ),
             (
                 // Second to last platform is destroyed
-                finalPhaseTime, 7000, new[]
-                {
+                finalPhaseTime, 7000, [
                     (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, hiddenOpacity),
                     (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
                     (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
@@ -1445,7 +1433,7 @@ internal class Qadim : MythwrightGambit
                     (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
                     (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
-                }
+                ]
             ),
         ];
 

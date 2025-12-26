@@ -65,7 +65,7 @@ internal class BanditTrio : SalvationPass
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -75,7 +75,7 @@ internal class BanditTrio : SalvationPass
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return [ TargetID.Cage ];
     }
@@ -117,8 +117,8 @@ internal class BanditTrio : SalvationPass
             // Thrash mob start check
             var boxStart = new Vector2(-2200, -11300);
             var boxEnd = new Vector2(1000, -7200);
-            var trashMobsToCheck = new HashSet<TargetID>()
-            {
+            HashSet<TargetID> trashMobsToCheck =
+            [
                 TargetID.BanditAssassin,
                 TargetID.BanditAssassin2,
                 TargetID.BanditSapperTrio,
@@ -132,7 +132,7 @@ internal class BanditTrio : SalvationPass
                 TargetID.BanditCleric2,
                 TargetID.BanditBombardier,
                 TargetID.BanditSniper,
-            };
+            ];
             var banditPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
                 .Select(x => new PositionEvent(x, agentData));
             var banditsInBox = banditPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
@@ -178,15 +178,10 @@ internal class BanditTrio : SalvationPass
         }
         if (agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
         {
-            var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration);
-            if (movements.Any())
+            var firstMovement = combatData.GetMovementData(berg).First(x => x.Time > berg.FirstAware + MinimumInCombatDuration);
+            if (firstMovement != null && firstMovement.Time < 120000)
             {
-                MovementEvent firstMove = movements.First();
-                // two minutes
-                if (firstMove.Time < 120000)
-                {
-                    return LogData.LogStartStatus.Late;
-                }
+                return LogData.LogStartStatus.Late;
             }
         }
         return LogData.LogStartStatus.Normal;
@@ -333,7 +328,7 @@ internal class BanditTrio : SalvationPass
                             break;
                     }
                 }
-            break;
+                break;
             case (int)TargetID.Narella:
                 break;
             default:

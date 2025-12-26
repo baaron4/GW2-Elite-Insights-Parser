@@ -65,7 +65,7 @@ internal class Dhuum : HallOfChains
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU", "Picked up by Ender's Echo","Ender's Pick up", 3000),
                 new PlayerDstBuffRemoveMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0)
-                    .UsingChecker( (br,log) => !log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 150).Any()),
+                    .UsingChecker((br,log) => !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(x.Time - br.Time) <= 150)),
             ]),
             new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10)
                 .UsingChecker((bae, log) =>
@@ -341,22 +341,19 @@ internal class Dhuum : HallOfChains
         {
             return LogData.LogStartStatus.NoPreEvent;
         }
-        else
-        {
-            return base.GetLogStartStatus(combatData, agentData, logData);
-        }
+        return base.GetLogStartStatus(combatData, agentData, logData);
     }
 
-    private static readonly List<(Vector3 Position, int Index)> ReapersToGreen = new()
-    {
-        { (new(16897, 1225, -6215), 0) },
-        { (new(16853, 65, -6215), 1) },
-        { (new(15935, -614, -6215), 2) },
-        { (new(14830, -294, -6215), 3) },
-        { (new(14408, 764, -6215), 4) },
-        { (new(14929, 1762, -6215), 5) },
-        { (new(16062, 1991, -6215), 6) },
-    };
+    private static readonly List<(Vector3 Position, int Index)> ReapersToGreen =
+    [
+        (new(16897, 1225, -6215), 0),
+        (new(16853, 65, -6215), 1),
+        (new(15935, -614, -6215), 2),
+        (new(14830, -294, -6215), 3),
+        (new(14408, 764, -6215), 4),
+        (new(14929, 1762, -6215), 5),
+        (new(16062, 1991, -6215), 6),
+    ];
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -617,7 +614,7 @@ internal class Dhuum : HallOfChains
                 } 
                 else
                 {
-                    BuffEvent? greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                    BuffEvent? greenTaken = log.CombatData.GetBuffData(FracturedSpirit).FirstOrDefault(x => x is BuffApplyEvent);
                     if (greenTaken != null)
                     {
                         var greenStart = (int)greenTaken.Time - 5000;

@@ -119,7 +119,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileFireWywern,
     ];
 
-    private static readonly HashSet<int> JuvenilePetIDs = new HashSet<int>() { 
+    private static readonly HashSet<int> JuvenilePetIDs = new HashSet<int> { 
         (int)MinionID.JuvenileArmorFish,
         (int)MinionID.JuvenileBristleback,
         (int)MinionID.JuvenileFangedIboga,

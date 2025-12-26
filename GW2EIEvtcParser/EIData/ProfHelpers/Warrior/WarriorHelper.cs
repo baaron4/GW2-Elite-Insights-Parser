@@ -34,12 +34,15 @@ internal static class WarriorHelper
 
     private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
     {
-        return new HashSet<AgentItem>(combatData.GetBuffData(id).Where(x =>
+        return
+        [
+            ..combatData.GetBuffData(id).Where(x =>
                 x is BuffApplyEvent &&
                 x.CreditedBy.Type == AgentItem.AgentType.Gadget &&
                 x.CreditedBy.Master == null &&
                 playerAgents.Any(x.To.IsMaster)
-        ).Select(x => x.CreditedBy));
+            ).Select(x => x.CreditedBy)
+        ];
     }
 
 
@@ -233,7 +236,7 @@ internal static class WarriorHelper
         }
         else if (warriorsCount > 1)
         {
-            // land and under water cast ids
+            // land and underwater cast ids
             ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);
             ProfHelper.AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { BannerOfDefenseSkill, BannerOfDefenseSkillUW }, 1000);
             ProfHelper.AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { BannerOfDisciplineSkill, BannerOfDisciplineSkillUW }, 1000);
@@ -268,13 +271,6 @@ internal static class WarriorHelper
             return false;
         }
 
-        if (x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-        {
-            return true;
-        }
-        else
-        {
-            return log.CombatData.GetIncomingCrowdControlData(x.To).Any(cc => x.Time >= cc.Time && x.Time <= cc.Time + cc.Duration);
-        }
+        return x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None || log.CombatData.GetIncomingCrowdControlData(x.To).Any(cc => x.Time >= cc.Time && x.Time <= cc.Time + cc.Duration);
     }
 }

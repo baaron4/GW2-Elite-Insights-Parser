@@ -116,7 +116,7 @@ public abstract class PhaseData
             }
         } else
         {
-            _targets[target] = new PhaseTargetData()
+            _targets[target] = new PhaseTargetData
             {
                 Priority = priority,
             };

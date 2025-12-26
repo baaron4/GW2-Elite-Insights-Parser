@@ -63,7 +63,7 @@ internal class Slothasor : SalvationPass
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, LogData logData)
     {
         base.UpdatePlayersSpecAndGroup(players, combatData, logData);
-        var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).Where(x => x.Time <= logData.LogStart + 5000).FirstOrDefault();
+        var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).FirstOrDefault(x => x.Time <= logData.LogStart + 5000);
         if (slubTransformApplyAtStart != null)
         {
             var transformedPlayer = players.FirstOrDefault(x => x.AgentItem.Is(slubTransformApplyAtStart.To));

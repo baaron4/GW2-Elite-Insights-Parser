@@ -16,10 +16,7 @@ public class SkillItem
         {
             return (ArcDPSDodge20220307, ArcDPSGenericBreakbar20220307);
         }
-        else
-        {
-            return (ArcDPSDodge, ArcDPSGenericBreakbar);
-        }
+        return (ArcDPSDodge, ArcDPSGenericBreakbar);
     }
     private const string DefaultIcon = SkillImages.MonsterSkill;
 

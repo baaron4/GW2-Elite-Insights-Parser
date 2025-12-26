@@ -231,7 +231,7 @@ internal class StatueOfDarkness : HallOfChains
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.EyeOfFate, 0 },
             {TargetID.EyeOfJudgement, 0 },

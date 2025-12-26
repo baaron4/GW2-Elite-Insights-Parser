@@ -98,12 +98,12 @@ public static class DPSReportController
             url += "&detailedwvw=true";
         }
         url += "&generator=ei";
-        var urls = new List<string>()
-        {
+        List<string> urls =
+        [
             GetURL(MainEntryPoint + url, userToken),
             GetURL(SecondaryEntryPoint + url, userToken),
             GetURL(TertiaryEntryPoint + url, userToken)
-        };
+        ];
         return Shuffle(urls);
     }
     private static List<string> GetGetUploadsURLs(GetUploadsParameters parameters, string userToken)
@@ -125,23 +125,22 @@ public static class DPSReportController
         {
             url += "&unique=1";
         }
-        var urls = new List<string>()
-        {
+        List<string> urls =
+        [
             GetURL(MainEntryPoint + url, userToken),
             GetURL(SecondaryEntryPoint + url, userToken),
             GetURL(TertiaryEntryPoint + url, userToken)
-        };
+        ];
         return Shuffle(urls);
     }
     private static List<string> GetUserTokenURLs()
     {
-        string url = GetUserTokenURL;
-        var urls = new List<string>()
-        {
-            MainEntryPoint + url,
-            SecondaryEntryPoint + url,
-            TertiaryEntryPoint + url
-        };
+        List<string> urls =
+        [
+            MainEntryPoint + GetUserTokenURL,
+            SecondaryEntryPoint + GetUserTokenURL,
+            TertiaryEntryPoint + GetUserTokenURL,
+        ];
         return Shuffle(urls);
     }
     private static List<string> GetUploadMetadataURLs(string? id, string? permalink)
@@ -155,12 +154,12 @@ public static class DPSReportController
         {
             url += "?permalink=" + permalink;
         }
-        var urls = new List<string>()
-        {
+        List<string> urls =
+        [
             MainEntryPoint + url,
             SecondaryEntryPoint + url,
             TertiaryEntryPoint + url
-        };
+        ];
         return Shuffle(urls);
     }
     private static List<string> GetJsonURLs(string? id, string? permalink)
@@ -174,12 +173,12 @@ public static class DPSReportController
         {
             url += "?permalink=" + permalink;
         }
-        var urls = new List<string>()
-        {
+        List<string> urls =
+        [
             MainEntryPoint + url,
             SecondaryEntryPoint + url,
             TertiaryEntryPoint + url
-        };
+        ];
         return Shuffle(urls);
     }
     ///////////////// APIs
@@ -211,15 +210,11 @@ public static class DPSReportController
     public static string GenerateUserToken(TraceHandler traceHandler)
     {
         DPSReportUserTokenResponse? responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", GetUserTokenURLs(), traceHandler);
-        if (responseItem != null)
-        {
-            return responseItem.UserToken;
-        }
-        return "";
+        return responseItem != null ? responseItem.UserToken : "";
     }
     public static DPSReportUploadObject? GetUploadMetaDataWithID(string id, TraceHandler traceHandler)
     {
-        if (id == null || id.Length == 0)
+        if (string.IsNullOrEmpty(id))
         {
             throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
         }
@@ -227,7 +222,7 @@ public static class DPSReportController
     }
     public static DPSReportUploadObject? GetUploadMetaDataWithPermalink(string permalink, TraceHandler traceHandler)
     {
-        if (permalink == null || permalink.Length == 0)
+        if (string.IsNullOrEmpty(permalink))
         {
             throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
         }
@@ -236,7 +231,7 @@ public static class DPSReportController
 
     public static T? GetJsonWithID<T>(string id, TraceHandler traceHandler)
     {
-        if (id == null || id.Length == 0)
+        if (string.IsNullOrEmpty(id))
         {
             throw new InvalidDataException("Missing ID for GetJson end point");
         }
@@ -244,7 +239,7 @@ public static class DPSReportController
     }
     public static T? GetJsonWithPermalink<T>(string permalink, TraceHandler traceHandler)
     {
-        if (permalink == null || permalink.Length == 0)
+        if (string.IsNullOrEmpty(permalink))
         {
             throw new InvalidDataException("Missing Permalink for GetJson end point");
         }
@@ -290,7 +285,7 @@ public static class DPSReportController
                 catch (AggregateException agg)
                 {
                     traceHandler(requestName + " tentative failed");
-                    traceHandler("Main reasong: " + agg.Message);             
+                    traceHandler("Main reason: " + agg.Message);             
                     foreach (Exception e in agg.InnerExceptions)
                     {
                         traceHandler("Sub reason: " + e.Message);

@@ -67,7 +67,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             foreach (var cairn in cairns)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(cairn.AgentItem).FirstOrDefault();
-                var spawnProtectLost = log.CombatData.GetBuffRemoveAllDataByIDByDst(SkillIDs.SpawnProtection, cairn.AgentItem).FirstOrDefault();
+                var spawnProtectLost = log.CombatData.GetBuffRemoveAllDataByIDByDst(SpawnProtection, cairn.AgentItem).FirstOrDefault();
                 bool hasEnteredCombat = enterCombat != null || spawnProtectLost != null;
                 if (!hasEnteredCombat && !log.CombatData.GetDamageTakenData(cairn.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
                 {
@@ -115,7 +115,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
                 var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
-                var greenApplies = log.CombatData.GetBuffApplyData(SkillIDs.GreenTeleport);
+                var greenApplies = log.CombatData.GetBuffApplyData(GreenTeleport);
                 foreach (AbstractBuffApplyEvent buffApplyEvent in greenApplies)
                 {
                     if (buffApplyEvent.Time >= encounterStartThreshold)

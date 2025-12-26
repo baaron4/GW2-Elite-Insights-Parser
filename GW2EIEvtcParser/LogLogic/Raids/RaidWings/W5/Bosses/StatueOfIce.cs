@@ -55,14 +55,7 @@ internal class StatueOfIce : HallOfChains
         if (logStartNPCUpdate != null)
         {
             CombatItem? initialCast = combatData.FirstOrDefault(x => x.StartCasting() && x.SkillID == BrokenKingFirstCast && x.SrcMatchesAgent(brokenKing));
-            if (initialCast != null)
-            {
-                startToUse = initialCast.Time;
-            }
-            else
-            {
-                startToUse = GetFirstDamageEventTime(logData, agentData, combatData, brokenKing);
-            }
+            startToUse = initialCast?.Time ?? GetFirstDamageEventTime(logData, agentData, combatData, brokenKing);
         }
         return startToUse;
     }

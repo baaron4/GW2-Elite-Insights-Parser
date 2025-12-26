@@ -24,7 +24,7 @@ internal class PlayerDstFirstHealthDamageHitMechanic : PlayerDstHealthDamageHitM
     {
         if (!_firstHits.TryGetValue(src, out var healthEvt))
         {
-            HealthDamageEvent? res = log.CombatData.GetDamageData(src).Where(x => MechanicIDs.Contains(x.SkillID) && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
+            HealthDamageEvent? res = log.CombatData.GetDamageData(src).FirstOrDefault(x => MechanicIDs.Contains(x.SkillID) && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log));
             _firstHits[src] = res;
             return res;
         }

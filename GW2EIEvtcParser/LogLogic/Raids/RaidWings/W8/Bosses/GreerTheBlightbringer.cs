@@ -168,31 +168,15 @@ internal class GreerTheBlightbringer : MountBalrior
 
     private static void SetPhaseNameForHP(PhaseData damageImmunityPhase, double hpPercent)
     {
-        if (hpPercent > 81)
+        damageImmunityPhase.Name = hpPercent switch
         {
-            damageImmunityPhase.Name = "100% - 80%";
-        }
-        else if (hpPercent > 66)
-        {
-            damageImmunityPhase.Name = "80% - 65%";
-        }
-        else if (hpPercent > 51)
-        {
-            damageImmunityPhase.Name = "65% - 50%";
-        }
-        else if (hpPercent > 36)
-        {
-            damageImmunityPhase.Name = "50% - 35%";
-        }
-        else if (hpPercent > 21 )
-        {
-            damageImmunityPhase.Name = "35% - 20%";
-        }
-        else
-        {
-            damageImmunityPhase.Name = "20% - 0%";
-        }
-
+            > 81 => "100% - 80%",
+            > 66 => "80% - 65%",
+            > 51 => "65% - 50%",
+            > 36 => "50% - 35%",
+            > 21 => "35% - 20%",
+            _ => "20% - 0%"
+        };
     }
 
     private static void AddMainTitansToPhase(PhaseData phase, SingleActor? greer, IEnumerable<SingleActor> greeAndReg, SingleActor? ereg, ParsedEvtcLog log)
@@ -293,14 +277,14 @@ internal class GreerTheBlightbringer : MountBalrior
                     {
                         phase.Name = "Proto Greer " + (++protoPhases);
                         phase.AddTargets(protoGreerlings, log);
-                        phases.Add(phase);
                     }
                     else
                     {
                         phase.Name = "Below 10% " + (++below10Phases);
                         AddMainTitansToPhase(phase, greer, greeAndReeg, ereg, log);
-                        phases.Add(phase);
                     }
+
+                    phases.Add(phase);
                     phase.OverrideEnd(Math.Min(phase.End, finalHPPhase.End));
                 }
             }

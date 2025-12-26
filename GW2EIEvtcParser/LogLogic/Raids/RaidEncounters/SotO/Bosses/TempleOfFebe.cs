@@ -190,7 +190,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             { TargetID.Cerus, 0 },
             { TargetID.EmbodimentOfDespair, 1 },
@@ -215,15 +215,15 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
         phases[0].AddTarget(cerus, log);
-        var embodimentIDs = new List<TargetID>
-        {
+        List<TargetID> embodimentIDs =
+        [
             TargetID.EmbodimentOfDespair,
             TargetID.EmbodimentOfEnvy,
             TargetID.EmbodimentOfGluttony,
             TargetID.EmbodimentOfMalice,
             TargetID.EmbodimentOfRage,
             TargetID.EmbodimentOfRegret,
-        };
+        ];
         var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIDs));
         var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
         phases[0].AddTargets(embodimentsKilled, log, PhaseData.TargetPriority.Blocking);
@@ -257,7 +257,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent? enragedSmash = cerus.GetCastEvents(log).Where(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM).FirstOrDefault();
+        CastEvent? enragedSmash = cerus.GetCastEvents(log).FirstOrDefault(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM);
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
@@ -286,7 +286,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         {
             var enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
             AgentItem cerus = GetCerusItem(agentData);
-            var spawnEvent = combatData.Where(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(cerus)).FirstOrDefault();
+            var spawnEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(cerus));
             if (spawnEvent != null && enterCombatTime >= spawnEvent.Time)
             {
                 return spawnEvent.Time;
@@ -298,15 +298,15 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var embodimentIDs = new List<TargetID>()
-        {
+        List<TargetID> embodimentIDs =
+        [
             TargetID.EmbodimentOfDespair,
             TargetID.EmbodimentOfEnvy,
             TargetID.EmbodimentOfGluttony,
             TargetID.EmbodimentOfMalice,
             TargetID.EmbodimentOfRage,
             TargetID.EmbodimentOfRegret,
-        };
+        ];
         AgentItem cerus = GetCerusItem(agentData);
         foreach (TargetID embodimentID in embodimentIDs)
         {
@@ -342,7 +342,6 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        int[] curEmbodiments = [1, 1, 1, 1, 1, 1];
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
@@ -831,6 +830,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                         // Fallback for security
                         var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                         var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
+                        replay.Decorations.Add(rectangle3);
                     }
                 }
             }

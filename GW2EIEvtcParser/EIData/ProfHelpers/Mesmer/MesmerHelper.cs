@@ -18,9 +18,7 @@ internal static class MesmerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
-            .UsingChecker((brae, combatData, agentData, skillData) => {
-                 return combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To);
-            })
+            .UsingChecker((brae, combatData, agentData, skillData) => combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To))
             .UsingNotAccurate() // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
             .UsingDisableWithEffectData(),
         new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight)
@@ -515,7 +513,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in dimensionalApertures)
             {
                 // The buff can be quite delayed
-                var buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                var buffApply = applies.FirstOrDefault(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100);
                 // Security
                 if (buffApply != null)
                 {

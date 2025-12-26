@@ -104,10 +104,7 @@ public class LogData
                 {
                     return new River((int)TargetID.DummyTarget);
                 }
-                else
-                {
-                    return new WvWLogic(id, parserSettings.DetailedWvWParse);
-                }
+                return new WvWLogic(id, parserSettings.DetailedWvWParse);
             case TargetID.Instance:
                 return new UnknownInstanceLogic(id);
         }
@@ -344,11 +341,8 @@ public class LogData
             {
                 mainPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault();
             }
-            if (mainPhase == null)
-            {
-                throw new InvalidOperationException("A log must have a main phase");
-            }
-            _phaseDataWithMetaData = mainPhase;
+
+            _phaseDataWithMetaData = mainPhase ?? throw new InvalidOperationException("A log must have a main phase");
         }
         return _phaseDataWithMetaData;
     }
@@ -373,7 +367,7 @@ public class LogData
             } 
             else if (!IsInstance)
             {
-                if (_phases.Where(x => x.Type == PhaseData.PhaseType.Encounter).Count() != 1)
+                if (_phases.Count(x => x.Type == PhaseData.PhaseType.Encounter) != 1)
                 {
                     throw new InvalidDataException("Boss logs must have only one encounter phase");
                 }

@@ -56,8 +56,8 @@ internal class CerusAndDeimos : LonelyTower
                         GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
                 return startToUse;
             }
-            CombatItem? initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
-                  agentData.GetAgent(x.SrcAgent, x.Time).Is(cerus) || agentData.GetAgent(x.SrcAgent, x.Time).Is(deimos))).FirstOrDefault();
+            CombatItem? initialDamageToPlayers = combatData.FirstOrDefault(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
+                agentData.GetAgent(x.SrcAgent, x.Time).Is(cerus) || agentData.GetAgent(x.SrcAgent, x.Time).Is(deimos)));
             long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(logData, agentData, combatData, cerus), GetFirstDamageEventTime(logData, agentData, combatData, deimos));
             if (initialDamageToPlayers != null)
             {

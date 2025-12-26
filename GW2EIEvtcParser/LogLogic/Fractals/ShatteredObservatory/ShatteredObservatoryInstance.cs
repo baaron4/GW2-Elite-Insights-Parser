@@ -92,7 +92,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                     var lastDamageTaken = skorvald.GetDamageTakenEvents(null, log).LastOrDefault(x => x.CreditedFrom.IsPlayer);
                     if (lastDamageTaken != null)
                     {
-                        var invul895Apply = log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.Determined895, skorvald.AgentItem).Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                        var invul895Apply = log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.Determined895, skorvald.AgentItem).LastOrDefault(x => x.Time > lastDamageTaken.Time - 500);
                         if (invul895Apply != null)
                         {
                             end = invul895Apply.Time;
