@@ -113,7 +113,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.MinisterLi, 0 },
             {TargetID.MinisterLiCM, 0 },
@@ -309,7 +309,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 // Check if any effect event exists before the current one within a 20 seconds time span
                 // This is to fix the beam duration incorrectly logged
                 // The first shot happens after 10 seconds, the following ones after 5 seconds
-                int correctedDuration = sniperBeamsCM.Where(x => x.Time > effect.Time - 20000 && x.Time != effect.Time && x.Time < effect.Time).Any() ? 5000 : 10000;
+                int correctedDuration = sniperBeamsCM.Any(x => x.Time > effect.Time - 20000 && x.Time != effect.Time && x.Time < effect.Time) ? 5000 : 10000;
                 // Correct the life span for the circle decoration
                 lifespan = (effect.Time, effect.Time + correctedDuration);
 

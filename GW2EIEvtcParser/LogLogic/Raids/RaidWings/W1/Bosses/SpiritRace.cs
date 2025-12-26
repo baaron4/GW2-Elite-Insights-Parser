@@ -95,7 +95,7 @@ internal class SpiritRace : SpiritVale
         {
             return LogData.LogStartStatus.Late;
         }
-        var position = combatData.GetMovementData(wallOfGhosts).Where(x => x is PositionEvent positionEvt).FirstOrDefault();
+        var position = combatData.GetMovementData(wallOfGhosts).FirstOrDefault(x => x is PositionEvent positionEvt);
         if (position != null)
         {
             var initialPosition = new Vector3(-5669.139f, -7814.589f, -1138.749f);
@@ -137,7 +137,7 @@ internal class SpiritRace : SpiritVale
             if (candidate.Type == AgentItem.AgentType.Gadget)
             {
                 needsDummy = false;
-                var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPointXY);
+                var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPointXY).ToList();
                 if (positions.Any(x => (x - position1).Length() < 10))
                 {
                     candidate.OverrideID(TargetID._EtherealBarrier1, agentData);
@@ -210,7 +210,7 @@ internal class SpiritRace : SpiritVale
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID._EtherealBarrier1, 0 },
             {TargetID._EtherealBarrier2, 1 },

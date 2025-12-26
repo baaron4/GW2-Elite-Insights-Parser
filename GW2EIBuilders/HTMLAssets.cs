@@ -15,13 +15,13 @@ public class HTMLAssets
 
     public HTMLAssets()
     {
-        var orderedScripts = new List<string>()
-        {
+        List<string> orderedScripts =
+        [
             Properties.Resources.global,
             Properties.Resources.mixins,
             Properties.Resources.functions,
             Properties.Resources.main_js,
-        };
+        ];
         string scriptContent = orderedScripts[0];
         for (int i = 1; i < orderedScripts.Count; i++)
         {
@@ -30,12 +30,12 @@ public class HTMLAssets
         List<string> templates = BuildTemplates();
         EIJavascriptCode = scriptContent.Replace("TEMPLATE_COMPILE", string.Join("\n", templates));
         //
-        var orderedCRScripts = new List<string>()
-        {
+        List<string> orderedCRScripts =
+        [
             Properties.Resources.animator,
             Properties.Resources.actors,
             Properties.Resources.decorations,
-        };
+        ];
         string scriptCRContent = orderedCRScripts[0];
         for (int i = 1; i < orderedCRScripts.Count; i++)
         {
@@ -154,8 +154,8 @@ public class HTMLAssets
 
     private static List<string> BuildCRTemplates()
     {
-        var templates = new List<string>
-        {
+        List<string> templates =
+        [
             Properties.Resources.tmplCombatReplayDamageData,
             Properties.Resources.tmplCombatReplayStatusData,
             Properties.Resources.tmplCombatReplayDamageTable,
@@ -171,7 +171,7 @@ public class HTMLAssets
             Properties.Resources.tmplCombatReplayExtraDecorations,
             Properties.Resources.tmplCombatReplayAnimationControl,
             Properties.Resources.tmplCombatReplayMechanicsList
-        };
+        ];
         var res = new List<string>();
         foreach (string template in templates)
         {
@@ -182,8 +182,8 @@ public class HTMLAssets
 
     private static List<string> BuildHealingExtensionTemplates()
     {
-        var templates = new List<string>
-        {
+        List<string> templates =
+        [
             Properties.Resources.tmplHealingExtensionView,
             Properties.Resources.tmplTargetPlayers,
             Properties.Resources.tmplIncomingHealingTable,
@@ -201,7 +201,7 @@ public class HTMLAssets
             Properties.Resources.tmplBarrierDistPlayer,
             Properties.Resources.tmplBarrierDistTable,
             Properties.Resources.tmplBarrierTakenDistPlayer
-        };
+        ];
         var res = new List<string>();
         foreach (string template in templates)
         {

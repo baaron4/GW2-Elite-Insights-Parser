@@ -309,18 +309,18 @@ internal static class WeaverHelper
 
     private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new()
     {
-        { FireMinorAttunement, new HashSet<long> { WaterFireAttunement, AirFireAttunement, EarthFireAttunement, DualFireAttunement }},
-        { WaterMinorAttunement, new HashSet<long> { FireWaterAttunement, AirWaterAttunement, EarthWaterAttunement, DualWaterAttunement }},
-        { AirMinorAttunement, new HashSet<long> { FireAirAttunement, WaterAirAttunement, EarthAirAttunement, DualAirAttunement }},
-        { EarthMinorAttunement, new HashSet<long> { FireEarthAttunement, WaterEarthAttunement, AirEarthAttunement, DualEarthAttunement }},
+        { FireMinorAttunement, [WaterFireAttunement, AirFireAttunement, EarthFireAttunement, DualFireAttunement] },
+        { WaterMinorAttunement, [FireWaterAttunement, AirWaterAttunement, EarthWaterAttunement, DualWaterAttunement] },
+        { AirMinorAttunement, [FireAirAttunement, WaterAirAttunement, EarthAirAttunement, DualAirAttunement] },
+        { EarthMinorAttunement, [FireEarthAttunement, WaterEarthAttunement, AirEarthAttunement, DualEarthAttunement] },
     };
 
     private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new()
     {
-        { FireMajorAttunement, new HashSet<long> { FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }},
-        { WaterMajorAttunement, new HashSet<long> { WaterFireAttunement, WaterAirAttunement, WaterEarthAttunement, DualWaterAttunement }},
-        { AirMajorAttunement, new HashSet<long> { AirFireAttunement, AirWaterAttunement, AirEarthAttunement, DualAirAttunement }},
-        { EarthMajorAttunement, new HashSet<long> { EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement }},
+        { FireMajorAttunement, [FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement] },
+        { WaterMajorAttunement, [WaterFireAttunement, WaterAirAttunement, WaterEarthAttunement, DualWaterAttunement] },
+        { AirMajorAttunement, [AirFireAttunement, AirWaterAttunement, AirEarthAttunement, DualAirAttunement] },
+        { EarthMajorAttunement, [EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement] },
     };
 
     private static long TranslateWeaverAttunement(IEnumerable<BuffApplyEvent> buffApplies)
@@ -332,13 +332,13 @@ internal static class WeaverHelper
         {
             throw new EIException("Too much buff apply events in TranslateWeaverAttunement");
         }*/
-        var duals = new HashSet<long>
-        {
+        HashSet<long> duals =
+        [
             DualFireAttunement,
             DualWaterAttunement,
             DualAirAttunement,
-            DualEarthAttunement
-        };
+            DualEarthAttunement,
+        ];
         HashSet<long>? major = null;
         HashSet<long>? minor = null;
         foreach (BuffApplyEvent c in buffApplies)
@@ -370,14 +370,14 @@ internal static class WeaverHelper
 
     public static List<BuffEvent> TransformWeaverAttunements(IReadOnlyList<BuffEvent> buffs, Dictionary<long, List<BuffEvent>> buffsByID, AgentItem a, SkillData skillData)
     {
-        var res = new List<BuffEvent>();
-        var attunements = new HashSet<long>
-        {
+        List<BuffEvent> res = [];
+        HashSet<long> attunements =
+        [
             FireAttunementBuff,
             WaterAttunementBuff,
             AirAttunementBuff,
             EarthAttunementBuff
-        };
+        ];
 
         // not useful for us
         /*const long fireAir = 45162;
@@ -387,8 +387,8 @@ internal static class WeaverHelper
         const long waterEarth = 42792;
         const long airEarth = 45683;*/
 
-        var weaverAttunements = new HashSet<long>
-        {
+        HashSet<long> weaverAttunements =
+        [
             FireMajorAttunement,
             FireMinorAttunement,
             WaterMajorAttunement,
@@ -409,9 +409,9 @@ internal static class WeaverHelper
             waterAir,
             waterEarth,
             airEarth,*/
-        };
+        ];
         // first we get rid of standard attunements
-        var toClean = new HashSet<long>();
+        HashSet<long> toClean = [];
         var attuns = buffs.Where(x => attunements.Contains(x.BuffID));
         foreach (BuffEvent c in attuns)
         {

@@ -183,11 +183,11 @@ public class Minions : Actor
 
     internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
     {
-        var minionsSegments = new List<List<Segment>>();
+        List<List<Segment>> minionsSegments = [];
         long logEnd = log.LogData.LogEnd;
         foreach (NPC minion in _minionList)
         {
-            var minionSegments = new List<Segment>();
+            List<Segment> minionSegments = [];
             long start = Math.Max(Math.Max(minion.FirstAware, Master.FirstAware), 0);
             // Find end
             long end = Math.Min(minion.LastAware, Master.LastAware);

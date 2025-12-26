@@ -369,15 +369,13 @@ internal class Xera : StrongholdOfTheFaithful
         {
             return LogData.LogStartStatus.NoPreEvent;
         }
-        else
-        {
-            return LogData.LogStartStatus.Normal;
-        }
+        return LogData.LogStartStatus.Normal;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
-        return [
+        return
+        [
             TargetID.Xera,
             TargetID.DummyTarget,
             TargetID.BloodstoneShardMainFight,

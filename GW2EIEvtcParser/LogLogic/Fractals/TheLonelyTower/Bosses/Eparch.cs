@@ -79,10 +79,7 @@ internal class Eparch : LonelyTower
         {
             return LogData.LogMode.CM;
         }
-        else
-        {
-            return LogData.LogMode.Normal;
-        }
+        return LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -163,12 +160,12 @@ internal class Eparch : LonelyTower
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + i / 2;
-                var ids = new List<TargetID>
-                {
+                List<TargetID> ids =
+                [
                     TargetID.IncarnationOfCruelty,
                     TargetID.IncarnationOfJudgement,
                     TargetID.KryptisRift,
-                };
+                ];
                 AddTargetsToPhase(phase, ids, log);
             }
             else
@@ -194,7 +191,7 @@ internal class Eparch : LonelyTower
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.EparchLonelyTower, 0},
             {TargetID.KryptisRift, 1},
@@ -442,7 +439,8 @@ internal class Eparch : LonelyTower
         IReadOnlyList<AnimatedCastEvent> eparchCasts = log.CombatData.GetAnimatedCastData(eparch.AgentItem);
 
         // globule gadgets as decorations
-        var globuleColors = new Dictionary<long, Color> {
+        var globuleColors = new Dictionary<long, Color>
+        {
             { RainOfDespair, Colors.Blue },
             { WaveOfEnvy, Colors.Green },
             { Inhale, Colors.Orange },

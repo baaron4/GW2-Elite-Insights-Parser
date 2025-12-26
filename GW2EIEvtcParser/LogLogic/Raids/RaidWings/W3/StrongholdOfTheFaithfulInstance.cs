@@ -121,7 +121,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     if (statue.FirstAware > prevStatue.LastAware)
                     {
                         packedStatus.Add(currentPack);
-                        currentPack = new List<SingleActor>();
+                        currentPack = [];
                     }
                     currentPack.Add(statue);
                 }

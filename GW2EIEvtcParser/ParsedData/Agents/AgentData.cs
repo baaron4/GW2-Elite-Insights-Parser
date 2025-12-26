@@ -255,7 +255,7 @@ public class AgentData
     private void Refresh()
     {
         _allAgentsList.SortByFirstAware();
-        var notEnglobingAgents = _allAgentsList.Where(x => !x.IsEnglobingAgent);
+        var notEnglobingAgents = _allAgentsList.Where(x => !x.IsEnglobingAgent).ToList();
         _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
         _allNPCsByID = notEnglobingAgents.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         _allGadgetsByID = notEnglobingAgents.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
@@ -277,11 +277,7 @@ public class AgentData
         {
             return list;
         }
-        else
-        {
-            return new List<AgentItem>();
-        }
-
+        return new List<AgentItem>();
     }
 
     public delegate long AgentGroupingTimeFetchet(AgentItem agentItem);
@@ -362,11 +358,7 @@ public class AgentData
     public bool TryGetFirstAgentItem(ChestID chestID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         agentItem = GetGadgetsByID(chestID).FirstOrDefault();
-        if (agentItem != null)
-        {
-            return true;
-        }
-        return false;
+        return agentItem != null;
     }
 
     /// <summary>
@@ -378,10 +370,6 @@ public class AgentData
     public bool TryGetFirstAgentItem(int speciesID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         agentItem = GetNPCsByID(speciesID).FirstOrDefault();
-        if (agentItem != null)
-        {
-            return true;
-        }
-        return false;
+        return agentItem != null;
     }
 }

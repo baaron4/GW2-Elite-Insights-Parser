@@ -336,7 +336,6 @@ internal static class EngineerHelper
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                 (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
                 (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
-                var connector = new PositionConnector(effect.Position);
                 // CC is only on first tick
                 AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 240, EffectImages.EffectThunderclap);
                 AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 240, EffectImages.EffectThunderclap);

@@ -99,8 +99,8 @@ internal class SalvationPassInstance : SalvationPass
         var boxStart = new Vector2(-2200, -11300);
         var boxEnd = new Vector2(1000, -7200);
         TargetID[] trashMobsToCheck =
-        {
-                TargetID.BanditAssassin,
+        [
+            TargetID.BanditAssassin,
                 TargetID.BanditAssassin2,
                 TargetID.BanditSapperTrio,
                 TargetID.BanditDeathsayer,
@@ -113,7 +113,7 @@ internal class SalvationPassInstance : SalvationPass
                 TargetID.BanditCleric2,
                 TargetID.BanditBombardier,
                 TargetID.BanditSniper,
-        };
+        ];
         var bandits = log.AgentData.GetNPCsByIDs(trashMobsToCheck);
         var banditPositions = new List<PositionEvent>();
         foreach (var bandit in bandits)
