@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
@@ -155,6 +156,7 @@ public class StatisticsHelper
     //Positions for group
     private List<ParametricPoint3D?>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
+    private List<(AgentItem p, GenericSegment<GUID> state)>? _commanderStates = null;
 
     /// <summary> Returns a list of center positions of the squad which are null in places where all players are dead or disconnected. One entry for each polling. </summary>
     public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)
@@ -168,6 +170,15 @@ public class StatisticsHelper
     {
         _stackCommanderPositions ??= CalculateStackCommanderPositions(log);
         return _stackCommanderPositions;
+    }
+
+    /// <summary> Returns a list of commander states for the squad. Segment contains timeframe during which agent was commander and the marker GUID 
+    /// List is ordered by state.Start. Segments should not overlap.
+    /// </summary>
+    public IReadOnlyList<(AgentItem p, GenericSegment<GUID> state)> GetCommanderStates(ParsedEvtcLog log)
+    {
+        _commanderStates ??= CalculateCommanderStates(log);
+        return _commanderStates;
     }
 
     /// <summary> Calculates a list of center positions of the squad which are null in places where all players are dead or disconnected. </summary>
@@ -276,6 +287,76 @@ public class StatisticsHelper
         }
 
         return commanderPositions;
+    }
+
+    private static List<(AgentItem p, GenericSegment<GUID> state)> CalculateCommanderStates(ParsedEvtcLog log)
+    {
+        var useGUIDs = log.LogMetadata.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
+        var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
+        var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
+        foreach (var player in relevantPlayers)
+        {
+            IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
+            var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
+            foreach (MarkerEvent markerEvent in markerEvents)
+            {
+                MarkerGUIDEvent marker = markerEvent.GUIDEvent!;
+                if (useGUIDs)
+                {
+                    if (marker.IsCommanderTag)
+                    {
+                        commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.LogData.EvtcLogEnd), marker.ContentGUID));
+                        if (markerEvent.EndNotSet)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (markerEvent.MarkerID != 0)
+                {
+                    commanderMarkerStates.Clear();
+                    commanderMarkerStates.Add(new(player.FirstAware, log.LogData.EvtcLogEnd, MarkerGUIDs.BlueCommanderTag));
+                    break;
+                }
+            }
+            if (commanderMarkerStates.Count > 0)
+            {
+                statesByPlayer[player] = commanderMarkerStates;
+            }
+        }
+        var states = new List<(AgentItem p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
+        foreach (var (player, state) in statesByPlayer)
+        {
+            foreach (var segment in state)
+            {
+                states.Add((player, segment));
+            }
+        }
+        states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
+
+        List<(AgentItem p, GenericSegment<GUID> state)> CommanderStates = new(states.Count);
+        var (lastPlayer, lastSegment) = states[0];
+        foreach (var (player, seg) in states.Skip(1))
+        {
+            if (lastPlayer.Is(player) && lastSegment.Value == seg.Value)
+            {
+                lastSegment.End = seg.End;
+            }
+            else
+            {
+                // Avoid overlaps, only one commander can be active at a given time
+                if (seg.Start < lastSegment.End)
+                {
+                    lastSegment.End = seg.Start;
+                }
+                CommanderStates.Add((lastPlayer, lastSegment));
+                lastPlayer = player;
+                lastSegment = seg;
+            }
+        }
+        CommanderStates.Add((lastPlayer, lastSegment));
+
+        return CommanderStates;
     }
 
 }
