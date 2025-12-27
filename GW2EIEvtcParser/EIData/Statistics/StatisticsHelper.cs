@@ -334,29 +334,36 @@ public class StatisticsHelper
         }
         states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
 
-        List<(AgentItem p, GenericSegment<GUID> state)> CommanderStates = new(states.Count);
-        var (lastPlayer, lastSegment) = states[0];
-        foreach (var (player, seg) in states.Skip(1))
+        List<(AgentItem p, GenericSegment<GUID> state)> commanderStates = new(states.Count);
+        if (states.Count == 0)
         {
-            if (lastPlayer.Is(player) && lastSegment.Value == seg.Value)
+            return commanderStates;
+        }
+        var (lastPlayer, lastSegment) = states[0];
+        // Add and Fuse
+        for (var i = 1; i < states.Count; i++)
+        {
+            var (player, seg) = states[i];
+            // Overlap protection, previous tag has priority
+            if (lastSegment.End > seg.Start)
+            {
+                seg = new(lastSegment.End, Math.Max(seg.End, lastSegment.End), seg.Value);
+            }
+            if (lastPlayer.Is(player) && lastSegment.Value == seg.Value && Math.Abs(lastSegment.End - seg.Start) < ParserHelper.ServerDelayConstant)
             {
                 lastSegment.End = seg.End;
             }
             else
             {
-                // Avoid overlaps, only one commander can be active at a given time
-                if (seg.Start < lastSegment.End)
-                {
-                    lastSegment.End = seg.Start;
-                }
-                CommanderStates.Add((lastPlayer, lastSegment));
+                commanderStates.Add((lastPlayer, lastSegment));
                 lastPlayer = player;
                 lastSegment = seg;
             }
         }
-        CommanderStates.Add((lastPlayer, lastSegment));
+        commanderStates.Add((lastPlayer, lastSegment));
+        commanderStates.RemoveAll(x => x.state.IsEmpty());
 
-        return CommanderStates;
+        return commanderStates;
     }
 
 }
