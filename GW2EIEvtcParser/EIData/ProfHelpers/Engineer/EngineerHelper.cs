@@ -135,25 +135,16 @@ internal static class EngineerHelper
             .UsingDstBaseSpecChecker(Spec.Engineer),
         new EffectCastFinder(DetonateThrowMineOrMineField, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.EngineerMineExplosion2)
-            .UsingChecker((effect, combatData, agentData, skillData) =>
-            {
-                // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
-                return MineDetonationInstantCastChecker(effect, combatData, false, [ EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 ]);
-            }),
+            // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
+            .UsingChecker((effect, combatData, agentData, skillData) => MineDetonationInstantCastChecker(effect, combatData, false, [ EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 ])),
         new EffectCastFinder(DetonateMineField, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.EngineerMineExplosion2)
-            .UsingChecker((effect, combatData, agentData, skillData) =>
-            {
-                // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
-                return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ]);
-            }),
+            // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
+            .UsingChecker((effect, combatData, agentData, skillData) => MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ])),
         new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.EngineerMineExplosion2)
-            .UsingChecker((effect, combatData, agentData, skillData) =>
-            {
-                // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
-                return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ]);
-            }),
+            // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
+            .UsingChecker((effect, combatData, agentData, skillData) => MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ])),
         new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
         new MissileCastFinder(AimAssistedRocket, AimAssistedRocket)
