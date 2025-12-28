@@ -498,7 +498,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 {
                     foreach (EffectEvent effect in deathZone)
                     {
-                        // Effect duration lasting longer than necessay
+                        // Effect duration lasting longer than necessary
                         // Depending on the mechanic the difference between logged duration and the damage effect is ~300ms to ~1120ms.
                         lifespan = effect.ComputeLifespanWithSecondaryEffects(log, [EffectGUIDs.DecimaEarthrendHit1, EffectGUIDs.DecimaSeismicCrashHit]);
                         var zone = new CircleDecoration(300, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));

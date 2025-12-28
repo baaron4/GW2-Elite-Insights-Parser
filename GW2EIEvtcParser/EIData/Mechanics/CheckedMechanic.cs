@@ -47,15 +47,9 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
     {
         if (stabPresent)
         {
-            return WithSubMechanic(stabMechanic, (time, actor, log) =>
-            {
-                return actor.HasBuff(log, SkillIDs.Stability, time - ParserHelper.ServerDelayConstant);
-            });
+            return WithSubMechanic(stabMechanic, (time, actor, log) => actor.HasBuff(log, SkillIDs.Stability, time - ParserHelper.ServerDelayConstant));
         }
-        return WithSubMechanic(stabMechanic, (time, actor, log) =>
-        {
-            return !actor.HasBuff(log, SkillIDs.Stability, time - ParserHelper.ServerDelayConstant);
-        });
+        return WithSubMechanic(stabMechanic, (time, actor, log) => !actor.HasBuff(log, SkillIDs.Stability, time - ParserHelper.ServerDelayConstant));
     }
 
     public override IReadOnlyList<Mechanic> GetMechanics()

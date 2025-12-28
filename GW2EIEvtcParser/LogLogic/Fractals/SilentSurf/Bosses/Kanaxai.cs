@@ -101,17 +101,18 @@ internal class Kanaxai : SilentSurf
         ];
     }
 
-    internal static readonly IReadOnlyList<TargetID> Aspects = [
-            TargetID.AspectOfTorment,
-            TargetID.AspectOfLethargy,
-            TargetID.AspectOfExposure,
-            TargetID.AspectOfDeath,
-            TargetID.AspectOfFear,
+    internal static readonly IReadOnlyList<TargetID> Aspects = 
+    [
+        TargetID.AspectOfTorment,
+        TargetID.AspectOfLethargy,
+        TargetID.AspectOfExposure,
+        TargetID.AspectOfDeath,
+        TargetID.AspectOfFear,
     ];
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
             {TargetID.AspectOfTorment, 1 },

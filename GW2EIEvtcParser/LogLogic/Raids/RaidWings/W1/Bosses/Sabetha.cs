@@ -87,12 +87,12 @@ internal class Sabetha : SpiritVale
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    private static readonly List<TargetID> BanditBossIDs = new List<TargetID>
-    {
+    private static readonly List<TargetID> BanditBossIDs =
+    [
         TargetID.Karde, // reverse order for mini boss phase detection
         TargetID.Knuckles,
         TargetID.Kernan,
-    };
+    ];
 
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabetha, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
@@ -108,7 +108,6 @@ internal class Sabetha : SpiritVale
             phase.AddParentPhase(encounterPhase);
             if (index % 2 == 0)
             {
-                int phaseID = index / 2;
                 phase.Name = "Unknown";
                 foreach (var miniBossID in BanditBossIDs)
                 {
@@ -123,15 +122,15 @@ internal class Sabetha : SpiritVale
                         break; // we found our main target
                     }
                 }
-                AddTargetsToPhase(phase, targets, BanditBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 int phaseID = (index + 1) / 2;
                 phase.Name = "Phase " + phaseID;
                 phase.AddTarget(sabetha, log);
-                AddTargetsToPhase(phase, targets, BanditBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
+
+            AddTargetsToPhase(phase, targets, BanditBossIDs, log, PhaseData.TargetPriority.NonBlocking);
         }
         return phases;
     }

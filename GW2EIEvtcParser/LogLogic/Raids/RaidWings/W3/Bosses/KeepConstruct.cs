@@ -188,15 +188,16 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    internal static readonly IReadOnlyList<TargetID> KCStatues = [
-            TargetID.Jessica,
-            TargetID.Olson,
-            TargetID.Engul,
-            TargetID.Faerla,
-            TargetID.Caulle,
-            TargetID.Henley,
-            TargetID.Galletta,
-            TargetID.Ianim
+    internal static readonly IReadOnlyList<TargetID> KCStatues = 
+    [
+        TargetID.Jessica,
+        TargetID.Olson,
+        TargetID.Engul,
+        TargetID.Faerla,
+        TargetID.Caulle,
+        TargetID.Henley,
+        TargetID.Galletta,
+        TargetID.Ianim,
     ];
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {

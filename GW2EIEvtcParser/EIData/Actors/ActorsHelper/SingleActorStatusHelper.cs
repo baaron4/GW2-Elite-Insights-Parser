@@ -209,7 +209,7 @@ partial class SingleActor
     #region BREAKBAR
     internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
     {
-        var status = new List<(long Time, BreakbarStateEvent evt)>();
+        List<(long Time, BreakbarStateEvent evt)> status = [];
         if (AgentItem.IsEnglobedAgent)
         {
             var firstEvent = combatData.GetBreakbarStateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
@@ -258,7 +258,7 @@ partial class SingleActor
         if (status.Count > 0)
         {
             var cur = status.Last();
-            if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
+            if (LastAware - cur.Time >= ServerDelayConstant)
             {
                 switch (cur.evt.State)
                 {

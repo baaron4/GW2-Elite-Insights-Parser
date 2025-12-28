@@ -191,7 +191,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.Ankka, 0 },
             {TargetID.ReanimatedAntipathy, 1 },

@@ -310,14 +310,14 @@ internal static class ElementalistHelper
 
     public static void RemoveDualBuffs(IReadOnlyList<BuffEvent> buffsPerDst, Dictionary<long, List<BuffEvent>> buffsByID, SkillData skillData)
     {
-        var duals = new HashSet<long>
-        {
+        HashSet<long> duals =
+        [
             DualFireAttunement,
             DualWaterAttunement,
             DualAirAttunement,
-            DualEarthAttunement,
-        };
-        var toClean = new HashSet<long>();
+            DualEarthAttunement
+        ];
+        HashSet<long> toClean = [];
         foreach (BuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
         {
             toClean.Add(c.BuffID);

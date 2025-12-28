@@ -62,7 +62,7 @@ public static class ParserHelper
         EncounterSpecific,
         FractalInstability,
         Unknown
-    };
+    }
 
     public enum Spec
     {
@@ -79,7 +79,7 @@ public static class ParserHelper
         //
         NPC, Gadget,
         Unknown
-    };
+    }
 
     [Flags]
     public enum DamageType
@@ -93,7 +93,7 @@ public static class ParserHelper
         StrikeAndLifeLeech = Strike | LifeLeech, // Common
         ConditionAndLifeLeech = Condition | LifeLeech, // Common
         StrikeAndConditionAndLifeLeech = Strike | Condition | LifeLeech, // Common
-    };
+    }
     public static string DamageTypeToString(this DamageType damageType)
     {
         if (damageType == DamageType.All)
@@ -260,7 +260,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Spec"/> Specialization / Profession given a <see cref="string"/> as reference.
     /// </summary>
-    private static IReadOnlyDictionary<string, Spec> ProfToSpecDictionary = new Dictionary<string, Spec>()
+    private static IReadOnlyDictionary<string, Spec> ProfToSpecDictionary = new Dictionary<string, Spec>
     {
         { "NPC", Spec.NPC },
         { "GDG", Spec.Gadget },
@@ -330,7 +330,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the base <see cref="Spec"/> Profession given a <see cref="Spec"/> Elite Specialization.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>()
+    private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>
     {
         { Spec.Galeshot, Spec.Ranger },
         { Spec.Untamed, Spec.Ranger },
@@ -395,61 +395,61 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Source"/> given a specific <see cref="Spec"/>.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>()
+    private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>
     {
-        { Spec.Galeshot, new List<Source> { Source.Ranger, Source.Galeshot } },
-        { Spec.Untamed, new List<Source> { Source.Ranger, Source.Untamed } },
-        { Spec.Soulbeast, new List<Source> { Source.Ranger, Source.Soulbeast } },
-        { Spec.Druid, new List<Source> { Source.Ranger, Source.Druid } },
-        { Spec.Ranger, new List<Source> { Source.Ranger } },
+        { Spec.Galeshot, [Source.Ranger, Source.Galeshot] },
+        { Spec.Untamed, [Source.Ranger, Source.Untamed] },
+        { Spec.Soulbeast, [Source.Ranger, Source.Soulbeast] },
+        { Spec.Druid, [Source.Ranger, Source.Druid] },
+        { Spec.Ranger, [Source.Ranger] },
         //
-        { Spec.Amalgam, new List<Source> { Source.Engineer, Source.Amalgam } },
-        { Spec.Mechanist, new List<Source> { Source.Engineer, Source.Mechanist } },
-        { Spec.Holosmith, new List<Source> { Source.Engineer, Source.Holosmith } },
-        { Spec.Scrapper, new List<Source> { Source.Engineer, Source.Scrapper } },
-        { Spec.Engineer, new List<Source> { Source.Engineer } },
+        { Spec.Amalgam, [Source.Engineer, Source.Amalgam] },
+        { Spec.Mechanist, [Source.Engineer, Source.Mechanist] },
+        { Spec.Holosmith, [Source.Engineer, Source.Holosmith] },
+        { Spec.Scrapper, [Source.Engineer, Source.Scrapper] },
+        { Spec.Engineer, [Source.Engineer] },
         //
-        { Spec.Antiquary, new List<Source> { Source.Thief, Source.Antiquary } },
-        { Spec.Specter, new List<Source> { Source.Thief, Source.Specter } },
-        { Spec.Deadeye, new List<Source> { Source.Thief, Source.Deadeye } },
-        { Spec.Daredevil, new List<Source> { Source.Thief, Source.Daredevil } },
-        { Spec.Thief, new List<Source> { Source.Thief } },
+        { Spec.Antiquary, [Source.Thief, Source.Antiquary] },
+        { Spec.Specter, [Source.Thief, Source.Specter] },
+        { Spec.Deadeye, [Source.Thief, Source.Deadeye] },
+        { Spec.Daredevil, [Source.Thief, Source.Daredevil] },
+        { Spec.Thief, [Source.Thief] },
         //
-        { Spec.Evoker, new List<Source> { Source.Elementalist, Source.Evoker } },
-        { Spec.Catalyst, new List<Source> { Source.Elementalist, Source.Catalyst } },
-        { Spec.Weaver, new List<Source> { Source.Elementalist, Source.Weaver } },
-        { Spec.Tempest, new List<Source> { Source.Elementalist, Source.Tempest } },
-        { Spec.Elementalist, new List<Source> { Source.Elementalist } },
+        { Spec.Evoker, [Source.Elementalist, Source.Evoker] },
+        { Spec.Catalyst, [Source.Elementalist, Source.Catalyst] },
+        { Spec.Weaver, [Source.Elementalist, Source.Weaver] },
+        { Spec.Tempest, [Source.Elementalist, Source.Tempest] },
+        { Spec.Elementalist, [Source.Elementalist] },
         //
-        { Spec.Troubadour, new List<Source> { Source.Mesmer, Source.Troubadour } },
-        { Spec.Virtuoso, new List<Source> { Source.Mesmer, Source.Virtuoso } },
-        { Spec.Mirage, new List<Source> { Source.Mesmer, Source.Mirage } },
-        { Spec.Chronomancer, new List<Source> { Source.Mesmer, Source.Chronomancer } },
-        { Spec.Mesmer, new List<Source> { Source.Mesmer } },
+        { Spec.Troubadour, [Source.Mesmer, Source.Troubadour] },
+        { Spec.Virtuoso, [Source.Mesmer, Source.Virtuoso] },
+        { Spec.Mirage, [Source.Mesmer, Source.Mirage] },
+        { Spec.Chronomancer, [Source.Mesmer, Source.Chronomancer] },
+        { Spec.Mesmer, [Source.Mesmer] },
         //
-        { Spec.Ritualist, new List<Source> { Source.Necromancer, Source.Ritualist } },
-        { Spec.Harbinger, new List<Source> { Source.Necromancer, Source.Harbinger } },
-        { Spec.Scourge, new List<Source> { Source.Necromancer, Source.Scourge } },
-        { Spec.Reaper, new List<Source> { Source.Necromancer, Source.Reaper } },
-        { Spec.Necromancer, new List<Source> { Source.Necromancer } },
+        { Spec.Ritualist, [Source.Necromancer, Source.Ritualist] },
+        { Spec.Harbinger, [Source.Necromancer, Source.Harbinger] },
+        { Spec.Scourge, [Source.Necromancer, Source.Scourge] },
+        { Spec.Reaper, [Source.Necromancer, Source.Reaper] },
+        { Spec.Necromancer, [Source.Necromancer] },
         //
-        { Spec.Paragon, new List<Source> { Source.Warrior, Source.Paragon } },
-        { Spec.Bladesworn, new List<Source> { Source.Warrior, Source.Bladesworn } },
-        { Spec.Spellbreaker, new List<Source> { Source.Warrior, Source.Spellbreaker } },
-        { Spec.Berserker, new List<Source> { Source.Warrior, Source.Berserker } },
-        { Spec.Warrior, new List<Source> { Source.Warrior } },
+        { Spec.Paragon, [Source.Warrior, Source.Paragon] },
+        { Spec.Bladesworn, [Source.Warrior, Source.Bladesworn] },
+        { Spec.Spellbreaker, [Source.Warrior, Source.Spellbreaker] },
+        { Spec.Berserker, [Source.Warrior, Source.Berserker] },
+        { Spec.Warrior, [Source.Warrior] },
         //
-        { Spec.Luminary, new List<Source> { Source.Guardian, Source.Luminary } },
-        { Spec.Willbender, new List<Source> { Source.Guardian, Source.Willbender } },
-        { Spec.Firebrand, new List<Source> { Source.Guardian, Source.Firebrand } },
-        { Spec.Dragonhunter, new List<Source> { Source.Guardian, Source.Dragonhunter } },
-        { Spec.Guardian, new List<Source> { Source.Guardian } },
+        { Spec.Luminary, [Source.Guardian, Source.Luminary] },
+        { Spec.Willbender, [Source.Guardian, Source.Willbender] },
+        { Spec.Firebrand, [Source.Guardian, Source.Firebrand] },
+        { Spec.Dragonhunter, [Source.Guardian, Source.Dragonhunter] },
+        { Spec.Guardian, [Source.Guardian] },
         //
-        { Spec.Conduit, new List<Source> { Source.Revenant, Source.Conduit } },
-        { Spec.Vindicator, new List<Source> { Source.Revenant, Source.Vindicator } },
-        { Spec.Renegade, new List<Source> { Source.Revenant, Source.Renegade } },
-        { Spec.Herald, new List<Source> { Source.Revenant, Source.Herald } },
-        { Spec.Revenant, new List<Source> { Source.Revenant } },
+        { Spec.Conduit, [Source.Revenant, Source.Conduit] },
+        { Spec.Vindicator, [Source.Revenant, Source.Vindicator] },
+        { Spec.Renegade, [Source.Revenant, Source.Renegade] },
+        { Spec.Herald, [Source.Revenant, Source.Herald] },
+        { Spec.Revenant, [Source.Revenant] },
     };
 
     public static IReadOnlyList<Source> SpecToSources(Spec spec)
@@ -493,7 +493,7 @@ public static class ParserHelper
         return ParserIcons.GenericEnemyIcon;
     }
 
-    public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesStrings { get; private set; } = new Dictionary<BuffAttribute, string>()
+    public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesStrings { get; private set; } = new Dictionary<BuffAttribute, string>
     {
         { BuffAttribute.Power, "Power" },
         { BuffAttribute.PowerSidekick, "Power (converted)" },
@@ -564,7 +564,7 @@ public static class ParserHelper
         { BuffAttribute.Unknown, "Unknown" },
     };
 
-    public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesPercent { get; private set; } = new Dictionary<BuffAttribute, string>()
+    public static IReadOnlyDictionary<BuffAttribute, string> BuffAttributesPercent { get; private set; } = new Dictionary<BuffAttribute, string>
     {
         { BuffAttribute.FlatOutgoing, "%" },
         { BuffAttribute.PhysOutgoing, "%" },

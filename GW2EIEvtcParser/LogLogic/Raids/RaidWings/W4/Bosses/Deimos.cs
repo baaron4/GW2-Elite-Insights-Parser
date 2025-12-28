@@ -211,7 +211,7 @@ internal class Deimos : BastionOfThePenitent
             HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10StartTime && playerAgents.Any(x.From.IsMasterOrSelf) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
-                // This means Deimos received damage after becoming non attackable, that means it did not die
+                // This means Deimos received damage after becoming non-attackable, that means it did not die
                 HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10StartTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
                 if (friendlyDamageToDeimos != null || !AtLeastOnePlayerAlive(combatData, logData, notAttackableEvent.Time, playerAgents))
                 {
@@ -421,10 +421,7 @@ internal class Deimos : BastionOfThePenitent
         {
             return LogData.LogStartStatus.NoPreEvent;
         }
-        else
-        {
-            return LogData.LogStartStatus.Normal;
-        }
+        return LogData.LogStartStatus.Normal;
     }
 
     private static long GetMainFightStart(ParsedEvtcLog log, AgentItem deimos, long start)

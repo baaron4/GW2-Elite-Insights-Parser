@@ -28,8 +28,8 @@ public readonly struct GUID : IEquatable<GUID>
     }
 
 
-    static readonly byte[]  InverseHexLookup = new byte[128]
-    {
+    static readonly byte[]  InverseHexLookup =
+    [
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -38,7 +38,7 @@ public readonly struct GUID : IEquatable<GUID>
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 10, 11, 12, 13, 14, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0,
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
+    ];
 
     public unsafe GUID(ReadOnlySpan<char> hex)
     {

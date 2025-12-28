@@ -265,7 +265,7 @@ internal class Skorvald : ShatteredObservatory
         HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
         if (lastDamageTaken != null)
         {
-            var invul895Apply = combatData.GetBuffApplyDataByIDByDst(Determined895, skorvald.AgentItem).Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+            var invul895Apply = combatData.GetBuffApplyDataByIDByDst(Determined895, skorvald.AgentItem).LastOrDefault(x => x.Time > lastDamageTaken.Time - 500);
             if (invul895Apply != null)
             {
                 logData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));

@@ -338,14 +338,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 HealthDamageEvent? lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                 if (lastDamageEvent != null)
                 {
-                    if (logData.Success)
-                    {
-                        logData.SetSuccess(true, Math.Min(lastDamageEvent.Time, logData.LogEnd));
-                    }
-                    else
-                    {
-                        logData.SetSuccess(true, lastDamageEvent.Time);
-                    }
+                    logData.SetSuccess(true, logData.Success ? Math.Min(lastDamageEvent.Time, logData.LogEnd) : lastDamageEvent.Time);
                 }
             }
         }

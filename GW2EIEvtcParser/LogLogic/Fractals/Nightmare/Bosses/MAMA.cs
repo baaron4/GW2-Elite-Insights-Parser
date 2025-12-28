@@ -136,7 +136,7 @@ internal class MAMA : Nightmare
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new Dictionary<TargetID, int>
         {
             {TargetID.MAMA, 0 },
             {TargetID.GreenKnight, 1 },
@@ -153,13 +153,12 @@ internal class MAMA : Nightmare
         return trashIDs;
     }
 
-    internal static readonly List<(TargetID, string)> KnightPhases = new()
-    {
-        // reverse order for phase name priority
+    internal static readonly List<(TargetID, string)> KnightPhases =
+    [
         (TargetID.BlueKnight, "Blue Knight"),
         (TargetID.GreenKnight, "Green Knight"),
         (TargetID.RedKnight, "Red Knight"),
-    };
+    ];
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
