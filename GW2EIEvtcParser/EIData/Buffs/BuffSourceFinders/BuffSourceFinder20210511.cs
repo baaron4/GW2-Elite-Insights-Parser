@@ -8,25 +8,36 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
     {
     }
 
+    private bool CouldBeUncertainDueToImbuedMelodiesForCappedDuration(long extension, ParsedEvtcLog log)
+    {
+        return extension <= ImbuedMelodies + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest);
+    }
+
+    private bool CouldBeUncertainDueToImperialImpactForCappedDuration(long extension, ParsedEvtcLog log)
+    {
+        return extension <= ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator);
+    }
+
     // Spec specific checks
-    protected override Certainty CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
+    protected override Certainty CouldBeRangerTraits(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
     {
         var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
         {
-            return base.CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
+            return base.CouldBeRangerTraits(dst, buffID, time, extension, log);
         }
-        if (IsSoulbeast(dst, time) && extension <= EssenceOfSpeed + ParserHelper.BuffSimulatorStackActiveDelayConstant)
+        if ((IsSoulbeast(dst, time) && extension <= EssenceOfSpeed + ParserHelper.BuffSimulatorStackActiveDelayConstant) ||
+            (IsRanger(dst, time) && extension <= ResoundingTimbre + ParserHelper.BuffSimulatorStackActiveDelayConstant))
         {
             if (GetIDs(log, buffID, extension).Count != 0)
             {
                 return Certainty.Uncertain;
             }
-            if (extension <= ImbuedMelodies + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
+            if (CouldBeUncertainDueToImbuedMelodiesForCappedDuration(extension, log))
             {
                 return Certainty.Uncertain;
             }
-            if (extension <= ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
+            if (CouldBeUncertainDueToImperialImpactForCappedDuration(extension, log))
             {
                 return Certainty.Uncertain;
             }
