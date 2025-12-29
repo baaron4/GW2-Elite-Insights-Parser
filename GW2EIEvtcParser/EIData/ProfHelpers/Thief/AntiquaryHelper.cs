@@ -49,7 +49,11 @@ internal static class AntiquaryHelper
             .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(SummonKryptisTurretTargetBuff , a.AgentItem).Count == 0),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    [
+        new DamageLogDamageModifier(Mod_EnterprisingAristocrat, "Enterprising Aristocrat", "-10% under barrier", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, TraitImages.EnterprisingAristocrate, (x, log) => x.ShieldDamage > 0, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
+    ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
     [
