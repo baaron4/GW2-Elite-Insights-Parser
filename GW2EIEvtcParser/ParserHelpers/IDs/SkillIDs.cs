@@ -5456,4 +5456,5 @@ public static class SkillIDs
     public const long RelicOfTheScoundrel = 79279;
     #endregion
     public const long BountifulPower = NoBuff;
+    public const long KineticBattery = NoBuff;
 }

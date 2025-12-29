@@ -167,13 +167,13 @@ internal static class EngineerHelper
     [
         // Explosives
         // - Glass Cannon
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.All)
             .UsingApproximate()
             .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.All)
             .UsingApproximate()
             .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.All)
             .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance),
         // - Shaped Charge
@@ -182,13 +182,13 @@ internal static class EngineerHelper
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
         // - Big Boomer
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All )
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, FromHigherThanToHPChecker, DamageModifierMode.All )
             .UsingApproximate()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.sPvPWvW )
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, FromHigherThanToHPChecker, DamageModifierMode.sPvPWvW )
             .UsingApproximate()
             .WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.PvE )
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, FromHigherThanToHPChecker, DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.August2022Balance),
         
@@ -205,10 +205,22 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.August2024JWRelease),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.August2024JWRelease),
+        // - Heavy Metal
+        new DamageLogDamageModifier(Mod_HeavyMetal_75, "Heavy Metal (75%)", "15% if target hp% lower than 75%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(50, 75), DamageModifierMode.PvE )
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_HeavyMetal_50, "Heavy Metal (50%)", "15% if target hp% lower than 50%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(25, 50), DamageModifierMode.PvE )
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_HeavyMetal_25, "Heavy Metal (25%)", "15% if target hp% lower than 25%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(0, 25), DamageModifierMode.PvE )
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.January2026Balance),
         
         // Tools
         // - Excessive Energy
         new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExcessiveEnergy, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_KineticBattery, KineticBattery, "Kinetic Battery", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.KineticBattery, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -235,6 +247,7 @@ internal static class EngineerHelper
         new Buff("Iron Blooded", IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.IronBlooded),
         new Buff("Streamlined Kits", StreamlinedKits, Source.Engineer, BuffClassification.Other, TraitImages.StreamlinedKits),
         new Buff("Kinetic Charge", KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KineticBattery),
+        new Buff("Kinetic Battery", KineticBattery, Source.Engineer, BuffClassification.Other, TraitImages.KineticBattery),
         new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, TraitImages.PinpointDistribution)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, TraitImages.ThermalVision),

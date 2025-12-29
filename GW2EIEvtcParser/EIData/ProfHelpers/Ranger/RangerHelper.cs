@@ -396,10 +396,10 @@ internal static class RangerHelper
         
         // Wilderness Survival
         // - Survival Instincts
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, FromHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, FromHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
 
@@ -428,10 +428,10 @@ internal static class RangerHelper
         // - Oakheart Salve
         new BuffOnActorDamageModifier(Mod_OakheartSalve, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
         // - Survival Instincts
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Incoming)", "-5% if hp > 50%", DamageSource.Incoming, -5, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Incoming)", "-10% if hp < 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, ToHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Incoming)", "-5% if hp >= 50%", DamageSource.Incoming, -5, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, ToHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
     ];

@@ -409,4 +409,8 @@ public static class DamageModifierIDs
     public const int Mod_SummonKryptisTurret = 396;
     public const int Mod_WillingHost_Strike = 397;
     public const int Mod_WillingHost_Condition = 398;
+    public const int Mod_KineticBattery = 399;
+    public const int Mod_HeavyMetal_75 = 400;
+    public const int Mod_HeavyMetal_50 = 401;
+    public const int Mod_HeavyMetal_25 = 402;
 }
