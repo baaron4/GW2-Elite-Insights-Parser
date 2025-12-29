@@ -73,6 +73,7 @@ public sealed class ProgramHelper : IDisposable
     public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation, MapAPICacheLocation);
 
     private CancellationTokenSource? RunningMemoryCheck = null;
+    private bool GCExecuted = false;
 
     public void Dispose()
     {
@@ -104,6 +105,7 @@ public sealed class ProgramHelper : IDisposable
         {
             RunningMemoryCheck.Cancel();
             RunningMemoryCheck.Dispose();
+            GCExecuted = false;
             RunningMemoryCheck = null;
         }
 
@@ -130,7 +132,20 @@ public sealed class ProgramHelper : IDisposable
                 proc.Refresh();
                 if (proc.PrivateMemorySize64 > Math.Max(memoryLimit, 100) * 1024L * 1024L)
                 {
-                    Environment.Exit(2);
+                    if (!GCExecuted)
+                    {
+                        // First try a garbage collection, if we fall here again in 500ms, kill
+                        GCExecuted = true;
+                        GC.Collect();
+                    } 
+                    else
+                    {
+                        Environment.Exit(2);
+                    }
+                } 
+                else
+                {
+                    GCExecuted = false;
                 }
             }
 

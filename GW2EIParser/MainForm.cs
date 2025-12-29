@@ -147,7 +147,6 @@ internal sealed partial class MainForm : Form
             _programHelper.DoWork(operation);
         }, cancelTokenSource.Token).ContinueWith(t =>
         {
-            GC.Collect();
             cancelTokenSource.Dispose();
             _runningCount--;
             AddTraceMessage("Operation: Parsed " + operation.InputFile);

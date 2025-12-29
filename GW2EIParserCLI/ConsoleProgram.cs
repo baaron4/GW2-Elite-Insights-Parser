@@ -102,6 +102,5 @@ static class ConsoleProgram
         {
             programHelper.GenerateTraceFile(operation);
         }
-        GC.Collect();
     }
 }
