@@ -14,6 +14,7 @@ static class ConsoleProgram
     public static int ParseAll(List<string> logFiles, ProgramHelper programHelper)
     {
         using var _t = new AutoTrace("ParseAll");
+        programHelper.ExecuteMemoryCheckTask();
         if (programHelper.ParseMultipleLogs())
         {
             var state = new ThreadingState()
@@ -77,7 +78,6 @@ static class ConsoleProgram
     private static void ParseLog(string logFile, ProgramHelper programHelper)
     {
         using var _t = new AutoTrace("Parse One");
-        programHelper.ExecuteMemoryCheckTask();
         var operation = new ConsoleOperationController(logFile);
         try
         {
