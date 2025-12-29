@@ -128,6 +128,12 @@ internal abstract class InstantCastFinder : IVersionable
         return time;
     }
 
+    // Override this when a unique instance per log must be returned (ex engineer kit finder has local accelerators)
+    public virtual InstantCastFinder GetInstance()
+    {
+        return this;
+    }
+
 
     public bool Available(CombatData combatData)
     {

@@ -75,6 +75,11 @@ internal static class EngineerHelper
             });
             UsingNotAccurate();
         }
+
+        public override InstantCastFinder GetInstance()
+        {
+            return new EngineerKitFinder(SkillID);
+        }
     }
 
     private static readonly HashSet<long> _engineerKit =
