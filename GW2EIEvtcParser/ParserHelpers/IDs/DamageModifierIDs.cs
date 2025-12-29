@@ -414,4 +414,5 @@ public static class DamageModifierIDs
     public const int Mod_HeavyMetal_50 = 401;
     public const int Mod_HeavyMetal_25 = 402;
     public const int Mod_FuriousFocus = 403;
+    public const int Mod_TimeBomb = 404;
 }

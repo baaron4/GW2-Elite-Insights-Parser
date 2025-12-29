@@ -37,10 +37,16 @@ internal static class ChronomancerHelper
         new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "15% crit damage on slowed target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "15% crit damage on slowed target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .UsingChecker(MesmerHelper.IllusionsWithMesmerChecker)
-            .WithBuilds(GW2Builds.June2025Balance),
+            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.January2026Balance),
+        new BuffOnActorDamageModifier(Mod_DangerTime, DangerTime, "Danger Time", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
+        // Time Bomb
+        new BuffOnFoeDamageModifier(Mod_TimeBomb, TimeBomb, "Time Bomb", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
+            .WithBuffOnFoeFromActor()
+            .WithBuilds(GW2Builds.January2026Balance),
         // Improved Alacrity
         new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
@@ -55,6 +61,8 @@ internal static class ChronomancerHelper
         new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.ContinuumSplit),
+        new Buff("Danger Time", DangerTime, Source.Chronomancer, BuffClassification.Other, TraitImages.DangerTime),
+        new Buff("Time Bomb", TimeBomb, Source.Chronomancer, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.ContinuumSplit),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
 

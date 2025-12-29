@@ -1728,7 +1728,7 @@ public static class SkillIDs
     public const long GhastlyRampageBegin = 31466;
     public const long SapperBombBuff = 31473;
     public const long HauntingAura = 31483;
-    public const long TimeBomb = 31485;
+    public const long TimeBomb_Encounter = 31485;
     public const long StaticCharge = 31487;
     public const long SapperBombSkill = 31488;
     public const long SublimeConversion = 31496;
@@ -5457,4 +5457,6 @@ public static class SkillIDs
     #endregion
     public const long BountifulPower = NoBuff;
     public const long KineticBattery = NoBuff;
+    public const long DangerTime = NoBuff;
+    public const long TimeBomb = NoBuff;
 }
