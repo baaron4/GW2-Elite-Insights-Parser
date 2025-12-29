@@ -268,9 +268,11 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
-            .WithMinions(),
+            .WithMinions()
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
-            .WithMinions(),
+            .WithMinions()
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
         new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
@@ -410,6 +412,13 @@ internal static class RangerHelper
                 return !a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.ReferenceAgentItem) || IsJuvenilePorcinePet(x.ReferenceAgentItem));
             })
             .WithBuilds(GW2Builds.April2025Balance),
+        // - Loud Whistle
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "15% while master hp >=90%", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.January2026Balance),
         
         // Mace
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)

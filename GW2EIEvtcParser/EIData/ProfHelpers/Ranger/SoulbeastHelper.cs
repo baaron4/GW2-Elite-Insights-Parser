@@ -58,7 +58,7 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.September2023Balance),
         // Loud Whistle
-        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle (Merged)", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All)
             .UsingChecker((x,log) => x.IsOverNinety)
             .WithBuilds(GW2Builds.May2018Balance),
         // Oppressive Superiority
