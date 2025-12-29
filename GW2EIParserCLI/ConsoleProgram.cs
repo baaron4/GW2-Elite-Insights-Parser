@@ -26,7 +26,7 @@ static class ConsoleProgram
             var parallelism = programHelper.GetMaxParallelRunning();
             for(int i = 0; i < parallelism - 1; i++)
             {
-                var t = new Thread(EnterParsetThread);
+                var t = new Thread(EnterParserThread);
                 t.Start(state);
             }
 
@@ -36,7 +36,7 @@ static class ConsoleProgram
             }
 
             state.NoMoreFiles = true;
-            EnterParsetThread(state); // we take the last thread
+            EnterParserThread(state); // we take the last thread
         }
         else
         {
@@ -56,7 +56,7 @@ static class ConsoleProgram
         public ConcurrentQueue<string> FileQueue;
     }
 
-    static void EnterParsetThread(object state_)
+    static void EnterParserThread(object state_)
     {
         var state = (ThreadingState)state_;
         while (true)
