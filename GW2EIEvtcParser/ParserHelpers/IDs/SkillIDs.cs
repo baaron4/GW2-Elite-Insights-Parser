@@ -5455,4 +5455,5 @@ public static class SkillIDs
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
     #endregion
+    public const long BountifulPower = NoBuff;
 }

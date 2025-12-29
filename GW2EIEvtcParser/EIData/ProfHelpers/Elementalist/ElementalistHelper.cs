@@ -154,7 +154,11 @@ internal static class ElementalistHelper
 
         // Arcane
         // - Bountiful Power
-        new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.BountifulPower, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.BountifulPower, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        // TODO: complete this
+        new BuffOnActorDamageModifier(Mod_BountifulPower, BountifulPower, "Bountiful Power", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.BountifulPower, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
         // - Storm Soul
         new BuffOnFoeDamageModifier(Mod_StormSoul, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, TraitImages.Stormsoul, DamageModifierMode.All)
             .WithBuilds(GW2Builds.December2018Balance)
@@ -256,6 +260,7 @@ internal static class ElementalistHelper
         new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.PersistingFlames)
             .WithBuilds(GW2Builds.July2020Balance),
         new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, TraitImages.FreshAir),
+        new Buff("Bountiful Power", BountifulPower, Source.Elementalist, BuffClassification.Other, TraitImages.BountifulPower),
         new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, TraitImages.SoothingMist)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
         new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Defensive, TraitImages.SoothingMist)
