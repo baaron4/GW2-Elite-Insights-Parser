@@ -234,6 +234,7 @@ public sealed class ProgramHelper : IDisposable
                                                         true,
                                                         true,
                                                         Settings.CustomTooShort,
+                                                        Settings.CustomTooBig,
                                                         Settings.DetailledWvW);
                         ParsedEvtcLog logToUse = originalLog;
                         if (originalLog.ParserSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
