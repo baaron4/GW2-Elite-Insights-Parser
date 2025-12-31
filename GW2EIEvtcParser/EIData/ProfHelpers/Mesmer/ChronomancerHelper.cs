@@ -46,6 +46,7 @@ internal static class ChronomancerHelper
         // Time Bomb
         new BuffOnFoeDamageModifier(Mod_TimeBomb, TimeBomb, "Time Bomb", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
             .WithBuffOnFoeFromActor()
+            .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(TimeBomb, a.AgentItem).Count == 0)
             .WithBuilds(GW2Builds.January2026Balance),
         // Improved Alacrity
         new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
