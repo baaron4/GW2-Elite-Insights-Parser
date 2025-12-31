@@ -119,7 +119,7 @@
                     </th>        
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
-                        data-original-title="Average Casting Time (No interrupted skills) <br>Min and Max on hover"">
+                        data-original-title="Average Casting Time (No interrupted skills) <br>Min and Max on hover">
                         Avg <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
@@ -149,13 +149,13 @@
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 16)" @click="sortBy('Data', 16, x => getCastTimeWasted(x))"
-                        data-original-title="Time wasted interupting skill casts">
+                        data-original-title="Time wasted interrupting skill casts">
                         <img :src="UIIcons.TimeWasted" alt="Wasted"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17, x => getCastTimeSaved(x))"
-                        data-original-title="Time saved(in seconds) interupting skill casts">
+                        data-original-title="Time saved(in seconds) interrupting skill casts">
                         <img :src="UIIcons.TimeSaved" alt="Saved"
                             class="icon icon-hover">
                     </th> 

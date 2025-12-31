@@ -4,7 +4,7 @@
         <keep-alive>
             <player-rotations-component v-for='(phase, index) in phases' :key="'rotations' + index"
                 v-if="index === phaseindex" :phaseindex="phaseindex" :light="light" :playerindex="playerindex">
-                </player-rotation-component>
+                </player-rotations-component>
         </keep-alive>
     </div>
 </template>
