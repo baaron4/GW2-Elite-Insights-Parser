@@ -413,11 +413,20 @@ internal static class RangerHelper
             })
             .WithBuilds(GW2Builds.April2025Balance),
         // - Loud Whistle
-        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) =>  IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
-        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.sPvPWvW)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
             .WithBuilds(GW2Builds.January2026Balance),
-        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "15% while master hp >=90%", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "15% while master hp >=90%", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) =>  IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvE)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
             .WithBuilds(GW2Builds.January2026Balance),
         
         // Mace
