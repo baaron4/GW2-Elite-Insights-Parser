@@ -160,7 +160,7 @@ internal class Dhuum : HallOfChains
 
     private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, IEnumerable<SingleActor> enforcers, long mainStart, long mainEnd, bool hasRitual, PhaseData parentPhase)
     {
-        var cls = dhuum.GetCastEvents(log);
+        var cls = dhuum.GetAnimatedCastEvents(log);
         var cataCycles = cls.Where(x => x.SkillID == CataclysmicCycle);
         var gDeathmarks = cls.Where(x => x.SkillID == GreaterDeathMark).ToList();
         if (gDeathmarks.Count < cataCycles.Count())
@@ -205,7 +205,7 @@ internal class Dhuum : HallOfChains
         long start = encounterPhase.Start;
         var phases = new List<PhaseData>(6);
         var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));
-        var castLogs = dhuum.GetCastEvents(log);
+        var castLogs = dhuum.GetAnimatedCastEvents(log);
         PhaseData? mainFight = null;
         // Sometimes the pre event is not in the evtc
         if (!hasPreEvent)

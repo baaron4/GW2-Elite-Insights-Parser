@@ -257,7 +257,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent? enragedSmash = cerus.GetCastEvents(log).FirstOrDefault(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM);
+        CastEvent? enragedSmash = cerus.GetAnimatedCastEvents(log).FirstOrDefault(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM);
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
@@ -890,7 +890,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
             if (target.IsSpecies(TargetID.Cerus))
             {
-                var casts = cerus.GetCastEvents(log).Where(x => x.SkillID == PetrifySkill);
+                var casts = cerus.GetAnimatedCastEvents(log).Where(x => x.SkillID == PetrifySkill);
                 foreach (CastEvent cast in casts)
                 {
                     if (lifespan.start <= cast.Time && lifespan.end > cast.Time)

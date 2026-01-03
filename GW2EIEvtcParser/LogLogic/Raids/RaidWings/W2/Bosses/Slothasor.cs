@@ -145,7 +145,7 @@ internal class Slothasor : SalvationPass
         var phases = new List<PhaseData>(5);
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
-        var sleepy = slothasor.GetCastEvents(log, encounterStart, encounterEnd).Where(x => x.SkillID == NarcolepsySkill);
+        var sleepy = slothasor.GetAnimatedCastEvents(log, encounterStart, encounterEnd).Where(x => x.SkillID == NarcolepsySkill);
         long start = encounterStart;
         int i = 1;
         foreach (CastEvent c in sleepy)

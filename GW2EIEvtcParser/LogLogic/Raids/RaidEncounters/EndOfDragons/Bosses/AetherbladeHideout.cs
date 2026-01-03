@@ -962,7 +962,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             int index = 0;
             int previousIndex = 0;
 
-            var electricBlasts = target.GetCastEvents(log).Where(x =>
+            var electricBlasts = target.GetAnimatedCastEvents(log).Where(x =>
                 x.SkillID == ElectricBlastCastSkillLeftNM ||
                 x.SkillID == ElectricBlastCastSkillRightNM ||
                 x.SkillID == ElectricBlastCastSkillLeftCM ||

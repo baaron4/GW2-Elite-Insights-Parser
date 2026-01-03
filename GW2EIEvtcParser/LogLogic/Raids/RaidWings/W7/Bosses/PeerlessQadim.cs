@@ -493,10 +493,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
         // Add custom arrow overhead for the player lifted up
-        var castsUnleash = p.GetCastEvents(log).Where(x => x.SkillID == UnleashSAK);
+        var castsUnleash = p.GetAnimatedCastEvents(log).Where(x => x.SkillID == UnleashSAK);
         var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem);
 
-        var castsLiftUp = p.GetCastEvents(log).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
+        var castsLiftUp = p.GetAnimatedCastEvents(log).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
         foreach (CastEvent cast in castsLiftUp)
         {
             long liftUpEnd = log.LogData.EvtcLogEnd;
