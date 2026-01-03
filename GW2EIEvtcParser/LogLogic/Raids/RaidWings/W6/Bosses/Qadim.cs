@@ -749,7 +749,6 @@ internal class Qadim : MythwrightGambit
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
-        var cls = target.GetCastEvents(log);
 
         long castDuration;
         (long start, long end) lifespan;

@@ -145,7 +145,7 @@ internal class SoullessHorror : HallOfChains
         long end = encounterPhase.End;
         var phases = new List<PhaseData>(6);
         var tormentedDeads = targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        var howling = soullessHorror.GetCastEvents(log, encounterPhase.Start, end).Where(x => x.SkillID == HowlingDeath);
+        var howling = soullessHorror.GetAnimatedCastEvents(log, encounterPhase.Start, end).Where(x => x.SkillID == HowlingDeath);
         long phaseStart = encounterPhase.Start;
         int i = 1;
         foreach (CastEvent c in howling)
@@ -195,7 +195,6 @@ internal class SoullessHorror : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.SoullessHorror:
-                var cls = target.GetCastEvents(log);
                 // arena reduction
                 var encounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target));     
                 if (encounterPhase != null)

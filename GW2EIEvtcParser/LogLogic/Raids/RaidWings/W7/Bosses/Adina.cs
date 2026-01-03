@@ -461,7 +461,7 @@ internal class Adina : TheKeyOfAhdashim
                 mainPhaseEnds.Add(pair.Key);
             }
         }
-        CastEvent? boulderBarrage = adina.GetCastEvents(log).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < encounterPhase.Start + 6000);
+        CastEvent? boulderBarrage = adina.GetAnimatedCastEvents(log).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < encounterPhase.Start + 6000);
         long start = boulderBarrage == null ? encounterPhase.Start : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {

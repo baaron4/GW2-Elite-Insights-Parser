@@ -117,8 +117,7 @@ internal class Sabir : TheKeyOfAhdashim
             return [];
         }
         var phases = new List<PhaseData>(3);
-
-        var casts = sabir.GetCastEvents(log);
+        var casts = sabir.GetAnimatedCastEvents(log);
         var wallopingWinds = casts.Where(x => x.SkillID == WallopingWind);
         long start = encounterPhase.Start;
         int i = 0;

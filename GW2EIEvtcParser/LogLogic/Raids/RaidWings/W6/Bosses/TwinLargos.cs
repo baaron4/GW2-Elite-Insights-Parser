@@ -294,8 +294,7 @@ internal class TwinLargos : MythwrightGambit
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
         (long start, long end) lifespan;
-
-        var cls = target.GetCastEvents(log);
+        
         switch (target.ID)
         {
             case (int)TargetID.Nikare:
