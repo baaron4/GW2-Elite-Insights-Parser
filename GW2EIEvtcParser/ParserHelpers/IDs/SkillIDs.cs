@@ -4328,7 +4328,7 @@ public static class SkillIDs
     public const long RelicOfTheNightmare = 69849;
     public const long RelicOfFireworks = 69855;
     public const long InsatiableHungerBigOrbEmpoweredNMCM1 = 69861;
-    public const long RelicOfCerusBuff = 69867;
+    public const long POV_RelicOfCerusBuff = 69867;
     public const long RelicOfPeithaTargetBuff = 69882;
     public const long CruelDetonation2 = 69928;
     public const long ChargingConstellationDamage = 69950;
