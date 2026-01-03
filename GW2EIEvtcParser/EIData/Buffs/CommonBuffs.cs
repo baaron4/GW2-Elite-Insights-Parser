@@ -197,7 +197,7 @@ internal static class CommonBuffs
         new Buff("Relic of the Scourge", RelicOfTheScourge, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfTheScourge),
         new Buff("Relic of the Weaver", RelicOfTheWeaver, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheWeaver),
         new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheZephyrite),
-        new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfCerus),
+        new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.RelicOfCerus),
         new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffStackType.Stacking, 1, BuffClassification.Gear, ItemImages.RelicOfDagda),
         new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfIsgarren),
         new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Defensive, ItemImages.RelicOfLyhr),
