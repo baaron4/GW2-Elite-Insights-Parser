@@ -36,6 +36,10 @@ public class MechanicData
         var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(logMechanics.Count);
         foreach (Mechanic m in logMechanics.Keys)
         {
+            if (m.Ignored)
+            {
+                continue;
+            }
             if (!log.LogData.AllowDuplicateMechanicPlotlyConfigs)
             {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
