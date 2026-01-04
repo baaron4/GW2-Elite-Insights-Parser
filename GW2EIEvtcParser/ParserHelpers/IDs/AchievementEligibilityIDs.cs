@@ -11,5 +11,5 @@
 /// </summary>
 public static class AchievementEligibilityIDs
 {
-   
+    public const long Ach_Shatterstep = 1;
 }

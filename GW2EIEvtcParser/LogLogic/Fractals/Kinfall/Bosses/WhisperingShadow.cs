@@ -7,8 +7,8 @@ using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using GW2EIEvtcParser.ParserHelpers;
-using System;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -45,8 +45,10 @@ internal class WhisperingShadow : Kinfall
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([LoftedCryoflash, TerrestialCryoflash], new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
-                    .UsingAchievementEligibility(),
+                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv.L", "Achievement Eligibility: Shatterstep Lost", "Achiv Shatterstep Lost", 0)
+                    .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YUp, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
+                    .UsingChecker((evt, log) => !evt.Lost)
             ]),
         ]);
     public WhisperingShadow(int triggerID) : base(triggerID)
@@ -333,6 +335,32 @@ internal class WhisperingShadow : Kinfall
         {
             var decoration = new CircleDecoration(radius, lifefire, Colors.Ice, 0.05, new AgentConnector(player.AgentItem));
             replay.Decorations.AddWithBorder(decoration);
+        }
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var shatterstepEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var whisperingShadowPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            List<HealthDamageEvent> damageData = [
+                ..log.CombatData.GetDamageData(LoftedCryoflash),
+                ..log.CombatData.GetDamageData(TerrestialCryoflash)
+            ];
+            damageData.SortByTime();
+            foreach (var evt in damageData)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(whisperingShadowPhases, shatterstepEligibilityEvents, evt.Time, Ach_Shatterstep, p);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(whisperingShadowPhases, shatterstepEligibilityEvents, Ach_Shatterstep, p);
+            achievementEligibilityEvents.AddRange(shatterstepEligibilityEvents);
         }
     }
 

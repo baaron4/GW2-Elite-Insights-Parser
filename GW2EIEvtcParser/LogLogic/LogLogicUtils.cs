@@ -376,4 +376,24 @@ internal static class LogLogicUtils
         }
         return offset;
     }
+
+    internal static bool InsertAchievementEligibityEventAndRemovePhase(HashSet<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long time, long achivementID, Player p)
+    {
+        var encounterPhase = encounterPhases.FirstOrDefault(x => x.InInterval(time));
+        if (encounterPhase != null)
+        {
+            encounterPhases.Remove(encounterPhase);
+            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(time, achivementID, p, true));
+            return true;
+        }
+        return false;
+    }
+
+    internal static void AddSuccessBasedAchievementEligibityEvents(IEnumerable<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long achivementID, Player p)
+    {
+        foreach (var encounterPhase in encounterPhases)
+        {
+            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(encounterPhase.End, achivementID, p, !encounterPhase.Success));
+        }
+    }
 }

@@ -18,7 +18,7 @@ internal class AchievementEligibilityMechanic : IDBasedMechanic<AchievementEligi
             {
                 foreach (var evt in player.GetAchievementEligibilityEvents(log))
                 {
-                    if (Keep(evt, log))
+                    if (evt.AchievementID == achievementID && Keep(evt, log))
                     {
                         InsertMechanic(log, mechanicLogs, evt.Time, player);
                     }
