@@ -12,4 +12,5 @@
 public static class AchievementEligibilityIDs
 {
     public const long Ach_Shatterstep = 1;
+    public const long Ach_NopeRopes = 2;
 }

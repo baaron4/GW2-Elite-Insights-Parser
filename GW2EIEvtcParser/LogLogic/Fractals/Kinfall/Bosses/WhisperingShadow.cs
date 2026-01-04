@@ -45,9 +45,9 @@ internal class WhisperingShadow : Kinfall
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             ]),
             new MechanicGroup([
-                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv.L", "Achievement Eligibility: Shatterstep Lost", "Achiv Shatterstep Lost", 0)
+                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YDown, Colors.DarkYellow), "Shatterstep.Achiv.L", "Achievement Eligibility: Shatterstep Lost", "Achiv Shatterstep Lost", 0)
                     .UsingChecker((evt, log) => evt.Lost),
-                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YUp, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
+                new AchievementEligibilityMechanic(Ach_Shatterstep, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv.K", "Achievement Eligibility: Shatterstep Kept", "Achiv Shatterstep Kept", 0)
                     .UsingChecker((evt, log) => !evt.Lost)
             ]),
         ]);

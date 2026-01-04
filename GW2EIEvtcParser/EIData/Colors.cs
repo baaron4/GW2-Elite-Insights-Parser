@@ -53,6 +53,7 @@ internal static class Colors
     public static Color BreakbarRecoveringOrange = new(168, 104, 61);
     public static Color Sand = new(177, 157, 111);
     public static Color Yellow = new(255, 220, 0);
+    public static Color DarkYellow = new(170, 135, 0);
     public static Color LightBrown = new(196, 164, 132);
     public static Color DarkBrown = new(53, 33, 0);
     public static Color Brown = new(120, 100, 0);
