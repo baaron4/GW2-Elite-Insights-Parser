@@ -100,6 +100,9 @@ internal static class GuardianHelper
         // - Symbolic Avenger
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
+        // - Furious Focus
+        new BuffOnActorDamageModifier(Mod_FuriousFocus, Fury, "Furious Focus", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FuriousFocus, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
         
         // Radiance
         // - Retribution

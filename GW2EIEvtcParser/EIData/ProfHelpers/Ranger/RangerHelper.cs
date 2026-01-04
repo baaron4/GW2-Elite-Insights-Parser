@@ -268,9 +268,11 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
-            .WithMinions(),
+            .WithMinions()
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
-            .WithMinions(),
+            .WithMinions()
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
         new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
@@ -331,7 +333,7 @@ internal static class RangerHelper
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
             .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em!", "40% Pet", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em! (Pet)", "40%", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
         // - Frost Spirit
         new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
@@ -396,10 +398,10 @@ internal static class RangerHelper
         
         // Wilderness Survival
         // - Survival Instincts
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, FromHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, FromHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
 
@@ -410,6 +412,22 @@ internal static class RangerHelper
                 return !a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.ReferenceAgentItem) || IsJuvenilePorcinePet(x.ReferenceAgentItem));
             })
             .WithBuilds(GW2Builds.April2025Balance),
+        // - Loud Whistle
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) =>  IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "10% while master hp >=90%", DamageSource.PetsOnly, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) => IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.sPvPWvW)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_LoudWhistle_Pet, "Loud Whistle", "15% while master hp >=90%", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.LoudWhistle, (x, log) =>  IsJuvenilePet(x.From) && x.From.GetFinalMaster().GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvE)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.January2026Balance),
         
         // Mace
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
@@ -428,10 +446,10 @@ internal static class RangerHelper
         // - Oakheart Salve
         new BuffOnActorDamageModifier(Mod_OakheartSalve, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
         // - Survival Instincts
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Incoming)", "-5% if hp > 50%", DamageSource.Incoming, -5, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Incoming)", "-10% if hp < 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, ToHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing10_Incoming5, "Survival Instincts (Incoming)", "-5% if hp >= 50%", DamageSource.Incoming, -5, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, ToHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
     ];

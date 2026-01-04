@@ -1,10 +1,12 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using System.Numerics;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -43,6 +45,15 @@ internal static class WarriorHelper
                 playerAgents.Any(x.To.IsMaster)
             ).Select(x => x.CreditedBy)
         ];
+    }
+
+    private static DamageLogChecker WarriorsCunningNoBarrierChecker(double hpThreshold)
+    {
+        var hpChecker = ToHPChecker(hpThreshold);
+        return (x, log) =>
+        {
+            return x.ShieldDamage == 0 && hpChecker(x, log);
+        };
     }
 
 
@@ -111,22 +122,22 @@ internal static class WarriorHelper
         new DamageLogDamageModifier(Mod_WarriorsCunningBarrier, "Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // - Warrior's Cunning (High HP, no Barrier)
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage == 0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(90), DamageModifierMode.PvEWvW)
             .UsingApproximate()
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage == 0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(80), DamageModifierMode.PvEWvW)
             .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage == 0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(80), DamageModifierMode.PvE)
             .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage == 0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(90), DamageModifierMode.sPvP)
             .UsingApproximate()
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(80), DamageModifierMode.sPvP)
             .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, WarriorsCunningNoBarrierChecker(80), DamageModifierMode.sPvPWvW)
             .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         
@@ -229,18 +240,18 @@ internal static class WarriorHelper
         if (warriorsCount == 1)
         {
             AgentItem warrior = warriors.First();
-            ProfHelper.SetGadgetMaster(strBanners, warrior);
-            ProfHelper.SetGadgetMaster(disBanners, warrior);
-            ProfHelper.SetGadgetMaster(tacBanners, warrior);
-            ProfHelper.SetGadgetMaster(defBanners, warrior);
+            SetGadgetMaster(strBanners, warrior);
+            SetGadgetMaster(disBanners, warrior);
+            SetGadgetMaster(tacBanners, warrior);
+            SetGadgetMaster(defBanners, warrior);
         }
         else if (warriorsCount > 1)
         {
             // land and underwater cast ids
-            ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);
-            ProfHelper.AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { BannerOfDefenseSkill, BannerOfDefenseSkillUW }, 1000);
-            ProfHelper.AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { BannerOfDisciplineSkill, BannerOfDisciplineSkillUW }, 1000);
-            ProfHelper.AttachMasterToGadgetByCastData(combatData, tacBanners, new List<long> { BannerOfTacticsSkill, BannerOfTacticsSkillUW }, 1000);
+            AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);
+            AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { BannerOfDefenseSkill, BannerOfDefenseSkillUW }, 1000);
+            AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { BannerOfDisciplineSkill, BannerOfDisciplineSkillUW }, 1000);
+            AttachMasterToGadgetByCastData(combatData, tacBanners, new List<long> { BannerOfTacticsSkill, BannerOfTacticsSkillUW }, 1000);
         }
     }
 

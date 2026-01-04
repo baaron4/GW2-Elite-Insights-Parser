@@ -66,7 +66,7 @@ internal static class ThiefHelper
         // - Twin Fangs
         new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
-        new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0 && x.HasCrit, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => x.HasCrit && x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(),
         // - Ferocious Strikes
