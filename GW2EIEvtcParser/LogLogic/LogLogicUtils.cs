@@ -377,23 +377,23 @@ internal static class LogLogicUtils
         return offset;
     }
 
-    internal static bool InsertAchievementEligibityEventAndRemovePhase(HashSet<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long time, long achivementID, Player p)
+    internal static bool InsertAchievementEligibityEventAndRemovePhase(HashSet<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long time, long achievementID, Player p)
     {
         var encounterPhase = encounterPhases.FirstOrDefault(x => x.InInterval(time));
         if (encounterPhase != null)
         {
             encounterPhases.Remove(encounterPhase);
-            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(time, achivementID, p, true));
+            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(time, achievementID, p, true));
             return true;
         }
         return false;
     }
 
-    internal static void AddSuccessBasedAchievementEligibityEvents(IEnumerable<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long achivementID, Player p)
+    internal static void AddSuccessBasedAchievementEligibityEvents(IEnumerable<EncounterPhaseData> encounterPhases, List<AchievementEligibilityEvent> achievementEligibilityEvents, long achievementID, Player p)
     {
         foreach (var encounterPhase in encounterPhases)
         {
-            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(encounterPhase.End, achivementID, p, !encounterPhase.Success));
+            achievementEligibilityEvents.Add(new AchievementEligibilityEvent(encounterPhase.End, achievementID, p, !encounterPhase.Success));
         }
     }
 }

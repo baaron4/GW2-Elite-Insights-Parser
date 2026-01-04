@@ -16,7 +16,7 @@ public class MechanicData
     {
         _mechanicLogs = new(logMechanics.Count);
         Tracing.Trace.TrackAverageStat("logMechanics", logMechanics.Count);
-        foreach (Mechanic m in logMechanics.OrderBy(x => !x.IsAchievementEligibility))
+        foreach (Mechanic m in logMechanics.OrderBy(x => !x.IsAchievementEligibility && x is not AchievementEligibilityMechanic))
         {
             // Ignore achievement eligibility mechanics in instances for now
             if (isIntanceLog && m.IsAchievementEligibility)
