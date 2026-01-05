@@ -20,4 +20,5 @@ public static class AchievementEligibilityIDs
     public const long Ach_Undevoured = 7;
     public const long Ach_DancedStars = 8;
     public const long Ach_UnboundedOptimism = 9;
+    public const long Ach_OutrunGhost = 10;
 }

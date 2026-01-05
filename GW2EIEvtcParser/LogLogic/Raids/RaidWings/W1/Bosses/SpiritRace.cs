@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using GW2EIGW2API;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -17,8 +18,12 @@ internal class SpiritRace : SpiritVale
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
-            new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0)
-                .UsingAchievementEligibility(),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_OutrunGhost, new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPink), "Outrun.Achiv.L", "Achievement Eligibility: I Can Outrun A...Ghost Lost", "I Can Outrun A...Ghost Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_OutrunGhost, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv.K", "Achievement Eligibility: I Can Outrun A...Ghost Kept", "I Can Outrun A...Ghost Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+            ]),
         ]);
     public SpiritRace(int triggerID) : base(triggerID)
     {
@@ -283,6 +288,24 @@ internal class SpiritRace : SpiritVale
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var outrunGhostEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var spiritRacePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            var crippleds = log.CombatData.GetBuffApplyDataByIDByDst(Crippled, p.AgentItem);
+            foreach (var evt in crippleds)
+            {
+                InsertAchievementEligibityEventAndRemovePhase(spiritRacePhases, outrunGhostEligibilityEvents, evt.Time, Ach_OutrunGhost, p);
+            }
+            AddSuccessBasedAchievementEligibityEvents(spiritRacePhases, outrunGhostEligibilityEvents, Ach_OutrunGhost, p);
+            achievementEligibilityEvents.AddRange(outrunGhostEligibilityEvents);
         }
     }
 }
