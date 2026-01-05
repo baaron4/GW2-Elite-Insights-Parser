@@ -16,4 +16,6 @@ public static class AchievementEligibilityIDs
     public const long Ach_TestReflexes = 3;
     public const long Ach_MostResistance = 4;
     public const long Ach_AetherAversion = 5;
+    public const long Ach_Clarity = 6;
+    public const long Ach_Undevoured = 7;
 }
