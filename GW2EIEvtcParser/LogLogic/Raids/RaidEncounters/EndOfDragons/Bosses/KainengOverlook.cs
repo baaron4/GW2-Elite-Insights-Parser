@@ -697,7 +697,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         }
         var allKOCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM).ToHashSet();
         {
-            var testReflexesElibilityEvents = new List<AchievementEligibilityEvent>();
+            var testReflexesEligibilityEvents = new List<AchievementEligibilityEvent>();
             HashSet<EncounterPhaseData> koPhases = [.. allKOCMPhases];
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(DragonSlashWaveNM),
@@ -712,14 +712,14 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             {
                 if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
                 {
-                    InsertAchievementEligibityEventAndRemovePhase(koPhases, testReflexesElibilityEvents, evt.Time, Ach_TestReflexes, p);
+                    InsertAchievementEligibityEventAndRemovePhase(koPhases, testReflexesEligibilityEvents, evt.Time, Ach_TestReflexes, p);
                 }
             }
-            AddSuccessBasedAchievementEligibityEvents(koPhases, testReflexesElibilityEvents, Ach_TestReflexes, p);
-            achievementEligibilityEvents.AddRange(testReflexesElibilityEvents);
+            AddSuccessBasedAchievementEligibityEvents(koPhases, testReflexesEligibilityEvents, Ach_TestReflexes, p);
+            achievementEligibilityEvents.AddRange(testReflexesEligibilityEvents);
         }
         {
-            var mostResistanceElibilityEvents = new List<AchievementEligibilityEvent>();
+            var mostResistanceEligibilityEvents = new List<AchievementEligibilityEvent>();
             HashSet<EncounterPhaseData> koPhases = [.. allKOCMPhases];
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(EnhancedDestructiveAuraSkill1),
@@ -742,7 +742,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             {
                 achievementEligibilityEvents.Add(new AchievementEligibilityEvent(koPhase.End, Ach_MostResistance, p, true));
             }
-            achievementEligibilityEvents.AddRange(mostResistanceElibilityEvents);
+            achievementEligibilityEvents.AddRange(mostResistanceEligibilityEvents);
         }
     }
 }

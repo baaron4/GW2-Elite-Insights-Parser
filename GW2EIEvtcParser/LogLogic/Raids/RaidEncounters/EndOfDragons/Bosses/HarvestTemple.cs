@@ -2742,7 +2742,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
         {
-            var nopeRopesElibilityEvents = new List<AchievementEligibilityEvent>();
+            var nopeRopesEligibilityEvents = new List<AchievementEligibilityEvent>();
             var harvestTemplePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(MordremothShockwave),
@@ -2754,11 +2754,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             {
                 if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
                 {
-                    InsertAchievementEligibityEventAndRemovePhase(harvestTemplePhases, nopeRopesElibilityEvents, evt.Time, Ach_NopeRopes, p);
+                    InsertAchievementEligibityEventAndRemovePhase(harvestTemplePhases, nopeRopesEligibilityEvents, evt.Time, Ach_NopeRopes, p);
                 }
             }
-            AddSuccessBasedAchievementEligibityEvents(harvestTemplePhases, nopeRopesElibilityEvents, Ach_NopeRopes, p);
-            achievementEligibilityEvents.AddRange(nopeRopesElibilityEvents);
+            AddSuccessBasedAchievementEligibityEvents(harvestTemplePhases, nopeRopesEligibilityEvents, Ach_NopeRopes, p);
+            achievementEligibilityEvents.AddRange(nopeRopesEligibilityEvents);
         }
     }
 

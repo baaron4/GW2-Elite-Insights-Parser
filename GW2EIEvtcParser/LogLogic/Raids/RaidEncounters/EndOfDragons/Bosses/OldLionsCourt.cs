@@ -743,7 +743,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
         {
-            var aetherAversionElibilityEvents = new List<AchievementEligibilityEvent>();
+            var aetherAversionEligibilityEvents = new List<AchievementEligibilityEvent>();
             var olcPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(BoilingAetherRedBlueNM),
@@ -756,11 +756,11 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             {
                 if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
                 {
-                    InsertAchievementEligibityEventAndRemovePhase(olcPhases, aetherAversionElibilityEvents, evt.Time, Ach_AetherAversion, p);
+                    InsertAchievementEligibityEventAndRemovePhase(olcPhases, aetherAversionEligibilityEvents, evt.Time, Ach_AetherAversion, p);
                 }
             }
-            AddSuccessBasedAchievementEligibityEvents(olcPhases, aetherAversionElibilityEvents, Ach_AetherAversion, p);
-            achievementEligibilityEvents.AddRange(aetherAversionElibilityEvents);
+            AddSuccessBasedAchievementEligibityEvents(olcPhases, aetherAversionEligibilityEvents, Ach_AetherAversion, p);
+            achievementEligibilityEvents.AddRange(aetherAversionEligibilityEvents);
         }
     }
 }
