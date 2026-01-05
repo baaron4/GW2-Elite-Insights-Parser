@@ -87,40 +87,6 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                 new AchievementEligibilityMechanic(Ach_UnboundedOptimism, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv.K", "Achievement Eligibility: Unbounded Optimism Kept", "Unbounded Optimism Kept", 0)
                         .UsingChecker((evt, log) => !evt.Lost)
             ]),
-            new NonSpecializedCombatEventListMechanic<TimeCombatEvent>(new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0, false, (log, agentItem) =>
-                {
-                    SingleActor? actor = log.FindActor(agentItem);
-                    var eligibilityRemovedEvents = new List<TimeCombatEvent>();
-                    if (actor == null)
-                    {
-                        return eligibilityRemovedEvents;
-                    }
-                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
-                    IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
-                    // In case player is dead but death event did not happen during encounter
-                    if (agentItem.IsDead(log, log.LogData.LogEnd) && !deads.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
-                    {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
-                    }
-                    else
-                    {
-                        eligibilityRemovedEvents.AddRange(deads);
-                    }
-                    IReadOnlyList<DespawnEvent> despawns = log.CombatData.GetDespawnEvents(agentItem);
-                    // In case player is DC but DC event did not happen during encounter
-                    if (agentItem.IsDC(log, log.LogData.LogEnd) && !despawns.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
-                    {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
-                    }
-                    else
-                    {
-                        eligibilityRemovedEvents.AddRange(despawns);
-                    }
-                    eligibilityRemovedEvents.SortByTime();
-                    return eligibilityRemovedEvents;
-                })
-                .UsingEnable(x => x.LogData.IsCM || x.LogData.IsLegendaryCM)
-                .UsingAchievementEligibility(),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
