@@ -228,7 +228,7 @@ internal static class LogLogicUtils
             .ToDictionary(x => x.Key, x => x.ToList());
         var gadgetPositions = positionDict.Where(entry => {
 
-            if (entry.Key.Type != AgentItem.AgentType.Gadget || nonZeroGadgetVelocities.ContainsKey(entry.Key))
+            if (entry.Key.Type != AgentItem.AgentType.Gadget || entry.Key.Master != null || nonZeroGadgetVelocities.ContainsKey(entry.Key))
             {
                 return false;
             }
