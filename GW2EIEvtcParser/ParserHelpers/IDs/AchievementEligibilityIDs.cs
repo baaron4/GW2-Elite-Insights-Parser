@@ -15,4 +15,5 @@ public static class AchievementEligibilityIDs
     public const long Ach_NopeRopes = 2;
     public const long Ach_TestReflexes = 3;
     public const long Ach_MostResistance = 4;
+    public const long Ach_AetherAversion = 5;
 }
