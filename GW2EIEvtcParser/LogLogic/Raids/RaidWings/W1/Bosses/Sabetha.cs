@@ -22,7 +22,7 @@ internal class Sabetha : SpiritVale
             new PlayerDstHealthDamageMechanic(Firestorm, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Flamewall", "Firestorm (killed by Flamewall)","Flamewall", 0)
                 .UsingChecker((de, log) => de.HasKilled),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(TimeBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb", "Got a Timed Bomb (Expanding circle)","Timed Bomb", 0),
+                new PlayerDstBuffApplyMechanic(TimeBomb_Encounter, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb", "Got a Timed Bomb (Expanding circle)","Timed Bomb", 0),
                 new PlayerDstHealthDamageMechanic([TimeBombDamage, TimeBombDamage2], new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkMagenta), "TimeB Down", "Downed by Time Bomb", "Time Bomb Down", 0)
                     .UsingChecker((hde, log) => hde.HasDowned),
                 new PlayerDstHealthDamageMechanic([TimeBombDamage, TimeBombDamage2], new MechanicPlotlySetting(Symbols.HexagramOpen, Colors.DarkMagenta), "TimeB Kill", "Killed by Time Bomb", "Time Bomb Kill", 0)
@@ -303,7 +303,7 @@ internal class Sabetha : SpiritVale
         }
 
         // Timed bombs
-        var timedBombs = p.GetBuffStatus(log, TimeBomb).Where(x => x.Value > 0);
+        var timedBombs = p.GetBuffStatus(log, TimeBomb_Encounter).Where(x => x.Value > 0);
         foreach (var seg in timedBombs)
         {
             // Buff lasts 4000ms, damage event happens at 3000ms.
