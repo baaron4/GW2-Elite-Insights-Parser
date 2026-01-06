@@ -280,9 +280,27 @@ internal class Cairn : BastionOfThePenitent
         }
     }
 
+    internal static bool HasActiveCountdownOnAllParticipatingPlayers(CombatData combatData, AgentData agentData, long start, long end)
+    {
+        var countdowns = combatData.GetBuffApplyData(Countdown).Where(x => x.Time >= start && x.Time <= end).ToList();
+        if (countdowns.Count > 0)
+        {
+            var players = agentData.GetAgentByType(AgentItem.AgentType.Player).Where(x => x.InAwareTimes(start, end) && x.IsActive(combatData, start, end, 5000));
+            foreach (var player in players)
+            {
+                if (!countdowns.Any(x => x.To.Is(player)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetBuffApplyData(Countdown).Any(x => x.Time > 0) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return HasActiveCountdownOnAllParticipatingPlayers(combatData, agentData, logData.LogStart, logData.LogEnd) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)

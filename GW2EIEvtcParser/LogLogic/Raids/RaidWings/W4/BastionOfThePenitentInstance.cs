@@ -96,7 +96,9 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], mainPhase, "Cairn", start, end, success, _cairn, log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], 
+                    mainPhase, "Cairn", start, end, success, _cairn, 
+                    Cairn.HasActiveCountdownOnAllParticipatingPlayers(log.CombatData, log.AgentData, start, end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
