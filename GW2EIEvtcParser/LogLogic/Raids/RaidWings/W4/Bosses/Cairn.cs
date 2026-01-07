@@ -280,8 +280,12 @@ internal class Cairn : BastionOfThePenitent
         }
     }
 
-    internal static bool HasActiveCountdownOnAllParticipatingPlayers(CombatData combatData, AgentData agentData, long start, long end)
+    internal static bool HasActiveCountdownOnAllParticipatingPlayersOrPetrified(CombatData combatData, AgentData agentData, long start, long end)
     {
+        if (combatData.GetBuffApplyData(CairnPetrifed).Any(x => x.Time >= start && x.Time <= end))
+    {
+            return true;
+        }
         var countdowns = combatData.GetBuffApplyData(Countdown).Where(x => x.Time >= start && x.Time <= end).ToList();
         if (countdowns.Count > 0)
         {
@@ -300,7 +304,7 @@ internal class Cairn : BastionOfThePenitent
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return HasActiveCountdownOnAllParticipatingPlayers(combatData, agentData, logData.LogStart, logData.LogEnd) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return HasActiveCountdownOnAllParticipatingPlayersOrPetrified(combatData, agentData, logData.LogStart, logData.LogEnd) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)

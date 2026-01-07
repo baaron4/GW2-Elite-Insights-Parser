@@ -2358,6 +2358,7 @@ public static class SkillIDs
     public const long FanaticalResilience = 38226;
     public const long ImpalingStab = 38231;
     public const long ClaimSAK = 38234;
+    public const long CairnPetrifed = 38235;
     public const long InevitableBetrayalSmall = 38247;
     public const long BrutalAura = 38258;
     public const long InevitableBetrayalFailSmall = 38260;

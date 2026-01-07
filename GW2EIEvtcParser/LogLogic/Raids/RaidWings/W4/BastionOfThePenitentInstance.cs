@@ -98,7 +98,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], 
                     mainPhase, "Cairn", start, end, success, _cairn, 
-                    Cairn.HasActiveCountdownOnAllParticipatingPlayers(log.CombatData, log.AgentData, start, end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    Cairn.HasActiveCountdownOnAllParticipatingPlayersOrPetrified(log.CombatData, log.AgentData, start, end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
