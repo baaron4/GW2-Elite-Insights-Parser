@@ -682,11 +682,11 @@ public static class EffectGUIDs
     public static readonly GUID CairnDisplacement = new("7798B97ED6B6EB489F7E33DF9FE6BD99");
     public static readonly GUID CairnDisplacementTrigger = new("43998FFA25AEC5488FD69339086A2AF8");
     public static readonly GUID CairnDisplacementTargetLocation = new("7D38A09D4FB0AC4DBED3FFB80304DD47");
-    public static readonly GUID CairnDashGreen = new("D2E6D55CC94F79418BB907F063CBDD81");
-    public static readonly GUID CairnFirstGreen = new("F22878AB2F4D9B4CA73C75C5DCEAD704");
-    public static readonly GUID CairnGreenBig = new("EF7AF4EB850EF44D80F5638BEE906E3D");
-    public static readonly GUID CairnGreenSmall = new("B433D800D3665B4CACDB4388610E252A");
-    public static readonly GUID CairnGreenMedium = new("154145C3D4A08A468ECFEB151AABE45F");
+    public static readonly GUID CairnDashGreenNoCount = new("D2E6D55CC94F79418BB907F063CBDD81");
+    public static readonly GUID CairnInitialGreen = new("F22878AB2F4D9B4CA73C75C5DCEAD704");
+    public static readonly GUID CairnGreen4PlayersOrBigNoCount = new("EF7AF4EB850EF44D80F5638BEE906E3D");
+    public static readonly GUID CairnGreen1Player = new("B433D800D3665B4CACDB4388610E252A");
+    public static readonly GUID CairnGreen2Players = new("154145C3D4A08A468ECFEB151AABE45F");
     // Mursaat Overseen
     public static readonly GUID MursaarOverseerDispelProjectile = new("DE71A86A0867764BB5789265E8C0CF6A"); // No Src - Dst Jade Scout
     public static readonly GUID MursaarOverseerProtectBubble = new("17BC358A51ED2D43BF2ABE8AB642B86B"); // Src player

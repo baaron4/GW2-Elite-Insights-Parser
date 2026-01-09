@@ -2280,7 +2280,7 @@ public static class SkillIDs
     public const long SpatialManipulation1 = 37611;
     public const long MindCrush = 37613;
     public const long EmpoweredMO = 37626;
-    public const long SpatialManipulationFirst = 37629;
+    public const long SpatialManipulationInitial = 37629;
     public const long OrbitalSweep = 37631;
     public const long SpatialManipulation2 = 37642;
     public const long CrystallineHeart = 37657;
@@ -2364,7 +2364,7 @@ public static class SkillIDs
     public const long InevitableBetrayalFailSmall = 38260;
     public const long UnseenBurdenDeimos = 38266;
     public const long BoonThief = 38272;
-    public const long SpatialManipulationPostDash = 38302;
+    public const long SpatialManipulationFastTrigger = 38302;
     public const long Bludgeon = 38305;
     public const long MeteorSwarm = 38313;
     public const long AnguishedBolt = 38314;

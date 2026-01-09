@@ -18,13 +18,13 @@ internal class Cairn : BastionOfThePenitent
 
             new PlayerDstHealthDamageHitMechanic(CairnDisplacement, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port", "Orange Teleport Field","Orange TP", 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationFirst, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationPostDash], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Std.Green", "Stood in Green Spatial Manipulation Field","Green", 0)
+                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationInitial, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationFastTrigger], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Std.Green", "Stood in Green Spatial Manipulation Field","Green", 0)
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationFirst, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationPostDash], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0),
+                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationInitial, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationFastTrigger], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0),
                         false
                     )
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationFirst, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationPostDash], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0),
+                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationInitial, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationFastTrigger], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0),
                         true
                     )
                     .UsingIgnored()
@@ -110,12 +110,22 @@ internal class Cairn : BastionOfThePenitent
         return phases;
     }
 
-    private static void AddGreenDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Span<GUID> greenGUIDs, List<long> castSkillIDs, long endOffset)
+    private static readonly Dictionary<long, long> SpatialManipulationTriggerTime = new() // from skill def
+    {
+        {SpatialManipulation1, 6300},
+        {SpatialManipulation2, 6300},
+        {SpatialManipulation3, 6300},
+        {SpatialManipulation4, 6300},
+        {SpatialManipulationFastTrigger, 3300},
+        {SpatialManipulationInitial, 3300},
+    };
+
+    private static void AddGreenDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Span<GUID> greenGUIDs)
     {
         if (log.CombatData.TryGetEffectEventsByGUIDs(greenGUIDs, out var greenEffects))
         {
             List<AnimatedCastEvent> spatialManipulations = [];
-            foreach (var castSkillID in castSkillIDs)
+            foreach (var castSkillID in SpatialManipulationTriggerTime.Keys)
             {
                 spatialManipulations.AddRange(log.CombatData.GetAnimatedCastData(castSkillID));
             }
@@ -135,22 +145,22 @@ internal class Cairn : BastionOfThePenitent
                 if (endEvent != null)
                 {
                     triggered = true;
-                    greenEnd = Math.Min(greenEnd, endEvent.Time + endOffset);
+                    greenEnd = Math.Min(greenEnd, endEvent.Time + SpatialManipulationTriggerTime[endEvent.SkillID]);
                 }
-                // TODO: find radius
-                uint radius = 150;
+                // Initial green and dash radius
+                uint radius = 120;
                 var guid = greenEffect.GUIDEvent.ContentGUID;
-                if (guid == EffectGUIDs.CairnGreenBig)
+                if (guid == EffectGUIDs.CairnGreen4PlayersOrBigNoCount)
                 {
-                    radius = 200;
+                    radius = 180;
                 }
-                else if (guid == EffectGUIDs.CairnGreenMedium || guid == EffectGUIDs.CairnDashGreen)
+                else if (guid == EffectGUIDs.CairnGreen2Players)
                 {
-                    radius = 130;
+                    radius = 80;
                 }
-                else if (guid == EffectGUIDs.CairnGreenSmall)
+                else if (guid == EffectGUIDs.CairnGreen1Player)
                 {
-                    radius = 90;
+                    radius = 60;
                 }
                 GeographicalConnector positionConnector;
                 if (greenEffect.IsAroundDst)
@@ -198,9 +208,7 @@ internal class Cairn : BastionOfThePenitent
                 environmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + expectedDisplacementDuration));
             }
         }
-        AddGreenDecorations(log, environmentDecorations, [EffectGUIDs.CairnDashGreen], [SpatialManipulationPostDash], 3300);// from skill def
-        AddGreenDecorations(log, environmentDecorations, [EffectGUIDs.CairnFirstGreen], [SpatialManipulationFirst], 3300); // from skill def
-        AddGreenDecorations(log, environmentDecorations, [EffectGUIDs.CairnGreenSmall, EffectGUIDs.CairnGreenMedium, EffectGUIDs.CairnGreenBig], [SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4], 6300); // from skill def
+        AddGreenDecorations(log, environmentDecorations, [EffectGUIDs.CairnDashGreenNoCount, EffectGUIDs.CairnInitialGreen, EffectGUIDs.CairnGreen1Player, EffectGUIDs.CairnGreen2Players, EffectGUIDs.CairnGreen4PlayersOrBigNoCount]);
 
         // Meteor Swarm
         var meteorSwarm = log.CombatData.GetMissileEventsBySkillID(MeteorSwarm);
@@ -326,7 +334,7 @@ internal class Cairn : BastionOfThePenitent
         {
             long agonyStart = c.Time;
             long agonyEnd = agonyStart + 62000;
-            replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), Colors.Red, 0.5, new AgentConnector(p)).UsingFilled(false));
+            replay.Decorations.Add(new CircleDecoration(200, (agonyStart, agonyEnd), Colors.Red, 0.5, new AgentConnector(p)).UsingFilled(false));
         }
     }
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
