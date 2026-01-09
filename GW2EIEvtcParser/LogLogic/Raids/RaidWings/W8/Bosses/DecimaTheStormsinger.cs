@@ -601,7 +601,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TargetID.EnlightenedConduit:
-                AddThunderAoE(target, log, replay, target.AgentItem);
+                AddThunderAoE(target, log, replay);
                 AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuff, DecimaConduitWallBuff);
                 break;
             case (int)TargetID.EnlightenedConduitCM:
@@ -614,10 +614,10 @@ internal class DecimaTheStormsinger : MountBalrior
                 List<string> chargeIcons = [ParserIcons.TargetOrder1Overhead, ParserIcons.TargetOrder2Overhead, ParserIcons.TargetOrder3Overhead];
                 if (target.AgentItem.Master != null)
                 {
-                    gadgetEffectConnector = new AgentConnector(target.AgentItem.Master);
+                    gadgetEffectConnector = new AgentConnector(target);
                     chargeTierBuffs = [EnlightenedConduitGadgetChargeTier1BuffCM, EnlightenedConduitGadgetChargeTier2BuffCM, EnlightenedConduitGadgetChargeTier3BuffCM];
                     // Chorus of Thunder / Discordant Thunder - Orange AoE
-                    AddThunderAoE(target, log, replay, target.AgentItem.Master);
+                    AddThunderAoE(target, log, replay);
                 }
                 else
                 {
@@ -827,7 +827,7 @@ internal class DecimaTheStormsinger : MountBalrior
         replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
 
         // Chorus of Thunder / Discordant Thunder - Orange AoE
-        AddThunderAoE(player, log, replay, player.AgentItem);
+        AddThunderAoE(player, log, replay);
     }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
@@ -839,11 +839,11 @@ internal class DecimaTheStormsinger : MountBalrior
     /// <summary>
     /// Chorus of Thunder / Discordant Thunder - Orange spread AoE on players or on Conduits.
     /// </summary>
-    private static void AddThunderAoE(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, AgentItem decorationOn)
+    private static void AddThunderAoE(SingleActor actor, ParsedEvtcLog log, CombatReplay replay)
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
-            var connector = new AgentConnector(decorationOn);
+            var connector = new AgentConnector(actor);
             foreach (var effect in thunders)
             {
                 long duration = 5000;
