@@ -200,26 +200,20 @@ internal class DecimaTheStormsinger : MountBalrior
         var conduitsGadgets = maxHPEventsAgents
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 200)
             .Distinct();
-        var effects = combatData.Where(x => x.IsEffect && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM));
+        var effects = combatData.Where(x => x.IsEffect && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM)).ToList();
         foreach (var conduitGadget in conduitsGadgets)
         {
             conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
             conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             var effectByConduitOnGadget = effects
-                .Where(x => x.DstMatchesAgent(conduitGadget)).FirstOrDefault();
+                .FirstOrDefault(x => x.DstMatchesAgent(conduitGadget));
             if (effectByConduitOnGadget != null)
             {
                 conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
+            } 
+            else if (effects.Any(x => conduitGadget.InAwareTimes(agentData.GetAgent(x.SrcAgent, x.Time)))) {
+                conduitGadget.OverrideID(TargetID.BigEnlightenedConduitGadget, agentData);
             }
-        }
-        var bigConduitsGadgets = maxHPEventsAgents
-            .Where(x => x.Type == AgentItem.AgentType.Gadget)
-            .Distinct();
-
-        foreach (var conduitGadget in conduitsGadgets)
-        {
-            conduitGadget.OverrideID(TargetID.BigEnlightenedConduitGadget, agentData);
-            conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
     }
 
