@@ -384,5 +384,11 @@ internal class Sabetha : SpiritVale
         { (int)TargetID.Kernan, "Kernan" },
         { (int)TargetID.Karde, "Karde" },
         { (int)TargetID.Knuckles, "Knuckles" }
-    };
+    }; internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
 }

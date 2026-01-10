@@ -376,4 +376,11 @@ internal class Cairn : BastionOfThePenitent
     {
         return "Cairn";
     }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
 }
