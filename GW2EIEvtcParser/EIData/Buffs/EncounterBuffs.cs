@@ -232,6 +232,7 @@ internal static class EncounterBuffs
             new Buff("Countdown", Countdown, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Countdown),
             new Buff("Gaze Avoidance", GazeAvoidance, Source.EncounterSpecific, BuffClassification.Other, BuffImages.GazeAvoidance),
             new Buff("Celestial Dash", CelestialDashBuff, Source.EncounterSpecific, BuffClassification.Other, SkillImages.CelestialDash),
+            new Buff("Petrified (Cairn)", CairnPetrifed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             // Mursaat Overseer
             new Buff("Empowered (MO)", EmpoweredMO, Source.EncounterSpecific, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Mursaat Overseer's Shield", MursaatOverseersShield, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Dispel),

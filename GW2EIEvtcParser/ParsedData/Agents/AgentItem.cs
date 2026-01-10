@@ -149,6 +149,11 @@ public class AgentItem
         IsUnknown = true;
     }
 
+    internal void SetInstid(ushort instid)
+    {
+        InstID = instid;
+    }
+    #region OVERRIDES
     internal void OverrideSpec(ParserHelper.Spec spec)
     {
         Spec = spec;
@@ -175,11 +180,6 @@ public class AgentItem
     internal void OverrideName(string name)
     {
         Name = name;
-    }
-
-    internal void SetInstid(ushort instid)
-    {
-        InstID = instid;
     }
 
     internal void OverrideID(int id, AgentData agentData)
@@ -227,7 +227,7 @@ public class AgentItem
             merge.ApplyOffset(offset);
         }
     }
-
+    #endregion OVERRIDES
     internal void SetMaster(AgentItem master)
     {
         if (IsPlayer || master.Is(this))
@@ -316,7 +316,7 @@ public class AgentItem
     {
         return InAwareTimes(other.FirstAware, other.LastAware);
     }
-
+    #region BUFFS
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
@@ -369,8 +369,9 @@ public class AgentItem
     {
         return log.FindActor(this).GetBuffStatus(log, by, buffID);
     }
+    #endregion BUFFS
 
-
+    #region STATE
     /// <summary>
     /// Checks if the agent will go into downstate before the next time they go above 90% health, or the fight ends.
     /// </summary>
@@ -454,6 +455,47 @@ public class AgentItem
         return log.FindActor(this).IsDC(log, start, end);
     }
 
+    /// <summary>
+    /// Checks if the agent is alive at given time
+    /// </summary>
+    /// <param name="time">Presence time.</param>
+    /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
+    public bool IsActive(ParsedEvtcLog log, long time)
+    {
+        return log.FindActor(this).IsActive(log, time);
+    }
+
+    /// <summary>
+    /// Checks if the agent is alive during a segment of time.
+    /// </summary>
+    /// <param name="start">Start time.</param>
+    /// <param name="end">End Time.</param>
+    /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
+    public bool IsActive(ParsedEvtcLog log, long start, long end)
+    {
+        return log.FindActor(this).IsActive(log, start, end);
+    }
+
+    /// <summary>
+    /// Checks if the agent is alive during a segment of time.
+    /// </summary>
+    /// <param name="start">Start time.</param>
+    /// <param name="end">End Time.</param>
+    /// <param name="duration">Minimum active duration</param>
+    /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
+    public bool IsActive(ParsedEvtcLog log, long start, long end, long duration)
+    {
+        return log.FindActor(this).IsActive(log, start, end, duration);
+    }
+    internal bool IsActive(CombatData combatData, long start, long end)
+    {
+        return new DummyActor(this).IsActive(combatData, start, end);
+    }
+    internal bool IsActive(CombatData combatData, long start, long end, long duration)
+    {
+        return new DummyActor(this).IsActive(combatData, start, end, duration);
+    }
+
     public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
     {
         return log.FindActor(this).GetCurrentHealthPercent(log, time);
@@ -464,6 +506,11 @@ public class AgentItem
         return log.FindActor(this).GetCurrentBarrierPercent(log, time);
     }
 
+    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+    {
+        return log.FindActor(this).GetCurrentBreakbarState(log, time);
+    }
+    #endregion STATE
     public bool TryGetCurrentPosition(ParsedEvtcLog log, long time, out Vector3 position, long forwardWindow = 0)
     {
         return log.FindActor(this).TryGetCurrentPosition(log, time, out position, forwardWindow);
@@ -477,12 +524,7 @@ public class AgentItem
     {
         return log.FindActor(this).TryGetCurrentFacingDirection(log, time, out facing, forwardWindow);
     }
-
-    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
-    {
-        return log.FindActor(this).GetCurrentBreakbarState(log, time);
-    }
-
+    #region SPECIES
     public bool IsUnamedSpecies()
     {
         if (IsPlayer)
@@ -545,6 +587,7 @@ public class AgentItem
     {
         return ids.Any(IsSpecies);
     }
+    #endregion SPECIES
     internal void AddMergeFrom(AgentItem mergedFrom, long start, long end)
     {
         _merges ??= [];
