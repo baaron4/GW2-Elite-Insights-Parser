@@ -370,6 +370,14 @@ internal class MythwrightGambitInstance : MythwrightGambit
             logic.SetInstanceBuffs(log, instanceBuffs);
         }
     }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        foreach (var logic in _subLogics)
+        {
+            logic.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var sortIDs = new Dictionary<TargetID, int>();
