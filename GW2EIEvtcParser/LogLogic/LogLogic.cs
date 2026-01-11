@@ -132,7 +132,7 @@ public abstract class LogLogic
         {
             allMechs.AddRange(mechGroup.GetMechanics());
         }
-        return new MechanicData(allMechs, IsInstance);
+        return new MechanicData(allMechs);
     }
 
     internal virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)

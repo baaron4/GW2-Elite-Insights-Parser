@@ -9,6 +9,7 @@ internal class AchievementEligibilityMechanic : IDBasedMechanic<AchievementEligi
 {
      public AchievementEligibilityMechanic(long achievementID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base([achievementID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
+        IsEnemyMechanic = false;
     }
     internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
