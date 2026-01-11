@@ -446,7 +446,7 @@ internal class SoullessHorror : HallOfChains
         }
         {
             var necroDancerEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var shPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
+            var shPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(InnerVortexSlash),
                 ..log.CombatData.GetDamageData(OuterVortexSlash)

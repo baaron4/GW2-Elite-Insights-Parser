@@ -2743,7 +2743,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
         {
             var nopeRopesEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var harvestTemplePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
+            var harvestTemplePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(MordremothShockwave),
                 ..log.CombatData.GetDamageData(TsunamiSlamClawOrb),

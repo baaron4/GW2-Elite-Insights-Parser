@@ -945,7 +945,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         }
         {
             var unboundedOptimismEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var tofPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && p.IsActive(log, x.Start, x.End)).ToHashSet();
+            var tofPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<TimeCombatEvent> lostEvents = [
                 ..p.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit),
                 ..log.CombatData.GetDeadEvents(p.AgentItem),

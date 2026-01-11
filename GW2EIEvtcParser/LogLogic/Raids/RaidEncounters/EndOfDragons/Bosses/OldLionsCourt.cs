@@ -744,7 +744,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         }
         {
             var aetherAversionEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var olcPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
+            var olcPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(BoilingAetherRedBlueNM),
                 ..log.CombatData.GetDamageData(BoilingAetherRedBlueCM),
