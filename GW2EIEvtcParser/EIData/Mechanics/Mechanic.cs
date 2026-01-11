@@ -93,18 +93,12 @@ public abstract class Mechanic : MechanicContainer
         return this;
     }
 
-    private static bool EligibilityKeeper(ParsedEvtcLog log)
-    {
-        return log.LogData.Success;
-    }
-
     /// <summary>
     /// Eligibility mechanics will only be computed in successful logs
     /// </summary>
     /// <returns></returns>
     internal Mechanic UsingAchievementEligibility()
     {
-        _enableConditions.Add(EligibilityKeeper);
         return this;
     }
 
