@@ -50,8 +50,6 @@ public abstract class Mechanic : MechanicContainer
     public bool ShowOnTable { get; private set; }
     public bool Ignored { get; private set; }
 
-    public bool IsAchievementEligibility { get; private set; }
-
     public delegate bool Keeper(ParsedEvtcLog log);
     private readonly List<Keeper> _enableConditions;
     private ulong _maxBuild = GW2Builds.EndOfLife;
@@ -95,23 +93,12 @@ public abstract class Mechanic : MechanicContainer
         return this;
     }
 
-    private static bool EligibilityKeeper(ParsedEvtcLog log)
-    {
-        return log.LogData.Success;
-    }
-
     /// <summary>
     /// Eligibility mechanics will only be computed in successful logs
     /// </summary>
     /// <returns></returns>
     internal Mechanic UsingAchievementEligibility()
     {
-        if (IsAchievementEligibility)
-        {
-            return this;
-        }
-        IsAchievementEligibility = true;
-        _enableConditions.Add(EligibilityKeeper);
         return this;
     }
 
@@ -167,10 +154,6 @@ public abstract class Mechanic : MechanicContainer
         return false;
     }
 
-    internal bool KeepIfEmpty(ParsedEvtcLog log)
-    {
-        return IsAchievementEligibility && log.LogData.Success;
-    }
     public override IReadOnlyList<Mechanic> GetMechanics()
     {
         return [this];

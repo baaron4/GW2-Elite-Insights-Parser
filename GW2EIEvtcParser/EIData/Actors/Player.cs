@@ -12,6 +12,7 @@ public class Player : PlayerActor
 
     private List<GenericSegment<GUID>>? CommanderStates = null;
     private bool _squadless = false;
+    private List<AchievementEligibilityEvent>? _achievementEligibilityEvents = null;
     // Constructors
     internal Player(AgentItem agent, bool noSquad) : base(agent)
     {
@@ -152,6 +153,16 @@ public class Player : PlayerActor
             }
         }
         base.InitAdditionalCombatReplayData(log, replay);
+    }
+
+    public override IReadOnlyList<AchievementEligibilityEvent> GetAchievementEligibilityEvents(ParsedEvtcLog log)
+    {
+        if (_achievementEligibilityEvents == null)
+        {
+            _achievementEligibilityEvents = [];
+            log.LogData.Logic.ComputeAchievementEligibilityEvents(log, this, _achievementEligibilityEvents);
+        }
+        return _achievementEligibilityEvents;
     }
 
 }

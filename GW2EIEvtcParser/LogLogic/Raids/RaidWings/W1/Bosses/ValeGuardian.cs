@@ -280,4 +280,11 @@ internal class ValeGuardian : SpiritVale
             replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Green, 0.2, circlePositionConnector));
         }
     }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
 }

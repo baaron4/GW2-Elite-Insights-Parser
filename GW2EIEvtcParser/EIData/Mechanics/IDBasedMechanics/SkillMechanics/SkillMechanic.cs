@@ -48,7 +48,7 @@ internal abstract class SkillMechanic<T> : IDBasedMechanic<T> where T : SkillEve
         {
             agentItem = agentItem.GetFinalMaster();
         }
-        return agentItem!;
+        return agentItem;
     }
     protected abstract bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor);
 

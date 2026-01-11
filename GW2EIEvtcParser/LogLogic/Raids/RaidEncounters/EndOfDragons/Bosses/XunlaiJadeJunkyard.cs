@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -49,8 +50,12 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                     new PlayerDstHealthDamageHitMechanic(TerrifyingApparition, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
                     new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 ]),
-                new PlayerDstHealthDamageHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
-                    .UsingAchievementEligibility(),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_Clarity, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkBlue), "Clarity.Achiv.L", "Achievement Eligibility: Clarity Lost", "Achiv Clarity Lost", 0)
+                            .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_Clarity, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv.K", "Achievement Eligibility: Clarity Kept", "Achiv Clarity Kept", 0)
+                            .UsingChecker((evt, log) => !evt.Lost)
+                ]),
                 // Reaches
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
@@ -69,9 +74,12 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
             new EnemyDstBuffApplyMechanic(PowerOfTheVoid, new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
-                new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
-                    .UsingAchievementEligibility()
-                    .UsingEnable(x => x.LogData.IsCM),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_Undevoured, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkBlue), "Undev.Achiv.L", "Achievement Eligibility: Undevoured Lost", "Achiv Undevoured Lost", 0)
+                            .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_Undevoured, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv.K", "Achievement Eligibility: Undevoured Kept", "Achiv Undevoured Kept", 0)
+                            .UsingChecker((evt, log) => !evt.Lost)
+                ]),
             ]),
         ])
         );
@@ -534,5 +542,44 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         var positionConnector = new PositionConnector(position);
         replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, positionConnector).UsingGrowingEnd(lifespan.end));
         replay.Decorations.Add(new CircleDecoration(radius, lifespanAoE, Colors.Red, 0.2, positionConnector));
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var clarityEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var xjjPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            List<HealthDamageEvent> damageData = [
+                ..log.CombatData.GetDamageData(WallOfFear),
+                ..log.CombatData.GetDamageData(WaveOfTormentNM),
+                ..log.CombatData.GetDamageData(WaveOfTormentCM),
+                ..log.CombatData.GetDamageData(TerrifyingApparition)
+            ];
+            damageData.SortByTime();
+            foreach (var evt in damageData)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(xjjPhases, clarityEligibilityEvents, evt.Time, Ach_Clarity, p);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(xjjPhases, clarityEligibilityEvents, Ach_Clarity, p);
+            achievementEligibilityEvents.AddRange(clarityEligibilityEvents);
+        }
+        {
+            var undevouredEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var xjjCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM).ToHashSet();
+            var buffApplyData = log.CombatData.GetBuffApplyDataByIDByDst(DevouringVoid, p.AgentItem);
+            foreach (var evt in buffApplyData)
+            {
+                InsertAchievementEligibityEventAndRemovePhase(xjjCMPhases, undevouredEligibilityEvents, evt.Time, Ach_Undevoured, p);
+            }
+            AddSuccessBasedAchievementEligibityEvents(xjjCMPhases, undevouredEligibilityEvents, Ach_Undevoured, p);
+            achievementEligibilityEvents.AddRange(undevouredEligibilityEvents);
+        }
     }
 }

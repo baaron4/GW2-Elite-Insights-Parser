@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -35,8 +36,12 @@ internal class Sabir : TheKeyOfAhdashim
             new PlayerDstHealthDamageHitMechanic(ChainLightning, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.White), "Chain Lightning", "Hit by Chain Lightning", "Chain Lightning Hit", 0),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(Electrospark, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Orange), "Electrospark", "Hit by Electrospark", "Electrospark", 0),
-                new PlayerDstHealthDamageHitMechanic(Electrospark, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Orange), "Charged Winds", "Achievement Elegibility: Charged Winds", "Charged Winds", 0)
-                    .UsingAchievementEligibility(),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_ChargedWinds, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Orange), "Charged Winds L", "Achievement Elegibility: Charged Winds Lost", "Charged Winds Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_ChargedWinds, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Charged Winds K", "Achievement Elegibility: Charged Winds Kept", "Charged Winds Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+                ]),
             ]),
             new MechanicGroup([
                 new MechanicGroup([
@@ -379,5 +384,27 @@ internal class Sabir : TheKeyOfAhdashim
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
         return (target.GetHealth(combatData) > 32e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var chargedWindsEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var sabirPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            var damageData = log.CombatData.GetDamageData(Electrospark);
+            foreach (var evt in damageData)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(sabirPhases, chargedWindsEligibilityEvents, evt.Time, Ach_ChargedWinds, p);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(sabirPhases, chargedWindsEligibilityEvents, Ach_ChargedWinds, p);
+            achievementEligibilityEvents.AddRange(chargedWindsEligibilityEvents);
+        }
     }
 }
