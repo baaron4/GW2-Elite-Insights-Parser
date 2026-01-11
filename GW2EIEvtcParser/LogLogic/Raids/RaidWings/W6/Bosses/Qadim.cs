@@ -13,6 +13,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -76,9 +77,12 @@ internal class Qadim : MythwrightGambit
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(SwapQadim, new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port", "Swap (Ported from below Legendary Creature to Qadim)","Port to Qadim", 0),
                 new PlayerDstBuffApplyMechanic(PowerOfTheLamp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp", "Power of the Lamp (Returned from the Lamp)","Lamp Return", 0),
-                new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns", "Achievement Eligibility: Taking Turns", "Taking Turns", 0, (log, a) => log.CombatData.GetDeadEvents(a))
-                    .UsingEnable((log) => CustomCheckTakingTurns(log))
-                    .UsingAchievementEligibility(),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_TakingTurns, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns.N.G", "Achievement Eligibility: Taking Turns not Gained", "Taking Turns not Gained", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_TakingTurns, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Grey), "Taking Turns.G", "Achievement Eligibility: Taking Turns Gained", "Taking Turns Gained", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+                ]),
                 new PlayerDstHealthDamageHitMechanic(Claw, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw", "Claw (Reaper of Flesh attack)","Reaper Claw", 0),
             ]),
             new MechanicGroup([
@@ -1498,43 +1502,46 @@ internal class Qadim : MythwrightGambit
     /// Check the player positions for the achievement eligiblity.<br></br>
     /// </summary>
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
-    private static bool CustomCheckTakingTurns(ParsedEvtcLog log)
+    private static bool CustomCheckTakingTurns(ParsedEvtcLog log, EncounterPhaseData qadimEncounter)
     {
         // Z coordinates info:
         // The player in the lamp is roughly at -81
         // The death zone from falling off the platform is roughly at -2950
         // The main fight platform is at roughly at -4700
 
-        var lamps = log.AgentData.GetNPCsByID(TargetID.QadimLamp).ToList();
+        var lamps = log.AgentData.GetNPCsByID(TargetID.QadimLamp).Where(x => x.InAwareTimes(qadimEncounter.Start, qadimEncounter.End)).ToList();
         int lampLabyrinthZ = -250; // Height Threshold
 
         foreach (Player p in log.PlayerList)
         {
-            IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
-            var exitBuffs = log.CombatData.GetBuffApplyDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>();
-
-            // Count the times the player has entered and exited the lamp.
-            // A player that has entered the lamp but never exites and remains alive is elible for the achievement.
-
-            int entered = 0;
-            int exited = 0;
-
-            for (int i = 0; i < lamps.Count; i++)
+            if (qadimEncounter.IntersectsWindow(p.FirstAware, p.LastAware))
             {
-                if (positions.Any(x => x.XYZ.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
+                var exitBuffs = log.CombatData.GetBuffApplyDataByIDByDst(PowerOfTheLamp, p.AgentItem).Where(x => qadimEncounter.InInterval(x.Time)).OfType<BuffApplyEvent>();
+
+                // Count the times the player has entered and exited the lamp.
+                // A player that has entered the lamp but never exites and remains alive is elible for the achievement.
+
+                int entered = 0;
+                int exited = 0;
+
+                for (int i = 0; i < lamps.Count; i++)
                 {
-                    entered++;
+                    if (positions.Any(x => x.XYZ.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                    {
+                        entered++;
+                    }
+
+                    var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.LogData.LogEnd;
+                    var segment = new Segment(lamps[i].LastAware, end, 1);
+
+                    if (exitBuffs.Any(x => segment.ContainsPoint(x.Time)))
+                    {
+                        exited++;
+                    }
+
+                    if (entered > 1) { return false; } // Failed achievement
                 }
-
-                var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.LogData.LogEnd;
-                var segment = new Segment(lamps[i].LastAware, end, 1);
-
-                if (exitBuffs.Any(x => segment.ContainsPoint(x.Time)))
-                {
-                    exited++;
-                }
-
-                if (entered > 1) { return false; } // Failed achievement
             }
         }
 
@@ -1601,6 +1608,33 @@ internal class Qadim : MythwrightGambit
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var takingTurnsEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var qadimPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var deaths = log.CombatData.GetDeadEvents(p.AgentItem);
+            foreach (var death in deaths)
+            {
+                InsertAchievementEligibityEventAndRemovePhase(qadimPhases, takingTurnsEligibilityEvents, death.Time, Ach_TakingTurns, p);
+            }
+            foreach (var qadimPhase in qadimPhases.ToList())
+            {
+                if (p.IsDead(log, qadimPhase.Start, qadimPhase.End))
+                {
+                    takingTurnsEligibilityEvents.Add(new AchievementEligibilityEvent(qadimPhase.End, Ach_TakingTurns, p, true));
+                    qadimPhases.Remove(qadimPhase);
+                }
+            }
+            foreach (var qadimPhase in qadimPhases.ToList())
+            {
+                if (!CustomCheckTakingTurns(log, qadimPhase))
+                {
+                    takingTurnsEligibilityEvents.Add(new AchievementEligibilityEvent(qadimPhase.End, Ach_TakingTurns, p, true));
+                    qadimPhases.Remove(qadimPhase);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(qadimPhases, takingTurnsEligibilityEvents, Ach_TakingTurns, p);
+            achievementEligibilityEvents.AddRange(takingTurnsEligibilityEvents);
         }
     }
 }

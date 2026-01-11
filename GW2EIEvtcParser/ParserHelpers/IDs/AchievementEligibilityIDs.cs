@@ -25,4 +25,5 @@ public static class AchievementEligibilityIDs
     public const long Ach_ChargedWinds = 12;
     public const long Ach_HopscotchMaster = 13;
     public const long Ach_Unplagued = 14;
+    public const long Ach_TakingTurns = 15;
 }
