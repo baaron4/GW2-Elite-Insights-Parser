@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -85,52 +86,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstHealthDamageHitMechanic(Sparkwave, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightOrange), "Sparkwave.H", "Hit by Sparkwave (Transcendent Boulders Cone)", "Sparkwave Hit", 0),
                 new PlayerDstHealthDamageHitMechanic(ChargedGround, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "CharGrnd.H", "Hit by Charged Ground (Transcendent Boulders AoEs)", "Charged Ground Hit", 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder], new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Eligibility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
-            {
-                // If you are dead, lose the achievement
-                if (adhe.To.IsDead(log, log.LogData.LogStart, log.LogData.LogEnd))
-                {
-                    return true;
-                }
-
-                // If you get hit by Fulgent Fence, lose the achievement
-                if (adhe.SkillID == FulgentFenceCM && adhe.HasHit)
-                {
-                    return true;
-                }
-
-                var damageTaken = log.CombatData.GetDamageTakenData(adhe.To);
-                bool hasExposed = log.CombatData.GetBuffData(ExposedPlayer).Any(x => x is BuffApplyEvent && x.To.Is(adhe.To) && Math.Abs(x.Time - adhe.Time) < ServerDelayConstant);
-
-                // If you get hit by your own Fluxlance only during the current sequence, keep the achievement
-                // If you get hit by 2 Fluxlance in the current sequence, lose the achievement
-                long[] fluxlanceIDs = [FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5];
-                var fluxlanceTimes = damageTaken.Where(x => (fluxlanceIDs.Contains(x.SkillID)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
-                foreach (long fluxlanceTime in fluxlanceTimes)
-                {
-                    // Fluxlance sequence lasts about 5 seconds, giving it 7 as margin
-                    if (Math.Abs(fluxlanceTime - adhe.Time) < 7000 && fluxlanceIDs.Contains(adhe.SkillID) && hasExposed)
-                    {
-                        return true;
-                    }
-                }
-
-                // If you get hit by your own thunder, keep the achievement
-                // If you get hit by a thunder on another player or on a conduit, lose the achievement
-                long[] thunderIDs = [ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder];
-                var thunderTimes = damageTaken.Where(x => (thunderIDs.Contains(x.SkillID)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
-                foreach (long thunderTime in thunderTimes)
-                {
-                    if (Math.Abs(thunderTime - adhe.Time) < ServerDelayConstant && thunderIDs.Contains(adhe.SkillID) && hasExposed)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            })
-                .UsingEnable(log => log.LogData.IsCM)
-                .UsingAchievementEligibility(),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_ThisBugCanDance, new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkerLime), "BugDance.Achiv.L", "Achievement Eligibility: This Bug Can Dance Lost", "Achiv: This Bug Can Dance Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_ThisBugCanDance, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv.K", "Achievement Eligibility: This Bug Can Dance Kept", "Achiv: This Bug Can Dance Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+            ]),
             new EnemyDstBuffApplyMechanic(ChargeDecima, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
         ]);
 
@@ -883,6 +844,53 @@ internal class DecimaTheStormsinger : MountBalrior
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var thisBugCanDanceEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var decimaCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            // Fulgent check
+            var fulgentCMs = log.CombatData.GetDamageData(FulgentFenceCM);
+            foreach (var evt in fulgentCMs)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(decimaCMPhases, thisBugCanDanceEligibilityEvents, evt.Time, Ach_ThisBugCanDance, p);
+                }
+            }
+            // Flux and Thunder checks
+            HashSet<long> fluxlanceIDs = [FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5];
+            HashSet<long> thunderIDs = [ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder];
+            var exposeds = log.CombatData.GetBuffApplyDataByIDByDst(ExposedPlayer, p.AgentItem);
+            var damageData = p.GetDamageTakenEvents(null, log).Where(x => fluxlanceIDs.Contains(x.SkillID) || thunderIDs.Contains(x.SkillID)).ToList();
+            foreach (var evt in exposeds)
+            {
+                if (damageData.Any(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant)) 
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(decimaCMPhases, thisBugCanDanceEligibilityEvents, evt.Time, Ach_ThisBugCanDance, p);
+                }
+            }
+            // Lost on death/dc
+            foreach (var decimaCMPhase in decimaCMPhases.ToList())
+            {
+                var deathEvent = log.CombatData.GetDeadEvents(p.AgentItem).FirstOrDefault(x => decimaCMPhase.InInterval(x.Time));
+                var dcEvent = log.CombatData.GetDespawnEvents(p.AgentItem).FirstOrDefault(x => decimaCMPhase.InInterval(x.Time));
+                if (deathEvent != null)
+                {
+                    decimaCMPhases.Remove(decimaCMPhase);
+                    thisBugCanDanceEligibilityEvents.Add(new AchievementEligibilityEvent(deathEvent.Time, Ach_ThisBugCanDance, p, true));
+                } else if (dcEvent != null)
+                {
+                    decimaCMPhases.Remove(decimaCMPhase);
+                    thisBugCanDanceEligibilityEvents.Add(new AchievementEligibilityEvent(dcEvent.Time, Ach_ThisBugCanDance, p, true));
+                }
+                else if (p.IsDead(log, decimaCMPhase.Start, decimaCMPhase.End) || p.IsDC(log, decimaCMPhase.Start, decimaCMPhase.End))
+                {
+                    decimaCMPhases.Remove(decimaCMPhase);
+                    thisBugCanDanceEligibilityEvents.Add(new AchievementEligibilityEvent(decimaCMPhase.Start, Ach_ThisBugCanDance, p, true));
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(decimaCMPhases, thisBugCanDanceEligibilityEvents, Ach_ThisBugCanDance, p);
+            achievementEligibilityEvents.AddRange(thisBugCanDanceEligibilityEvents);
         }
     }
 }

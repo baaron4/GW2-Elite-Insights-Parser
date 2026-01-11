@@ -93,15 +93,6 @@ public abstract class Mechanic : MechanicContainer
         return this;
     }
 
-    /// <summary>
-    /// Eligibility mechanics will only be computed in successful logs
-    /// </summary>
-    /// <returns></returns>
-    internal Mechanic UsingAchievementEligibility()
-    {
-        return this;
-    }
-
     internal Mechanic UsingEnable(Keeper keeper)
     {
         _enableConditions.Add(keeper);
