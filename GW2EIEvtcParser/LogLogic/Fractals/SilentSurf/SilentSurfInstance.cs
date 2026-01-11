@@ -185,6 +185,7 @@ internal class SilentSurfInstance : SilentSurf
     {
         base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         _kanaxai.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+    }
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
