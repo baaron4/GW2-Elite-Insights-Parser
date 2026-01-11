@@ -227,7 +227,7 @@ internal class Arkk : ShatteredObservatory
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End));
         var finalEncounter = encounterPhases.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {

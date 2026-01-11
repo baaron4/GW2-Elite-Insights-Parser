@@ -767,7 +767,7 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         {
             var hopscotchMasterEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var uraPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM)).ToHashSet();
+            var uraPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && p.IsActive(log, x.Start, x.End)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(EruptionVent),
                 ..log.CombatData.GetDamageData(SulfuricEruption)

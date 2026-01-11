@@ -571,7 +571,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         }
         {
             var dancedStarsEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var coCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM).ToHashSet();
+            var coCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && p.IsActive(log, x.Start, x.End)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(SpinningNebulaCentral),
                 ..log.CombatData.GetDamageData(SpinningNebulaWithTeleport)

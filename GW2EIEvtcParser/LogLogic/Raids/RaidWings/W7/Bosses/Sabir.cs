@@ -394,7 +394,7 @@ internal class Sabir : TheKeyOfAhdashim
         }
         {
             var chargedWindsEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var sabirPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            var sabirPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
             var damageData = log.CombatData.GetDamageData(Electrospark);
             foreach (var evt in damageData)
             {

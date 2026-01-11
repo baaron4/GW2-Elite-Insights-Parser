@@ -841,7 +841,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
         {
             var unplaguedEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var greerPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM).ToHashSet();
+            var greerPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && p.IsActive(log, x.Start, x.End)).ToHashSet();
             var buffData = log.CombatData.GetBuffApplyDataByIDByDst(PlagueRot, p.AgentItem);
             foreach (var evt in buffData)
             {

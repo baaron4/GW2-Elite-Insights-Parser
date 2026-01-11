@@ -552,7 +552,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         {
             var clarityEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var xjjPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            var xjjPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(WallOfFear),
                 ..log.CombatData.GetDamageData(WaveOfTormentNM),
@@ -572,7 +572,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         {
             var undevouredEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var xjjCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM).ToHashSet();
+            var xjjCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && p.IsActive(log, x.Start, x.End)).ToHashSet();
             var buffApplyData = log.CombatData.GetBuffApplyDataByIDByDst(DevouringVoid, p.AgentItem);
             foreach (var evt in buffApplyData)
             {

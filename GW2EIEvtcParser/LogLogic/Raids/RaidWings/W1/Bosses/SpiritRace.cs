@@ -298,7 +298,7 @@ internal class SpiritRace : SpiritVale
         }
         {
             var outrunGhostEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var spiritRacePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID).ToHashSet();
+            var spiritRacePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && p.IsActive(log, x.Start, x.End)).ToHashSet();
             var crippleds = log.CombatData.GetBuffApplyDataByIDByDst(Crippled, p.AgentItem);
             foreach (var evt in crippleds)
             {
