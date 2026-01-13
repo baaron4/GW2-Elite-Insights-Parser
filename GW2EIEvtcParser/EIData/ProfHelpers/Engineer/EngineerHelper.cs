@@ -246,6 +246,7 @@ internal static class EngineerHelper
         // Tools
         // - Excessive Energy
         new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExcessiveEnergy, DamageModifierMode.All),
+        // TODO: double check values/game modes
         new BuffOnActorDamageModifier(Mod_KineticBattery, KineticBattery, "Kinetic Battery", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.KineticBattery, DamageModifierMode.All)
             .WithBuilds(GW2Builds.January2026Balance),
     ];
