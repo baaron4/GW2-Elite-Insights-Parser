@@ -11,7 +11,7 @@ public class EvtcParserSettings
     public readonly long TooBigLimit;
     public readonly bool DetailedWvWParse;
 
-    public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, long tooBigLimit) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, tooShortLimit, tooShortLimit, false)
+    public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, long tooBigLimit) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, tooShortLimit, tooBigLimit, false)
     {
     }
 

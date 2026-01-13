@@ -9,7 +9,7 @@
             <div v-show="specToBase[spec.name] === persBuffMode">
                 <h3 class="text-center">{{ spec.name }}</h3>
                 <buff-volume-table-component :target="null"  :outgoing="false" :id="'persbuffs-volume-stats-table' + '_' + spec.name"
-                    :buffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
+                    :buffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-volume-table-component>
             </div>
         </div>
     </div>

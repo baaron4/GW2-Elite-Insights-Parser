@@ -2280,11 +2280,11 @@ public static class SkillIDs
     public const long SpatialManipulation1 = 37611;
     public const long MindCrush = 37613;
     public const long EmpoweredMO = 37626;
-    public const long SpatialManipulation2 = 37629;
+    public const long SpatialManipulationInitial = 37629;
     public const long OrbitalSweep = 37631;
-    public const long SpatialManipulation3 = 37642;
+    public const long SpatialManipulation2 = 37642;
     public const long CrystallineHeart = 37657;
-    public const long SpatialManipulation4 = 37673;
+    public const long SpatialManipulation3 = 37673;
     public const long EnragedCairn = 37675;
     public const long JadeSoldierAura = 37677;
     public const long FixatedRigom = 37693;
@@ -2330,7 +2330,7 @@ public static class SkillIDs
     public const long DemonicShockWaveLeft = 38046;
     public const long SharedAgony = 38049;
     public const long EnergySurge = 38060;
-    public const long SpatialManipulation5 = 38074;
+    public const long SpatialManipulation4 = 38074;
     public const long SpectralAgony = 38077;
     public const long Countdown = 38098;
     public const long CairnImpact = 38102;
@@ -2358,12 +2358,13 @@ public static class SkillIDs
     public const long FanaticalResilience = 38226;
     public const long ImpalingStab = 38231;
     public const long ClaimSAK = 38234;
+    public const long CairnPetrifed = 38235;
     public const long InevitableBetrayalSmall = 38247;
     public const long BrutalAura = 38258;
     public const long InevitableBetrayalFailSmall = 38260;
     public const long UnseenBurdenDeimos = 38266;
     public const long BoonThief = 38272;
-    public const long SpatialManipulation6 = 38302;
+    public const long SpatialManipulationFastTrigger = 38302;
     public const long Bludgeon = 38305;
     public const long MeteorSwarm = 38313;
     public const long AnguishedBolt = 38314;
@@ -4328,7 +4329,7 @@ public static class SkillIDs
     public const long RelicOfTheNightmare = 69849;
     public const long RelicOfFireworks = 69855;
     public const long InsatiableHungerBigOrbEmpoweredNMCM1 = 69861;
-    public const long RelicOfCerusBuff = 69867;
+    public const long POV_RelicOfCerusBuff = 69867;
     public const long RelicOfPeithaTargetBuff = 69882;
     public const long CruelDetonation2 = 69928;
     public const long ChargingConstellationDamage = 69950;
