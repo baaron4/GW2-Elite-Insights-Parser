@@ -224,6 +224,10 @@ public class Buff : IVersionable
     {
         ulong gw2Build = combatData.GetGW2BuildEvent().Build;
 
+        if (gw2Build >= GW2Builds.January2026Balance)
+        {
+            return new BuffSourceFinder20260113(boonIDs);
+        }
         if (gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary)
         {
             return new BuffSourceFinder20240319(boonIDs);
