@@ -25,6 +25,8 @@ internal static class GuardianHelper
         //new BuffLossCastFinder(9120,9119,InstantCastFinder.DefaultICD), // Virtue of Resolve
         //new BuffLossCastFinder(9118,9113,InstantCastFinder.DefaultICD), // Virtue of Courage
 
+        // TODO: lesser symbols and symbol of blades
+
         // Meditations
         new DamageCastFinder(JudgesIntervention, JudgesIntervention)
             .UsingDisableWithEffectData(),
