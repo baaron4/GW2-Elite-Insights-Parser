@@ -163,6 +163,23 @@ internal static class EngineerHelper
         new MissileCastFinder(SurpriseShot, SurpriseShot),
     ];
 
+    private static DamageLogChecker HeavyMetalChecker(double lower, double higher = 101)
+    {
+        return (x, log) =>
+        {
+            if (!x.HasCrit)
+            {
+                return false;
+            }
+            double toHP = x.To.GetCurrentHealthPercent(log, x.Time);
+            if (toHP < 0.0)
+            {
+                return false;
+            }
+            return higher > toHP && toHP >= lower;
+        };
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
@@ -208,17 +225,21 @@ internal static class EngineerHelper
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2024JWRelease),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.WvW)
-            .WithBuilds(GW2Builds.August2024JWRelease),
+            .WithBuilds(GW2Builds.August2024JWRelease, GW2Builds.January2026Balance),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
-            .WithBuilds(GW2Builds.August2024JWRelease),
+            .WithBuilds(GW2Builds.August2024JWRelease, GW2Builds.January2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.January2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.PvEsPvP)
+            .WithBuilds(GW2Builds.January2026Balance),
         // - Heavy Metal
-        new DamageLogDamageModifier(Mod_HeavyMetal_75, "Heavy Metal (75%)", "15% if target hp% lower than 75%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(50, 75), DamageModifierMode.PvE )
+        new DamageLogDamageModifier(Mod_HeavyMetal_75, "Heavy Metal (75%)", "5% on crit if target hp% lower than 75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.HeavyMetal, HeavyMetalChecker(50, 75), DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.January2026Balance),
-        new DamageLogDamageModifier(Mod_HeavyMetal_50, "Heavy Metal (50%)", "15% if target hp% lower than 50%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(25, 50), DamageModifierMode.PvE )
+        new DamageLogDamageModifier(Mod_HeavyMetal_50, "Heavy Metal (50%)", "10% on crit if target hp% lower than 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.HeavyMetal, HeavyMetalChecker(25, 50), DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.January2026Balance),
-        new DamageLogDamageModifier(Mod_HeavyMetal_25, "Heavy Metal (25%)", "15% if target hp% lower than 25%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, ToHPChecker(0, 25), DamageModifierMode.PvE )
+        new DamageLogDamageModifier(Mod_HeavyMetal_25, "Heavy Metal (25%)", "15% on crit if target hp% lower than 25%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.HeavyMetal, HeavyMetalChecker(0, 25), DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.January2026Balance),
         
