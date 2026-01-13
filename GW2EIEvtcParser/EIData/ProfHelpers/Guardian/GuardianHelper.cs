@@ -101,7 +101,9 @@ internal static class GuardianHelper
         new BuffOnFoeDamageModifier(Mod_SymbolicExposure, Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.SymbolicExposure, DamageModifierMode.All),
         // - Symbolic Avenger
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.July2019Balance),
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2026Balance),
+        new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger_Jan2026, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.January2026Balance),
         // - Furious Focus
         new BuffOnActorDamageModifier(Mod_FuriousFocus, Fury, "Furious Focus", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FuriousFocus, DamageModifierMode.All)
             .WithBuilds(GW2Builds.January2026Balance),
@@ -201,7 +203,9 @@ internal static class GuardianHelper
         new Buff("Virtue of Resolve (Battle Presence)", VirtueOfResolveBattlePresence, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, TraitImages.BattlePresence),
         new Buff("Virtue of Resolve (Battle Presence - Absolute Resolve)", VirtueOfResolveBattlePresenceAbsoluteResolve, Source.Guardian, BuffStackType.Queue, 2, BuffClassification.Defensive, SkillImages.VirtueOfResolve),
         new Buff("Symbolic Avenger", SymbolicAvenger, Source.Guardian, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.SymbolicAvenger)
-            .WithBuilds(GW2Builds.July2019Balance),
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2026Balance),
+        new Buff("Symbolic Avenger", SymbolicAvenger, Source.Guardian, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.SymbolicAvenger_Jan2026)
+            .WithBuilds(GW2Builds.January2026Balance),
         new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.VirtuousSolace)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
         new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, TraitImages.VirtuousSolace)

@@ -5461,4 +5461,5 @@ public static class SkillIDs
     public const long KineticBattery = NoBuff;
     public const long DangerTime = NoBuff;
     public const long TimeBomb = NoBuff;
+    public const long LesserSicEmSkill = NoBuff;
 }
