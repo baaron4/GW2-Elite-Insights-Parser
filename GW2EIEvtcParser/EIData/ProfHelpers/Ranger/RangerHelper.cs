@@ -268,15 +268,12 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
+            .WithMinions(),
+        new BuffGainCastFinder(LesserSicEm, LesserSicEm)
             .WithMinions()
-            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
-        new BuffGainCastFinder(LesserSicEmSkill, SicEmBuff)
-            .WithMinions()
-            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant)
             .WithBuilds(GW2Builds.January2026Balance),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
-            .WithMinions()
-            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
+            .WithMinions(),
         new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
@@ -337,7 +334,14 @@ internal static class RangerHelper
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
             .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em! (Pet)", "40%", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_LesserSicEm, LesserSicEm, "Lesser Sic 'Em!", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
+            .WithBuffOnActorFromFoe()
+            .WithBuilds(GW2Builds.January2026Balance),
+        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em! (Pet)", "40%", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
+            .WithBuffOnActorFromFoe(),
+        new BuffOnActorDamageModifier(Mod_LesserSicEmPet, LesserSicEm, "Lesser Sic 'Em! (Pet)", "40%", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
+            .WithBuffOnActorFromFoe()
+            .WithBuilds(GW2Builds.January2026Balance),
         // - Frost Spirit
         new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
@@ -497,6 +501,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
         new Buff("Strength of the Pack!", StrengthOfThePack, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
         new Buff("Sic 'Em!", SicEmBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
+        new Buff("Lesser Sic 'Em!", LesserSicEm, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Sic 'Em! (PvP)", SicEmPvPBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Sharpening Stones", SharpeningStonesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SharpeningStone),
         new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SharpenSpines),

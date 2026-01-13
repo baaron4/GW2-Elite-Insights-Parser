@@ -417,4 +417,6 @@ public static class DamageModifierIDs
     public const int Mod_TimeBomb = 404;
     public const int Mod_LoudWhistle_Pet = 405;
     public const int Mod_EnterprisingAristocrat = 406;
+    public const int Mod_LesserSicEmPet = 407;
+    public const int Mod_LesserSicEm = 408;
 }
