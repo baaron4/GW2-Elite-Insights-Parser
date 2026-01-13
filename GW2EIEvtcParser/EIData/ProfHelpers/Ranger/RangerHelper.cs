@@ -270,6 +270,10 @@ internal static class RangerHelper
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
             .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
+        new BuffGainCastFinder(LesserSicEmSkill, SicEmBuff)
+            .WithMinions()
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant)
+            .WithBuilds(GW2Builds.January2026Balance),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
             .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 10000) < ServerDelayConstant),
