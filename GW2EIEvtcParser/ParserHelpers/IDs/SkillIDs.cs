@@ -1184,6 +1184,7 @@ public static class SkillIDs
     public const long ProtectionUnstrippable = 16537; // Used for Greer
     public const long PortalUses = 16553;
     public const long GravelShot3 = 16711;
+    public const long Dread = 16947;
     public const long VirtueOfResolveBattlePresence = 17046;
     public const long VirtueOfResolveBattlePresenceAbsoluteResolve = 17047;
     public const long DeployGuildArrowCart = 17676;
@@ -5460,5 +5461,4 @@ public static class SkillIDs
     public const long KineticBattery = NoBuff;
     public const long DangerTime = NoBuff;
     public const long TimeBomb = NoBuff;
-    public const long Dread = NoBuff;
 }

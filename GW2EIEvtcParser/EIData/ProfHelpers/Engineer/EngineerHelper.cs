@@ -175,7 +175,13 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.All)
             .UsingApproximate()
-            .WithBuilds(GW2Builds.May2021Balance),
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.PvEsPvP)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.January2026Balance),
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, FromHPChecker(75), DamageModifierMode.WvW)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.January2026Balance),
         // - Shaped Charge
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
