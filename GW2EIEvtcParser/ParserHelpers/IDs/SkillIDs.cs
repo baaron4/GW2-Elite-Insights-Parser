@@ -5458,9 +5458,10 @@ public static class SkillIDs
     public const long RelicOfTheScoundrel = 79279;
     public const long TimeBombBuff = 79339;
     public const long LesserSicEm = 79348;
+    public const long BountifulPowerCharge = 79349;
     public const long DangerTime = 79353;
     public const long TimeBombDamage = 79359;
+    public const long BountifulPower = 79363;
     #endregion
-    public const long BountifulPower = NoBuff;
     public const long KineticBattery = NoBuff;
 }

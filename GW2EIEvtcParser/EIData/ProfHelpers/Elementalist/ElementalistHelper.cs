@@ -262,6 +262,7 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.July2020Balance),
         new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, TraitImages.FreshAir),
         new Buff("Bountiful Power", BountifulPower, Source.Elementalist, BuffClassification.Other, TraitImages.BountifulPower),
+        new Buff("Bountiful Power (Charge)", BountifulPowerCharge, Source.Elementalist, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.BountifulPower),
         new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, TraitImages.SoothingMist)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
         new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Defensive, TraitImages.SoothingMist)
