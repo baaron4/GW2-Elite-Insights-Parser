@@ -107,6 +107,7 @@ internal static class TraitImages
     #region Mesmer
     public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";
     public const string DangerTime = "https://render.guildwars2.com/file/E0A1FF012E170754030A0CB6DFDBAED3E81FAB5B/1012479.png";
+    public const string TimeBomb = "https://render.guildwars2.com/file/C9BC67D77E3D959723393BF0EC9B212B53D8362D/1012478.png";
     public const string ImprovedAlacrity = "https://render.guildwars2.com/file/C9BC67D77E3D959723393BF0EC9B212B53D8362D/1012478.png";
     public const string ConfoundingSuggestions = "https://render.guildwars2.com/file/E9CB4990C405C00D34DB07C5C5291FD5E90EF90C/1012486.png";
     public const string TemporalEnchanter = "https://render.guildwars2.com/file/1503DDC5B62526D71901E3A7F891A6F4445D80C8/1012527.png";

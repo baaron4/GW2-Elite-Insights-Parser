@@ -26,6 +26,7 @@ internal static class ChronomancerHelper
         new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
             .UsingSrcSpecChecker(Spec.Chronomancer),
+        new DamageCastFinder(TimeBombDamage, TimeBombDamage),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
@@ -41,12 +42,14 @@ internal static class ChronomancerHelper
             .UsingChecker((x, log) => x.HasCrit)
             .UsingChecker(MesmerHelper.IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.June2025Balance, GW2Builds.January2026Balance),
-        new BuffOnActorDamageModifier(Mod_DangerTime, DangerTime, "Danger Time", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DangerTime, DangerTime, "Danger Time", "10%", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.HasCrit)
+            .UsingChecker(MesmerHelper.IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.January2026Balance),
         // Time Bomb
-        new BuffOnFoeDamageModifier(Mod_TimeBomb, TimeBomb, "Time Bomb", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_TimeBomb, TimeBombBuff, "Time Bomb", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.TimeBomb, DamageModifierMode.All)
             .WithBuffOnFoeFromActor()
-            .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(TimeBomb, a.AgentItem).Count == 0)
+            .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(TimeBombBuff, a.AgentItem).Count == 0)
             .WithBuilds(GW2Builds.January2026Balance),
         // Improved Alacrity
         new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
@@ -63,7 +66,7 @@ internal static class ChronomancerHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.ContinuumSplit),
         new Buff("Danger Time", DangerTime, Source.Chronomancer, BuffClassification.Other, TraitImages.DangerTime),
-        new Buff("Time Bomb", TimeBomb, Source.Chronomancer, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.ContinuumSplit),
+        new Buff("Time Bomb", TimeBombBuff, Source.Chronomancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.TimeBomb),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
 
