@@ -27,7 +27,7 @@
                     <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
                         v-show="isInPlayerColPage(index)"
                         :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                        {{ playerMechHeader[index].isAchievementEligibility ? (mech[0] ? 'Non Eligible' : 'Eligible') : (mech[0] ? mech[0] : '-')}}
+                        {{ (mech[0] ? mech[0] : '-')}}
                     </td>
                 </tr>
             </tbody>
@@ -225,7 +225,7 @@
                         if (!player) {
                             continue;
                         }
-                        if (this.phase.mechanicStats[i][j][0] > 0 || allPlayerMechs[j].isAchievementEligibility) {
+                        if (this.phase.mechanicStats[i][j][0] > 0) {
                             res.push(allPlayerMechs[j]);
                             break;
                         }
@@ -265,7 +265,7 @@
                         if (enemy.firstAware >= encounterPhase.end || enemy.lastAware <=  encounterPhase.start) {
                             continue;
                         }
-                        if (this.phase.enemyMechanicStats[i][j][0] > 0 || allEnemyMechs[j].isAchievementEligibility) {
+                        if (this.phase.enemyMechanicStats[i][j][0] > 0) {
                             res.push(allEnemyMechs[j]);
                             break;
                         }

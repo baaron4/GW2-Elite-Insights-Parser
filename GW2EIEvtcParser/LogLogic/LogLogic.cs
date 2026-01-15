@@ -132,7 +132,7 @@ public abstract class LogLogic
         {
             allMechs.AddRange(mechGroup.GetMechanics());
         }
-        return new MechanicData(allMechs, IsInstance);
+        return new MechanicData(allMechs);
     }
 
     internal virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
@@ -148,6 +148,11 @@ public abstract class LogLogic
             Map.ComputeBoundingBox(log);
         }
         return Map;
+    }
+
+    internal virtual void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+
     }
 
     internal virtual void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)

@@ -45,7 +45,8 @@ public class JsonMechanics
     /// <summary>
     /// If true, then the mechanic represent an achievement eligibility mechanic. \n
     /// Will only appear on successful encounters. \n
-    /// Any Player who appears in <see cref="MechanicsData"/> will not be eligible for the achievement.
+    /// Any Player who appears in <see cref="MechanicsData"/> will not be eligible for the achievement. \n
+    /// Discontinued as of EI 3.17.0.0.
     /// </summary>
     public bool IsAchievementEligibility;
 }

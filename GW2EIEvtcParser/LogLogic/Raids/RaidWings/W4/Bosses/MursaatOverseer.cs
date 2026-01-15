@@ -182,6 +182,13 @@ internal class MursaatOverseer : BastionOfThePenitent
             base.SetInstanceBuffs(log, instanceBuffs);
         }
     }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {

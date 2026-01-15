@@ -474,4 +474,19 @@ internal class Eparch : LonelyTower
             }
         }
     }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
 }

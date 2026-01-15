@@ -13,7 +13,6 @@ internal class MechanicDto
     public string? Description { get; set; }
     public bool EnemyMech { get; set; }
     public bool PlayerMech { get; set; }
-    public bool IsAchievementEligibility { get; set; }
 
     private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, SingleActor actor, PhaseData phase)
     {
@@ -64,7 +63,6 @@ internal class MechanicDto
                 Description = mech.Description,
                 PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
                 EnemyMech = mech.IsEnemyMechanic,
-                IsAchievementEligibility = mech.IsAchievementEligibility,
                 Icd = mech.InternalCooldown
             };
             mechsDtos.Add(dto);

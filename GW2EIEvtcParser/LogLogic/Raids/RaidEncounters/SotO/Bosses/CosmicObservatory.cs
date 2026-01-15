@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using GW2EIGW2API;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -21,9 +22,12 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         MechanicList.Add( new MechanicGroup([
         
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
-                    .UsingEnable(x => x.LogData.IsCM)
-                    .UsingAchievementEligibility(),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_DancedStars, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv.L", "Achievement Eligibility: Danced with the Stars Lost", "Danced with the Stars Lost", 0)
+                            .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_DancedStars, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Blue), "DancStars.Achiv.K", "Achievement Eligibility: Danced with the Stars Kept", "Danced with the Stars Kept", 0)
+                            .UsingChecker((evt, log) => !evt.Lost)
+                ]),
                 new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
                 new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
             ]),
@@ -556,6 +560,32 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                     instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityPrecisionAnxiety], 1, encounterPhase));
                 }
             }
+        }
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var dancedStarsEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var coCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            List<HealthDamageEvent> damageData = [
+                ..log.CombatData.GetDamageData(SpinningNebulaCentral),
+                ..log.CombatData.GetDamageData(SpinningNebulaWithTeleport)
+            ];
+            damageData.SortByTime();
+            foreach (var evt in damageData)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(coCMPhases, dancedStarsEligibilityEvents, evt.Time, Ach_DancedStars, p);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(coCMPhases, dancedStarsEligibilityEvents, Ach_DancedStars, p);
+            achievementEligibilityEvents.AddRange(dancedStarsEligibilityEvents);
         }
     }
 }

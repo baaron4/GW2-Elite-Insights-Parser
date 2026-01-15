@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -148,5 +149,11 @@ internal class KinfallInstance : Kinfall
     {
         base.SetInstanceBuffs(log, instanceBuffs);
         _whisperingShadow.SetInstanceBuffs(log, instanceBuffs);
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        _whisperingShadow.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
     }
 }
