@@ -458,7 +458,7 @@ internal class Matthias : SalvationPass
 
         // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection).Where(x => x.Value > 0);
-        replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
+        replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowDownOverhead);
 
         // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice).Where(x => x.Value > 0);

@@ -248,8 +248,10 @@ internal class WhisperingShadow : Kinfall
             foreach (var effect in spikes)
             {
                 var lifespan = effect.ComputeLifespan(log, 1500);
-                var decoration = new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                var position = new PositionConnector(effect.Position);
+                var decoration = new CircleDecoration(130, lifespan, Colors.Orange, 0.2, position);
                 environmentDecorations.AddWithGrowing(decoration, lifespan.end);
+                environmentDecorations.Add(new IconDecoration(ParserIcons.RedArrowUpOverhead, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, position));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpikeDanger, out var spikesDanger))
@@ -257,8 +259,10 @@ internal class WhisperingShadow : Kinfall
             foreach (var effect in spikesDanger)
             {
                 var lifespan = effect.ComputeLifespan(log, 2000);
-                var decoration = new CircleDecoration(130, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                var position = new PositionConnector(effect.Position);
+                var decoration = new CircleDecoration(130, lifespan, Colors.Red, 0.2, position);
                 environmentDecorations.AddWithGrowing(decoration, lifespan.end);
+                environmentDecorations.Add(new IconDecoration(ParserIcons.RedXMarkerOverhead, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, position));
             }
         }
 
