@@ -729,13 +729,22 @@ internal class DecimaTheStormsinger : MountBalrior
 
     private static void AddEnlightenedConduitDecorations(ParsedEvtcLog log, SingleActor target, CombatReplay replay, long fluxLanceTargetBuffID, long wallWarningBuffID, long wallBuffID)
     {
-
         // Focused Fluxlance - Green Arrow from Decima to the Conduit
         var greenArrow = GetBuffApplyRemoveSequence(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
+        const long duration = 5500;
+        bool isCM = fluxLanceTargetBuffID == FluxlanceTargetBuffCM1;
+        // Prior to build 172309 normal mode required 5 players instead of 3.
+        string img = isCM || log.LogMetadata.GW2Build < GW2Builds.December2024MountBalriorNerfs ? ParserIcons.GreenMarkerSize5Overhead : ParserIcons.GreenMarkerSize3Overhead;
         foreach (var apply in greenArrow)
         {
-            replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
-            replay.Decorations.Add(new LineDecoration((apply.Time + 5500, apply.Time + 6500), Colors.DarkGreen, 0.5, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
+            (long start, long end) lifespan = (apply.Time, apply.Time + duration);
+            replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + duration), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
+            replay.Decorations.Add(new LineDecoration((apply.Time + duration, apply.Time + duration + 1000), Colors.DarkGreen, 0.5, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
+            if (apply.To.TryGetCurrentInterpolatedPosition(log, apply.Time, out Vector3 pos1) && apply.By.TryGetCurrentInterpolatedPosition(log, apply.Time, out Vector3 pos2))
+            {
+                Vector3 centralPos = (pos1 + pos2) / 2;
+                replay.Decorations.Add(new IconDecoration(img, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, new PositionConnector(centralPos)));
+            }
         }
 
         // Warning indicator of walls spawning between Conduits.
