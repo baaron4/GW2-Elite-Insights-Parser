@@ -563,11 +563,12 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         }
 
         // Pool of Despair - Spread AoE on ground
+        var tofPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && (x.IsCM || x.IsLegendaryCM)).ToList();
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespair, out var poolOfDespair))
         {
             foreach (EffectEvent effect in poolOfDespair)
             {
-                int duration = log.LogData.LogIsCM || log.LogData.LogIsLegendaryCM ? 120000 : 60000;
+                int duration = tofPhases.Any(x => x.InInterval(effect.Time)) ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);

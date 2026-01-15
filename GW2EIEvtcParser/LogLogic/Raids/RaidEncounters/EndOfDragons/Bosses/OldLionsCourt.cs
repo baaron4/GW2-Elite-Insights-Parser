@@ -197,7 +197,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
     }
 
-    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, PhaseData fullFightPhase)
+    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, EncounterPhaseData fullFightPhase)
     {
         DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
         long end = log.LogData.LogEnd;
@@ -208,7 +208,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         }
         List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, start, end);
         string[] phaseNames;
-        if (log.LogData.LogIsCM)
+        if (fullFightPhase.IsCM)
         {
             if (subPhases.Count > 3)
             {
@@ -284,7 +284,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(vermilion, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", phases[0]));
+                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", (EncounterPhaseData)phases[0]));
             }
         }
         SingleActor? indigo = Indigo();
@@ -293,7 +293,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(indigo, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(indigo, log, "Indigo", phases[0]));
+                phases.AddRange(GetSubPhases(indigo, log, "Indigo", (EncounterPhaseData)phases[0]));
             }
         }
         SingleActor? arsenite = Arsenite();
@@ -302,7 +302,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(arsenite, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", phases[0]));
+                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", (EncounterPhaseData)phases[0]));
             }
         }
         return phases;

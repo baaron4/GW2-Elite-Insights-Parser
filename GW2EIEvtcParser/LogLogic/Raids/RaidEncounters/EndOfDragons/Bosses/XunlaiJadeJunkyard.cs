@@ -20,7 +20,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 {
     public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
     {
-        MechanicList.Add(new MechanicGroup([  
+        MechanicList.Add(new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(GraspingHorror, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
@@ -187,7 +187,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -270,9 +270,9 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
             IReadOnlyDictionary<long, BuffGraph> bgms = ankka.Key.GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out var bgm))
             {
-                if (bgm.Values.Any(x => x.Value == 6)) 
-                { 
-                    return true; 
+                if (bgm.Values.Any(x => x.Value == 6))
+                {
+                    return true;
                 }
             }
         }
@@ -287,202 +287,208 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         switch (target.ID)
         {
             case (int)TargetID.Ankka:
+            {
+                var casts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == DeathsEmbraceSkill).ToList();
+                castDuration = 10143;
+
+                foreach (CastEvent cast in casts)
                 {
-                    var casts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == DeathsEmbraceSkill).ToList();
-                    castDuration = 10143;
+                    long endTime = cast.Time + castDuration;
 
-                    foreach (CastEvent cast in casts)
+                    if (target.TryGetCurrentPosition(log, cast.Time, out var ankkaPosition))
                     {
-                        long endTime = cast.Time + castDuration;
-
-                        if (target.TryGetCurrentPosition(log, cast.Time, out var ankkaPosition))
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out var deathsEmbraceEffects))
                         {
-                            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out var deathsEmbraceEffects))
+                            uint radius = 500; // Zone 1
+                                               // Zone 2
+                            if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
                             {
-                                uint radius = 500; // Zone 1
-                                                   // Zone 2
-                                if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
-                                {
-                                    radius = 340;
-                                }
-
-                                // Zone 3
-                                if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
-                                {
-                                    radius = 380;
-                                }
-
-                                var effects = deathsEmbraceEffects.Where(x => x.Time >= cast.Time && x.Time <= cast.EndTime);
-                                foreach (EffectEvent effectEvt in effects)
-                                {
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, radius, effectEvt.Time - cast.Time, effectEvt.Position);
-                                }
+                                radius = 340;
                             }
-                            else
+
+                            // Zone 3
+                            if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
                             {
-                                // logs without effects
-                                int delay = 1833 * 2;
-                                // Zone 1
-                                if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
-                                {
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 500, delay, new(-3941.78f, 66.76819f, -3611.2f)); // CENTER
-                                }
+                                radius = 380;
+                            }
 
-                                // Zone 2
-                                if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
-                                {
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(1663.69f, 1739.87f, -4639.695f)); // NW
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(2563.689f, 1739.87f, -4664.611f)); // NE
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(1663.69f, 839.8699f, -4640.633f)); // SW
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(2563.689f, 839.8699f, -4636.368f)); // SE
-                                }
+                            var effects = deathsEmbraceEffects.Where(x => x.Time >= cast.Time && x.Time <= cast.EndTime);
+                            foreach (EffectEvent effectEvt in effects)
+                            {
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, radius, effectEvt.Time - cast.Time, effectEvt.Position);
+                            }
+                        }
+                        else
+                        {
+                            // logs without effects
+                            int delay = 1833 * 2;
+                            // Zone 1
+                            if (ankkaPosition.X > -6000 && ankkaPosition.X < -2500 && ankkaPosition.Y < 1000 && ankkaPosition.Y > -1000)
+                            {
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 500, delay, new(-3941.78f, 66.76819f, -3611.2f)); // CENTER
+                            }
 
-                                // Zone 3
-                                if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
-                                {
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-2547.61f, 5466.439f, -6257.504f)); // NW
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-1647.61f, 5466.439f, -6256.795f)); // NE
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-2547.61f, 4566.439f, -6256.799f)); // SW
-                                    AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-1647.61f, 4566.439f, -6257.402f)); // SE
-                                }
+                            // Zone 2
+                            if (ankkaPosition.X > 0 && ankkaPosition.X < 4000)
+                            {
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(1663.69f, 1739.87f, -4639.695f)); // NW
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(2563.689f, 1739.87f, -4664.611f)); // NE
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(1663.69f, 839.8699f, -4640.633f)); // SW
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 340, delay, new(2563.689f, 839.8699f, -4636.368f)); // SE
+                            }
+
+                            // Zone 3
+                            if (ankkaPosition.Y > 4000 && ankkaPosition.Y < 6000)
+                            {
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-2547.61f, 5466.439f, -6257.504f)); // NW
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-1647.61f, 5466.439f, -6256.795f)); // NE
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-2547.61f, 4566.439f, -6256.799f)); // SW
+                                AddDeathEmbraceDecoration(replay, cast.Time, castDuration, 380, delay, new(-1647.61f, 4566.439f, -6257.402f)); // SE
                             }
                         }
                     }
-
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out var deathsHandOnPlayerNM))
-                    {
-                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
-                        {
-                            if (log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
-                            {
-                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 300, 13000);
-                            }
-                        }
-                    }
-
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out var deathsHandOnPlayerCMOrInBetween))
-                    {
-                        foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
-                        {
-                            if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
-                            {
-                                // One also happens during death's embrace so we filter that one out
-                                if (!casts.Any(x => x.Time <= deathsHandEffect.Time && x.Time + castDuration >= deathsHandEffect.Time))
-                                {
-                                    AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 1000);
-                                }
-                            }
-                            else if (log.LogData.LogIsCM)
-                            {
-                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 33000);
-                            }
-                        }
-                    }
-
-                    // Power of the Void
-                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid).Where(x => x.Value > 0);
-                    replay.Decorations.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
                 }
-                break;
+
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out var deathsHandOnPlayerNM))
+                {
+                    foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
+                    {
+                        if (log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                        {
+                            AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 300, 13000);
+                        }
+                    }
+                }
+
+                var xjjPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out var deathsHandOnPlayerCMOrInBetween))
+                {
+                    foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
+                    {
+                        if (!log.CombatData.GetBuffRemoveAllData(DeathsHandSpreadBuff).Any(x => Math.Abs(x.Time - deathsHandEffect.Time) < ServerDelayConstant))
+                        {
+                            // One also happens during death's embrace so we filter that one out
+                            if (!casts.Any(x => x.Time <= deathsHandEffect.Time && x.Time + castDuration >= deathsHandEffect.Time))
+                            {
+                                AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 1000);
+                            }
+                        }
+                        else if (xjjPhases.Any(x => x.InInterval(deathsHandEffect.Time)))
+                        {
+                            AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 33000);
+                        }
+                    }
+                }
+
+                // Power of the Void
+                IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid).Where(x => x.Value > 0);
+                replay.Decorations.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
+            }
+            break;
 
             case (int)TargetID.KraitsHallucination:
-                {
-                    // Wall of Fear
-                    long firstMovementTime = target.FirstAware + 2550;
-                    uint kraitsRadius = 420;
-                    var agentConnector = new AgentConnector(target);
-                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), Colors.Orange, 0.2, agentConnector).UsingGrowingEnd(firstMovementTime));
-                    replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), Colors.Red, 0.2, agentConnector));
-                }
-                break;
+            {
+                // Wall of Fear
+                long firstMovementTime = target.FirstAware + 2550;
+                uint kraitsRadius = 420;
+                var agentConnector = new AgentConnector(target);
+                replay.Decorations.Add(new CircleDecoration(kraitsRadius, (target.FirstAware, firstMovementTime), Colors.Orange, 0.2, agentConnector).UsingGrowingEnd(firstMovementTime));
+                replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), Colors.Red, 0.2, agentConnector));
+            }
+            break;
 
             case (int)TargetID.LichHallucination:
-                {
-                    // Terrifying Apparition
-                    long awareTime = target.FirstAware + 1000;
-                    uint lichRadius = 280;
-                    var agentConnector = new AgentConnector(target);
-                    replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), Colors.Orange, 0.2, agentConnector).UsingGrowingEnd(awareTime));
-                    replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, agentConnector));
-                }
-                break;
+            {
+                // Terrifying Apparition
+                long awareTime = target.FirstAware + 1000;
+                uint lichRadius = 280;
+                var agentConnector = new AgentConnector(target);
+                replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), Colors.Orange, 0.2, agentConnector).UsingGrowingEnd(awareTime));
+                replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, agentConnector));
+            }
+            break;
 
             case (int)TargetID.QuaggansHallucinationNM:
+            {
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
+                    switch (cast.SkillID)
                     {
-                        switch (cast.SkillID)
-                        {
-                            // Wave of Torment - Circle explosion around Quaggan
-                            case WaveOfTormentNM:
-                                castDuration = 2800;
-                                lifespan = (cast.Time, cast.Time + castDuration);
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
-                                break;
-                            default:
-                                break;
-                        }
+                        // Wave of Torment - Circle explosion around Quaggan
+                        case WaveOfTormentNM:
+                            castDuration = 2800;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                            break;
+                        default:
+                            break;
                     }
                 }
-                break;
+            }
+            break;
 
             case (int)TargetID.QuaggansHallucinationCM:
+            {
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
+                    switch (cast.SkillID)
                     {
-                        switch (cast.SkillID)
-                        {
-                            // Wave of Torment - Circle explosion around Quaggan
-                            case WaveOfTormentCM:
-                                castDuration = 5600;
-                                lifespan = (cast.Time, cast.Time + castDuration);
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(450, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
-                                break;
-                            default:
-                                break;
-                        }
+                        // Wave of Torment - Circle explosion around Quaggan
+                        case WaveOfTormentCM:
+                            castDuration = 5600;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(450, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                            break;
+                        default:
+                            break;
                     }
                 }
-                break;
+            }
+            break;
 
             case (int)TargetID.ZhaitansReach:
+            {
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
+                    switch (cast.SkillID)
                     {
-                        switch (cast.SkillID)
-                        {
-                            // Thrash - Circle that pulls in
-                            case ZhaitansReachThrashXJJ1:
-                            case ZhaitansReachThrashXJJ2:
-                                castDuration = 1900;
-                                lifespan = (cast.Time, cast.Time + castDuration);
-                                replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 500, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
-                                break;
-                            // Ground Slam - AoE that knocks out
-                            case ZhaitansReachGroundSlam:
-                            case ZhaitansReachGroundSlamXJJ:
-                                // 66534 -> Fast AoE -- 66397 -> Slow AoE
-                                castDuration = cast.SkillID == ZhaitansReachGroundSlam ? 800 : 2500;
-                                lifespan = (cast.Time, cast.Time + castDuration);
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(400, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
-                                break;
-                            default:
-                                break;
-                        }
+                        // Thrash - Circle that pulls in
+                        case ZhaitansReachThrashXJJ1:
+                        case ZhaitansReachThrashXJJ2:
+                            castDuration = 1900;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 500, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                            break;
+                        // Ground Slam - AoE that knocks out
+                        case ZhaitansReachGroundSlam:
+                        case ZhaitansReachGroundSlamXJJ:
+                            // 66534 -> Fast AoE -- 66397 -> Slow AoE
+                            castDuration = cast.SkillID == ZhaitansReachGroundSlam ? 800 : 2500;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(400, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                            break;
+                        default:
+                            break;
                     }
                 }
-                break;
+            }
+            break;
 
             case (int)TargetID.ReanimatedSpite:
                 break;
 
             case (int)TargetID.SanctuaryPrism:
-                if (!log.LogData.LogIsCM)
+            {
+                var xjjPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
+                var prismStart = log.LogData.EvtcLogStart;
+                foreach (var xjjPhase in xjjPhases)
                 {
-                    replay.Trim(log.LogData.EvtcLogStart, log.LogData.EvtcLogStart);
+                    replay.Hidden.Add(new(prismStart, xjjPhase.Start));
+                    prismStart = xjjPhase.End;
                 }
+                replay.Hidden.Add(new(prismStart, log.LogData.EvtcLogEnd));
                 break;
-
+            }
             default:
                 break;
         }
@@ -491,6 +497,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
+        var xjjPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
         if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out var value))
         {
             foreach (Segment segment in value.Values)
@@ -498,8 +505,9 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                 //TODO(Rennorb) @correctnes: there was a null check here, i have no clue why.
                 if (!segment.IsEmpty() && segment.Value == 1)
                 {
-                    uint deathsHandRadius = (uint)(log.LogData.LogIsCM ? 380 : 300);
-                    int deathsHandDuration = log.LogData.LogIsCM ? 33000 : 13000;
+                    var isCM = xjjPhases.Any(x => x.IntersectsWindow(segment.Start, segment.End));
+                    uint deathsHandRadius = (uint)(isCM ? 380 : 300);
+                    int deathsHandDuration = isCM ? 33000 : 13000;
                     // AoE on player
                     replay.Decorations.AddWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
                     // Logs without effects, we add the dropped AoE manually
