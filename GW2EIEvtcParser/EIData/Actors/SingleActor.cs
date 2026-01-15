@@ -849,6 +849,12 @@ public abstract partial class SingleActor : Actor
     #endregion CROWD CONTROL
 
 
+    public virtual IReadOnlyList<AchievementEligibilityEvent> GetAchievementEligibilityEvents(ParsedEvtcLog log)
+    {
+        return [];
+    }
+
+
     // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
     private static int BinarySearchRecursive(IReadOnlyList<ParametricPoint3D> position, long time, int minIndex, int maxIndex)
     {

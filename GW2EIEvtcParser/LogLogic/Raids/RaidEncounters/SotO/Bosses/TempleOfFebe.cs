@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -79,40 +80,13 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                 new EnemyCastStartMechanic(PetrifySkill, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Pet.C", "Casted Petrify", "Petrify breakbar start", 0),
                 new EnemySrcHealthDamageHitMechanic(PetrifyDamage, new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkTeal), "Pet.F", "Petrify hit players and healed Cerus", "Petrify breakbar fail", 100),
             ]),
-            new NonSpecializedCombatEventListMechanic<TimeCombatEvent>(new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0, false, (log, agentItem) =>
-                {
-                    SingleActor? actor = log.FindActor(agentItem);
-                    var eligibilityRemovedEvents = new List<TimeCombatEvent>();
-                    if (actor == null)
-                    {
-                        return eligibilityRemovedEvents;
-                    }
-                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
-                    IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
-                    // In case player is dead but death event did not happen during encounter
-                    if (agentItem.IsDead(log, log.LogData.LogEnd) && !deads.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
-                    {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
-                    }
-                    else
-                    {
-                        eligibilityRemovedEvents.AddRange(deads);
-                    }
-                    IReadOnlyList<DespawnEvent> despawns = log.CombatData.GetDespawnEvents(agentItem);
-                    // In case player is DC but DC event did not happen during encounter
-                    if (agentItem.IsDC(log, log.LogData.LogEnd) && !despawns.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
-                    {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
-                    }
-                    else
-                    {
-                        eligibilityRemovedEvents.AddRange(despawns);
-                    }
-                    eligibilityRemovedEvents.SortByTime();
-                    return eligibilityRemovedEvents;
-                })
-                .UsingEnable(x => x.LogData.IsCM || x.LogData.IsLegendaryCM)
-                .UsingAchievementEligibility(),
+
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_UnboundedOptimism, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkRedSkin), "UnbOpt.Achiv.L", "Achievement Eligibility: Unbounded Optimism Lost", "Unbounded Optimism Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_UnboundedOptimism, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv.K", "Achievement Eligibility: Unbounded Optimism Kept", "Unbounded Optimism Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+            ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
@@ -961,5 +935,38 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
     private static AgentItem GetCerusItem(AgentData agentData)
     {
         return agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var unboundedOptimismEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var tofPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            List<TimeCombatEvent> lostEvents = [
+                ..p.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit),
+                ..log.CombatData.GetDeadEvents(p.AgentItem),
+                ..log.CombatData.GetDespawnEvents(p.AgentItem)
+            ];
+            lostEvents.SortByTime();
+            foreach (var evt in lostEvents)
+            {
+                InsertAchievementEligibityEventAndRemovePhase(tofPhases, unboundedOptimismEligibilityEvents, evt.Time, Ach_UnboundedOptimism, p);
+            }
+            foreach (var remainingToFPhase in tofPhases.ToList())
+            {
+                // Dead or DC during fight but did not die or dc during fight
+                if (p.IsDead(log, remainingToFPhase.Start, remainingToFPhase.End) || p.IsDC(log, remainingToFPhase.Start, remainingToFPhase.End))
+                {
+                    unboundedOptimismEligibilityEvents.Add(new AchievementEligibilityEvent(remainingToFPhase.Start, Ach_UnboundedOptimism, p, true));
+                    tofPhases.Remove(remainingToFPhase);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(tofPhases, unboundedOptimismEligibilityEvents, Ach_UnboundedOptimism, p);
+            achievementEligibilityEvents.AddRange(unboundedOptimismEligibilityEvents);
+        }
     }
 }

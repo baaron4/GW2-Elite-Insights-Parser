@@ -12,17 +12,12 @@ public class MechanicData
     private CachingCollection<HashSet<Mechanic>>? _presentMechanics;
     private CachingCollection<List<SingleActor>>? _enemyList;
 
-    internal MechanicData(List<Mechanic> logMechanics, bool isIntanceLog)
+    internal MechanicData(List<Mechanic> logMechanics)
     {
         _mechanicLogs = new(logMechanics.Count);
         Tracing.Trace.TrackAverageStat("logMechanics", logMechanics.Count);
-        foreach (Mechanic m in logMechanics.OrderBy(x => !x.IsAchievementEligibility))
+        foreach (Mechanic m in logMechanics.OrderBy(x => x is not AchievementEligibilityMechanic))
         {
-            // Ignore achievement eligibility mechanics in instances for now
-            if (isIntanceLog && m.IsAchievementEligibility)
-            {
-                continue;
-            }
             _mechanicLogs.Add(m, []);
         }
 
@@ -142,7 +137,7 @@ public class MechanicData
             {
                 events.SortByTime();
             }
-            else if(!mechanic.KeepIfEmpty(log))
+            else
             {
                 //NOTE(Rennorb: Removing from dicts is allowed during iteration.
                 _mechanicLogs.Remove(mechanic);
@@ -180,7 +175,7 @@ public class MechanicData
         var enemyHash = new HashSet<SingleActor>();
         foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
         {
-            if (pair.Key.KeepIfEmpty(log) || pair.Value.Any(x => x.Time >= start && x.Time <= end))
+            if (pair.Value.Any(x => x.Time >= start && x.Time <= end))
             {
                 presentMechanics.Add(pair.Key);
                 if (pair.Key.ShowOnTable)

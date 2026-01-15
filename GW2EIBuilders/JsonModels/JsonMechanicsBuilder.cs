@@ -29,7 +29,6 @@ internal static class JsonMechanicsBuilder
             Name = mech.ShortName,
             FullName = mech.FullName,
             Description = mech.Description,
-            IsAchievementEligibility = mech.IsAchievementEligibility,
             MechanicsData = data
         };
         return jsMechs;

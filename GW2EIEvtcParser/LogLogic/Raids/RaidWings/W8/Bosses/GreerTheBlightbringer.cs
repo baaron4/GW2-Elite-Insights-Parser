@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -45,9 +46,12 @@ internal class GreerTheBlightbringer : MountBalrior
                 ]),
                 new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
                 new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
-                new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Eligibility: Guaranteed Plague Free", "Achiv Unplagued", 0)
-                    .UsingEnable(log => log.LogData.IsCM)
-                    .UsingAchievementEligibility(),
+                new MechanicGroup([
+                    new AchievementEligibilityMechanic(Ach_Unplagued, new MechanicPlotlySetting(Symbols.YDown, Colors.DarkYellow), "Unplagued.Achiv.L", "Achievement Eligibility: Guaranteed Plague Free Lost", "Achiv Unplagued Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                    new AchievementEligibilityMechanic(Ach_Unplagued, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv.K", "Achievement Eligibility: Guaranteed Plague Free Kept", "Achiv Unplagued Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+                ]),
             ]),
             new PlayerDstHealthDamageHitMechanic(WaveOfCorruption, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new MechanicGroup([
@@ -826,6 +830,25 @@ internal class GreerTheBlightbringer : MountBalrior
                 }
 
             }
+        }
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var unplaguedEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var greerPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var buffData = log.CombatData.GetBuffApplyDataByIDByDst(PlagueRot, p.AgentItem);
+            foreach (var evt in buffData)
+            {
+                InsertAchievementEligibityEventAndRemovePhase(greerPhases, unplaguedEligibilityEvents, evt.Time, Ach_Unplagued, p);
+            }
+            AddSuccessBasedAchievementEligibityEvents(greerPhases, unplaguedEligibilityEvents, Ach_Unplagued, p);
+            achievementEligibilityEvents.AddRange(unplaguedEligibilityEvents);
         }
     }
 }

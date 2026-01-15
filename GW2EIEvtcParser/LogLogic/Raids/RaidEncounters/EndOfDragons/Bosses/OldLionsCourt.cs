@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -68,8 +69,12 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                 new PlayerDstHealthDamageMechanic(ExhaustPlume, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150)
                     .UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
             ]),
-            new PlayerDstHealthDamageHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150)
-                .UsingAchievementEligibility(),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_AetherAversion, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.DarkRed), "AethAver.Achiv.L", "Achievement Eligibility: Aether Aversion Lost", "Achiv Aether Aversion Lost", 0)
+                        .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_AetherAversion, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv.K", "Achievement Eligibility: Aether Aversion Kept", "Achiv Aether Aversion Kept", 0)
+                        .UsingChecker((evt, log) => !evt.Lost)
+            ]),
             new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
             new EnemyDstBuffApplyMechanic(PowerTransfer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
             new EnemyDstBuffApplyMechanic(LeyWovenShielding, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
@@ -728,6 +733,34 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             var removal = removals.FirstOrDefault(x => x.Time > start);
             long end = removal?.Time ?? log.LogData.EvtcLogEnd;
             replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
+        }
+    }
+
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+        {
+            var aetherAversionEligibilityEvents = new List<AchievementEligibilityEvent>();
+            var olcPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            List<HealthDamageEvent> damageData = [
+                ..log.CombatData.GetDamageData(BoilingAetherRedBlueNM),
+                ..log.CombatData.GetDamageData(BoilingAetherRedBlueCM),
+                ..log.CombatData.GetDamageData(BoilingAetherGreenNM),
+                ..log.CombatData.GetDamageData(BoilingAetherGreenCM)
+            ];
+            damageData.SortByTime();
+            foreach (var evt in damageData)
+            {
+                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                {
+                    InsertAchievementEligibityEventAndRemovePhase(olcPhases, aetherAversionEligibilityEvents, evt.Time, Ach_AetherAversion, p);
+                }
+            }
+            AddSuccessBasedAchievementEligibityEvents(olcPhases, aetherAversionEligibilityEvents, Ach_AetherAversion, p);
+            achievementEligibilityEvents.AddRange(aetherAversionEligibilityEvents);
         }
     }
 }
