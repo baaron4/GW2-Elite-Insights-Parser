@@ -398,12 +398,13 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             }
         }
 
+        var aetherPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
         // Ley Breach - Red Puddles
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutLeyBreachRedPuddle, out var leyBreachPuddle))
         {
             foreach (EffectEvent effect in leyBreachPuddle)
             {
-                long duration = log.LogData.LogIsCM ? 30000 : 15000;
+                long duration = aetherPhases.Any(x => x.InInterval(effect.Time)) ? 30000 : 15000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
@@ -529,9 +530,9 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         environmentDecorations.AddNonHomingMissiles(log, toxicBullets, Colors.DarkRed, 0.3, 40);
     }
 
-    private SingleActor? GetEchoOfScarletBriar(LogData logData)
+    private SingleActor? GetEchoOfScarletBriar(bool isCM)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(logData.LogIsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
+        return Targets.FirstOrDefault(x => x.IsSpecies(isCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -544,7 +545,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
         if (!logData.Success)
         {
-            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(logData);
+            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(logData.LogIsCM);
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinRaid)) ?? throw new MissingKeyActorsException("Mai Trin not found");
@@ -566,7 +567,8 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinRaid)) ?? throw new MissingKeyActorsException("Mai Trin not found");
         phases[0].AddTarget(maiTrin, log);
-        SingleActor? echoOfScarlet = GetEchoOfScarletBriar(log.LogData);
+        var isCM = ((EncounterPhaseData)phases[0]).IsCM;
+        SingleActor? echoOfScarlet = GetEchoOfScarletBriar(isCM);
         if (echoOfScarlet != null)
         {
             phases[0].AddTarget(echoOfScarlet, log);
