@@ -224,15 +224,15 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         ];
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == MapIDs.XunlaijadeJunkyardStory)
         {
-            return LogData.LogMode.Story;
+            return LogData.Mode.Story;
         }
-        return ankka.GetHealth(combatData) > 50e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return ankka.GetHealth(combatData) > 50e6 ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -252,7 +252,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
 
         foreach (var encounterPhase in encounterPhases)
         {
@@ -372,7 +372,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             }
-                            else if (log.LogData.IsCM)
+                            else if (log.LogData.LogIsCM)
                             {
                                 AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 33000);
                             }
@@ -477,7 +477,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                 break;
 
             case (int)TargetID.SanctuaryPrism:
-                if (!log.LogData.IsCM)
+                if (!log.LogData.LogIsCM)
                 {
                     replay.Trim(log.LogData.EvtcLogStart, log.LogData.EvtcLogStart);
                 }
@@ -498,8 +498,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                 //TODO(Rennorb) @correctnes: there was a null check here, i have no clue why.
                 if (!segment.IsEmpty() && segment.Value == 1)
                 {
-                    uint deathsHandRadius = (uint)(log.LogData.IsCM ? 380 : 300);
-                    int deathsHandDuration = log.LogData.IsCM ? 33000 : 13000;
+                    uint deathsHandRadius = (uint)(log.LogData.LogIsCM ? 380 : 300);
+                    int deathsHandDuration = log.LogData.LogIsCM ? 33000 : 13000;
                     // AoE on player
                     replay.Decorations.AddWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
                     // Logs without effects, we add the dropped AoE manually
@@ -552,7 +552,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         {
             var clarityEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var xjjPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var xjjPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(WallOfFear),
                 ..log.CombatData.GetDamageData(WaveOfTormentNM),
@@ -572,7 +572,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         {
             var undevouredEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var xjjCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var xjjCMPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             var buffApplyData = log.CombatData.GetBuffApplyDataByIDByDst(DevouringVoid, p.AgentItem);
             foreach (var evt in buffApplyData)
             {

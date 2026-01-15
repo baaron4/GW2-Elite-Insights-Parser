@@ -84,7 +84,7 @@ internal class SilentSurfInstance : SilentSurf
                     end = determinedApply.Time;
                 }
                 var name = "Kanaxai";
-                var mode = LogData.LogMode.CMNoName;
+                var mode = LogData.Mode.CMNoName;
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [kanaxai], [], [], mainPhase, name, start, end, success, _kanaxai, mode);
             }
         }

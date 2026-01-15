@@ -231,11 +231,11 @@ internal class HallOfChainsInstance : HallOfChains
                 }
                 if (dhuum.GetAnimatedCastEvents(log).Any(x => (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= start && x.Time <= start + 40000))
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal, LogData.LogStartStatus.NoPreEvent);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.Mode.CM : LogData.Mode.Normal, LogData.StartStatus.NoPreEvent);
                 } 
                 else
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.Mode.CM : LogData.Mode.Normal);
                 }
             }
         }
@@ -251,7 +251,7 @@ internal class HallOfChainsInstance : HallOfChains
         {
             var shPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], "Soulless Horror", _soullessHorror, 
                 (log, soullessHorror) => 
-                SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.Mode.CM : LogData.Mode.Normal);
             foreach (var shPhase in shPhases)
             {
                 var soullessHorror = shPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.SoullessHorror));

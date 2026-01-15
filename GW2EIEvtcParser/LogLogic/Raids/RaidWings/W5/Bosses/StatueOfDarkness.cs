@@ -78,14 +78,14 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (TargetHPPercentUnderThreshold(TargetID.EyeOfJudgement, logData.LogStart, combatData, Targets) ||
             TargetHPPercentUnderThreshold(TargetID.EyeOfFate, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

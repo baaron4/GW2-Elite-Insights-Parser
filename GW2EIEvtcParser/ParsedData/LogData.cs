@@ -4,6 +4,7 @@ using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.LogLogic.OpenWorld;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -14,6 +15,7 @@ public class LogData
 {
     // Fields
     private List<PhaseData> _phases = [];
+    private List<EncounterPhaseData> _encounterPhases = [];
     public readonly int TriggerID;
     public readonly LogLogic.LogLogic Logic;
 
@@ -41,7 +43,7 @@ public class LogData
     }
     public bool Success { get; private set; }
 
-    public enum LogMode
+    public enum Mode
     {
         NotSet,
         Story,
@@ -52,21 +54,20 @@ public class LogData
         NotApplicable,
         Unknown,
     }
+    public Mode LogMode { get; private set; } = Mode.NotSet;
+    public bool LogIsCM => LogMode == Mode.CMNoName || LogMode == Mode.CM;
+    public bool LogIsLegendaryCM => LogMode == Mode.LegendaryCM;
 
-    public LogMode Mode { get; private set; } = LogMode.NotSet;
-    public bool IsCM => Mode == LogMode.CMNoName || Mode == LogMode.CM;
-    public bool IsLegendaryCM => Mode == LogMode.LegendaryCM;
-
-    public enum LogStartStatus
+    public enum StartStatus
     {
         NotSet,
         Normal,
         Late,
         NoPreEvent
     }
-    public LogStartStatus StartStatus { get; private set; } = LogStartStatus.NotSet;
-    public bool IsLateStart => StartStatus == LogStartStatus.Late || MissingPreEvent;
-    public bool MissingPreEvent => StartStatus == LogStartStatus.NoPreEvent;
+    public StartStatus LogStartStatus { get; private set; } = StartStatus.NotSet;
+    public bool LogIsLateStart => LogStartStatus == StartStatus.Late || LogMissingPreEvent;
+    public bool LogMissingPreEvent => LogStartStatus == StartStatus.NoPreEvent;
 
     private PhaseDataWithMetaData? _phaseDataWithMetaData = null;
 
@@ -320,11 +321,11 @@ public class LogData
     {
         LogNameNoMode = Logic.GetLogicName(combatData, agentData, apiController);
         LogName = LogNameNoMode
-            + (Mode == LogMode.CM ? " CM" : "")
-            + (Mode == LogMode.LegendaryCM ? " LCM" : "")
-            + (Mode == LogMode.Story ? " Story" : "")
-            + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
-            + (MissingPreEvent ? " (No Pre-Event)" : "");
+            + (LogMode == Mode.CM ? " CM" : "")
+            + (LogMode == Mode.LegendaryCM ? " LCM" : "")
+            + (LogMode == Mode.Story ? " Story" : "")
+            + (LogIsLateStart && !LogMissingPreEvent ? " (Late Start)" : "")
+            + (LogMissingPreEvent ? " (No Pre-Event)" : "");
     }
 
     public PhaseDataWithMetaData GetMainPhase(ParsedEvtcLog log)
@@ -431,8 +432,18 @@ public class LogData
                     }
                 }
             }
+            _encounterPhases = encounterPhases;
         }
         return _phases;
+    }
+
+    public IReadOnlyList<EncounterPhaseData> GetEncounterPhases(ParsedEvtcLog log)
+    {
+        if (_phases.Count == 0)
+        {
+            GetPhases(log);
+        }
+        return _encounterPhases;
     }
 
     public IReadOnlyList<SingleActor> GetMainTargets(ParsedEvtcLog log)
@@ -443,14 +454,14 @@ public class LogData
     // Setters
     internal void ProcessLogStatus(CombatData combatData, AgentData agentData)
     {
-        if (Mode == LogMode.NotSet)
+        if (LogMode == Mode.NotSet)
         {
-            Mode = Logic.GetLogMode(combatData, agentData, this);
-            if (Mode == LogMode.Story)
+            LogMode = Logic.GetLogMode(combatData, agentData, this);
+            if (LogMode == Mode.Story)
             {
                 Logic.InvalidateLogID();
             }
-            StartStatus = Logic.GetLogStartStatus(combatData, agentData, this);
+            LogStartStatus = Logic.GetLogStartStatus(combatData, agentData, this);
             InstancePrivacy = Logic.GetInstancePrivacyMode(combatData, agentData, this);
         }
     }

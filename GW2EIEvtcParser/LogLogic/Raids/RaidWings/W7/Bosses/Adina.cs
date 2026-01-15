@@ -533,7 +533,7 @@ internal class Adina : TheKeyOfAhdashim
         try
         {
             var allPhases = log.LogData.GetPhases(log);
-            var adinaPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var adinaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             var splitPhasesMap = new List<string>()
             {
                     CombatReplayAdinaSplitPhase1,
@@ -605,10 +605,10 @@ internal class Adina : TheKeyOfAhdashim
         return crMap;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
-        return (target.GetHealth(combatData) > 23e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 23e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -619,7 +619,7 @@ internal class Adina : TheKeyOfAhdashim
         }
         if (log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)

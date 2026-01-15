@@ -91,7 +91,7 @@ internal class Slothasor : SalvationPass
         }
         if (log.CombatData.GetBuffData(SlipperySlubling).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)

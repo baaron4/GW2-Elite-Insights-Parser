@@ -67,9 +67,9 @@ internal class Siax : Nightmare
         ];
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.CMNoName;
+        return LogData.Mode.CMNoName;
     }
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor siax, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {

@@ -403,7 +403,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         {
             foreach (EffectEvent effect in leyBreachPuddle)
             {
-                long duration = log.LogData.IsCM ? 30000 : 15000;
+                long duration = log.LogData.LogIsCM ? 30000 : 15000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
@@ -531,7 +531,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
 
     private SingleActor? GetEchoOfScarletBriar(LogData logData)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(logData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
+        return Targets.FirstOrDefault(x => x.IsSpecies(logData.LogIsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -1056,17 +1056,17 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         decorations.Add(new CircleDecoration(innerRadius, lifespans[2], Colors.White, 0.5, positionConnector).UsingRotationConnector(rotationConnectors[2]));
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinRaid)) ?? throw new MissingKeyActorsException("Mai Trin not found");
-        return maiTrin.GetHealth(combatData) > 8e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return maiTrin.GetHealth(combatData) > 8e6 ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
 
         foreach (var encounterPhase in encounterPhases)
         {

@@ -161,7 +161,7 @@ internal abstract class FractalLogic : LogLogic
         }
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
@@ -169,9 +169,9 @@ internal abstract class FractalLogic : LogLogic
         }
         if (TargetHPPercentUnderThreshold(GenericTriggerID, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

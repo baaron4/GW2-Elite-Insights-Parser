@@ -26,15 +26,15 @@ internal class CerusAndDeimos : LonelyTower
         LogID |= 0x000001;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         if (cerus.GetHealth(combatData) < 5e6 || deimos.GetHealth(combatData) < 5e6)
         {
-            return LogData.LogMode.Normal;
+            return LogData.Mode.Normal;
         }
-        return LogData.LogMode.CM;
+        return LogData.Mode.CM;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -89,17 +89,17 @@ internal class CerusAndDeimos : LonelyTower
         }
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (TargetHPPercentUnderThreshold(TargetID.CerusLonelyTower, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         if (TargetHPPercentUnderThreshold(TargetID.DeimosLonelyTower, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     private static PhaseData GetBossPhase(ParsedEvtcLog log, SingleActor target, string phaseName)

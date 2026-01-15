@@ -111,7 +111,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         success = true;
                     }
                     lowerThreshold = end;
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, _conjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, _conjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? LogData.Mode.CM : LogData.Mode.Normal);
                 }
             }
         }
@@ -159,7 +159,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, _twinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, _twinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.Mode.CM : LogData.Mode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -191,7 +191,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, _qadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, _qadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.Mode.CM : LogData.Mode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);

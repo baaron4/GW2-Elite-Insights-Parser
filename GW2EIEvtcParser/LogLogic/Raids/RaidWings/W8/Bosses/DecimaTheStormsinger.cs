@@ -817,9 +817,9 @@ internal class DecimaTheStormsinger : MountBalrior
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return GenericTriggerID == (int)TargetID.DecimaCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
+        return GenericTriggerID == (int)TargetID.DecimaCM ? LogData.Mode.CMNoName : LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -828,7 +828,7 @@ internal class DecimaTheStormsinger : MountBalrior
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)
@@ -849,7 +849,7 @@ internal class DecimaTheStormsinger : MountBalrior
         }
         {
             var thisBugCanDanceEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var decimaCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var decimaCMPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             // Fulgent check
             var fulgentCMs = log.CombatData.GetDamageData(FulgentFenceCM);
             foreach (var evt in fulgentCMs)

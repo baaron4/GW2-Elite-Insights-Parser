@@ -90,10 +90,10 @@ internal class Mordremoth : StoryInstance
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
-        return (mordremoth.GetHealth(combatData) > 9e6) ? LogData.LogMode.CM : LogData.LogMode.Story;
+        return (mordremoth.GetHealth(combatData) > 9e6) ? LogData.Mode.CM : LogData.Mode.Story;
     }
 
     internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()

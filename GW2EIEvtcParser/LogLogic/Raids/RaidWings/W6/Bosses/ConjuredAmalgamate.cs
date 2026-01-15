@@ -166,14 +166,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return GetGenericLogOffset(logData);
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
         if (TargetHPPercentUnderThreshold(TargetID.ConjuredAmalgamate, logData.LogStart, combatData, Targets, 90))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -469,10 +469,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        return combatData.GetBuffData(LockedOn).Count > 0 ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return combatData.GetBuffData(LockedOn).Count > 0 ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

@@ -116,13 +116,13 @@ internal class Freezie : FestivalRaidEncounterLogic
         }
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault() ?? throw new MissingKeyActorsException("Freezie not found");
         HealthUpdateEvent? freezieHpUpdate = combatData.GetHealthUpdateEvents(freezie).FirstOrDefault(x => x.Time >= freezie.FirstAware);
         if ((freezieHpUpdate != null && freezieHpUpdate.HealthPercent <= 90))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         AgentItem? heart = agentData.GetNPCsByID(TargetID.FreeziesFrozenHeart).FirstOrDefault();
         if (heart != null)
@@ -130,10 +130,10 @@ internal class Freezie : FestivalRaidEncounterLogic
             HealthUpdateEvent? heartHpUpdate = combatData.GetHealthUpdateEvents(heart).FirstOrDefault(x => x.Time >= freezie.FirstAware);
             if ((heartHpUpdate != null && heartHpUpdate.HealthPercent > 0) )
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

@@ -18,13 +18,12 @@ internal static class JsonNPCBuilder
     {
         var jsonNPC = new JsonNPC();
         JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
-        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
         jsonNPC.Id = npc.ID;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;
-        var targetEncounterPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(npc));
+        var targetEncounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.Targets.ContainsKey(npc));
         if (targetEncounterPhase != null && targetEncounterPhase.Success)
         {
             hpLeft = 0;

@@ -398,9 +398,9 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetBuffApplyData(AchievementEligibilityDownDownDowned).Any(x => x.Time > -100) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return combatData.GetBuffApplyData(AchievementEligibilityDownDownDowned).Any(x => x.Time > -100) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -461,7 +461,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)

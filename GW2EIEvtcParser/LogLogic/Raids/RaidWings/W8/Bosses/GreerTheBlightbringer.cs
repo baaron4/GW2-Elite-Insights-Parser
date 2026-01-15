@@ -158,16 +158,16 @@ internal class GreerTheBlightbringer : MountBalrior
         RenameProtoGreerlings(Targets);
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
         if (ereg != null)
         {
             greer.OverrideName("Godspoil Greer");
-            return LogData.LogMode.CMNoName;
+            return LogData.Mode.CMNoName;
         }
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
     private static void SetPhaseNameForHP(PhaseData damageImmunityPhase, double hpPercent)
@@ -817,7 +817,7 @@ internal class GreerTheBlightbringer : MountBalrior
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)
@@ -841,7 +841,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
         {
             var unplaguedEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var greerPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var greerPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             var buffData = log.CombatData.GetBuffApplyDataByIDByDst(PlagueRot, p.AgentItem);
             foreach (var evt in buffData)
             {

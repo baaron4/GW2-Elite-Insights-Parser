@@ -251,14 +251,14 @@ internal class TwinLargos : MythwrightGambit
         return phases;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (TargetHPPercentUnderThreshold(TargetID.Kenut, logData.LogStart, combatData, Targets) ||
             TargetHPPercentUnderThreshold(TargetID.Nikare, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal static void AdjustFinalHPEvents(List<CombatItem> combatData, AgentItem agentItem)
@@ -458,10 +458,10 @@ internal class TwinLargos : MythwrightGambit
         return false;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
-        return HasCastAquaticDomainOrCMHP(combatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return HasCastAquaticDomainOrCMHP(combatData, nikare, kenut) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 }

@@ -68,7 +68,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
                 new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
-                    .UsingEnable(x => x.LogData.IsCM),
+                    .UsingEnable(x => x.LogData.LogIsCM),
             ]),
             new PlayerDstEffectMechanic(EffectGUIDs.CosmicObservatoryDemonicFever, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "DemFev.T", "Targeted by Demonic Fever (Orange Spread AoEs)", "Demonic Fever Target", 0),
         ])
@@ -511,14 +511,14 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         ];
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (combatData.GetGW2BuildEvent().Build < GW2Builds.DagdaNMHPChangedAndCMRelease)
         {
-            return LogData.LogMode.Normal;
+            return LogData.Mode.Normal;
         }
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-        return (dagda.GetHealth(combatData) > 56e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (dagda.GetHealth(combatData) > 56e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -529,7 +529,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)
@@ -571,7 +571,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         }
         {
             var dancedStarsEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var coCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var coCMPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(SpinningNebulaCentral),
                 ..log.CombatData.GetDamageData(SpinningNebulaWithTeleport)

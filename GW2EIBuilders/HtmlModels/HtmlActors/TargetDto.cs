@@ -18,7 +18,7 @@ internal class TargetDto : ActorDto
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;
         HpLeftPercent = 100.0;
-        var targetEncounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target));
+        var targetEncounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.Targets.ContainsKey(target));
         if (targetEncounterPhase != null && targetEncounterPhase.Success)
         {
             HpLeftPercent = 0;

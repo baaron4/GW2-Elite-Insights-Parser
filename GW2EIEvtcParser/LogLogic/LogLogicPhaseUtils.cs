@@ -32,7 +32,7 @@ internal static class LogLogicPhaseUtils
                 success = true;
                 end = dead.Time;
             }
-            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
+            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.Mode.Normal, log.LogData.Logic.LogID);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
@@ -47,12 +47,12 @@ internal static class LogLogicPhaseUtils
             var logEndEvent = log.CombatData.GetSquadCombatEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
             if (logEndEvent != null)
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.Mode.Normal, log.LogData.Logic.LogID);
                 phases.Add(fightPhase);
             }
             else
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.Mode.Normal, log.LogData.Logic.LogID);
                 phases.Add(fightPhase);
                 break;
             }
@@ -214,28 +214,28 @@ internal static class LogLogicPhaseUtils
     }
     #region INSTANCE PHASES
 
-    internal delegate LogData.LogMode LogModeChecker(ParsedEvtcLog log, SingleActor target);
-    internal delegate LogData.LogStartStatus LogStartStatusChecker(SingleActor target, long time, CombatData combatData, double expectedInitialPercent = 100.0);
+    internal delegate LogData.Mode LogModeChecker(ParsedEvtcLog log, SingleActor target);
+    internal delegate LogData.StartStatus LogStartStatusChecker(SingleActor target, long time, CombatData combatData, double expectedInitialPercent = 100.0);
 
-    internal static LogData.LogStartStatus DefaultLogStartStatusChecker(SingleActor? target, long time, CombatData combatData, double expectedInitialPercent = 100.0)
+    internal static LogData.StartStatus DefaultLogStartStatusChecker(SingleActor? target, long time, CombatData combatData, double expectedInitialPercent = 100.0)
     {
         if (TargetHPPercentUnderThreshold(target, time, combatData, expectedInitialPercent))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
-    internal static LogData.LogStartStatus DefaultLogStartStatusChecker(IEnumerable<SingleActor?> targets, long time, CombatData combatData, double expectedInitialPercent = 100.0)
+    internal static LogData.StartStatus DefaultLogStartStatusChecker(IEnumerable<SingleActor?> targets, long time, CombatData combatData, double expectedInitialPercent = 100.0)
     {
         if (targets.Any(target => TargetHPPercentUnderThreshold(target, time, combatData, expectedInitialPercent)))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
     #region INSTANCE ENCOUNTER
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.LogMode logMode, LogData.LogStartStatus logStartStatus)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.Mode logMode, LogData.StartStatus logStartStatus)
     {
         if (!success && (end - start < log.ParserSettings.TooShortLimit || log.ParserSettings.SkipFailedTries))
         {
@@ -255,7 +255,7 @@ internal static class LogLogicPhaseUtils
         instancePhase.AddTargets(targets.Where(x => x != null && !x.IsSpecies(TargetID.DummyTarget)), log);
         return phase;
     }
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.LogMode logMode, LogData.LogStartStatus logStartStatus)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.Mode logMode, LogData.StartStatus logStartStatus)
     {
 
         return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, logMode, logStartStatus);
@@ -264,33 +264,33 @@ internal static class LogLogicPhaseUtils
     internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic)
     {
 
-        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, LogData.LogMode.Normal, DefaultLogStartStatusChecker(targets, start, log.CombatData));
+        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, LogData.Mode.Normal, DefaultLogStartStatusChecker(targets, start, log.CombatData));
     }
 
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.LogMode logMode)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.Mode logMode)
     {
 
         return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, logMode, DefaultLogStartStatusChecker(targets, start, log.CombatData));
     }
 
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.LogStartStatus logStartStatus)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.StartStatus logStartStatus)
     {
 
-        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, LogData.LogMode.Normal, logStartStatus);
+        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, LogData.Mode.Normal, logStartStatus);
     }
 
     internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID)
     {
-        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, icon, encounterID, LogData.LogMode.Normal, DefaultLogStartStatusChecker(targets, start, log.CombatData));
+        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, icon, encounterID, LogData.Mode.Normal, DefaultLogStartStatusChecker(targets, start, log.CombatData));
     }
 
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.LogMode logMode)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.Mode logMode)
     {
         return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, icon, encounterID, logMode, DefaultLogStartStatusChecker(targets, start, log.CombatData));
     }
-    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.LogStartStatus logStartStatus)
+    internal static EncounterPhaseData? AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<EncounterPhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.StartStatus logStartStatus)
     {
-        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, icon, encounterID, LogData.LogMode.Normal, logStartStatus);
+        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, icon, encounterID, LogData.Mode.Normal, logStartStatus);
     }
     #endregion INSTANCE ENCOUNTER
 
@@ -331,7 +331,7 @@ internal static class LogLogicPhaseUtils
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, encounterID, fightModeChecker != null ? fightModeChecker(log, target) : LogData.LogMode.Normal, fightStartStatusChecker != null ? fightStartStatusChecker(target, start, log.CombatData) : DefaultLogStartStatusChecker(target, start, log.CombatData));
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, encounterID, fightModeChecker != null ? fightModeChecker(log, target) : LogData.Mode.Normal, fightStartStatusChecker != null ? fightStartStatusChecker(target, start, log.CombatData) : DefaultLogStartStatusChecker(target, start, log.CombatData));
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);

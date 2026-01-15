@@ -47,9 +47,9 @@ internal class MAMA : Nightmare
         return crMap;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.CMNoName;
+        return LogData.Mode.CMNoName;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

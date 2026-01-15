@@ -91,7 +91,7 @@ internal class NightmareInstance : Nightmare
                     success = true;
                     end = death.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [mama], knights, [], mainPhase, "MAMA", start, end, success, _mama, LogData.LogMode.CMNoName);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [mama], knights, [], mainPhase, "MAMA", start, end, success, _mama, LogData.Mode.CMNoName);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -130,7 +130,7 @@ internal class NightmareInstance : Nightmare
                     success = true;
                     end = death.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [siax], echoes, [], mainPhase, "Siax the Corrupted", start, end, success, _siax, LogData.LogMode.CMNoName);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [siax], echoes, [], mainPhase, "Siax the Corrupted", start, end, success, _siax, LogData.Mode.CMNoName);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -171,7 +171,7 @@ internal class NightmareInstance : Nightmare
                     success = true;
                     end = death.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ensolyss], [], [], mainPhase, "Ensolyss of the Endless Torment", start, end, success, _ensolyss, LogData.LogMode.CMNoName);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [ensolyss], [], [], mainPhase, "Ensolyss of the Endless Torment", start, end, success, _ensolyss, LogData.Mode.CMNoName);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);

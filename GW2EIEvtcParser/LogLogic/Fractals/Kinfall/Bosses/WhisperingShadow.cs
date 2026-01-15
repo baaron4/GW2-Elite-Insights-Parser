@@ -80,13 +80,13 @@ internal class WhisperingShadow : Kinfall
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (combatData.GetBuffApplyData(LifeFireCircleCM).Any())
         {
-            return LogData.LogMode.CM;
+            return LogData.Mode.CM;
         }
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor shadow, EncounterPhaseData encounterPhase, bool requirePhases)
@@ -346,7 +346,7 @@ internal class WhisperingShadow : Kinfall
         }
         {
             var shatterstepEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var whisperingShadowPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var whisperingShadowPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(LoftedCryoflash),
                 ..log.CombatData.GetDamageData(TerrestialCryoflash)
@@ -372,7 +372,7 @@ internal class WhisperingShadow : Kinfall
         }
         if (log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             var lastEncounter = encounterPhases.LastOrDefault();
             if (lastEncounter != null && lastEncounter.Success && lastEncounter.IsCM)
             {

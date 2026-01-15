@@ -60,7 +60,7 @@ internal class KinfallInstance : Kinfall
         {
             var whisperingShadowPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.WhisperingShadow, [], "Whispering Shadow", _whisperingShadow, (log, whisperingShadow) =>
             {
-                return log.CombatData.GetBuffApplyData(SkillIDs.LifeFireCircleCM).Any(x => whisperingShadow.InAwareTimes(x.Time)) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+                return log.CombatData.GetBuffApplyData(SkillIDs.LifeFireCircleCM).Any(x => whisperingShadow.InAwareTimes(x.Time)) ? LogData.Mode.CM : LogData.Mode.Normal;
             });
             foreach (var whisperingShadowPhase in whisperingShadowPhases)
             {

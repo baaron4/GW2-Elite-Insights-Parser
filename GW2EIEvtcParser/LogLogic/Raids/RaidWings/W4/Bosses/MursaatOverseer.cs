@@ -190,10 +190,10 @@ internal class MursaatOverseer : BastionOfThePenitent
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
-        return (target.GetHealth(combatData) > 25e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 25e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)

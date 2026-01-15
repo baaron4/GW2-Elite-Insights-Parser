@@ -71,7 +71,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
 
-            var adinaPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], "Cardinal Adina", _adina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            var adinaPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], "Cardinal Adina", _adina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? LogData.Mode.CM : LogData.Mode.Normal);
             foreach (var adinaPhase in adinaPhases)
             {
                 var adina = adinaPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Adina));
@@ -82,7 +82,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             }
         }
         {
-            var sabirPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], "Cardinal Sabir", _sabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            var sabirPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], "Cardinal Sabir", _sabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? LogData.Mode.CM : LogData.Mode.Normal);
             foreach (var sabirPhase in sabirPhases)
             {
                 var sabir = sabirPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Sabir));
@@ -90,7 +90,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             }
         }
         {
-            var qtpPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], "Qadim the Peerless", _peerlessQadim, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            var qtpPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], "Qadim the Peerless", _peerlessQadim, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.Mode.CM : LogData.Mode.Normal);
             foreach (var qtpPhase in qtpPhases)
             {
                 var qtp = qtpPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.PeerlessQadim));

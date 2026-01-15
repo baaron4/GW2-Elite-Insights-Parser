@@ -264,7 +264,7 @@ internal class Sabir : TheKeyOfAhdashim
                         }
                     }
                 }
-                var successSabirPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().LastOrDefault(x => x.LogID == LogID && x.Success);
+                var successSabirPhase = log.LogData.GetEncounterPhases(log).LastOrDefault(x => x.ID == LogID && x.Success);
                 if (successSabirPhase != null)
                 {
                     mainPlateformOpacities.Add(new(1, successSabirPhase.End));
@@ -380,10 +380,10 @@ internal class Sabir : TheKeyOfAhdashim
         return enterCombat.Time;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
-        return (target.GetHealth(combatData) > 32e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 32e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
@@ -394,7 +394,7 @@ internal class Sabir : TheKeyOfAhdashim
         }
         {
             var chargedWindsEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var sabirPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var sabirPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             var damageData = log.CombatData.GetDamageData(Electrospark);
             foreach (var evt in damageData)
             {

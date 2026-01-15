@@ -20,9 +20,9 @@ internal abstract class UnknownEncounterLogic : LogLogic
         // We don't know how an unknown fight could operate.
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.Unknown;
+        return LogData.Mode.Unknown;
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {

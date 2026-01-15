@@ -87,7 +87,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             long timeToUse = time;
             if (_timeClamper != null)
             {
-                var encounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.InInterval(time) || x.Start > time) ?? log.LogData.GetPhases(log)[0];
+                var encounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.InInterval(time) || x.Start > time) ?? log.LogData.GetPhases(log)[0];
                 timeToUse = _timeClamper(time, log, encounterPhase);
             }
             if (actor.AgentItem.IsEnglobingAgent)

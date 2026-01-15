@@ -101,7 +101,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                     }
                 }
                 var isCM = cmAnomalies.Any(x => skorvald.InAwareTimes(x.FirstAware));
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [skorvald], anomalies, [], mainPhase, "Skorvald", start, end, success, _skorvald, isCM ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [skorvald], anomalies, [], mainPhase, "Skorvald", start, end, success, _skorvald, isCM ? LogData.Mode.CM : LogData.Mode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -139,7 +139,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                         end = effect.Time;
                     }
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [artsariiv], [], [], mainPhase, "Artsariiv", start, end, success, _artsariiv, LogData.LogMode.CMNoName );
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [artsariiv], [], [], mainPhase, "Artsariiv", start, end, success, _artsariiv, LogData.Mode.CMNoName );
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -178,7 +178,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                     success = true;
                     end = death.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [arkk], subBosses, [], mainPhase, "Arkk", start, end, success, _arkk, LogData.LogMode.CMNoName);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [arkk], subBosses, [], mainPhase, "Arkk", start, end, success, _arkk, LogData.Mode.CMNoName);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);

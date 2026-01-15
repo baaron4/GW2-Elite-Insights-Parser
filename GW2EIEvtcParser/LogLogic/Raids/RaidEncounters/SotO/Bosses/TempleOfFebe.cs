@@ -376,15 +376,15 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
         var cerusHP = cerus.GetHealth(combatData);
         if (cerusHP > 130e6)
         {
-            return LogData.LogMode.LegendaryCM;
+            return LogData.Mode.LegendaryCM;
         }
-        return (cerusHP > 100e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (cerusHP > 100e6) ? LogData.Mode.CM : LogData.Mode.Normal;
 
     }
 
@@ -567,7 +567,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         {
             foreach (EffectEvent effect in poolOfDespair)
             {
-                int duration = log.LogData.IsCM || log.LogData.IsLegendaryCM ? 120000 : 60000;
+                int duration = log.LogData.LogIsCM || log.LogData.LogIsLegendaryCM ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
@@ -906,7 +906,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         var empoweredBuffs = new List<long>()
         {
             EmpoweredDespairCerus,
@@ -945,7 +945,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         }
         {
             var unboundedOptimismEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var tofPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var tofPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<TimeCombatEvent> lostEvents = [
                 ..p.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit),
                 ..log.CombatData.GetDeadEvents(p.AgentItem),

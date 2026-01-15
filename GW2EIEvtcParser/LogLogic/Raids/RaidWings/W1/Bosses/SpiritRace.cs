@@ -92,22 +92,22 @@ internal class SpiritRace : SpiritVale
         return phases;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
 
         AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts == null)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var position = combatData.GetMovementData(wallOfGhosts).FirstOrDefault(x => x is PositionEvent positionEvt);
         if (position != null)
         {
             var initialPosition = new Vector3(-5669.139f, -7814.589f, -1138.749f);
-            return (position.GetPoint3D() - initialPosition).Length() > 10 ? LogData.LogStartStatus.Late : LogData.LogStartStatus.Normal;
+            return (position.GetPoint3D() - initialPosition).Length() > 10 ? LogData.StartStatus.Late : LogData.StartStatus.Normal;
         }
         // To investigate
-        return LogData.LogStartStatus.Late;
+        return LogData.StartStatus.Late;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
@@ -298,7 +298,7 @@ internal class SpiritRace : SpiritVale
         }
         {
             var outrunGhostEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var spiritRacePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var spiritRacePhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             var crippleds = log.CombatData.GetBuffApplyDataByIDByDst(Crippled, p.AgentItem);
             foreach (var evt in crippleds)
             {

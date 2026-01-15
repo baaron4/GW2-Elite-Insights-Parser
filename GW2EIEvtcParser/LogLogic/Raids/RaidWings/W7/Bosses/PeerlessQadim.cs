@@ -103,7 +103,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         ("(SE)", new(2941.51514f, 9321.848f)),
     ];
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
         return base.GetLogStartStatus(combatData, agentData, logData);
@@ -731,10 +731,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
-        return (target.GetHealth(combatData) > 48e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 48e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
 }
