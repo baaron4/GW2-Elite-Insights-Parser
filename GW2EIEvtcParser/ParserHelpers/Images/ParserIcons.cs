@@ -671,7 +671,8 @@ internal static class ParserIcons
     internal const string WhiteCatmanderTagOverhead = "https://wiki.guildwars2.com/images/5/51/Catmander_tag_%28white%29.png";
     internal const string YellowCatmanderTagOverhead = "https://wiki.guildwars2.com/images/a/a3/Catmander_tag_%28yellow%29.png";
     // - Miscellaneous
-    internal const string RedArrowOverhead = "https://wiki.guildwars2.com/images/3/33/Generic_red_arrow_down.png";
+    internal const string RedArrowDownOverhead = "https://wiki.guildwars2.com/images/3/33/Generic_red_arrow_down.png";
+    internal const string RedArrowUpOverhead = "https://i.imgur.com/VWI9Q7g.png";
     internal const string EnragedOverhead = "https://wiki.guildwars2.com/images/thumb/8/8e/Enraged_%28overhead_icon%29.png/120px-Enraged_%28overhead_icon%29.png";
     internal const string BombOverhead = "https://wiki.guildwars2.com/images/d/da/Bomb_%28overhead_icon%29.png";
     internal const string VolatilePoisonOverhead = "https://wiki.guildwars2.com/images/d/db/Volatile_Poison_IG.png";
@@ -712,10 +713,14 @@ internal static class ParserIcons
     internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
     internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
     // - Green Marker
-    internal const string GreenMarkerSize1Overhead = "https://i.imgur.com/eBgZ07h.png";
-    internal const string GreenMarkerSize2Overhead = "https://i.imgur.com/mJ73L0s.png";
-    internal const string GreenMarkerSize3Overhead = "https://i.imgur.com/WxeUYl7.png";
-    internal const string GreenMarkerSize5Overhead = "https://i.imgur.com/kMUvmwz.png";
+    internal const string GreenMarkerSize1Overhead = "https://i.imgur.com/uroOS2v.png";
+    internal const string GreenMarkerSize2Overhead = "https://i.imgur.com/NirISNv.png";
+    internal const string GreenMarkerSize3Overhead = "https://i.imgur.com/AwsIRUl.png";
+    internal const string GreenMarkerSize4Overhead = "https://i.imgur.com/tkzDoTg.png";
+    internal const string GreenMarkerSize5Overhead = "https://i.imgur.com/OjEQWyV.png";
+    internal const string GreenMarkerSize6Overhead = "https://i.imgur.com/40kZWle.png";
+    // - X Marker
+    internal const string RedXMarkerOverhead = "https://i.imgur.com/2dLzgP6.png";
     #endregion
 
     // NPC / Gadgets Icons not private
