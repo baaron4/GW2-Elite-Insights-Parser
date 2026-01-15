@@ -170,21 +170,21 @@ internal class BanditTrio : SalvationPass
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (TargetHPPercentUnderThreshold(TargetID.Berg, logData.LogStart, combatData, Targets))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         if (agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
         {
             var firstMovement = combatData.GetMovementData(berg).First(x => x.Time > berg.FirstAware + MinimumInCombatDuration);
             if (firstMovement != null && firstMovement.Time < 120000)
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, PhaseData encounterPhase, ParsedEvtcLog log)
@@ -366,7 +366,7 @@ internal class BanditTrio : SalvationPass
         }
         if (log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)

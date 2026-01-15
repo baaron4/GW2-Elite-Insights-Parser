@@ -145,7 +145,7 @@ internal class Xera : StrongholdOfTheFaithful
         long encounterEnd = encounterPhase.End;
         var phases = new List<PhaseData>(5);
         PhaseData phase100to0 = encounterPhase;
-        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.LogStartStatus.Normal)
+        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.StartStatus.Normal)
         {
             long xeraFightStart = GetMainXeraFightStart(log, xera.AgentItem, encounterStart);
             var phasePreEvent = new SubPhasePhaseData(encounterPhase.Start, xeraFightStart, "Pre Event");
@@ -362,14 +362,14 @@ internal class Xera : StrongholdOfTheFaithful
         SetManualHPForXera(GetMainTarget());
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
         if (!agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _) && combatData.GetLogNPCUpdateEvents().Any())
         {
-            return LogData.LogStartStatus.NoPreEvent;
+            return LogData.StartStatus.NoPreEvent;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

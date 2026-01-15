@@ -87,7 +87,7 @@ internal class River : HallOfChains
         return startToUse;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Desmina, out var desmina))
         {
@@ -99,10 +99,10 @@ internal class River : HallOfChains
             var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
             if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)

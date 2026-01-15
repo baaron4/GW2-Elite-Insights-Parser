@@ -97,9 +97,9 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)

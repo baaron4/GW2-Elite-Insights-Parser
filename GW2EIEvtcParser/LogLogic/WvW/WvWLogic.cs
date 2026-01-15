@@ -92,9 +92,9 @@ internal class WvWLogic : LogLogic
     {
         return GetGenericLogOffset(logData);
     }
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.NotApplicable;
+        return LogData.Mode.NotApplicable;
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
@@ -253,7 +253,7 @@ internal class WvWLogic : LogLogic
         base.SetInstanceBuffs(log, instanceBuffs);
         if (_isGuildHall)
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
+            var encounterPhases = log.LogData.GetEncounterPhases(log);
             long[] usedModes = [GuildHallPvEMode, GuildHallsPvPMode, GuildHallWvWMode];
             foreach (var encounterPhase in encounterPhases)
             {

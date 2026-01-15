@@ -326,7 +326,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return phases;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         var jormagVoid = agentData.GetNPCsByID(TargetID.TheDragonVoidJormag).FirstOrDefault();
         var otherVoids = agentData.GetNPCsByIDs([
@@ -343,34 +343,34 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         } 
         else if (otherVoids.Count > 0)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var pushableOrb = agentData.GetNPCsByID(TargetID.PushableVoidAmalgamate).LastOrDefault(x => x.FirstAware <= pushableOrbCheckThreshold);
         if (pushableOrb == null)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var voidShellApplies = combatData.GetBuffApplyDataByIDByDst(VoidShell, pushableOrb);
         if (voidShellApplies.Count < 3)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
         if (firstNonZeroVelocity == null)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var firstPositionAfterVelocity = combatData.GetMovementData(pushableOrb).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= firstNonZeroVelocity.Time);
         if (firstPositionAfterVelocity == null)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
         var position = firstPositionAfterVelocity.GetPoint3D();
         if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 50)
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
@@ -1760,7 +1760,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
                         int offset = 0;
                         double initialRadius = 100.0;
-                        double radiusIncrement = log.LogData.IsCM ? 35.0 : 35.0 / 2;
+                        double radiusIncrement = log.LogData.LogIsCM ? 35.0 : 35.0 / 2;
                         // To handle same amalgamate handling multiple phases
                         while (offset < poolEffects.Count)
                         {
@@ -2665,7 +2665,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         HashSet<int> targetIDs =
         [
@@ -2677,7 +2677,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         ];
         if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
         {
-            return LogData.LogMode.CM;
+            return LogData.Mode.CM;
         }
         IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID(TargetID.VoidMelter);
         if (voidMelters.Count > 5)
@@ -2685,22 +2685,22 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             long firstAware = voidMelters[0].FirstAware;
             if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ServerDelayConstant) > 5)
             {
-                return LogData.LogMode.CM;
+                return LogData.Mode.CM;
             }
         }
         // fallback for late logs
         if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
         {
-            return LogData.LogMode.CM;
+            return LogData.Mode.CM;
         }
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
 
         foreach (var encounterPhase in encounterPhases)
         {
@@ -2743,7 +2743,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
         {
             var nopeRopesEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var harvestTemplePhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var harvestTemplePhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(MordremothShockwave),
                 ..log.CombatData.GetDamageData(TsunamiSlamClawOrb),

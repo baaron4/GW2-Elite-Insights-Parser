@@ -260,28 +260,28 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return start;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (HasElementalMode(agentData))
         {
             if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, logData.LogStart, combatData, Targets))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
         else if (HasDarkMode(agentData))
         {
             if (TargetHPPercentUnderThreshold(TargetID.DarkAiKeeperOfThePeak, logData.LogStart, combatData, Targets))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.CMNoName;
+        return LogData.Mode.CMNoName;
     }
 
     internal static List<PhaseData> ComputeElementalPhases(ParsedEvtcLog log, SingleActor elementalAi, PhaseData elementalPhase, bool requirePhases)
@@ -478,7 +478,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         var mainPhase = log.LogData.GetMainPhase(log);
-        var encountersWithDarkAi = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak)));
+        var encountersWithDarkAi = log.LogData.GetEncounterPhases(log).Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak)));
         var finalEncounter = encountersWithDarkAi.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {

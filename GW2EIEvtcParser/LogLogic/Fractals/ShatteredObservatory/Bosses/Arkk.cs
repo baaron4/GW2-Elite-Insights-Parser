@@ -97,9 +97,9 @@ internal class Arkk : ShatteredObservatory
         return trashIDs;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.CMNoName;
+        return LogData.Mode.CMNoName;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -227,7 +227,7 @@ internal class Arkk : ShatteredObservatory
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         var finalEncounter = encounterPhases.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {

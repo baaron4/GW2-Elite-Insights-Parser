@@ -168,13 +168,13 @@ internal class PhaseDto
             EncounterDuration = phaseWithMetaData.DurationString;
             switch (phaseWithMetaData.Mode)
             {
-                case LogData.LogMode.Unknown:
+                case LogData.Mode.Unknown:
                     Mode = "Unknown";
                     break;
-                case LogData.LogMode.Story:
+                case LogData.Mode.Story:
                     Mode = "Story Mode";
                     break;
-                case LogData.LogMode.Normal:
+                case LogData.Mode.Normal:
                     Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.Emboldened && x.AttachedPhase == phase) ? 
                         "Emboldened Normal Mode" : 
                         log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.QuickplayBoost) ? 
@@ -182,11 +182,11 @@ internal class PhaseDto
                             : 
                             "Normal Mode";
                     break;
-                case LogData.LogMode.CM:
-                case LogData.LogMode.CMNoName:
+                case LogData.Mode.CM:
+                case LogData.Mode.CMNoName:
                     Mode = "Challenge Mode";
                     break;
-                case LogData.LogMode.LegendaryCM:
+                case LogData.Mode.LegendaryCM:
                     Mode = "Legendary Challenge Mode";
                     break;
                 default:
@@ -194,14 +194,14 @@ internal class PhaseDto
             }
             switch (phaseWithMetaData.StartStatus)
             {
-                case LogData.LogStartStatus.Normal:
+                case LogData.StartStatus.Normal:
                     break;
-                case LogData.LogStartStatus.NotSet:
+                case LogData.StartStatus.NotSet:
                     break;
-                case LogData.LogStartStatus.Late:
+                case LogData.StartStatus.Late:
                     StartStatus = "Late Start";
                     break;
-                case LogData.LogStartStatus.NoPreEvent:
+                case LogData.StartStatus.NoPreEvent:
                     StartStatus = "No Pre-Event";
                     break;
                 default:

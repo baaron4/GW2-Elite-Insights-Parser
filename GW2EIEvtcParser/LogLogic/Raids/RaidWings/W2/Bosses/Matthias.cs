@@ -95,7 +95,7 @@ internal class Matthias : SalvationPass
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
         if (bloodstoneBisque.Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)
@@ -458,7 +458,7 @@ internal class Matthias : SalvationPass
 
         // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection).Where(x => x.Value > 0);
-        replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
+        replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowDownOverhead);
 
         // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice).Where(x => x.Value > 0);

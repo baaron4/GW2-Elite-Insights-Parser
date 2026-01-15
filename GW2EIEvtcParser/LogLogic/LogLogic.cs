@@ -165,7 +165,7 @@ public abstract class LogLogic
                 instanceBuffs.Add(new(fractalInstability, 1, mainPhase));
             }
         }
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
+        var encounterPhases = log.LogData.GetEncounterPhases(log);
         foreach (var encounterPhase in encounterPhases)
         {
             long end = encounterPhase.Success ? encounterPhase.End : (encounterPhase.End + encounterPhase.Start) / 2;
@@ -524,30 +524,30 @@ public abstract class LogLogic
         return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
-    internal virtual LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal virtual LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
-            return LogData.LogMode.NotApplicable;
+            return LogData.Mode.NotApplicable;
         }
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
-    internal virtual LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal virtual LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
             InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
             if (evt == null)
             {
-                return LogData.LogStartStatus.Normal;
+                return LogData.StartStatus.Normal;
             }
             else
             {
-                return evt.TimeOffsetFromInstanceCreation > 10000 ? LogData.LogStartStatus.Late : LogData.LogStartStatus.Normal;
+                return evt.TimeOffsetFromInstanceCreation > 10000 ? LogData.StartStatus.Late : LogData.StartStatus.Normal;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     protected virtual IReadOnlyList<TargetID> GetSuccessCheckIDs()

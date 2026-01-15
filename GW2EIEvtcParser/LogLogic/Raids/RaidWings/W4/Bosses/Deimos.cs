@@ -267,7 +267,7 @@ internal class Deimos : BastionOfThePenitent
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
-        if (!logData.IsCM)
+        if (!logData.LogIsCM)
         {
             return res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
         }
@@ -414,14 +414,14 @@ internal class Deimos : BastionOfThePenitent
         RenameTargetSauls(Targets);
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
         if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
         {
-            return LogData.LogStartStatus.NoPreEvent;
+            return LogData.StartStatus.NoPreEvent;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     private static long GetMainFightStart(ParsedEvtcLog log, AgentItem deimos, long start)
@@ -443,7 +443,7 @@ internal class Deimos : BastionOfThePenitent
         var phases = new List<PhaseData>(10);
         var fullFight = encounterPhase;
         PhaseData phase100to0 = fullFight;
-        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.LogStartStatus.Normal)
+        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.StartStatus.Normal)
         {
             var deimosMainFightStart = GetMainFightStart(log, deimos.AgentItem, encounterPhase.Start);
             var phasePreEvent = new SubPhasePhaseData(0, deimosMainFightStart, "Pre Event");
@@ -846,11 +846,11 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
-        LogData.LogMode cmStatus = (target.GetHealth(combatData) > 40e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
-        AdjustDeimosHP(target, cmStatus == LogData.LogMode.CM);
+        LogData.Mode cmStatus = (target.GetHealth(combatData) > 40e6) ? LogData.Mode.CM : LogData.Mode.Normal;
+        AdjustDeimosHP(target, cmStatus == LogData.Mode.CM);
 
         return cmStatus;
     }

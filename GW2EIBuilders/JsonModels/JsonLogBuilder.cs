@@ -182,10 +182,10 @@ internal static class JsonLogBuilder
         jsonLog.Language = log.LogMetadata.Language;
         jsonLog.LanguageID = (byte)log.LogMetadata.LanguageID;
         jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
-        jsonLog.IsCM = log.LogData.IsCM || log.LogData.IsLegendaryCM;
-        jsonLog.IsLegendaryCM = log.LogData.IsLegendaryCM;
-        jsonLog.IsLateStart = log.LogData.IsLateStart;
-        jsonLog.MissingPreEvent = log.LogData.MissingPreEvent;
+        jsonLog.IsCM = log.LogData.LogIsCM || log.LogData.LogIsLegendaryCM;
+        jsonLog.IsLegendaryCM = log.LogData.LogIsLegendaryCM;
+        jsonLog.IsLateStart = log.LogData.LogIsLateStart;
+        jsonLog.MissingPreEvent = log.LogData.LogMissingPreEvent;
         jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
         jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.LogData.Logic.ParseMode == LogLogic.ParseModeEnum.WvW;
         var personalBuffs = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)

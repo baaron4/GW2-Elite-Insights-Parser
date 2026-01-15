@@ -256,7 +256,7 @@ internal class Qadim : MythwrightGambit
         RenamePyres(Targets);
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out var qadim))
         {
@@ -268,15 +268,15 @@ internal class Qadim : MythwrightGambit
             var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
             if (!positions.Any(x => (x - qadimInitialPosition).XY().Length() < 150))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
         if (TargetHPPercentUnderThreshold(TargetID.Qadim, logData.LogStart, combatData, Targets) ||
             (Targets.Any(x => x.IsSpecies(TargetID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TargetID.AncientInvokedHydra, logData.LogStart, combatData, Targets)))
         {
-            return LogData.LogStartStatus.Late;
+            return LogData.StartStatus.Late;
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -1081,10 +1081,10 @@ internal class Qadim : MythwrightGambit
         return false;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-        return (target.GetHealth(combatData) > 21e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 21e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     private static void ManuallyAnimatePlateforms(SingleActor? qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
@@ -1481,7 +1481,7 @@ internal class Qadim : MythwrightGambit
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success)
@@ -1611,7 +1611,7 @@ internal class Qadim : MythwrightGambit
         }
         {
             var takingTurnsEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var qadimPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var qadimPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             var deaths = log.CombatData.GetDeadEvents(p.AgentItem);
             foreach (var death in deaths)
             {

@@ -200,7 +200,7 @@ internal class Dhuum : HallOfChains
         {
             return [];
         }
-        bool hasPreEvent = encounterPhase.StartStatus == LogData.LogStartStatus.Normal;
+        bool hasPreEvent = encounterPhase.StartStatus == LogData.StartStatus.Normal;
         long end = encounterPhase.End;
         long start = encounterPhase.Start;
         var phases = new List<PhaseData>(6);
@@ -330,7 +330,7 @@ internal class Dhuum : HallOfChains
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
         {
@@ -339,7 +339,7 @@ internal class Dhuum : HallOfChains
         // We expect pre event in all logs
         if (combatData.GetAnimatedCastData(dhuum).Any(x => (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000))
         {
-            return LogData.LogStartStatus.NoPreEvent;
+            return LogData.StartStatus.NoPreEvent;
         }
         return base.GetLogStartStatus(combatData, agentData, logData);
     }
@@ -890,10 +890,10 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
-        return (target.GetHealth(combatData) > 35e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return (target.GetHealth(combatData) > 35e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     /// <summary>

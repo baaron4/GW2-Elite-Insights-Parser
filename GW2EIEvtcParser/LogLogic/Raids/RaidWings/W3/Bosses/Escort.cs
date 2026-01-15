@@ -221,7 +221,7 @@ internal class Escort : StrongholdOfTheFaithful
         return startToUse;
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
         {
@@ -238,18 +238,18 @@ internal class Escort : StrongholdOfTheFaithful
                 var glennaInitialPosition = new Vector2(9092.697f, 21477.2969f/*, -2946.81885f*/);
                 if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && (pe.GetPointXY() - glennaInitialPosition).Length() < 100))
                 {
-                    return LogData.LogStartStatus.Late;
+                    return LogData.StartStatus.Late;
                 }
             }
-            return LogData.LogStartStatus.Normal;
+            return LogData.StartStatus.Normal;
         }
         else if (combatData.GetLogNPCUpdateEvents().Any())
         {
-            return LogData.LogStartStatus.NoPreEvent;
+            return LogData.StartStatus.NoPreEvent;
         }
         else
         {
-            return LogData.LogStartStatus.Normal;
+            return LogData.StartStatus.Normal;
         }
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -301,7 +301,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
         if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any() || log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)

@@ -200,7 +200,7 @@ internal class Skorvald : ShatteredObservatory
         return GetGenericLogOffset(logData);
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
@@ -223,13 +223,13 @@ internal class Skorvald : ShatteredObservatory
                 agentData.GetNPCsByID(TargetID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
                 agentData.GetNPCsByID(TargetID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
             {
-                return LogData.LogMode.CM;
+                return LogData.Mode.CM;
             }
-            return LogData.LogMode.Normal;
+            return LogData.Mode.Normal;
         }
         else
         {
-            return (target.GetHealth(combatData) == 5551340) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+            return (target.GetHealth(combatData) == 5551340) ? LogData.Mode.CM : LogData.Mode.Normal;
         }
     }
 

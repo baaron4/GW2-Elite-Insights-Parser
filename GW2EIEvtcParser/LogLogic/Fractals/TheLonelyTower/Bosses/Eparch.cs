@@ -69,7 +69,7 @@ internal class Eparch : LonelyTower
         LogID |= 0x000002;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         ulong build = combatData.GetGW2BuildEvent().Build;
         int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
@@ -77,9 +77,9 @@ internal class Eparch : LonelyTower
         SingleActor eparch = GetEparchActor();
         if (build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
         {
-            return LogData.LogMode.CM;
+            return LogData.Mode.CM;
         }
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -122,7 +122,7 @@ internal class Eparch : LonelyTower
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffApplyDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        var cmCheck = logData.IsCM || IsFakeCM(agentData);
+        var cmCheck = logData.LogIsCM || IsFakeCM(agentData);
         if (cmCheck && determinedApplies.Count >= 3)
         {
             logData.SetSuccess(true, determinedApplies[2].Time);
@@ -148,7 +148,7 @@ internal class Eparch : LonelyTower
         SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement])), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases || (!log.LogData.IsCM && !IsFakeCM(log.AgentData)))
+        if (!requirePhases || (!log.LogData.LogIsCM && !IsFakeCM(log.AgentData)))
         {
             return phases;
         }

@@ -17,8 +17,8 @@ internal abstract class OpenWorldLogic : LogLogic
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.LogMode.NotApplicable;
+        return LogData.Mode.NotApplicable;
     }
 }

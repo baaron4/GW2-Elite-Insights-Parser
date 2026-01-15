@@ -126,16 +126,16 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         return [ TargetID.Tribocharge ];
     }
 
-    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
-        if (logData.IsCM)
+        if (logData.LogIsCM)
         {
             if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilionCM, logData.LogStart, combatData, Targets) ||
                 TargetHPPercentUnderThreshold(TargetID.PrototypeIndigoCM, logData.LogStart, combatData, Targets) ||
                 TargetHPPercentUnderThreshold(TargetID.PrototypeArseniteCM, logData.LogStart, combatData, Targets))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
 
         }
@@ -145,10 +145,10 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                 TargetHPPercentUnderThreshold(TargetID.PrototypeIndigo, logData.LogStart, combatData, Targets) ||
                 TargetHPPercentUnderThreshold(TargetID.PrototypeArsenite, logData.LogStart, combatData, Targets))
             {
-                return LogData.LogStartStatus.Late;
+                return LogData.StartStatus.Late;
             }
         }
-        return LogData.LogStartStatus.Normal;
+        return LogData.StartStatus.Normal;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -157,7 +157,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         if (!logData.Success)
         {
             List<TargetID> idsToCheck;
-            if (logData.IsCM)
+            if (logData.LogIsCM)
             {
                 idsToCheck =
                 [
@@ -197,7 +197,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
     }
 
-    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, PhaseData fullFightPhase)
+    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, EncounterPhaseData fullFightPhase)
     {
         DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
         long end = log.LogData.LogEnd;
@@ -208,7 +208,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         }
         List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, start, end);
         string[] phaseNames;
-        if (log.LogData.IsCM)
+        if (fullFightPhase.IsCM)
         {
             if (subPhases.Count > 3)
             {
@@ -284,7 +284,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(vermilion, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", phases[0]));
+                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", (EncounterPhaseData)phases[0]));
             }
         }
         SingleActor? indigo = Indigo();
@@ -293,7 +293,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(indigo, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(indigo, log, "Indigo", phases[0]));
+                phases.AddRange(GetSubPhases(indigo, log, "Indigo", (EncounterPhaseData)phases[0]));
             }
         }
         SingleActor? arsenite = Arsenite();
@@ -302,16 +302,16 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             phases[0].AddTarget(arsenite, log);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", phases[0]));
+                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", (EncounterPhaseData)phases[0]));
             }
         }
         return phases;
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = (Vermilion() ?? Indigo() ?? Arsenite()) ?? throw new MissingKeyActorsException("Main target not found");
-        return target.GetHealth(combatData) > 20e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return target.GetHealth(combatData) > 20e6 ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -319,7 +319,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         base.SetInstanceBuffs(log, instanceBuffs);
         if (log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
         {
-            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
             foreach (var encounterPhase in encounterPhases)
             {
                 if (encounterPhase.Success)
@@ -675,7 +675,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             // Expansion Timer: 500ms
             uint initialRadius = 100;
             uint timeInterval = 500;
-            uint radiusIncreasePerInterval = (uint)(log.LogData.IsCM ? 15 : 11);
+            uint radiusIncreasePerInterval = (uint)(log.LogData.LogIsCM ? 15 : 11);
 
             foreach (EffectEvent effect in boilingAetherExpanding)
             {
@@ -700,7 +700,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         {
             // Maximum Radius: 320 (Normal Mode)
             // Maximum Radius: 400 (Challenge Mode)
-            uint radius = (uint)(log.LogData.IsCM ? 400 : 320);
+            uint radius = (uint)(log.LogData.LogIsCM ? 400 : 320);
 
             foreach (EffectEvent effect in boilingAetherExpanded)
             {
@@ -744,7 +744,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         }
         {
             var aetherAversionEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var olcPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var olcPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(BoilingAetherRedBlueNM),
                 ..log.CombatData.GetDamageData(BoilingAetherRedBlueCM),

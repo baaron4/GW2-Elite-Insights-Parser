@@ -199,22 +199,23 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         }
     }
 
-    private SingleActor? GetMinisterLi(LogData logData)
+    private SingleActor? GetMinisterLi(bool isCM)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(logData.IsCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
+        return Targets.FirstOrDefault(x => x.IsSpecies(isCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ministerLi = GetMinisterLi(log.LogData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        var isCM = ((EncounterPhaseData)phases[0]).IsCM;
+        SingleActor ministerLi = GetMinisterLi(isCM) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi, log);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheSniperCM : TargetID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
         //
         phases[0].AddTarget(enforcer, log, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(mindblade, log, PhaseData.TargetPriority.Blocking);
@@ -242,7 +243,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        SingleActor ministerLi = GetMinisterLi(logData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(logData.LogIsCM) ?? throw new MissingKeyActorsException("Minister Li not found");
         var buffApplies = combatData.GetBuffApplyDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
         if (buffApplies.Any())
         {
@@ -254,10 +255,10 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor? ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MinisterLiCM));
-        return ministerLiCM != null ? LogData.LogMode.CM : LogData.LogMode.Normal;
+        return ministerLiCM != null ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -695,7 +696,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
-        var allKOCMPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+        var allKOCMPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
         {
             var testReflexesEligibilityEvents = new List<AchievementEligibilityEvent>();
             HashSet<EncounterPhaseData> koPhases = [.. allKOCMPhases];

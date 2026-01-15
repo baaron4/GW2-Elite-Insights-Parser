@@ -704,17 +704,17 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
         var uraHP = target.GetHealth(combatData);
         if (uraHP > 70e6)
         {
             target.OverrideName("Godscream Ura");
-            return uraHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName;
+            return uraHP > 100e6 ? LogData.Mode.LegendaryCM : LogData.Mode.CMNoName;
         }
         target.OverrideName("Ura, the Steamshrieker");
-        return LogData.LogMode.Normal;
+        return LogData.Mode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -724,7 +724,7 @@ internal class UraTheSteamshrieker : MountBalrior
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && (encounterPhase.IsCM || encounterPhase.IsLegendaryCM))
@@ -767,7 +767,7 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         {
             var hopscotchMasterEligibilityEvents = new List<AchievementEligibilityEvent>();
-            var uraPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+            var uraPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
             List<HealthDamageEvent> damageData = [
                 ..log.CombatData.GetDamageData(EruptionVent),
                 ..log.CombatData.GetDamageData(SulfuricEruption)
