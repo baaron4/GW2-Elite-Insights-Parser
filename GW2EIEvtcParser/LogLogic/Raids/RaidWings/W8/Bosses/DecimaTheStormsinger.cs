@@ -113,7 +113,7 @@ internal class DecimaTheStormsinger : MountBalrior
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -172,8 +172,9 @@ internal class DecimaTheStormsinger : MountBalrior
             if (effectByConduitOnGadget != null)
             {
                 conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
-            } 
-            else if (effectSrcs.Any(x => conduitGadget.InAwareTimes(x))) {
+            }
+            else if (effectSrcs.Any(x => conduitGadget.InAwareTimes(x)))
+            {
                 conduitGadget.OverrideID(TargetID.BigEnlightenedConduitGadget, agentData);
             }
         }
@@ -189,13 +190,14 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         long start = long.MaxValue;
         long end = long.MinValue;
-        foreach (SingleActor boulder in boulders) {
+        foreach (SingleActor boulder in boulders)
+        {
             start = Math.Min(boulder.FirstAware, start);
             var deadEvent = log.CombatData.GetDeadEvents(boulder.AgentItem).FirstOrDefault();
             if (deadEvent != null)
             {
                 end = Math.Max(deadEvent.Time, end);
-            } 
+            }
             else
             {
                 end = Math.Max(boulder.LastAware, end);
@@ -314,7 +316,7 @@ internal class DecimaTheStormsinger : MountBalrior
             AddTargetsToPhase(phases[0], [TargetID.TranscendentBoulder], log, PhaseData.TargetPriority.Blocking);
         }
         phases.AddRange(ComputePhases(log, decima, Targets, (EncounterPhaseData)phases[0], requirePhases));
-        
+
         return phases;
     }
 
@@ -864,7 +866,7 @@ internal class DecimaTheStormsinger : MountBalrior
             var damageData = p.GetDamageTakenEvents(null, log).Where(x => fluxlanceIDs.Contains(x.SkillID) || thunderIDs.Contains(x.SkillID)).ToList();
             foreach (var evt in exposeds)
             {
-                if (damageData.Any(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant)) 
+                if (damageData.Any(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(decimaCMPhases, thisBugCanDanceEligibilityEvents, evt.Time, Ach_ThisBugCanDance, p);
                 }
@@ -878,7 +880,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 {
                     decimaCMPhases.Remove(decimaCMPhase);
                     thisBugCanDanceEligibilityEvents.Add(new AchievementEligibilityEvent(deathEvent.Time, Ach_ThisBugCanDance, p, true));
-                } else if (dcEvent != null)
+                }
+                else if (dcEvent != null)
                 {
                     decimaCMPhases.Remove(decimaCMPhase);
                     thisBugCanDanceEligibilityEvents.Add(new AchievementEligibilityEvent(dcEvent.Time, Ach_ThisBugCanDance, p, true));
