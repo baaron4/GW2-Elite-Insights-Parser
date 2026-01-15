@@ -18,7 +18,6 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class DecimaTheStormsinger : MountBalrior
 {
-    private bool IsCMTriggerID => GenericTriggerID == (int)TargetID.DecimaCM;
 
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
@@ -309,9 +308,10 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor decima = Targets.FirstOrDefault(x => IsCMTriggerID ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found"); ;
+        bool isCMTriggerID = GenericTriggerID == (int)TargetID.DecimaCM;
+        SingleActor decima = Targets.FirstOrDefault(x => isCMTriggerID ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found"); ;
         phases[0].AddTarget(decima, log);
-        if (IsCMTriggerID)
+        if (isCMTriggerID)
         {
             AddTargetsToPhase(phases[0], [TargetID.TranscendentBoulder], log, PhaseData.TargetPriority.Blocking);
         }
@@ -819,7 +819,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
+        return GenericTriggerID == (int)TargetID.DecimaCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
