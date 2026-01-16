@@ -3,7 +3,7 @@
 #pragma warning disable CA1823 // Unused field
 internal static class EffectImages
 {
-    
+
     // Portal icons
     internal const string PortalMesmerEntre = "https://i.imgur.com/TILHQ1u.png";
     internal const string PortalMesmerExeunt = "https://i.imgur.com/7gsObHV.png";
@@ -96,12 +96,16 @@ internal static class EffectImages
     internal const string EffectThrowMine = "https://i.imgur.com/q9Z4xdI.png";
     internal const string EffectMineField = "https://i.imgur.com/Miy0H2G.png";
     internal const string EffectDetonateThrowMineOrMineField = "https://i.imgur.com/0Jbtf2q.png";
-    internal const string EffectHuntersWard = "https://i.imgur.com/Di7OvVr.png";
-    internal const string EffectSymbolOfEnergy = "https://i.imgur.com/tPaAF8S.png";
-    internal const string EffectSymbolOfVengeance = "https://i.imgur.com/1niDRW8.png";
     internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
     internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
     internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
+    internal const string EffectSymbolOfFaith = "";
+    internal const string EffectSymbolOfSwiftness = "";
+    internal const string EffectSymbolOfProtection = "";
+    internal const string EffectHuntersWard = "https://i.imgur.com/Di7OvVr.png";
+    internal const string EffectSymbolOfEnergy = "https://i.imgur.com/tPaAF8S.png";
+    internal const string EffectSymbolOfVengeance = "https://i.imgur.com/1niDRW8.png";
+    internal const string EffectSymbolOfIgnition = "";
     internal const string EffectSymbolOfLuminance = "https://i.imgur.com/opBLfAA.png";
     internal const string EffectSolarStorm = "https://i.imgur.com/iDvjMxE.png";
     internal const string EffectStalwartStand = "https://i.imgur.com/uBAyxRu.png";

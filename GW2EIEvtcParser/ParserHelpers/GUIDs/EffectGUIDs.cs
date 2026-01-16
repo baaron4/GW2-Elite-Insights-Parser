@@ -17,6 +17,11 @@ public static class EffectGUIDs
     public static readonly GUID StealthReveal = new("A37F8E2B550B254DA89F933BDF654B41"); // also used with e.g. infiltrators strike, infiltrators arrow, shadowstep, shadow return, infiltrators signet
     public static readonly GUID WhiteMantlePortalInactive = new("D43373FEFA19A54DA2A2B6BB7834A338");
     public static readonly GUID WhiteMantlePortalActive = new("388CF9246218A34DB2F8107E19FCA471");
+    public static readonly GUID LightField180 = new("0B22F631EBB04341A17FDC57431385EB"); // model, 180 radius
+    public static readonly GUID LightField240 = new("26F02F878BA59141AE8632521E1448AD"); // model, 240 radius
+    public static readonly GUID EnemyAoE180 = new("60C2DD0478450F4B81BAA6486227872A"); // split compound with effect for hostile, radius 180, e.g. guardian symbols
+    public static readonly GUID EnemyAoE240 = new("2125A13079C1C5479C150926EB60A15D"); // split compound with effect for hostile, radius 240, e.g. guardian symbols
+    public static readonly GUID AoEWhiteOutline180 = new("E37AD3E0D6DA364999D987D9DDFC9707"); // split compound with generic white outline for ally
     #endregion
 
     #region Mounts
@@ -320,19 +325,33 @@ public static class EffectGUIDs
     public static readonly GUID GuardianShieldOfTheAvenger = new("0885D553A0A0A341B4C31B7964243407");
     public static readonly GUID GuardianSignetOfMercyLightTray = new("E9D10435E997D846B736B62EDCC6B4BD"); // Duration 2000 - light ray at the start of the cast
     public static readonly GUID GuardianSignetOfMercyEnd = new("61ED02C4AA44C0429790A79E8EFCA7CC"); // Duration 0 - end cast
-    public static readonly GUID GuardianSymbolOfPunishment1 = new("D20225BED809BE4D86FFE87D6C5AD2B0"); // duration 5000
-    public static readonly GUID GuardianSymbolOfPunishment2 = new("5F56361FEE7463448CA988CE773F4F63"); // duration 6000 - has effect end after 5000
+    public static readonly GUID GuardianSymbolOfPunishmentShared = new("5F56361FEE7463448CA988CE773F4F63"); // duration 6000, model, same for regular & large, end after 5000
+    public static readonly GUID GuardianSymbolOfPunishment = new("D20225BED809BE4D86FFE87D6C5AD2B0"); // duration 5000, split compound
+    public static readonly GUID GuardianSymbolOfPunishmentLarge = new("B41C75065DB527459CBE66F04FD3AD1E"); // duration 7000, split compound, Writ of Persistence
     public static readonly GUID GuardianSymbolOfPunishmentOrb = new("A8C650860481DD48B1B41F76B3054576"); // duration 500
-    public static readonly GUID GuardianSymbolOfResolution = new("98C9834C6381204A85DC67C375D135E4"); // duration 4000
-    public static readonly GUID GuardianSymbolOfBlades = new("FA37E0B77272314AA1ADCFF824F24C27"); // duration 5000
+    public static readonly GUID GuardianSymbolOfResolution = new("98C9834C6381204A85DC67C375D135E4"); // duration 4000, lesser 5960
+    public static readonly GUID GuardianSymbolOfResolutionLarge = new("13D0B65D73B5334D80824EE17B5C257E"); // duration 6000, lesser 8955, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfBlades = new("FA37E0B77272314AA1ADCFF824F24C27"); // duration 5000, lesser 4000
+    public static readonly GUID GuardianSymbolOfBladesLarge = new("8B05122882E53242A4D4725F0A1537A4"); // duration 7000, lesser 6000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfSwiftness = new("CDBF65743EAA1E498E4DF7D49A4DFC0C"); // duration 4000
+    public static readonly GUID GuardianSymbolOfSwiftnessLarge = new("514CA7B38D8ADD4083968F76A86CECD5"); // duration 6000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfFaith = new("697DC505DCAA7246ABFDD00EE8D61287"); // duration 4000
+    public static readonly GUID GuardianSymbolOfFaithLarge = new("A594A24B4CB9EE418208762958E77A7F"); // duration 6000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfProtection = new("8321373FA14B2B4B8761CDC6EEADB161"); // duration 2000, lesser 2000
+    public static readonly GUID GuardianSymbolOfProtectionLarge = new("E10D2D0DF7803146A69BBB5BD47944FC"); // duration 4000, lesser 4000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfEnergy = new("8493CB203B40E04BAE5DC6F141B40743"); // duration 4000
+    public static readonly GUID GuardianSymbolOfEnergyLarge = new("6134A0857D5B844F95E7A2797118271A"); // duration 6000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfVengeance = new("9E41C2BEFD43D64299C41FD6EFB9ECBE"); // duration 4000
+    public static readonly GUID GuardianSymbolOfVengeanceLarge = new("1B667A2C0D65CE409B0D779C41AFA1A0"); // duration 6000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfIgnition = new("935E4272F75A3840B814337B3E2ABCAB"); // duration 4000, CONFLICT large, 0.75 size
+    public static readonly GUID GuardianSymbolOfIgnitionLarge = new("935E4272F75A3840B814337B3E2ABCAB"); // duration 4000, Writ of Persistence, CONFLICT regular, 1.0 size
+    public static readonly GUID GuardianSymbolOfLuminance = new("951D9581F5B0D64685A2C77E25246E7A"); // duration 4000, player src
+    public static readonly GUID GuardianSymbolOfLuminanceLarge = new("0802C43FFCF1CD4D94851FA72F28FD7E"); // duration 6000, player src
+    public static readonly GUID GuardianSymbolOfLuminancePlayer1 = new("F5E8E3DC7B2F2B4DB8451F3D68FD298D"); // duration 0 - no src - player dst
+    public static readonly GUID GuardianSymbolOfLuminancePlayer2 = new("0D459F62A5A4FB41A94AD7B7174A4BBC"); // duration 0 - no src - player dst
     public static readonly GUID GuardianDetonateJurisdictionLevel1 = new("6646D48A2446884998EFADB3EFEF0483");
     public static readonly GUID GuardianDetonateJurisdictionLevel2 = new("3E33C9645D62CF4DBC208511BB3D12F1");
     public static readonly GUID GuardianDetonateJurisdictionLevel3 = new("29F6AADDF5E75348854123B956E4BF0E");
-    public static readonly GUID GuardianSymbolOfLuminance1 = new("F5E8E3DC7B2F2B4DB8451F3D68FD298D"); // duration 0 - no src - player dst
-    public static readonly GUID GuardianSymbolOfLuminance2 = new("951D9581F5B0D64685A2C77E25246E7A"); // duration 4000 - player src
-    public static readonly GUID GuardianSymbolOfLuminance3 = new("E37AD3E0D6DA364999D987D9DDFC9707"); // duration 4000 - player src
-    public static readonly GUID GuardianSymbolOfLuminance4 = new("0B22F631EBB04341A17FDC57431385EB"); // duration 4000 - player src - CONFLICT Symbol of Vengeance
-    public static readonly GUID GuardianSymbolOfLuminance5 = new("0D459F62A5A4FB41A94AD7B7174A4BBC"); // duration 0 - no src - player dst
     public static readonly GUID GuardianSolarStormSpearProjectile = new("7ACBDCFF4A1FAC4E9D3221D946E49658"); // duration 0 - player src
     public static readonly GUID GuardianSolarStormAerealEffect = new("23D4642E4DC66548A7FC8214C73FA3CD"); // duration 0 - player src
     public static readonly GUID GuardianSolarStormSpearImpact = new("928509D0D350234EA86589063083FEB0"); // duration 0 - player src
@@ -360,14 +379,10 @@ public static class EffectGUIDs
     public static readonly GUID FirebrandTomeOfJusticeOpen = new("D573910FDB59434ABF6E7433061995BD");
     public static readonly GUID FirebrandTomeOfResolveOpen = new("39C1BD24ADA04C4788A99C7B0FD9B53F");
     public static readonly GUID FirebrandTomeOfCourageOpen = new("9EE3EAFEF333BE44AD8A7D234A1C3899");
-    public static readonly GUID FirebrandSymbolOfVengeance1 = new("9E41C2BEFD43D64299C41FD6EFB9ECBE");
-    public static readonly GUID FirebrandSymbolOfVengeance2 = new("0B22F631EBB04341A17FDC57431385EB"); // CONFLICT Symbol of Luminance
-    public static readonly GUID FirebrandSymbolOfVengeance3 = new("60C2DD0478450F4B81BAA6486227872A");
     public static readonly GUID DragonhunterTrapEffect = new("CCF55B3EAA4D514BBB8340E01B6A1DEC");
     public static readonly GUID DragonhunterTestOfFaith = new("D7006AC247BBE74BA54E912188EF6B12");
     public static readonly GUID DragonhunterFragmentsOfFaith = new("C84644DDAA59E542989FDB98CD69134C");
     public static readonly GUID DragonhunterHuntersWardCage = new("F70A6157503537478331C8F82C0AB76E");
-    public static readonly GUID DragonhunterSymbolOfEnergy = new("8493CB203B40E04BAE5DC6F141B40743");
     public static readonly GUID LuminaryRadiantJustice1 = new("FB78801BB31CAF488B55F2F57EF9B070");
     public static readonly GUID LuminaryRadiantJustice2 = new("7535B4CB815232418B69092F3390A7AB");
     public static readonly GUID LuminaryRadiantResolve1 = new("4A83F0B627B75C47894941C4D35BA89F");
@@ -461,7 +476,6 @@ public static class EffectGUIDs
     public static readonly GUID ThiefSignetOfAgility = new("BB5488951B60B546BB1BD5626DAE83E1");
     public static readonly GUID ThiefSignetOfShadows = new("14A5982DB277744CB928A4935555F563");
     public static readonly GUID ThiefPitfallAoE = new("7325E9B0DD2E914F9837E5FCFC740A95");
-    public static readonly GUID ThiefThousandNeedlesAoECollision = new("2125A13079C1C5479C150926EB60A15D"); // collision with shadow flare & other
     public static readonly GUID ThiefThousandNeedlesAoE1 = new("9AF103E33FC235498190448A9496C98A"); // ~280ms delayed
     public static readonly GUID ThiefThousandNeedlesAoE2 = new("B8DC8C6736C8E0439295A9DBBADC6296"); // ~280ms delayed
     public static readonly GUID ThiefSealAreaAoE = new("92A7634C2C7F2746AFDA88E1AD9AE886");
