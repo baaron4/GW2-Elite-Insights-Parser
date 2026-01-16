@@ -101,7 +101,7 @@ internal class Xera : StrongholdOfTheFaithful
         return xera.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         var xera = GetMainTarget().AgentItem;
         var mergedXera2 = GetXera2Merge(xera);
@@ -110,14 +110,14 @@ internal class Xera : StrongholdOfTheFaithful
             BuffEvent? invulXera = GetInvulXeraEvent(combatData, xera);
             if (invulXera == null)
             {
-                logData.SetSuccess(false, xera.LastAware);
+                successHandler.SetSuccess(false, xera.LastAware);
             }
             return;
         }
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (logData.Success && logData.LogEnd < mergedXera2.FirstAware)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (successHandler.Success && logData.LogEnd < mergedXera2.FirstAware)
         {
-            logData.SetSuccess(false, mergedXera2.LastAware);
+            successHandler.SetSuccess(false, mergedXera2.LastAware);
         }
     }
 

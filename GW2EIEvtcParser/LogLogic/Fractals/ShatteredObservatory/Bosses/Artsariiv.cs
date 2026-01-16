@@ -221,11 +221,11 @@ internal class Artsariiv : ShatteredObservatory
         return GetLogOffsetByInvulnStart(logData, combatData, artsariiv, Determined762);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
         // reward or death worked
-        if (logData.Success)
+        if (successHandler.Success)
         {
             return;
         }
@@ -235,16 +235,16 @@ internal class Artsariiv : ShatteredObservatory
             // TBC: this looks promising so far
             if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
             {
-                logData.SetSuccess(true, effects.Last().Time);
+                successHandler.SetSuccess(true, effects.Last().Time);
             }
             else
             {
-                logData.SetSuccess(false, target.LastAware);
+                successHandler.SetSuccess(false, target.LastAware);
             }
             return;
         }
         // Legacy
-        SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 4);
+        SetSuccessByBuffCount(combatData, logData, playerAgents, successHandler, target, Determined762, 4);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

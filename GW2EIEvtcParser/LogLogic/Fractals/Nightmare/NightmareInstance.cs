@@ -47,7 +47,7 @@ internal class NightmareInstance : Nightmare
         return crMap;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         var lastEnsolyss = agentData.GetNPCsByID(TargetID.Ensolyss).LastOrDefault();
         if (lastEnsolyss != null)
@@ -55,7 +55,7 @@ internal class NightmareInstance : Nightmare
             var death = combatData.GetDeadEvents(lastEnsolyss).FirstOrDefault();
             if (death != null)
             {
-                logData.SetSuccess(true, death.Time);
+                successHandler.SetSuccess(true, death.Time);
             }
         }
     }

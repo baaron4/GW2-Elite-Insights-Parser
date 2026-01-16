@@ -113,7 +113,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
                 icon = EncounterIconUra;
                 break;
         }
-        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log.LogData.Success, icon, log.LogData.LogMode, log.LogData.Logic.LogID).WithParentPhase(phases[0]);
+        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, icon).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
         if (!requirePhases)

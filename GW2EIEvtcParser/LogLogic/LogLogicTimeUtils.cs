@@ -159,7 +159,7 @@ internal static class LogLogicTimeUtils
         return null;
     }
 
-    internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (!targets.Any())
         {
@@ -198,20 +198,20 @@ internal static class LogLogicTimeUtils
             {
                 return;
             }
-            logData.SetSuccess(true, lastDamageTaken.Time);
+            successHandler.SetSuccess(true, lastDamageTaken.Time);
         }
     }
 
-    internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, LogData logData)
+    internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, LogData logData, LogData.LogSuccessHandler successHandler)
     {
         AgentItem? chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
         if (chest != null)
         {
-            logData.SetSuccess(true, chest.FirstAware);
+            successHandler.SetSuccess(true, chest.FirstAware);
         }
     }
 
-    internal static void SetSuccessByDeath(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
+    internal static void SetSuccessByDeath(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler, bool all)
     {
         if (!targets.Any())
         {
@@ -236,7 +236,7 @@ internal static class LogLogicTimeUtils
         }
         if ((all && success == targets.Count()) || (!all && success > 0))
         {
-            logData.SetSuccess(true, maxTime);
+            successHandler.SetSuccess(true, maxTime);
         }
     }
 

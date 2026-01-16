@@ -22,11 +22,11 @@ internal abstract class RaidWingLogic : RaidLogic
         return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
+            successHandler.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         var raidRewardsTypes = new HashSet<int>();
@@ -42,11 +42,11 @@ internal abstract class RaidWingLogic : RaidLogic
         RewardEvent? reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > logData.LogStart);
         if (reward != null)
         {
-            logData.SetSuccess(true, reward.Time);
+            successHandler.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
         }
     }
 }

@@ -14,7 +14,7 @@ public abstract class OperationController : ParserController
         {
             LogDuration = log.LogData.DurationString;
             LogName = log.LogData.LogName;
-            Success = log.LogData.Success;
+            Success = log.LogData.GetMainPhase(log).Success;
             LogCategory = log.LogData.Logic.LogCategoryInformation;
             Icon = log.LogData.Logic.Icon;
             LogStart = log.LogMetadata.DateStartStd;

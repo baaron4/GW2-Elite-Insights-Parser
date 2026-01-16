@@ -540,23 +540,23 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         return [TargetID.MaiTrinRaid, TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
-            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(logData.LogIsCM);
+            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM);
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinRaid)) ?? throw new MissingKeyActorsException("Mai Trin not found");
                 BuffApplyEvent? buffApply = combatData.GetBuffApplyDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
-                    logData.SetSuccess(true, buffApply.Time);
+                    successHandler.SetSuccess(true, buffApply.Time);
                 } 
                 else
                 {
-                    logData.SetSuccess(false, echoOfScarlet.LastAware);
+                    successHandler.SetSuccess(false, echoOfScarlet.LastAware);
                 }
             }
         }

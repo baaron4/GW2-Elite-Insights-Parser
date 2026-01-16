@@ -297,10 +297,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate));
             SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
@@ -338,7 +338,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             if (npcSpawn != null)
             {
-                logData.SetSuccess(true, lastDamageTaken.Time);
+                successHandler.SetSuccess(true, lastDamageTaken.Time);
             }
         }
     }

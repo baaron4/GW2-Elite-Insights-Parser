@@ -15,7 +15,11 @@ public class EncounterPhaseData : PhaseDataWithMetaData
     {
     }
 
-    internal EncounterPhaseData(long start, long end, string name, ParsedEvtcLog log) : base(start, end, name, log, PhaseType.Encounter)
+    internal EncounterPhaseData(long start, long end, string name, bool success, Mode mode, StartStatus startStatus, LogData logData) : base(start, end, name, success, mode, startStatus, logData, PhaseType.Encounter)
+    {
+    }
+
+    internal EncounterPhaseData(long start, long end, string name, bool success, string icon, Mode mode, StartStatus startStatus, LogData logData) : base(start, end, name, success, icon, mode, startStatus, logData, PhaseType.Encounter)
     {
     }
 }

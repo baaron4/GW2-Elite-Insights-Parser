@@ -64,7 +64,7 @@ internal class WvWLogic : LogLogic
         }
         if (_detailed)
         {
-            PhaseData detailedPhase = _isFromInstance ? new InstancePhaseData(phases[0].Start, phases[0].End, "Detailed Full Instance", log) : new EncounterPhaseData(phases[0].Start, phases[0].End, "Detailed Full Fight", log);
+            PhaseData detailedPhase = _isFromInstance ? log.LogData.CreateInstancePhase(phases[0].Start, phases[0].End, "Detailed Full Instance") : log.LogData.CreateEncounterPhase(phases[0].Start, phases[0].End, "Detailed Full Fight");
             detailedPhase.AddTargets(Targets, log);
             if (detailedPhase.Targets.Any())
             {
@@ -280,9 +280,9 @@ internal class WvWLogic : LogLogic
         }
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        logData.SetSuccess(true, logData.LogEnd);
+        successHandler.SetSuccess(true, logData.LogEnd);
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)

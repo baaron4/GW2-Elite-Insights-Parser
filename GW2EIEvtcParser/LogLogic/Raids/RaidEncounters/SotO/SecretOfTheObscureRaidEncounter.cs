@@ -13,22 +13,22 @@ internal abstract class SecretOfTheObscureRaidEncounter : RaidEncounterLogic
         LogID |= LogIDs.RaidEncounterMasks.SotOMask;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
+            successHandler.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
         RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart);
         if (reward != null)
         {
-            logData.SetSuccess(true, reward.Time);
+            successHandler.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
         }
     }
 }

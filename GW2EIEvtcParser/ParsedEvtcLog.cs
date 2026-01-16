@@ -53,7 +53,8 @@ public class ParsedEvtcLog
         LogData.CompleteLogName(CombatData, AgentData, apiController);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
-        LogData.Logic.CheckSuccess(CombatData, AgentData, LogData, agentData.GetAgentByType(AgentItem.AgentType.Player));
+        var successHandler = new LogData.LogSuccessHandler(LogData);
+        LogData.Logic.CheckSuccess(CombatData, AgentData, LogData, agentData.GetAgentByType(AgentItem.AgentType.Player), successHandler);
         if (LogData.LogDuration <= ParserSettings.TooShortLimit)
         {
             throw new TooShortException(LogData.LogDuration, ParserSettings.TooShortLimit);
@@ -62,7 +63,7 @@ public class ParsedEvtcLog
         {
             throw new InvalidDataException("LogEnd can't be bigger than EvtcLogEnd");
         }
-        if (ParserSettings.SkipFailedTries && !LogData.Success && !LogData.IsInstance)
+        if (ParserSettings.SkipFailedTries && !successHandler.Success && !LogData.IsInstance)
         {
             throw new SkipException();
         }

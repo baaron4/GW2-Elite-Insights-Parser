@@ -427,7 +427,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return [TargetID.AiKeeperOfThePeak, TargetID.DarkAiKeeperOfThePeak];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         int status = 0;
         if (HasElementalMode(agentData))
@@ -446,11 +446,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 BuffApplyEvent? invul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.AppliedDuration > Determined895DurationCheckForSuccess);
                 if (invul895Gain != null)
                 {
-                    logData.SetSuccess(true, invul895Gain.Time);
+                    successHandler.SetSuccess(true, invul895Gain.Time);
                 }
                 else
                 {
-                    logData.SetSuccess(false, ai.LastAware);
+                    successHandler.SetSuccess(false, ai.LastAware);
                 }
                 break;
             case 3:
@@ -458,11 +458,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 BuffApplyEvent? darkInvul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.AppliedDuration > Determined895DurationCheckForSuccess);
                 if (darkInvul895Gain != null)
                 {
-                    logData.SetSuccess(true, darkInvul895Gain.Time);
+                    successHandler.SetSuccess(true, darkInvul895Gain.Time);
                 } 
                 else
                 {
-                    logData.SetSuccess(false, darkAi.LastAware);
+                    successHandler.SetSuccess(false, darkAi.LastAware);
                 }
                 break;
             case 0:

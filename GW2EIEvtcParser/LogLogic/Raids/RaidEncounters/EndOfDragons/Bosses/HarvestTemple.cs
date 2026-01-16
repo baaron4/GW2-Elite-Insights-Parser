@@ -465,10 +465,10 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return "Harvest Temple";
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             // no bouny chest detection, the reward is delayed
             SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
@@ -505,7 +505,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         }
                         if (isSuccess)
                         {
-                            logData.SetSuccess(true, targetOffs.Last().Time);
+                            successHandler.SetSuccess(true, targetOffs.Last().Time);
                         }
                     }
                 }
@@ -1754,13 +1754,14 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             case (int)TargetID.VoidAmalgamate:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleInfluenceOfTheVoidPool, out var poolEffects))
                 {
+                    var htPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
                     if (poolEffects.Count != 0)
                     {
                         // To be safe
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
                         int offset = 0;
                         double initialRadius = 100.0;
-                        double radiusIncrement = log.LogData.LogIsCM ? 35.0 : 35.0 / 2;
+                        double radiusIncrement = htPhases.Any(x => x.InInterval(poolEffects[0].Time)) ? 35.0 : 35.0 / 2;
                         // To handle same amalgamate handling multiple phases
                         while (offset < poolEffects.Count)
                         {

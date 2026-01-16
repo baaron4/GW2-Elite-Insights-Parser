@@ -20,14 +20,14 @@ internal abstract class ConvergenceLogic : LogLogic
         LogID |= LogIDs.LogMasks.ConvergenceMask;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x =>
             x.RewardType == RewardTypes.ConvergenceReward1 ||
             x.RewardType == RewardTypes.ConvergenceReward2);
         if (reward != null)
         {
-            logData.SetSuccess(true, reward.Time);
+            successHandler.SetSuccess(true, reward.Time);
         }
     }
 }

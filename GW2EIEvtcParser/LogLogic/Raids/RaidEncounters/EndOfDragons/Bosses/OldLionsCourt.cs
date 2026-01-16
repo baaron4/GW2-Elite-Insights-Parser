@@ -129,7 +129,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
-        if (logData.LogIsCM)
+        if (GetLogMode(combatData, agentData, logData) == LogData.Mode.CM)
         {
             if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilionCM, logData.LogStart, combatData, Targets) ||
                 TargetHPPercentUnderThreshold(TargetID.PrototypeIndigoCM, logData.LogStart, combatData, Targets) ||
@@ -151,13 +151,13 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         return LogData.StartStatus.Normal;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             List<TargetID> idsToCheck;
-            if (logData.LogIsCM)
+            if (GetLogMode(combatData, agentData, logData) == LogData.Mode.CM)
             {
                 idsToCheck =
                 [
@@ -175,7 +175,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                     TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, logData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, logData, playerAgents, successHandler, true);
         }
     }
 
@@ -663,7 +663,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                 environmentDecorations.Add(circle.Copy().UsingFilled(true).UsingGrowingEnd(lifespan.end));
             }
         }
-
+        var olcPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
         // Boiling Aether - Expanding AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherExpanding, out var boilingAetherExpanding))
         {
@@ -675,10 +675,10 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             // Expansion Timer: 500ms
             uint initialRadius = 100;
             uint timeInterval = 500;
-            uint radiusIncreasePerInterval = (uint)(log.LogData.LogIsCM ? 15 : 11);
 
             foreach (EffectEvent effect in boilingAetherExpanding)
             {
+                uint radiusIncreasePerInterval = (uint)(olcPhases.Any(x => x.InInterval(effect.Time)) ? 15 : 11);
                 uint currentRadius = initialRadius;
                 long totalIntervals = effect.Duration / timeInterval;
                 (long start, long end) lifespan = (effect.Time, effect.Time + timeInterval);
@@ -698,12 +698,11 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         // Boiling Aether - Fully Expanded
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherFullyExpanded1, out var boilingAetherExpanded))
         {
-            // Maximum Radius: 320 (Normal Mode)
-            // Maximum Radius: 400 (Challenge Mode)
-            uint radius = (uint)(log.LogData.LogIsCM ? 400 : 320);
-
             foreach (EffectEvent effect in boilingAetherExpanded)
             {
+                // Maximum Radius: 320 (Normal Mode)
+                // Maximum Radius: 400 (Challenge Mode)
+                uint radius = (uint)(olcPhases.Any(x => x.InInterval(effect.Time)) ? 400 : 320);
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 590000);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);

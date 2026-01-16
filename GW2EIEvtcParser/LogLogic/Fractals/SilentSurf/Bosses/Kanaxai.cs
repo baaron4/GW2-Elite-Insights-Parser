@@ -254,17 +254,17 @@ internal class Kanaxai : SilentSurf
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
         BuffApplyEvent? invul762Gain = combatData.GetBuffApplyDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
         if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
         {
-            logData.SetSuccess(true, invul762Gain.Time);
+            successHandler.SetSuccess(true, invul762Gain.Time);
         }
         else
         {
-            logData.SetSuccess(false, kanaxai.LastAware);
+            successHandler.SetSuccess(false, kanaxai.LastAware);
         }
     }
 
