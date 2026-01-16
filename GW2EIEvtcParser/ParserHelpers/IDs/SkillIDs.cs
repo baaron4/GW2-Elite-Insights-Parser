@@ -5456,6 +5456,7 @@ public static class SkillIDs
     public const long POV_ElementalBalance = 79230; // Trait buff?
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
+    public const long KineticBattery = 79338;
     public const long TimeBombBuff = 79339;
     public const long LesserSicEm = 79348;
     public const long BountifulPowerCharge = 79349;
@@ -5463,5 +5464,4 @@ public static class SkillIDs
     public const long TimeBombDamage = 79359;
     public const long BountifulPower = 79363;
     #endregion
-    public const long KineticBattery = NoBuff;
 }
