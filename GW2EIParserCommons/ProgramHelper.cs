@@ -292,7 +292,7 @@ public sealed class ProgramHelper : IDisposable
 
                         originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing upload");
 
-                        string result = logToUse.LogData.Success ? "kill" : "fail";
+                        string result = logToUse.LogData.GetMainPhase(logToUse).Success ? "kill" : "fail";
                         WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.LogData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                     }
                     catch (Exception e)
