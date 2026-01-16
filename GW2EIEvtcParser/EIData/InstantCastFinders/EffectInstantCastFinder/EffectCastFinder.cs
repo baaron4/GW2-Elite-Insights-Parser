@@ -106,6 +106,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && specs.Contains(evt.Dst.Spec));
         return this;
     }
+
     internal EffectCastFinder UsingDstNotSpecsChecker(HashSet<Spec> specs)
     {
         UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && !specs.Contains(evt.Dst.Spec));
@@ -121,6 +122,18 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     internal EffectCastFinder UsingNotIsAroundDstChecker()
     {
         UsingChecker((evt, combatData, agentData, skillData) => !evt.IsAroundDst);
+        return this;
+    }
+
+    internal EffectCastFinder UsingDurationChecker(long duration)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) => evt.Duration == duration);
+        return this;
+    }
+
+    internal EffectCastFinder UsingDurationChecker(long min, long max)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) => evt.Duration >= min && evt.Duration <= max);
         return this;
     }
 

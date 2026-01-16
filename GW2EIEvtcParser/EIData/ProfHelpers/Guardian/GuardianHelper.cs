@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.InstantCastFinder;
 using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
@@ -38,7 +39,7 @@ internal static class GuardianHelper
             .UsingDstBaseSpecChecker(Spec.Guardian),
         new DamageCastFinder(SmiteCondition, SmiteCondition),
         new DamageCastFinder(LesserSmiteCondition, LesserSmiteCondition)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(InstantCastOrigin.Trait),
 
         // Shouts
         new EffectCastFinderByDst(SaveYourselves, EffectGUIDs.GuardianSaveYourselves)
@@ -67,19 +68,33 @@ internal static class GuardianHelper
         new EffectCastFinderByDst(SignetOfJudgmentSkill, EffectGUIDs.GuardianSignetOfJudgement2)
             .UsingDstBaseSpecChecker(Spec.Guardian),
         new DamageCastFinder(LesserSignetOfWrath, LesserSignetOfWrath)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(InstantCastOrigin.Trait),
+
+        // Lesser Symbols
+        new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBlades)
+            .UsingDurationChecker(4000)
+            .UsingOrigin(InstantCastOrigin.Trait),
+        new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBladesLarge)
+            .UsingDurationChecker(6000)
+            .UsingOrigin(InstantCastOrigin.Trait),
+        new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution)
+            .UsingDurationChecker(5960)
+            .UsingOrigin(InstantCastOrigin.Trait),
+        new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge)
+            .UsingDurationChecker(8955)
+            .UsingOrigin(InstantCastOrigin.Trait),
 
         //new DamageCastFinder(9097,9097), // Symbol of Blades
         new DamageCastFinder(GlacialHeart, GlacialHeart)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .UsingOrigin(InstantCastOrigin.Trait)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
         new EXTHealingCastFinder(GlacialHeartHeal, GlacialHeartHeal)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .UsingOrigin(InstantCastOrigin.Trait)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new DamageCastFinder(ShatteredAegis, ShatteredAegis)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(InstantCastOrigin.Trait),
         new EXTHealingCastFinder(SelflessDaring, SelflessDaring)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+            .UsingOrigin(InstantCastOrigin.Unconditional),
         // Pistol
         new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel1)
             .UsingSrcBaseSpecChecker(Spec.Guardian),
