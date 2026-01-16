@@ -155,13 +155,13 @@ internal static class MesmerHelper
             .UsingChecker(IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.February2020Balance2),
         // - Egotism
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, FromHigherThanToHPChecker, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, FromHigherThanToHPChecker, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, FromHigherThanToHPChecker, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance)
             .UsingApproximate(),
         // - Fragility

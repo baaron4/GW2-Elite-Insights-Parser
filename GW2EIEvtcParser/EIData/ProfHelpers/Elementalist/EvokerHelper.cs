@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -30,10 +31,10 @@ internal static class EvokerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Elemental Balance
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, FromHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10_Incoming5, "Elemental balance (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10_Incoming5, "Elemental balance (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, FromHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
         // Familiar's Prowess (Fox)
@@ -117,10 +118,10 @@ internal static class EvokerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
         // Elemental Balance
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10_Incoming5, "Elemental balance (Incoming)", "-5% if hp > 50%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10_Incoming5, "Elemental balance (Incoming)", "-5% if hp >= 50%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, ToHPChecker(50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Incoming)", "-10% if hp < 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, ToHPChecker(0, 50), DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease)
             .UsingApproximate(),
         // Familiar's Prowess (Toad)
