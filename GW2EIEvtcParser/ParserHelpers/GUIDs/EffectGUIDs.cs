@@ -337,8 +337,8 @@ public static class EffectGUIDs
     public static readonly GUID GuardianSymbolOfSwiftnessLarge = new("514CA7B38D8ADD4083968F76A86CECD5"); // duration 6000, Writ of Persistence
     public static readonly GUID GuardianSymbolOfFaith = new("697DC505DCAA7246ABFDD00EE8D61287"); // duration 4000
     public static readonly GUID GuardianSymbolOfFaithLarge = new("A594A24B4CB9EE418208762958E77A7F"); // duration 6000, Writ of Persistence
-    public static readonly GUID GuardianSymbolOfProtection = new("8321373FA14B2B4B8761CDC6EEADB161"); // duration 2000, lesser 2000
-    public static readonly GUID GuardianSymbolOfProtectionLarge = new("E10D2D0DF7803146A69BBB5BD47944FC"); // duration 4000, lesser 4000, Writ of Persistence
+    public static readonly GUID GuardianSymbolOfProtection = new("8321373FA14B2B4B8761CDC6EEADB161"); // duration 2000, lesser 2985
+    public static readonly GUID GuardianSymbolOfProtectionLarge = new("E10D2D0DF7803146A69BBB5BD47944FC"); // duration 4000, lesser 5970, Writ of Persistence
     public static readonly GUID GuardianSymbolOfEnergy = new("8493CB203B40E04BAE5DC6F141B40743"); // duration 4000
     public static readonly GUID GuardianSymbolOfEnergyLarge = new("6134A0857D5B844F95E7A2797118271A"); // duration 6000, Writ of Persistence
     public static readonly GUID GuardianSymbolOfVengeance = new("9E41C2BEFD43D64299C41FD6EFB9ECBE"); // duration 4000

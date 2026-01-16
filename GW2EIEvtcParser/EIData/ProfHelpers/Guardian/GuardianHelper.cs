@@ -17,6 +17,13 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class GuardianHelper
 {
+    private const long LesserSymbolOfBladesDuration = 4000;
+    private const long LesserSymbolOfBladesLargeDuration = 6000;
+    private const long LesserSymbolOfResolutionDuration = 5960;
+    private const long LesserSymbolOfResolutionLargeDuration = 8955;
+    private const long LesserSymbolOfProtectionDuration = 2985;
+    private const long LesserSymbolOfProtectionLargeDuration = 5970;
+
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
@@ -72,16 +79,22 @@ internal static class GuardianHelper
 
         // Lesser Symbols
         new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBlades)
-            .UsingDurationChecker(4000)
+            .UsingDurationChecker(LesserSymbolOfBladesDuration)
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBladesLarge)
-            .UsingDurationChecker(6000)
+            .UsingDurationChecker(LesserSymbolOfBladesLargeDuration)
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution)
-            .UsingDurationChecker(5960)
+            .UsingDurationChecker(LesserSymbolOfResolutionDuration)
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge)
-            .UsingDurationChecker(8955)
+            .UsingDurationChecker(LesserSymbolOfResolutionLargeDuration)
+            .UsingOrigin(InstantCastOrigin.Trait),
+        new EffectCastFinder(LesserSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtection)
+            .UsingDurationChecker(LesserSymbolOfProtectionDuration)
+            .UsingOrigin(InstantCastOrigin.Trait),
+        new EffectCastFinder(LesserSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtectionLarge)
+            .UsingDurationChecker(LesserSymbolOfProtectionLargeDuration)
             .UsingOrigin(InstantCastOrigin.Trait),
 
         //new DamageCastFinder(9097,9097), // Symbol of Blades
@@ -311,15 +324,14 @@ internal static class GuardianHelper
             }
         }
 
-        // Symbol of Blades & Lesser Symbol of Blades
+        // Symbol of Blades & Lesser Symbol of Blades (distinguished by duration)
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out var symbolOfBlades))
         {
             var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades);
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfBlades);
             foreach (var effect in symbolOfBlades)
             {
-                // duration 5s for regular, 4s for lesser
-                var skill = effect.Duration == 4000 ? lesser : regular;
+                var skill = effect.Duration == LesserSymbolOfBladesDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 5000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfBlades);
             }
@@ -330,22 +342,20 @@ internal static class GuardianHelper
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfBlades);
             foreach (var effect in symbolOfBladesLarge)
             {
-                // duration 7s for regular, 6s for lesser
-                var skill = effect.Duration == 6000 ? lesser : regular;
+                var skill = effect.Duration == LesserSymbolOfBladesLargeDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 7000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSymbolOfBlades);
             }
         }
 
-        // Symbol of Resolution & Lesser Symbol of Resolution
+        // Symbol of Resolution & Lesser Symbol of Resolution (distinguished by duration)
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out var symbolOfResolution))
         {
             var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution);
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution);
             foreach (var effect in symbolOfResolution)
             {
-                // duration 4s for regular, 5.960s for lesser
-                var skill = effect.Duration == 5960 ? lesser : regular;
+                var skill = effect.Duration == LesserSymbolOfResolutionDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 4000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfBlades);
             }
@@ -356,23 +366,35 @@ internal static class GuardianHelper
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution);
             foreach (var effect in symbolOfResolutionLarge)
             {
-                // duration 6s for regular, 8.955s for lesser
-                var skill = effect.Duration == 8955 ? lesser : regular;
+                var skill = effect.Duration == LesserSymbolOfResolutionLargeDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 6000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSymbolOfBlades);
             }
         }
 
-        // Symbol of Protection - cant distinguish regular & lesser
-        AddSymbolDecorations(
-            player,
-            log,
-            replay,
-            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfProtection),
-            (EffectGUIDs.GuardianSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtectionLarge),
-            2000,
-            EffectImages.EffectSymbolOfProtection
-        );
+        // Symbol of Protection & Lesser Symbol of Protection (distinguished by duration)
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfProtection, out var symbolOfProtection))
+        {
+            var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfProtection);
+            var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfProtection);
+            foreach (var effect in symbolOfProtection)
+            {
+                var skill = effect.Duration == LesserSymbolOfProtectionDuration ? lesser : regular;
+                var lifespan = effect.ComputeDynamicLifespan(log, 2000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfProtection);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfProtectionLarge, out var symbolOfProtectionLarge))
+        {
+            var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfProtection);
+            var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfProtection);
+            foreach (var effect in symbolOfProtectionLarge)
+            {
+                var skill = effect.Duration == LesserSymbolOfProtectionLargeDuration ? lesser : regular;
+                var lifespan = effect.ComputeDynamicLifespan(log, 4000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSymbolOfProtection);
+            }
+        }
 
         // Symbol of Punishment
         AddSymbolDecorations(
