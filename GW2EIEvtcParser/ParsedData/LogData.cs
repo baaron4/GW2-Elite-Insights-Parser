@@ -41,7 +41,24 @@ public class LogData
             return ParserHelper.ToDurationString(LogDuration);
         }
     }
-    public bool Success { get; private set; }
+    private bool Success;
+
+    public class LogSuccessHandler
+    {
+        public bool Success => _logData.Success;
+        public long Time => _logData.LogEnd;
+        private LogData _logData;
+
+        internal LogSuccessHandler(LogData logData)
+        {
+            _logData = logData;
+        }
+
+        public void SetSuccess(bool success, long time)
+        {
+            _logData.SetSuccess(success, time);
+        }
+    }
 
     public enum Mode
     {
@@ -480,7 +497,7 @@ public class LogData
         }
     }
 
-    internal void SetSuccess(bool success, long logEnd)
+    private void SetSuccess(bool success, long logEnd)
     {
         Success = success;
         LogEnd = Success ? Math.Min( logEnd + ParserHelper.ServerDelayConstant, EvtcLogEnd) : logEnd;

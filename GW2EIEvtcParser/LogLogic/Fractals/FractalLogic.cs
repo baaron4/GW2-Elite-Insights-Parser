@@ -86,11 +86,11 @@ internal abstract class FractalLogic : LogLogic
         ];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
+            successHandler.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         // check reward
@@ -101,16 +101,16 @@ internal abstract class FractalLogic : LogLogic
         {
             if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 1000)
             {
-                logData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
+                successHandler.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
             }
             else
             {
-                NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+                NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
             }
         } 
         else
         {
-            logData.SetSuccess(false, mainTarget.LastAware);
+            successHandler.SetSuccess(false, mainTarget.LastAware);
         }
     }
 

@@ -175,14 +175,14 @@ internal static class JsonLogBuilder
                 jsonLog.InstancePrivacy = "Unknown";
                 break;
         }
-        jsonLog.Success = log.LogData.Success;
+        var mainPhase = log.LogData.GetMainPhase(log);
+        jsonLog.Success = mainPhase.Success;
         jsonLog.Targetless = log.LogData.Logic.Targetless;
         jsonLog.GW2Build = log.LogMetadata.GW2Build;
         jsonLog.UploadLinks = [uploadLinks.DPSReportEILink];
         jsonLog.Language = log.LogMetadata.Language;
         jsonLog.LanguageID = (byte)log.LogMetadata.LanguageID;
         jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
-        var mainPhase = log.LogData.GetMainPhase(log);
         jsonLog.IsCM = mainPhase.IsCM || mainPhase.IsLegendaryCM;
         jsonLog.IsLegendaryCM = mainPhase.IsLegendaryCM;
         jsonLog.IsLateStart = mainPhase.IsLateStart;

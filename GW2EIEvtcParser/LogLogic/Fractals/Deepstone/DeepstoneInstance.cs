@@ -30,8 +30,8 @@ internal class DeepstoneInstance : FractalLogic
             TargetID.TheVoice,
         ];
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        logData.SetSuccess(true, logData.LogEnd);
+        successHandler.SetSuccess(true, logData.LogEnd);
     }
 }

@@ -238,12 +238,12 @@ internal class SooWon : OpenWorldLogic
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData,
-        IReadOnlyCollection<AgentItem> playerAgents)
+        IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > logData.LogStart);
         if (reward != null)
         {
-            logData.SetSuccess(true, reward.Time);
+            successHandler.SetSuccess(true, reward.Time);
         }
     }
 

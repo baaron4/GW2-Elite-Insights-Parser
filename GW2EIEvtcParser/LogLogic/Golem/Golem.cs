@@ -189,7 +189,7 @@ internal class Golem : LogLogic
         return LogData.Mode.NotApplicable;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
         long encounterEndTime = mainTarget.LastAware;
@@ -213,7 +213,7 @@ internal class Golem : LogLogic
                 }
             }
         }
-        logData.SetSuccess(success, encounterEndTime);
+        successHandler.SetSuccess(success, encounterEndTime);
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

@@ -200,23 +200,23 @@ internal class Arkk : ShatteredObservatory
         return startBuffApply?.Time ?? GetLogOffsetBySpawn(logData, combatData, arkk);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
         // reward or death worked
-        if (logData.Success)
+        if (successHandler.Success)
         {
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         // missing buff apply events fallback, some phases will be missing
         // removes should be present
-        if (SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 10))
+        if (SetSuccessByBuffCount(combatData, logData, playerAgents, successHandler, target, Determined762, 10))
         {
             var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>();
             if (invulsRemoveTarget.Count() == 5)
             {
-                SetSuccessByCombatExit([target], combatData, logData, playerAgents);
+                SetSuccessByCombatExit([target], combatData, logData, playerAgents, successHandler);
             }
         }
     }

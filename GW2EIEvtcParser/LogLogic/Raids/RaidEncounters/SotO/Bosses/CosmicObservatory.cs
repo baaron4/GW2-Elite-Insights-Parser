@@ -328,9 +328,9 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         environmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
         // Special check since CM release, normal mode broke too, but we always trust reward events
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart) == null)
         {
@@ -341,7 +341,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 HealthDamageEvent? lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                 if (lastDamageEvent != null)
                 {
-                    logData.SetSuccess(true, logData.Success ? Math.Min(lastDamageEvent.Time, logData.LogEnd) : lastDamageEvent.Time);
+                    successHandler.SetSuccess(true, successHandler.Success ? Math.Min(lastDamageEvent.Time, logData.LogEnd) : lastDamageEvent.Time);
                 }
             }
         }

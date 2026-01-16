@@ -106,10 +106,10 @@ internal class SoullessHorror : HallOfChains
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).LastOrDefault(x => x is BuffApplyEvent);
@@ -117,7 +117,7 @@ internal class SoullessHorror : HallOfChains
             {
                 if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
                 {
-                    logData.SetSuccess(true, buffOnDeath.Time);
+                    successHandler.SetSuccess(true, buffOnDeath.Time);
                 }
             }
         }

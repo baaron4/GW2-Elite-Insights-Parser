@@ -92,7 +92,7 @@ public class CSVBuilder
         NewLine();
         //Boss card
         WriteLine(["Boss", _log.LogData.LogName]);
-        WriteLine(["Success", _log.LogData.Success.ToString()]);
+        WriteLine(["Success", _log.LogData.GetMainPhase(_log).Success.ToString()]);
         WriteLine(["Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString()]);
         var hpUpdates = _legacyTarget.GetHealthUpdates(_log);
         double hpLeft = hpUpdates.Count > 0

@@ -465,10 +465,10 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return "Harvest Temple";
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             // no bouny chest detection, the reward is delayed
             SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
@@ -505,7 +505,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         }
                         if (isSuccess)
                         {
-                            logData.SetSuccess(true, targetOffs.Last().Time);
+                            successHandler.SetSuccess(true, targetOffs.Last().Time);
                         }
                     }
                 }
