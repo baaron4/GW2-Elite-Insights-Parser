@@ -54,9 +54,9 @@ public class LogData
         NotApplicable,
         Unknown,
     }
-    public Mode LogMode { get; private set; } = Mode.NotSet;
-    public bool LogIsCM => LogMode == Mode.CMNoName || LogMode == Mode.CM;
-    public bool LogIsLegendaryCM => LogMode == Mode.LegendaryCM;
+    private Mode LogMode = Mode.NotSet;
+    private bool LogIsCM => LogMode == Mode.CMNoName || LogMode == Mode.CM;
+    private bool LogIsLegendaryCM => LogMode == Mode.LegendaryCM;
 
     public enum StartStatus
     {
@@ -65,9 +65,9 @@ public class LogData
         Late,
         NoPreEvent
     }
-    public StartStatus LogStartStatus { get; private set; } = StartStatus.NotSet;
-    public bool LogIsLateStart => LogStartStatus == StartStatus.Late || LogMissingPreEvent;
-    public bool LogMissingPreEvent => LogStartStatus == StartStatus.NoPreEvent;
+    private StartStatus LogStartStatus  = StartStatus.NotSet;
+    private bool LogIsLateStart => LogStartStatus == StartStatus.Late || LogMissingPreEvent;
+    private bool LogMissingPreEvent => LogStartStatus == StartStatus.NoPreEvent;
 
     private PhaseDataWithMetaData? _phaseDataWithMetaData = null;
 
@@ -435,6 +435,20 @@ public class LogData
             _encounterPhases = encounterPhases;
         }
         return _phases;
+    }
+
+    internal InstancePhaseData CreateInstancePhase(long start, long end, string name)
+    {
+        return new InstancePhaseData(start, end, name, Success, LogMode, LogStartStatus, this);
+    }
+
+    internal EncounterPhaseData CreateEncounterPhase(long start, long end, string name, string? icon = null)
+    {
+        if (icon != null)
+        {
+            return new EncounterPhaseData(start, end, name, Success, icon, LogMode, LogStartStatus, this);
+        }
+        return new EncounterPhaseData(start, end, name, Success, LogMode, LogStartStatus, this);
     }
 
     public IReadOnlyList<EncounterPhaseData> GetEncounterPhases(ParsedEvtcLog log)

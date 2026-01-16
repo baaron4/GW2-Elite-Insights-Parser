@@ -545,7 +545,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
         if (!logData.Success)
         {
-            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(logData.LogIsCM);
+            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM);
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinRaid)) ?? throw new MissingKeyActorsException("Mai Trin not found");

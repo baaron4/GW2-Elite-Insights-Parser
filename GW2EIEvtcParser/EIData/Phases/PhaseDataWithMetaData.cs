@@ -41,9 +41,14 @@ public abstract class PhaseDataWithMetaData : PhaseData
             + (MissingPreEvent ? " (No Pre-Event)" : ""); ;
     }
 
-    internal PhaseDataWithMetaData(long start, long end, string name, ParsedEvtcLog log, PhaseType type) : this(start, end, name, log.LogData.Success, log.LogData.Logic.Icon, log.LogData.LogMode, log.LogData.Logic.LogID, type)
+    internal PhaseDataWithMetaData(long start, long end, string name, bool success, Mode mode, StartStatus startStatus, LogData logData, PhaseType type) : this(start, end, name, success, logData.Logic.Icon, mode, logData.Logic.LogID, type)
     {
-        StartStatus = log.LogData.LogStartStatus;
+        StartStatus = startStatus;
         Name = NameNoMode;
+    }
+
+    internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, Mode mode, StartStatus startStatus, LogData logData, PhaseType type) : this(start, end, name, success, mode, startStatus, logData, type)
+    {
+        Icon = icon;
     }
 }

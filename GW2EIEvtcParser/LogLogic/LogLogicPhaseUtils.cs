@@ -204,12 +204,12 @@ internal static class LogLogicPhaseUtils
         {
             return
             [
-                new InstancePhaseData(log.LogData.LogStart, log.LogData.LogEnd, "Full Instance", log)
+                log.LogData.CreateInstancePhase(log.LogData.LogStart, log.LogData.LogEnd, "Full Instance")
             ];
         }
         return
         [
-            new EncounterPhaseData(log.LogData.LogStart, log.LogData.LogEnd, "Full Fight", log)
+            log.LogData.CreateEncounterPhase(log.LogData.LogStart, log.LogData.LogEnd, "Full Fight")
         ];
     }
     #region INSTANCE PHASES

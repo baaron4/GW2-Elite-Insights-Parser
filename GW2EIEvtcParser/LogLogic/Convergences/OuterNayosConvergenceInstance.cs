@@ -148,7 +148,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
                 phaseName = "Full Umbriel";
                 break;
         }
-        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log).WithParentPhase(phases[0]);
+        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
 

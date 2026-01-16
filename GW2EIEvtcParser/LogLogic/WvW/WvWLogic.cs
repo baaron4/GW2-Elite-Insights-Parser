@@ -64,7 +64,7 @@ internal class WvWLogic : LogLogic
         }
         if (_detailed)
         {
-            PhaseData detailedPhase = _isFromInstance ? new InstancePhaseData(phases[0].Start, phases[0].End, "Detailed Full Instance", log) : new EncounterPhaseData(phases[0].Start, phases[0].End, "Detailed Full Fight", log);
+            PhaseData detailedPhase = _isFromInstance ? log.LogData.CreateInstancePhase(phases[0].Start, phases[0].End, "Detailed Full Instance") : log.LogData.CreateEncounterPhase(phases[0].Start, phases[0].End, "Detailed Full Fight");
             detailedPhase.AddTargets(Targets, log);
             if (detailedPhase.Targets.Any())
             {

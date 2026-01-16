@@ -1754,13 +1754,14 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             case (int)TargetID.VoidAmalgamate:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleInfluenceOfTheVoidPool, out var poolEffects))
                 {
+                    var htPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM).ToList();
                     if (poolEffects.Count != 0)
                     {
                         // To be safe
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
                         int offset = 0;
                         double initialRadius = 100.0;
-                        double radiusIncrement = log.LogData.LogIsCM ? 35.0 : 35.0 / 2;
+                        double radiusIncrement = htPhases.Any(x => x.InInterval(poolEffects[0].Time)) ? 35.0 : 35.0 / 2;
                         // To handle same amalgamate handling multiple phases
                         while (offset < poolEffects.Count)
                         {

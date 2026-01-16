@@ -267,7 +267,7 @@ internal class Deimos : BastionOfThePenitent
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
-        if (!logData.LogIsCM)
+        if (GetLogMode(combatData, agentData, logData) != LogData.Mode.CM)
         {
             return res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
         }

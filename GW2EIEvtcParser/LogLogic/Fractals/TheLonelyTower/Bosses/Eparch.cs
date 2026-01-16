@@ -122,7 +122,7 @@ internal class Eparch : LonelyTower
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffApplyDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        var cmCheck = logData.LogIsCM || IsFakeCM(agentData);
+        var cmCheck = GetLogMode(combatData, agentData, logData) == LogData.Mode.CM || IsFakeCM(agentData);
         if (cmCheck && determinedApplies.Count >= 3)
         {
             logData.SetSuccess(true, determinedApplies[2].Time);
@@ -146,9 +146,10 @@ internal class Eparch : LonelyTower
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
+        var encounterPhase = (EncounterPhaseData)phases[0];
         phases[0].AddTarget(eparch, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement])), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases || (!log.LogData.LogIsCM && !IsFakeCM(log.AgentData)))
+        if (!requirePhases || (!encounterPhase.IsCM && !IsFakeCM(log.AgentData)))
         {
             return phases;
         }
