@@ -293,11 +293,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     internal EffectCastFinder UsingNoAnimatedCastChecker(long skillID, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
-        UsingChecker((effect, combatData, agentData, skillData) =>
-        {
-            var time = effect.Time + timeOffset;
-            return !combatData.GetAnimatedCastData(effect.Src).Any(cast => cast.SkillID == skillID && time > cast.Time - epsilon && time < cast.EndTime + epsilon);
-        });
+        UsingChecker((effect, combatData, agentData, skillData) => !combatData.IsCasting(skillID, effect.Src, effect.Time + timeOffset, epsilon));
         return this;
     }
 

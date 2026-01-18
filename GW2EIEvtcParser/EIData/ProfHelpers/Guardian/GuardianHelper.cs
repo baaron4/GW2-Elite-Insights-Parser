@@ -76,21 +76,27 @@ internal static class GuardianHelper
         // Lesser Symbols
         new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBlades)
             .UsingNoAnimatedCastChecker(SymbolOfBlades)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBladesLarge)
             .UsingNoAnimatedCastChecker(SymbolOfBlades)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution)
             .UsingNoAnimatedCastChecker(SymbolOfWrath_SymbolOfResolution)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge)
             .UsingNoAnimatedCastChecker(SymbolOfWrath_SymbolOfResolution)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtection)
             .UsingNoAnimatedCastChecker(SymbolOfProtection)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtectionLarge)
             .UsingNoAnimatedCastChecker(SymbolOfProtection)
+            .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
 
         //new DamageCastFinder(9097,9097), // Symbol of Blades
@@ -327,7 +333,7 @@ internal static class GuardianHelper
             }
         }
 
-        // Symbol of Blades & Lesser Symbol of Blades (distinguished by duration)
+        // Symbol of Blades & Lesser Symbol of Blades
         AddSymbolDecorations(
             player,
             log,
@@ -338,7 +344,7 @@ internal static class GuardianHelper
             EffectImages.EffectSymbolOfBlades
         );
 
-        // Symbol of Resolution & Lesser Symbol of Resolution (distinguished by duration)
+        // Symbol of Resolution & Lesser Symbol of Resolution
         AddSymbolDecorations(
             player,
             log,
