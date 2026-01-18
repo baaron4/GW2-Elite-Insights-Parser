@@ -423,10 +423,10 @@ internal static class ElementalistHelper
             {
                 SkillModeDescriptor skill;
                 string icon;
-                var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
-                if (firestormCastsOnEffect.Count() == 1)
+                var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                if (firestormCastsOnEffect.Count == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillID);
+                    skill = new SkillModeDescriptor(player, Spec.Elementalist, firestormCastsOnEffect.First().SkillID);
                     icon = skill.SkillID == FirestormGlyphOfStorms ? EffectImages.EffectFirestormGlyph : EffectImages.EffectFirestormFieryGreatsword;
                 }
                 else
