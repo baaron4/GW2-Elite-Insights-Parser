@@ -447,15 +447,16 @@ internal static class GuardianHelper
         }
 
         // Symbol of Ignition
-        AddSymbolDecorations(
-            player,
-            log,
-            replay,
-            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfIgnition),
-            (EffectGUIDs.GuardianSymbolOfIgnition, EffectGUIDs.GuardianSymbolOfIgnitionLarge),
-            4000,
-            EffectImages.EffectSymbolOfIgnition
-        );
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfIgnition, out var symbolsOfIgnition))
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfIgnition);
+            foreach (EffectEvent effect in symbolsOfIgnition)
+            {
+                var radius = effect.IsScaled ? effect.Scale * 240.0f : 180.0f;
+                var lifespan = effect.ComputeLifespan(log, 4000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, (uint)radius, EffectImages.EffectSymbolOfIgnition);
+            }
+        }
 
         // Solar Storm
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormAerealEffect, out var solarStorms))
@@ -512,15 +513,13 @@ internal static class GuardianHelper
 
     internal static void AddSymbolDecorations(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor skill, (GUID regular, GUID large) effects, long duration, string icon)
     {
-        const uint radius = 180;
-        const uint radiusLarge = 240;
         var durationLarge = duration + 2000;
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.regular, out var symbols))
         {
             foreach (EffectEvent effect in symbols)
             {
                 var lifespan = effect.ComputeLifespan(log, duration);
-                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, radius, icon);
+                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 180, icon);
             }
         }
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.large, out var symbolsLarge))
@@ -528,7 +527,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsLarge)
             {
                 var lifespan = effect.ComputeLifespan(log, durationLarge);
-                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, radiusLarge, icon);
+                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 240, icon);
             }
         }
     }

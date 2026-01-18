@@ -343,8 +343,7 @@ public static class EffectGUIDs
     public static readonly GUID GuardianSymbolOfEnergyLarge = new("6134A0857D5B844F95E7A2797118271A"); // duration 6000, Writ of Persistence
     public static readonly GUID GuardianSymbolOfVengeance = new("9E41C2BEFD43D64299C41FD6EFB9ECBE"); // duration 4000
     public static readonly GUID GuardianSymbolOfVengeanceLarge = new("1B667A2C0D65CE409B0D779C41AFA1A0"); // duration 6000, Writ of Persistence
-    public static readonly GUID GuardianSymbolOfIgnition = new("935E4272F75A3840B814337B3E2ABCAB"); // duration 4000, CONFLICT large, 0.75 size
-    public static readonly GUID GuardianSymbolOfIgnitionLarge = new("935E4272F75A3840B814337B3E2ABCAB"); // duration 4000, Writ of Persistence, CONFLICT regular, 1.0 size
+    public static readonly GUID GuardianSymbolOfIgnition = new("935E4272F75A3840B814337B3E2ABCAB"); // duration 4000, regular 0.75 scale, large 1.0 scale
     public static readonly GUID GuardianSymbolOfLuminance = new("951D9581F5B0D64685A2C77E25246E7A"); // duration 4000, player src
     public static readonly GUID GuardianSymbolOfLuminanceLarge = new("0802C43FFCF1CD4D94851FA72F28FD7E"); // duration 6000, player src
     public static readonly GUID GuardianSymbolOfLuminancePlayer1 = new("F5E8E3DC7B2F2B4DB8451F3D68FD298D"); // duration 0 - no src - player dst
