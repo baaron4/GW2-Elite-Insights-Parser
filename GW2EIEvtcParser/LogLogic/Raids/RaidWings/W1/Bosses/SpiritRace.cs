@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class SpiritRace : SpiritVale
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstHealthDamageHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
             new MechanicGroup([
                 new AchievementEligibilityMechanic(Ach_OutrunGhost, new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPink), "Outrun.Achiv.L", "Achievement Eligibility: I Can Outrun A...Ghost Lost", "I Can Outrun A...Ghost Lost", 0)

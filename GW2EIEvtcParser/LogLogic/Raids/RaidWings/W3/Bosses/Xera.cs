@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class Xera : StrongholdOfTheFaithful
 {
 
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", 0),
                 new PlayerDstHealthDamageHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", 0),
@@ -559,7 +559,7 @@ internal class Xera : StrongholdOfTheFaithful
                 // Float happens after 7000 ms, extra 500ms to display the hit
                 float angle = 0;
                 (long start, long end) lifespan = (halfGravityWell.Time, halfGravityWell.Time + 7500);
-                (long start, long end) lifespanIndicator = (halfGravityWell.Time, halfGravityWell.Time + 7000);
+                (long start, long end) = (halfGravityWell.Time, halfGravityWell.Time + 7000);
                 bool hasFired = true;
                 var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => x.FirstAware <= halfGravityWell.Time && x.LastAware >= halfGravityWell.Time);
                 if (activeXera == null)
@@ -571,7 +571,7 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     var timeLimit = splitEvent != null ? splitEvent.Time : activeXera.LastAware;
                     angle = -30 + (cur++) * 90;
-                    if (lifespanIndicator.end > timeLimit)
+                    if (end > timeLimit)
                     {
                         hasFired = false;
                     }
@@ -586,7 +586,7 @@ internal class Xera : StrongholdOfTheFaithful
                     }
                     var timeLimit = activeXera.LastAware;
                     angle = -210 - (cur++) * 90;
-                    if (lifespanIndicator.end > timeLimit)
+                    if (end > timeLimit)
                     {
                         hasFired = false;
                     }
@@ -597,11 +597,11 @@ internal class Xera : StrongholdOfTheFaithful
                         (PieDecoration)new PieDecoration(1150, 180, lifespan, Colors.Purple, 0.15, pos)
                             .UsingRotationConnector(angleConnector),
                         true,
-                        lifespanIndicator.end
+                        end
                 );
                 if (hasFired)
                 {
-                    environmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
+                    environmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (end, end + 500), Colors.Purple, 0.2, pos)
                             .UsingRotationConnector(angleConnector));
                 }
             }

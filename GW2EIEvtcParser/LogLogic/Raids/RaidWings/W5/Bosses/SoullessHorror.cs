@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class SoullessHorror : HallOfChains
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", 0),
                 new PlayerDstHealthDamageHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", 0),
@@ -130,7 +130,7 @@ internal class SoullessHorror : HallOfChains
         {
             foreach (var combatEvent in combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time))
             {
-                combatEvent.OverrideSrcAgent(ParserHelper._unknownAgent);
+                combatEvent.OverrideSrcAgent(_unknownAgent);
             }
         }
     }

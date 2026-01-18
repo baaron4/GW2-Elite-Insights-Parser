@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Artsariiv : ShatteredObservatory
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault", "Vault from Big Adds","Vault (Add)", 0),
             new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam", "Slam (Vault) from Boss","Vault (Arts)", 0),
@@ -131,7 +131,7 @@ internal class Artsariiv : ShatteredObservatory
             .FirstOrDefault();
         if (artsariivMarkerGUID != null)
         {
-            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
+            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
             foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
             {
                 if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
@@ -208,7 +208,7 @@ internal class Artsariiv : ShatteredObservatory
         return LogData.Mode.CMNoName;
     }
 
-    static private AgentItem FindTargetArtsariiv(AgentData agentData)
+    private static AgentItem FindTargetArtsariiv(AgentData agentData)
     {
         // cc artsariiv clones have the same species id, find target with longest aware time
         return agentData.GetNPCsByID(TargetID.Artsariiv).MaxBy(x => x.LastAware - x.FirstAware) ?? throw new MissingKeyActorsException("Artsariiv not found");

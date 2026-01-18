@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class KeepConstruct : StrongholdOfTheFaithful
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", 0),
             new PlayerDstHealthDamageHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", 0),
             new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", 0),

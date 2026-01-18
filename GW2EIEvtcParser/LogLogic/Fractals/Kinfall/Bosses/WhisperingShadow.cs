@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class WhisperingShadow : Kinfall
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DeathlyGrime, new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "DeathGr.A", "Gained Deathly Grime", "Deathly Grime Application", 0),
                 new PlayerDstBuffApplyMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightBlue), "LifeFire.A", "Gained Life-Fire Circle", "Life-Fire Circle Apply", 0),

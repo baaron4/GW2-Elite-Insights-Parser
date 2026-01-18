@@ -603,7 +603,7 @@ public partial class CombatData
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-        _buffDataBySrc = buffEvents.Where(x => !(x is BuffExtensionEvent)).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
+        _buffDataBySrc = buffEvents.Where(x => x is not BuffExtensionEvent).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
         OffsetBuffExtensionEvents(evtcVersion);
         // damage events

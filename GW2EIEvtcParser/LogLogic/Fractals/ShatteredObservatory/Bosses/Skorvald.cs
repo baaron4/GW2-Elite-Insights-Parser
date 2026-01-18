@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Skorvald : ShatteredObservatory
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             new PlayerDstHealthDamageHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge", "Combustion Rush","Charge", 0),
             new PlayerDstHealthDamageHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick", "Punishing Kick (Single purple Line, Add)","Kick (Add)", 0),

@@ -9,8 +9,8 @@ internal static class JsonCombatReplayMetaDataBuilder
     public static JsonCombatReplayMetaData BuildJsonCombatReplayMetaData(ParsedEvtcLog log, RawFormatSettings settings)
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
-        var decorations = log.GetCombatReplayDescriptions([], []);
-        var mapDecorations = decorations.decorationRendering.OfType<ArenaDecorationRenderingDescription>().ToList();
+        var (actors, decorationRendering, decorationMetadata) = log.GetCombatReplayDescriptions([], []);
+        var mapDecorations = decorationRendering.OfType<ArenaDecorationRenderingDescription>().ToList();
         var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>(mapDecorations.Count);
         var jsonCR = new JsonCombatReplayMetaData()
         {
@@ -20,7 +20,7 @@ internal static class JsonCombatReplayMetaDataBuilder
             Maps = maps
         };
         //
-        var mapMetaDatas = decorations.decorationMetadata.OfType<ArenaDecorationMetadataDescription>().GroupBy(x => x.Signature).ToDictionary(x => x.Key, x => x.First());
+        var mapMetaDatas = decorationMetadata.OfType<ArenaDecorationMetadataDescription>().GroupBy(x => x.Signature).ToDictionary(x => x.Key, x => x.First());
         foreach (var mapItem in mapDecorations)
         {
             if (mapItem.ConnectedTo is PositionConnectorDescription posConnector &&  mapMetaDatas.TryGetValue(mapItem.MetadataSignature, out var metadata))

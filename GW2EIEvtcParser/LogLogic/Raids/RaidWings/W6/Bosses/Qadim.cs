@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Qadim : MythwrightGambit
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new EnemyCastStartMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC", "Qadim CC","Qadim CC", 0),
                 new EnemyCastEndMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed", "Qadim Breakbar broken","Qadim CCed", 0)

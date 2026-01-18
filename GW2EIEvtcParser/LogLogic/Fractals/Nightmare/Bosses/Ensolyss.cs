@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Ensolyss : Nightmare
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup(
                 [
                     new PlayerDstHealthDamageHitMechanic([ LungeEnsolyss, LungeNightmareHallucination ], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge", "Lunge (KB charge over arena)","Charge", 150),

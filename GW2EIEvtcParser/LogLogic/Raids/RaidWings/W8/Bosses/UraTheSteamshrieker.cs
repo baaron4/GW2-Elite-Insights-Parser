@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class UraTheSteamshrieker : MountBalrior
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             // Sulfuric Geysers
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),

@@ -441,8 +441,8 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                         foreach (EffectEvent effect in horizonWhite)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                            (uint inner, uint outer) radius = ((uint, uint))(effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner ? (300, 340) : (440, 500));
-                            replay.Decorations.Add(new DoughnutDecoration(radius.inner, radius.outer, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)));
+                            (uint inner, uint outer) = ((uint, uint))(effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner ? (300, 340) : (440, 500));
+                            replay.Decorations.Add(new DoughnutDecoration(inner, outer, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)));
                         }
                     }
                 }

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class TwistedCastle : StrongholdOfTheFaithful
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstBuffApplyMechanic(SpatialDistortion, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Statue TP", "Teleported by Statue", "Statue Teleport", 500),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Still Waters (Immunity)", "Used a fountain for immunity", "Still Waters (Immunity)", 0)

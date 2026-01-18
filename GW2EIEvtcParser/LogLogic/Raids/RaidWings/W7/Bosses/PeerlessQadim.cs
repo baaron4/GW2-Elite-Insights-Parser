@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class PeerlessQadim : TheKeyOfAhdashim
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(EnergizedAffliction, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
                 new PlayerDstHealthDamageHitMechanic(ForceOfRetaliation, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000)

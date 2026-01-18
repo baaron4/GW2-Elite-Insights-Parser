@@ -331,9 +331,9 @@ internal static class GuardianHelper
             var skillDamage = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfVengeance);
             foreach (EffectEvent effect in symbolsOfVengeance)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
-                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
+                (long start, long end) = effect.ComputeLifespan(log, 4000);
+                (long start, long end) lifespanCC = (start, start + 1000);
+                (long start, long end) lifespanDamage = (lifespanCC.end, end);
                 // CC on initial strike
                 AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 180, EffectImages.EffectSymbolOfVengeance);
                 AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 180, EffectImages.EffectSymbolOfVengeance);
@@ -402,9 +402,9 @@ internal static class GuardianHelper
             var skillDamage = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfLuminanceSkill);
             foreach (EffectEvent effect in symbolsOfLuminance)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
-                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
+                (long start, long end) = effect.ComputeLifespan(log, 4000);
+                (long start, long end) lifespanCC = (start, start + 1000);
+                (long start, long end) lifespanDamage = (lifespanCC.end, end);
                 // CC on initial strike
                 AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 180, EffectImages.EffectSymbolOfLuminance);
                 AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 180, EffectImages.EffectSymbolOfLuminance);

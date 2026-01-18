@@ -257,47 +257,47 @@ partial class SingleActor
         }
         for (int i = 0; i < status.Count - 1; i++)
         {
-            var cur = status[i];
-            if (i == 0 && cur.Time > FirstAware)
+            var (Time, evt) = status[i];
+            if (i == 0 && Time > FirstAware)
             {
-                AddSegment(nones, FirstAware, cur.Time);
+                AddSegment(nones, FirstAware, Time);
             }
             var next = status[i + 1];
-            switch (cur.evt.State)
+            switch (evt.State)
             {
                 case BreakbarState.Active:
-                    AddSegment(actives, cur.Time, next.Time);
+                    AddSegment(actives, Time, next.Time);
                     break;
                 case BreakbarState.Immune:
-                    AddSegment(immunes, cur.Time, next.Time);
+                    AddSegment(immunes, Time, next.Time);
                     break;
                 case BreakbarState.None:
-                    AddSegment(nones, cur.Time, next.Time);
+                    AddSegment(nones, Time, next.Time);
                     break;
                 case BreakbarState.Recover:
-                    AddSegment(recovering, cur.Time, next.Time);
+                    AddSegment(recovering, Time, next.Time);
                     break;
             }
         }
         // check last value
         if (status.Count > 0)
         {
-            var cur = status.Last();
-            if (LastAware - cur.Time >= ServerDelayConstant)
+            var (Time, evt) = status.Last();
+            if (LastAware - Time >= ServerDelayConstant)
             {
-                switch (cur.evt.State)
+                switch (evt.State)
                 {
                     case BreakbarState.Active:
-                        AddSegment(actives, cur.Time, LastAware);
+                        AddSegment(actives, Time, LastAware);
                         break;
                     case BreakbarState.Immune:
-                        AddSegment(immunes, cur.Time, LastAware);
+                        AddSegment(immunes, Time, LastAware);
                         break;
                     case BreakbarState.None:
-                        AddSegment(nones, cur.Time, LastAware);
+                        AddSegment(nones, Time, LastAware);
                         break;
                     case BreakbarState.Recover:
-                        AddSegment(recovering, cur.Time, LastAware);
+                        AddSegment(recovering, Time, LastAware);
                         break;
                 }
             }

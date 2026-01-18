@@ -26,7 +26,7 @@ public static class DPSReportController
         IncludeFields = true,
     };
 
-    private static readonly HttpClient HTTPClient = new HttpClient()
+    private static readonly HttpClient HTTPClient = new()
     {
         Timeout = Timeout.InfiniteTimeSpan
     };

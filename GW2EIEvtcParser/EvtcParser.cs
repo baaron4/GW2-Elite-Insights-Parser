@@ -1340,8 +1340,10 @@ public class EvtcParser
     /// <param name="nullTerminated">if set the array will become truncated at the first null byte</param>
     private static ArrayPoolReturner<byte> GetByteArrayPooled(BinaryReader reader, int length, bool nullTerminated = true)
     {
-        var buffer = new ArrayPoolReturner<byte>(length); // TODO use own reader for direct access 
-        buffer.Length = 0; // reuse the length, don't need to remember the original
+        var buffer = new ArrayPoolReturner<byte>(length)
+        {
+            Length = 0 // reuse the length, don't need to remember the original
+        }; // TODO use own reader for direct access 
         while (length-- > 0)
         {
             var b = buffer.Array[buffer.Length] = reader.ReadByte();
@@ -1369,8 +1371,10 @@ public class EvtcParser
     /// <param name="nullTerminated">if set the array will become truncated at the first null byte</param>
     private static ArrayPoolReturner<char> GetCharArrayPooled(BinaryReader reader, int length, bool nullTerminated = true)
     {
-        var buffer = new ArrayPoolReturner<char>(length); // TODO use own reader for direct access 
-        buffer.Length = 0; // reuse the length, don't need to remember the original
+        var buffer = new ArrayPoolReturner<char>(length)
+        {
+            Length = 0 // reuse the length, don't need to remember the original
+        }; // TODO use own reader for direct access 
         while (length-- > 0)
         {
             var b = reader.ReadByte();

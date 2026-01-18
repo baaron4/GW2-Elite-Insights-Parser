@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfIce : HallOfChains
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(KingsWrathConeAoE, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),

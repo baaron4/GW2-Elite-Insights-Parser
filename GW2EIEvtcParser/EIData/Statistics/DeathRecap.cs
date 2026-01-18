@@ -8,7 +8,7 @@ public class DeathRecap
     {
         public long ID { get; internal set; }
         public bool IndirectDamage { get; internal set; }
-        public string SourceAgent { get; internal set; }
+        public string SourceAgent { get; internal set; } = "";
         public int Damage { get; internal set; }
         public int Time { get; internal set; }
     }

@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Kanaxai : SilentSurf
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             new MechanicGroup(
                 [

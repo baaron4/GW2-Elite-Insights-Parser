@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class ConjuredAmalgamate : MythwrightGambit
 {
 
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam", "Pulverize (Arm Slam)","Arm Slam", 0)
                     .WithStabilitySubMechanic(

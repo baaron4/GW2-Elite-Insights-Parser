@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfDeath : HallOfChains
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstHealthDamageHitMechanic(HungeringMiasma, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit", "Hungering Miasma (Vomit Goo)","Vomit Dmg", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected", "Applied when taking a light orb","Light Orb", 0),
@@ -105,7 +105,7 @@ internal class StatueOfDeath : HallOfChains
                         switch (cast.SkillID)
                         {
                             case Imbibe:
-                                replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
                                 .UsingRotationConnector(new AngleConnector(180)));
                                 break;
                             case HungeringMiasma:

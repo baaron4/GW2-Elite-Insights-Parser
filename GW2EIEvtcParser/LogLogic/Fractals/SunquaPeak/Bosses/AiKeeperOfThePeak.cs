@@ -18,7 +18,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
 {
     internal const long Determined895DurationCheckForSuccess = int.MaxValue / 4;
 
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             // General
             new PlayerDstHealthDamageHitMechanic(ElementalWhirl, new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.", "Elemental Whirl","Elemental Whirl", 0),

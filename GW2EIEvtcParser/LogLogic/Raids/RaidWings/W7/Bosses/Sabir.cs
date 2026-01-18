@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Sabir : TheKeyOfAhdashim
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageMechanic(DireDrafts, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500)
                     .UsingChecker((de, log) => de.HasDowned || de.HasKilled),

@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class MursaatOverseer : BastionOfThePenitent
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(JadeSoldierAura, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade", "Jade Soldier's Aura hit","Jade Aura", 0),
                 new PlayerDstHealthDamageHitMechanic(JadeSoldierExplosion, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl", "Jade Soldier's Death Explosion","Jade Explosion", 0),

@@ -22,7 +22,7 @@
 
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-        <Version>5.0.0</Version>
+        <Version>5.0.1</Version>
         <Authors>EliphasNUIT</Authors>
         <Company>GW2 Elite Insights</Company>
         <Product>GW2 Elite Insights</Product>

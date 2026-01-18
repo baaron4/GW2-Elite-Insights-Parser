@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Gorseval : SpiritVale
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstHealthDamageHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", 4000)
                 .UsingBuffChecker(Stability, false),
             new PlayerDstBuffApplyMechanic(GhastlyPrison, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", 500),

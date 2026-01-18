@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Arkk : ShatteredObservatory
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup(
                 [
                     new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", 0),
@@ -146,7 +146,7 @@ internal class Arkk : ShatteredObservatory
 
         var bloomPhases = new List<PhaseData>(10);
         var encounterBlooms = trashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom) && encounterPhase.InInterval(x.FirstAware)).OrderBy(x => x.FirstAware);
-        foreach (NPC bloom in encounterBlooms)
+        foreach (var bloom in encounterBlooms)
         {
             long start = bloom.FirstAware;
             long end = bloom.LastAware;

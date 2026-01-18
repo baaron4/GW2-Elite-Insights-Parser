@@ -21,10 +21,10 @@ public static class SpeciesIDs
         GreenGuardian = 15420,
         // - Spirit Race
         EtherealBarrier = SpeciesIDs.EtherealBarrier,
-        _EtherealBarrier1 = SpeciesIDs.EtherealBarrier1,
-        _EtherealBarrier2 = SpeciesIDs.EtherealBarrier2,
-        _EtherealBarrier3 = SpeciesIDs.EtherealBarrier3,
-        _EtherealBarrier4 = SpeciesIDs.EtherealBarrier4,
+        _EtherealBarrier1 = EtherealBarrier1,
+        _EtherealBarrier2 = EtherealBarrier2,
+        _EtherealBarrier3 = EtherealBarrier3,
+        _EtherealBarrier4 = EtherealBarrier4,
         EtherealBarrierGadget = 47188, // Gadget
         EtherealBarrierGadget_CHINA = 48133, // Gadget
         WallOfGhosts = 15415,
@@ -610,7 +610,7 @@ public static class SpeciesIDs
         CHOP = 16552,
         ProjectionArkk = 17613,
         // - Ai
-        Parent_AiKeeperOfThePeak = SpeciesIDs.ParentAiKeeperOfThePeak,
+        Parent_AiKeeperOfThePeak = ParentAiKeeperOfThePeak,
         AiKeeperOfThePeak = 23254,
         DarkAiKeeperOfThePeak = SpeciesIDs.DarkAiKeeperOfThePeak,
         EnragedWaterSprite = 23270,

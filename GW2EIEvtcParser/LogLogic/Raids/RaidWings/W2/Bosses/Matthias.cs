@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Matthias : SalvationPass
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
 
 
             new PlayerDstHealthDamageHitMechanic([OppressiveGazeHuman, OppressiveGazeAbomination], new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken", "Oppressive Gaze (Hadouken projectile)","Hadouken", 0),
@@ -164,7 +164,7 @@ internal class Matthias : SalvationPass
                 if (abo != null)
                 {
                     phases.Add(new SubPhasePhaseData(downPour.Time, abo.Time));
-                    BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, matthias.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
+                    BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, matthias.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x is not BuffApplyEvent);
                     if (invulRemove != null)
                     {
                         phases.Add(new SubPhasePhaseData(invulRemove.Time, encounterEnd));

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Siax : Nightmare
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
         [
             new PlayerDstHealthDamageHitMechanic(VileSpit, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", 0),
             new PlayerDstHealthDamageHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash Siax (half circle Knockback)","Tail Lash (Siax)", 0),

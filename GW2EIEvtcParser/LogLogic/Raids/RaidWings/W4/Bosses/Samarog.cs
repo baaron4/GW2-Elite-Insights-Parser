@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Samarog : BastionOfThePenitent
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstHealthDamageHitMechanic(SamarogShockwave, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv", "Shockwave from Spears","Shockwave", 0)
                 .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", 0)

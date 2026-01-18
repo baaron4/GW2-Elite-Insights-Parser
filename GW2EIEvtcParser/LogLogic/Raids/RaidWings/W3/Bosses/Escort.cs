@@ -19,7 +19,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new PlayerDstHealthDamageMechanic(DetonateMineEscort, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TargetID.Mine)),
             new PlayerDstHealthDamageMechanic(GlennaBombHit, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
             new PlayerDstHealthDamageHitMechanic(FireMortarEscortHit, new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),

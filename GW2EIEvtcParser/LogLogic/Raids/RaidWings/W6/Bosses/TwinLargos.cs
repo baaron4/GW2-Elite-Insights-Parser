@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class TwinLargos : MythwrightGambit
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Breakbar","Breakbar", 0),
                 new EnemyCastEndMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", 0),

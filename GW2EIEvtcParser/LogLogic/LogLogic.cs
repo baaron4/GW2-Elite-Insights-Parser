@@ -31,7 +31,7 @@ public abstract class LogLogic
     }
 
 
-    private CombatReplayMap Map;
+    private CombatReplayMap? Map;
     protected readonly List<MechanicContainer> MechanicList;//Resurrects (start), Resurrect
     public ParseModeEnum ParseMode { get; protected set; } = ParseModeEnum.Unknown;
     public SkillModeEnum SkillMode { get; protected set; } = SkillModeEnum.PvE;
@@ -55,13 +55,13 @@ public abstract class LogLogic
 
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
-    private CombatReplayDecorationContainer EnvironmentDecorations;
+    private CombatReplayDecorationContainer? EnvironmentDecorations;
     private readonly CombatReplayDecorationContainer ArenaDecorations;
 
     public ChestID ChestID { get; protected set; } = ChestID.None;
 
 
-    public struct InstanceBuff
+    public readonly struct InstanceBuff
     {
         public readonly Buff Buff;
         public readonly int Stack;
@@ -510,7 +510,7 @@ public abstract class LogLogic
 
     internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayArenaDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log)
     {
-        return ArenaDecorations.GetCombatReplayRenderableDescriptions(Map, log, [], []);
+        return ArenaDecorations.GetCombatReplayRenderableDescriptions(map, log, [], []);
     }
 
     internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayEnvironmentDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)

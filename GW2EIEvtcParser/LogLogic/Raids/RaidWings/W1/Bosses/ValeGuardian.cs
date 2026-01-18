@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class ValeGuardian : SpiritVale
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(GreenGuardianUnstableMagicSpike, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP", "Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
                 new PlayerDstHealthDamageHitMechanic(UnstableMagicSpike, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP", "Unstable Magic Spike (Boss Teleport)","Boss TP", 500),

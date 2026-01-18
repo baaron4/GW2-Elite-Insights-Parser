@@ -49,7 +49,7 @@ internal abstract class ShatteredObservatory : FractalLogic
         if (invulsTarget.Count() == count)
         {
             BuffEvent last = invulsTarget.Last();
-            if (!(last is BuffApplyEvent))
+            if (last is not BuffApplyEvent)
             {
                 SetSuccessByCombatExit(new List<SingleActor> { target }, combatData, logData, playerAgents, successHandler);
                 return false;

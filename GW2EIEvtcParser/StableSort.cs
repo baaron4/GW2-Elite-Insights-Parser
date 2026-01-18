@@ -333,7 +333,7 @@ public static unsafe class StableSort<T>
 
     static int quad_swap(Span<T> array, Func<T, T, int> cmp)
     {
-        using var swap = new ArrayPoolReturner<T>(32, StableSort<T>.Pool);
+        using var swap = new ArrayPoolReturner<T>(32, Pool);
         T tmp;
         int count, nmemb = array.Length;
         int pta, pts;
@@ -1153,7 +1153,7 @@ public static unsafe class StableSort<T>
     {
         if (true || array.Length < 32)
         {
-            using var swap = new ArrayPoolReturner<T>(Math.Max(array.Length, 32), StableSort<T>.Pool);
+            using var swap = new ArrayPoolReturner<T>(Math.Max(array.Length, 32), Pool);
             tail_swap(array, swap, cmp);
         }
         else if (quad_swap(array, cmp) == 0)
@@ -1162,10 +1162,10 @@ public static unsafe class StableSort<T>
 
             if (nmemb > 4194304) { for (swap_size = 4194304 ; swap_size * 8 <= nmemb ; swap_size *= 4) {} }
 
-            using var swap = new ArrayPoolReturner<T>(swap_size, StableSort<T>.Pool);
+            using var swap = new ArrayPoolReturner<T>(swap_size, Pool);
             if (swap.Length == 0) //TODO(Rennorb) 
             {
-                using var sswap = new ArrayPoolReturner<T>(512, StableSort<T>.Pool);
+                using var sswap = new ArrayPoolReturner<T>(512, Pool);
                 block = quad_merge(array, sswap, 32, cmp);
                 rotate_merge(array, sswap, block, cmp);
                 return;
@@ -1431,7 +1431,7 @@ public static unsafe class StableSort<T>
 
     static T median_of_nine(Span<T> array, int nmemb, Func<T, T, int> cmp)
     {
-        using var swap = new ArrayPoolReturner<T>(9, StableSort<T>.Pool);
+        using var swap = new ArrayPoolReturner<T>(9, Pool);
         int pta;
         int x, y, z;
 
@@ -1664,7 +1664,7 @@ public static unsafe class StableSort<T>
         }
         else
         {
-            using var mem = new ArrayPoolReturner<T>(array.Length, StableSort<T>.Pool);
+            using var mem = new ArrayPoolReturner<T>(array.Length, Pool);
             var swap = mem.AsSpan();
             if (swap == null) //TODO(Rennorb) 
             {

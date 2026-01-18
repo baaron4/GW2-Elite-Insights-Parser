@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Sabetha : SpiritVale
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
        
             // NOTE: Time Bomb damage is registered only for the user that has the bomb, damage to others is not logged.
             new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (launched up to cannons)","Shell-Shocked", 0),

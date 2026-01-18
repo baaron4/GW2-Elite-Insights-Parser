@@ -10,7 +10,7 @@ public static class Updater
     /// <summary>
     /// Structure to store the update information.
     /// </summary>
-    public struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string file, bool update)
+    public readonly struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string file, bool update)
     {
         public readonly GitHubRelease Release = release;
         /// <summary>

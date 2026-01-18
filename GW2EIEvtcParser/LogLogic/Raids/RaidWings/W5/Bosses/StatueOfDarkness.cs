@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfDarkness : HallOfChains
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
 
             new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared", "Feared by Eye Teleport Skill","Feared", 0),
             new MechanicGroup([

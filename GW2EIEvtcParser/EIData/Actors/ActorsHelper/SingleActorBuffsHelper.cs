@@ -1089,7 +1089,7 @@ partial class SingleActor
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(consumable.ID))
             {
-                if (!(c is BuffApplyEvent ba) || !AgentItem.Is(ba.To))
+                if (c is not BuffApplyEvent ba || !AgentItem.Is(ba.To))
                 {
                     continue;
                 }

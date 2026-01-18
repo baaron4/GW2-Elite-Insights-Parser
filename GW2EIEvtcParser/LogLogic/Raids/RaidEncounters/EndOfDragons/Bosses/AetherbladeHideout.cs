@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class AetherbladeHideout : EndOfDragonsRaidEncounter
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new(
             [
                 // NOTE: Kaleidoscopic Chaos deals HP % damage - Normal Mode: 20% if hit once, 60% if hit twice - Challenge Mode: 33% if hit once, 200% if hit twice.
                 new MechanicGroup([

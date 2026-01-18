@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Deimos : BastionOfThePenitent
 {
-    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
                 new PlayerDstFirstHealthDamageHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
@@ -128,7 +128,7 @@ internal class Deimos : BastionOfThePenitent
                 {
                     if (evt.IsStateChange == StateChange.MaxHealthUpdate)
                     {
-                        evt.OverrideSrcAgent(ParserHelper._unknownAgent);
+                        evt.OverrideSrcAgent(_unknownAgent);
                     }
                     if (evt.IsGeographical && evt.Time < upperTimeThreshold)
                     {

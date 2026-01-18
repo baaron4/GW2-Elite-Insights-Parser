@@ -75,7 +75,7 @@ internal class PlayerDto : ActorDto
         }
         (ColTarget, ColCleave, ColTotal) = GetSpecGraphColor(actor.BaseSpec);
         IsFake = actor.IsFakeActor;
-        NotInSquad = !(actor is Player);
+        NotInSquad = actor is not Player;
         WeaponSets = [];
         BuildWeaponSets(actor, log);
     }

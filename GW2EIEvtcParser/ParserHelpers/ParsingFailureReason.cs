@@ -13,7 +13,7 @@ public class ParsingFailureReason
 
     public bool IsSafeToIgnore => _reason is EINonFatalException;
 
-    public bool IsParserBug => !(_reason is EIException);
+    public bool IsParserBug => _reason is not EIException;
 
     public string Reason => _reason.Message;
 

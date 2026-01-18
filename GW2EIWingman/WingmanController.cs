@@ -21,7 +21,7 @@ public static class WingmanController
         IncludeFields = true,
     };
     private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
-    private static readonly HttpClient HTTPClient = new HttpClient()
+    private static readonly HttpClient HTTPClient = new()
     {
         Timeout = Timeout.InfiniteTimeSpan
     };

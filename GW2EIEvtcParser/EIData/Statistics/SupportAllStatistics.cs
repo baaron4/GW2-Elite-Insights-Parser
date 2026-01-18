@@ -28,9 +28,9 @@ public class SupportAllStatistics : SupportPerAllyStatistics
 
     internal SupportAllStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
-        var resArray = GetReses(log, actor, start, end);
-        ResurrectCount = resArray.Count;
-        ResurrectTime = Math.Round((double)resArray.Duration / 1000, ParserHelper.TimeDigit);
+        var (Count, Duration) = GetReses(log, actor, start, end);
+        ResurrectCount = Count;
+        ResurrectTime = Math.Round((double)Duration / 1000, ParserHelper.TimeDigit);
         foreach (StunBreakEvent sbe in log.CombatData.GetStunBreakEvents(actor.AgentItem))
         {
             StunBreakCount++;
