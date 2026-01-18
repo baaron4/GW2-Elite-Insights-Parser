@@ -31,7 +31,8 @@ internal static class ThiefHelper
             .UsingNotAccurate(), // same id as leeching venom trait?
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
-        new EffectCastFinder(ThousandNeedles, EffectGUIDs.ThiefThousandNeedlesAoE1)
+        new EffectCastFinder(ThousandNeedles, EffectGUIDs.EnemyAoE240)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE1, 280)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE2, 280)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE)
