@@ -35,7 +35,7 @@ internal static class SkillImages
     #endregion
     #region Elementalist
     public const string FireShield = "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png";
-    
+
     public const string WeaveSelf = "https://render.guildwars2.com/file/E656D3A8B1339603A70BBB7237F2BA004258ED55/1770326.png";
     // Attunements
     public const string FireAttunement = "https://render.guildwars2.com/file/1C91E9C799469ACC6EAF1ACD4B0AD8ACAB0C69A2/103035.png";
@@ -277,6 +277,9 @@ internal static class SkillImages
     public const string MightyBlow = "https://render.guildwars2.com/file/7CF5FFD35624B6D243B97CE4344018C3F1E6ACB7/103682.png";
     public const string Repose = "https://render.guildwars2.com/file/3D9C99D66E6CD2B0529DED46AC38AA51F4E2A61E/2479374.png";
     public const string MercifulIntervention = "https://render.guildwars2.com/file/4B93D8CA0663ABD94BAF9FCE80D6280A56C01099/103706.png";
+    public const string SymbolOfBlades = "https://render.guildwars2.com/file/E7F5FFA84F0AE4EA0EC5AE54FA365C09925551A0/103641.png";
+    public const string SymbolOfProtection = "https://render.guildwars2.com/file/E56B3804B2F82E3256A82318E537D024DC57E271/103161.png";
+    public const string SymbolOfResolution = "https://render.guildwars2.com/file/B9FC18E67D7FEE5B64F60AB7700E5706CCB51DA6/103660.png";
     public const string SymbolOfLuminance = "https://render.guildwars2.com/file/0E1E2D69CBC3C0E36217506C6CCB710138035373/3379129.png";
     public const string FireJurisdiction = "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png";
     public const string ProtectorsStrike = "https://render.guildwars2.com/file/7C42A81ACFBFFE32A528DFCA8014E7C4476358C8/103202.png";

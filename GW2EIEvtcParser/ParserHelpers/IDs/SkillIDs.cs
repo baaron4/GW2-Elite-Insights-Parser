@@ -70,6 +70,9 @@ public static class SkillIDs
     public const long SandShadeBuff = -51;
     public const long SandSavantSandShadeBuff = -52;
     public const long TsunaniSlamClaw = -53; // TODO find if there is an actual ID for this
+    public const long SymbolOfBladesOrLesser = -54;
+    public const long SymbolOfProtectionOrLesser = -55;
+    public const long SymbolOfResolutionOrLesser = -56;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
@@ -1004,6 +1007,7 @@ public static class SkillIDs
     public const long MedicalDispersionFieldHeal = 13515;
     public const long SelflessDaring = 13594;
     public const long GlacialHeartHeal = 13629;
+    public const long LesserSymbolOfResolution = 13677;
     public const long LesserSymbolOfProtection = 13684;
     public const long RestorativeMantras = 13721;
     public const long PowerBlockDamage = 13752;
@@ -4490,6 +4494,7 @@ public static class SkillIDs
     public const long NaturesStrength = 71976;
     public const long TappedOut = 71979;
     public const long EnervationBlade = 71986;
+    public const long SymbolOfIgnition = 71987;
     public const long DetonateJurisdiction = 71989;
     public const long Flourish = 71999;
     public const long ValiantLeap = 72002;
@@ -5456,6 +5461,7 @@ public static class SkillIDs
     public const long POV_ElementalBalance = 79230; // Trait buff?
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
+    public const long LesserSymbolOfBlades = 79336;
     public const long KineticBattery = 79338;
     public const long TimeBombBuff = 79339;
     public const long LesserSicEm = 79348;
