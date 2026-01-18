@@ -70,6 +70,9 @@ public static class SkillIDs
     public const long SandShadeBuff = -51;
     public const long SandSavantSandShadeBuff = -52;
     public const long TsunaniSlamClaw = -53; // TODO find if there is an actual ID for this
+    public const long SymbolOfBladesOrLesser = -54;
+    public const long SymbolOfProtectionOrLesser = -55;
+    public const long SymbolOfResolutionOrLesser = -56;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

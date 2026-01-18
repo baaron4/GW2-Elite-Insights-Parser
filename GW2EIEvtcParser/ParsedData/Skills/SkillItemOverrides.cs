@@ -106,6 +106,9 @@ public static class SkillItemOverrides
         { DetonateThrowMineOrMineField, "Detonate (Throw Mine / Mine Field)" },
         #endregion Engineer
         #region Guardian
+        { SymbolOfBladesOrLesser, "(Lesser) Symbol Of Blades" },
+        { SymbolOfProtectionOrLesser, "(Lesser) Symbol of Protection" },
+        { SymbolOfResolutionOrLesser, "(Lesser) Symbol Of Resolution" },
         { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
         { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
         { HuntersVerdictPull, "Hunter's Verdict (Pull)" },
@@ -630,6 +633,9 @@ public static class SkillItemOverrides
             #region GuardianIcons
             { LesserSymbolOfResolution, SkillImages.SymbolOfResolution }, // game uses symbol of swiftness
             { LesserSymbolOfBlades, SkillImages.SymbolOfBlades }, // game uses symbol of swiftness
+            { SymbolOfBladesOrLesser, SkillImages.SymbolOfBlades },
+            { SymbolOfProtectionOrLesser, SkillImages.SymbolOfProtection },
+            { SymbolOfResolutionOrLesser, SkillImages.SymbolOfResolution },
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
             { SwordOfJusticeDamage, SkillImages.SwordOfJustice },
             { GlacialHeart, TraitImages.GlacialHeart },
