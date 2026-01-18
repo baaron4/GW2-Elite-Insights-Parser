@@ -334,10 +334,12 @@ internal static class GuardianHelper
         }
 
         // Symbol of Blades & Lesser Symbol of Blades
-        AddSymbolDecorations(
+        AddSymbolDecorationsWithLesserUncertainty(
             player,
             log,
             replay,
+            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades),
+            new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfBlades),
             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBladesOrLesser),
             (EffectGUIDs.GuardianSymbolOfBlades, EffectGUIDs.GuardianSymbolOfBladesLarge),
             5000,
@@ -345,10 +347,12 @@ internal static class GuardianHelper
         );
 
         // Symbol of Resolution & Lesser Symbol of Resolution
-        AddSymbolDecorations(
+        AddSymbolDecorationsWithLesserUncertainty(
             player,
             log,
             replay,
+            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution),
+            new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution),
             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser),
             (EffectGUIDs.GuardianSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge),
             4000,
@@ -356,10 +360,12 @@ internal static class GuardianHelper
         );
 
         // Symbol of Protection & Lesser Symbol of Protection
-        AddSymbolDecorations(
+        AddSymbolDecorationsWithLesserUncertainty(
             player,
             log,
             replay,
+            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfProtection),
+            new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfProtection),
             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfProtectionOrLesser),
             (EffectGUIDs.GuardianSymbolOfProtection, EffectGUIDs.GuardianSymbolOfProtectionLarge),
             2000,
@@ -533,6 +539,48 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsLarge)
             {
                 var lifespan = effect.ComputeLifespan(log, durationLarge);
+                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 240, icon);
+            }
+        }
+    }
+
+    internal static void AddSymbolDecorationsWithLesserUncertainty(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, (GUID regular, GUID large) effects, long duration, string icon)
+    {
+        var durationLarge = duration + 2000;
+        var mainSkillCasts = player.GetAnimatedCastEvents(log).Where(x => x.SkillID == mainSkill.SkillID).ToList();
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.regular, out var symbols))
+        {
+            foreach (EffectEvent effect in symbols)
+            {
+                var lifespan = effect.ComputeLifespan(log, duration);
+                var mainSkillCastsOnEffect = mainSkillCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                SkillModeDescriptor skill;
+                if (mainSkillCastsOnEffect.Count <= 1)
+                {           
+                    skill = mainSkillCasts.Count == 1 ? mainSkill : lesserSkill;
+                } 
+                else
+                {
+                    skill = uncertainSkill;
+                }
+                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 180, icon);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.large, out var symbolsLarge))
+        {
+            foreach (EffectEvent effect in symbolsLarge)
+            {
+                var lifespan = effect.ComputeLifespan(log, durationLarge);
+                var mainSkillCastsOnEffect = mainSkillCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                SkillModeDescriptor skill;
+                if (mainSkillCastsOnEffect.Count <= 1)
+                {
+                    skill = mainSkillCasts.Count == 1 ? mainSkill : lesserSkill;
+                }
+                else
+                {
+                    skill = uncertainSkill;
+                }
                 AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 240, icon);
             }
         }
