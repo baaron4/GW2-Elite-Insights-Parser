@@ -325,7 +325,7 @@ internal static class GuardianHelper
         }
 
         // Symbol of Blades & Lesser Symbol of Blades (distinguished by duration)
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out var symbolOfBlades))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolution, out var symbolOfBlades))
         {
             var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades);
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfBlades);
@@ -336,7 +336,7 @@ internal static class GuardianHelper
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfBlades);
             }
         }
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBladesLarge, out var symbolOfBladesLarge))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolutionLarge, out var symbolOfBladesLarge))
         {
             var regular = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades);
             var lesser = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfBlades);
@@ -357,7 +357,7 @@ internal static class GuardianHelper
             {
                 var skill = effect.Duration == LesserSymbolOfResolutionDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfBlades);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfResolution);
             }
         }
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBladesLarge, out var symbolOfResolutionLarge))
@@ -368,7 +368,7 @@ internal static class GuardianHelper
             {
                 var skill = effect.Duration == LesserSymbolOfResolutionLargeDuration ? lesser : regular;
                 var lifespan = effect.ComputeDynamicLifespan(log, 6000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSymbolOfBlades);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSymbolOfResolution);
             }
         }
 
@@ -420,13 +420,13 @@ internal static class GuardianHelper
 
         // Symbol of Swiftness
         AddSymbolDecorations(
-             player,
-             log,
-             replay,
-             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfSwiftness),
-             (EffectGUIDs.GuardianSymbolOfSwiftness, EffectGUIDs.GuardianSymbolOfSwiftnessLarge),
-             4000,
-             EffectImages.EffectSymbolOfSwiftness
+            player,
+            log,
+            replay,
+            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfSwiftness),
+            (EffectGUIDs.GuardianSymbolOfSwiftness, EffectGUIDs.GuardianSymbolOfSwiftnessLarge),
+            4000,
+            EffectImages.EffectSymbolOfSwiftness
         );
 
         // Symbol of Energy

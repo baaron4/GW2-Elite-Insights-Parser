@@ -628,6 +628,8 @@ public static class SkillItemOverrides
         { ThornsSkill, SkillImages.DefensiveProtocolThorns },
 #endregion EngineerIcons
             #region GuardianIcons
+            { LesserSymbolOfResolution, SkillImages.SymbolOfResolution }, // game uses symbol of swiftness
+            { LesserSymbolOfBlades, SkillImages.SymbolOfBlades }, // game uses symbol of swiftness
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
             { SwordOfJusticeDamage, SkillImages.SwordOfJustice },
             { GlacialHeart, TraitImages.GlacialHeart },

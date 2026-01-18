@@ -99,13 +99,13 @@ internal static class EffectImages
     internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
     internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
     internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
-    internal const string EffectSymbolOfFaith = "";
-    internal const string EffectSymbolOfSwiftness = "";
-    internal const string EffectSymbolOfProtection = "";
+    internal const string EffectSymbolOfFaith = "https://i.imgur.com/yfe04jz.png";
+    internal const string EffectSymbolOfSwiftness = "https://i.imgur.com/4OF12bm.png";
+    internal const string EffectSymbolOfProtection = "https://i.imgur.com/FskM6TI.png";
     internal const string EffectHuntersWard = "https://i.imgur.com/Di7OvVr.png";
     internal const string EffectSymbolOfEnergy = "https://i.imgur.com/tPaAF8S.png";
     internal const string EffectSymbolOfVengeance = "https://i.imgur.com/1niDRW8.png";
-    internal const string EffectSymbolOfIgnition = "";
+    internal const string EffectSymbolOfIgnition = "https://i.imgur.com/19AXEEI.png";
     internal const string EffectSymbolOfLuminance = "https://i.imgur.com/opBLfAA.png";
     internal const string EffectSolarStorm = "https://i.imgur.com/iDvjMxE.png";
     internal const string EffectStalwartStand = "https://i.imgur.com/uBAyxRu.png";
