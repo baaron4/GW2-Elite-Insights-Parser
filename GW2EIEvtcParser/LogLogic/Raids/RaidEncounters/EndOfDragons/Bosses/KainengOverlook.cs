@@ -241,17 +241,17 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        SingleActor ministerLi = GetMinisterLi(logData.LogIsCM) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM) ?? throw new MissingKeyActorsException("Minister Li not found");
         var buffApplies = combatData.GetBuffApplyDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
         if (buffApplies.Any())
         {
-            logData.SetSuccess(true, buffApplies.First().Time);
+            successHandler.SetSuccess(true, buffApplies.First().Time);
         } 
         else
         {
-            logData.SetSuccess(false, ministerLi.LastAware);
+            successHandler.SetSuccess(false, ministerLi.LastAware);
         }
     }
 

@@ -67,8 +67,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
                 new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
-                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
-                    .UsingEnable(x => x.LogData.LogIsCM),
+                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda)),
             ]),
             new PlayerDstEffectMechanic(EffectGUIDs.CosmicObservatoryDemonicFever, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "DemFev.T", "Targeted by Demonic Fever (Orange Spread AoEs)", "Demonic Fever Target", 0),
         ])
@@ -329,9 +328,9 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         environmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
         // Special check since CM release, normal mode broke too, but we always trust reward events
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart) == null)
         {
@@ -342,7 +341,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 HealthDamageEvent? lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                 if (lastDamageEvent != null)
                 {
-                    logData.SetSuccess(true, logData.Success ? Math.Min(lastDamageEvent.Time, logData.LogEnd) : lastDamageEvent.Time);
+                    successHandler.SetSuccess(true, successHandler.Success ? Math.Min(lastDamageEvent.Time, logData.LogEnd) : lastDamageEvent.Time);
                 }
             }
         }

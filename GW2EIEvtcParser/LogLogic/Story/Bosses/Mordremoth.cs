@@ -76,17 +76,17 @@ internal class Mordremoth : StoryInstance
         ];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
         BuffApplyEvent? buffApply = combatData.GetBuffApplyDataByIDByDst(Determined895, mordremoth.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (buffApply != null)
         {
-            logData.SetSuccess(true, mordremoth.LastAware);
+            successHandler.SetSuccess(true, mordremoth.LastAware);
         } 
         else
         {
-            logData.SetSuccess(false, mordremoth.LastAware);
+            successHandler.SetSuccess(false, mordremoth.LastAware);
         }
     }
 

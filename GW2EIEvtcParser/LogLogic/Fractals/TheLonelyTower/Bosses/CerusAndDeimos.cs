@@ -73,7 +73,7 @@ internal class CerusAndDeimos : LonelyTower
         return [TargetID.CerusLonelyTower, TargetID.DeimosLonelyTower];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
@@ -81,11 +81,11 @@ internal class CerusAndDeimos : LonelyTower
         BuffApplyEvent? determinedApplyDeimos = combatData.GetBuffApplyDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
-            logData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
+            successHandler.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
         } 
         else
         {
-            logData.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
+            successHandler.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
         }
     }
 

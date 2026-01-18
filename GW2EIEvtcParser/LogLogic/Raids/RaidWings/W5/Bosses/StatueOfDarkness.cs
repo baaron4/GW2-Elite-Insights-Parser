@@ -182,10 +182,10 @@ internal class StatueOfDarkness : HallOfChains
         return false;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
-        if (!logData.Success)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
         {
             SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfFate));
             SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfJudgement));
@@ -195,7 +195,7 @@ internal class StatueOfDarkness : HallOfChains
             }
             if (HasIntersectingLastGrasps(combatData, eyeFate, eyeJudgement, out var intersectTime))
             {
-                logData.SetSuccess(true, intersectTime);
+                successHandler.SetSuccess(true, intersectTime);
             }
         }
     }

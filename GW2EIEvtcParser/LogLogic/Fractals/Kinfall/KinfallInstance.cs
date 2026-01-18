@@ -40,7 +40,7 @@ internal class KinfallInstance : Kinfall
         _whisperingShadow.GetCombatMapInternal(log, arenaDecorations);
         return crMap;
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         var lastWhisperingShadow = agentData.GetNPCsByID(TargetID.WhisperingShadow).LastOrDefault();
         if (lastWhisperingShadow != null)
@@ -48,7 +48,7 @@ internal class KinfallInstance : Kinfall
             var death = combatData.GetDeadEvents(lastWhisperingShadow).FirstOrDefault();
             if (death != null)
             {
-                logData.SetSuccess(true, death.Time);
+                successHandler.SetSuccess(true, death.Time);
             }
         }
     }

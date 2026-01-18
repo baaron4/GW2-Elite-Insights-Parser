@@ -193,7 +193,7 @@ public sealed class ProgramHelper : IDisposable
             SingleActor povActor = log.FindActor(pov);
             builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogMetadata.DateStartStd + " / " + log.LogMetadata.DateEndStd, povActor.GetIcon(true));
         }
-        builder.WithColor(log.LogData.Success ? Discord.Color.Green : Discord.Color.Red);
+        builder.WithColor(log.LogData.GetMainPhase(log).Success ? Discord.Color.Green : Discord.Color.Red);
         if (dpsReportPermalink.Length > 0)
         {
             builder.WithUrl(dpsReportPermalink);
@@ -292,7 +292,7 @@ public sealed class ProgramHelper : IDisposable
 
                         originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing upload");
 
-                        string result = logToUse.LogData.Success ? "kill" : "fail";
+                        string result = logToUse.LogData.GetMainPhase(logToUse).Success ? "kill" : "fail";
                         WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.LogData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                     }
                     catch (Exception e)
@@ -451,7 +451,7 @@ public sealed class ProgramHelper : IDisposable
 
         string resultStr;
         string resultSuffix;
-        if (log.LogData.Success)
+        if (log.LogData.GetMainPhase(log).Success)
         {
             if (log.LogData.IsInstance)
             {

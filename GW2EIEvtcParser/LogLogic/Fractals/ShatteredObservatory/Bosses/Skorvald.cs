@@ -253,11 +253,11 @@ internal class Skorvald : ShatteredObservatory
             TargetID.FluxAnomalyCM4,
         ];
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
         // reward or death worked
-        if (logData.Success)
+        if (successHandler.Success)
         {
             return;
         }
@@ -268,7 +268,7 @@ internal class Skorvald : ShatteredObservatory
             var invul895Apply = combatData.GetBuffApplyDataByIDByDst(Determined895, skorvald.AgentItem).LastOrDefault(x => x.Time > lastDamageTaken.Time - 500);
             if (invul895Apply != null)
             {
-                logData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
+                successHandler.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
             }
         }
     }

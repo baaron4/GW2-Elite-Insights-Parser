@@ -1188,6 +1188,7 @@ public static class SkillIDs
     public const long ProtectionUnstrippable = 16537; // Used for Greer
     public const long PortalUses = 16553;
     public const long GravelShot3 = 16711;
+    public const long Dread = 16947;
     public const long VirtueOfResolveBattlePresence = 17046;
     public const long VirtueOfResolveBattlePresenceAbsoluteResolve = 17047;
     public const long DeployGuildArrowCart = 17676;
@@ -1700,7 +1701,7 @@ public static class SkillIDs
     public const long BiteSmokescale = 31312;
     public const long PylonAttunementBlue = 31317;
     public const long WingBuffetWyvern = 31321;
-    public const long TimeBombDamage = 31324; // First Bomb
+    public const long TimeBombDamage_Encounter = 31324; // First Bomb
     public const long Firestorm = 31332;
     public const long Rebound = 31337;
     public const long DistributedMagicBlue = 31340;
@@ -1732,7 +1733,7 @@ public static class SkillIDs
     public const long GhastlyRampageBegin = 31466;
     public const long SapperBombBuff = 31473;
     public const long HauntingAura = 31483;
-    public const long TimeBomb = 31485;
+    public const long TimeBomb_Encounter = 31485;
     public const long StaticCharge = 31487;
     public const long SapperBombSkill = 31488;
     public const long SublimeConversion = 31496;
@@ -1963,7 +1964,7 @@ public static class SkillIDs
     public const long ShellShocked = 34108;
     public const long SpawnProtection = 34113;
     public const long SoothingBastion = 34136;
-    public const long TimeBombDamage2 = 34152; // Second Bomb, below 50% Sabetha HP
+    public const long TimeBombDamage2_Encounter = 34152; // Second Bomb, below 50% Sabetha HP
     public const long CallOfTheMists = 34164;
     public const long PeppermintOil = 34187;
     public const long PeppermintOmnomberryBar = 34188;
@@ -5461,5 +5462,12 @@ public static class SkillIDs
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
     public const long LesserSymbolOfBlades = 79336;
+    public const long KineticBattery = 79338;
+    public const long TimeBombBuff = 79339;
+    public const long LesserSicEm = 79348;
+    public const long BountifulPowerCharge = 79349;
+    public const long DangerTime = 79353;
+    public const long TimeBombDamage = 79359;
+    public const long BountifulPower = 79363;
     #endregion
 }

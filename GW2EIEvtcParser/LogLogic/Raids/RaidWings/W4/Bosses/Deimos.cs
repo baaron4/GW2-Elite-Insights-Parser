@@ -166,10 +166,10 @@ internal class Deimos : BastionOfThePenitent
         return res;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        if (logData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (successHandler.Success)
         {
             return;
         }
@@ -217,11 +217,11 @@ internal class Deimos : BastionOfThePenitent
                 {
                     return;
                 }
-                logData.SetSuccess(true, notAttackableEvent.Time);
+                successHandler.SetSuccess(true, notAttackableEvent.Time);
             }
-            if (!logData.Success)
+            if (!successHandler.Success)
             {
-                logData.SetSuccess(false, notAttackableEvent.Time);
+                successHandler.SetSuccess(false, notAttackableEvent.Time);
             }
         }
     }
@@ -267,7 +267,7 @@ internal class Deimos : BastionOfThePenitent
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
-        if (!logData.LogIsCM)
+        if (GetLogMode(combatData, agentData, logData) != LogData.Mode.CM)
         {
             return res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
         }

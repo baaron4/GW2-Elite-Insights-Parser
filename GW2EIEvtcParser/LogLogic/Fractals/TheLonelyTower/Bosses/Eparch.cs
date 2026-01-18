@@ -118,22 +118,22 @@ internal class Eparch : LonelyTower
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffApplyDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        var cmCheck = logData.LogIsCM || IsFakeCM(agentData);
+        var cmCheck = GetLogMode(combatData, agentData, logData) == LogData.Mode.CM || IsFakeCM(agentData);
         if (cmCheck && determinedApplies.Count >= 3)
         {
-            logData.SetSuccess(true, determinedApplies[2].Time);
+            successHandler.SetSuccess(true, determinedApplies[2].Time);
         }
         else if (!cmCheck && determinedApplies.Count >= 1)
         {
-            logData.SetSuccess(true, determinedApplies[0].Time);
+            successHandler.SetSuccess(true, determinedApplies[0].Time);
         } 
         else
         {
-            logData.SetSuccess(false, eparch.LastAware);
+            successHandler.SetSuccess(false, eparch.LastAware);
         }
     }
 
@@ -146,9 +146,10 @@ internal class Eparch : LonelyTower
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
+        var encounterPhase = (EncounterPhaseData)phases[0];
         phases[0].AddTarget(eparch, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement])), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases || (!log.LogData.LogIsCM && !IsFakeCM(log.AgentData)))
+        if (!requirePhases || (!encounterPhase.IsCM && !IsFakeCM(log.AgentData)))
         {
             return phases;
         }

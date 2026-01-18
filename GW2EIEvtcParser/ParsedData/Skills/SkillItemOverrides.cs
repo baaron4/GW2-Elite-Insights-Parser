@@ -732,6 +732,7 @@ public static class SkillItemOverrides
             { PhantasmalSeekingAxe, TraitImages.PhantomPain },
             { PhantasmalSpinningAxe, TraitImages.PhantomPain },
             { Syncopate, TraitImages.Syncopate },
+            { TimeBombDamage, TraitImages.TimeBomb },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },

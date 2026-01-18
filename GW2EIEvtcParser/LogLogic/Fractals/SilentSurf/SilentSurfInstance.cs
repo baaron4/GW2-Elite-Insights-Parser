@@ -40,7 +40,7 @@ internal class SilentSurfInstance : SilentSurf
         _kanaxai.GetCombatMapInternal(log, arenaDecorations);
         return crMap;
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         var lastKanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Any());
         if (lastKanaxai != null)
@@ -50,7 +50,7 @@ internal class SilentSurfInstance : SilentSurf
             var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent && x.Time > enterCombat.Time);
             if (determinedApply != null && !combatData.GetDespawnEvents(lastKanaxai).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
             {
-                logData.SetSuccess(true, determinedApply.Time);
+                successHandler.SetSuccess(true, determinedApply.Time);
             }
         }
     }

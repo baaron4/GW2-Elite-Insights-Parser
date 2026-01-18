@@ -409,4 +409,14 @@ public static class DamageModifierIDs
     public const int Mod_SummonKryptisTurret = 396;
     public const int Mod_WillingHost_Strike = 397;
     public const int Mod_WillingHost_Condition = 398;
+    public const int Mod_KineticBattery = 399;
+    public const int Mod_HeavyMetal_75 = 400;
+    public const int Mod_HeavyMetal_50 = 401;
+    public const int Mod_HeavyMetal_25 = 402;
+    public const int Mod_FuriousFocus = 403;
+    public const int Mod_TimeBomb = 404;
+    public const int Mod_LoudWhistle_Pet = 405;
+    public const int Mod_EnterprisingAristocrat = 406;
+    public const int Mod_LesserSicEmPet = 407;
+    public const int Mod_LesserSicEm = 408;
 }

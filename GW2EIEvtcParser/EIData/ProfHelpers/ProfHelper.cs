@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -945,17 +946,49 @@ internal static class ProfHelper
     }
 
     /// <summary>
-    /// Checks for self HP to be higher than the target HP.
+    /// Checks for from HP to be higher than the to HP.
     /// </summary>
-    internal static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+    internal static bool FromHigherThanToHPChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-        if (selfHP < 0.0 || dstHP < 0.0)
+        double fromHP = x.From.GetCurrentHealthPercent(log, x.Time);
+        double toHP = x.To.GetCurrentHealthPercent(log, x.Time);
+        if (fromHP < 0.0 || toHP < 0.0)
         {
             return false;
         }
-        return selfHP > dstHP;
+        return fromHP > toHP;
+    }
+
+    /// <summary>
+    /// Checks for to HP to be between lower and higer.
+    /// </summary>
+    internal static DamageLogChecker ToHPChecker(double lower, double higher = 101)
+    {
+        return (x, log) =>
+        {
+            double toHP = x.To.GetCurrentHealthPercent(log, x.Time);
+            if (toHP < 0.0)
+            {
+                return false;
+            }
+            return higher > toHP && toHP >= lower;
+        };
+    }
+
+    /// <summary>
+    /// Checks for from HP to be between lower and higer.
+    /// </summary>
+    internal static DamageLogChecker FromHPChecker(double lower, double higher = 101)
+    {
+        return (x, log) =>
+        {
+            double fromHP = x.From.GetCurrentHealthPercent(log, x.Time);
+            if (fromHP < 0.0)
+            {
+                return false;
+            }
+            return higher > fromHP && fromHP >= lower;
+        };
     }
 
     /// <summary>

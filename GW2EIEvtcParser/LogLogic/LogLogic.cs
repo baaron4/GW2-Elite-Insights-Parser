@@ -555,9 +555,9 @@ public abstract class LogLogic
         return [ GetTargetID(GenericTriggerID) ];
     }
 
-    internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
     }
 
     protected IEnumerable<SingleActor> GetSuccessCheckTargets()
@@ -565,26 +565,26 @@ public abstract class LogLogic
         return Targets.Where(x => x.IsAnySpecies(GetSuccessCheckIDs()));
     }
 
-    protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        if (!logData.Success && ChestID != ChestID.None)
+        if (!successHandler.Success && ChestID != ChestID.None)
         {
-            SetSuccessByChestGadget(ChestID, agentData, logData);
+            SetSuccessByChestGadget(ChestID, agentData, logData, successHandler);
         }
-        if (!logData.Success && (GenericFallBackMethod & FallBackMethod.Death) > 0)
+        if (!successHandler.Success && (GenericFallBackMethod & FallBackMethod.Death) > 0)
         {
-            SetSuccessByDeath(GetSuccessCheckTargets(), combatData, logData, playerAgents, true);
+            SetSuccessByDeath(GetSuccessCheckTargets(), combatData, logData, playerAgents, successHandler, true);
         }
-        if (!logData.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
+        if (!successHandler.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
         {
-            SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, logData, playerAgents);
+            SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, logData, playerAgents, successHandler);
         }
-        if (!logData.Success)
+        if (!successHandler.Success)
         {
             var targets = GetSuccessCheckTargets();
             if (targets.Any())
             {
-                logData.SetSuccess(false, targets.Max(x => x.LastAware));
+                successHandler.SetSuccess(false, targets.Max(x => x.LastAware));
             }
         }
     }

@@ -11,11 +11,11 @@ internal abstract class IcebroodSagaRaidEncounter : RaidEncounterLogic
         LogID |= LogIDs.RaidEncounterMasks.IBSMask;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
+            successHandler.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         var sraidEncounterRewardIDs = new HashSet<ulong>
@@ -33,11 +33,11 @@ internal abstract class IcebroodSagaRaidEncounter : RaidEncounterLogic
         RewardEvent? reward = rewards.FirstOrDefault(x => sraidEncounterRewardIDs.Contains(x.RewardID) && x.Time > logData.LogStart);
         if (reward != null)
         {
-            logData.SetSuccess(true, reward.Time);
+            successHandler.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
         }
     }
 }
