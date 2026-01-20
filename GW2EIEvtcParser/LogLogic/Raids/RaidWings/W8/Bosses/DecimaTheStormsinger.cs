@@ -837,19 +837,17 @@ internal class DecimaTheStormsinger : MountBalrior
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        /*var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                var decima = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.DecimaCM));
-                if (decima != null && !decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
+                if (log.PlayerList.Any(x => x.HasBuff(log, AchievementEligibilityCalmBeforeTheStorm, encounterPhase.End - ServerDelayConstant)))
                 {
                     instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1, encounterPhase));
                 }
             }
-        }
-        */
+        }       
     }
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
     {
