@@ -55,7 +55,7 @@ internal static class EngineerHelper
                     var cast = animatedCastData[i];
                     if (cast.Time >= swap.Time + WeaponSwapDelayConstant)
                     {
-                        if (cast.Time > nextSwapTime)
+                        if (cast.Time >= nextSwapTime)
                         {
                             if (atLeastOneProcessed)
                             {
