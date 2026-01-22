@@ -250,6 +250,8 @@ public class LogData
                         return new CosmicObservatory(id);
                     case TargetID.Cerus:
                         return new TempleOfFebe(id);
+                    case TargetID.KelaSeneschalOfWaves:
+                        return new GuardiansGlade(id);
                     // Fractals
                     case TargetID.MAMA:
                         return new MAMA(id);

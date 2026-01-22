@@ -164,6 +164,7 @@ internal static class LogImages
     internal const string EncounterIconOldLionsCourt = "https://i.imgur.com/Q2g9aLD.png";
     internal const string EncounterIconCosmicObservatory = "https://i.imgur.com/v6vjRsH.png";
     internal const string EncounterIconTempleOfFebe = "https://i.imgur.com/1cGN1UT.png";
+    internal const string EncounterIconGuardiansGlade = "";
 
     // Combat Replay Maps
     internal const string CombatReplayFreezie = "";
@@ -182,6 +183,7 @@ internal static class LogImages
     internal const string CombatReplayCosmicObservatory_old = "https://i.imgur.com/47tKhXG.png";
     internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/mODYp42.png";
     internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
+    internal const string CombatReplayGuardiansGlade = "";
 
     #endregion RAID ENCOUNTERS
 
