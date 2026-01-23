@@ -345,7 +345,6 @@ partial class SingleActor
     #region PRESENCE
     /// <summary>
     /// Returns a dictionnary of <BuffID, PresenceValue> for given interval by provided actor
-    /// This dictionary will only container buff ids for intensity stacking buffs
     /// </summary>
     /// <param name="log"></param>
     /// <param name="start"></param>
@@ -389,15 +388,12 @@ partial class SingleActor
         var buffPresence = new Dictionary<long, long>(buffSimulators.Count);
         foreach (var (buff, simulator) in buffSimulators)
         {
-            if (simulator.Buff.Type == BuffType.Intensity)
+            foreach (BuffSimulationItem simul in GetBuffGenerationSimulationItems(log, simulator, start, end))
             {
-                foreach (BuffSimulationItem simul in GetBuffGenerationSimulationItems(log, simulator, start, end))
+                long duration = by != null ? simul.GetClampedDuration(start, end, by) : simul.GetClampedDuration(start, end);
+                if (duration != 0)
                 {
-                    long duration = by != null ? simul.GetClampedDuration(start, end, by) : simul.GetClampedDuration(start, end);
-                    if (duration != 0)
-                    {
-                        buffPresence.IncrementValue(buff, duration);
-                    }
+                    buffPresence.IncrementValue(buff, duration);
                 }
             }
         }
