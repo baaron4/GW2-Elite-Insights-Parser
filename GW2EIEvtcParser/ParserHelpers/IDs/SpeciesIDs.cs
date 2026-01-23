@@ -512,7 +512,19 @@ public static class SpeciesIDs
         JormagMovingFrostBeamCenter = 23747,
         JormagMovingFrostBeamNorth = 24541,
         JormagMovingFrostBeam = SpeciesIDs.JormagMovingFrostBeam,
-        // - Old Lion's Court
+        HTGreenJormagWest = SpeciesIDs.HTGreenJormagWest,
+        HTGreenJormagEast = SpeciesIDs.HTGreenJormagEast,
+        HTGreenJormagSouthEast = SpeciesIDs.HTGreenJormagSouthEast,
+        HTGreenPrimordusNorthWest = SpeciesIDs.HTGreenPrimordusNorthWest,
+        HTGreenPrimordusNorthEast = SpeciesIDs.HTGreenPrimordusNorthEast,
+        HTGreenPrimordusNorth = SpeciesIDs.HTGreenPrimordusNorth,
+        HTGreenZhaitanNorthWest = SpeciesIDs.HTGreenZhaitanNorthWest,
+        HTGreenZhatainNorthEast = SpeciesIDs.HTGreenZhatainNorthEast,
+        HTGreenZhaitanSouth = SpeciesIDs.HTGreenZhaitanSouth,
+        HTGreenSooWonNorthEast = SpeciesIDs.HTGreenSooWonNorthEast,
+        HTGreenSooWonSouthEast = SpeciesIDs.HTGreenSooWonSouthEast,
+        HTGreenSooWonSouth = SpeciesIDs.HTGreenSooWonSouth,
+    // - Old Lion's Court
         PrototypeVermilion = 25413,
         PrototypeArsenite = 25415,
         PrototypeIndigo = 25419,
@@ -1208,6 +1220,18 @@ public static class SpeciesIDs
     private const int ParentAiKeeperOfThePeak = -107;
     private const int PlayerSlubling = -108;
     private const int TheDragonVoidUnknown = -109;
+    private const int HTGreenJormagWest = -110;
+    private const int HTGreenJormagEast = -111;
+    private const int HTGreenJormagSouthEast = -112;
+    private const int HTGreenPrimordusNorthWest = -113;
+    private const int HTGreenPrimordusNorthEast = -114;
+    private const int HTGreenPrimordusNorth = -115;
+    private const int HTGreenZhaitanNorthWest = -116;
+    private const int HTGreenZhatainNorthEast = -117;
+    private const int HTGreenZhaitanSouth = -118;
+    private const int HTGreenSooWonNorthEast = -119;
+    private const int HTGreenSooWonSouthEast = -120;
+    private const int HTGreenSooWonSouth = -121;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

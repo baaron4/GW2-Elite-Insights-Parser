@@ -16,6 +16,15 @@ public abstract class MovementEvent : StatusEvent
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static (ulong, int) PackMovementData(float x, float y, float z)
+    {
+        var xBytes = BitConverter.GetBytes(x);
+        var yBytes = BitConverter.GetBytes(y);
+        byte[] xyBytes = [.. xBytes, .. yBytes];
+        ulong packXY = BitConverter.ToUInt64(xyBytes);
+        return new(packXY, BitConverter.SingleToInt32Bits(z));
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static unsafe Vector3 UnpackMovementData(ulong packedXY, int intZ)
     {
         return new(*(float*)&packedXY, *((float*)&packedXY + 1), *(float*)&intZ);
