@@ -75,8 +75,10 @@ internal class SalvationPassInstance : SalvationPass
                 {
                     foreach (var narella in narellas)
                     {
-                        var pack = new List<SingleActor>(3);
-                        pack.Add(narella);
+                        var pack = new List<SingleActor>(3)
+                        {
+                            narella
+                        };
                         var curZane = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curZane != null)
                         {

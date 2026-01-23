@@ -71,7 +71,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
     [ThreadStatic]
     private static SharedArrayPoolThreadLocalArray[]? t_tlsBuckets;
     /// <summary>Used to keep track of all thread local buckets for trimming if needed.</summary>
-    private readonly ConditionalWeakTable<SharedArrayPoolThreadLocalArray[], object?> _allTlsBuckets = new();
+    private readonly ConditionalWeakTable<SharedArrayPoolThreadLocalArray[], object?> _allTlsBuckets = [];
     /// <summary>
     /// An array of per-core partitions. The slots are lazily initialized to avoid creating
     /// lots of overhead for unused array sizes.

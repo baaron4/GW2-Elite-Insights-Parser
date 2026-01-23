@@ -25,7 +25,7 @@ internal static class GW2APIUtilities
     {
         public APIItems()
         {
-            Items = new Dictionary<long, T>();
+            Items = [];
         }
 
         public APIItems(List<T> traits)

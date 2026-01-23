@@ -153,7 +153,7 @@ internal class LogDataDto
         NoMechanics = log.LogData.Logic.HasNoEncounterSpecificMechanics;
         if (log.LogMetadata.LogErrors.Count > 0)
         {
-            LogErrors = new List<string>(log.LogMetadata.LogErrors);
+            LogErrors = [.. log.LogMetadata.LogErrors];
         }
     }
 

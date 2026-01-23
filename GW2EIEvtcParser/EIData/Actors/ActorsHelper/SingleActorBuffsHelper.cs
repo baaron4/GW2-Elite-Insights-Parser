@@ -935,10 +935,10 @@ partial class SingleActor
         if (AgentItem.IsEnglobedAgent)
         {
             log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
-            _buffGraphs = new Dictionary<long, BuffGraph>();
+            _buffGraphs = [];
             _buffDistribution = new CachingCollection<BuffDistribution>(log);
             _buffPresenceBy = new CachingCollectionWithTarget<IReadOnlyDictionary<long, long>>(log);
-            _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
+            _buffSimulators = [];
             return;
         }
         if (_buffMap == null)
