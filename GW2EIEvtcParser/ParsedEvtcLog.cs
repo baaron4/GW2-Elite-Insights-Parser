@@ -137,12 +137,6 @@ public class ParsedEvtcLog
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Find sources for buff extension events");
         CombatData.TryFindSrc(this);
-        // Mandatory to detect encounters
-        if (LogData.IsInstance)
-        {
-            _operation.UpdateProgressWithCancellationCheck("Parsing: Finding encounters for instance log");
-            LogData.GetPhases(this);
-        }
     }
 
     public void UpdateProgressWithCancellationCheck(string status)
