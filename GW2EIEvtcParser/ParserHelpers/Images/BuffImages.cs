@@ -127,8 +127,7 @@ public static class BuffImages
     public const string Fixated = "https://wiki.guildwars2.com/images/6/66/Fixated.png";
     public const string AchievementEffect = "https://wiki.guildwars2.com/images/1/10/Achievement_effect.png";
     public const string CallOfTheMists = "https://wiki.guildwars2.com/images/5/52/Call_of_the_Mists.png";
-    public const string QuickplayBoost = "https://wiki.guildwars2.com/images/d/d9/Quickplay_Boost.png";
-    public const string QuickplayMorale = "";
+    public const string QuickplayBoostMorale = "https://assets.gw2dat.com/3691067.png";
     // Strike Essences
     public const string EssenceOfVigilance = "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png";
     public const string EssenceOfResilience = "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png";
