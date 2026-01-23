@@ -188,10 +188,13 @@ public abstract class LogLogic
             }
         }
         // Quickplay
-        var hasQuickplay = log.PlayerList.Any(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd));
-        if (hasQuickplay)
+        if (log.PlayerList.Any(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)))
         {
             instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1, mainPhase));
+        }
+        else if (log.PlayerList.Any(x => x.HasBuff(log, SkillIDs.QuickplayMorale, log.LogData.LogStart, log.LogData.LogEnd)))
+        {
+            instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.QuickplayMorale], 1, mainPhase));
         }
     }
 
