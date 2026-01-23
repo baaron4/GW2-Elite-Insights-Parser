@@ -17,7 +17,9 @@ internal static class JsonMechanicsBuilder
         var jsMech = new JsonMechanic
         {
             Time = ml.Time,
-            Actor = ml.Actor.Character
+            Actor = ml.Actor.Character,
+            Instid = ml.Actor.InstID,
+            Id = ml.Actor.ID
         };
         return jsMech;
     }

@@ -19,6 +19,14 @@ public class JsonMechanics
         /// The actor who is concerned by the mechanic
         /// </summary>
         public string? Actor;
+        /// <summary>
+        /// Species ID of the Actor, 0 for players
+        /// </summary>
+        public int Id;
+        /// <summary>
+        /// Instance ID of the Actor
+        /// </summary>
+        public int Instid;
     }
 
 

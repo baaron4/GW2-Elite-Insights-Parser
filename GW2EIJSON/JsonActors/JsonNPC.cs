@@ -6,7 +6,7 @@
 public class JsonNPC : JsonActor
 {
     /// <summary>
-    /// Game ID of the target
+    /// Species ID of the target
     /// </summary>
     public int Id;
 

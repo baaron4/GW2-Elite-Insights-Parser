@@ -55,7 +55,7 @@ static class Vector
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsInTriangle(this in Vector2 p, ReadOnlySpan<Vector2> vertices)
         => vertices.Length == 3 && IsInTriangle(p, vertices[0], vertices[1], vertices[2]);
-	/// <summary>
+    /// <summary>
     /// Returns true if p in inside or on the edges of the triangle defined by vertices
     /// points must have exactly 3 values, returns false otherwise
     /// Triangle can be clockwise or counter clock wise
@@ -89,7 +89,7 @@ static class Vector
         => Math.Min(v0.X, v1.X) <= p.X && p.X <= Math.Max(v0.X, v0.X)
            && Math.Min(v0.Y, v1.Y) <= p.Y && p.Y <= Math.Max(v0.Y, v0.Y)
            && Math.Min(v0.Z, v1.Z) <= p.Z && p.Z <= Math.Max(v0.Z, v0.Z);
-    
+
     public static float ScalarProduct(in Vector2 pt1, in Vector2 pt2)
     {
         return pt1.X * pt2.X + pt1.Y * pt2.Y;
@@ -113,7 +113,7 @@ static class Vector
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector3 ProjectPointOn2DLine(this in Vector3 toProject, in Vector3 pointOnLine, in Vector3 directionVector) => new (toProject.XY().ProjectPointOnLine(pointOnLine.XY(), directionVector.XY()), pointOnLine.Z);
+    public static Vector3 ProjectPointOn2DLine(this in Vector3 toProject, in Vector3 pointOnLine, in Vector3 directionVector) => new(toProject.XY().ProjectPointOnLine(pointOnLine.XY(), directionVector.XY()), pointOnLine.Z);
     public static Vector2 RotatePointAroundPoint(in Vector2 pivotPoint, in Vector2 rotationPoint, double angle)
     {
         double sin = Math.Sin(angle);
@@ -126,7 +126,7 @@ static class Vector
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector3 RotatePointAroundPoint(in Vector3 pivotPoint, in Vector3 rotationPoint, double angle) => new (RotatePointAroundPoint(pivotPoint.XY(), rotationPoint.XY(), angle), 0);
+    public static Vector3 RotatePointAroundPoint(in Vector3 pivotPoint, in Vector3 rotationPoint, double angle) => new(RotatePointAroundPoint(pivotPoint.XY(), rotationPoint.XY(), angle), 0);
 
     /// <summary> Calculates the average of a point-cloud. </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -137,7 +137,7 @@ static class Vector
     public static Vector3 Average(this in ReadOnlySpan<Vector3> points)
     {
         var sum = Vector3.Zero;
-        foreach(var point in points)
+        foreach (var point in points)
         {
             sum += point;
         }
