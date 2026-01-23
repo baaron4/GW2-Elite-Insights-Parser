@@ -113,6 +113,255 @@ public class EvtcParser
         }
     }
 
+    private static void DoMultiThreadAccelerationCommon(ParsedEvtcLog log, AutoTrace _t, 
+        IReadOnlyList<(long start, long end)> intervals)
+    {
+        Parallel.ForEach(log.Friendlies, actor =>
+        {
+        foreach (var (start, end) in intervals)
+        {
+                // To create the caches
+                foreach (var p in log.PlayerList)
+                {
+                    actor.GetBuffApplyEventsOnByIDInternal(log, start, end, 0, p);
+                    actor.GetBuffRemoveAllEventsByByIDInternal(log, start, end, 0, p);
+                    actor.GetBuffRemoveAllEventsFromByIDInternal(log, start, end, 0, p);
+                }
+            }
+
+        });
+        _t.Log("Friendlies accelerator caches");
+        //
+        //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+        Parallel.ForEach(log.Friendlies, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffs(BuffEnum.Self, log, start, end);
+            }
+
+        });
+        Parallel.ForEach(log.Friendlies, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffVolumes(BuffEnum.Self, log, start, end);
+            }
+
+        });
+        _t.Log("Friendlies GetBuffs Self");
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffs(BuffEnum.Group, log, start, end);
+            }
+
+        });
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffVolumes(BuffEnum.Group, log, start, end);
+            }
+
+        });
+        _t.Log("PlayerList GetBuffs Group");
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffs(BuffEnum.OffGroup, log, start, end);
+            }
+
+        });
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffVolumes(BuffEnum.OffGroup, log, start, end);
+            }
+
+        });
+        _t.Log("PlayerList GetBuffs OffGroup");
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffs(BuffEnum.Squad, log, start, end);
+            }
+
+        });
+        Parallel.ForEach(log.PlayerList, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffVolumes(BuffEnum.Squad, log, start, end);
+            }
+
+        });
+        _t.Log("PlayerList GetBuffs Squad");
+        Parallel.ForEach(log.LogData.Logic.Targets, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffs(BuffEnum.Self, log, start, end);
+            }
+
+        });
+        _t.Log("LogData.Logic.Targets GetBuffs Self");
+        Parallel.ForEach(log.Friendlies, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                // To initialize cache
+                actor.GetDamageEvents(null, log, start, end);
+                foreach (var target in log.LogData.Logic.Targets)
+                {
+                    actor.GetDamageEvents(target, log, start, end);
+                }
+            }
+
+        });
+        _t.Log("PlayerList GetDamageEvents");
+    }
+
+    private static void DoMultiThreadAcceleration(ParsedEvtcLog log, AutoTrace _t,
+        IReadOnlyList<SingleActor> friendliesAndTargets, IReadOnlyList<SingleActor> friendliesAndTargetsAndMobs,
+        IReadOnlyList<(long start, long end)> intervals)
+    {
+        Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
+        _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+        Parallel.ForEach(friendliesAndTargets, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffDistribution(log, start, end);
+            }
+
+        });
+        _t.Log("friendliesAndTargets GetBuffDistribution");
+
+        Parallel.ForEach(friendliesAndTargets, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffPresence(log, start, end);
+                // We need Buff Presence by other players for Buff generation statistics
+                if (actor is Player)
+                {
+                    foreach (var other in friendliesAndTargets)
+                    {
+                        if (other is Player)
+                        {
+                            actor.GetBuffPresence(log, start, end, other);
+                        }
+                    }
+
+                }
+            }
+        });
+        _t.Log("friendliesAndTargets GetBuffPresence");
+
+        DoMultiThreadAccelerationCommon(log, _t, intervals);
+    }
+
+    private static void DoMultiThreadAccelerationWithEnglobingAgents(ParsedEvtcLog log, AutoTrace _t, 
+        IReadOnlyList<SingleActor> friendliesAndTargets,
+        IReadOnlyList<SingleActor> friendliesAndTargetsAndMobsEnglobing, IReadOnlyList<SingleActor> friendliesAndTargetsAndMobsNonEnglobed,
+        IReadOnlyList<SingleActor> friendliesAndTargetsEnglobing,
+        IReadOnlyList<SingleActor> friendliesAndTargetsAndMobsEnglobed, IReadOnlyList<SingleActor> friendliesAndTargetsNonEnglobed,
+        IReadOnlyList<(long start, long end)> intervals)
+    {
+
+        Parallel.ForEach(friendliesAndTargetsAndMobsEnglobing, actor => actor.SimulateBuffsAndComputeGraphs(log));
+        Parallel.ForEach(friendliesAndTargetsAndMobsNonEnglobed, actor => actor.SimulateBuffsAndComputeGraphs(log));
+        _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+        Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+        {
+            var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
+            foreach ( var (start, end) in intervals)
+            {
+                actor.GetBuffDistribution(log, start, end);
+                foreach (var englobed in englobeds)
+                {
+                    englobed.GetBuffDistribution(log, start, end);
+                }
+            }
+        });
+        Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffDistribution(log, start, end);
+            }
+
+        });
+        _t.Log("friendliesAndTargets GetBuffDistribution");
+
+        Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+        {
+            var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffPresence(log, start, end);
+                foreach (var englobed in englobeds)
+                {
+                    englobed.GetBuffPresence(log, start, end);
+                    // We need Buff Presence by other players for Buff generation statistics
+                    if (englobed is Player)
+                    {
+                        foreach (var other in friendliesAndTargets)
+                        {
+                            if (other is Player)
+                            {
+                                englobed.GetBuffPresence(log, start, end, other);
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+        Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                actor.GetBuffPresence(log, start, end);
+                // We need Buff Presence by other players for Buff generation statistics
+                if (actor is Player)
+                {
+                    foreach (var other in friendliesAndTargets)
+                    {
+                        if (other is Player)
+                        {
+                            actor.GetBuffPresence(log, start, end, other);
+                        }
+                    }
+                }
+            }
+
+        });
+        _t.Log("friendliesAndTargets GetBuffPresence");
+
+        Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
+                actor.GetBuffGraphs(log);
+                foreach (var englobed in englobeds)
+                {
+                    englobed.GetBuffGraphs(log);
+                }
+            }
+        });
+        _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
+        DoMultiThreadAccelerationCommon(log, _t, intervals);
+    }
+
     /// <summary>
     /// Parses the given log. <br></br>
     /// On parsing failure, <see cref="ParsingFailureReason"/> will be filled with the reason of the failure and the method will return <see langword="null"/>.
@@ -148,7 +397,6 @@ public class EvtcParser
             {
                 using var _t = new AutoTrace("Buffs?");
 
-                IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
 
                 var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.LogData.Logic.Targets.Count);
@@ -181,232 +429,55 @@ public class EvtcParser
                 if (hasEnglobingAgents)
                 {
                     var friendliesAndTargetsEnglobed = friendliesAndTargets
-                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                        .Where(x => x.AgentItem.IsEnglobedAgent)
+                        .ToList();
                     var friendliesAndTargetsEnglobing = friendliesAndTargetsEnglobed
                         .DistinctBy(x => x.EnglobingAgentItem)
-                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                        .Select(x => log.FindActor(x.EnglobingAgentItem))
+                        .ToList();
                     var friendliesAndTargetsNonEnglobed = friendliesAndTargets
-                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+                        .Where(x => !x.AgentItem.IsEnglobedAgent)
+                        .ToList();
 
                     var friendliesAndTargetsAndMobsEnglobed = friendliesAndTargetsAndMobs
-                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                        .Where(x => x.AgentItem.IsEnglobedAgent)
+                        .ToList();
                     var friendliesAndTargetsAndMobsEnglobing = friendliesAndTargetsAndMobsEnglobed
                         .DistinctBy(x => x.EnglobingAgentItem)
-                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                        .Select(x => log.FindActor(x.EnglobingAgentItem))
+                        .ToList();
                     var friendliesAndTargetsAndMobsNonEnglobed = friendliesAndTargetsAndMobs
-                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+                        .Where(x => !x.AgentItem.IsEnglobedAgent)
+                        .ToList();
 
-                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobing, actor => actor.SimulateBuffsAndComputeGraphs(log));
-                    Parallel.ForEach(friendliesAndTargetsAndMobsNonEnglobed, actor => actor.SimulateBuffsAndComputeGraphs(log));
-                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-
-                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
-                    {
-                        var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffDistribution(log, phase.Start, phase.End);
-                            foreach (var englobed in englobeds)
-                            {
-                                englobed.GetBuffDistribution(log, phase.Start, phase.End);
-                            }
-                        }
-                    });
-                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffDistribution(log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffDistribution");
-
-                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
-                    {
-                        var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffPresence(log, phase.Start, phase.End);
-                            foreach (var englobed in englobeds)
-                            {
-                                englobed.GetBuffPresence(log, phase.Start, phase.End);
-                                // We need Buff Presence by other players for Buff generation statistics
-                                if (englobed is Player)
-                                {
-                                    foreach (var other in friendliesAndTargets)
-                                    {
-                                        if (other is Player)
-                                        {
-                                            englobed.GetBuffPresence(log, phase.Start, phase.End, other);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffPresence(log, phase.Start, phase.End);
-                            // We need Buff Presence by other players for Buff generation statistics
-                            if (actor is Player)
-                            {
-                                foreach (var other in friendliesAndTargets)
-                                {
-                                    if (other is Player)
-                                    {
-                                        actor.GetBuffPresence(log, phase.Start, phase.End, other);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffPresence");
-
-                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
-                    {
-                        var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-                        actor.GetBuffGraphs(log);
-                        foreach (var englobed in englobeds)
-                        {
-                            englobed.GetBuffGraphs(log);
-                        }
-                    });
-                    _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
+                    DoMultiThreadAccelerationWithEnglobingAgents(log, _t, 
+                        friendliesAndTargets, 
+                        friendliesAndTargetsAndMobsEnglobing, friendliesAndTargetsAndMobsNonEnglobed, 
+                        friendliesAndTargetsEnglobing, 
+                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed, 
+                        [(log.LogData.LogStart, log.LogData.LogEnd)]);
+                    IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+                    DoMultiThreadAccelerationWithEnglobingAgents(log, _t,
+                        friendliesAndTargets,
+                        friendliesAndTargetsAndMobsEnglobing, friendliesAndTargetsAndMobsNonEnglobed,
+                        friendliesAndTargetsEnglobing,
+                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed, 
+                        phases.Select(x => (x.Start, x.End)).ToList());
                 }
                 else
                 {
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
-                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-
-                    Parallel.ForEach(friendliesAndTargets, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffDistribution(log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffDistribution");
-
-                    Parallel.ForEach(friendliesAndTargets, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffPresence(log, phase.Start, phase.End);
-                            // We need Buff Presence by other players for Buff generation statistics
-                            if (actor is Player)
-                            {
-                                foreach (var other in friendliesAndTargets)
-                                {
-                                    if (other is Player)
-                                    {
-                                        actor.GetBuffPresence(log, phase.Start, phase.End, other);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffPresence");
+                    DoMultiThreadAcceleration(log, _t, friendliesAndTargets, friendliesAndTargetsAndMobs, [(log.LogData.LogStart, log.LogData.LogEnd)]);
+                    IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+                    DoMultiThreadAcceleration(log, _t, friendliesAndTargets, friendliesAndTargetsAndMobs, phases.Select(x => (x.Start, x.End)).ToList());
                 }
-                Parallel.ForEach(log.Friendlies, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        // To create the caches
-                        foreach (var p in log.PlayerList)
-                        {
-                            actor.GetBuffApplyEventsOnByIDInternal(log, phase.Start, phase.End, 0, p);
-                            actor.GetBuffRemoveAllEventsByByIDInternal(log, phase.Start, phase.End, 0, p);
-                            actor.GetBuffRemoveAllEventsFromByIDInternal(log, phase.Start, phase.End, 0, p);
-                        }
-                    }
-                });
-                _t.Log("Friendlies accelerator caches");
-                //
-                //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                Parallel.ForEach(log.Friendlies, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.Friendlies, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("Friendlies GetBuffs Self");
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffVolumes(BuffEnum.Group, log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("PlayerList GetBuffs Group");
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("PlayerList GetBuffs OffGroup");
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
-                    }
-                });
-                Parallel.ForEach(log.PlayerList, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("PlayerList GetBuffs Squad");
-                Parallel.ForEach(log.LogData.Logic.Targets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("LogData.Logic.Targets GetBuffs Self");
-                Parallel.ForEach(log.Friendlies, actor =>
-                {
-                    // To initialize cache
-                    foreach (PhaseData phase in phases)
-                    {
-                        actor.GetDamageEvents(null, log, phase.Start, phase.End);
-                        foreach (var target in log.LogData.Logic.Targets)
-                        {
-                            actor.GetDamageEvents(target, log, phase.Start, phase.End);
-                        }
-                    }
-                });
-                _t.Log("PlayerList GetDamageEvents");
             }
+            else if (log.LogData.IsInstance)
+            {
+                // Mandatory to detect encounters
+                operation.UpdateProgressWithCancellationCheck("Parsing: Finding encounters for instance log");
+                log.LogData.GetPhases(log);
+            }
+
 
             return log;
         }
@@ -752,8 +823,8 @@ public class EvtcParser
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-            if (stopAtLogEndEvent == -1 && 
-                combatItem.IsStateChange == StateChange.SquadCombatStart)           
+            if (stopAtLogEndEvent == -1 &&
+                combatItem.IsStateChange == StateChange.SquadCombatStart)
             {
                 // Trigger ID is map ID
                 if (SquadCombatStartEvent.GetLogType(combatItem) == LogType.Map)
@@ -761,7 +832,7 @@ public class EvtcParser
                     _id = (int)TargetID.Instance;
                     operation.UpdateProgressWithCancellationCheck("Parsing: Correcting boss log to instance log");
                     stopAtLogEndEvent = 1;
-                } 
+                }
                 else
                 {
                     stopAtLogEndEvent = 0;
@@ -822,7 +893,7 @@ public class EvtcParser
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEndEvent <= 0 )
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEndEvent <= 0)
             {
                 keepOnlyExtensionEvents = true;
             }
@@ -1074,7 +1145,8 @@ public class EvtcParser
         {
             _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
         }
-        var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => {
+        var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x =>
+        {
             var res = x.ToList();
             res.SortByFirstAware();
             return res;
@@ -1109,7 +1181,7 @@ public class EvtcParser
                     {
                         invalidSrcCombatItems.Add(c);
                     }
-                } 
+                }
                 else if (c.SrcInstid > 0)
                 {
                     orphanedSrcInstidCombatItems.Add(c);
@@ -1137,7 +1209,7 @@ public class EvtcParser
                     {
                         invalidDstCombatItems.Add(c);
                     }
-                } 
+                }
                 else if (c.DstInstid > 0)
                 {
                     orphanedDstInstidCombatItems.Add(c);
@@ -1146,7 +1218,8 @@ public class EvtcParser
         }
         if (orphanedSrcInstidCombatItems.Count > 0 || orphanedDstInstidCombatItems.Count > 0)
         {
-            var agentsInstidLookup = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => {
+            var agentsInstidLookup = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x =>
+            {
                 var res = x.ToList();
                 res.SortByFirstAware();
                 return res;
@@ -1254,12 +1327,12 @@ public class EvtcParser
                     if (exitCombatEvents.TryGetValue(playerAgentItem, out var exitCombatEventsForAgent))
                     {
                         AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
-                    } 
-                    else 
-                    {    
+                    }
+                    else
+                    {
                         AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                     }
-                } 
+                }
                 else
                 {
                     AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap([], [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
