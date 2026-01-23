@@ -381,16 +381,17 @@ public abstract partial class SingleActor : Actor
             CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
         }
         TrimCombatReplay(log, CombatReplay);
-        if (!IsFakeActor && !AgentItem.IsEnglobingAgent)
-        {
-            InitAdditionalCombatReplayData(log, CombatReplay);
-        }
         return CombatReplay;
     }
 
     internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        return InitCombatReplay(log).Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
+        var cr = InitCombatReplay(log);
+        if (cr.Decorations.IsEmpty() && !IsFakeActor && !AgentItem.IsEnglobingAgent)
+        {
+            InitAdditionalCombatReplayData(log, CombatReplay);
+        }
+        return cr.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
     protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)

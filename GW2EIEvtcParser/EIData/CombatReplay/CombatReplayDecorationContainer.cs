@@ -21,6 +21,11 @@ internal class CombatReplayDecorationContainer
         Decorations = new(capacity);
     }
 
+    public bool IsEmpty()
+    {
+        return Decorations.Count == 0;
+    }
+
     public void Add(Decoration decoration)
     {
         if (decoration.Lifespan.end <= decoration.Lifespan.start)
