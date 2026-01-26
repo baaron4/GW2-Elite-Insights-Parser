@@ -48,7 +48,7 @@ internal static class JsonDamageModifierDataBuilder
                 {
                     damageModMap[iKey] = dMod;
                 }
-                if (profEnums.Contains(dMod.Src))
+                if (profEnums.Intersect(dMod.Srcs).Any())
                 {
                     if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {
@@ -98,7 +98,7 @@ internal static class JsonDamageModifierDataBuilder
                 {
                     damageModMap[iKey] = dMod;
                 }
-                if (profEnums.Contains(dMod.Src))
+                if (profEnums.Intersect(dMod.Srcs).Any())
                 {
                     if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {

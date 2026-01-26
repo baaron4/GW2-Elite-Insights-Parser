@@ -23,7 +23,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public bool SkillBased => GainComputer.SkillBased;
 
     public bool Approximate { get; protected set; } = false;
-    public readonly Source Src;
+    public readonly HashSet<Source> Srcs;
     public readonly string Icon;
     public readonly string Name;
 
@@ -34,7 +34,11 @@ internal abstract class DamageModifierDescriptor : IVersionable
     private List<DamageLogChecker> _dlCheckers;
     private List<ActorChecker> _earlyExitCheckers;
 
-    internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
+    internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, [src], icon, gainComputer, mode)
+    {
+    }
+
+    internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, HashSet<Source> srcs, string icon, GainComputer gainComputer, DamageModifierMode mode)
     {
         if (id <= 0)
         {
@@ -51,7 +55,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
         }
         CompareType = compareType;
         SrcType = srctype;
-        Src = src;
+        Srcs = srcs;
         Icon = icon;
         GainComputer = gainComputer;
         Mode = mode;

@@ -15,7 +15,7 @@ public abstract class DamageModifier
     public bool SkillBased => DamageModDescriptor.SkillBased;
 
     public bool Approximate => DamageModDescriptor.Approximate;
-    public Source Src => DamageModDescriptor.Src;
+    public IReadOnlyCollection<Source> Srcs => DamageModDescriptor.Srcs;
     public string Icon => DamageModDescriptor.Icon;
     public string Name => DamageModDescriptor.Name;
     /// <remarks>Not stable across restarts because it uses `Name.GetHashCode()`.</remarks>

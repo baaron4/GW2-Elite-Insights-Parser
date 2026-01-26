@@ -79,7 +79,22 @@ public class DamageModifiersContainer
         {
             currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
         }
-        OutgoingDamageModifiersPerSource = currentOutgoingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
+        var outDamageModsPerSource = new Dictionary<ParserHelper.Source, List<OutgoingDamageModifier>>();
+        foreach (var incDamageMod in currentOutgoingDamageMods)
+        {
+            foreach (var source in incDamageMod.Srcs)
+            {
+                if (outDamageModsPerSource.TryGetValue(source, out var list))
+                {
+                    list.Add(incDamageMod);
+                }
+                else
+                {
+                    outDamageModsPerSource[source] = [incDamageMod];
+                }
+            }
+        }
+        OutgoingDamageModifiersPerSource = outDamageModsPerSource.ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.Value);
         OutgoingDamageModifiersByID = currentOutgoingDamageMods.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
             var e = x.GetEnumerator(); e.MoveNext();
@@ -154,7 +169,22 @@ public class DamageModifiersContainer
         {
             currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
         }
-        IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
+        var incDamageModsPerSource = new Dictionary<ParserHelper.Source, List<IncomingDamageModifier>>();
+        foreach (var incDamageMod in currentIncomingDamageMods)
+        {
+            foreach (var source in incDamageMod.Srcs)
+            {
+                if (incDamageModsPerSource.TryGetValue(source, out var list))
+                {
+                    list.Add(incDamageMod);
+                }
+                else
+                {
+                    incDamageModsPerSource[source] = [incDamageMod];
+                }
+            }
+        }
+        IncomingDamageModifiersPerSource = incDamageModsPerSource.ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.Value);
         IncomingDamageModifiersByID = currentIncomingDamageMods.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
             var e = x.GetEnumerator(); e.MoveNext();
