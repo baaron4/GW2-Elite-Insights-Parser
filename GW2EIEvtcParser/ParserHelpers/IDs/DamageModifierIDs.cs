@@ -419,4 +419,6 @@ public static class DamageModifierIDs
     public const int Mod_EnterprisingAristocrat = 406;
     public const int Mod_LesserSicEmPet = 407;
     public const int Mod_LesserSicEm = 408;
+    public const int Mod_DeterminedResolution_NuminousGift = 409;
+    public const int Mod_TargetedDestruction_NuminousGift = 410;
 }

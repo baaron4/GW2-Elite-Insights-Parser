@@ -127,7 +127,7 @@ internal static class RevenantHelper
             .UsingApproximate()
             .WithBuilds(GW2Builds.February2020Balance),
         // - Targeted Destruction
-        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.TargetedDestruction, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, [Source.BaseRevenantOnly, Source.Herald, Source.Renegade, Source.Vindicator], ByStack, TraitImages.TargetedDestruction, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.TargetedDestruction, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
@@ -178,9 +178,9 @@ internal static class RevenantHelper
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
         new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.May2025BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-7% under resolution", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-7% under resolution", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, [Source.BaseRevenantOnly, Source.Herald, Source.Renegade, Source.Vindicator], ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.May2025BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.PvEWvW)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, [Source.BaseRevenantOnly, Source.Herald, Source.Renegade, Source.Vindicator], ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.May2025BalanceHotFix),
         // Resolute Evasion
         new BuffOnActorDamageModifier(Mod_ResoluteEvasion, ResoluteEvasion, "Resolute Evasion", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ResoluteEvasion, DamageModifierMode.All)

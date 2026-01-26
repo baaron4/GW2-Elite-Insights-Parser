@@ -31,12 +31,21 @@ internal static class ConduitHelper
             .UsingICD(10),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [   
+        // - Targeted Destruction Numinous Gift
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction_NuminousGift, Vulnerability, "Targeted Destruction (Numinous Gift)", "0.5% per stack vuln + 5% base", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Conduit, new GainComputerByStackPlusConstant(5.0), TraitImages.TargetedDestruction, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2025VoEBeta),
+    ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
         // Shielding Hands
         new BuffOnActorDamageModifier(Mod_ShieldingHands, ShieldingHandsBuff, "Shielding Hands", "-75%", DamageSource.Incoming, -75, DamageType.StrikeAndCondition, DamageType.All, Source.Conduit, ByPresence, SkillImages.ShieldingHands, DamageModifierMode.All),
+        // Retribution Numinous Gift
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution_NuminousGift, Resolution, "Determined Resolution (Numinous Gift)", "-12% under resolution", DamageSource.Incoming, -12.0, DamageType.Strike, DamageType.All, Source.Conduit, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.August2025VoEBeta),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution_NuminousGift, Resolution, "Determined Resolution (Numinous Gift)", "-15% under resolution", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Conduit, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.August2025VoEBeta),
     ];
 
     // TODO: check if new buffs with the rework
