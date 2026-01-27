@@ -90,7 +90,7 @@
                     </th>           
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
-                        data-original-title="Average Casting Time (No interrupted skills) <br>Min and Max on hover"">
+                        data-original-title="Average Casting Time (No interrupted skills) <br>Min and Max on hover">
                         Avg <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
@@ -195,10 +195,10 @@
         <div class="card">
             <div class="card-body container">
                 <p><u>Background</u></p>
-                <span style="padding: 2px; background-color:rgba(0, 0, 255, 0.25); border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF">
+                <span class="hs-bg hs-bg-darkblue">
                     Conversion based healing
                 </span>
-                <span style="padding: 2px; background-color:rgba(0, 255, 0, 0.25); border-style:solid; border-width: 1px; border-color:#000000; color:#000000">
+                <span class="hs-bg hs-bg-darkgreen">
                     Hybrid (could be healing power or conversion) healing, included in healing power based stats
                 </span>
             </div>

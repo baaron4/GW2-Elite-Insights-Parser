@@ -37,7 +37,7 @@
                             {{target.name}}
                         </div>
                         <div :data-original-title="healthRemaining(target)">
-                            <div class="healthBar" :style="{'background': getGradient(target)}">
+                            <div class="health-bar" :style="{'background': getGradient(target)}">
                             </div>
                             <div v-if="target.health > 0" class="super-small" style="text-align: center;">
                                 {{ targetHealthValues(target) }}
@@ -175,25 +175,25 @@
             fightModeColorClass: function (mode) {
                 switch (mode) {
                     case "Unknown":
-                        return { 'fightModeUnknown-light': this.light, 'fightModeUnknown-dark': !this.light };
+                        return { 'fm-unknown': true };
                         break;
                     case "Story Mode":
-                        return { 'fightModeStory-light': this.light, 'fightModeStory-dark': !this.light };
+                        return { 'fm-story': true };
                         break;
                     case "Quickplay Normal Mode":
-                        return { 'fightModeQuickplay-light': this.light, 'fightModeQuickplay-dark': !this.light };
+                        return { 'fm-quickplay': true };
                         break;
                     case "Emboldened Normal Mode":
-                        return { 'fightModeEmboldened-light': this.light, 'fightModeEmboldened-dark': !this.light };
+                        return { 'fm-emboldened': true };
                         break;
                     case "Normal Mode":
-                        return { 'fightModeNormal-light': this.light, 'fightModeNormal-dark': !this.light };
+                        return { 'fm-normal': true };
                         break;
                     case "Challenge Mode":
-                        return { 'fightModeChallenge-light': this.light, 'fightModeChallenge-dark': !this.light };
+                        return { 'fm-challenge': true };
                         break;
                     case "Legendary Challenge Mode":
-                        return { 'fightModeLegendary-light': this.light, 'fightModeLegendary-dark': !this.light };
+                        return { 'fm-legendary': true };
                         break;
                     default:
                         break;

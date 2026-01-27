@@ -1,20 +1,19 @@
 <template>
     <div style="width: 100%;">
-        <div style="position:absolute; margin-top: 60px; z-index: 1;">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Players" style="font-size: 1.1em;">
+        <div class="rot-dropdown-pos">
+            <a href="#" class="dropdown-toggle rot-font-dropdown" data-toggle="dropdown" title="Filter Players">
                 Players <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" style="min-width: 165px;">
-                <div class="d-flex flex-column justify-content-center align-items-center mb-1"
-                    style="border-bottom: 2px solid #bbb;">
+            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown min-wd-165">
+                <div class="d-flex flex-column justify-content-center align-items-center mb-1 separator-border-bottom">
                     <li>
-                        <button style="width:160px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                        <button type="button" class="btn btn-primary btn-sm rt-button"
                             @click="for (var i = 0; i < selectedPlayers.length; i++) {selectedPlayers[i].selected = true;}" @click.stop="stopClickEvent">
                             Select all
                         </button>
                     </li>
                     <li class="mb-1">
-                        <button style="width:160px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                        <button type="button" class="btn btn-primary btn-sm rt-button"
                             @click="for (var i = 0; i < selectedPlayers.length; i++) {selectedPlayers[i].selected = false;}" @click.stop="stopClickEvent">
                             Deselect all
                         </button>
@@ -25,7 +24,7 @@
                         <input :id="'rotations-player-' + index  + '-' + phaseindex" type="checkbox"
                             v-model="selectedPlayers[index].selected" @click.stop="stopClickEvent" />
                         <label :for="'rotations-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                            style="font-size: 1.0em; white-space: nowrap; margin-top: 2px;">         
+                            class="rot-font">         
                             <img class="icon" :src="player.icon">
                             {{player.name}}
                         </label>
