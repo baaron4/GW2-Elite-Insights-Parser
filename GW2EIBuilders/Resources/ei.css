@@ -936,7 +936,7 @@ td.approximate::before {
 }
 
 /* Rotation buttons */
-.rt-button {
+.rot-button {
     width:160px;
     padding: 0.4rem 0.4rem;
 }
@@ -1007,4 +1007,14 @@ td.approximate::before {
 
 .separator-border-bottom {
     border-bottom: 2px solid #bbb;
+}
+
+.cr-slide-delimiter {
+    position: absolute;
+    color: black;
+    pointer-events:none;
+}
+
+.text-center {
+    text-align: center;
 }

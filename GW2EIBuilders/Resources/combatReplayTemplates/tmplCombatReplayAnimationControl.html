@@ -38,7 +38,7 @@
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
                         :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
-                    <p style="position: absolute; color: black; pointer-events:none;">
+                    <p class="cr-slide-delimiter">
                         {{sliderDelimiter.name}}
                     </p>
                     <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text"

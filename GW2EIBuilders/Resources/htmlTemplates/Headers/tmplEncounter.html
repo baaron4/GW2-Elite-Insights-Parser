@@ -33,13 +33,13 @@
                 </div>
                 <div class="ml-1 d-flex flex-column justify-content-center">
                     <div v-if="!encounterData.hideTargets" class="mb-1" v-for="target in encounterData.targets">
-                        <div class="small" style="text-align:center;">
+                        <div class="small text-center">
                             {{target.name}}
                         </div>
                         <div :data-original-title="healthRemaining(target)">
                             <div class="health-bar" :style="{'background': getGradient(target)}">
                             </div>
-                            <div v-if="target.health > 0" class="super-small" style="text-align: center;">
+                            <div v-if="target.health > 0" class="super-small text-center">
                                 {{ targetHealthValues(target) }}
                             </div>
                         </div>
