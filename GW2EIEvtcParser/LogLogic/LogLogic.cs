@@ -184,7 +184,7 @@ public abstract class LogLogic
             }).Max();
             if (emboldenedStacks > 0)
             {
-                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks, mainPhase));
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks, encounterPhase));
             }
         }
         // Quickplay
