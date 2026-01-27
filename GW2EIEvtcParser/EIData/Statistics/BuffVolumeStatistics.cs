@@ -57,7 +57,7 @@ public class BuffVolumeStatistics
                         totalOutgoing += bae.AppliedDuration;
                         if (playerActiveDuration > 0)
                         {
-                            totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
+                            totalActiveOutgoing += (double)bae.AppliedDuration / playerActiveDuration;
                         }
                     }
                     if (abae is BuffExtensionEvent bee)
@@ -65,7 +65,7 @@ public class BuffVolumeStatistics
                         totalOutgoingByExtension += bee.ExtendedDuration;
                         if (playerActiveDuration > 0)
                         {
-                            totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
+                            totalActiveOutgoingByExtension += (double)bee.ExtendedDuration / playerActiveDuration;
                         }
                     }
                 }
