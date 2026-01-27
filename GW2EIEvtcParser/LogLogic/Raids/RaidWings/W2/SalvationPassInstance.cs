@@ -97,6 +97,10 @@ internal class SalvationPassInstance : SalvationPass
                 }
             }
         }
+        if (packedTrios.Count == 0)
+        {
+            return [];
+        }
         // Thrash mob start check
         var boxStart = new Vector2(-2200, -11300);
         var boxEnd = new Vector2(1000, -7200);
