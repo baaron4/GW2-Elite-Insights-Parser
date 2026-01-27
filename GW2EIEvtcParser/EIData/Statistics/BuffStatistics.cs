@@ -25,6 +25,10 @@ public class BuffStatistics
         var playerCount = 0;
         foreach (Player p in players)
         {
+            if (!p.InAwareTimes(start, end))
+            {
+                continue;
+            }
             buffDistributionPerPlayer[p] = p.GetBuffDistribution(log, start, end);
             playerCount++;
         }
