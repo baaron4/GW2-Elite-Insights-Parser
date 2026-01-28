@@ -176,6 +176,12 @@ Temple of Febe: 0x040502
 
 0xXXXX1X indicates a full instance log.
 
+### Visions of Eternity
+
+Guardian's Glade: 0x040601
+
+0xXXXX1X indicates a full instance log.
+
 ## Open World
 Soo-Won: 0x050401
 
