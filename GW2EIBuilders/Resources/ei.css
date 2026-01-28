@@ -817,66 +817,204 @@ td.approximate::before {
 }
 
 /* Fight Mode Header - Light Theme */
-.fightModeStory-light {
+.theme-yeti .fm-story {
     background-color: #EEEEEE;
 }
 
-.fightModeQuickplay-light {
+.theme-yeti .fm-quickplay {
     background-color: #32FCEB;
 }
 
-.fightModeEmboldened-light {
+.theme-yeti .fm-emboldened {
     background-color: #39925A;
 }
 
-.fightModeNormal-light {
+.theme-yeti .fm-normal {
     background-color: #00779E;
 }
 
-.fightModeChallenge-light {
+.theme-yeti .fm-challenge {
     background-color: #E99002;
 }
 
-.fightModeLegendary-light {
+.theme-yeti .fm-legendary {
     background-color: #C9A0FF;
 }
 
-.fightModeUnknown-light {
+.theme-yeti .fm-unknown {
     background-color: #EE3000;
 }
 
-
 /* Fight Mode Header - Dark Theme */
-.fightModeStory-dark {
+.theme-slate .fm-story {
     background-color: #515960;
 }
 
-.fightModeQuickplay-dark {
+.theme-slate .fm-quickplay {
     background-color: #006858;
 }
 
-.fightModeEmboldened-dark {
+.theme-slate .fm-emboldened {
     background-color: #036E09;
 }
 
-.fightModeNormal-dark {
+.theme-slate .fm-normal {
     background-color: #0C5E94;
 }
 
-.fightModeChallenge-dark {
+.theme-slate .fm-challenge {
     background-color: #736625;
 }
 
-.fightModeLegendary-dark {
+.theme-slate .fm-legendary {
     background-color: #6C4DA3;
 }
 
-.fightModeUnknown-dark {
+.theme-slate .fm-unknown {
     background-color: #990000;
 }
 
-.healthBar {
+.health-bar {
     height: 7px;
     width: 100%;
     border-radius: 5px;
+}
+
+/* Rotation Legend */
+/* Background filler */
+.rot-legend-bg {
+    padding: 2px;
+    border-style:solid;
+    border-width: 1px;
+    border-color:#000000;
+}
+
+.rot-bg-blue {
+    background-color:#0000FF;
+    color:#FFFFFF;
+}
+
+.rot-bg-green {
+    background-color:#00FF00;
+    color:#000000;
+}
+
+.rot-bg-red {
+    background-color:#FF0000;
+    color:#FFFFFF;
+}
+
+.rot-bg-cyan {
+    background-color:#00FFFF;
+    color:#000000;
+}
+
+.rot-bg-yellow {
+    background-color:#FFFF00;
+    color:#000000;
+}
+
+/* Outlines */
+.rot-legend-border {
+    padding: 2px;
+    background-color:#999999;
+    border-style:solid;
+    border-width: 2px;
+    color:#000000;
+}
+
+.rot-border-orange{
+    border-color:rgb(220,125,30);
+}
+
+.rot-border-grey {
+    border-color:rgb(125,125,125);
+}
+
+.rot-border-pink {
+    border-color:rgb(220,20,220);
+}
+
+/* Rotation buttons */
+.rot-button {
+    width:160px;
+    padding: 0.4rem 0.4rem;
+}
+
+/* Rotation font */
+.rot-font {
+    font-size: 1.0em;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+.rot-font-dropdown {
+    font-size: 1.1em;
+}
+
+/* Rotation selector */
+.rot-dropdown-pos {
+    position:absolute;
+    margin-top: 60px;
+    z-index: 1;
+}
+
+/* Healing stats background fill legend */
+.hs-bg {
+    padding: 2px;
+    border-style:solid;
+    border-width: 1px;
+    border-color:#000000;
+}
+.hs-bg-darkblue {
+    background-color:rgba(0, 0, 255, 0.25);
+    color:#FFFFFF;
+}
+.hs-bg-darkgreen {
+    background-color:rgba(0, 255, 0, 0.25);
+    color:#000000;
+}
+
+/* Width */
+.max-wd-900 {
+    max-width: 900px;
+}
+.max-wd-700 {
+    max-width: 700px;
+}
+.max-wd-500 {
+    max-width: 500px;
+}
+.min-wd-165 {
+    min-width: 165px;
+}
+.wd-100 {
+    width: 100px;
+}
+.wd-150 {
+    width: 150px;
+}
+.wd-200 {
+    width: 200px;
+}
+
+/* Graph range control */
+.graph-rc {
+    position:absolute;
+    margin-top: -60px;
+    margin-left: 100px;
+    z-index: 1;
+}
+
+.separator-border-bottom {
+    border-bottom: 2px solid #bbb;
+}
+
+.cr-slide-delimiter {
+    position: absolute;
+    color: black;
+    pointer-events:none;
+}
+
+.text-center {
+    text-align: center;
 }
