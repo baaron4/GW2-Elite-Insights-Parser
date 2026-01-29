@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column justify-content-center align-items-center" style="width: 750px;">
         <div v-if="showNormalPhases" class="mb-1">
-            <ul class="nav nav-pills d-flex flex-row justify-content-center" style="max-width: 700px;">
+            <ul class="nav nav-pills d-flex flex-row justify-content-center max-wd-700">
                 <li class="nav-item" v-for="(phase, id) in phases"
                     v-show="!phase.breakbarPhase"
                     :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
@@ -38,7 +38,7 @@
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
                         :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
-                    <p style="position: absolute; color: black; pointer-events:none;">
+                    <p class="cr-slide-delimiter">
                         {{sliderDelimiter.name}}
                     </p>
                     <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text"
