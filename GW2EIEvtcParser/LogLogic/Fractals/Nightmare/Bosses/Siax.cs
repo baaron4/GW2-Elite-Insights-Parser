@@ -71,17 +71,17 @@ internal class Siax : Nightmare
     {
         return LogData.Mode.CMNoName;
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor siax, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor siax, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(5);
-        phases.AddRange(GetPhasesByInvul(log, Determined762, siax, true, true, encounterPhase.Start, encounterPhase.End));
+        var phases = new List<SubPhasePhaseData>(5);
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, siax, true, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             var index = i + 1;
             phase.AddParentPhase(encounterPhase);
             if (index % 2 == 0)

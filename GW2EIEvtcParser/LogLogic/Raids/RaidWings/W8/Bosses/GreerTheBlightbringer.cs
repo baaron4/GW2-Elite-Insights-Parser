@@ -189,20 +189,20 @@ internal class GreerTheBlightbringer : MountBalrior
         phase.AddTargets(greeAndReg, log, PhaseData.TargetPriority.Blocking);
         phase.AddTarget(ereg, log, PhaseData.TargetPriority.NonBlocking);
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor greer, IEnumerable<SingleActor> greeAndReeg, SingleActor? ereg, IEnumerable<SingleActor> protoGreerlings, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor greer, IEnumerable<SingleActor> greeAndReeg, SingleActor? ereg, IEnumerable<SingleActor> protoGreerlings, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(encounterPhase.IsCM ? 14 : 11);
+        var phases = new List<SubPhasePhaseData>(encounterPhase.IsCM ? 14 : 11);
         // In shield bubble phases
-        phases.AddRange(GetPhasesByCast(log, InvulnerableBarrier, greer, true, true, encounterPhase.Start, encounterPhase.End));
-        var mainPhases = new List<PhaseData>(3);
+        phases.AddRange(GetSubPhasesByCast(log, InvulnerableBarrier, greer, true, true, encounterPhase.Start, encounterPhase.End));
+        var mainPhases = new List<SubPhasePhaseData>(3);
         for (int i = 0; i < phases.Count; i++)
         {
             var phaseIndex = i + 1;
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             if (phaseIndex % 2 == 0)
             {
                 phase.Name = "Split " + (phaseIndex) / 2;
@@ -219,7 +219,7 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
         // Generic in between damage immunity phases handling
-        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true, encounterPhase.Start, encounterPhase.End);
+        var damageImmunityPhases = GetSubPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true, encounterPhase.Start, encounterPhase.End);
         foreach (var damageImmunityPhase in damageImmunityPhases)
         {
             damageImmunityPhase.AddParentPhases(mainPhases);
@@ -261,7 +261,7 @@ internal class GreerTheBlightbringer : MountBalrior
         // Below 20% CM phases handling
         if (encounterPhase.IsCM && greer.GetBuffStatus(log, DamageImmunity3).Any(x => x.Value > 0))
         {
-            var finalPhases = GetPhasesByInvul(log, DamageImmunity3, greer, true, true, encounterPhase.Start, encounterPhase.End);
+            var finalPhases = GetSubPhasesByInvul(log, DamageImmunity3, greer, true, true, encounterPhase.Start, encounterPhase.End);
             var finalHPPhase = phases.Last();
             if (finalPhases.Count > 0)
             {

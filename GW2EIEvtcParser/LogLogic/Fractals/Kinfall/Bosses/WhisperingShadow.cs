@@ -89,13 +89,13 @@ internal class WhisperingShadow : Kinfall
         return LogData.Mode.Normal;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor shadow, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor shadow, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(7);
+        var phases = new List<SubPhasePhaseData>(7);
         // guttering light queues up at 80%, 50%, 20%
         // we use the first cast as start and stun/breakbar as end
         int i = 1;

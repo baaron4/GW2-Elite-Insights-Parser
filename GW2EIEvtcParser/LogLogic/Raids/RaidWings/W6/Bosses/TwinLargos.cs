@@ -90,13 +90,13 @@ internal class TwinLargos : MythwrightGambit
         return [];
     }
 
-    private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName, EncounterPhaseData encounterPhase)
+    private static List<SubPhasePhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName, EncounterPhaseData encounterPhase)
     {
         long phaseStart = encounterPhase.Start;
         long phaseEnd = 0;
         long start = encounterPhase.Start;
         long end = encounterPhase.End;
-        var targetPhases = new List<PhaseData>();
+        var targetPhases = new List<SubPhasePhaseData>();
         var states = new List<TimeCombatEvent>();
         states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
         states.AddRange(GetBuffApplyRemoveSequence(log.CombatData, Determined762, target, true, true).Where(x => x is BuffApplyEvent));
@@ -126,7 +126,7 @@ internal class TwinLargos : MythwrightGambit
         targetPhases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
         for (int i = 0; i < targetPhases.Count; i++)
         {
-            PhaseData phase = targetPhases[i];
+            var phase = targetPhases[i];
             phase.Name = baseName + " P" + (i + 1);
             phase.AddParentPhase(encounterPhase);
             phase.AddTarget(target, log);
@@ -134,7 +134,7 @@ internal class TwinLargos : MythwrightGambit
         return targetPhases;
     }
 
-    private static void FallBackPhases(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log, EncounterPhaseData encounterPhase, bool firstPhaseAt0)
+    private static void FallBackPhases(SingleActor target, IReadOnlyList<SubPhasePhaseData> phases, ParsedEvtcLog log, EncounterPhaseData encounterPhase, bool firstPhaseAt0)
     {
         IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
         // clean Nikare/Kenut missing enter combat events related bugs
@@ -217,21 +217,19 @@ internal class TwinLargos : MythwrightGambit
         }
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor nikare, SingleActor? kenut, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor nikare, SingleActor? kenut, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        long start = encounterPhase.Start;
-        long end = encounterPhase.End;
-        var phases = new List<PhaseData>(6);
-        List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare", encounterPhase);
+        var phases = new List<SubPhasePhaseData>(6);
+        var nikPhases = GetTargetPhases(log, nikare, "Nikare", encounterPhase);
         FallBackPhases(nikare, nikPhases, log, encounterPhase, true);
         phases.AddRange(nikPhases);
         if (kenut != null)
         {
-            List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut", encounterPhase);
+            var kenPhases = GetTargetPhases(log, kenut, "Kenut", encounterPhase);
             FallBackPhases(kenut, kenPhases, log, encounterPhase, false);
             phases.AddRange(kenPhases);
         }

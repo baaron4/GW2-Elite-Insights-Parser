@@ -74,18 +74,18 @@ internal class MAMA : Nightmare
         return startToUse;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mama, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mama, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
         var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
-        var phases = new List<PhaseData>(7);
-        phases.AddRange(GetPhasesByInvul(log, Determined762, mama, true, true, encounterPhase.Start, encounterPhase.End));
+        var phases = new List<SubPhasePhaseData>(7);
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, mama, true, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             var index = i + 1;
             phase.AddParentPhase(encounterPhase);
             if (index % 2 == 0)

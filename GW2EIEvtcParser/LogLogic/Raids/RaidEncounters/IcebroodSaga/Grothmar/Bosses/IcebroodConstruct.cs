@@ -76,7 +76,7 @@ internal class IcebroodConstruct : Grothmar
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, false, true));
+        phases.AddRange(GetSubPhasesByInvul(log, Invulnerability757, mainTarget, false, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];

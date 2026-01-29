@@ -93,7 +93,7 @@ internal class SuperKodanBrothers : Bjora
             return phases;
         }
         //
-        List<PhaseData> unmergedPhases = GetPhasesByInvul(log, Determined762, claw, false, true);
+        var unmergedPhases = GetSubPhasesByInvul(log, Determined762, claw, false, true);
         for (int i = 0; i < unmergedPhases.Count; i++)
         {
             unmergedPhases[i].Name = "Phase " + (i + 1);

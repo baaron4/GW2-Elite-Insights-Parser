@@ -63,13 +63,13 @@ internal class Gorseval : SpiritVale
         TargetID.ChargedSoul,
     ];
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = GetPhasesByInvul(log, ProtectiveShadow, gorseval, true, true, encounterPhase.Start, encounterPhase.End);
+        var phases = GetSubPhasesByInvul(log, ProtectiveShadow, gorseval, true, true, encounterPhase.Start, encounterPhase.End);
         for (int i = 0; i < phases.Count; i++)
         {
             int index = i + 1;

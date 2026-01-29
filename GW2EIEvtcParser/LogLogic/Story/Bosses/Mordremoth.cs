@@ -46,7 +46,7 @@ internal class Mordremoth : StoryInstance
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, Determined762, mainTarget, false, true));
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, mainTarget, false, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];

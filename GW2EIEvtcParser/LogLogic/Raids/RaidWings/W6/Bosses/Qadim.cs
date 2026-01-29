@@ -311,18 +311,18 @@ internal class Qadim : MythwrightGambit
         }
         return GetGenericLogOffset(logData);
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qadim, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qadim, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(7);
-        phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false, encounterPhase.Start, encounterPhase.End));
+        var phases = new List<SubPhasePhaseData>(7);
+        phases.AddRange(GetSubPhasesByInvul(log, QadimInvulnerable, qadim, true, false, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
             int phaseIndex = i + 1;
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             phase.AddParentPhase(encounterPhase);
             if (phaseIndex % 2 == 0)
             {

@@ -601,7 +601,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 phases.Add(maiTrinPhase);
 
                 // Candidate phases
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, false);
+                var maiPhases = GetSubPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, false);
                 List<PhaseData> candidateMainPhases = [];
                 List<PhaseData> candidateSplitPhases = [];
                 for (int i = 0; i < maiPhases.Count; i++)
@@ -673,7 +673,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             phases.Add(echoPhase);
             var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2]));
             var bombs = Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb));
-            List <PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.LogData.LogEnd);
+            var echoPhases = GetSubPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.LogData.LogEnd);
             for (int i = 0; i < echoPhases.Count; i++)
             {
                 PhaseData subPhase = echoPhases[i];

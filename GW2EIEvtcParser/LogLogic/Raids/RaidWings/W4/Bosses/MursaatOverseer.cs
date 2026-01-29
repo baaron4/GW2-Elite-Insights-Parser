@@ -71,13 +71,13 @@ internal class MursaatOverseer : BastionOfThePenitent
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mursaatOverseer, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mursaatOverseer, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(4);
+        var phases = new List<SubPhasePhaseData>(4);
         phases.AddRange(GetPhasesByHealthPercent(log, mursaatOverseer, new List<double> { 75, 50, 25, 0 }, encounterPhase.Start, encounterPhase.End));
         foreach (var phase in phases)
         {

@@ -206,7 +206,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             return phases;
         }
         // Invul check
-        List<PhaseData> invulnPhases = GetPhasesByInvul(log, InvulnerabilityCerus, cerus, true, true);
+        var invulnPhases = GetSubPhasesByInvul(log, InvulnerabilityCerus, cerus, true, true);
         phases.AddRange(invulnPhases);
         for (int i = 1; i < phases.Count; i++)
         {

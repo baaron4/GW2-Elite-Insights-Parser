@@ -83,7 +83,7 @@ internal class Freezie : FestivalRaidEncounterLogic
         {
             return phases;
         }
-        phases.AddRange(GetPhasesByInvul(log, Determined895, mainTarget, true, true));
+        phases.AddRange(GetSubPhasesByInvul(log, Determined895, mainTarget, true, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];

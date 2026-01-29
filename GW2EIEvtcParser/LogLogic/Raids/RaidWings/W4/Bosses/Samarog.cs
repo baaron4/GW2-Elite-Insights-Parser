@@ -117,19 +117,19 @@ internal class Samarog : BastionOfThePenitent
         TargetID.Rigom,
         TargetID.Guldhem
     ];
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(5);
+        var phases = new List<SubPhasePhaseData>(5);
         // Determined check
-        phases.AddRange(GetPhasesByInvul(log, Determined762, samarog, true, true, encounterPhase.Start, encounterPhase.End));
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, samarog, true, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
             int phaseIndex = i + 1;
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             phase.AddParentPhase(encounterPhase);
             if (phaseIndex % 2 == 0)
             {

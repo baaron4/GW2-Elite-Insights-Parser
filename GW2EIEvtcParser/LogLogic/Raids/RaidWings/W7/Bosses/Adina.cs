@@ -426,16 +426,16 @@ internal class Adina : TheKeyOfAhdashim
 
     internal static readonly List<TargetID> HandIDs = [ TargetID.HandOfErosion, TargetID.HandOfEruption];
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor adina, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor adina, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
         var invuls = adina.GetBuffStatus(log, Determined762);
-        var phases = new List<PhaseData>(7);
+        var phases = new List<SubPhasePhaseData>(7);
         // Split phases
-        var splitPhases = new List<PhaseData>();
+        var splitPhases = new List<SubPhasePhaseData>();
         var splitPhaseEnds = new List<long>();
         for (int i = 0; i < invuls.Count; i++)
         {
@@ -450,7 +450,7 @@ internal class Adina : TheKeyOfAhdashim
             }
         }
         // Main phases
-        var mainPhases = new List<PhaseData>();
+        var mainPhases = new List<SubPhasePhaseData>();
         var pillarApplies = log.CombatData.GetBuffApplyDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>();
         Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
         var mainPhaseEnds = new List<long>();

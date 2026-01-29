@@ -185,7 +185,7 @@ internal class DecimaTheStormsinger : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    private static PhaseData GetBoulderPhase(ParsedEvtcLog log, IEnumerable<SingleActor> boulders, string name, SingleActor decima)
+    private static SubPhasePhaseData GetBoulderPhase(ParsedEvtcLog log, IEnumerable<SingleActor> boulders, string name, SingleActor decima)
     {
         long start = long.MaxValue;
         long end = long.MinValue;
@@ -208,31 +208,33 @@ internal class DecimaTheStormsinger : MountBalrior
         return phase;
     }
 
-    private static IReadOnlyList<PhaseData> GetAroundBoulderPhases(ParsedEvtcLog log, PhaseData boulderPhase, PhaseData boulderMainPhase, SingleActor decima, int index)
+    private static IReadOnlyList<SubPhasePhaseData> GetAroundBoulderPhases(ParsedEvtcLog log, PhaseData boulderPhase, PhaseData boulderMainPhase, SingleActor decima, int index)
     {
-        var preBoulderPhase = new SubPhasePhaseData(boulderMainPhase.Start, boulderPhase.Start, $"Pre-Boulders {index}").WithParentPhase(boulderMainPhase);
+        var preBoulderPhase = new SubPhasePhaseData(boulderMainPhase.Start, boulderPhase.Start, $"Pre-Boulders {index}");
+        preBoulderPhase.AddParentPhase(boulderMainPhase);
         preBoulderPhase.AddTarget(decima, log);
-        var postBoulderPhase = new SubPhasePhaseData(boulderPhase.End, boulderMainPhase.End, $"Post-Boulders {index}").WithParentPhase(boulderMainPhase);
+        var postBoulderPhase = new SubPhasePhaseData(boulderPhase.End, boulderMainPhase.End, $"Post-Boulders {index}");
+        postBoulderPhase.AddParentPhase(boulderMainPhase);
         postBoulderPhase.AddTarget(decima, log);
         return [preBoulderPhase, postBoulderPhase];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor decima, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor decima, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
         bool isCM = encounterPhase.IsCM;
-        var phases = new List<PhaseData>(isCM ? 9 : 5);
+        var phases = new List<SubPhasePhaseData>(isCM ? 9 : 5);
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true, encounterPhase.Start, encounterPhase.End));
-        var mainPhases = new List<PhaseData>(3);
+        phases.AddRange(GetSubPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true, encounterPhase.Start, encounterPhase.End));
+        var mainPhases = new List<SubPhasePhaseData>(3);
         var currentMainPhase = 1;
         for (int i = 0; i < phases.Count; i++)
         {
             var phaseIndex = i + 1;
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             phase.AddParentPhase(encounterPhase);
             if (phaseIndex % 2 == 0)
             {

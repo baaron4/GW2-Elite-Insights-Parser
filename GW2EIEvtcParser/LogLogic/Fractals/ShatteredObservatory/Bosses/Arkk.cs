@@ -113,7 +113,7 @@ internal class Arkk : ShatteredObservatory
         ];
     }
 
-    private static void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, IReadOnlyList<SingleActor> targets, string phaseName, List<PhaseData> phases, EncounterPhaseData encounterPhase)
+    private static void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, IReadOnlyList<SingleActor> targets, string phaseName, List<SubPhasePhaseData> phases, EncounterPhaseData encounterPhase)
     {
         SingleActor? target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
@@ -126,14 +126,14 @@ internal class Arkk : ShatteredObservatory
         phaseData.AddParentPhase(encounterPhase);
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor arkk, IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> trashMobs, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor arkk, IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> trashMobs, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(11);
-        phases.AddRange(GetPhasesByInvul(log, Determined762, arkk, false, true, encounterPhase.Start, encounterPhase.End));
+        var phases = new List<SubPhasePhaseData>(11);
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, arkk, false, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
             phases[i].Name = "Phase " + (i + 1);
@@ -144,7 +144,7 @@ internal class Arkk : ShatteredObservatory
         GetMiniBossPhase(TargetID.Archdiviner, log, encounterMiniBosses, "Archdiviner", phases, encounterPhase);
         GetMiniBossPhase(TargetID.EliteBrazenGladiator, log, encounterMiniBosses, "Brazen Gladiator", phases, encounterPhase);
 
-        var bloomPhases = new List<PhaseData>(10);
+        var bloomPhases = new List<SubPhasePhaseData>(10);
         var encounterBlooms = trashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom) && encounterPhase.InInterval(x.FirstAware)).OrderBy(x => x.FirstAware);
         foreach (var bloom in encounterBlooms)
         {

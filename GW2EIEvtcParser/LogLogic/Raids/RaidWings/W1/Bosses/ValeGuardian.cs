@@ -104,13 +104,13 @@ internal class ValeGuardian : SpiritVale
         TargetID.RedGuardian
     ];
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor valeGuardian, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor valeGuardian, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = GetPhasesByInvul(log, Invulnerability757, valeGuardian, true, true, encounterPhase.Start, encounterPhase.End);
+        var phases = GetSubPhasesByInvul(log, Invulnerability757, valeGuardian, true, true, encounterPhase.Start, encounterPhase.End);
         for (int i = 0; i < phases.Count; i++)
         {
             int index = i + 1;

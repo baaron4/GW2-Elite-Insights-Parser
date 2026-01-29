@@ -134,7 +134,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         return encounterStart;
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         // If xera is null, the whole fight is in pre event
         if (!requirePhases || xera == null)
@@ -143,7 +143,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
-        var phases = new List<PhaseData>(5);
+        var phases = new List<SubPhasePhaseData>(5);
         PhaseData phase100to0 = encounterPhase;
         if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.StartStatus.Normal)
         {
@@ -159,7 +159,7 @@ internal class Xera : StrongholdOfTheFaithful
             phase100to0 = new SubPhasePhaseData(xeraFightStart, encounterPhase.End, "Main Fight");
             phase100to0.AddParentPhase(encounterPhase);
             phase100to0.AddTarget(xera, log);
-            phases.Add(phase100to0);
+            phases.Add((SubPhasePhaseData)phase100to0);
         }
         BuffEvent? invulXera = GetInvulXeraEvent(log.CombatData, xera);
         // split happened

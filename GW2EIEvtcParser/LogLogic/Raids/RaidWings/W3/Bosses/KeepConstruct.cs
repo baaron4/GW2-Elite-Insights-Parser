@@ -73,7 +73,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor keepConstruct, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor keepConstruct, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -81,10 +81,10 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         }
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
-        var phases = new List<PhaseData>(20);
+        var phases = new List<SubPhasePhaseData>(20);
         // Main phases 35025
         var kcPhaseInvuls = keepConstruct.GetBuffStatus(log, XerasBoon);
-        var mainPhases = new List<PhaseData>();
+        var mainPhases = new List<SubPhasePhaseData>();
         var mainPhaseCount = 1;
         foreach (var c in kcPhaseInvuls)
         {
@@ -123,7 +123,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
         }
         int burnCount = 1;
-        var burnPhases = new List<PhaseData>(5);
+        var burnPhases = new List<SubPhasePhaseData>(5);
         foreach (Segment seg in segments)
         {
             var phase = new SubPhasePhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
@@ -135,7 +135,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // pre burn phases
         int preBurnCount = 1;
-        var preBurnPhases = new List<PhaseData>(5);
+        var preBurnPhases = new List<SubPhasePhaseData>(5);
         var kcInvuls = keepConstruct.GetBuffStatus(log, Determined762);
         foreach (var invul in kcInvuls)
         {
@@ -160,11 +160,11 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         phases.AddRange(preBurnPhases);
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // add leftover phases
-        PhaseData? cur = null;
-        var leftOverPhases = new List<PhaseData>(5);
+        SubPhasePhaseData? cur = null;
+        var leftOverPhases = new List<SubPhasePhaseData>(5);
         for (int i = 0; i < phases.Count; i++)
         {
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             if (mainPhases.Contains(phase))
             {
                 cur = phase;

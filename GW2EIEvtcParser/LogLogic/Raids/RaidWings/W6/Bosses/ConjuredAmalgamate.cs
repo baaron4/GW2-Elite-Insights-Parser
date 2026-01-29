@@ -357,7 +357,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return [];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor conjuredAmalgamate, SingleActor? rightArm, SingleActor? leftArm, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor conjuredAmalgamate, SingleActor? rightArm, SingleActor? leftArm, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -365,13 +365,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
         long start = encounterPhase.Start;
         long end = encounterPhase.End;
-        var phases = new List<PhaseData>(5);
-        phases.AddRange(GetPhasesByInvul(log, CAInvul, conjuredAmalgamate, true, false, start, end));
+        var phases = new List<SubPhasePhaseData>(5);
+        phases.AddRange(GetSubPhasesByInvul(log, CAInvul, conjuredAmalgamate, true, false, start, end));
         int burnPhase = 0, armPhase = 0;
         for (int i = 0; i < phases.Count; i++)
         {
             string name;
-            PhaseData phase = phases[i];
+            var phase = phases[i];
             phase.AddParentPhase(encounterPhase);
             if (i % 2 == 0)
             {

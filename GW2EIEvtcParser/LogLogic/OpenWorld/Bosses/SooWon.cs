@@ -78,7 +78,7 @@ internal class SooWon : OpenWorldLogic
             return phases;
         }
 
-        phases.AddRange(GetPhasesByInvul(log, new long[] { Invulnerability757, SooWonSpearPhaseInvul }, mainTarget, true, true, log.LogData.LogStart,
+        phases.AddRange(GetSubPhasesByInvul(log, new long[] { Invulnerability757, SooWonSpearPhaseInvul }, mainTarget, true, true, log.LogData.LogStart,
             log.LogData.LogEnd));
 
         int phaseOffset = GetPhaseOffset(log, mainTarget);

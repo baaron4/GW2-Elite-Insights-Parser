@@ -411,7 +411,7 @@ public abstract class LogLogic
             var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration);
             if (targets.Any())
             {
-                AddPhasesPerTarget(log, phases, targets);
+                AddEncounterPhasesPerTarget(log, phases, targets);
             }
             else
             {

@@ -187,7 +187,7 @@ internal class BanditTrio : SalvationPass
         return LogData.StartStatus.Normal;
     }
 
-    private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, PhaseData encounterPhase, ParsedEvtcLog log)
+    private static void SetPhasePerTarget(SingleActor target, List<SubPhasePhaseData> phases, PhaseData encounterPhase, ParsedEvtcLog log)
     {
         EnterCombatEvent? phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault(x => x.Time >= encounterPhase.Start);
         if (phaseStart != null)
@@ -213,13 +213,13 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor berg, SingleActor zane, SingleActor narella, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor berg, SingleActor zane, SingleActor narella, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(3);
+        var phases = new List<SubPhasePhaseData>(3);
         SetPhasePerTarget(berg, phases, encounterPhase, log);
         SetPhasePerTarget(zane, phases, encounterPhase, log);
         SetPhasePerTarget(narella, phases, encounterPhase, log);

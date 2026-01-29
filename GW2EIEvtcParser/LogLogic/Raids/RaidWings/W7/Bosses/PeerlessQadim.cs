@@ -138,13 +138,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             TargetID.PeerlessQadimPylon
         ];
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qtp, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qtp, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(11);
+        var phases = new List<SubPhasePhaseData>(11);
         var phaseStarts = new List<long>();
         var phaseEnds = new List<long>();
         var casts = qtp.GetAnimatedCastEvents(log).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());

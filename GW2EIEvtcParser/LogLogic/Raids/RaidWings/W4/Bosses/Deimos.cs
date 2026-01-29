@@ -434,13 +434,13 @@ internal class Deimos : BastionOfThePenitent
         return start;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor deimos, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor deimos, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(10);
+        var phases = new List<SubPhasePhaseData>(10);
         var fullFight = encounterPhase;
         PhaseData phase100to0 = fullFight;
         if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.StartStatus.Normal)
@@ -459,7 +459,7 @@ internal class Deimos : BastionOfThePenitent
             phase100to0.AddParentPhase(fullFight);
             phase100to0.AddTarget(deimos, log);
             phase100to0.AddTargets(targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
-            phases.Add(phase100to0);
+            phases.Add((SubPhasePhaseData)phase100to0);
         }
         (var phase100to10, var phase10to0) = AddBossPhases(phases, log, deimos, phase100to0, encounterPhase);
         AddAddPhases(phases, targets, log, deimos, encounterPhase);
@@ -478,12 +478,12 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    private static (PhaseData, PhaseData?) AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor deimos, PhaseData mainFightPhase, PhaseData encounterPhase)
+    private static (PhaseData, SubPhasePhaseData?) AddBossPhases(List<SubPhasePhaseData> phases, ParsedEvtcLog log, SingleActor deimos, PhaseData mainFightPhase, PhaseData encounterPhase)
     {
         // Determined + additional data on inst change
         BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         var phase100to10 = mainFightPhase;
-        PhaseData? phase10to0 = null;
+        SubPhasePhaseData? phase10to0 = null;
         var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
         if (invulDei != null || percent10Start != null)
         {
@@ -498,7 +498,7 @@ internal class Deimos : BastionOfThePenitent
             phase100to10 = new SubPhasePhaseData(mainFightStart, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(deimos, log);
             phase100to10.AddParentPhase(mainFightPhase);
-            phases.Add(phase100to10);
+            phases.Add((SubPhasePhaseData)phase100to10);
 
             if (encounterPhase.End - percent10StartTime > PhaseTimeLimit)
             {
@@ -513,7 +513,7 @@ internal class Deimos : BastionOfThePenitent
         return (phase100to10, phase10to0);
     }
 
-    private static void AddAddPhases(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, SingleActor mainTarget, EncounterPhaseData encounterPhase)
+    private static void AddAddPhases(List<SubPhasePhaseData> phases, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, SingleActor mainTarget, EncounterPhaseData encounterPhase)
     {
         foreach (SingleActor target in targets)
         {
@@ -541,7 +541,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    private static void AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases, EncounterPhaseData encounterPhase)
+    private static void AddBurstPhases(List<SubPhasePhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases, EncounterPhaseData encounterPhase)
     {
         var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet).Where(x => x.Value > 0);
         int burstID = 1;

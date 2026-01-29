@@ -136,13 +136,13 @@ internal class Slothasor : SalvationPass
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, IEnumerable<SingleActor> slublings, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, IEnumerable<SingleActor> slublings, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(5);
+        var phases = new List<SubPhasePhaseData>(5);
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
         var sleepy = slothasor.GetAnimatedCastEvents(log, encounterStart, encounterEnd).Where(x => x.SkillID == NarcolepsySkill);

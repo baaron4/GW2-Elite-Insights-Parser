@@ -63,7 +63,7 @@ internal abstract class FractalLogic : LogLogic
         {
             return phases;
         }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, mainTarget, false, true));
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, mainTarget, false, true));
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = "Phase " + i;

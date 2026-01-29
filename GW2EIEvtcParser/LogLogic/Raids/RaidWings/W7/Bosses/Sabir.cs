@@ -115,13 +115,13 @@ internal class Sabir : TheKeyOfAhdashim
         NegateDamageAgainstBarrier(combatData, agentData, [TargetID.Sabir]);
         return [];
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabir, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabir, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(3);
+        var phases = new List<SubPhasePhaseData>(3);
         var casts = sabir.GetAnimatedCastEvents(log);
         var wallopingWinds = casts.Where(x => x.SkillID == WallopingWind);
         long start = encounterPhase.Start;

@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.LogLogic;
 internal static class LogLogicPhaseUtils
 {
 
-    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    internal static void AddEncounterPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
     {
         phases[0].AddTargets(targets, log);
         foreach (SingleActor target in targets)
@@ -38,9 +38,9 @@ internal static class LogLogicPhaseUtils
             phases.Add(phase);
         }
     }
-    internal static List<PhaseData> GetPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
+    internal static List<EncounterPhaseData> GetEncounterPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
     {
-        var phases = new List<PhaseData>();
+        var phases = new List<EncounterPhaseData>();
         int sequence = 1;
         foreach (var startEvent in log.CombatData.GetSquadCombatStartEvents())
         {
@@ -60,9 +60,9 @@ internal static class LogLogicPhaseUtils
         return phases;
     }
 
-    internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, SingleActor mainTarget, IReadOnlyList<double> thresholds, long start, long end)
+    internal static IReadOnlyList<SubPhasePhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, SingleActor mainTarget, IReadOnlyList<double> thresholds, long start, long end)
     {
-        var phases = new List<PhaseData>();
+        var phases = new List<SubPhasePhaseData>();
         if (thresholds.Count == 0)
         {
             return phases;
@@ -88,10 +88,15 @@ internal static class LogLogicPhaseUtils
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
+        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
+        {
+            // Only one phase that matches that duplicates whole duration
+            return [];
+        }
         return phases;
     }
 
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
     {
         long last = start;
         var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
@@ -99,7 +104,7 @@ internal static class LogLogicPhaseUtils
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
 
-        var phases = new List<PhaseData>(invuls.Count);
+        var phases = new List<SubPhasePhaseData>(invuls.Count);
         bool nextToAddIsSkipPhase = !beginWithStart;
         foreach (BuffEvent c in invuls)
         {
@@ -125,28 +130,27 @@ internal static class LogLogicPhaseUtils
         {
             phases.Add(new SubPhasePhaseData(last, end));
         }
+        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
+        {
+            // Only one phase that matches that duplicates whole duration
+            return [];
+        }
         long filterThreshold = filterSmallPhases ? 100 : 0;
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
-
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
     {
-        return GetPhasesByInvul(log, skillIDs, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
+        return GetSubPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end, filterSmallPhases);
     }
 
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, bool filterSmallPhases = true)
     {
-        return GetPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end, filterSmallPhases);
-    }
-
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, bool filterSmallPhases = true)
-    {
-        return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
+        return GetSubPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
     }
 
 
-    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCasts, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByCast(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCasts, long start, long end, bool filterSmallPhases = true)
     {
         long last = start;
         var casts = mainTarget.GetAnimatedCastEvents(log, start, end);
@@ -155,7 +159,7 @@ internal static class LogLogicPhaseUtils
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
 
-        var phases = new List<PhaseData>(invuls.Count);
+        var phases = new List<SubPhasePhaseData>(invuls.Count);
         bool nextToAddIsSkipPhase = !mainBetweenCasts;
         foreach (CastEvent c in invuls)
         {
@@ -185,17 +189,18 @@ internal static class LogLogicPhaseUtils
         {
             phases.Add(new SubPhasePhaseData(last, end));
         }
+        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
+        {
+            // Only one phase that matches that duplicates whole duration
+            return [];
+        }
         long filterThreshold = filterSmallPhases ? 100 : 0;
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
-    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, long start, long end, bool filterSmallPhases = true)
     {
-        return GetPhasesByCast(log, [skillID], mainTarget, addSkipPhases, mainBetweenCast, start, end, filterSmallPhases);
-    }
-    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, bool filterSmallPhases = true)
-    {
-        return GetPhasesByCast(log, skillID, mainTarget, addSkipPhases, mainBetweenCast, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
+        return GetSubPhasesByCast(log, [skillID], mainTarget, addSkipPhases, mainBetweenCast, start, end, filterSmallPhases);
     }
 
     internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)

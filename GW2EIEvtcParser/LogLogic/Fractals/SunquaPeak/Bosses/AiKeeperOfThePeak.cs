@@ -293,7 +293,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         var phases = new List<PhaseData>(3);
         // sub phases
         string[] eleNames = ["Air", "Fire", "Water"];
-        var elementalSubPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, elementalPhase.Start, elementalPhase.End).Take(3).ToList();
+        var elementalSubPhases = GetSubPhasesByInvul(log, Determined762, elementalAi, false, true, elementalPhase.Start, elementalPhase.End).Take(3).ToList();
         for (int i = 0; i < elementalSubPhases.Count; i++)
         {
             PhaseData phase = elementalSubPhases[i];

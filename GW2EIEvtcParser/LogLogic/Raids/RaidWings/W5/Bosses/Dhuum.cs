@@ -124,7 +124,7 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO_PERF(Rennorb)
-    private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
+    private static void ComputeFightPhases(List<SubPhasePhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillID == MajorSoulSplit);
         // Dhuum brought down to 10%
@@ -158,17 +158,17 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, IEnumerable<SingleActor> enforcers, long mainStart, long mainEnd, bool hasRitual, PhaseData parentPhase)
+    private static List<SubPhasePhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, IEnumerable<SingleActor> enforcers, long mainStart, long mainEnd, bool hasRitual, PhaseData parentPhase)
     {
         var cls = dhuum.GetAnimatedCastEvents(log);
-        var cataCycles = cls.Where(x => x.SkillID == CataclysmicCycle);
+        var cataCycles = cls.Where(x => x.SkillID == CataclysmicCycle).ToList();
         var gDeathmarks = cls.Where(x => x.SkillID == GreaterDeathMark).ToList();
-        if (gDeathmarks.Count < cataCycles.Count())
+        if (gDeathmarks.Count < cataCycles.Count)
         {
             // anomaly, don't do sub phases
             return [];
         }
-        var phases = new List<PhaseData>();
+        var phases = new List<SubPhasePhaseData>();
         long start = mainStart;
         long end = 0;
         int i = 0;
@@ -179,22 +179,25 @@ internal class Dhuum : HallOfChains
             long soulsplitEnd = Math.Min(cataCycle.EndTime, mainEnd);
             ++i;
 
-            var preSoulSplit = new SubPhasePhaseData(start, end, "Pre-Soulsplit " + i).WithParentPhase(parentPhase);
+            var preSoulSplit = new SubPhasePhaseData(start, end, "Pre-Soulsplit " + i);
+            preSoulSplit.AddParentPhase(parentPhase);
             preSoulSplit.AddTarget(dhuum, log);
             preSoulSplit.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
             phases.Add(preSoulSplit);
 
-            var soulSplit = new SubPhasePhaseData(end, soulsplitEnd, "Soulsplit " + i).WithParentPhase(parentPhase);
+            var soulSplit = new SubPhasePhaseData(end, soulsplitEnd, "Soulsplit " + i);
+            soulSplit.AddParentPhase(parentPhase);
             soulSplit.AddTarget(dhuum, log);
             phases.Add(soulSplit);
             start = cataCycle.EndTime;
         }
-        var final = new SubPhasePhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe").WithParentPhase(parentPhase);
+        var final = new SubPhasePhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe");
+        final.AddParentPhase(parentPhase);
         final.AddTarget(dhuum, log);
         phases.Add(final);
         return phases;
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor dhuum, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor dhuum, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -203,7 +206,7 @@ internal class Dhuum : HallOfChains
         bool hasPreEvent = encounterPhase.StartStatus == LogData.StartStatus.Normal;
         long end = encounterPhase.End;
         long start = encounterPhase.Start;
-        var phases = new List<PhaseData>(6);
+        var phases = new List<SubPhasePhaseData>(6);
         var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));
         var castLogs = dhuum.GetAnimatedCastEvents(log);
         PhaseData? mainFight = null;
@@ -221,14 +224,16 @@ internal class Dhuum : HallOfChains
             if (invulDhuum != null)
             {
                 long preEventEnd = invulDhuum.Time;
-                var preEvent = new SubPhasePhaseData(start, preEventEnd, "Pre Event").WithParentPhase(encounterPhase);
+                var preEvent = new SubPhasePhaseData(start, preEventEnd, "Pre Event");
+                preEvent.AddParentPhase(encounterPhase);
                 preEvent.AddTarget(dhuum, log);
                 preEvent.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(preEvent);
 
                 mainFight = new SubPhasePhaseData(preEventEnd, end, "Main Fight");
+                mainFight.AddParentPhase(encounterPhase);
                 mainFight.AddTarget(dhuum, log);
-                phases.Add(mainFight.WithParentPhase(encounterPhase));
+                phases.Add((SubPhasePhaseData)mainFight);
                 ComputeFightPhases(phases, dhuum, castLogs, log, end, preEventEnd, mainFight);
             }
         }

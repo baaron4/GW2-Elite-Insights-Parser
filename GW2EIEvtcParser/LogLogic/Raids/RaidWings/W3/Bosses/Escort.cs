@@ -57,9 +57,9 @@ internal class Escort : StrongholdOfTheFaithful
         return "Siege the Stronghold";
     }
 
-    private static IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, EncounterPhaseData encounterPhase)
+    private static IReadOnlyList<SubPhasePhaseData> GetMcLeodPhases(SingleActor mcLeod, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
-        var phases = new List<PhaseData>();
+        var phases = new List<SubPhasePhaseData>();
         //
         DeadEvent? mcLeodDeath = log.CombatData.GetDeadEvents(mcLeod.AgentItem).LastOrDefault();
         long mcLeodStart = Math.Max(mcLeod.FirstAware, encounterPhase.Start);
@@ -71,7 +71,7 @@ internal class Escort : StrongholdOfTheFaithful
         mainPhase.AddTarget(mcLeod, log);
         phases.Add(mainPhase);
         //
-        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mcLeod, true, true, mcLeodStart, mcLeodEnd));
+        phases.AddRange(GetSubPhasesByInvul(log, Invulnerability757, mcLeod, true, true, mcLeodStart, mcLeodEnd));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
@@ -91,13 +91,13 @@ internal class Escort : StrongholdOfTheFaithful
         return phases;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(9);
+        var phases = new List<SubPhasePhaseData>(9);
         var wargs = targets.Where(x => x.IsSpecies(TargetID.WargBloodhound));
         {
             long preEventEnd = mcLeod != null ? mcLeod.FirstAware : encounterPhase.End;

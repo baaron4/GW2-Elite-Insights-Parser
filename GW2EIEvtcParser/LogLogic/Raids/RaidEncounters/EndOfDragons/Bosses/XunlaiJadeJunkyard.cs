@@ -114,7 +114,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
 
         // Health and Transition Phases
-        List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, true, true);
+        var subPhases = GetSubPhasesByInvul(log, AnkkaPlateformChanging, ankka, true, true);
         for (int i = 0; i < subPhases.Count; i++)
         {
             switch (i)
@@ -142,7 +142,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         phases.AddRange(subPhases);
         // DPS Phases
-        List<PhaseData> dpsPhase = GetPhasesByInvul(log, Determined895, ankka, false, true);
+        var dpsPhase = GetSubPhasesByInvul(log, Determined895, ankka, false, true);
         for (int i = 0; i < dpsPhase.Count; i++)
         {
             dpsPhase[i].Name = $"DPS Phase {i + 1}";
@@ -158,7 +158,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         phases.AddRange(dpsPhase);
         // Necrotic Rituals
-        List<PhaseData> rituals = GetPhasesByInvul(log, NecroticRitual, ankka, true, true);
+        var rituals = GetSubPhasesByInvul(log, NecroticRitual, ankka, true, true);
         for (int i = 0; i < rituals.Count; i++)
         {
             if (i % 2 != 0)

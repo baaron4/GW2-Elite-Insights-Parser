@@ -146,7 +146,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
             phases = base.GetPhases(log, requirePhases);
             if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
             {
-                var fightPhases = GetPhasesBySquadCombatStartEnd(log);
+                var fightPhases = GetEncounterPhasesBySquadCombatStartEnd(log);
                 fightPhases.ForEach(x =>
                 {
                     x.AddTargets(phases[0].Targets.Keys, log);
@@ -157,7 +157,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration));
+        AddEncounterPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration));
         return phases;
     }
 

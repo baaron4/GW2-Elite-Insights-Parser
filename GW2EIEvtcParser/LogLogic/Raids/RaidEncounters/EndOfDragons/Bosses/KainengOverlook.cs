@@ -226,7 +226,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         {
             return phases;
         }
-        List<PhaseData> subPhases = GetPhasesByInvul(log, Determined762, ministerLi, false, true);
+        var subPhases = GetSubPhasesByInvul(log, Determined762, ministerLi, false, true);
         for (int i = 0; i < subPhases.Count; i++)
         {
             subPhases[i].Name = "Phase " + (i + 1);
@@ -234,8 +234,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             subPhases[i].AddParentPhase(phases[0]);
         }
         // when wiped during a split phase, Li's LastAware is well before fight end
-        subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ServerDelayConstant);
-        phases.AddRange(subPhases);
+        phases.AddRange(subPhases.Where(x => (x.End + x.Start) / 2 <= ministerLi.LastAware + ServerDelayConstant));
         AddSplitPhase(phases, [enforcer, mindblade, ritualist], ministerLi, log, 1);
         AddSplitPhase(phases, [mechRider, sniper], ministerLi, log, 2);
         return phases;

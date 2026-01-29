@@ -142,7 +142,7 @@ internal class Matthias : SalvationPass
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor matthias, IEnumerable<SingleActor> sacrifices, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor matthias, IEnumerable<SingleActor> sacrifices, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -150,7 +150,7 @@ internal class Matthias : SalvationPass
         }
         var encounterStart = encounterPhase.Start;
         var encounterEnd = encounterPhase.End;
-        var phases = new List<PhaseData>(4);
+        var phases = new List<SubPhasePhaseData>(4);
         // Special buff cast check
         BuffEvent? heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
         if (heatWave != null)

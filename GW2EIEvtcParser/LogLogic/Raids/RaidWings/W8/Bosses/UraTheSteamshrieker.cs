@@ -302,13 +302,13 @@ internal class UraTheSteamshrieker : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameFumarollers(Targets);
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor ura, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor ura, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<PhaseData>(6);
+        var phases = new List<SubPhasePhaseData>(6);
         PhaseData parentPhase = encounterPhase;
         bool isCm = encounterPhase.IsCM || encounterPhase.IsLegendaryCM;
         long start = encounterPhase.Start;

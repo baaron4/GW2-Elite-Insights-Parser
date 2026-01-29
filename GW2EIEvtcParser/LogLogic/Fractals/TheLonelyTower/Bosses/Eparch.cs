@@ -153,7 +153,7 @@ internal class Eparch : LonelyTower
         {
             return phases;
         }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, eparch, true, true));
+        phases.AddRange(GetSubPhasesByInvul(log, Determined762, eparch, true, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];

@@ -141,14 +141,14 @@ internal class SoullessHorror : HallOfChains
         HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor soullessHorror, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor soullessHorror, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
         long end = encounterPhase.End;
-        var phases = new List<PhaseData>(6);
+        var phases = new List<SubPhasePhaseData>(6);
         var tormentedDeads = targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
         var howling = soullessHorror.GetAnimatedCastEvents(log, encounterPhase.Start, end).Where(x => x.SkillID == HowlingDeath);
         long phaseStart = encounterPhase.Start;
