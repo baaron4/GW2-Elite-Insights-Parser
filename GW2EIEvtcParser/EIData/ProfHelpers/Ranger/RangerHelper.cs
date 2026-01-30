@@ -369,6 +369,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.February2025Balance),
         // - Predator's Onslaught
         new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
+            .UsingChecker((x, log) => IsJuvenilePet(x.From) || x.From.BaseSpec == Spec.Ranger)
             .UsingApproximate(),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025Balance),
