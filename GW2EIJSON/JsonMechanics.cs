@@ -1,4 +1,6 @@
-﻿namespace GW2EIJSON;
+﻿using System.Text.Json.Serialization;
+
+namespace GW2EIJSON;
 
 /// <summary>
 /// Class corresponding to mechanics
@@ -49,6 +51,11 @@ public class JsonMechanics
     /// Description of the mechanic, this is the description that appears on hover on EI HTML Mechanic tables.
     /// </summary>
     public string? Description;
+    /// <summary>
+    /// Internal cooldown of the mechanic, to be ignored if missing. EI considers the same mechanic triggering within internal cooldown to be the same mechanic.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? InternalCooldown;
 
     /// <summary>
     /// If true, then the mechanic represent an achievement eligibility mechanic. \n

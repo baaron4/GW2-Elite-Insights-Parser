@@ -31,6 +31,7 @@ internal static class JsonMechanicsBuilder
             Name = mech.ShortName,
             FullName = mech.FullName,
             Description = mech.Description,
+            InternalCooldown = mech.InternalCooldown > 0 ? mech.InternalCooldown : null,
             MechanicsData = data
         };
         return jsMechs;
