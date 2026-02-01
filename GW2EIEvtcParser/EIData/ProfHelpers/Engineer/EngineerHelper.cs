@@ -228,9 +228,9 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.August2024JWRelease, GW2Builds.January2026Balance),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.August2024JWRelease, GW2Builds.January2026Balance),
-        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.WvW)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1% per condition on target", DamageSource.NoPets, 1, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.January2026Balance),
-        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.PvEsPvP)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition_Jan2026, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.January2026Balance),
         // - Heavy Metal
         new DamageLogDamageModifier(Mod_HeavyMetal_75, "Heavy Metal (75%)", "5% on crit if target hp% lower than 75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.HeavyMetal, HeavyMetalChecker(50, 75), DamageModifierMode.PvE )
