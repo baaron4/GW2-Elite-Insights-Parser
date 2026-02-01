@@ -88,11 +88,6 @@ internal static class LogLogicPhaseUtils
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
-        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
-        {
-            // Only one phase that matches that duplicates whole duration
-            return [];
-        }
         return phases;
     }
 
@@ -129,11 +124,6 @@ internal static class LogLogicPhaseUtils
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
             phases.Add(new SubPhasePhaseData(last, end));
-        }
-        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
-        {
-            // Only one phase that matches that duplicates whole duration
-            return [];
         }
         long filterThreshold = filterSmallPhases ? 100 : 0;
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
@@ -188,11 +178,6 @@ internal static class LogLogicPhaseUtils
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
             phases.Add(new SubPhasePhaseData(last, end));
-        }
-        if (phases.Count == 1 && phases[0].Start == start && phases[0].End == end)
-        {
-            // Only one phase that matches that duplicates whole duration
-            return [];
         }
         long filterThreshold = filterSmallPhases ? 100 : 0;
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
