@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-center max-wd-500">           
+    <div class="d-flex flex-column justify-content-center align-items-center max-wd-500px">           
         <h4>General Settings</h4>
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <div class="form-check mb-2 mr-2" :data-original-title="'Viewpoint will follow selected actor, as long as selected actor is drawn'">
@@ -48,7 +48,7 @@
                 <label class="form-check-label" for="selectedMinionsCheck">Selected's Minions</label>
             </div>
         </div>
-        <div v-if="showSkills" class="d-flex flex-column justify-content-center align-items-center max-wd-500">
+        <div v-if="showSkills" class="d-flex flex-column justify-content-center align-items-center max-wd-500px">
             <h4>Global Skill Settings</h4>
             <div class="d-flex flex-row justify-content-center flex-wrap">
                 <div class="form-check mb-2 mr-2" v-for="skillCategory in skillCategories">
@@ -68,7 +68,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
-                    <custom-numberform-component class="wd-100" :minValue="1" :id="'circle1Text'"
+                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle1Text'"
                                                         :placeholderValue="getAnimator().rangeControl[0].radius"></custom-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
-                    <custom-numberform-component class="wd-100" :minValue="1" :id="'circle2Text'"
+                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle2Text'"
                                                         :placeholderValue="getAnimator().rangeControl[1].radius"></custom-numberform-component>
                 </div>
                 <div class="form-check mt-1 mb-2">
@@ -88,7 +88,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center">
                     <span>Radius: </span>
-                    <custom-numberform-component class="wd-100" :minValue="1" :id="'circle3Text'"
+                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle3Text'"
                                                         :placeholderValue="getAnimator().rangeControl[2].radius"></custom-numberform-component>
                 </div>
             </div>
@@ -101,12 +101,12 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                     <span>Radius: </span>
-                    <custom-numberform-component class="wd-100" :minValue="1" :id="'coneRadiusText'"
+                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'coneRadiusText'"
                                                         :placeholderValue="getAnimator().coneControl.radius"></custom-numberform-component>
                 </div>
                 <div class="d-flex flex-row justify-content-between align-items-center mt-1">
                     <span>Opening: </span>
-                    <custom-numberform-component class="wd-100" :minValue="1" :maxValue="360" :id="'coneAngleText'"
+                    <custom-numberform-component class="wd-100px" :minValue="1" :maxValue="360" :id="'coneAngleText'"
                                                         :placeholderValue="getAnimator().coneControl.openingAngle"></custom-numberform-component>
                 </div>
             </div>

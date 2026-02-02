@@ -975,25 +975,25 @@ td.approximate::before {
 }
 
 /* Width */
-.max-wd-900 {
+.max-wd-900px {
     max-width: 900px;
 }
-.max-wd-700 {
+.max-wd-700px {
     max-width: 700px;
 }
-.max-wd-500 {
+.max-wd-500px {
     max-width: 500px;
 }
-.min-wd-165 {
+.min-wd-165px {
     min-width: 165px;
 }
-.wd-100 {
+.wd-100px {
     width: 100px;
 }
-.wd-150 {
+.wd-150px {
     width: 150px;
 }
-.wd-200 {
+.wd-200px {
     width: 200px;
 }
 
