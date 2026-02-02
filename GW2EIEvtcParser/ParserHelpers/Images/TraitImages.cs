@@ -130,11 +130,11 @@ internal static class TraitImages
     public const string SuperiorityComplex = "https://render.guildwars2.com/file/AAD25BD0F7753D5B447E9654A4AE6A35057B2932/1012504.png";
     public const string PhantomPain = "https://render.guildwars2.com/file/3999015BF80BA211F8AD463C50BEBD0826DC1D12/1769956.png";
     public const string AlteredChord = "https://render.guildwars2.com/file/57FB13067F3039331F0C03A63B0D07242F0C72C4/3679975.png";
-    public const string ReverberatingLute = "https://render.guildwars2.com/file/4CAA3750145A55B7E73D5EB9917590EC45657BE7/3680159.png";
     public const string Harmonize = "https://render.guildwars2.com/file/4BE6ED63233DEB2D5801D5D66BB202E202A6A27F/3679977.png";
     public const string Shredding = "https://render.guildwars2.com/file/EF2D16FDF29BDCFEEC96503E0145BE1A9846F04C/3679970.png";
     public const string Syncopate = "https://render.guildwars2.com/file/42C9802D696B9670A0155DDF0FD2480CD9FBC473/3679969.png";
     public const string SymphonicResonance = "https://render.guildwars2.com/file/AF276ECB07996BF5343A513FF2E52F3BE1CBAD0B/3679978.png";
+    public const string LoveSong = "https://render.guildwars2.com/file/1CC50D6BDDE64580522F0D396D194C020AC50DCE/3679972.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://render.guildwars2.com/file/22B370D754AC1D69A8FE66DCCB36BE940455E5EA/1012539.png";

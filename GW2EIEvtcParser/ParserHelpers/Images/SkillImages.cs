@@ -365,6 +365,7 @@ internal static class SkillImages
     public const string HarmoniousHarp = "https://render.guildwars2.com/file/C1BCF465DE1DAB00E00B0F1494ABDB2D7F57BECA/3680162.png";
     public const string DeafeningDrum = "https://render.guildwars2.com/file/E061ECE20A34DC281C0E3EB8FB90094549E87941/3680161.png";
     public const string FlusteringFlute = "https://render.guildwars2.com/file/CFE30B5052A2AA67D9A8AE5FC1FBA0A56C64584C/3680160.png";
+    public const string LivelyLute = "https://render.guildwars2.com/file/4CAA3750145A55B7E73D5EB9917590EC45657BE7/3680159.png";
     #endregion Mesmer
     #region Necromancer
     // Shrouds
