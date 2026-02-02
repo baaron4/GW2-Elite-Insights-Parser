@@ -4,8 +4,8 @@
 internal static class ItemImages
 {
 
-    public const string NourishmentFood = "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
-    public const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
+    public const string NourishmentFood = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";
+    public const string NourishmentUtility = "https://render.guildwars2.com/file/64976F59BF060718C9109D36C27AD0F40F06BB32/436368.png";
     // From runes and sigils
     public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
 
