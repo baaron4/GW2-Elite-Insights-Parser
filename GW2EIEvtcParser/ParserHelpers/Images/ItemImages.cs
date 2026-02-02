@@ -834,10 +834,10 @@ internal static class ItemImages
     #endregion
 
     // Guild
-    public const string GuildSwiftnessBanner = "https://wiki.guildwars2.com/images/4/45/Guild_Swiftness_Banner_Boost.png";
+    public const string GuildSwiftnessBanner = "https://render.guildwars2.com/file/3101EC25F03A0D070554277AA6B3DE4EFB00D3B7/543935.png";
     // Primers
-    public const string UtilityPrimer = "https://wiki.guildwars2.com/images/a/a8/Utility_Primer_%28effect%29.png";
-    public const string MetabolicPrimer = "https://wiki.guildwars2.com/images/a/af/Metabolic_Primer_%28effect%29.png";
+    public const string UtilityPrimer = "https://render.guildwars2.com/file/DB411DA470FE9643D6C63A5C6EAD13BF19B9C3BD/849447.png";
+    public const string MetabolicPrimer = "https://render.guildwars2.com/file/F9090B7DF4CA3DDDE5616B74F29C91E805FAE408/643282.png";
     // Other Consumables
     public const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
     public const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
@@ -845,13 +845,13 @@ internal static class ItemImages
     public const string DamageReduction5 = "https://wiki.guildwars2.com/images/8/8b/Damage_Reduction_%28five_percent%29.png";
     public const string HealthfulRejuvenation = "https://wiki.guildwars2.com/images/1/1c/Healthful_Rejuvenation.png";
     public const string DamageBonus5 = "https://wiki.guildwars2.com/images/6/66/Damage_Bonus_%28five_percent%29.png";
-    public const string SwiftMoaFeather = "https://wiki.guildwars2.com/images/f/f0/Swift_Moa_Feather.png";
-    public const string OgrePetWhistle = "https://wiki.guildwars2.com/images/d/de/Ogre_Pet_Whistle.png";
-    public const string FireElementalPowder = "https://wiki.guildwars2.com/images/9/9c/Pile_of_Cinnamon_and_Sugar.png";
-    public const string SunspearParagonSupport = "https://wiki.guildwars2.com/images/1/17/Sunspear_Paragon_Support.png";
-    public const string RavenSpiritShadow = "https://wiki.guildwars2.com/images/d/de/Raven_Spirit_Shadow.png";
+    public const string SwiftMoaFeather = "https://render.guildwars2.com/file/ED4AB79F28A702D8BB47B597909A601BA0282394/223801.png";
+    public const string OgrePetWhistle = "https://render.guildwars2.com/file/EBA905F8E06B409ABD17DB990D5E6F5162BFB315/455549.png";
+    public const string FireElementalPowder = "https://render.guildwars2.com/file/F90EEC96BB0C70D5CC2F30BA2E0B45B8326965A8/219351.png";
+    public const string SunspearParagonSupport = "https://render.guildwars2.com/file/CAAF3329AC92102553F8CA0D0116C1B2A9644392/1894924.png";
+    public const string RavenSpiritShadow = "https://render.guildwars2.com/file/4820B8070531F833EED091FB1CFB3407E13401E7/2220562.png";
     // Other Items
-    public const string WatchworkPortalDevice = "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png";
+    public const string WatchworkPortalDevice = "https://render.guildwars2.com/file/7B0E6BFAEEB8164FBF3DD33ACFAAAD9E9607753F/619596.png";
 
 }
 #pragma warning restore CA1823 // Unused field
