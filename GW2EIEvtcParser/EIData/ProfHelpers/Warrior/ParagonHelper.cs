@@ -17,10 +17,16 @@ internal static class ParagonHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
+        // Chant of Action Beta
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         // Chant of Action
-        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+            .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
         new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
         new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "7%", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvP)
@@ -52,9 +58,16 @@ internal static class ParagonHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
+        // Chant of Recuperation Beta
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         // Chant of Recuperation
-        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-7%", DamageSource.Incoming, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-7%", DamageSource.Incoming, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
