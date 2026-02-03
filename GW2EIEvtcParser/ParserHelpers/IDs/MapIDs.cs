@@ -43,6 +43,7 @@ public static class MapIDs
     public const int OldLionsCourtRaidEncounter = 1485;
     public const int CosmicObservatoryRaidEncounter = 1515;
     public const int TempleOfFebeRaidEncounter = 1520;
+    public const int GuardiansGladeRaidEncounter = 1609;
     #endregion
     #region Fractals
     public const int AetherbladeFractal = 956;

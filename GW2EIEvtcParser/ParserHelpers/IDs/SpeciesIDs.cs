@@ -547,7 +547,7 @@ public static class SpeciesIDs
         PermanentEmbodimentOfEnvy = SpeciesIDs.PermanentEmbodimentOfEnvy,
         PermanentEmbodimentOfMalice = SpeciesIDs.PermanentEmbodimentOfMalice,
         // - Guardian's Glade
-        KelaSeneschalOfWaves = -9999,
+        KelaSeneschalOfWaves = 27124,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
