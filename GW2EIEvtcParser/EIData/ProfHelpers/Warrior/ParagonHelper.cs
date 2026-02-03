@@ -18,8 +18,13 @@ internal static class ParagonHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Chant of Action
-        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas:Chant of Action", "7%", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
         // Brisk Pacing 1
         new BuffOnActorDamageModifier(Mod_BriskPacingTier1, BriskPacingTier1, "Brisk Pacing", "7.5%", DamageSource.NoPets, 7.5, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
@@ -37,14 +42,19 @@ internal static class ParagonHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "30%", DamageSource.NoPets, 30.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.December2025Balance),
-        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_BriskPacingTier3, BriskPacingTier3, "Brisk Pacing", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, TraitImages.BriskPacing, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
         // Chant of Recuperation
-        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation, ChantOfRecuperationBuff, "Chant of Recuperation", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation, ChantOfRecuperationBuff, "Chant of Recuperation", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-7%", DamageSource.Incoming, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 

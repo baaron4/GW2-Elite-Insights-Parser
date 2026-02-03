@@ -84,7 +84,11 @@ internal static class EvokerHelper
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "15% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.November2025Balance, GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "15% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvEsPvP)
-            .WithBuilds(GW2Builds.December2025Balance),
+            .WithBuilds(GW2Builds.December2025Balance, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "15% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "12% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
         // Zap
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.PvE)
             .WithBuffOnFoeFromActor()
@@ -109,7 +113,19 @@ internal static class EvokerHelper
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
             .UsingChecker((hde, log) => hde.HasCrit)
             .UsingApproximate()
-            .WithBuilds(GW2Builds.August2025VoEBeta),
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "5% crit damage", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.WvW)
+            .WithBuffOnFoeFromActor()
+            .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
+            .UsingChecker((hde, log) => hde.HasCrit)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
+        new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "3% crit damage", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.sPvP)
+            .WithBuffOnFoeFromActor()
+            .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
+            .UsingChecker((hde, log) => hde.HasCrit)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
         // Adept
         new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "5% against burning foes", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
 
