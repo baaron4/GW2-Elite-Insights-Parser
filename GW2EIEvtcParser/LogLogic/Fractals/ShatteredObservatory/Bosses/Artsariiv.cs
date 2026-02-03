@@ -237,10 +237,6 @@ internal class Artsariiv : ShatteredObservatory
             {
                 successHandler.SetSuccess(true, effects.Last().Time);
             }
-            else
-            {
-                successHandler.SetSuccess(false, target.LastAware);
-            }
             return;
         }
         // Legacy
