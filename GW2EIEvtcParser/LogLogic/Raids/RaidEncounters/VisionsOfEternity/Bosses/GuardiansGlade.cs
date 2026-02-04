@@ -63,6 +63,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             TargetID.EliteCrocodilianRazortooth,
             TargetID.VeteranCrocodilianRazortooth,
             TargetID.ExecutorOfWaves,
+            TargetID.CursedArtefact_NPC,
         ];
     }
 

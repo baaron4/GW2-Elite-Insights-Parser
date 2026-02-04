@@ -564,6 +564,7 @@ public static class SpeciesIDs
         VeteranCrocodilianRazortooth = 27667,
         DownedEliteCrocodilianRazortooth = 27658,
         EliteCrocodilianRazortooth = 27655,
+        CursedArtefact_NPC = 27663,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,

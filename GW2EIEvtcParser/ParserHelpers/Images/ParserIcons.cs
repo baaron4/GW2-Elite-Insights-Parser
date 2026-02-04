@@ -1364,6 +1364,7 @@ internal static class ParserIcons
         { TargetID.WhisperingShadow, WhisperingShadow },
         { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
         { TargetID.EliteCrocodilianRazortooth, TrashGenericRedEnemySkull },
+        { TargetID.CursedArtefact_NPC, TrashBloodstoneShard },
     };
 
     /// <summary>
