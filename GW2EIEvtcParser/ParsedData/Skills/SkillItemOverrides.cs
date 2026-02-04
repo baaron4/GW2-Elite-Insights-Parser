@@ -294,6 +294,8 @@ public static class SkillItemOverrides
         { BigMagmaDrop, "Big Magma Drop" },
         // Ura
         { UraDispelSAK, "Dispel" },
+        // Kela
+        { KelaBurrow, "Burrow" },
         #endregion Raids
         #region Strikes
         // Voice and Claw
