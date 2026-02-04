@@ -271,7 +271,7 @@ internal class Samarog : BastionOfThePenitent
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
         var fixatedSamarog = GetBuffApplyRemoveSequence(log.CombatData, FixatedSamarog, p, true, true);
-        replay.Decorations.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
+        replay.Decorations.AddTethers(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
         //fixated Guldhem
         var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedGuldhem)

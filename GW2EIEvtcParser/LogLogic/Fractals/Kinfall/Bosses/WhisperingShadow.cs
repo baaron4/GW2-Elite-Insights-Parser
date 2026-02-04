@@ -175,7 +175,7 @@ internal class WhisperingShadow : Kinfall
         var inevitableDarkness = player.GetBuffStatus(log, InevitableDarknessPlayer).Where(x => x.Value > 0);
         var inevitableDarknessEvents = GetBuffApplyRemoveSequence(log.CombatData, InevitableDarknessPlayer, player, true, false);
         replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
-        replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
+        replay.Decorations.AddTethers(inevitableDarknessEvents, Colors.LightPurple, 0.5);
 
         // wintry orb (green)
         var wintryOrbs = player.GetBuffStatus(log, LethalCoalescenceBuff).Where(x => x.Value > 0);

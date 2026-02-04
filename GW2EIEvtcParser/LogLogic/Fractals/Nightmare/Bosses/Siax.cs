@@ -246,7 +246,7 @@ internal class Siax : Nightmare
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare).Where(x => x.Value > 0);
         var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, FixatedNightmare, p, true, true);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        replay.Decorations.AddTethers(fixationEvents, Colors.Magenta, 0.5);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

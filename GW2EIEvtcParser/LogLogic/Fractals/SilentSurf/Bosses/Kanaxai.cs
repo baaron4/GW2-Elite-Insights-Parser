@@ -294,7 +294,7 @@ internal class Kanaxai : SilentSurf
         // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
         // Custom decoration not visible in game
         var phantasmagorias = GetBuffApplyRemoveSequence(log.CombatData, Phantasmagoria, player, true, true);
-        replay.Decorations.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
+        replay.Decorations.AddTethers(phantasmagorias, Colors.LightBlue, 0.5);
 
         // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
         IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2]).Where(x => x.Value > 0);

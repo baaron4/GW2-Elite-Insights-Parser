@@ -407,7 +407,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 {
                     // Red tether from Qadim to the Pylon during breakbar
                     var breakbarBuffs = GetBuffApplyRemoveSequence(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
-                    replay.Decorations.AddTether(breakbarBuffs, Colors.Red, 0.4);
+                    replay.Decorations.AddTethers(breakbarBuffs, Colors.Red, 0.4);
                     var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
                     var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
                     foreach (var segment in breakbarActives)

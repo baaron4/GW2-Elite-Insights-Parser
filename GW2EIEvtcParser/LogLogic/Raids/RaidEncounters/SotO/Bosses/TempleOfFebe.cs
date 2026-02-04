@@ -528,7 +528,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
         // Malicious Intent - Malice Adds Tether
         var maliciousIntent = GetBuffApplyRemoveSequence(log.CombatData, [MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], p, true, true);
-        replay.Decorations.AddTether(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
+        replay.Decorations.AddTethers(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

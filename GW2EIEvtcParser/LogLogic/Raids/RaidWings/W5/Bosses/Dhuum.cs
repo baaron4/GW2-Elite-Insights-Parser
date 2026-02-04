@@ -571,7 +571,7 @@ internal class Dhuum : HallOfChains
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
                 var fixations = GetBuffApplyRemoveSequence(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
-                replay.Decorations.AddTether(fixations, Colors.Red, 0.4);
+                replay.Decorations.AddTethers(fixations, Colors.Red, 0.4);
                 break;
             case (int)TargetID.Deathling:
                 break;
@@ -721,13 +721,13 @@ internal class Dhuum : HallOfChains
         }
         // shackles connection
         var shackles = GetBuffApplyRemoveSequence(log.CombatData, [DhuumShacklesBuff, DhuumShacklesBuff2], p, true, true);
-        replay.Decorations.AddTether(shackles, Colors.Teal, 0.5);
+        replay.Decorations.AddTethers(shackles, Colors.Teal, 0.5);
 
         // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
         // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
         // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
         var shacklesDmg = GetBuffApplyRemoveSequence(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
-        replay.Decorations.AddTether(shacklesDmg, Colors.Yellow, 0.5);
+        replay.Decorations.AddTethers(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
         var hastenedDemise = p.GetBuffStatus(log, HastenedDemise).Where(x => x.Value == 1);
