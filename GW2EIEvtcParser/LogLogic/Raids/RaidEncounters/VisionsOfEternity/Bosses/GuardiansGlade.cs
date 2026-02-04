@@ -71,9 +71,87 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kela, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<SubPhasePhaseData>(10);
+        var kelaCasts = kela.GetAnimatedCastEvents(log, encounterPhase.Start, encounterPhase.End);
+        var burrowCast = kelaCasts.Where(x => x.SkillID == KelaBurrow).ToList();
+        var kelaNonBurrowRelatedCast = kelaCasts.Where(x => x.SkillID != KelaBurrow && x.SkillID != KelaAmbush1 && x.SkillID != KelaAmbush2 && x.SkillID != log.SkillData.DodgeID && x.ActualDuration > ServerDelayConstant).ToList();
+        // Candidate phases
+        var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, false);
+        List<SubPhasePhaseData> candidateMainPhases = [];
+        List<SubPhasePhaseData> candidateBurrowedPhases = [];
+        for (int i = 0; i < kelaPhases.Count; i++)
+        {
+            SubPhasePhaseData subPhase = kelaPhases[i];
+            subPhase.AddParentPhase(encounterPhase);
+            if ((i % 2) == 0)
+            {
+                candidateMainPhases.Add(subPhase);
+            }
+            else
+            {
+                candidateBurrowedPhases.Add(subPhase);
+            }
+            subPhase.AddTarget(kela, log);
+        }
+        // Split phases
+        var burrowPhaseCount = 1;
+        List<SubPhasePhaseData> burrowPhases = new(10);
+        SubPhasePhaseData? curBurrowPhase = null;
+        foreach (var candidateBurrowPhase in candidateBurrowedPhases)
+        {
+            if (curBurrowPhase == null)
+            {
+                curBurrowPhase = candidateBurrowPhase;
+                curBurrowPhase.Name = "Kela Burrow Phase " + (burrowPhaseCount++);
+                phases.Add(curBurrowPhase);
+                burrowPhases.Add(curBurrowPhase);
+            } 
+            else
+            {
+                var nextBurrowStart = candidateBurrowPhase.Start;
+                var previousBurrowEnd = curBurrowPhase.End;
+                var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
+                var nonBurrowCast = kelaNonBurrowRelatedCast.Where(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant).ToList();
+                if (nonBurrowCast.Count == 0 && burrowCastQuickly)
+                {
+                    curBurrowPhase.OverrideEnd(candidateBurrowPhase.End);
+                } 
+                else
+                {
+                    curBurrowPhase = candidateBurrowPhase;
+                    phases.Add(curBurrowPhase);
+                    curBurrowPhase.Name = "Kela Burrow Phase " + (burrowPhaseCount++);
+                    burrowPhases.Add(curBurrowPhase);
+                }
+            }
+        }
+        // Main phases
+        var mainPhaseCount = 1;
+        foreach (var candidateMainPhase in candidateMainPhases)
+        {
+            if (!burrowPhases.Any(x => x.InInterval((candidateMainPhase.Start + candidateMainPhase.End) / 2)))
+            {
+                candidateMainPhase.Name = "Kela Phase " + (mainPhaseCount++);
+                phases.Add(candidateMainPhase);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        return base.GetPhases(log, requirePhases);
+        var kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
+        var phases = GetInitialPhase(log);
+        var fullFightPhase = (EncounterPhaseData)phases[0];
+        fullFightPhase.AddTarget(kela, log);
+        phases.AddRange(ComputePhases(log, kela, fullFightPhase, requirePhases));
+        return phases;
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
