@@ -26,6 +26,10 @@ public class CombatReplayMap
     /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
     internal CombatReplayMap((int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
     {
+        if (urlPixelSize.width <= 0 || urlPixelSize.height <= 0)
+        {
+            throw new InvalidDataException("Width and height must be strictly positive in CombatReplay map");
+        }
         _pixelSize = urlPixelSize;
         _rectInMap = rectInMap;
     }
