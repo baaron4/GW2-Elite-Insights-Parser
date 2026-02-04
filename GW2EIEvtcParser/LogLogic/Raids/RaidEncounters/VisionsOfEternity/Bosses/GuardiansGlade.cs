@@ -65,12 +65,12 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        return [];
+        return base.GetPhases(log, requirePhases);
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
@@ -80,6 +80,6 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
     }
 }
