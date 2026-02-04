@@ -8,11 +8,13 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -65,6 +67,24 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             TargetID.ExecutorOfWaves,
             TargetID.CursedArtefact_NPC,
         ];
+    }
+
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
+    {
+        long startToUse = GetGenericLogOffset(logData);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            long enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            var firstFixation = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == FixatedKela);
+            // If fixation is missing or first seen fixation is after boss enters combat, fallback to EvtcLogStart
+            if (firstFixation == null || firstFixation.Time > enterCombatTime)
+            {
+                return startToUse;
+            }
+            return firstFixation.Time;
+        }
+        return startToUse;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
