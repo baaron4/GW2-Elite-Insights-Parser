@@ -151,8 +151,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 var nextBurrowStart = candidateBurrowPhase.Start;
                 var previousBurrowEnd = curBurrowPhase.End;
                 var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
-                var nonBurrowCast = kelaNonBurrowRelatedCast.Where(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant).ToList();
-                if (nonBurrowCast.Count == 0 && burrowCastQuickly)
+                var nonBurrowCast = kelaNonBurrowRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
+                if (!nonBurrowCast && burrowCastQuickly)
                 {
                     curBurrowPhase.OverrideEnd(candidateBurrowPhase.End);
                 } 
