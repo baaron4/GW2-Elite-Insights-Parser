@@ -21,7 +21,7 @@ internal abstract class VisionsOfEternityRaidEncounter : RaidEncounterLogic
             return;
         }
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.CurrentRaidReward && x.Time > logData.LogStart);
         if (reward != null)
         {
             successHandler.SetSuccess(true, reward.Time);

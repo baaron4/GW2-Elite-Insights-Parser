@@ -81,5 +81,14 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
+        {
+            var kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
+            var determined762Applies = combatData.GetBuffApplyDataByIDByDst(Determined762, kela.AgentItem);
+            if (determined762Applies.Count == 1)
+            {
+                successHandler.SetSuccess(true, determined762Applies[0].Time);
+            }
+        }
     }
 }
