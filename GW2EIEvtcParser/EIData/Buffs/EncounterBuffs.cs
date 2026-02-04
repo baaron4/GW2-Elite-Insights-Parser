@@ -457,6 +457,16 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: Hopscotch Master", AchievementEligibilityHopscotchMaster, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Toxic Buildup", ToxicBuildup, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Acid Rain", AcidRain, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ScaldingWater),
+            // Kela       
+            new Buff("Fixated (Kelta)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Targeted (Kela)", TargetedKela, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Loose Sand", LooseSand, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Shredded Armor", ShreddedArmor, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Unknown),
+            new Buff("Biting Swarm 2", BitingSwarm2, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Biting Swarm 1", BitingSwarm1, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
             //////////////////////////////////////////////
             // Fractals
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),

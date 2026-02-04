@@ -5469,6 +5469,18 @@ public static class SkillIDs
     public const long DangerTime = 79353;
     public const long TimeBombDamage = 79359;
     public const long BountifulPower = 79363;
+    public const long FixatedKela = 79380;
+    public const long TargetedKela = 79414;
+    public const long KelaAmbush2 = 79425;
+    public const long Hunted = 79470;
+    public const long KelaBurrow = 79472;
+    public const long ShreddedArmor = 79485;
     public const long QuickplayMorale = 79492;
+    public const long RelentlessSpeed = 79493;
+    public const long KelaAmbush1 = 79507;
+    public const long KelaBurrowed = 79509;
+    public const long BitingSwarm2 = 79513;
+    public const long LooseSand = 79525;
+    public const long BitingSwarm1 = 79526;
     #endregion
 }
