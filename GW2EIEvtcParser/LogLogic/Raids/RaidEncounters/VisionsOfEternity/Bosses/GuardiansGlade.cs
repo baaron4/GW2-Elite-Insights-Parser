@@ -36,7 +36,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap(
-            (0, 0),
+            (800, 800),
             (0, 0, 0, 0));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGuardiansGlade, crMap);
         return crMap;
