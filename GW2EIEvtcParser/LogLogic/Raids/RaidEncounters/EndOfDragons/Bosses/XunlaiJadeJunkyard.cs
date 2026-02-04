@@ -523,13 +523,13 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         }
         // Tethering Players to Lich
         var lichTethers = GetBuffApplyRemoveSequence(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
-        replay.Decorations.AddTether(lichTethers, Colors.Teal, 0.5);
+        replay.Decorations.AddTethers(lichTethers, Colors.Teal, 0.5);
 
         // Reanimated Hatred Fixation
         IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
-        replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TargetID.ReanimatedHatred, Colors.Magenta, 0.5);
+        replay.Decorations.AddTethersByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TargetID.ReanimatedHatred, Colors.Magenta, 0.5);
     }
 
     private static void AddDeathsHandDecoration(CombatReplay replay, Vector3 position, long start, int delay, uint radius, int duration)

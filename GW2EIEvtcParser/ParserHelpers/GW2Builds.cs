@@ -241,5 +241,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-02-03
     public const ulong February2026GuardiansGladeReleaseAndPvPBalance = 194969;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2026-02-03
+    public const ulong February2026GuardiansGladeRelease = 194969;
+
     public const ulong EndOfLife = ulong.MaxValue;
 }

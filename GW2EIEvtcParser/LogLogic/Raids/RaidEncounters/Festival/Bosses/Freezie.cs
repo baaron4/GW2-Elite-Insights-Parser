@@ -163,7 +163,7 @@ internal class Freezie : FestivalRaidEncounterLogic
             case (int)TargetID.Freezie:
                 // Fixation tether to Icy Protector
                 var fixations = GetBuffApplyRemoveSequence(log.CombatData, IcyBarrier, target, true, true);
-                replay.Decorations.AddTether(fixations, "rgba(30, 144, 255, 0.4)");
+                replay.Decorations.AddTethers(fixations, "rgba(30, 144, 255, 0.4)");
                 break;
             default:
                 break;

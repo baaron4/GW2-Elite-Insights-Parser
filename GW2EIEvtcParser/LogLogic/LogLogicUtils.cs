@@ -225,16 +225,17 @@ internal static class LogLogicUtils
         var positionDict = movementData
             .Where(x => x.IsStateChange == StateChange.Position)
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Key.Type == AgentItem.AgentType.Gadget && x.Key.Master == null)
             .ToDictionary(x => x.Key, x => x.ToList());
         var gadgetPositions = positionDict.Where(entry => {
 
-            if (entry.Key.Type != AgentItem.AgentType.Gadget || entry.Key.Master != null || nonZeroGadgetVelocities.ContainsKey(entry.Key))
+            if (nonZeroGadgetVelocities.ContainsKey(entry.Key))
             {
                 return false;
             }
             return entry.Value.Any(x => chestIDs.Any(y => (MovementEvent.GetPoint3D(x) - y.chestPosition).XY().Length() < InchDistanceThreshold));
-        });
-        if (!gadgetPositions.Any())
+        }).ToList();
+        if (gadgetPositions.Count == 0)
         {
             return;
         }

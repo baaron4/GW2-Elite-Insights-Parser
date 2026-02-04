@@ -533,11 +533,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
         // tether between sprite and player
         var spriteFixations = GetBuffApplyRemoveSequence(log.CombatData, [FixatedEnragedWaterSprite], p, true, true);
-        replay.Decorations.AddTether(spriteFixations, Colors.Purple, 0.5);
+        replay.Decorations.AddTethers(spriteFixations, Colors.Purple, 0.5);
 
         // Tethering Players to Fears
         var fearFixations = GetBuffApplyRemoveSequence(log.CombatData, [FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], p, true, true);
-        replay.Decorations.AddTether(fearFixations, Colors.Magenta, 0.5);
+        replay.Decorations.AddTethers(fearFixations, Colors.Magenta, 0.5);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -597,7 +597,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 {
                     // tether between guilt and player/boss, buff applied TO guilt
                     var fixationBuffs = GetBuffApplyRemoveSequence(log.CombatData, [FixatedGuilt], target, true, true);
-                    replay.Decorations.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
+                    replay.Decorations.AddTethers(fixationBuffs, Colors.DarkPurple, 0.5);
                     break;
                 }
         }
