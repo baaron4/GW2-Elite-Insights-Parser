@@ -177,7 +177,7 @@ internal class PhaseDto
                 case LogData.Mode.Normal:
                     Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.Emboldened && x.AttachedPhase == phase) ? 
                         "Emboldened Normal Mode" : 
-                        log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.QuickplayBoost) ? 
+                        log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.QuickplayBoost || x.Buff.ID == SkillIDs.QuickplayMorale) ? 
                             "Quickplay Normal Mode" 
                             : 
                             "Normal Mode";

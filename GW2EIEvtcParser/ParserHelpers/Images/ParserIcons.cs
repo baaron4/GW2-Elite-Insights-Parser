@@ -234,6 +234,7 @@ internal static class ParserIcons
     private const string Umbriel = "https://i.imgur.com/lE2Dg5a.png";
     private const string Zojja = "https://i.imgur.com/9iSzaTe.png";
     private const string WhisperingShadow = "https://i.imgur.com/ncmbsdG.png";
+    private const string KelaSeneschalOfWaves = "https://i.imgur.com/9aku5q0.png";
     #endregion
 
     #region Trash
@@ -1361,6 +1362,7 @@ internal static class ParserIcons
         { TargetID.UmbrielHalberdOfHouseAurkus, Umbriel },
         { TargetID.ZojjaNayos, Zojja },
         { TargetID.WhisperingShadow, WhisperingShadow },
+        { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
     };
 
     /// <summary>

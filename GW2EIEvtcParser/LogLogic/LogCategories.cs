@@ -42,6 +42,7 @@ public class LogCategories
         Drizzlewood,
         Cantha,
         SotO,
+        VisionsOfEternity,
         //
         GreenAlpineBorderlands,
         BlueAlpineBorderlands,

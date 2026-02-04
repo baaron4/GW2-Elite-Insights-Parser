@@ -5469,5 +5469,6 @@ public static class SkillIDs
     public const long DangerTime = 79353;
     public const long TimeBombDamage = 79359;
     public const long BountifulPower = 79363;
+    public const long QuickplayMorale = 79492;
     #endregion
 }
