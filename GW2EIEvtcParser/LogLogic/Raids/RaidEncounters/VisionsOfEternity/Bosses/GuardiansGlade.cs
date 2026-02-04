@@ -59,7 +59,10 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     {
         return
         [
-            
+            TargetID.DownedEliteCrocodilianRazortooth,
+            TargetID.EliteCrocodilianRazortooth,
+            TargetID.VeteranCrocodilianRazortooth,
+            TargetID.ExecutorOfWaves,
         ];
     }
 

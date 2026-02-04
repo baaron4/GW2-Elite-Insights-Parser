@@ -1363,6 +1363,7 @@ internal static class ParserIcons
         { TargetID.ZojjaNayos, Zojja },
         { TargetID.WhisperingShadow, WhisperingShadow },
         { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
+        { TargetID.EliteCrocodilianRazortooth, TrashGenericRedEnemySkull },
     };
 
     /// <summary>

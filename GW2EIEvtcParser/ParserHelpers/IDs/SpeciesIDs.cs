@@ -560,6 +560,10 @@ public static class SpeciesIDs
         PermanentEmbodimentOfMalice = SpeciesIDs.PermanentEmbodimentOfMalice,
         // - Guardian's Glade
         KelaSeneschalOfWaves = 27124,
+        ExecutorOfWaves = 27651,
+        VeteranCrocodilianRazortooth = 27667,
+        DownedEliteCrocodilianRazortooth = 27658,
+        EliteCrocodilianRazortooth = 27655,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
