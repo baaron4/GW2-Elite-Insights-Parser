@@ -20,7 +20,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 {
     internal readonly MechanicGroup Mechanics = new
     ([
-        
+        new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela","Fixated", 0),
     ]);
     
     public GuardiansGlade(int triggerID) : base(triggerID)
@@ -171,6 +171,22 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         return LogData.Mode.Normal;
+    }
+
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
+    {
+        // Fixated
+        var kelaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID).ToList();
+        var fixateds = p.GetBuffStatus(log, FixatedKela).Where(x => x.Value > 0);
+        foreach (Segment seg in fixateds)
+        {
+            var kela = kelaPhases.FirstOrDefault(x => x.IntersectsWindow(seg.Start, seg.End))?.Targets.First(x => x.Key.IsSpecies(TargetID.KelaSeneschalOfWaves)).Key;
+            if (kela != null)
+            {
+                replay.Decorations.AddTether(seg.Start, seg.End, p.AgentItem, kela.AgentItem, Colors.FixationPurple.WithAlpha(0.3).ToString());
+            }
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+        }
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)

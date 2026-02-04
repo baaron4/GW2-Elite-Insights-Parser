@@ -364,7 +364,7 @@ internal class Slothasor : SalvationPass
         var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSloth)
         {
-            replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
+            replay.Decorations.Add(new CircleDecoration(120, seg, Colors.FixationPurple.WithAlpha(0.3).ToString(), new AgentConnector(p)));
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
     }
