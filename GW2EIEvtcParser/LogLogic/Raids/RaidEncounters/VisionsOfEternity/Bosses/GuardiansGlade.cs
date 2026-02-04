@@ -77,10 +77,10 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             long enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
             var firstFixation = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == FixatedKela);
-            // If fixation is missing or first seen fixation is after boss enters combat, fallback to EvtcLogStart
+            // If fixation is missing or first seen fixation is after boss enters combat, fallback to enterCombatTime, log will be seen as late start
             if (firstFixation == null || firstFixation.Time > enterCombatTime)
             {
-                return startToUse;
+                return enterCombatTime;
             }
             return firstFixation.Time;
         }
@@ -207,6 +207,21 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
+    }
+
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    {
+        var genericStatus = base.GetLogStartStatus(combatData, agentData, logData);
+        if (genericStatus != LogData.StartStatus.Normal)
+        {
+            return genericStatus;
+        }
+        var firstFixation = combatData.GetBuffApplyData(FixatedKela).FirstOrDefault();
+        if (firstFixation != null)
+        {
+            return firstFixation.Time <= logData.LogStart ? LogData.StartStatus.Normal : LogData.StartStatus.Late;
+        }
+        return LogData.StartStatus.Late;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
