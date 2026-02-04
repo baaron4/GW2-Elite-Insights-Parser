@@ -1066,6 +1066,7 @@ public static class SpeciesIDs
     internal static readonly Vector3 DecimasChestPosition = new(-10464.6f, 13033.6f, -5450.19f);
     internal static readonly Vector3 UrasChestPosition = new(4925.35f, 10724.1f, -10632.8f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
+    internal static readonly Vector3 GrandRaidChestKelaPosition = new(-20832.9f, 12552.2f, -1698.32f);
 
     public enum ChestID : int
     {
@@ -1095,7 +1096,8 @@ public static class SpeciesIDs
         GreersChest = SpeciesIDs.GreersChest,
         DecimasChest = SpeciesIDs.DecimasChest,
         UrasChest = SpeciesIDs.UrasChest,
-        GrandStrikeHTChest = SpeciesIDs.GrandStrikeHTChest,
+        GrandStrikeHarvestTempleChest = SpeciesIDs.GrandStrikeHarvestTempleChest,
+        GrandRaidKelaChest = SpeciesIDs.GrandRaidKelaChest,
 
         None = int.MaxValue,
     };
@@ -1167,7 +1169,7 @@ public static class SpeciesIDs
     private const int QadimPlatform = -49;
     private const int GravityBall = -50;
     private const int JormagMovingFrostBeam = -51;
-    private const int GrandStrikeChest = -52;
+    private const int GrandStrikeHarvestTempleChest = -52;
     private const int PermanentEmbodimentOfGluttony = -53;
     private const int PermanentEmbodimentOfRage = -54;
     private const int PermanentEmbodimentOfDespair = -55;
@@ -1238,6 +1240,7 @@ public static class SpeciesIDs
     private const int HTGreenSooWonNorthEast = -119;
     private const int HTGreenSooWonSouthEast = -120;
     private const int HTGreenSooWonSouth = -121;
+    private const int GrandRaidKelaChest = -122;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

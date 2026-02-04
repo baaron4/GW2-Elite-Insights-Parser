@@ -152,7 +152,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             ]),
         ]));
         Icon = EncounterIconHarvestTemple;
-        ChestID = ChestID.GrandStrikeHTChest;
+        ChestID = ChestID.GrandStrikeHarvestTempleChest;
         GenericFallBackMethod = FallBackMethod.None;
         Extension = "harvsttmpl";
         LogCategoryInformation.InSubCategoryOrder = 3;
