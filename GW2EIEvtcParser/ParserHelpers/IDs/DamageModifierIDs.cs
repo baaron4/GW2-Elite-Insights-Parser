@@ -422,4 +422,5 @@ public static class DamageModifierIDs
     public const int Mod_DeterminedResolution_NuminousGift = 409;
     public const int Mod_TargetedDestruction_NuminousGift = 410;
     public const int Mod_LoveSong = 411;
+    public const int Mod_ShreddedArmor = 412;
 }
