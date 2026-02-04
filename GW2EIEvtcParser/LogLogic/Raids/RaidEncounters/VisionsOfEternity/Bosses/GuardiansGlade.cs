@@ -108,7 +108,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             if (curBurrowPhase == null)
             {
                 curBurrowPhase = candidateBurrowPhase;
-                curBurrowPhase.Name = "Kela Burrow Phase " + (burrowPhaseCount++);
+                curBurrowPhase.Name = "Burrow Phase " + (burrowPhaseCount++);
                 phases.Add(curBurrowPhase);
                 burrowPhases.Add(curBurrowPhase);
             } 
@@ -126,7 +126,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 {
                     curBurrowPhase = candidateBurrowPhase;
                     phases.Add(curBurrowPhase);
-                    curBurrowPhase.Name = "Kela Burrow Phase " + (burrowPhaseCount++);
+                    curBurrowPhase.Name = "Burrow Phase " + (burrowPhaseCount++);
                     burrowPhases.Add(curBurrowPhase);
                 }
             }
@@ -137,7 +137,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             if (!burrowPhases.Any(x => x.InInterval((candidateMainPhase.Start + candidateMainPhase.End) / 2)))
             {
-                candidateMainPhase.Name = "Kela Phase " + (mainPhaseCount++);
+                candidateMainPhase.Name = "Phase " + (mainPhaseCount++);
                 phases.Add(candidateMainPhase);
             }
         }
