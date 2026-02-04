@@ -1095,7 +1095,7 @@ public static class SpeciesIDs
         GreersChest = SpeciesIDs.GreersChest,
         DecimasChest = SpeciesIDs.DecimasChest,
         UrasChest = SpeciesIDs.UrasChest,
-        GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
+        GrandStrikeHTChest = SpeciesIDs.GrandStrikeHTChest,
 
         None = int.MaxValue,
     };
