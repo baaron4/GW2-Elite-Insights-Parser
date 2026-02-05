@@ -296,6 +296,7 @@ public static class SkillItemOverrides
         { UraDispelSAK, "Dispel" },
         // Kela
         { KelaBurrow, "Burrow" },
+        { KelaAura, "Aura (Kela)" },
         #endregion Raids
         #region Strikes
         // Voice and Claw

@@ -5481,6 +5481,7 @@ public static class SkillIDs
     public const long KelaBurrowed = 79509;
     public const long BitingSwarm = 79513;
     public const long LooseSand = 79525;
+    public const long KelaAura = 79520;
     public const long BitingSwarmStackingDamage = 79526;
     #endregion
 }

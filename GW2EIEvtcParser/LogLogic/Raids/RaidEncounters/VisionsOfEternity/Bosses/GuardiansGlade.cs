@@ -43,6 +43,13 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGuardiansGlade, crMap);
         return crMap;
     }
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        return
+        [
+            new DamageCastFinder(KelaAura, KelaAura),
+        ];
+    }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
