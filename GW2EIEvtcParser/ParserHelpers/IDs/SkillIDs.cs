@@ -5479,8 +5479,8 @@ public static class SkillIDs
     public const long RelentlessSpeed = 79493;
     public const long KelaAmbush1 = 79507;
     public const long KelaBurrowed = 79509;
-    public const long BitingSwarm2 = 79513;
+    public const long BitingSwarm = 79513;
     public const long LooseSand = 79525;
-    public const long BitingSwarm1 = 79526;
+    public const long BitingSwarmStackingDamage = 79526;
     #endregion
 }
