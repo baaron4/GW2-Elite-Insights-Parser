@@ -216,7 +216,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
 
         // Biting Swarm
-        var bitingSwarms = p.GetBuffStatus(log, BitingSwarmIndicator).Where(x => x.Value > 0);
+        var bitingSwarms = p.GetBuffStatus(log, BitingSwarm).Where(x => x.Value > 0);
         foreach (var seg in bitingSwarms)
         {
             var decoration = new CircleDecoration(100, seg, Colors.Orange, 0.1, new AgentConnector(p.AgentItem));
@@ -275,7 +275,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                     var end = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault()?.Time ?? target.LastAware;
                     if (start != null)
                     {
-                        var decoration = new CircleDecoration(235, (start.Value, end), Colors.White, 0.2, new AgentConnector(target));
+                        var decoration = new CircleDecoration(235, (start.Value, end), Colors.BlueishGrey, 0.2, new AgentConnector(target));
                         replay.Decorations.Add(decoration);
                     }
                     break;
