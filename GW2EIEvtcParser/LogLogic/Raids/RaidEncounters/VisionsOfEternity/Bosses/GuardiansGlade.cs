@@ -37,10 +37,17 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap(
-            (800, 800),
-            (0, 0, 0, 0));
+            (1149, 1149),
+            (-23041.832, 10959.9775, -18941.832, 15059.9775));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGuardiansGlade, crMap);
         return crMap;
+    }
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        return
+        [
+            new DamageCastFinder(KelaAura, KelaAura),
+        ];
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -118,7 +125,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         // Candidate phases
         var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, false);
         List<SubPhasePhaseData> candidateMainPhases = [];
-        List<SubPhasePhaseData> candidateBurrowedPhases = [];
+        List<SubPhasePhaseData> candidateStormPhases = [];
         for (int i = 0; i < kelaPhases.Count; i++)
         {
             SubPhasePhaseData subPhase = kelaPhases[i];
@@ -129,39 +136,39 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
             else
             {
-                candidateBurrowedPhases.Add(subPhase);
+                candidateStormPhases.Add(subPhase);
             }
             subPhase.AddTarget(kela, log);
         }
         // Split phases
-        var burrowPhaseCount = 1;
-        List<SubPhasePhaseData> burrowPhases = new(10);
-        SubPhasePhaseData? curBurrowPhase = null;
-        foreach (var candidateBurrowPhase in candidateBurrowedPhases)
+        var stormPhaseCount = 1;
+        List<SubPhasePhaseData> stormPhases = new(10);
+        SubPhasePhaseData? curStormPhase = null;
+        foreach (var candidateStormPhase in candidateStormPhases)
         {
-            if (curBurrowPhase == null)
+            if (curStormPhase == null)
             {
-                curBurrowPhase = candidateBurrowPhase;
-                curBurrowPhase.Name = "Burrow Phase " + (burrowPhaseCount++);
-                phases.Add(curBurrowPhase);
-                burrowPhases.Add(curBurrowPhase);
+                curStormPhase = candidateStormPhase;
+                curStormPhase.Name = "Storm Phase " + (stormPhaseCount++);
+                phases.Add(curStormPhase);
+                stormPhases.Add(curStormPhase);
             }
             else
             {
-                var nextBurrowStart = candidateBurrowPhase.Start;
-                var previousBurrowEnd = curBurrowPhase.End;
+                var nextBurrowStart = candidateStormPhase.Start;
+                var previousBurrowEnd = curStormPhase.End;
                 var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
-                var nonBurrowCast = kelaNonBurrowRelatedCast.Where(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant).ToList();
-                if (nonBurrowCast.Count == 0 && burrowCastQuickly)
+                var nonBurrowCast = kelaNonBurrowRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
+                if (!nonBurrowCast && burrowCastQuickly)
                 {
-                    curBurrowPhase.OverrideEnd(candidateBurrowPhase.End);
+                    curStormPhase.OverrideEnd(candidateStormPhase.End);
                 }
                 else
                 {
-                    curBurrowPhase = candidateBurrowPhase;
-                    phases.Add(curBurrowPhase);
-                    curBurrowPhase.Name = "Burrow Phase " + (burrowPhaseCount++);
-                    burrowPhases.Add(curBurrowPhase);
+                    curStormPhase = candidateStormPhase;
+                    phases.Add(curStormPhase);
+                    curStormPhase.Name = "Storm Phase " + (stormPhaseCount++);
+                    stormPhases.Add(curStormPhase);
                 }
             }
         }
@@ -169,7 +176,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var mainPhaseCount = 1;
         foreach (var candidateMainPhase in candidateMainPhases)
         {
-            if (!burrowPhases.Any(x => x.InInterval((candidateMainPhase.Start + candidateMainPhase.End) / 2)))
+            if (!stormPhases.Any(x => x.InInterval((candidateMainPhase.Start + candidateMainPhase.End) / 2)))
             {
                 candidateMainPhase.Name = "Phase " + (mainPhaseCount++);
                 phases.Add(candidateMainPhase);

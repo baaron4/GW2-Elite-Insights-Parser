@@ -877,6 +877,7 @@ internal static class SkillImages
     public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
     public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
     public const string TossSlubling = "https://assets.gw2dat.com/831481.png";
+    public const string ThrowLight = "https://wiki.guildwars2.com/images/8/8c/Throw_Light.png";
     // Convergences
     public const string EtherealHealing = "https://wiki.guildwars2.com/images/3/3c/Ethereal_Healing.png";
     public const string PacifiedMagicalStorm = "https://wiki.guildwars2.com/images/f/f1/Pacified_Magical_Storm.png";

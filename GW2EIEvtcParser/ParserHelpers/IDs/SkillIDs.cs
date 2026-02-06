@@ -5480,8 +5480,10 @@ public static class SkillIDs
     public const long RelentlessSpeed = 79493;
     public const long KelaAmbush1 = 79507;
     public const long KelaBurrowed = 79509;
-    public const long BitingSwarmIndicator = 79513; // hidden, effect & screen border
+    public const long BitingSwarm = 79513; // hidden, effect & screen border
     public const long LooseSand = 79525;
-    public const long BitingSwarmStacks = 79526;
+    public const long KelaAura = 79520;
+    public const long BitingSwarmStackingDamage = 79526;
     #endregion
+    public const long ThrowRelic = 99999; // Todo find id of this, instant cast?
 }

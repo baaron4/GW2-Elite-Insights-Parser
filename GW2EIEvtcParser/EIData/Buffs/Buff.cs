@@ -81,6 +81,7 @@ public class Buff : IVersionable
 #if DEBUG
         if (Classification == BuffClassification.Hidden)
         {
+            Name += " Debug";
             Classification = BuffClassification.Other;
         }
 #endif

@@ -143,7 +143,7 @@ internal static class LogImages
     internal const string CombatReplayMountBalriorRaid = "https://wiki.guildwars2.com/images/e/eb/Mount_Balrior_map.jpg";
     internal const string CombatReplayGreerTheBlightbringer = "https://i.imgur.com/yH1yulA.png";
     internal const string CombatReplayDecimaTheStormsinger = "https://i.imgur.com/4cJAW7r.png";
-    internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/Vn1JQ3p.png";
+    internal const string CombatReplayUraTheSteamshrieker = "https://i.imgur.com/Vn1JQ3p.png";
 
     #endregion RAID WINGS
 
@@ -183,7 +183,7 @@ internal static class LogImages
     internal const string CombatReplayCosmicObservatory_old = "https://i.imgur.com/47tKhXG.png";
     internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/mODYp42.png";
     internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
-    internal const string CombatReplayGuardiansGlade = "";
+    internal const string CombatReplayGuardiansGlade = "https://i.imgur.com/Eg0LxdA.png";
 
     #endregion RAID ENCOUNTERS
 

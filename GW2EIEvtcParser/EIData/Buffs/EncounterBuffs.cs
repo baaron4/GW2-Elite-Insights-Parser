@@ -457,16 +457,6 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: Hopscotch Master", AchievementEligibilityHopscotchMaster, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Toxic Buildup", ToxicBuildup, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Acid Rain", AcidRain, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ScaldingWater),
-            // Kela
-            new Buff("Fixated (Kelta)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
-            new Buff("Targeted (Kela)", TargetedKela, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
-            new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Loose Sand", LooseSand, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Shredded Armor", ShreddedArmor, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Unknown),
-            new Buff("Biting Swarm 2", BitingSwarmIndicator, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Biting Swarm 1", BitingSwarmStacks, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
             //////////////////////////////////////////////
             // Fractals
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
@@ -750,6 +740,16 @@ internal static class EncounterBuffs
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Achievement Eligibility: Unbounded Optimism", AchievementEligibilityUnboundedOptimism, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Apathetic", AchievementEligibilityApathetic, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Kela
+            new Buff("Fixated (Kela)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, SkillImages.ThrowLight),
+            new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Loose Sand", LooseSand, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.Goop),
+            new Buff("Shredded Armor", ShreddedArmor, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Vulnerability),
+            new Buff("Biting Swarm (Hidden)", BitingSwarm, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Biting Swarm", BitingSwarmStackingDamage, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, BuffImages.TargetedLocust),
+            new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RelentlessSpeed),
+            new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             // Convergences
             // - Outer Nayos
             new Buff("Unstable Attunement (SotO)", UnstableAttunementSotO, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.DebilitatingVoid),

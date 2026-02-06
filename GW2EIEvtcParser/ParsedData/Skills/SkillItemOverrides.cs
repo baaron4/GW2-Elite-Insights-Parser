@@ -296,6 +296,7 @@ public static class SkillItemOverrides
         { UraDispelSAK, "Dispel" },
         // Kela
         { KelaBurrow, "Burrow" },
+        { KelaAura, "Aura (Kela)" },
         #endregion Raids
         #region Strikes
         // Voice and Claw
@@ -1127,7 +1128,7 @@ public static class SkillItemOverrides
             // Eater of Souls
             { ReclaimedEnergySkill, BuffImages.ReclaimedEnergy },
             // Eyes of Judgment
-            { ThrowLight, "https://wiki.guildwars2.com/images/8/8c/Throw_Light.png" },
+            { ThrowLight, SkillImages.ThrowLight },
             { Flare, "https://wiki.guildwars2.com/images/5/54/Flare.png" },
             // - Dhuum
             { ExpelEnergySAK, "https://wiki.guildwars2.com/images/c/c1/Core_Capture.png" },
@@ -1154,6 +1155,8 @@ public static class SkillItemOverrides
             { HypernovaLaunchSAK, SkillImages.CelestialDash },
             // - Eparch
             { HeartOfTheObscure, "https://wiki.guildwars2.com/images/5/5a/Scan_for_Rift.png" },
+            // Kela
+            { ThrowRelic, SkillImages.ThrowLight },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Generic Encounter Skills
