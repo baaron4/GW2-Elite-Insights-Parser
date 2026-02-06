@@ -5484,4 +5484,5 @@ public static class SkillIDs
     public const long KelaAura = 79520;
     public const long BitingSwarmStackingDamage = 79526;
     #endregion
+    public const long ThrowRelic = 99999; // Todo find id of this, instant cast?
 }
