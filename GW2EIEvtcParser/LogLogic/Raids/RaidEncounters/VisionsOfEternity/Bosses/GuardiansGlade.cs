@@ -329,7 +329,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
         }
 
-        // Scaling Wave
+        // Scalding Wave
         const uint waveLength = 5000;
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleScaldingWaveIndicator, out var waveIndicators))
         {
