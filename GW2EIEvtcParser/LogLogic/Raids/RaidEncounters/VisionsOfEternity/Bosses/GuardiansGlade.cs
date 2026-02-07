@@ -14,14 +14,99 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
 internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 {
     internal readonly MechanicGroup Mechanics = new([
-        new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela","Fixated", 0),
+        // Kela Stomp Left / Right
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", 0),
+                    false
+                ),
+        ]),
+        // Kela Claw Slam
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", 0),
+                    false
+                ),
+        ]),
+        // Lightning Strike
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", 10),
+                    false
+                ),
+        ]),
+        // Crocodilian Razortooth Tackle
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", 0),
+                    false
+                ),
+        ]),
+        // Tornado
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", 0),
+                    false
+                ),
+        ]),
+        new PlayerDstHealthDamageHitMechanic([KelaAmbush1, KelaAmbush2], new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Ambush.H", "Hit by Ambush", "Ambush Hit", 0),
+        new PlayerDstHealthDamageHitMechanic([KelaTantrum1, KelaTantrum2], new MechanicPlotlySetting(Symbols.Square, Colors.BreakbarActiveBlue), "Tantrum.H", "Hit by Tantrum", "Tantrum", 0),
+        new PlayerDstHealthDamageHitMechanic(ScaldingWave, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "ScalWave.H", "Hit by Scalding Wave", "Scalding Wave Hit", 0),
+        new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela", "Kela Fixated", 0),
+        new PlayerDstBuffApplyMechanic(Hunted, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "Croc.Fix", "Fixated by Crocodilian Razortooth", "Croc Fixated", 0),
+        new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", 0),
+        new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", 0),
+        // Biting Swarm
+        new MechanicGroup([
+            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", 0)
+            .UsingChecker((bae, log) =>
+            {
+                foreach (var player in log.PlayerList)
+                {
+                    if (bae.To == player.AgentItem)
+                    {
+                        continue;
+                    }
+                    if (player.HasBuff(log, BitingSwarm, bae.Time - 2800, 2800))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }),
+            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Spread", "Biting Swarm Spread Application", "Spread Biting Swarm", 0)
+            .UsingChecker((bae, log) =>
+            {
+                foreach (var player in log.PlayerList)
+                {
+                    if (bae.To == player.AgentItem)
+                    {
+                        continue;
+                    }
+                    if (player.HasBuff(log, BitingSwarm, bae.Time - 2800, 2800))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }),
+        ]),
+        new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", 0),
+        new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Croc Eat", "Eaten a Crocodilian Razortooth", "Croc Eaten", 0)
+            .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.DownedEliteCrocodilianRazortooth)),
+        new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Player Eat", "Eaten a Player", "Player Eaten", 0)
+            .UsingChecker((hde, log) => hde.To.IsPlayer),
     ]);
 
     public GuardiansGlade(int triggerID) : base(triggerID)
@@ -47,6 +132,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return
         [
             new DamageCastFinder(KelaAura, KelaAura),
+            new MinionSpawnCastFinder(ThrowRelic, (int)TargetID.CursedArtifact_NPC),
         ];
     }
 
@@ -60,6 +146,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return
         [
             TargetID.KelaSeneschalOfWaves,
+            TargetID.ExecutorOfWaves,
+            TargetID.EliteCrocodilianRazortooth,
         ];
     }
 
@@ -68,9 +156,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return
         [
             TargetID.DownedEliteCrocodilianRazortooth,
-            TargetID.EliteCrocodilianRazortooth,
             TargetID.VeteranCrocodilianRazortooth,
-            TargetID.ExecutorOfWaves,
             TargetID.GuardiansGladeTornado,
             TargetID.CursedArtifact_NPC,
         ];
@@ -99,7 +185,13 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         FindChestGadgets([
             (ChestID.GrandRaidKelaChest, GrandRaidChestKelaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
         ], agentData, combatData);
+
+        OverrideGenericKillAmbushKillingBlows(agentData, combatData);
+
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+
+        RenameCrocodilianRazortooth(Targets);
+
         /*var chest = agentData.GetGadgetsByID(ChestID.GrandRaidKelaChest).FirstOrDefault();
         if (chest != null)
         {
@@ -219,8 +311,22 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var bitingSwarms = p.GetBuffStatus(log, BitingSwarm).Where(x => x.Value > 0);
         foreach (var seg in bitingSwarms)
         {
-            var decoration = new CircleDecoration(100, seg, Colors.Orange, 0.1, new AgentConnector(p.AgentItem));
-            replay.Decorations.Add(decoration);
+            var decoration = new CircleDecoration(100, seg, Colors.Orange, 0.3, new AgentConnector(p.AgentItem));
+            replay.Decorations.AddWithBorder(decoration, Colors.Orange, 0.2);
+        }
+
+        // Crocodilian Razortooth Fixation
+        var crocHunted = GetBuffApplyRemoveSequencePerInstanceID(log.CombatData, Hunted, p.AgentItem, true).ToList();
+        foreach (List<BuffEvent> eventsList in crocHunted)
+        {
+            // TODO - Investigate why some croc do not have a tether
+            replay.Decorations.AddTethers(eventsList, Colors.Red, 0.2);
+            foreach (BuffEvent ev in eventsList.Where(x => x is BuffApplyEvent))
+            {
+                // Adjust the fixation end time, in game it's not removed correctly when the croc dies.
+                var lifespan = (ev.Time, ev.By.LastAware);
+                replay.Decorations.Add(new IconOverheadDecoration(ParserIcons.FixationRedOverhead, 20, 1, lifespan, new AgentConnector(p)));
+            }
         }
     }
 
@@ -262,9 +368,27 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                     // Burrowed
                     foreach (var burrowed in target.GetBuffStatus(log, KelaBurrowed).Where(x => x.Value > 0))
                     {
-                        var decoration = new CircleDecoration(320, burrowed, Colors.Orange, 0.2, new AgentConnector(target));
+                        var decoration = new CircleDecoration(320, burrowed, Colors.Orange, 0.3, new AgentConnector(target));
+                        var ring = new CircleDecoration(450, burrowed, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false);
                         replay.Decorations.Add(decoration);
+                        replay.Decorations.Add(ring);
                         replay.Decorations.AddOverheadIcon(burrowed, target, ParserIcons.RedArrowDownOverhead);
+                    }
+
+                    // Tantrum Breakbar
+                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                    var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
+                    foreach (var segment in breakbarActives)
+                    {
+                        replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                    }
+
+                    // Tantrum Range
+                    var tantrumCasts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == KelaTantrum1 || x.SkillID == KelaTantrum2).ToList();
+                    foreach (var cast in tantrumCasts)
+                    {
+                        var decoration = new CircleDecoration(1800, (cast.Time, cast.EndTime), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false);
+                        replay.Decorations.Add(decoration);
                     }
                     break;
                 }
@@ -276,7 +400,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                     if (start != null)
                     {
                         var decoration = new CircleDecoration(235, (start.Value, end), Colors.BlueishGrey, 0.2, new AgentConnector(target));
-                        replay.Decorations.Add(decoration);
+                        replay.Decorations.AddWithBorder(decoration, Colors.Orange, 0.2);
                     }
                     break;
                 }
@@ -285,34 +409,41 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
+        (long start, long end) lifespan;
+
         // Claw Slam (frontal)
+        long slamDuration = 2520; // Effect duration lasts longer than when the damage event happens.
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleClawSlamIndicator, out var clawSlams))
         {
             foreach (var effect in clawSlams)
             {
-                var decoration = new PieDecoration(600, 135, effect.ComputeLifespan(log, 3000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
+                lifespan = (effect.Time, effect.Time + slamDuration);
+                var decoration = (PieDecoration)new PieDecoration(600, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
                    .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                environmentDecorations.Add(decoration);
+                environmentDecorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
             }
         }
 
         // Stomp
+        long stompDuration = 1520; // Effect duration lasts longer than when the damage event happens.
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleStompLeftIndicator, out var stompLeft))
         {
             foreach (var effect in stompLeft)
             {
-                var decoration = new PieDecoration(600, 180, effect.ComputeLifespan(log, 2000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
+                lifespan = (effect.Time, effect.Time + stompDuration);
+                var decoration = (PieDecoration)new PieDecoration(600, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
                    .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                environmentDecorations.Add(decoration);
+                environmentDecorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleStompRightIndicator, out var stompRight))
         {
             foreach (var effect in stompRight)
             {
-                var decoration = new PieDecoration(600, 180, effect.ComputeLifespan(log, 2000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
-                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
-                environmentDecorations.Add(decoration);
+                lifespan = (effect.Time, effect.Time + stompDuration);
+                var decoration = (PieDecoration)new PieDecoration(600, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                environmentDecorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
             }
         }
 
@@ -336,7 +467,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             foreach (var effect in waveIndicators)
             {
                 var position = new PositionConnector(effect.Position).WithOffset(new Vector3(0f, -0.5f * waveLength, 0f), true);
-                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4000), Colors.LightOrange, 0.2, position)
+                lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.GuardiansGaleScaldingWave);
+                var decoration = new RectangleDecoration(2000, waveLength, lifespan, Colors.LightOrange, 0.2, position)
                    .UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 environmentDecorations.Add(decoration);
             }
@@ -345,8 +477,10 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in waves)
             {
+                // TODO - Investigate if it's possible to update the behaviour of the wave to be a moving rectangle.
+                // If it's possible, update the indicator above to last since its spawn time until the wave ends.
                 var position = new PositionConnector(effect.Position).WithOffset(new Vector3(0f, -0.5f * waveLength, 0f), true);
-                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4666), Colors.Red, 0.2, position)
+                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4666), Colors.LightBlue, 0.2, position)
                    .UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 environmentDecorations.Add(decoration);
             }
@@ -356,19 +490,18 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         const float ground = -1700f; // ignore effects significantly above ground
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleLightningStrikeIndicator, out var lightningIndicators))
         {
-            foreach (var effect in lightningIndicators.Where(x => x.isBelowHeight(ground, 100)))
+            foreach (var effect in lightningIndicators.Where(x => x.IsBelowHeight(ground, 100)))
             {
-                var (start, end) = effect.ComputeLifespan(log, 1200);
-                var decoration = new CircleDecoration(190, effect.ComputeLifespan(log, 1200), Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
-                    .UsingFilled(false);
-                environmentDecorations.AddWithFilledWithGrowing(decoration, true, end);
+                lifespan = effect.ComputeLifespan(log, 1200);
+                var decoration = new CircleDecoration(190, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleLightningStrikeHit, out var lightningHits))
         {
-            foreach (var effect in lightningHits.Where(x => x.isBelowHeight(ground, 100)))
+            foreach (var effect in lightningHits.Where(x => x.IsBelowHeight(ground, 100)))
             {
-                var lifespan = (effect.Time, effect.Time + 100); // actual effect duration 1s
+                lifespan = (effect.Time, effect.Time + 100); // actual effect duration 1s
                 var decoration = new CircleDecoration(190, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                 environmentDecorations.Add(decoration);
             }
@@ -401,6 +534,54 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 .UsingFilled(filled);
             decorations.Add(decoration);
             mergedStart = long.MaxValue;
+        }
+    }
+
+    private static void RenameCrocodilianRazortooth(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor actor in targets)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.VeteranCrocodilianRazortooth:
+                    actor.OverrideName("Veteran " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCrocodilianRazortooth:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+                case (int)TargetID.DownedEliteCrocodilianRazortooth:
+                    actor.OverrideName("Downed Elite " + actor.Character);
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// When Kela ambushes a player or a crocodilian razortooth, sometimes the killing blow has no source attached.<br></br>
+    /// We redirect the source of the combat item to Kela.
+    /// </summary>
+    private static void OverrideGenericKillAmbushKillingBlows(AgentData agentData, List<CombatItem> combatData)
+    {
+        AgentItem kela = agentData.GetNPCsByID(TargetID.KelaSeneschalOfWaves).FirstOrDefault() ?? throw new MissingKeyActorsException("Kela not found");
+
+        IReadOnlyList<AgentItem> downedCrocs = agentData.GetNPCsByID(TargetID.DownedEliteCrocodilianRazortooth);
+        foreach (AgentItem croc in downedCrocs)
+        {
+            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
+            foreach (CombatItem item in items)
+            {
+                item.OverrideSrcAgent(kela);
+            }
+        }
+
+        IReadOnlyList<AgentItem> players = agentData.GetAgentByType(AgentItem.AgentType.Player);
+        foreach (AgentItem player in players)
+        {
+            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(player) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill && x.IFF == IFF.Foe);
+            foreach (CombatItem item in items)
+            {
+                item.OverrideSrcAgent(kela);
+            }
         }
     }
 }

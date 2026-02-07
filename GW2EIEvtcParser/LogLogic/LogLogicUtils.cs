@@ -112,6 +112,48 @@ internal static class LogLogicUtils
         return filtered;
     }
 
+    internal static List<List<BuffEvent>> GetBuffApplyRemoveSequencePerInstanceID(CombatData combatData, long buffID, AgentItem target, bool addDummyRemoveAllEventAtEnd)
+    {
+        var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent || x is BuffRemoveSingleEvent)).ToList();
+        var applies = main.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+        var removeSingles = main.OfType<BuffRemoveSingleEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+        var removeAlls = main.OfType<BuffRemoveAllEvent>().ToList();
+        var filtered = new List<List<BuffEvent>>();
+        foreach (var pair in applies)
+        {
+            var instanceApplies = pair.Value;
+            var instanceSequence = new List<BuffEvent>();
+            foreach (var apply in instanceApplies)
+            {
+                instanceSequence.Add(apply);
+                AbstractBuffRemoveEvent? remove = null;
+                if (removeSingles.TryGetValue(pair.Key, out var singleRemoves))
+                {
+                    remove = singleRemoves.FirstOrDefault(x => x.Time >= apply.Time);
+                }
+                if (remove == null)
+                {
+                    remove = removeAlls.FirstOrDefault(x => x.Time > apply.Time);
+                }
+                if (remove != null)
+                {
+                    instanceSequence.Add(remove);
+                }
+                else
+                {
+                    // Instance never removed
+                    if (addDummyRemoveAllEventAtEnd)
+                    {
+                        instanceSequence.Add(new BuffRemoveAllEvent(_unknownAgent, apply.To, target.LastAware, int.MaxValue, apply.BuffSkill, IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                    }
+                    break;
+                }
+            }
+            filtered.Add(instanceSequence);
+        }
+        return filtered;
+    }
+
     internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
         return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
