@@ -578,10 +578,15 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
         }
 
-        IReadOnlyList<AgentItem> players = agentData.GetAgentByType(AgentItem.AgentType.Player);
-        foreach (AgentItem player in players)
+        List<AgentItem> eatableIFFFoeAgents = [
+            ..agentData.GetNPCsByID(TargetID.CursedArtifact_NPC),
+            ..agentData.GetAgentByType(AgentItem.AgentType.Player)
+        ];
+        foreach (AgentItem eatableAgent in eatableIFFFoeAgents)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(player) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill && x.IFF == IFF.Foe);
+            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(eatableAgent) 
+            && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill 
+            && x.IFF == IFF.Foe);
             foreach (CombatItem item in items)
             {
                 item.OverrideSrcAgent(kela);
