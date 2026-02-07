@@ -567,15 +567,19 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     /// </summary>
     private static void OverrideGenericKillAmbushKillingBlows(AgentData agentData, List<CombatItem> combatData)
     {
-        AgentItem kela = agentData.GetNPCsByID(TargetID.KelaSeneschalOfWaves).FirstOrDefault() ?? throw new MissingKeyActorsException("Kela not found");
+        var kelas = agentData.GetNPCsByID(TargetID.KelaSeneschalOfWaves);
 
         IReadOnlyList<AgentItem> downedCrocs = agentData.GetNPCsByID(TargetID.DownedEliteCrocodilianRazortooth);
         foreach (AgentItem croc in downedCrocs)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
-            foreach (CombatItem item in items)
+            var kela = kelas.FirstOrDefault(x => x.InAwareTimes(croc));
+            if (kela != null)
             {
-                item.OverrideSrcAgent(kela);
+                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
+                foreach (CombatItem item in items)
+                {
+                    item.OverrideSrcAgent(kela);
+                }
             }
         }
 
@@ -585,12 +589,16 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ];
         foreach (AgentItem eatableAgent in eatableIFFFoeAgents)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(eatableAgent) 
-            && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill 
-            && x.IFF == IFF.Foe);
-            foreach (CombatItem item in items)
+            var kela = kelas.FirstOrDefault(x => x.InAwareTimes(eatableAgent));
+            if (kela != null)
             {
-                item.OverrideSrcAgent(kela);
+                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(eatableAgent)
+                    && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill
+                    && x.IFF == IFF.Foe);
+                foreach (CombatItem item in items)
+                {
+                    item.OverrideSrcAgent(kela);
+                }
             }
         }
     }
