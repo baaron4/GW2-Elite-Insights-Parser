@@ -298,7 +298,7 @@ public static class SkillItemOverrides
         { KelaBurrow, "Burrow" },
         { KelaAura, "Aura (Kela)" },
         #endregion Raids
-        #region Strikes
+        #region Raid Encounters
         // Voice and Claw
         { KodanTeleport, "Kodan Teleport" },
         // Mai Trin (Aetherblade Hideout)
@@ -349,7 +349,9 @@ public static class SkillItemOverrides
         { PetrifySkill, "Petrify" },
         { EnragedSmashNM, "Enraged Smash (NM)" },
         { EnragedSmashCM, "Enraged Smash (CM)" },
-        #endregion Strikes
+        // Kela
+        { ThrowRelic, "Throw Relic" },
+        #endregion Raid Encounters
         #region Fractals
         // Artsariiv
         { NovaLaunchSAK, "Nova Launch" },
