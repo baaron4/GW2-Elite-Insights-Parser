@@ -740,7 +740,7 @@ internal static class EncounterBuffs
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Achievement Eligibility: Unbounded Optimism", AchievementEligibilityUnboundedOptimism, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Apathetic", AchievementEligibilityApathetic, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Kela       
+            // Kela
             new Buff("Fixated (Kela)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, SkillImages.ThrowLight),
             new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
             new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Fixated),

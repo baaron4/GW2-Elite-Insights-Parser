@@ -5475,11 +5475,12 @@ public static class SkillIDs
     public const long Hunted = 79470;
     public const long KelaBurrow = 79472;
     public const long ShreddedArmor = 79485;
+    public const long TornadoEffects = 79491;
     public const long QuickplayMorale = 79492;
     public const long RelentlessSpeed = 79493;
     public const long KelaAmbush1 = 79507;
     public const long KelaBurrowed = 79509;
-    public const long BitingSwarm = 79513;
+    public const long BitingSwarm = 79513; // hidden, effect & screen border
     public const long LooseSand = 79525;
     public const long KelaAura = 79520;
     public const long BitingSwarmStackingDamage = 79526;

@@ -1083,5 +1083,16 @@ public static class EffectGUIDs
     public static readonly GUID TempleOfFebeEnviousGaze3 = new("B77A06C842511949889877EDC1448D49"); // Duration 11000
     public static readonly GUID TempleOfFebeEnviousGaze4 = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000 - Red circle AoE underneath Cerus - Conflics with other encounters
     public static readonly GUID TempleOfFebeMaliciousIntentTether = new("518369328A12B74EAC49702A785FBA19"); // Duration 0
+    // Guardian's Glade
+    public static readonly GUID GuardiansGaleClawSlamIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // owned by kela, duration 3000
+    public static readonly GUID GuardiansGaleClawSlamHit = new("64D5C832AF8C6E4B90D2D067BDC7D667"); // owned by kela, default duration 1666.6667
+    public static readonly GUID GuardiansGaleStompLeftIndicator = new("ADC3B99ECCB6E04CAB2CDC441FDA26FC"); // owned by kela, duration 2000
+    public static readonly GUID GuardiansGaleStompRightIndicator = new("5274B38555448246AC3F7FE31564C298"); // owned by kela, duration 2000
+    public static readonly GUID GuardiansGaleScaldingWaveIndicator = new("B4DA1EC7924FFE47A4E2FADE7884D78E"); // owned by wave kela, duration 4000
+    public static readonly GUID GuardiansGaleScaldingWave = new("335B7269572CF149B8B1F20DCB83B2A8"); // owned by wave kela, default duration 4666.667
+    public static readonly GUID GuardiansGaleSand = new("07C6CFE25E768C4DAD8515467222B8E4"); // sand visual, owned by executor of waves or sand kela, duration 2100 or 2500
+    public static readonly GUID GuardiansGaleSandBorder = new("826CD8C2ECB37243BC86C7556C977FA7"); // red ring, owned by executor of waves or sand kela, duration 3500 or 19998000 (bug?)
+    public static readonly GUID GuardiansGaleLightningStrikeIndicator = new("CE91D2D4CD6C4141B3977FA70FFE05BB"); // owned by kela, duration 1200
+    public static readonly GUID GuardiansGaleLightningStrikeHit = new("67F798DBCB84984AA21C3FAF663B47D7"); // owned by kela, default duration 1000
     #endregion
 }

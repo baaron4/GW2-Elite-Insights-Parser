@@ -20,11 +20,10 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 {
-    internal readonly MechanicGroup Mechanics = new
-    ([
+    internal readonly MechanicGroup Mechanics = new([
         new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela","Fixated", 0),
     ]);
-    
+
     public GuardiansGlade(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -34,7 +33,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         LogCategoryInformation.InSubCategoryOrder = 0;
         LogID |= 0x000001;
     }
-    
+
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap(
@@ -56,7 +55,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return "Guardian's Glade";
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -72,7 +71,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             TargetID.EliteCrocodilianRazortooth,
             TargetID.VeteranCrocodilianRazortooth,
             TargetID.ExecutorOfWaves,
-            TargetID.CursedArtefact_NPC,
+            TargetID.GuardiansGladeTornado,
+            TargetID.CursedArtifact_NPC,
         ];
     }
 
@@ -152,7 +152,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 curStormPhase.Name = "Storm Phase " + (stormPhaseCount++);
                 phases.Add(curStormPhase);
                 stormPhases.Add(curStormPhase);
-            } 
+            }
             else
             {
                 var nextBurrowStart = candidateStormPhase.Start;
@@ -162,7 +162,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 if (!nonBurrowCast && burrowCastQuickly)
                 {
                     curStormPhase.OverrideEnd(candidateStormPhase.End);
-                } 
+                }
                 else
                 {
                     curStormPhase = candidateStormPhase;
@@ -214,6 +214,14 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
+
+        // Biting Swarm
+        var bitingSwarms = p.GetBuffStatus(log, BitingSwarm).Where(x => x.Value > 0);
+        foreach (var seg in bitingSwarms)
+        {
+            var decoration = new CircleDecoration(100, seg, Colors.Orange, 0.1, new AgentConnector(p.AgentItem));
+            replay.Decorations.Add(decoration);
+        }
     }
 
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
@@ -242,6 +250,157 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             {
                 successHandler.SetSuccess(true, determined762Applies[0].Time);
             }
+        }
+    }
+
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        switch (target.ID)
+        {
+            case (int)TargetID.KelaSeneschalOfWaves:
+                {
+                    // Burrowed
+                    foreach (var burrowed in target.GetBuffStatus(log, KelaBurrowed).Where(x => x.Value > 0))
+                    {
+                        var decoration = new CircleDecoration(320, burrowed, Colors.Orange, 0.2, new AgentConnector(target));
+                        replay.Decorations.Add(decoration);
+                        replay.Decorations.AddOverheadIcon(burrowed, target, ParserIcons.RedArrowDownOverhead);
+                    }
+                    break;
+                }
+            case (int)TargetID.GuardiansGladeTornado:
+                {
+                    // Tornado (visual representation via applied buff)
+                    var start = log.CombatData.GetBuffApplyDataByIDByDst(TornadoEffects, target.AgentItem).FirstOrDefault()?.Time;
+                    var end = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault()?.Time ?? target.LastAware;
+                    if (start != null)
+                    {
+                        var decoration = new CircleDecoration(235, (start.Value, end), Colors.BlueishGrey, 0.2, new AgentConnector(target));
+                        replay.Decorations.Add(decoration);
+                    }
+                    break;
+                }
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        // Claw Slam (frontal)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleClawSlamIndicator, out var clawSlams))
+        {
+            foreach (var effect in clawSlams)
+            {
+                var decoration = new PieDecoration(600, 135, effect.ComputeLifespan(log, 3000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
+        // Stomp
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleStompLeftIndicator, out var stompLeft))
+        {
+            foreach (var effect in stompLeft)
+            {
+                var decoration = new PieDecoration(600, 180, effect.ComputeLifespan(log, 2000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                environmentDecorations.Add(decoration);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleStompRightIndicator, out var stompRight))
+        {
+            foreach (var effect in stompRight)
+            {
+                var decoration = new PieDecoration(600, 180, effect.ComputeLifespan(log, 2000), Colors.Orange, 0.2, new PositionConnector(effect.Position))
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
+        // Sand
+        foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
+        {
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSand, out var sands))
+            {
+                AddSandDecorations(log, environmentDecorations, sands, 2500, Colors.Yellow, 0.1, true);
+            }
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSandBorder, out var borders))
+            {
+                AddSandDecorations(log, environmentDecorations, borders, 3500, Colors.Red, 0.2, false);
+            }
+        }
+
+        // Scalding Wave
+        const uint waveLength = 5000;
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleScaldingWaveIndicator, out var waveIndicators))
+        {
+            foreach (var effect in waveIndicators)
+            {
+                var position = new PositionConnector(effect.Position).WithOffset(new Vector3(0f, -0.5f * waveLength, 0f), true);
+                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4000), Colors.LightOrange, 0.2, position)
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                environmentDecorations.Add(decoration);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleScaldingWave, out var waves))
+        {
+            foreach (var effect in waves)
+            {
+                var position = new PositionConnector(effect.Position).WithOffset(new Vector3(0f, -0.5f * waveLength, 0f), true);
+                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4666), Colors.Red, 0.2, position)
+                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
+        // Lightning Strike
+        const float ground = -1700f; // ignore effects significantly above ground
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleLightningStrikeIndicator, out var lightningIndicators))
+        {
+            foreach (var effect in lightningIndicators.Where(x => x.isBelowHeight(ground, 100)))
+            {
+                var (start, end) = effect.ComputeLifespan(log, 1200);
+                var decoration = new CircleDecoration(190, effect.ComputeLifespan(log, 1200), Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
+                    .UsingFilled(false);
+                environmentDecorations.AddWithFilledWithGrowing(decoration, true, end);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GuardiansGaleLightningStrikeHit, out var lightningHits))
+        {
+            foreach (var effect in lightningHits.Where(x => x.isBelowHeight(ground, 100)))
+            {
+                var lifespan = (effect.Time, effect.Time + 100); // actual effect duration 1s
+                var decoration = new CircleDecoration(190, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.Add(decoration);
+            }
+        }
+    }
+
+    private static void AddSandDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, IReadOnlyList<EffectEvent> effects, long defaultDuration, Color color, double opacity, bool filled)
+    {
+        const uint maxInterval = 2500; // usually 2s interval
+        const uint baseRadius = 240;
+
+        var mergedStart = long.MaxValue;
+        for (var i = 0; i < effects.Count; i++)
+        {
+            var effect = effects[i];
+            var (start, end) = effect.ComputeDynamicLifespan(log, defaultDuration);
+            var next = effects.ElementAtOrDefault(i + 1);
+            if (next?.Time < end + maxInterval) // avoid overlap and pulsing by using start of next as end
+            {
+                if (next.Scale == effect.Scale) // merge same scale with next
+                {
+                    mergedStart = Math.Min(mergedStart, start);
+                    continue;
+                }
+                end = next.Time;
+            }
+            start = Math.Min(start, mergedStart);
+            var radius = (uint)(effect.Scale * baseRadius);
+            var decoration = new CircleDecoration(radius, (start, end), color, opacity, new PositionConnector(effect.Position))
+                .UsingFilled(filled);
+            decorations.Add(decoration);
+            mergedStart = long.MaxValue;
         }
     }
 }

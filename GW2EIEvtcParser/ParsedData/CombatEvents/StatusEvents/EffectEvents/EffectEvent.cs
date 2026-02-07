@@ -284,4 +284,19 @@ public abstract class EffectEvent : StatusEvent
         }
         return (start, end);
     }
+
+    public bool isAtHeight(float height, float epsilon = 10f)
+    {
+        return Math.Abs(Position.Z - height) < epsilon;
+    }
+
+    public bool isAboveHeight(float height, float epsilon = 10f)
+    {
+        return Position.Z < height + epsilon; // towards negative = higher
+    }
+
+    public bool isBelowHeight(float height, float epsilon = 10f)
+    {
+        return Position.Z > height - epsilon; // towards positive = lower
+    }
 }
