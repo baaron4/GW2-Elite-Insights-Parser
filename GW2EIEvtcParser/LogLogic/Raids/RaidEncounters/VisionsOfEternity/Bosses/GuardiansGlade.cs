@@ -24,7 +24,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", 0)
                 .WithStabilitySubMechanic(
-                    new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", 0),
                     false
                 ),
         ]),
@@ -32,7 +32,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", 0)
                 .WithStabilitySubMechanic(
-                    new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", 0),
                     false
                 ),
         ]),
@@ -40,7 +40,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", 0)
                 .WithStabilitySubMechanic(
-                    new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", 10),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", 10),
                     false
                 ),
         ]),
@@ -48,7 +48,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", 0)
                 .WithStabilitySubMechanic(
-                    new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", 0),
                     false
                 ),
         ]),
@@ -56,7 +56,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", 0)
                 .WithStabilitySubMechanic(
-                    new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", 0),
                     false
                 ),
         ]),
