@@ -14,7 +14,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
 
     internal delegate bool SingleActorChecker(long time, SingleActor actor, ParsedEvtcLog log);
-    private readonly List<(CheckedMechanic<Checkable> Mechanic, SingleActorChecker Checker)> _subMechanics = [];
+    private readonly List<(SubMechanic Mechanic, SingleActorChecker Checker)> _subMechanics = [];
 
     protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -33,9 +33,8 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         return this;
     }
 
-    internal CheckedMechanic<Checkable> WithSubMechanic(CheckedMechanic<Checkable> mechanic, SingleActorChecker actorChecker)
+    internal CheckedMechanic<Checkable> WithSubMechanic(SubMechanic mechanic, SingleActorChecker actorChecker)
     {
-        mechanic.IsASubMechanic = true;
         _subMechanics.Add((
             mechanic,
             actorChecker
@@ -43,7 +42,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         return this;
     }
 
-    internal CheckedMechanic<Checkable> WithStabilitySubMechanic(CheckedMechanic<Checkable> stabMechanic, bool stabPresent)
+    internal CheckedMechanic<Checkable> WithStabilitySubMechanic(SubMechanic stabMechanic, bool stabPresent)
     {
         if (stabPresent)
         {
@@ -54,9 +53,9 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
     public override IReadOnlyList<Mechanic> GetMechanics()
     {
-        var res = new List<Mechanic>(1 +  _subMechanics.Count) 
-        { 
-            this 
+        var res = new List<Mechanic>(1 + _subMechanics.Count)
+        {
+            this
         };
         foreach (var subMechanic in _subMechanics)
         {
@@ -75,27 +74,24 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         {
             if (subMechanic.Checker(time, actor, log))
             {
-                subMechanic.Mechanic.InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
+                mechanicLogs[subMechanic.Mechanic].Add(new MechanicEvent(timeToUse, subMechanic.Mechanic, actor));
             }
         }
     }
 
     protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor)
     {
-        if (actor != null)
+        long timeToUse = time;
+        if (_timeClamper != null)
         {
-            long timeToUse = time;
-            if (_timeClamper != null)
-            {
-                var encounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.InInterval(time) || x.Start > time) ?? log.LogData.GetPhases(log)[0];
-                timeToUse = _timeClamper(time, log, encounterPhase);
-            }
-            if (actor.AgentItem.IsEnglobingAgent)
-            {
-                actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
-            }
-            InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
+            var encounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.InInterval(time) || x.Start > time) ?? log.LogData.GetPhases(log)[0];
+            timeToUse = _timeClamper(time, log, encounterPhase);
         }
+        if (actor.AgentItem.IsEnglobingAgent)
+        {
+            actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
+        }
+        InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
     }
 
     protected virtual bool Keep(Checkable checkable, ParsedEvtcLog log)

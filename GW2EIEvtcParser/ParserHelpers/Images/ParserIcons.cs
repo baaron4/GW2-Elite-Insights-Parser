@@ -464,6 +464,9 @@ internal static class ParserIcons
     private const string TrashHandOfErosion = "https://i.imgur.com/THCasXt.png";
     private const string TrashHandOfEruption = "https://i.imgur.com/pQ0bOT8.png";
     private const string Deathling = "https://i.imgur.com/tnhj5B2.png";
+    private const string ExecutorOfWaves = "https://i.imgur.com/yOzVPFL.png";
+    private const string CrocodilianRazortooth = "https://i.imgur.com/tyLGqy5.png";
+    private const string DownedCrocodilianRazortooth = "https://i.imgur.com/v3Z6ZvX.png";
     #endregion
 
     #region Minion
@@ -1363,8 +1366,12 @@ internal static class ParserIcons
         { TargetID.ZojjaNayos, Zojja },
         { TargetID.WhisperingShadow, WhisperingShadow },
         { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
-        { TargetID.EliteCrocodilianRazortooth, TrashGenericRedEnemySkull },
+        { TargetID.VeteranCrocodilianRazortooth, CrocodilianRazortooth },
+        { TargetID.EliteCrocodilianRazortooth, CrocodilianRazortooth },
+        { TargetID.DownedEliteCrocodilianRazortooth, DownedCrocodilianRazortooth },
         { TargetID.CursedArtifact_NPC, TrashBloodstoneShard },
+        { TargetID.ExecutorOfWaves, ExecutorOfWaves },
+        { TargetID.GuardiansGladeTornado, TrashSmallJumpyTornado },
     };
 
     /// <summary>

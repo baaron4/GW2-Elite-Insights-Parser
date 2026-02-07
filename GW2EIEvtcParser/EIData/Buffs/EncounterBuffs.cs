@@ -748,13 +748,13 @@ internal static class EncounterBuffs
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Achievement Eligibility: Unbounded Optimism", AchievementEligibilityUnboundedOptimism, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Apathetic", AchievementEligibilityApathetic, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Kela
+            // Guardian's Glade
             new Buff("Fixated (Kela)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, SkillImages.ThrowLight),
-            new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.TargetedLocust), // Happens at the same time as Bitting Swarm
             new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Loose Sand", LooseSand, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.Goop),
             new Buff("Shredded Armor", ShreddedArmor, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Vulnerability),
-            new Buff("Biting Swarm (Hidden)", BitingSwarm, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Biting Swarm (Hidden)", BitingSwarm, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.TargetedLocust), // Happens at the same time as Bitting Swarm
             new Buff("Biting Swarm", BitingSwarmStackingDamage, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, BuffImages.TargetedLocust),
             new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RelentlessSpeed),
             new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
