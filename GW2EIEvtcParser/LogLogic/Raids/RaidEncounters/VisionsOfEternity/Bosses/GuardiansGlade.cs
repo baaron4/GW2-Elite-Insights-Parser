@@ -204,12 +204,14 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }*/
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kela, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kela, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
+        var eliteCrocs = targets.Where(x => x.IsSpecies(TargetID.EliteCrocodilianRazortooth));
+        var crabs = targets.Where(x => x.IsSpecies(TargetID.ExecutorOfWaves));
         var phases = new List<SubPhasePhaseData>(10);
         var kelaCasts = kela.GetAnimatedCastEvents(log, encounterPhase.Start, encounterPhase.End);
         var burrowCast = kelaCasts.Where(x => x.SkillID == KelaBurrow).ToList();
@@ -225,10 +227,12 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             if ((i % 2) == 0)
             {
                 candidateMainPhases.Add(subPhase);
+                subPhase.AddTargets(crabs, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 candidateStormPhases.Add(subPhase);
+                subPhase.AddTargets(eliteCrocs, log, PhaseData.TargetPriority.NonBlocking);
             }
             subPhase.AddTarget(kela, log);
         }
@@ -283,7 +287,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var phases = GetInitialPhase(log);
         var fullFightPhase = (EncounterPhaseData)phases[0];
         fullFightPhase.AddTarget(kela, log);
-        phases.AddRange(ComputePhases(log, kela, fullFightPhase, requirePhases));
+        phases.AddRange(ComputePhases(log, kela, Targets, fullFightPhase, requirePhases));
         return phases;
     }
 
