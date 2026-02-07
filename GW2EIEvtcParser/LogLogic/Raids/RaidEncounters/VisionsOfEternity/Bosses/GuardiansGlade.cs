@@ -19,6 +19,22 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 {
+    private static bool IsFirstBee(long time, AgentItem agent, ParsedEvtcLog log)
+    {
+        foreach (var player in log.PlayerList)
+        {
+            if (agent.Is(player.AgentItem) || !player.InAwareTimes(time))
+            {
+                continue;
+            }
+            if (player.HasBuff(log, BitingSwarm, time - 2800, 2800))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     internal readonly MechanicGroup Mechanics = new([
         // Kela Stomp Left / Right
         new MechanicGroup([
@@ -69,38 +85,10 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", 0),
         // Biting Swarm
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", 0)
-            .UsingChecker((bae, log) =>
-            {
-                foreach (var player in log.PlayerList)
-                {
-                    if (bae.To == player.AgentItem)
-                    {
-                        continue;
-                    }
-                    if (player.HasBuff(log, BitingSwarm, bae.Time - 2800, 2800))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }),
-            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Spread", "Biting Swarm Spread Application", "Spread Biting Swarm", 0)
-            .UsingChecker((bae, log) =>
-            {
-                foreach (var player in log.PlayerList)
-                {
-                    if (bae.To == player.AgentItem)
-                    {
-                        continue;
-                    }
-                    if (player.HasBuff(log, BitingSwarm, bae.Time - 2800, 2800))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }),
+            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", 0)
+                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", 0), (time, actor, log) => IsFirstBee(time, actor.AgentItem, log))
+                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Cntmntd", "Contaminated by Bitting Swarm", "Contaminated by Bitting Swarm ", 0), (time, actor, log) => !IsFirstBee(time, actor.AgentItem, log))
+                .UsingIgnored()
         ]),
         new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", 0),
         new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Croc Eat", "Eaten a Crocodilian Razortooth", "Croc Eaten", 0)
