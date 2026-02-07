@@ -22,33 +22,43 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal readonly MechanicGroup Mechanics = new([
         // Kela Stomp Left / Right
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", 0),
-            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", 0)
-                .UsingBuffChecker(Stability, false),
+            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", 0),
+                    false
+                ),
         ]),
         // Kela Claw Slam
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", 0),
-            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", 0)
-                .UsingBuffChecker(Stability, false),
+            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", 0),
+                    false
+                ),
         ]),
         // Lightning Strike
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", 0),
-            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", 10)
-                .UsingBuffChecker(Stability, false),
+            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", 10),
+                    false
+                ),
         ]),
         // Crocodilian Razortooth Tackle
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", 0),
-            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", 0)
-                .UsingBuffChecker(Stability, false),
+            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", 0),
+                    false
+                ),
         ]),
         // Tornado
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", 0),
-            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", 0)
-                .UsingBuffChecker(Stability, false),
+            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", 0),
+                    false
+                ),
         ]),
         new PlayerDstHealthDamageHitMechanic([KelaAmbush1, KelaAmbush2], new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Ambush.H", "Hit by Ambush", "Ambush Hit", 0),
         new PlayerDstHealthDamageHitMechanic([KelaTantrum1, KelaTantrum2], new MechanicPlotlySetting(Symbols.Square, Colors.BreakbarActiveBlue), "Tantrum.H", "Hit by Tantrum", "Tantrum", 0),
@@ -176,7 +186,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             (ChestID.GrandRaidKelaChest, GrandRaidChestKelaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
         ], agentData, combatData);
 
-        OverrideAmbushKillingBlows(agentData, combatData);
+        OverrideGenericKillAmbushKillingBlows(agentData, combatData);
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
@@ -546,14 +556,18 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void OverrideAmbushKillingBlows(AgentData agentData, List<CombatItem> combatData)
+    /// <summary>
+    /// When Kela ambushes a player or a crocodilian razortooth, sometimes the killing blow has no source attached.<br></br>
+    /// We redirect the source of the combat item to Kela.
+    /// </summary>
+    private static void OverrideGenericKillAmbushKillingBlows(AgentData agentData, List<CombatItem> combatData)
     {
         AgentItem kela = agentData.GetNPCsByID(TargetID.KelaSeneschalOfWaves).FirstOrDefault() ?? throw new MissingKeyActorsException("Kela not found");
 
         IReadOnlyList<AgentItem> downedCrocs = agentData.GetNPCsByID(TargetID.DownedEliteCrocodilianRazortooth);
         foreach (AgentItem croc in downedCrocs)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.DstInstid == croc.InstID && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
+            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
             foreach (CombatItem item in items)
             {
                 item.OverrideSrcAgent(kela);
@@ -563,7 +577,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         IReadOnlyList<AgentItem> players = agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem player in players)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.DstInstid == player.InstID && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill && x.IFF == IFF.Foe);
+            IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(player) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill && x.IFF == IFF.Foe);
             foreach (CombatItem item in items)
             {
                 item.OverrideSrcAgent(kela);
