@@ -91,10 +91,23 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 .UsingIgnored()
         ]),
         new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", 0),
-        new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Croc Eat", "Eaten a Crocodilian Razortooth", "Croc Eaten", 0)
-            .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.DownedEliteCrocodilianRazortooth)),
-        new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Player Eat", "Eaten a Player", "Player Eaten", 0)
-            .UsingChecker((hde, log) => hde.To.IsPlayer),
+        // Eating
+        new MechanicGroup([
+            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Ate Croc", "Ate a Crocodilian Razortooth", "Ate Croc", 0)
+                .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.DownedEliteCrocodilianRazortooth)),
+            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Ate Artifact", "Ate the Cursed Artifact", "Ate Artifact", 0)
+                .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.CursedArtifact_NPC)),
+            new MechanicGroup([
+                new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Red), "Ate Player", "Ate a Player", "Ate Player", 0)
+                    .UsingChecker((hde, log) => hde.To.IsPlayer),
+                new PlayerDstHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Red), "Player Eaten", "Player Eaten", "Player Eaten", 0)
+                    .UsingChecker((hde, log) => hde.From.IsSpecies(TargetID.KelaSeneschalOfWaves))
+                    .WithSubMechanic(
+                        new SubMechanic(new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "Tank Eaten", "Tank Eaten", "Tank Eaten", 0)
+                        , (time, agent, log) => agent.HasBuff(log, FixatedKela, time - 50)
+                    ),
+            ]),
+        ]),
     ]);
 
     public GuardiansGlade(int triggerID) : base(triggerID)
