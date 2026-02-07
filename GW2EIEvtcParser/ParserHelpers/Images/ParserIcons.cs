@@ -52,7 +52,7 @@ internal static class ParserIcons
     private const string HighResScrapper = "https://i.imgur.com/z5kr00B.png";
     private const string HighResEngineer = "https://i.imgur.com/lV62W3O.png";
     // Thief
-    private const string HighResAntiquary = "https://i.imgur.com/ithzoW0.png";
+    private const string HighResAntiquary = "https://i.imgur.com/iE1RnSs.png";
     private const string HighResSpecter = "https://i.imgur.com/3el5P6G.png";
     private const string HighResDeadeye = "https://i.imgur.com/UOMFo4a.png";
     private const string HighResDaredevil = "https://i.imgur.com/8DzmCRv.png";
@@ -82,7 +82,7 @@ internal static class ParserIcons
     private const string HighResBerserker = "https://i.imgur.com/0ijFUUG.png";
     private const string HighResWarrior = "https://i.imgur.com/j82eNjR.png";
     // Guardian
-    private const string HighResLuminary = "https://i.imgur.com/JTFpGOh.png";
+    private const string HighResLuminary = "https://i.imgur.com/4w7OTH5.png";
     private const string HighResWillbender = "https://i.imgur.com/WhIEbGZ.png";
     private const string HighResFirebrand = "https://i.imgur.com/J5EFywD.png";
     private const string HighResDragonhunter = "https://i.imgur.com/pSVMnVu.png";
@@ -108,7 +108,7 @@ internal static class ParserIcons
     private const string BaseResScrapper = "https://i.imgur.com/Cd9yD43.png";
     private const string BaseResEngineer = "https://i.imgur.com/hckhnZy.png";
     // Thief
-    private const string BaseResAntiquary = "https://i.imgur.com/wJBMKe2.png";
+    private const string BaseResAntiquary = "https://i.imgur.com/R1f6iXn.png";
     private const string BaseResSpecter = "https://i.imgur.com/nVAyYVQ.png";
     private const string BaseResDeadeye = "https://i.imgur.com/kryyJRy.png";
     private const string BaseResDaredevil = "https://i.imgur.com/RiCJalE.png";
@@ -138,7 +138,7 @@ internal static class ParserIcons
     private const string BaseResBerserker = "https://i.imgur.com/dNY6e8n.png";
     private const string BaseResWarrior = "https://i.imgur.com/ejI5STj.png";
     // Guardian
-    private const string BaseResLuminary = "https://i.imgur.com/H9upKPo.png";
+    private const string BaseResLuminary = "https://i.imgur.com/1znO8HP.png";
     private const string BaseResWillbender = "https://i.imgur.com/pIFrNLa.png";
     private const string BaseResFirebrand = "https://i.imgur.com/TOsmJOl.png";
     private const string BaseResDragonhunter = "https://i.imgur.com/GqKocpf.png";
@@ -234,6 +234,7 @@ internal static class ParserIcons
     private const string Umbriel = "https://i.imgur.com/lE2Dg5a.png";
     private const string Zojja = "https://i.imgur.com/9iSzaTe.png";
     private const string WhisperingShadow = "https://i.imgur.com/ncmbsdG.png";
+    private const string KelaSeneschalOfWaves = "https://i.imgur.com/wSpjlSf.png";
     #endregion
 
     #region Trash
@@ -1361,6 +1362,9 @@ internal static class ParserIcons
         { TargetID.UmbrielHalberdOfHouseAurkus, Umbriel },
         { TargetID.ZojjaNayos, Zojja },
         { TargetID.WhisperingShadow, WhisperingShadow },
+        { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
+        { TargetID.EliteCrocodilianRazortooth, TrashGenericRedEnemySkull },
+        { TargetID.CursedArtifact_NPC, TrashBloodstoneShard },
     };
 
     /// <summary>

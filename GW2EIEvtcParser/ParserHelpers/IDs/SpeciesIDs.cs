@@ -524,7 +524,7 @@ public static class SpeciesIDs
         HTGreenSooWonNorthEast = SpeciesIDs.HTGreenSooWonNorthEast,
         HTGreenSooWonSouthEast = SpeciesIDs.HTGreenSooWonSouthEast,
         HTGreenSooWonSouth = SpeciesIDs.HTGreenSooWonSouth,
-    // - Old Lion's Court
+        // - Old Lion's Court
         PrototypeVermilion = 25413,
         PrototypeArsenite = 25415,
         PrototypeIndigo = 25419,
@@ -558,6 +558,16 @@ public static class SpeciesIDs
         PermanentEmbodimentOfRegret = SpeciesIDs.PermanentEmbodimentOfRegret,
         PermanentEmbodimentOfEnvy = SpeciesIDs.PermanentEmbodimentOfEnvy,
         PermanentEmbodimentOfMalice = SpeciesIDs.PermanentEmbodimentOfMalice,
+        // - Guardian's Glade
+        KelaSeneschalOfWaves = 27124,
+        KelaSeneschalOfWavesSand = 27665, // keeps sand after executor of waves dies
+        KelaSeneschalOfWavesScaldingWave = 27670, // spawns scalding waves
+        ExecutorOfWaves = 27651,
+        VeteranCrocodilianRazortooth = 27667,
+        DownedEliteCrocodilianRazortooth = 27658,
+        GuardiansGladeTornado = 27654,
+        EliteCrocodilianRazortooth = 27655,
+        CursedArtifact_NPC = 27663,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
@@ -1033,14 +1043,14 @@ public static class SpeciesIDs
         Unknown,
     }
 
-    internal static readonly Vector3 GuardianChestPosition = new( -4770.21f, -20629.2f, -2401.27f );
+    internal static readonly Vector3 GuardianChestPosition = new(-4770.21f, -20629.2f, -2401.27f);
     internal static readonly Vector3 GorsevalChestPosition = new(1626.19f, -4467.53f, -1904.65f);
     internal static readonly Vector3 SabethaChestPosition = new(-4903.99f, 3431.57f, -2461.83f);
     internal static readonly Vector3 SlothasorChestPosition = new(7690.45f, -496.617f, -25.7641f);
     internal static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
     internal static readonly Vector3 MatthiasChestPosition = new(-5896.35f, 5454.3f, -5182.15f);
     internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
-    internal static readonly Vector3 KeepConstructChestPosition = new (-3860.69f, 9389.32f, -5907.59f);
+    internal static readonly Vector3 KeepConstructChestPosition = new(-3860.69f, 9389.32f, -5907.59f);
     internal static readonly Vector3 XeraChestPosition = new(-2840.79f, -7552.79f, -9594.75f);
     internal static readonly Vector3 CairnChestPosition = new(14025.2f, 2211.56f, -1348.89f);
     internal static readonly Vector3 RecreationRoomChestPosition = new(2647.21f, 3985.09f, -4187.83f);
@@ -1060,6 +1070,7 @@ public static class SpeciesIDs
     internal static readonly Vector3 DecimasChestPosition = new(-10464.6f, 13033.6f, -5450.19f);
     internal static readonly Vector3 UrasChestPosition = new(4925.35f, 10724.1f, -10632.8f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
+    internal static readonly Vector3 GrandRaidChestKelaPosition = new(-20832.9f, 12552.2f, -1698.32f);
 
     public enum ChestID : int
     {
@@ -1089,7 +1100,8 @@ public static class SpeciesIDs
         GreersChest = SpeciesIDs.GreersChest,
         DecimasChest = SpeciesIDs.DecimasChest,
         UrasChest = SpeciesIDs.UrasChest,
-        GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
+        GrandStrikeHarvestTempleChest = SpeciesIDs.GrandStrikeHarvestTempleChest,
+        GrandRaidKelaChest = SpeciesIDs.GrandRaidKelaChest,
 
         None = int.MaxValue,
     };
@@ -1161,7 +1173,7 @@ public static class SpeciesIDs
     private const int QadimPlatform = -49;
     private const int GravityBall = -50;
     private const int JormagMovingFrostBeam = -51;
-    private const int GrandStrikeChest = -52;
+    private const int GrandStrikeHarvestTempleChest = -52;
     private const int PermanentEmbodimentOfGluttony = -53;
     private const int PermanentEmbodimentOfRage = -54;
     private const int PermanentEmbodimentOfDespair = -55;
@@ -1232,6 +1244,7 @@ public static class SpeciesIDs
     private const int HTGreenSooWonNorthEast = -119;
     private const int HTGreenSooWonSouthEast = -120;
     private const int HTGreenSooWonSouth = -121;
+    private const int GrandRaidKelaChest = -122;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

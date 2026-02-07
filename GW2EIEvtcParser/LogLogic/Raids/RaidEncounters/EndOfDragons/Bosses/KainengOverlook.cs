@@ -276,7 +276,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         // Fixation
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
         var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
-        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        replay.Decorations.AddTethers(fixationEvents, Colors.Magenta, 0.5);
 
         // Shared Destruction (Green)
         int greenDuration = 6250;
@@ -322,7 +322,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 lifespan = (effect.Time, effect.Time + correctedDuration);
 
                 // Tether Sniper to Player
-                replay.Decorations.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
+                replay.Decorations.AddTethersByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
 
                 // Circle around the player
                 replay.Decorations.Add(new CircleDecoration(500, lifespan, Colors.Red, 0.2, new AgentConnector(p)).UsingFilled(false));
@@ -475,14 +475,14 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             case (int)TargetID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
                 var enforcerInspiration = GetBuffApplyRemoveSequence(log.CombatData, LethalInspiration, target, true, true);
-                replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
+                replay.Decorations.AddTethers(enforcerInspiration, Colors.Blue, 0.1);
                 HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMindblade:
             case (int)TargetID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
                 var mindbladeInspiration = GetBuffApplyRemoveSequence(log.CombatData, LethalInspiration, target, true, true);
-                replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
+                replay.Decorations.AddTethers(mindbladeInspiration, Colors.Blue, 0.1);
                 HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheRitualist:

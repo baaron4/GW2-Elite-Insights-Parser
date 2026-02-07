@@ -714,11 +714,11 @@ internal class DecimaTheStormsinger : MountBalrior
 
         // Warning indicator of walls spawning between Conduits.
         var wallsWarnings = GetBuffApplyRemoveSequence(log.CombatData, wallWarningBuffID, target, true, true);
-        replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
+        replay.Decorations.AddTethers(wallsWarnings, Colors.Red, 0.2, 30, true);
 
         // Walls connecting Conduits to each other.
         var walls = GetBuffApplyRemoveSequence(log.CombatData, wallBuffID, target, true, true);
-        replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
+        replay.Decorations.AddTethers(walls, Colors.Purple, 0.4, 60, true);
     }
 
     private static void AddBeam(ParsedEvtcLog log, CombatReplay replay, uint beamWidth, IEnumerable<BuffEvent> beams, Color color)

@@ -379,8 +379,8 @@ public static class DamageModifierIDs
     public const int Mod_GaleForce = 366;
     public const int Mod_EmpoweredArmaments = 367;
     public const int Mod_LuminarysBlessing = 368;
-    public const int Mod_ChantOfAction = 369;
-    public const int Mod_ChantOfRecuperation = 370;
+    public const int Mod_ChantOfAction_StrengtheningStanzas = 369;
+    public const int Mod_ChantOfRecuperation_StrengtheningStanzas = 370;
     public const int Mod_WillingHost_StrikeCondition = 371;
     public const int Mod_PlasmaticState = 372;
     public const int Mod_ShieldingHands = 373;
@@ -422,4 +422,5 @@ public static class DamageModifierIDs
     public const int Mod_DeterminedResolution_NuminousGift = 409;
     public const int Mod_TargetedDestruction_NuminousGift = 410;
     public const int Mod_LoveSong = 411;
+    public const int Mod_ShreddedArmor = 412;
 }

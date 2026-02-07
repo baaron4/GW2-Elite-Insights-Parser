@@ -127,7 +127,7 @@ public static class BuffImages
     public const string Fixated = "https://wiki.guildwars2.com/images/6/66/Fixated.png";
     public const string AchievementEffect = "https://wiki.guildwars2.com/images/1/10/Achievement_effect.png";
     public const string CallOfTheMists = "https://wiki.guildwars2.com/images/5/52/Call_of_the_Mists.png";
-    public const string QuickplayBoost = "https://wiki.guildwars2.com/images/d/d9/Quickplay_Boost.png";
+    public const string QuickplayBoostMorale = "https://assets.gw2dat.com/3691067.png";
     // Strike Essences
     public const string EssenceOfVigilance = "https://wiki.guildwars2.com/images/a/a4/Essence_of_Vigilance.png";
     public const string EssenceOfResilience = "https://wiki.guildwars2.com/images/b/b6/Essence_of_Resilience.png";
@@ -408,6 +408,8 @@ public static class BuffImages
     public const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
     public const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
     public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
+    public const string Goop = "https://wiki.guildwars2.com/images/2/2e/Goop.png";
+    public const string RelentlessSpeed = "https://wiki.guildwars2.com/images/e/e4/Relentless_Speed.png";
     // Convergence
     public const string WizardsBlessing = "https://wiki.guildwars2.com/images/d/d8/Wizard%27s_Blessing_%28effect%29.png";
     public const string KryptisEssence = "https://wiki.guildwars2.com/images/3/37/Kryptis_Essence.png";

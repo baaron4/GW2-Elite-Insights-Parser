@@ -79,6 +79,7 @@ internal static class Colors
     public static Color Purple = new(150, 0, 255);
     public static Color DarkPurple = new(50, 0, 150);
     public static Color LightPurple = new(200, 140, 255);
+    public static Color FixationPurple = new(255, 80, 255);
     public static Color Pink = new(255, 0, 150);
     public static Color DesaturatedPink = new(200, 60, 150);
     public static Color LightPink = new(255, 140, 255);
