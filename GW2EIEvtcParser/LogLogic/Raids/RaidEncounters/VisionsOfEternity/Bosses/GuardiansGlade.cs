@@ -389,7 +389,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                         var decoration = new CircleDecoration(320, burrowed, Colors.Orange, 0.3, new AgentConnector(target));
                         var ring = new CircleDecoration(450, burrowed, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false);
                         replay.Decorations.Add(decoration);
-                        replay.Decorations.Add(ring);
+                        //replay.Decorations.Add(ring); // TODO: Size to be verified, death most likely snaps at ambush cast start
                         replay.Decorations.AddOverheadIcon(burrowed, target, ParserIcons.RedArrowDownOverhead);
                     }
 
