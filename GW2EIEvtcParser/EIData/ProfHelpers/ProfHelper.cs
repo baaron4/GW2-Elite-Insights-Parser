@@ -20,7 +20,7 @@ internal static class ProfHelper
     ];
     private static readonly List<InstantCastFinder> _genericInstantCastFinders =
     [
-        // Sigils
+        #region Sigils
         new DamageCastFinder(RingOfEarth_MinorSigilOfGeomancy, RingOfEarth_MinorSigilOfGeomancy)
             .UsingICD(500)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -94,7 +94,8 @@ internal static class ProfHelper
         new MissileCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
             .UsingICD(500)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // Runes
+        #endregion Sigils
+        #region Runes
         new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
@@ -110,17 +111,10 @@ internal static class ProfHelper
         new MinionSpawnCastFinder(RunePrivateerSpawn, (int)MinionID.TropicalBird)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        // Combos
-        new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
-        new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
-        new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-        new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
-        // Misc
-        new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
-        new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
-            .UsingBeforeWeaponSwap(),
-        new BreakbarDamageCastFinder(Technobabble, Technobabble),
-        // Relics
+        #endregion Runes
+        #region Relics
+        new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand)
@@ -133,11 +127,18 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(SoulOfTheTitan, SoulOfTheTitan)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfFogBuff, RelicOfFogBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheCoralHeartBuff, RelicOfTheCoralHeartBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfShacklesApplicationBuff, RelicOfShacklesApplicationBuff)
+            .UsingICD(100)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -191,6 +192,9 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(BloodstoneExplosion, EffectGUIDs.RelicOfBloodstone)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfTheNauticalBeastDamageHealing, EffectGUIDs.RelicOfTheNauticalBeastGround2)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RelicOfTheNauticalBeastGround1)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
@@ -220,7 +224,11 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new MissileCastFinder(RelicOfPeithaBlade, RelicOfPeithaBlade)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // Mounts
+        new MissileCastFinder(RelicOfTheForestDwellerMissileDamage, RelicOfTheForestDwellerMissileDamage)
+            .UsingICD(100)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        #endregion Relics
+        #region Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
         new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith)
@@ -231,6 +239,19 @@ internal static class ProfHelper
         new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
         new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.SkyscaleBlast2),
+        #endregion Mounts
+        #region Combos
+        new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
+        new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
+        new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
+        new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
+        #endregion Combos
+        #region Misc
+        new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
+        new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
+            .UsingBeforeWeaponSwap(),
+        new BreakbarDamageCastFinder(Technobabble, Technobabble),
+        #endregion Misc
     ];
 
     internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)

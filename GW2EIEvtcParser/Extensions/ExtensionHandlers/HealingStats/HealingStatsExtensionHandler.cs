@@ -117,6 +117,7 @@ public class HealingStatsExtensionHandler : ExtensionHandler
         SoothingSplash,
         DeathlyEnervation,
         EchoingErosion,
+        RelicOfTheNauticalBeastDamageHealing,
     ];
 
     private readonly List<EXTHealingEvent> _healingEvents = [];
