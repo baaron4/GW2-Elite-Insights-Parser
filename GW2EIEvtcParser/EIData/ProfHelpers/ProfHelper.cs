@@ -11,7 +11,13 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ProfHelper
 {
-
+    private static readonly List<InstantCastFinder> _genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse = 
+    [
+        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+    ];
     private static readonly List<InstantCastFinder> _genericInstantCastFinders =
     [
         // Sigils
@@ -132,10 +138,6 @@ internal static class ProfHelper
         new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -309,6 +311,7 @@ internal static class ProfHelper
     internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<AgentItem> players)
     {
         List<InstantCastFinder> instantCastFinders = new (500);
+        instantCastFinders.AddRange(_genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse);
         instantCastFinders.AddRange(_genericInstantCastFinders);
         foreach (Spec spec in players.Select(x => x.BaseSpec).Distinct())
         {
