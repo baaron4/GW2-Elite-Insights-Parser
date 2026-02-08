@@ -525,6 +525,7 @@ internal static class ItemImages
     public const string CanOfMangoSalsa = "https://wiki.guildwars2.com/images/b/b0/Can_of_Mango_Salsa.png";
     public const string BloodstonePotPie = "https://wiki.guildwars2.com/images/6/68/Meat_Pie.png";
     public const string BagOfPoppedCandyCorn = "https://wiki.guildwars2.com/images/e/e9/Bag_of_Popped_Candy_Corn.png";
+    public const string NewYearRiceCake = "https://render.guildwars2.com/file/E8E42A78077CD20CC2210D7F1F9E510C24446042/3744657.png";
     #endregion Food
     #region AscendedFood
     public const string BowlOfFruitSaladWithCilantroGarnish = "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png";

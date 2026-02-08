@@ -5473,6 +5473,7 @@ public static class SkillIDs
     public const long RelicOfTheCoralHeartBuff = 79393;
     public const long KelaTantrum1 = 79398;
     public const long DownAndOutHallOfChains = 79400;
+    public const long NewYearRiceCake = 79403;
     public const long RendingClaws = 79407;
     public const long TargetedKela = 79414;
     public const long RelicOfShacklesDamageSkill = 79423;
