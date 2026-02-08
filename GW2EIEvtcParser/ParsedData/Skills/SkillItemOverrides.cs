@@ -89,6 +89,7 @@ public static class SkillItemOverrides
         { RelicGolemancerSpawn, "Relic of the Golemancer (Spawn Minion)" },
         { RelicPrivateerSpawn, "Relic of the Privateer (Spawn Minion)" },
         { RelicOfTheSteamshrieker, "Relic of the Steamshrieker" },
+        { RelicOfShacklesDamageSkill, "Relic of Shackles (Damage)" },
         #endregion Relics
         #region Elementalist
         { ShatteringIceDamage, "Shattering Ice (Hit)" },
@@ -298,7 +299,7 @@ public static class SkillItemOverrides
         { KelaBurrow, "Burrow" },
         { KelaAura, "Aura (Kela)" },
         #endregion Raids
-        #region Strikes
+        #region Raid Encounters
         // Voice and Claw
         { KodanTeleport, "Kodan Teleport" },
         // Mai Trin (Aetherblade Hideout)
@@ -349,7 +350,9 @@ public static class SkillItemOverrides
         { PetrifySkill, "Petrify" },
         { EnragedSmashNM, "Enraged Smash (NM)" },
         { EnragedSmashCM, "Enraged Smash (CM)" },
-        #endregion Strikes
+        // Kela
+        { ThrowRelic, "Throw Relic" },
+        #endregion Raid Encounters
         #region Fractals
         // Artsariiv
         { NovaLaunchSAK, "Nova Launch" },
@@ -557,6 +560,9 @@ public static class SkillItemOverrides
         { RelicOfTheMistStranger, ItemImages.RelicOfTheMistStranger },
         { RelicOfCastora, ItemImages.RelicOfCastora },
         { RelicOfTheBiomancer, ItemImages.RelicOfTheBiomancer },
+        { RelicOfTheNauticalBeastDamageHealing, ItemImages.RelicOfTheNauticalBeast },
+        { RelicOfShacklesDamageSkill, ItemImages.RelicOfShackles },
+        { RelicOfTheForestDwellerMissileDamage, ItemImages.RelicOfTheForestDweller },
 #endregion RelicIcons
         #region ElementalistIcons
         { EarthenBlast, TraitImages.EarthenBlast },

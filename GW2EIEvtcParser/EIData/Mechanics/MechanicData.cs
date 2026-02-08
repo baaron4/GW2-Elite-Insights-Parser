@@ -103,7 +103,7 @@ public class MechanicData
         CheckConfiguration(log);
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
-            if (mech.IsASubMechanic)
+            if (mech is SubMechanic)
             {
                 continue;
             }

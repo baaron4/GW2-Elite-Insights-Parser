@@ -133,7 +133,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     new PlayerDstHealthDamageHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", 0),
                     new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", 0)
                         .WithStabilitySubMechanic(
-                            new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0),
+                            new SubMechanic(new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0),
                             false
                         ),
                 ]),
@@ -141,7 +141,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0)
                             .WithStabilitySubMechanic(
-                                new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0),
+                                new SubMechanic(new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0),
                                 false
                             ),
                 ]),

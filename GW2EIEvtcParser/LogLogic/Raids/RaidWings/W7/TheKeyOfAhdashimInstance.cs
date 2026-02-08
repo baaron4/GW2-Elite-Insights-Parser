@@ -19,7 +19,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 {
     private readonly Adina _adina;
     private readonly Sabir _sabir;
-    private readonly PeerlessQadim _peerlessQadim;
+    private readonly QadimThePeerless _qadimThePeerless;
 
     private readonly IReadOnlyList<TheKeyOfAhdashim> _subLogics;
     public TheKeyOfAhdashimInstance(int triggerID) : base(triggerID)
@@ -30,12 +30,12 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         
         _adina = new Adina((int)TargetID.Adina);
         _sabir = new Sabir((int)TargetID.Sabir);
-        _peerlessQadim = new PeerlessQadim((int)TargetID.PeerlessQadim);
-        _subLogics = [_adina, _sabir, _peerlessQadim];
+        _qadimThePeerless = new QadimThePeerless((int)TargetID.QadimThePeerless);
+        _subLogics = [_adina, _sabir, _qadimThePeerless];
 
         MechanicList.Add(_adina.Mechanics);
         MechanicList.Add(_sabir.Mechanics);
-        MechanicList.Add(_peerlessQadim.Mechanics);
+        MechanicList.Add(_qadimThePeerless.Mechanics);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -56,7 +56,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_peerlessQadim.ChestID).FirstOrDefault();
+        var chest = agentData.GetGadgetsByID(_qadimThePeerless.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -90,11 +90,11 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             }
         }
         {
-            var qtpPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], "Qadim the Peerless", _peerlessQadim, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.Mode.CM : LogData.Mode.Normal);
+            var qtpPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.QadimThePeerless, [], "Qadim the Peerless", _qadimThePeerless, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.Mode.CM : LogData.Mode.Normal);
             foreach (var qtpPhase in qtpPhases)
             {
-                var qtp = qtpPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.PeerlessQadim));
-                phases.AddRange(PeerlessQadim.ComputePhases(log, qtp, qtpPhase, requirePhases));
+                var qtp = qtpPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.QadimThePeerless));
+                phases.AddRange(QadimThePeerless.ComputePhases(log, qtp, qtpPhase, requirePhases));
             }
         }
         
@@ -106,7 +106,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         List<InstantCastFinder> finders = [
             .. _adina.GetInstantCastFinders(),
             .. _sabir.GetInstantCastFinders(),
-            .. _peerlessQadim.GetInstantCastFinders()
+            .. _qadimThePeerless.GetInstantCastFinders()
         ];
         return finders;
     }
@@ -116,7 +116,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         List<TargetID> trashes = [
             .. _adina.GetTrashMobsIDs(),
             .. _sabir.GetTrashMobsIDs(),
-            .. _peerlessQadim.GetTrashMobsIDs()
+            .. _qadimThePeerless.GetTrashMobsIDs()
         ];
         return trashes.Distinct().ToList();
     }
@@ -125,7 +125,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         List<TargetID> targets = [
             .. _adina.GetTargetsIDs(),
             .. _sabir.GetTargetsIDs(),
-            .. _peerlessQadim.GetTargetsIDs()
+            .. _qadimThePeerless.GetTargetsIDs()
         ];
         return targets.Distinct().ToList();
     }
@@ -135,7 +135,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         List<TargetID> friendlies = [
             .. _adina.GetFriendlyNPCIDs(),
             .. _sabir.GetFriendlyNPCIDs(),
-            .. _peerlessQadim.GetFriendlyNPCIDs()
+            .. _qadimThePeerless.GetFriendlyNPCIDs()
         ];
         return friendlies.Distinct().ToList();
     }
@@ -144,7 +144,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         HashSet<TargetID> forbidBreakbarPhasesFor = [
             .. _adina.ForbidBreakbarPhasesFor(),
             .. _sabir.ForbidBreakbarPhasesFor(),
-            .. _peerlessQadim.ForbidBreakbarPhasesFor()
+            .. _qadimThePeerless.ForbidBreakbarPhasesFor()
         ];
         return forbidBreakbarPhasesFor;
     }
@@ -164,7 +164,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         Sabir.FindPlateforms(agentData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Adina.RenameHands(Targets, combatData);
-        PeerlessQadim.RenamePylons(Targets, combatData);
+        QadimThePeerless.RenamePylons(Targets, combatData);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)

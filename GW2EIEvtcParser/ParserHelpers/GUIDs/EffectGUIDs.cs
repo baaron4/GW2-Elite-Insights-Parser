@@ -61,6 +61,9 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
     public static readonly GUID RelicOfTheSteamshrieker = new("C0B2EC5CAE1FF3468FD5D62157625E77"); // Effect Event duration 0, default duration 2000
     public static readonly GUID RelicOfBloodstone = new("AA9A51B997476A4BB803B1252B782420"); // Explosion
+    public static readonly GUID RelicOfTheNauticalBeastGround1 = new("B44BAD999BEB2D4DB284745895B42BDD"); // Ground effect, duration 566
+    public static readonly GUID RelicOfTheNauticalBeastGround2 = new("10D6B2D42D39254FB866CE86D27D36AD"); // Ground effect, duration 2000
+    public static readonly GUID RelicOfTheNauticalBeastAgent = new("40818C8E9CC6EF4388C2821FCC26A9EC"); // Around Src == Dst, duration 0
     #endregion
 
     #region Mesmer
@@ -884,7 +887,7 @@ public static class EffectGUIDs
     public static readonly GUID UraVentshotPressureReleaseWaterJet = new("37BA83DEA82A6E4DB5AB1997CC7DF942"); // 3000 duration - Water Sprout
     #endregion
 
-    #region Strikes
+    #region Raid Encounters
     // Freezie
     public static readonly GUID FreezieFrozenPatch = new("2CE301ED692ACA4E964BFDFEED9D055E"); // 30000 duration
     public static readonly GUID FreezieOrangeAoE120 = new("0760BCD6779C0248B480E59D41E785B4"); // Has multiple durations
@@ -1084,15 +1087,15 @@ public static class EffectGUIDs
     public static readonly GUID TempleOfFebeEnviousGaze4 = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000 - Red circle AoE underneath Cerus - Conflics with other encounters
     public static readonly GUID TempleOfFebeMaliciousIntentTether = new("518369328A12B74EAC49702A785FBA19"); // Duration 0
     // Guardian's Glade
-    public static readonly GUID GuardiansGaleClawSlamIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // owned by kela, duration 3000
+    public static readonly GUID GuardiansGaleClawSlamIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // owned by kela, duration 3000 - damage happens at around 2520
     public static readonly GUID GuardiansGaleClawSlamHit = new("64D5C832AF8C6E4B90D2D067BDC7D667"); // owned by kela, default duration 1666.6667
-    public static readonly GUID GuardiansGaleStompLeftIndicator = new("ADC3B99ECCB6E04CAB2CDC441FDA26FC"); // owned by kela, duration 2000
-    public static readonly GUID GuardiansGaleStompRightIndicator = new("5274B38555448246AC3F7FE31564C298"); // owned by kela, duration 2000
+    public static readonly GUID GuardiansGaleStompLeftIndicator = new("ADC3B99ECCB6E04CAB2CDC441FDA26FC"); // owned by kela, duration 2000 - damage happens at around 1520
+    public static readonly GUID GuardiansGaleStompRightIndicator = new("5274B38555448246AC3F7FE31564C298"); // owned by kela, duration 2000 - damage happens at around 1520
     public static readonly GUID GuardiansGaleScaldingWaveIndicator = new("B4DA1EC7924FFE47A4E2FADE7884D78E"); // owned by wave kela, duration 4000
     public static readonly GUID GuardiansGaleScaldingWave = new("335B7269572CF149B8B1F20DCB83B2A8"); // owned by wave kela, default duration 4666.667
     public static readonly GUID GuardiansGaleSand = new("07C6CFE25E768C4DAD8515467222B8E4"); // sand visual, owned by executor of waves or sand kela, duration 2100 or 2500
     public static readonly GUID GuardiansGaleSandBorder = new("826CD8C2ECB37243BC86C7556C977FA7"); // red ring, owned by executor of waves or sand kela, duration 3500 or 19998000 (bug?)
     public static readonly GUID GuardiansGaleLightningStrikeIndicator = new("CE91D2D4CD6C4141B3977FA70FFE05BB"); // owned by kela, duration 1200
     public static readonly GUID GuardiansGaleLightningStrikeHit = new("67F798DBCB84984AA21C3FAF663B47D7"); // owned by kela, default duration 1000
-    #endregion
+    #endregion Raid Encounters
 }

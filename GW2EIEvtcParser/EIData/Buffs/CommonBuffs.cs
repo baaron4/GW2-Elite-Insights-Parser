@@ -219,6 +219,10 @@ internal static class CommonBuffs
         new Buff("Bloodstone Fervor", BloodstoneFervor, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, ItemImages.RelicOfBloodstone),
         new Buff("Agony of the choir", AgonyOfTheChoir, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
         new Buff("Relic of the Scoundrel", RelicOfTheScoundrel, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheScoundrel),
+        new Buff("Relic of the Coral Heart", RelicOfTheCoralHeartBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheCoralHeart),
+        new Buff("Relic of Fog", RelicOfFogBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, ItemImages.RelicOfFog),
+        new Buff("Relif of the Forest Dweller (Float)", RelicOfTheForestDwellerFloatBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheForestDweller),
+        new Buff("Relic of Shackles (Application)", RelicOfShacklesApplicationBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfShackles),
     ];
 
 }

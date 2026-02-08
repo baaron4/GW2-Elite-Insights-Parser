@@ -185,7 +185,7 @@ internal static class ParserIcons
     private const string TargetFreezie = "https://i.imgur.com/98uyYXk.png";
     private const string TargetAdina = "https://i.imgur.com/or3m1yb.png";
     private const string TargetSabir = "https://i.imgur.com/Q4WUXqw.png";
-    private const string TargetPeerlessQadim = "https://i.imgur.com/47uePpb.png";
+    private const string TargetQadimThePeerless = "https://i.imgur.com/47uePpb.png";
     private const string TargetIcebroodConstruct = "https://i.imgur.com/dpaZFa5.png";
     private const string TargetClawOfTheFallen = "https://i.imgur.com/HF85QpV.png";
     private const string TargetVoiceOfTheFallen = "https://i.imgur.com/BdTGXMU.png";
@@ -464,6 +464,9 @@ internal static class ParserIcons
     private const string TrashHandOfErosion = "https://i.imgur.com/THCasXt.png";
     private const string TrashHandOfEruption = "https://i.imgur.com/pQ0bOT8.png";
     private const string Deathling = "https://i.imgur.com/tnhj5B2.png";
+    private const string ExecutorOfWaves = "https://i.imgur.com/yOzVPFL.png";
+    private const string CrocodilianRazortooth = "https://i.imgur.com/tyLGqy5.png";
+    private const string DownedCrocodilianRazortooth = "https://i.imgur.com/v3Z6ZvX.png";
     #endregion
 
     #region Minion
@@ -897,7 +900,7 @@ internal static class ParserIcons
         { TargetID.Freezie, TargetFreezie },
         { TargetID.Adina, TargetAdina },
         { TargetID.Sabir, TargetSabir },
-        { TargetID.PeerlessQadim, TargetPeerlessQadim },
+        { TargetID.QadimThePeerless, TargetQadimThePeerless },
         { TargetID.IcebroodConstruct, TargetIcebroodConstruct },
         { TargetID.IcebroodConstructFraenir, TargetIcebroodConstruct },
         { TargetID.ClawOfTheFallen, TargetClawOfTheFallen },
@@ -1363,8 +1366,12 @@ internal static class ParserIcons
         { TargetID.ZojjaNayos, Zojja },
         { TargetID.WhisperingShadow, WhisperingShadow },
         { TargetID.KelaSeneschalOfWaves, KelaSeneschalOfWaves },
-        { TargetID.EliteCrocodilianRazortooth, TrashGenericRedEnemySkull },
+        { TargetID.VeteranCrocodilianRazortooth, CrocodilianRazortooth },
+        { TargetID.EliteCrocodilianRazortooth, CrocodilianRazortooth },
+        { TargetID.DownedEliteCrocodilianRazortooth, DownedCrocodilianRazortooth },
         { TargetID.CursedArtifact_NPC, TrashBloodstoneShard },
+        { TargetID.ExecutorOfWaves, ExecutorOfWaves },
+        { TargetID.GuardiansGladeTornado, TrashSmallJumpyTornado },
     };
 
     /// <summary>

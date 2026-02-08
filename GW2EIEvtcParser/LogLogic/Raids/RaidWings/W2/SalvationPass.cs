@@ -23,6 +23,10 @@ internal abstract class SalvationPass : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.SalvationPass;
         LogID |= LogIDs.RaidWingMasks.SalvationPassMask;
     }
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutSalvationPass, TargetID.Matthias);
+    }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {

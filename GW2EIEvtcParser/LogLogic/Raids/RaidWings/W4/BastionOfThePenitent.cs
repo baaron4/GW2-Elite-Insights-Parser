@@ -24,6 +24,10 @@ internal abstract class BastionOfThePenitent : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.BastionOfThePenitent;
         LogID |= LogIDs.RaidWingMasks.BastionOfThePenitentMask;
     }
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutBastionOfThePenitent, TargetID.Deimos);
+    }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {

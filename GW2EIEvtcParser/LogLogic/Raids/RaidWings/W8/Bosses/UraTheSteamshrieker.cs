@@ -38,7 +38,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Orange), "UraJump.H", "Hit by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser Hit", 0)
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0),
+                        new SubMechanic(new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0),
                         false
                     ),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)

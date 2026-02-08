@@ -74,6 +74,14 @@ internal static class EncounterBuffs
             new Buff("Resistance (Unremovable)", ResistanceUnremovable, Source.EncounterSpecific,BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.Resistance),
             new Buff("Quickplay Boost", QuickplayBoost, Source.EncounterSpecific, BuffClassification.Other, BuffImages.QuickplayBoostMorale),
             new Buff("Quickplay Morale", QuickplayMorale, Source.EncounterSpecific, BuffClassification.Other, BuffImages.QuickplayBoostMorale),
+            new Buff("Down and Out: Spirit Vale", DownAndOutSpiritVale, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Salvation Pass", DownAndOutSalvationPass, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Stronghold of the Faithful", DownAndOutStrongholdOfTheFaithful, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Bastion of the Penitent", DownAndOutBastionOfThePenitent, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Hall of Chains", DownAndOutHallOfChains, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Mythwright Gambit", DownAndOutMythwrightGambit, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Key of Ahdashim", DownAndOutKeyOfAhdashim, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Down and Out: Mount Balrior", DownAndOutMountBalrior, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Strike Essences
             new Buff("Essence of Vigilance Tier 1", EssenceOfVigilanceTier1, Source.EncounterSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
             new Buff("Essence of Vigilance Tier 2", EssenceOfVigilanceTier2, Source.EncounterSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
@@ -740,13 +748,13 @@ internal static class EncounterBuffs
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Achievement Eligibility: Unbounded Optimism", AchievementEligibilityUnboundedOptimism, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Apathetic", AchievementEligibilityApathetic, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Kela
+            // Guardian's Glade
             new Buff("Fixated (Kela)", FixatedKela, Source.EncounterSpecific, BuffClassification.Other, SkillImages.ThrowLight),
-            new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Targeted (Kela Bees)", TargetedKela, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.TargetedLocust), // Happens at the same time as Bitting Swarm
             new Buff("Hunted", Hunted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Loose Sand", LooseSand, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.Goop),
             new Buff("Shredded Armor", ShreddedArmor, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Vulnerability),
-            new Buff("Biting Swarm (Hidden)", BitingSwarm, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown), // Happens at the same time as Bitting Swarm
+            new Buff("Biting Swarm (Hidden)", BitingSwarm, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.TargetedLocust), // Happens at the same time as Bitting Swarm
             new Buff("Biting Swarm", BitingSwarmStackingDamage, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, BuffImages.TargetedLocust),
             new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RelentlessSpeed),
             new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),

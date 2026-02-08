@@ -20,6 +20,11 @@ internal abstract class SpiritVale : RaidWingLogic
         LogID |= LogIDs.RaidWingMasks.SpiritValeMask;
     }
 
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutSpiritVale, TargetID.Sabetha);
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([

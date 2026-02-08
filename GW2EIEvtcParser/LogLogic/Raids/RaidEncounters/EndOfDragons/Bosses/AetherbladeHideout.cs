@@ -30,7 +30,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.White), "HrtPier.H", "Hit by Heartpiercer", "Heartpiercer Hit", 0)
                         .WithStabilitySubMechanic(
-                            new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.DarkWhite), "HrtPier.CC", "Knocked Down by Heartpiercer", "Heartpiercer Knockdown", 150),
+                            new SubMechanic(new MechanicPlotlySetting(Symbols.Octagon, Colors.DarkWhite), "HrtPier.CC", "Knocked Down by Heartpiercer", "Heartpiercer Knockdown", 150),
                             false
                         ),
                 ]),

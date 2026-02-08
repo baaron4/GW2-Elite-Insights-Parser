@@ -13,7 +13,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class PeerlessQadim : TheKeyOfAhdashim
+internal class QadimThePeerless : TheKeyOfAhdashim
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
@@ -52,7 +52,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
             new PlayerDstBuffApplyMechanic(SappingSurge, new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
         ]);
-    public PeerlessQadim(int triggerID) : base(triggerID)
+    public QadimThePeerless(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
         Extension = "prlqadim";
@@ -66,7 +66,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
     {
         return
         [
-            TargetID.PeerlessQadim,
+            TargetID.QadimThePeerless,
             TargetID.EntropicDistortion,
             TargetID.PeerlessQadimPylon,
         ];
@@ -225,7 +225,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.QadimThePeerless)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
         phases[0].AddTarget(mainTarget, log);
         phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
         
@@ -252,7 +252,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
         switch (target.ID)
         {
-            case (int)TargetID.PeerlessQadim:
+            case (int)TargetID.QadimThePeerless:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
@@ -733,7 +733,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.QadimThePeerless)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
         return (target.GetHealth(combatData) > 48e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 

@@ -57,8 +57,6 @@ public abstract class Mechanic : MechanicContainer
     private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
     private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
 
-    public bool IsASubMechanic { get; protected set; } = false;
-
     /// <summary>
     /// Full constructor without special checks
     /// </summary>
