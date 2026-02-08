@@ -89,6 +89,7 @@ public static class SkillItemOverrides
         { RelicGolemancerSpawn, "Relic of the Golemancer (Spawn Minion)" },
         { RelicPrivateerSpawn, "Relic of the Privateer (Spawn Minion)" },
         { RelicOfTheSteamshrieker, "Relic of the Steamshrieker" },
+        { RelicOfShacklesDamageSkill, "Relic of Shackles (Damage)" },
         #endregion Relics
         #region Elementalist
         { ShatteringIceDamage, "Shattering Ice (Hit)" },
@@ -559,6 +560,9 @@ public static class SkillItemOverrides
         { RelicOfTheMistStranger, ItemImages.RelicOfTheMistStranger },
         { RelicOfCastora, ItemImages.RelicOfCastora },
         { RelicOfTheBiomancer, ItemImages.RelicOfTheBiomancer },
+        { RelicOfTheNauticalBeastDamageHealing, ItemImages.RelicOfTheNauticalBeast },
+        { RelicOfShacklesDamageSkill, ItemImages.RelicOfShackles },
+        { RelicOfTheForestDwellerMissileDamage, ItemImages.RelicOfTheForestDweller },
 #endregion RelicIcons
         #region ElementalistIcons
         { EarthenBlast, TraitImages.EarthenBlast },

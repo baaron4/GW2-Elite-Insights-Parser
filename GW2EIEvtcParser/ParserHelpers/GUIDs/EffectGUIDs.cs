@@ -61,6 +61,9 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
     public static readonly GUID RelicOfTheSteamshrieker = new("C0B2EC5CAE1FF3468FD5D62157625E77"); // Effect Event duration 0, default duration 2000
     public static readonly GUID RelicOfBloodstone = new("AA9A51B997476A4BB803B1252B782420"); // Explosion
+    public static readonly GUID RelicOfTheNauticalBeastGround1 = new("B44BAD999BEB2D4DB284745895B42BDD"); // Ground effect, duration 566
+    public static readonly GUID RelicOfTheNauticalBeastGround2 = new("10D6B2D42D39254FB866CE86D27D36AD"); // Ground effect, duration 2000
+    public static readonly GUID RelicOfTheNauticalBeastAgent = new("40818C8E9CC6EF4388C2821FCC26A9EC"); // Around Src == Dst, duration 0
     #endregion
 
     #region Mesmer
