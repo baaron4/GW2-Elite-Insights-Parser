@@ -31,19 +31,19 @@
                 } else if (timeS > rotation[end][0] + this.getSkillDuration(rotation[end])) {
                     return end;
                 }
-                var id = Math.floor((end + start) / 2);
+                const id = Math.floor((end + start) / 2);
                 if (id === start || id === end) {
-                    var item = rotation[start];
-                    var x = item[0];
-                    var duration = this.getSkillDuration(item);
+                    const item = rotation[start];
+                    const x = item[0];
+                    const duration = this.getSkillDuration(item);
                     if (timeS >= x && x + duration >= timeS) {
                         return start;
                     }
                     return end;
                 }
-                var item = rotation[id];
-                var x = item[0];
-                var duration = this.getSkillDuration(item);
+                const item = rotation[id];
+                const x = item[0];
+                const duration = this.getSkillDuration(item);
                 if (timeS < x) {
                     return this.findRotationIndex(rotation, timeS, start, id);
                 } else if (timeS > x + duration) {
@@ -61,7 +61,7 @@
                 };
             },
             getTooltip(cast) {
-                var tooltip = `${cast.skill.name} at ${cast.time}s`;
+                const tooltip = `${cast.skill.name} at ${cast.time}s`;
                 if (cast.type === RotationStatus.INSTANT) {
                     return tooltip;
                 } else {
@@ -76,58 +76,75 @@
             actorRotation: function () {
                 return this.actor.details.rotation[0];
             },
-            actorNoInstantRotation: function () {
-                var actorNoInstantRotation = [];
-                var actorNoInstantRotationIndex = [];
-                for (var i = 0; i < this.actorRotation.length; i++) {
-                    var rot = this.actorRotation[i];
+            actorSplitRotation: function () {
+                const actorNoInstantRotation = [];
+                const actorNoInstantRotationIndex = [];
+                const actorInstantRotation = [];
+                const actorInstantRotationIndex = [];
+                for (let i = 0; i < this.actorRotation.length; i++) {
+                    const rot = this.actorRotation[i];
                     if (rot[3] !== RotationStatus.INSTANT) {
                         actorNoInstantRotation.push(rot);
                         actorNoInstantRotationIndex.push(i);
+                    } else {
+                        actorInstantRotation.push(rot);
+                        actorInstantRotationIndex.push(i);
                     }
                 }
-                return [actorNoInstantRotation, actorNoInstantRotationIndex];
+                return [actorNoInstantRotation, actorNoInstantRotationIndex, actorInstantRotation, actorInstantRotationIndex];
             },
             rotation: function () {
-                var res = {
+                const res = {
                     current: null,
                     nexts: []
                 };
                 if (this.actorRotation.length === 0) {
                     return res;
                 }
-                var time = this.timeToUse / 1000.0;
-                var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
-                var item = this.actorRotation[id];
-                var x = item[0];
-                var duration = this.getSkillDuration(item);
-                var drawItem = false;
-                var [actorNoInstantRotation, actorNoInstantRotationIndex] = this.actorNoInstantRotation;
-                if (x <= time && time <= x + duration) {
-                    drawItem = true;
-                } else if (item[3] === RotationStatus.INSTANT && actorNoInstantRotation.length) {
-                    var idNoInstant =  this.findRotationIndex(actorNoInstantRotation, time, 0, actorNoInstantRotation.length - 1);
-                    id = Math.min(id, actorNoInstantRotationIndex[idNoInstant]);
-                    if (id !== idNoInstant) {
-                        item = this.actorRotation[id];
-                        x = item[0];
-                        duration = this.getSkillDuration(item);
-                        if (x <= time && time <= x + duration) {
-                            drawItem = true;
-                        }
+                const time = this.timeToUse / 1000.0;
+                const [actorNoInstantRotation, actorNoInstantRotationIndex, actorInstantRotation, actorInstantRotationIndex] = this.actorSplitRotation;
+                let idInstant = -1;
+                let instantItem = null;
+                if (actorInstantRotation.length > 0) {
+                    let idInInstant = this.findRotationIndex(actorInstantRotation, time, 0, actorInstantRotation.length - 1);
+                    idInstant = actorInstantRotationIndex[idInInstant];
+                    instantItem = actorInstantRotation[idInInstant];
+                }
+                let idNoInstant = -1;
+                let noInstantItem = null;
+                if (actorNoInstantRotation.length > 0) {
+                    let idInNoInstant = this.findRotationIndex(actorNoInstantRotation, time, 0, actorNoInstantRotation.length - 1);
+                    idNoInstant = actorNoInstantRotationIndex[idInNoInstant];
+                    noInstantItem = actorNoInstantRotation[idInNoInstant];
+                }
+                let item = noInstantItem;
+                let id = idNoInstant;
+                if (instantItem) {
+                    if (!item ||
+                        item[0] > instantItem[0] ||
+                        (instantItem[0] <= time &&
+                        time <= instantItem[0] + this.getSkillDuration(instantItem))
+                    ) {
+                        item = instantItem;
+                        id = idInstant;
                     }
+                }
+                const itemTime = item[0];
+                let drawItem = false;
+                if (itemTime <= time && time <= itemTime + this.getSkillDuration(item)) {
+                    drawItem = true;
                 }
                 if (drawItem) {
                     res.current = {
-                        time: item[0],
+                        time: itemTime,
                         skill: findSkill(false, item[1]),
                         duration: item[2],
                         type: item[3]
                     };
                     id++;
                 }
-                for (var j = id; j < this.actorRotation.length; j++) {
-                    var next = this.actorRotation[j];
+                for (let j = id; j < this.actorRotation.length; j++) {
+                    const next = this.actorRotation[j];
                     if (next[0] >= time) {
                         res.nexts.push({
                             time: next[0],
