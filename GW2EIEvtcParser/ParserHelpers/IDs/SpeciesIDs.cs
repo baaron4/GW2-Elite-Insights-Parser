@@ -320,8 +320,8 @@ public static class SpeciesIDs
         SabirSquarePlateform = SpeciesIDs.SabirSquarePlateform,
         SabirRectanglePlateform = SpeciesIDs.SabirRectanglePlateform,
         SabirBigRectanglePlateform = SpeciesIDs.SabirBigRectanglePlateform,
-        // - Peerless Qadim
-        PeerlessQadim = 22000,
+        // - Qadim the Peerless
+        QadimThePeerless = 22000,
         PeerlessQadimPylon = 21996,
         PeerlessQadimAuraPylon = 21962,
         EntropicDistortion = 21973,
