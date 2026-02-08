@@ -129,9 +129,6 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(SoulOfTheTitan, SoulOfTheTitan)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
-            .UsingOverridenDurationChecker(0)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfFogBuff, RelicOfFogBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheCoralHeartBuff, RelicOfTheCoralHeartBuff)
@@ -144,6 +141,9 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfShacklesApplicationBuff, RelicOfShacklesApplicationBuff)
             .UsingICD(100)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
+            .UsingOverridenDurationChecker(0)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
