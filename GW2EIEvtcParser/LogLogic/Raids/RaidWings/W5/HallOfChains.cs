@@ -28,6 +28,10 @@ internal abstract class HallOfChains : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.HallOfChains;
         LogID |= LogIDs.RaidWingMasks.HallOfChainsMask;
     }
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutHallOfChains, TargetID.Dhuum);
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([

@@ -22,6 +22,11 @@ internal abstract class RaidWingLogic : RaidLogic
         return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
     }
 
+    protected virtual (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (SkillIDs.NoBuff, TargetID.Unknown);
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (IsInstance)
@@ -47,6 +52,28 @@ internal abstract class RaidWingLogic : RaidLogic
         else
         {
             NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
+        }
+    }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        (long downAndOutID, TargetID targetID) = GetDownAndOutIDs();
+        if (downAndOutID != SkillIDs.NoBuff && targetID != TargetID.Unknown)
+        {
+            var mainPhase = log.LogData.GetMainPhase(log);
+            var encounterPhase = log.LogData.GetEncounterPhases(log).FirstOrDefault(x => x.Success && x.Targets.Keys.Any(x => x.IsSpecies(targetID)));
+            if (encounterPhase != null)
+            {
+                foreach (var player in log.PlayerList)
+                {
+                    if (encounterPhase.IntersectsWindow(player.FirstAware, player.LastAware) && player.HasBuff(log, downAndOutID, encounterPhase.End, 100))
+                    {
+                        instanceBuffs.Add(new InstanceBuff(log.Buffs.BuffsByIDs[downAndOutID], 1, mainPhase));
+                        break;
+                    }
+                }
+            }
         }
     }
 }

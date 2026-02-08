@@ -30,7 +30,10 @@ internal abstract class MountBalrior : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.MountBalrior;
         LogID |= LogIDs.RaidWingMasks.MountBalriorMask;
     }
-
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutMountBalrior, TargetID.Ura);
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
