@@ -23,6 +23,10 @@ internal abstract class MythwrightGambit : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.MythwrightGambit;
         LogID |= LogIDs.RaidWingMasks.MythwrightGambitMask;
     }
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutMythwrightGambit, TargetID.Qadim);
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([

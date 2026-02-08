@@ -11,7 +11,13 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ProfHelper
 {
-
+    private static readonly List<InstantCastFinder> _genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse = 
+    [
+        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+    ];
     private static readonly List<InstantCastFinder> _genericInstantCastFinders =
     [
         #region Sigils
@@ -107,17 +113,6 @@ internal static class ProfHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         #endregion Runes
         #region Relics
-        // Keep the relics in order in this section: Loss -> Gain
-        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
-            .UsingOverridenDurationChecker(0)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // End ordered section
         new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
@@ -150,6 +145,11 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce)
             .UsingICD(1000)
             .UsingDisableWithMissileData()
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
+            .UsingOverridenDurationChecker(0)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
             .UsingDisableWithMissileData()
@@ -332,6 +332,7 @@ internal static class ProfHelper
     internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<AgentItem> players)
     {
         List<InstantCastFinder> instantCastFinders = new (500);
+        instantCastFinders.AddRange(_genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse);
         instantCastFinders.AddRange(_genericInstantCastFinders);
         foreach (Spec spec in players.Select(x => x.BaseSpec).Distinct())
         {

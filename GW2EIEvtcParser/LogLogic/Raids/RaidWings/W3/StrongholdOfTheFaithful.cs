@@ -24,6 +24,10 @@ internal abstract class StrongholdOfTheFaithful : RaidWingLogic
         LogCategoryInformation.SubCategory = SubLogCategory.StrongholdOfTheFaithful;
         LogID |= LogIDs.RaidWingMasks.StrongholdOfTheFaithfulMask;
     }
+    protected override (long downAndOutID, TargetID targetID) GetDownAndOutIDs()
+    {
+        return (DownAndOutStrongholdOfTheFaithful, TargetID.Xera);
+    }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
