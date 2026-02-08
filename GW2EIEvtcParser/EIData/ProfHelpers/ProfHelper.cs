@@ -14,7 +14,7 @@ internal static class ProfHelper
 
     private static readonly List<InstantCastFinder> _genericInstantCastFinders =
     [
-        // Sigils
+        #region Sigils
         new DamageCastFinder(RingOfEarth_MinorSigilOfGeomancy, RingOfEarth_MinorSigilOfGeomancy)
             .UsingICD(500)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -88,7 +88,8 @@ internal static class ProfHelper
         new MissileCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
             .UsingICD(500)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // Runes
+        #endregion Sigils
+        #region Runes
         new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
@@ -104,17 +105,19 @@ internal static class ProfHelper
         new MinionSpawnCastFinder(RunePrivateerSpawn, (int)MinionID.TropicalBird)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        // Combos
-        new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
-        new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
-        new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-        new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
-        // Misc
-        new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
-        new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
-            .UsingBeforeWeaponSwap(),
-        new BreakbarDamageCastFinder(Technobabble, Technobabble),
-        // Relics
+        #endregion Runes
+        #region Relics
+        // Keep the relics in order in this section: Loss -> Gain
+        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
+            .UsingOverridenDurationChecker(0)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        // End ordered section
         new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
@@ -142,20 +145,11 @@ internal static class ProfHelper
         new BuffGiveCastFinder(RelicOfShacklesApplicationBuff, RelicOfShacklesApplicationBuff)
             .UsingICD(100)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
-            .UsingOverridenDurationChecker(0)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce)
             .UsingICD(1000)
             .UsingDisableWithMissileData()
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
             .UsingDisableWithMissileData()
@@ -233,7 +227,8 @@ internal static class ProfHelper
         new MissileCastFinder(RelicOfTheForestDwellerMissileDamage, RelicOfTheForestDwellerMissileDamage)
             .UsingICD(100)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // Mounts
+        #endregion Relics
+        #region Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
         new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith)
@@ -244,6 +239,19 @@ internal static class ProfHelper
         new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
         new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.SkyscaleBlast2),
+        #endregion Mounts
+        #region Combos
+        new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
+        new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
+        new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
+        new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
+        #endregion Combos
+        #region Misc
+        new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
+        new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
+            .UsingBeforeWeaponSwap(),
+        new BreakbarDamageCastFinder(Technobabble, Technobabble),
+        #endregion Misc
     ];
 
     internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
