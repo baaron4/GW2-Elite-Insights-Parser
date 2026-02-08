@@ -225,17 +225,15 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             SubPhasePhaseData subPhase = kelaPhases[i];
             subPhase.AddParentPhase(encounterPhase);
+            subPhase.AddTarget(kela, log);
             if ((i % 2) == 0)
             {
                 candidateMainPhases.Add(subPhase);
-                subPhase.AddTargets(crabs, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 candidateStormPhases.Add(subPhase);
-                subPhase.AddTargets(eliteCrocs, log, PhaseData.TargetPriority.NonBlocking);
             }
-            subPhase.AddTarget(kela, log);
         }
         // Split phases
         var stormPhaseCount = 1;
@@ -269,6 +267,11 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 }
             }
         }
+        foreach (var stormPhase in stormPhases)
+        {
+            stormPhase.AddTargets(crabs, log, PhaseData.TargetPriority.NonBlocking);
+            stormPhase.AddTargets(eliteCrocs, log, PhaseData.TargetPriority.NonBlocking);
+        }
         // Main phases
         var mainPhaseCount = 1;
         foreach (var candidateMainPhase in candidateMainPhases)
@@ -276,6 +279,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             if (!stormPhases.Any(x => x.InInterval((candidateMainPhase.Start + candidateMainPhase.End) / 2)))
             {
                 candidateMainPhase.Name = "Phase " + (mainPhaseCount++);
+                candidateMainPhase.AddTargets(crabs, log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(candidateMainPhase);
             }
         }
