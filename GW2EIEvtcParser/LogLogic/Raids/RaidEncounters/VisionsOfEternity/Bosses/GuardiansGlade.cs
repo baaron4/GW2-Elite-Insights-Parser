@@ -282,6 +282,15 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return phases;
     }
 
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>() {
+            { TargetID.KelaSeneschalOfWaves, 0 },
+            { TargetID.EliteCrocodilianRazortooth, 1 },
+            { TargetID.ExecutorOfWaves, 1 },
+        };
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
