@@ -215,8 +215,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var crabs = targets.Where(x => x.IsSpecies(TargetID.ExecutorOfWaves));
         var phases = new List<SubPhasePhaseData>(10);
         var kelaCasts = kela.GetAnimatedCastEvents(log, encounterPhase.Start, encounterPhase.End);
-        var burrowCast = kelaCasts.Where(x => x.SkillID == KelaBurrow).ToList();
-        var kelaNonBurrowRelatedCast = kelaCasts.Where(x => x.SkillID != KelaBurrow && x.SkillID != KelaAmbush1 && x.SkillID != KelaAmbush2 && x.SkillID != log.SkillData.DodgeID && x.ActualDuration > ServerDelayConstant).ToList();
+        var burrowOrAmbushCast = kelaCasts.Where(x => x.SkillID == KelaBurrow || x.SkillID == KelaAmbush1 || x.SkillID == KelaAmbush2).ToList();
+        var kelaNonStormRelatedCast = kelaCasts.Where(x => x.SkillID != KelaBurrow && x.SkillID != KelaAmbush1 && x.SkillID != KelaAmbush2 && x.SkillID != log.SkillData.DodgeID && x.ActualDuration > ServerDelayConstant).ToList();
         // Candidate phases
         var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, false);
         List<SubPhasePhaseData> candidateMainPhases = [];
@@ -252,9 +252,9 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             {
                 var nextBurrowStart = candidateStormPhase.Start;
                 var previousBurrowEnd = curStormPhase.End;
-                var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
-                var nonBurrowCast = kelaNonBurrowRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
-                if (!nonBurrowCast && burrowCastQuickly)
+                var burrowOrAmbushCastQuickly = burrowOrAmbushCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
+                var nonStormCast = kelaNonStormRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
+                if (!nonStormCast && burrowOrAmbushCastQuickly)
                 {
                     curStormPhase.OverrideEnd(candidateStormPhase.End);
                 }
@@ -274,11 +274,11 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             var followingMainphase = candidateMainPhases.FirstOrDefault(x => x.Start >= lastStormPhase.End);
             if (followingMainphase != null)
             {
-                var nextBurrowStart = followingMainphase.End;
+                var fightEnd = followingMainphase.End;
                 var previousBurrowEnd = lastStormPhase.End;
-                var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
-                var nonBurrowCast = kelaNonBurrowRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
-                if (!nonBurrowCast && burrowCastQuickly)
+                var burrowOrAmbushCastQuickly = burrowOrAmbushCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
+                var nonStormCast = kelaNonStormRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= fightEnd + ServerDelayConstant);
+                if (!nonStormCast && burrowOrAmbushCastQuickly)
                 {
                     lastStormPhase.OverrideEnd(followingMainphase.End);
                     candidateMainPhases.Remove(followingMainphase);
