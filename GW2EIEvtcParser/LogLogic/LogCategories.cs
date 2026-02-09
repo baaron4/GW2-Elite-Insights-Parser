@@ -160,6 +160,8 @@ public class LogCategories
                 return "Drizzlewood Coast";
             case SubLogCategory.SotO:
                 return "Secret of the Obscure";
+            case SubLogCategory.VisionsOfEternity:
+                return "Visions of Eternity";
             default:
                 return SubCategory.ToString();
         }
