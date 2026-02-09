@@ -267,6 +267,24 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 }
             }
         }
+        // Handle edges cases where Kela is killed before it can burrow again, creating a "fake" dps phase
+        var lastStormPhase = stormPhases.LastOrDefault();
+        if (lastStormPhase != null)
+        {
+            var followingMainphase = candidateMainPhases.FirstOrDefault(x => x.Start >= lastStormPhase.End);
+            if (followingMainphase != null)
+            {
+                var nextBurrowStart = followingMainphase.End;
+                var previousBurrowEnd = lastStormPhase.End;
+                var burrowCastQuickly = burrowCast.Any(x => x.Time <= previousBurrowEnd + 5000 && x.Time >= previousBurrowEnd);
+                var nonBurrowCast = kelaNonBurrowRelatedCast.Any(x => x.Time >= previousBurrowEnd - ServerDelayConstant && x.Time <= nextBurrowStart + ServerDelayConstant);
+                if (!nonBurrowCast && burrowCastQuickly)
+                {
+                    lastStormPhase.OverrideEnd(followingMainphase.End);
+                    candidateMainPhases.Remove(followingMainphase);
+                }
+            }
+        }
         foreach (var stormPhase in stormPhases)
         {
             stormPhase.AddTargets(crabs, log, PhaseData.TargetPriority.NonBlocking);
