@@ -121,7 +121,7 @@ public class CombatReplay
                 }
                 else
                 {
-                    ParametricPoint3D last = _PolledPositions.Last().Time > pos.Time ? _PolledPositions.Last() : pos;
+                    ParametricPoint3D last = _PolledPositions[polledPositionTableIndex - 1].Time > pos.Time ? _PolledPositions[polledPositionTableIndex - 1] : pos;
                     velocityTableIndex = UpdateVelocityIndex(_Velocities, t, velocityTableIndex);
                     ParametricPoint3D velocity = default;
                     if (velocityTableIndex >= 0 && velocityTableIndex < Velocities.Count)
@@ -167,7 +167,7 @@ public class CombatReplay
                 }
                 else
                 {
-                    ParametricPoint3D last = _PolledRotations.Last().Time > rot.Time ? _PolledRotations.Last() : rot;
+                    ParametricPoint3D last = _PolledRotations[polledRotationTableIndex - 1].Time > rot.Time ? _PolledRotations[polledRotationTableIndex - 1] : rot;
                     if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
                     {
                         _PolledRotations[polledRotationTableIndex++] = rot.WithChangedTime(t);

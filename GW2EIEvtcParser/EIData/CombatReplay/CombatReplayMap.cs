@@ -141,6 +141,10 @@ public class CombatReplayMap
         double scaleY = (double)height / _pixelSize.height;
         double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
         double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
+        if (Double.IsNaN(x) || Double.IsNaN(y) || Double.IsInfinity(x) || Double.IsInfinity(y))
+        {
+            throw new InvalidOperationException("Positions are NaN");
+        }
         return new(
             (float)Math.Round(scaleX * _pixelSize.width * x, ParserHelper.CombatReplayDataDigit), 
             (float)Math.Round(scaleY * (_pixelSize.height - _pixelSize.height * y), ParserHelper.CombatReplayDataDigit)
