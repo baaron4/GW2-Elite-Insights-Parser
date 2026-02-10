@@ -206,7 +206,10 @@ internal class FraenirOfJormag : Bjora
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        base.SetInstanceBuffs(log, instanceBuffs);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
         if (log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);

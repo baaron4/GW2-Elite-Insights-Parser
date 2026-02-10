@@ -89,7 +89,10 @@ internal class Boneskinner : Bjora
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
-        base.SetInstanceBuffs(log, instanceBuffs);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
         {
