@@ -732,6 +732,8 @@ internal static class ProfHelper
     /// </summary>
     private static readonly HashSet<int> CommonMinions =
     [
+        // Raids
+        (int)MinionID.InsectSwarm,
         // Racial Summons
         (int)MinionID.HoundOfBalthazar,
         (int)MinionID.SnowWurm,

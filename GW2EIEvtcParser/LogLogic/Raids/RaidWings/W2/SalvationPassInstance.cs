@@ -244,9 +244,11 @@ internal class SalvationPassInstance : SalvationPass
     {
         Slothasor.FindMushrooms(logData, agentData, combatData, extensions);
         Slothasor.FindSlublingTransformations(logData, agentData, combatData, extensions);
+        var bees = BanditTrio.CreateCustomInsectSwarmMasterAgent(logData, agentData);
         BanditTrio.FindCageAndBombs(agentData, combatData);
         Matthias.FindSacrifices(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        BanditTrio.RedirectInsectSwarmsToCustomMaster(bees, agentData);
         Matthias.ForceSacrificeHealth(Targets);
     }
 

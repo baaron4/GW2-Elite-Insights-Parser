@@ -81,9 +81,9 @@ public static class SpeciesIDs
         BanditSniper = 16065,
         NarellaTornado = 16092,
         OilSlick = 16096,
-        InsectSwarm = 16120,
         Prisoner1 = 16056,
         Prisoner2 = 16103,
+        InsectSwarms = SpeciesIDs.InsectSwarms,
         // - Matthias
         Matthias = 16115,
         Spirit = 16105,
@@ -1039,6 +1039,8 @@ public static class SpeciesIDs
         VentariTablet = SpeciesIDs.VentariTablet,
         // Mechanist
         JadeMech = 23549,
+        // Raids
+        InsectSwarm = 16120,
         // General
         Unknown,
     }
@@ -1245,6 +1247,7 @@ public static class SpeciesIDs
     private const int HTGreenSooWonSouthEast = -120;
     private const int HTGreenSooWonSouth = -121;
     private const int GrandRaidKelaChest = -122;
+    private const int InsectSwarms = -123;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

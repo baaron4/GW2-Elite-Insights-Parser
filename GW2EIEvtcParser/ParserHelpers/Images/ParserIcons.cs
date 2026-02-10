@@ -616,6 +616,7 @@ internal static class ParserIcons
     private const string MinionSpiritOfAnguish = "https://i.imgur.com/DjpbK1o.png";
     private const string MinionSpiritOfWanderlust = "https://i.imgur.com/UKgogUa.png";
     private const string MinionSpiritOfPreservation = "https://i.imgur.com/9nyIxmd.png";
+    private const string MinionInsectSwarm = "https://i.imgur.com/V1yBcfr.png";
     #endregion
 
     #region Marker
@@ -1019,6 +1020,7 @@ internal static class ParserIcons
         { TargetID.BanditSaboteur, TrashBanditSaboteur },
         { TargetID.NarellaTornado, TrashTornado },
         { TargetID.Cage, TrashCage },
+        { TargetID.InsectSwarms, MinionInsectSwarm },
         { TargetID.Bombs, TrashBombs },
         { TargetID.Tornado, TrashTornado },
         { TargetID.Jade, TrashJade },
@@ -1621,6 +1623,7 @@ internal static class ParserIcons
         { MinionID.SpiritOfAnguish, MinionSpiritOfAnguish },
         { MinionID.SpiritOfPreservation, MinionSpiritOfPreservation },
         { MinionID.SpiritOfWanderlust, MinionSpiritOfWanderlust },
+        { MinionID.InsectSwarm, MinionInsectSwarm },
     };
 
     /// <summary>

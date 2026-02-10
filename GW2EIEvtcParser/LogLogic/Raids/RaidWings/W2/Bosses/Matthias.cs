@@ -242,8 +242,11 @@ internal class Matthias : SalvationPass
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        // Bees can be brought to Matthias
+        var bees = BanditTrio.CreateCustomInsectSwarmMasterAgent(logData, agentData);
         FindSacrifices(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        BanditTrio.RedirectInsectSwarmsToCustomMaster(bees, agentData);
         ForceSacrificeHealth(Targets);
     }
 
@@ -258,7 +261,9 @@ internal class Matthias : SalvationPass
 
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
-        return [(int)TargetID.MatthiasSacrificeCrystal];
+        return [
+            (int)TargetID.MatthiasSacrificeCrystal,
+        ];
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

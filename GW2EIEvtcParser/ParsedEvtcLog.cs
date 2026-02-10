@@ -229,26 +229,25 @@ public class ParsedEvtcLog
         var actors = new List<SingleActorCombatReplayDescription>();
         var decorationRenderings = new List<CombatReplayRenderingDescription>();
         var decorationMetadata = new List<CombatReplayMetadataDescription>();
-        var fromNonFriendliesSet = new HashSet<SingleActor>(LogData.Logic.Hostiles);
+        var awareCheckedAgents = new HashSet<SingleActor>(LogData.Logic.Hostiles);
         foreach (SingleActor actor in Friendlies)
         {
-            if (actor.IsFakeActor || !actor.HasCombatReplayPositions(this))
+            if (!(actor.IsFakeActor || !actor.HasCombatReplayPositions(this)))
             {
-                continue;
+                actors.Add(actor.GetCombatReplayDescription(map, this));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
             }
-            actors.Add(actor.GetCombatReplayDescription(map, this));
-            decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
             foreach (Minions minions in actor.GetMinions(this))
             {
                 if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                 {
-                    fromNonFriendliesSet.UnionWith(minions.MinionList);
+                    awareCheckedAgents.UnionWith(minions.MinionList);
                 }
             }
         }
-        foreach (SingleActor actor in fromNonFriendliesSet)
+        foreach (SingleActor actor in awareCheckedAgents)
         {
-            if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
+            if (actor.IsFakeActor || (actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
             {
                 continue;
             }
