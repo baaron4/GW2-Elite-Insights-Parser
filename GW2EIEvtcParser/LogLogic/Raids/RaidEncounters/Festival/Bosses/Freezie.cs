@@ -176,7 +176,10 @@ internal class Freezie : FestivalRaidEncounterLogic
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // Fixation Aurora Beam
         var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff).Where(x => x.Value > 0);

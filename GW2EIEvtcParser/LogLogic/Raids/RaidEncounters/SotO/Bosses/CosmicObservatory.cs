@@ -175,7 +175,10 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // Lost Control
         var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff).Where(x => x.Value > 0);

@@ -335,7 +335,10 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
     }
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // Mag Beam - Rectangular Beams during the bomb puzzle.
         AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetGreen, 30, 120);
