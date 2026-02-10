@@ -395,6 +395,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         var casts = target.GetAnimatedCastEvents(log).ToList();
         (long start, long end) lifespan;
 

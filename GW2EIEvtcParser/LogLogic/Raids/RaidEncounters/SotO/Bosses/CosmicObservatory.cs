@@ -89,6 +89,10 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         (long start, long end) lifespan;
         var casts = target.GetAnimatedCastEvents(log).ToList();
 
