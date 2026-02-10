@@ -198,21 +198,21 @@ public static class SpeciesIDs
         BrokenKing = 19691,
         // - Statue of Death
         EaterOfSouls = 19536,
-        OrbSpider = 19801,
-        GreenSpirit1 = 19587,
-        GreenSpirit2 = 19571,
+        TwistedSpirit = 19801, // Spider
+        LostSpirit1 = 19587, // Greens
+        LostSpirit2 = 19571, // Greens
         AscalonianPeasant1 = 19810,
         AscalonianPeasant2 = 19758,
         // - Statues of Darkness
         EyeOfJudgement = 19651,
         EyeOfFate = 19844,
-        LightThieves = 19658,
+        LightThief = 19658,
         MazeMinotaur = 19402,
         // - Dhuum (Skeletons are the same as Spirit Hordes)
         Dhuum = 19450,
-        Messenger = 19807,
-        Echo = 19628,
-        Enforcer = 19681,
+        DhuumsMessenger = 19807,
+        EndersEcho = 19628,
+        DhuumsEnforcer = 19681,
         Deathling = 19759,
         UnderworldReaper = 19831,
         DhuumDesmina = 19481,

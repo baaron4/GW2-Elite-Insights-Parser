@@ -55,12 +55,12 @@ internal class StatueOfDeath : HallOfChains
     {
         return
         [
-            TargetID.OrbSpider,
+            TargetID.TwistedSpirit,
             TargetID.SpiritHorde1,
             TargetID.SpiritHorde2,
             TargetID.SpiritHorde3,
-            TargetID.GreenSpirit1,
-            TargetID.GreenSpirit2
+            TargetID.LostSpirit1,
+            TargetID.LostSpirit2
         ];
     }
 
@@ -128,8 +128,8 @@ internal class StatueOfDeath : HallOfChains
                     }
                 }
                 break;
-            case (int)TargetID.GreenSpirit1:
-            case (int)TargetID.GreenSpirit2:
+            case (int)TargetID.LostSpirit1:
+            case (int)TargetID.LostSpirit2:
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
@@ -149,7 +149,7 @@ internal class StatueOfDeath : HallOfChains
             case (int)TargetID.SpiritHorde1:
             case (int)TargetID.SpiritHorde2:
             case (int)TargetID.SpiritHorde3:
-            case (int)TargetID.OrbSpider:
+            case (int)TargetID.TwistedSpirit:
                 break;
             default:
                 break;
