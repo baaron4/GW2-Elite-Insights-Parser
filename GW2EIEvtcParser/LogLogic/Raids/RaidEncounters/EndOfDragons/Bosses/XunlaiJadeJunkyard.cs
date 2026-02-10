@@ -539,6 +539,13 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         replay.Decorations.AddTethersByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TargetID.ReanimatedHatred, Colors.Magenta, 0.5);
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
     private static void AddDeathsHandDecoration(CombatReplay replay, Vector3 position, long start, int delay, uint radius, int duration)
     {
         (long start, long end) lifespan = (start, start + delay);
