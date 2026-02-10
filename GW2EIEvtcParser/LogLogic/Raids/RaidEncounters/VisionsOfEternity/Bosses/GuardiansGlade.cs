@@ -328,8 +328,42 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         return LogData.Mode.Normal;
     }
 
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    {
+        var genericStatus = base.GetLogStartStatus(combatData, agentData, logData);
+        if (genericStatus != LogData.StartStatus.Normal)
+        {
+            return genericStatus;
+        }
+        var firstFixation = combatData.GetBuffApplyData(FixatedKela).FirstOrDefault();
+        if (firstFixation != null)
+        {
+            return firstFixation.Time <= logData.LogStart ? LogData.StartStatus.Normal : LogData.StartStatus.Late;
+        }
+        return LogData.StartStatus.Late;
+    }
+
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
+    {
+        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
+        if (!successHandler.Success)
+        {
+            var kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
+            var determined762Applies = combatData.GetBuffApplyDataByIDByDst(Determined762, kela.AgentItem);
+            if (determined762Applies.Count == 1)
+            {
+                successHandler.SetSuccess(true, determined762Applies[0].Time);
+            }
+        }
+    }
+
+
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // Fixated
         var kelaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID).ToList();
         var fixateds = p.GetBuffStatus(log, FixatedKela).Where(x => x.Value > 0);
@@ -365,38 +399,12 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
         }
     }
-
-    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
-    {
-        var genericStatus = base.GetLogStartStatus(combatData, agentData, logData);
-        if (genericStatus != LogData.StartStatus.Normal)
-        {
-            return genericStatus;
-        }
-        var firstFixation = combatData.GetBuffApplyData(FixatedKela).FirstOrDefault();
-        if (firstFixation != null)
-        {
-            return firstFixation.Time <= logData.LogStart ? LogData.StartStatus.Normal : LogData.StartStatus.Late;
-        }
-        return LogData.StartStatus.Late;
-    }
-
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
-    {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
-        if (!successHandler.Success)
-        {
-            var kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
-            var determined762Applies = combatData.GetBuffApplyDataByIDByDst(Determined762, kela.AgentItem);
-            if (determined762Applies.Count == 1)
-            {
-                successHandler.SetSuccess(true, determined762Applies[0].Time);
-            }
-        }
-    }
-
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.KelaSeneschalOfWaves:
@@ -445,6 +453,10 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
         (long start, long end) lifespan;
 
         // Claw Slam (frontal)
@@ -543,7 +555,20 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             }
         }
     }
-
+    internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
     private static void AddSandDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, IReadOnlyList<EffectEvent> effects, long defaultDuration, Color color, double opacity, bool filled)
     {
         const uint maxInterval = 2500; // usually 2s interval
