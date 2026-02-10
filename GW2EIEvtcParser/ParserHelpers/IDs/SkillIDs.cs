@@ -1049,6 +1049,7 @@ public static class SkillIDs
     public const long SkullCrack1 = 14414;
     public const long TremorMace = 14415;
     public const long BannerOfStrengthBuff = 14417;
+    public const long BattleStandard = 14419;
     public const long SkullCrack2 = 14425;
     public const long SkullCrack3 = 14426;
     public const long SkullCrack4 = 14427;
@@ -4483,9 +4484,11 @@ public static class SkillIDs
     public const long FriendlyFire = 71892;
     public const long Journey = 71897;
     public const long LineBreakerHeal = 71901;
+    public const long PathToVictoryWarrior = 71922;
+    public const long PathToVictoryBerserker = 71932;
     public const long FireBullet = 71936;
     public const long PathOfGluttonyFlipBuff = 71947;
-    public const long PathToVictory = 71950;
+    public const long PathToVictorySpellbreaker = 71950;
     public const long FireJurisdictionLevel1 = 71818;
     public const long PhantasmalSharpshooterAttack = 71953;
     public const long FireJurisdictionLevel2 = 71954;
@@ -4501,6 +4504,7 @@ public static class SkillIDs
     public const long InspiringImagery = 72005;
     public const long POV_DimensionalAperturaFlipSkillBuff = 72025;
     public const long FrigidFlurry = 72028;
+    public const long PathToVictoryBladesworn = 72029;
     public const long SoothingSplash = 72033;
     public const long MechanicalGeniusRemain = 72040;
     public const long ShatteringStoneBuff = 72046;
@@ -4509,6 +4513,7 @@ public static class SkillIDs
     public const long EchoingErosion = 72062;
     public const long DazingDischargeBuff = 72069;
     public const long Abstraction = 72076;
+    public const long PathToVictoryParagon = 72089;
     public const long GuildHallWvWMode = 72110;
     public const long GuildHallPvEMode = 72113;
     public const long RelicOfTheFlockBarrier = 72115;
