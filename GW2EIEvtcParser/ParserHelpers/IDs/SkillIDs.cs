@@ -147,6 +147,7 @@ public static class SkillIDs
     public const long Poisoned = 910;
     public const long NourishmentGuildBanquetTable = 937;
     public const long SkaleVenomConsumable = 972;
+    public const long Resurrect2 = 1006;
     public const long Resurrect = 1066;
     public const long LevelUp = 1080;
     public const long Finisher1 = 1097;
@@ -204,6 +205,9 @@ public static class SkillIDs
     public const long FlameBurstWvW = 3842;
     public const long BolaTossWvW = 3847;
     public const long ThrowBolasWvW = 3848;
+    public const long HammerSwingNPC = 3849;
+    public const long HammerShockNPC = 3852;
+    public const long BackBreakerNPC = 3853;
     public const long BlackPowderWvW = 3854;
     public const long Determined3892 = 3892;
     public const long MeteorShower = 5501;
@@ -1679,6 +1683,7 @@ public static class SkillIDs
     public const long PulmonaryImpactSkill = 30770;
     public const long Rise = 30772;
     public const long HuntersMark = 30778;
+    public const long SignetOfTheLocusSomething1 = 30782;
     public const long WingsOfResolveSkill = 30783;
     public const long InvigoratingBond = 30784;
     public const long EnterReaperShroud = 30792;
@@ -3500,6 +3505,7 @@ public static class SkillIDs
     public const long SpiritNovaTier4 = 60501;
     public const long TargetedDragonVoid = 60517;
     public const long LethalCoalescence = 60545;
+    public const long SignetOfTheLocusSomething2 = 60617;
     public const long SignetOfVampirismHeal2 = 60618;
     public const long SignetOfVampirismSkill2 = 60625;
     public const long Enraged_200_strike_50_reduc = 60674;
@@ -5463,14 +5469,28 @@ public static class SkillIDs
     public const long POV_ElementalBalance = 79230; // Trait buff?
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
+    public const long FrostfireWardSecondaryAttack = 79332;
+    public const long ElutriateSecondaryAttack = 79333;
     public const long LesserSymbolOfBlades = 79336;
     public const long KineticBattery = 79338;
     public const long TimeBombBuff = 79339;
+    public const long SignetOfTheLocusSomething3 = 79340;
+    public const long SignetOfTheLocusSomething4 = 79343;
+    public const long FieryImpactSecondaryAttackBuff = 79346;
+    public const long GalvanizeSecondaryAttackBuff = 79347;
     public const long LesserSicEm = 79348;
     public const long BountifulPowerCharge = 79349;
     public const long DangerTime = 79353;
+    public const long GalvanizeSecondaryAttack = 79356;
     public const long TimeBombDamage = 79359;
+    public const long ShaleStormSecondaryAttack = 79360;
+    public const long FieryImpactSecondaryAttack = 79361;
     public const long BountifulPower = 79363;
+    public const long ElutriateSecondaryAttackBuff = 79364;
+    public const long SoothingBurstSecondaryAttackBuff = 79369;
+    public const long ChainReactivityBarrier3rdHit = 79370;
+    public const long FrostfireWardSecondaryAttackBuff = 79372;
+    public const long ShaleStormSecondaryAttackBuff = 79373;
     public const long FixatedKela = 79380;
     public const long RelicOfTheCoralHeartBuff = 79393;
     public const long KelaTantrum1 = 79398;
@@ -5526,20 +5546,14 @@ public static class SkillIDs
     public const long POV_RelicOfFogGearBuff = 79529;
     #endregion
     // TODO needs icon override and then sort
-    public const long Resurrect2 = 1006;
     public const long GatlingFists = 1508;
-    public const long HammerSwingNPC = 3849;
-    public const long HammerShockNPC = 3852;
-    public const long BackBreakerNPC = 3853;
     public const long ManifestToxin = 27425;
     public const long ChainReactivityBarrier = 29499;
-    public const long SignetOfLocusSomething1 = 30782;
     public const long FuelRemaining = 31109;
     public const long UnstableSlashMinion = 40860;
     public const long SwoopOwlPet = 41896;
     public const long GrimSpecter = 45389;
     public const long JumpShotBounce = 55028;
-    public const long SignetOfLocusSomething2 = 60617;
     public const long PhasePounceSoulbeastMerged = 63939;
     public const long BitePet = 69822;
     public const long LeyLineVortexAetherHunterPet = 70332;
@@ -5558,12 +5572,5 @@ public static class SkillIDs
     public const long DeafeningDrumAfterImage = 76892;
     public const long FlusteringFluteAfterImage = 77176;
     public const long LesserEnchantedDaggers = 78971;
-    public const long FrostfireWardSecondaryAttack = 79332;
-    public const long ElutriateSecondaryAttack = 79333;
-    public const long SignetOfLocusSomething3 = 79340;
-    public const long SignetOfLocusSomething4 = 79343;
-    public const long GalvanizeSecondaryAttack = 79356;
-    public const long ShaleStormSecondaryAttack = 79630;
-    public const long FieryImpactSecondaryAttack = 79361;
-    public const long ChainReactivityBarrier3rdHit = 79370;
+    public const long SoothingBurstSecondaryAttack = 999999;// TODO find this id
 }

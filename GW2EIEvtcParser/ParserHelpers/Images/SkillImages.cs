@@ -137,6 +137,12 @@ internal static class SkillImages
     public const string SoothingSplash = "https://render.guildwars2.com/file/D2092BE1DA1F2D1D93F67E07EE010BB113794C44/3256326.png";
     public const string ElectricExposure = "https://render.guildwars2.com/file/575D6048F7B2660A3BC0D3A93CECFD49EEB1C0D1/3256323.png";
     public const string PiercingPebble = "https://render.guildwars2.com/file/4F217D25EBBFC017B4621C966BD26A7C4C6CD81C/3256324.png";
+    public const string FrostfireWard = "https://render.guildwars2.com/file/DD1B9616EB330DC50729663B497B31D40104290C/3379105.png";
+    public const string Galvanize = "https://render.guildwars2.com/file/14A70A6CE40336397DAA5C0F03940C08C7622376/3379106.png";
+    public const string FieryImpact = "https://render.guildwars2.com/file/69FB136A0D3615BBBE1B04DCBE09407D7E9297F3/3379107.png";
+    public const string Elutriate = "https://render.guildwars2.com/file/1EF742E5936B0D160F3869511D2EBEC6745EEA18/3379108.png";
+    public const string SoothingBurst = "https://render.guildwars2.com/file/110F9A310F3A6D0E999B36DAB4F5390F70727DEB/3379109.png";
+    public const string ShaleStorm = "https://render.guildwars2.com/file/53AD3D92123744A13D0D2434661EFA3608213D06/3379110.png";
     // Evoker
     // - Fox
     public const string Ignite = "https://render.guildwars2.com/file/3C20D2FF75DA624828651AD5CEB463AC90A01207/3680117.png";
@@ -776,6 +782,9 @@ internal static class SkillImages
     public const string SpearmarshalsSupport = "https://render.guildwars2.com/file/43132DEC934F072272F14B19FC03FB62111502FB/3379203.png";
     public const string Kick = "https://render.guildwars2.com/file/E578C9070BCA270818F56304CBE2800CD4691350/103001.png";
     public const string Counterblow = "https://render.guildwars2.com/file/92C19D3798F16AC716CAC7A5C044E4CFC251E4A2/102986.png";
+    public const string Backbreaker = "https://render.guildwars2.com/file/3FB1611D020DAE0C082558D346BBF91148E2E223/103086.png";
+    public const string HammerShock = "https://render.guildwars2.com/file/D378332B719ED07509EABBCDA3D96C5ABFC116D6/103256.png";
+    public const string HammerSwing = "https://render.guildwars2.com/file/C3BAD7D3D29FB64654985F0AB8FEA7713BE375E9/103178.png";
     // Paragon
     public const string ChantOfAction = "https://render.guildwars2.com/file/A4D0D740CF360E0840EF76282843109C759C63A8/3680225.png";
     public const string ChantOfRecuperation = "https://render.guildwars2.com/file/2D4B0C67FACAADD8612746BD6F5C6BE9A828C9A3/3680227.png";

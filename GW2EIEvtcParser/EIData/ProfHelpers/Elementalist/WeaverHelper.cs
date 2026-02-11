@@ -208,11 +208,33 @@ internal static class WeaverHelper
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM)
             .UsingTimeOffset(-ExtraOrbHammerDelay),
         // Spear
-        new BuffGainCastFinder(FrostfireWardSkill, FrostfireWardBuff),
-        new BuffGainCastFinder(GalvanizeSkill, GalvanizeBuff),
-        new BuffGainCastFinder(FieryImpactSkill, FieryImpactBuff),
-        new BuffGainCastFinder(ElutriateSkill, ElutriateBuff),
-        new BuffGainCastFinder(ShaleStormSkill, ShaleStormBuff),
+        new BuffGainCastFinder(FrostfireWardSkill, FrostfireWardBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new BuffGainCastFinder(FrostfireWardSkill, FrostfireWardSecondaryAttackBuff)
+            .WithBuilds(GW2Builds.January2026Balance),
+
+        new BuffGainCastFinder(GalvanizeSkill, GalvanizeBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new BuffGainCastFinder(GalvanizeSkill, GalvanizeSecondaryAttackBuff)
+            .WithBuilds( GW2Builds.January2026Balance),
+
+        new BuffGainCastFinder(FieryImpactSkill, FieryImpactBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new BuffGainCastFinder(FieryImpactSkill, FieryImpactSecondaryAttackBuff)
+            .WithBuilds(GW2Builds.January2026Balance),
+
+        new BuffGainCastFinder(ElutriateSkill, ElutriateBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new BuffGainCastFinder(ElutriateSkill, ElutriateSecondaryAttackBuff)
+            .WithBuilds( GW2Builds.January2026Balance),
+
+        new BuffGainCastFinder(ShaleStormSkill, ShaleStormBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
+        new BuffGainCastFinder(ShaleStormSkill, ShaleStormSecondaryAttackBuff)
+            .WithBuilds(GW2Builds.January2026Balance),
+
+        new BuffGainCastFinder(SoothingBurst, SoothingBurstSecondaryAttackBuff)
+            .WithBuilds(GW2Builds.January2026Balance),
     ];
 
 
@@ -299,11 +321,18 @@ internal static class WeaverHelper
         new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, SkillImages.StoneResonance),
         new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, SkillImages.GrindingStones),
         // Spear
-        new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
-        new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
-        new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
-        new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
-        new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FrostfireWard),
+        new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Galvanize),
+        new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FieryImpact),
+        new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Elutriate),
+        new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.ShaleStorm),
+        // Spear additional strikes
+        new Buff("Fiery Impact (Additional Strike)", FieryImpactSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FieryImpact),
+        new Buff("Galvanize (Additional Strike)", GalvanizeSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Galvanize),
+        new Buff("Frostfire Ward (Additional Strike)", FrostfireWardBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FrostfireWard),
+        new Buff("Elutriate (Additional Strike)", ElutriateSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Elutriate),
+        new Buff("Soothing Burst (Additional Strike)", SoothingBurstSecondaryAttack, Source.Elementalist, BuffClassification.Other, SkillImages.SoothingBurst),
+        new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.ShaleStorm),
     ];
 
 

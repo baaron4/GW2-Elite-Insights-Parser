@@ -73,6 +73,7 @@ internal static class TraitImages
     public const string GrandEntrance = "https://render.guildwars2.com/file/7093569DA52A64BE5C42AE0A0D0A700BAA320C0C/2261505.png";
     public const string WillingHost = "https://render.guildwars2.com/file/49DEE2C90E04E876DE2517C201060E330A7D9FDE/3679954.png";
     public const string HeavyMetal = "https://render.guildwars2.com/file/68380515301D93ABD5E7A4C89748F80CD819EB3F/1012357.png";
+    public const string ChainReactivity = "https://render.guildwars2.com/file/09CAECBD623B9DD4BB97E24795B99B27EC0240EC/1012338.png";
     #endregion
     #region Guardian
     public const string HuntersFortification = "https://render.guildwars2.com/file/2F147CBEA990E470AF0F0D20F652040E67962AB9/1012396.png";

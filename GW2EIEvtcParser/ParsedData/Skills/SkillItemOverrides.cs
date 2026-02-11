@@ -11,6 +11,7 @@ public static class SkillItemOverrides
     {
         { WeaponSwap, "Weapon Swap" },
         { Resurrect, "Resurrect" },
+        { Resurrect2, "Resurrect" },
         { Bandage, "Bandage" },
         { ArcDPSDodge, "Dodge" },
         { ArcDPSDodge20220307, "Dodge" },
@@ -411,6 +412,7 @@ public static class SkillItemOverrides
         { WeaponStow, SkillImages.WeaponStow },
         { WeaponDraw, SkillImages.WeaponDraw },
         { Resurrect, SkillImages.Resurrect },
+        { Resurrect2, SkillImages.Resurrect },
         { Bandage, SkillImages.Bandage },
         { LevelUp, ParserIcons.LevelUp },
         { LevelUp2, ParserIcons.LevelUp },
@@ -590,6 +592,12 @@ public static class SkillItemOverrides
         { SplashPetSkill, SkillImages.Splash },
         { CalcifyPetSkill, SkillImages.Calcify },
         { ZapPetSkill, SkillImages.Zap },
+        { FrostfireWardSecondaryAttack, SkillImages.FrostfireWard },
+        { GalvanizeSecondaryAttack, SkillImages.Galvanize },
+        { FieryImpactSecondaryAttack, SkillImages.FieryImpact },
+        { ElutriateSecondaryAttack, SkillImages.Elutriate },
+        { SoothingBurstSecondaryAttack, SkillImages.SoothingBurst },
+        { ShaleStormSecondaryAttack, SkillImages.ShaleStorm },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -638,6 +646,8 @@ public static class SkillItemOverrides
         { PlasmaticStateSkill2, SkillImages.PlasmaticState },
         { RapaciousStrain2, SkillImages.DefensiveProtocolThorns },
         { ThornsSkill, SkillImages.DefensiveProtocolThorns },
+        { ChainReactivityBarrier, TraitImages.ChainReactivity },
+        { ChainReactivityBarrier3rdHit, TraitImages.ChainReactivity },
 #endregion EngineerIcons
             #region GuardianIcons
             { LesserSymbolOfResolution, SkillImages.SymbolOfResolution }, // game uses symbol of swiftness
@@ -799,6 +809,10 @@ public static class SkillItemOverrides
             { AnguishAutoattack_Wanderlust, SkillImages.Wanderlust },
             { PreservationAutoattack, SkillImages.Preservation },
             { PreservationHealingBuff, SkillImages.Preservation },
+            { SignetOfTheLocusSomething1, SkillImages.SignetOfTheLocust },
+            { SignetOfTheLocusSomething2, SkillImages.SignetOfTheLocust },
+            { SignetOfTheLocusSomething3, SkillImages.SignetOfTheLocust },
+            { SignetOfTheLocusSomething4, SkillImages.SignetOfTheLocust },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -1082,6 +1096,9 @@ public static class SkillItemOverrides
             { FuriousRally, SkillImages.BannerOfDiscipline },
             { PlantStandard, SkillImages.PlantStandard },
             { CounterblowDamage, SkillImages.Counterblow },
+            { HammerSwingNPC, SkillImages.HammerSwing },
+            { HammerShockNPC, SkillImages.HammerShock },
+            { BackBreakerNPC, SkillImages.Backbreaker },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },
