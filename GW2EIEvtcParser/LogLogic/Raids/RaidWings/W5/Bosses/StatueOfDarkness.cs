@@ -54,7 +54,7 @@ internal class StatueOfDarkness : HallOfChains
     {
         return
         [
-            TargetID.LightThieves,
+            TargetID.LightThief,
             TargetID.MazeMinotaur,
         ];
     }
@@ -94,7 +94,7 @@ internal class StatueOfDarkness : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(TargetID.LightThieves);
+            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(TargetID.LightThief);
             if (lightThieves.Any())
             {
                 startToUse = lightThieves.Min(x => x.FirstAware);

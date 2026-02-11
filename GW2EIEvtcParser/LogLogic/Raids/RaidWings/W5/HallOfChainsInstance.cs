@@ -178,7 +178,7 @@ internal class HallOfChainsInstance : HallOfChains
         if (targetsByIDs.TryGetValue((int)TargetID.EyeOfFate, out var eyeOfFates) &&
             targetsByIDs.TryGetValue((int)TargetID.EyeOfJudgement, out var eyeOfJudgements))
         {
-            var lightThieves = log.AgentData.GetNPCsByID(TargetID.LightThieves);
+            var lightThieves = log.AgentData.GetNPCsByID(TargetID.LightThief);
             foreach (var eyeOfFate in eyeOfFates)
             {
                 var eyeOfJudgement = eyeOfJudgements.FirstOrDefault(x => x.InAwareTimes(eyeOfFate));
@@ -212,7 +212,7 @@ internal class HallOfChainsInstance : HallOfChains
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
-            var messengers = log.AgentData.GetNPCsByID(TargetID.Messenger);
+            var messengers = log.AgentData.GetNPCsByID(TargetID.DhuumsMessenger);
             var chest = log.AgentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {

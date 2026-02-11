@@ -207,7 +207,7 @@ internal class Dhuum : HallOfChains
         long end = encounterPhase.End;
         long start = encounterPhase.Start;
         var phases = new List<SubPhasePhaseData>(6);
-        var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));
+        var enforcers = targets.Where(x => x.IsSpecies(TargetID.DhuumsEnforcer));
         var castLogs = dhuum.GetAnimatedCastEvents(log);
         PhaseData? mainFight = null;
         // Sometimes the pre event is not in the evtc
@@ -268,8 +268,8 @@ internal class Dhuum : HallOfChains
         return
         [
             TargetID.Dhuum,
-            TargetID.Echo,
-            TargetID.Enforcer,
+            TargetID.EndersEcho,
+            TargetID.DhuumsEnforcer,
             TargetID.UnderworldReaper,
         ];
     }
@@ -278,7 +278,7 @@ internal class Dhuum : HallOfChains
     {
         return
         [
-            TargetID.Messenger,
+            TargetID.DhuumsMessenger,
             TargetID.Deathling,
             TargetID.DhuumDesmina
         ];
@@ -290,7 +290,7 @@ internal class Dhuum : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem messenger = agentData.GetNPCsByID(TargetID.Messenger).MinBy(x => x.FirstAware);
+            AgentItem messenger = agentData.GetNPCsByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
             if (messenger != null)
             {
                 startToUse = messenger.FirstAware;
@@ -541,10 +541,10 @@ internal class Dhuum : HallOfChains
             break;
             case (int)TargetID.DhuumDesmina:
                 break;
-            case (int)TargetID.Echo:
+            case (int)TargetID.EndersEcho:
                 replay.Decorations.Add(new CircleDecoration(120, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
                 break;
-            case (int)TargetID.Enforcer:
+            case (int)TargetID.DhuumsEnforcer:
             {
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
@@ -567,7 +567,7 @@ internal class Dhuum : HallOfChains
                 }
             }
             break;
-            case (int)TargetID.Messenger:
+            case (int)TargetID.DhuumsMessenger:
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
                 var fixations = GetBuffApplyRemoveSequence(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
