@@ -323,7 +323,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
     {
         var res = new List<InstantCastEvent>();
-        var effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
+        var effectGUIDEvent = combatData.GetEffectGUIDEventByGUID(_effectGUID);
         var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
         foreach (var group in effects)
         {

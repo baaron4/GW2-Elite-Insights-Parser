@@ -2852,7 +2852,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             }
         }
         // fallback for late logs
-        if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+        if (combatData.GetEffectGUIDEventByGUID(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
         {
             return LogData.Mode.CM;
         }

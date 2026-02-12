@@ -217,7 +217,7 @@ partial class CombatData
     /// <param name="markerEvents">Found marker events</param>
     public bool TryGetMarkerEventsByGUID(GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
-        var markerGUIDEvent = GetMarkerGUIDEvent(marker);
+        var markerGUIDEvent = GetMarkerGUIDEventByGUID(marker);
         markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
         if (markerEvents.Count > 0)
         {
@@ -562,7 +562,7 @@ partial class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsByGUID(GUID effectGUID, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
-        var effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
+        var effectGUIDEvent = GetEffectGUIDEventByGUID(effectGUID);
         effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
         if (effectEvents.Count > 0)
         {
@@ -879,12 +879,12 @@ partial class CombatData
     }
     #endregion EFFECTS
     #region GUIDS
-    public EffectGUIDEvent GetEffectGUIDEvent(GUID effectGUID)
+    public EffectGUIDEvent GetEffectGUIDEventByGUID(GUID effectGUID)
     {
         return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out var evt) ? evt : EffectGUIDEvent.DummyEffectGUID;
     }
 
-    internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
+    public EffectGUIDEvent GetEffectGUIDEventByEffectID(long effectID)
     {
         if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out var evt))
         {
@@ -899,34 +899,44 @@ partial class CombatData
         return EffectGUIDEvent.DummyEffectGUID;
     }
 
-    public SkillGUIDEvent? GetSkillGUIDEvent(GUID skill)
+    public SkillGUIDEvent? GetSkillGUIDEventByGUID(GUID skill)
     {
         return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
-    internal SkillGUIDEvent? GetSkillGUIDEvent(long skillID)
+    public SkillGUIDEvent? GetSkillGUIDEventBySKillID(long skillID)
     {
         return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
-    public SpeciesGUIDEvent? GetSpeciesGUIDEvent(GUID species)
+    public SpeciesGUIDEvent? GetSpeciesGUIDEventByGUID(GUID species)
     {
         return _metaDataEvents.SpeciesGUIDEventsByGUID.TryGetValue(species, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SpeciesGUIDEvent.DummySpeciesGUID : null;
     }
 
-    internal SpeciesGUIDEvent? GetSpeciesGUIDEvent(long speciesID)
+    public SpeciesGUIDEvent? GetSpeciesGUIDEventBySpeciesID(long speciesID)
     {
         return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SpeciesGUIDEvent.DummySpeciesGUID : null;
     }
 
-    public MarkerGUIDEvent GetMarkerGUIDEvent(GUID marker)
+    public MarkerGUIDEvent GetMarkerGUIDEventByGUID(GUID marker)
     {
         return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
 
-    internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
+    public MarkerGUIDEvent GetMarkerGUIDEventByMarkerID(long markerID)
     {
         return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
+    }
+
+    public TeamGUIDEvent? GetTeamGUIDEventByGUID(GUID team)
+    {
+        return _metaDataEvents.TeamGUIDEventsByGUID.TryGetValue(team, out var evt) ? evt : null;
+    }
+
+    public TeamGUIDEvent? GetTeamGUIDEventByTeamID(ulong teamID)
+    {
+        return _metaDataEvents.TeamGUIDEventsByTeamID.TryGetValue(teamID, out var evt) ? evt : null;
     }
     #endregion GUIDS
     #region MISSILE

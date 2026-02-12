@@ -347,6 +347,11 @@ internal static class CombatEventFactory
                             metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
                             break;
+                        case ContentLocal.Team:
+                            var teamGUID = new TeamGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.TeamGUIDEventsByTeamID[teamGUID.ContentID] = teamGUID;
+                            metaDataEvents.TeamGUIDEventsByGUID[teamGUID.ContentGUID] = teamGUID;
+                            break;
                         default:
                             break;
                     }
