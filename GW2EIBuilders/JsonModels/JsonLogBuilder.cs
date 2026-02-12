@@ -120,6 +120,15 @@ internal static class JsonLogBuilder
         return damageModDesc;
     }
 
+    private static TeamDesc BuildTeamDesc(TeamGUIDEvent teamGUID)
+    {
+        var teamDesc = new TeamDesc
+        {
+            GUID = teamGUID.ContentGUID.ToHex(),
+        };
+        return teamDesc;
+    }
+
     public static JsonLog BuildJsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadLinks)
     {
         var jsonLog = new JsonLog();
@@ -197,6 +206,8 @@ internal static class JsonLogBuilder
         var buffDescs = new Dictionary<string, BuffDesc>(100); //TODO_PERF(Rennorb)
         var damageModMap = new Dictionary<int, DamageModifier>(50); //TODO_PERF(Rennorb)
         var damageModDesc = new Dictionary<string, DamageModDesc>(50); //TODO_PERF(Rennorb)
+        var teamMap = new HashSet<ulong>(5);
+        var teamDesc = new Dictionary<string, TeamDesc>(5);
 
         var instanceBuffs = log.LogData.Logic.GetInstanceBuffs(log);
         if (instanceBuffs.Any())
@@ -232,10 +243,10 @@ internal static class JsonLogBuilder
         jsonLog.Phases = log.LogData.GetPhases(log).Select(x => JsonPhaseBuilder.BuildJsonPhase(x, log)).ToList();
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
-        jsonLog.Targets = log.LogData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap)).ToList();
+        jsonLog.Targets = log.LogData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap, teamMap)).ToList();
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-        jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods)).ToList();
+        jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods, teamMap)).ToList();
         //
         if (log.LogMetadata.LogErrors.Any())
         {
@@ -284,6 +295,18 @@ internal static class JsonLogBuilder
             damageModDesc["d" + pair.Key] = BuildDamageModDesc(pair.Value);
         }
         jsonLog.DamageModMap = damageModDesc;
+        foreach (var teamID in teamMap)
+        {
+            var teamGUIDEvent = log.CombatData.GetTeamGUIDEventByTeamID(teamID);
+            if (teamGUIDEvent != null)
+            {
+                teamDesc["t" + teamID] = BuildTeamDesc(teamGUIDEvent);
+            }
+        }
+        if (teamDesc.Count > 0)
+        {
+            jsonLog.TeamMap = teamDesc;
+        }
         //
         if (log.CanCombatReplay)
         {

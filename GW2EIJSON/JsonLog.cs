@@ -209,6 +209,12 @@ public class JsonLog
         public bool Incoming;
     }
 
+    public class TeamDesc
+    {
+        // Stable ID of the corresponding team ID
+        public string? GUID;
+    }
+
     /// <summary>
     /// The used EI version.
     /// </summary>
@@ -449,6 +455,11 @@ public class JsonLog
     /// </summary>
     /// <seealso cref="DamageModDesc"/>
     public IReadOnlyDictionary<string, DamageModDesc>? DamageModMap;
+    /// <summary>
+    /// Dictionary of team id description, the key is in "'t' + id" format
+    /// </summary>
+    /// <seealso cref="TeamDesc"/>
+    public IReadOnlyDictionary<string, TeamDesc>? TeamMap;
 
     /// <summary>
     /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids

@@ -15,7 +15,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonActorBuilder
 {
 
-    public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, HashSet<ulong>  teampMap)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
@@ -42,6 +42,7 @@ internal static class JsonActorBuilder
             {
                 jsonActor.TeamID = teamChange.TeamIDComingFrom;
             }
+            teampMap.Add(jsonActor.TeamID);
         }
         //
         jsonActor.DpsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(actor.GetDamageStats(log, phase.Start, phase.End))).ToArray();

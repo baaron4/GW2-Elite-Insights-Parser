@@ -14,10 +14,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonNPCBuilder
 {
 
-    public static JsonNPC BuildJsonNPC(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static JsonNPC BuildJsonNPC(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, HashSet<ulong> teampMap)
     {
         var jsonNPC = new JsonNPC();
-        JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
+        JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap, teampMap);
         //
         jsonNPC.Id = npc.ID;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
