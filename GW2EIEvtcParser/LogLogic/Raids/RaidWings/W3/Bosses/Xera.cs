@@ -531,7 +531,7 @@ internal class Xera : StrongholdOfTheFaithful
         {
             foreach (EffectEvent shardAoE in shardAoEs)
             {
-                (long, long) lifespan = shardAoE.ComputeLifespan(log, shardAoE.GUIDEvent.ContentGUID == EffectGUIDs.XeraShardAoEs ? 3000 : 1000);
+                (long, long) lifespan = shardAoE.ComputeLifespan(log, shardAoE.GUIDEvent.GUID == EffectGUIDs.XeraShardAoEs ? 3000 : 1000);
                 var circle = new CircleDecoration(180, lifespan, Colors.Red, 0.2, new PositionConnector(shardAoE.Position)).UsingFilled(false);
                 environmentDecorations.Add(circle);
             }

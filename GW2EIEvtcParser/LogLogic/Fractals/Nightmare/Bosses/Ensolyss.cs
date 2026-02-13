@@ -545,7 +545,7 @@ internal class Ensolyss : Nightmare
                 lifespan = (effect.Time, effect.Time + effect.Duration);
                 uint radius = 0;
 
-                switch (effect.GUIDEvent.ContentGUID)
+                switch (effect.GUIDEvent.GUID)
                 {
                     case var small when small == EffectGUIDs.EnsolyssTailLashSmallCircleAoE:
                         lifespan = effect.ComputeLifespan(log, 1850);

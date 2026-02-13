@@ -77,7 +77,7 @@ internal class MarkerCastFinder : CheckedCastFinder<MarkerEvent>
     {
         var res = new List<InstantCastEvent>();
         var markerGUIDEvent = combatData.GetMarkerGUIDEventByGUID(_markerGUID);
-        var markers = combatData.GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID).GroupBy(GetAgent);
+        var markers = combatData.GetMarkerEventsByMarkerID(markerGUIDEvent.MarkerID).GroupBy(GetAgent);
         foreach (var group in markers)
         {
             if (group.Key.IsUnknown)

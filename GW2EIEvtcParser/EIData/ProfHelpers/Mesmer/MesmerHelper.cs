@@ -575,7 +575,7 @@ internal static class MesmerHelper
                 long duration = 0; // Overriding logged duration of 0
                 uint radius = 0;
 
-                if (mapping.TryGetValue(effect.GUIDEvent.ContentGUID, out (long duration, uint radius) values))
+                if (mapping.TryGetValue(effect.GUIDEvent.GUID, out (long duration, uint radius) values))
                 {
                     duration = values.duration;
                     radius = values.radius;

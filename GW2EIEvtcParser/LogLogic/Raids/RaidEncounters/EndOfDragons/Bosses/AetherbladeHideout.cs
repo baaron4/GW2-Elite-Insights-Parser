@@ -901,7 +901,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         Color color = Colors.LightOrange;
         var species = new List<int>();
 
-        switch (effect.GUIDEvent.ContentGUID)
+        switch (effect.GUIDEvent.GUID)
         {
             case var focusedDestruction when focusedDestruction == EffectGUIDs.AetherbladeHideoutFocusedDestructionGreen:
                 color = Colors.DarkGreen;

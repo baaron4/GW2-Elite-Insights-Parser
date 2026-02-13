@@ -218,7 +218,7 @@ partial class CombatData
     public bool TryGetMarkerEventsByGUID(GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
         var markerGUIDEvent = GetMarkerGUIDEventByGUID(marker);
-        markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
+        markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.MarkerID);
         if (markerEvents.Count > 0)
         {
             return true;
@@ -563,7 +563,7 @@ partial class CombatData
     public bool TryGetEffectEventsByGUID(GUID effectGUID, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         var effectGUIDEvent = GetEffectGUIDEventByGUID(effectGUID);
-        effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
+        effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.EffectID);
         if (effectEvents.Count > 0)
         {
             return true;

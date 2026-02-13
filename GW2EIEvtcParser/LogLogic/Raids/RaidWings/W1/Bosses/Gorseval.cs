@@ -374,7 +374,7 @@ internal class Gorseval : SpiritVale
                 // for the explosion
                 lifespan.end += 500;
                 FormDecoration rampage;
-                var contentGUID = ghastlyRampage.GUIDEvent.ContentGUID;
+                var contentGUID = ghastlyRampage.GUIDEvent.GUID;
                 if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer0)
                 {
                     rampage = new CircleDecoration(360, lifespan, Colors.DarkPurpleBlue, 0.25, new PositionConnector(pos));

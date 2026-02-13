@@ -437,10 +437,10 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in noxiousBlight)
             {
-                long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
+                long duration = effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
                 string icon = 
-                    effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen 
-                    || effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen2 
+                    effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen 
+                    || effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen2 
                     ? ParserIcons.GreenMarkerSize2Overhead : ParserIcons.GreenMarkerSize3Overhead;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
@@ -562,7 +562,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 foreach (EffectEvent cloud in miasmaClouds.Where(x => x.Time > animation.Time && x.Time < animation.Time + 6000))
                 {
-                    long duration = cloud.GUIDEvent.ContentGUID == EffectGUIDs.GreerEnfeeblingMiasmaGasClouds ? 12000 : 13000;
+                    long duration = cloud.GUIDEvent.GUID == EffectGUIDs.GreerEnfeeblingMiasmaGasClouds ? 12000 : 13000;
                     lifespan = cloud.ComputeLifespan(log, duration);
                     var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
                     replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);

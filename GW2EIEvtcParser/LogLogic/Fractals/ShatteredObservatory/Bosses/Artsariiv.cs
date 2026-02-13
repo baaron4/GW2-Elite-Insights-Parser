@@ -131,7 +131,7 @@ internal class Artsariiv : ShatteredObservatory
             .FirstOrDefault();
         if (artsariivMarkerGUID != null)
         {
-            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
+            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == StateChange.Marker && x.Value == artsariivMarkerGUID.MarkerID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
             foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
             {
                 if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))

@@ -124,7 +124,7 @@ internal static class JsonLogBuilder
     {
         var teamDesc = new TeamDesc
         {
-            GUID = teamGUID.ContentGUID.ToHex(),
+            GUID = teamGUID.GUID.ToHex(),
         };
         return teamDesc;
     }

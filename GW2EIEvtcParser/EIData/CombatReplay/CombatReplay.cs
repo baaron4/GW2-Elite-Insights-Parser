@@ -236,7 +236,7 @@ public class CombatReplay
     internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
-            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end)
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end)
             .ToList();
         var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsOnAgentDistinct = effectGUIDsOnAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
@@ -285,7 +285,7 @@ public class CombatReplay
             }
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
-            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end)
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end)
             .ToList();
         var effectGUIDsByAgent = effectEventsByAgent.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsByAgentDistinct = effectGUIDsByAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
@@ -338,7 +338,7 @@ public class CombatReplay
     internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0)
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0)
             .ToList();
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
@@ -392,7 +392,7 @@ public class CombatReplay
     internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0)
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0)
             .ToList();
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
@@ -445,7 +445,7 @@ public class CombatReplay
     internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end && x.EffectID > 0)
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end && x.EffectID > 0)
             .ToList();
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);

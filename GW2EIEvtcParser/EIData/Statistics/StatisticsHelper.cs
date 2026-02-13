@@ -305,7 +305,7 @@ public class StatisticsHelper
                 {
                     if (marker.IsCommanderTag)
                     {
-                        commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.LogData.EvtcLogEnd), marker.ContentGUID));
+                        commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.LogData.EvtcLogEnd), marker.GUID));
                         if (markerEvent.EndNotSet)
                         {
                             break;

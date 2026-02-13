@@ -329,28 +329,28 @@ internal static class CombatEventFactory
                     {
                         case ContentLocal.Effect:
                             var effectGUID = new EffectGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
-                            metaDataEvents.EffectGUIDEventsByGUID[effectGUID.ContentGUID] = effectGUID;
+                            metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.EffectID] = effectGUID;
+                            metaDataEvents.EffectGUIDEventsByGUID[effectGUID.GUID] = effectGUID;
                             break;
                         case ContentLocal.Marker:
                             var markerGUID = new MarkerGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
-                            metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
+                            metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.MarkerID] = markerGUID;
+                            metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.GUID] = markerGUID;
                             break;
                         case ContentLocal.Skill:
                             var skillGUID = new SkillGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.SkillGUIDEventsBySkillID[skillGUID.ContentID] = skillGUID;
-                            metaDataEvents.SkillGUIDEventsByGUID[skillGUID.ContentGUID] = skillGUID;
+                            metaDataEvents.SkillGUIDEventsBySkillID[skillGUID.SkillID] = skillGUID;
+                            metaDataEvents.SkillGUIDEventsByGUID[skillGUID.GUID] = skillGUID;
                             break;
                         case ContentLocal.Species:
                             var speciesGUID = new SpeciesGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
-                            metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
+                            metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.SpeciesID] = speciesGUID;
+                            metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.GUID] = speciesGUID;
                             break;
                         case ContentLocal.Team:
                             var teamGUID = new TeamGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.TeamGUIDEventsByTeamID[teamGUID.ContentID] = teamGUID;
-                            metaDataEvents.TeamGUIDEventsByGUID[teamGUID.ContentGUID] = teamGUID;
+                            metaDataEvents.TeamGUIDEventsByTeamID[teamGUID.TeamID] = teamGUID;
+                            metaDataEvents.TeamGUIDEventsByGUID[teamGUID.GUID] = teamGUID;
                             break;
                         default:
                             break;

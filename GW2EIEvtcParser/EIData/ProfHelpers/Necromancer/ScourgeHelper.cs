@@ -66,7 +66,7 @@ internal static class ScourgeHelper
                 // unreliable for early ends
                 continue;
             }
-            SkillItem skill = shade.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
+            SkillItem skill = shade.GUIDEvent.GUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
             int expectedDuration;
             if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
             {
@@ -129,7 +129,7 @@ internal static class ScourgeHelper
             var skill = new SkillModeDescriptor(player, Spec.Scourge, ManifestSandShadeSkill);
             foreach (EffectEvent effect in scourgeShades)
             {
-                uint radius = (uint)(effect.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? 300 : 180);
+                uint radius = (uint)(effect.GUIDEvent.GUID == EffectGUIDs.ScourgeShadeSandSavant ? 300 : 180);
                 long duration;
                 if (log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
                 {

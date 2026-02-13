@@ -324,7 +324,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
         var res = new List<InstantCastEvent>();
         var effectGUIDEvent = combatData.GetEffectGUIDEventByGUID(_effectGUID);
-        var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
+        var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.EffectID).GroupBy(GetAgent);
         foreach (var group in effects)
         {
             if (group.Key.IsUnknown)

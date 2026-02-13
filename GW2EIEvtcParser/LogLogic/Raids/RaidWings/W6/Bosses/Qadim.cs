@@ -189,7 +189,7 @@ internal class Qadim : MythwrightGambit
         if (qadimLampMarkerGUID != null)
         {
             var lamps = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();

@@ -872,9 +872,9 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
                 usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
-            .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.ContentID)))
+            .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.EffectID)))
             .GroupBy(x => x.Item1)
-            .ToDictionary(x => x.Key.ContentGUID, x => x.SelectMany(x => x.Item2));
+            .ToDictionary(x => x.Key.GUID, x => x.SelectMany(x => x.Item2));
         // Attack targets
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
@@ -1167,7 +1167,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         foreach (var guidEvent in greenFailSuccGUIDs)
         {
             IEnumerable<(EffectEvent?, CombatItem)> effects = combatData
-                .Where(x => x.IsEffect && x.SkillID == guidEvent.ContentID)
+                .Where(x => x.IsEffect && x.SkillID == guidEvent.EffectID)
                 .Select(x =>
                 {
                     if (x.IsStateChange == StateChange.Effect_51)

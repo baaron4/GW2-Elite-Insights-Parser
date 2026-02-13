@@ -196,7 +196,7 @@ internal class UraTheSteamshrieker : MountBalrior
         if (titanGeyserMarkerGUID != null)
         {
             var titanAgents = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();
@@ -216,7 +216,7 @@ internal class UraTheSteamshrieker : MountBalrior
         if (toxicEffectGUID != null)
         {
             var toxicAgents = combatData
-                .Where(x => x.IsEffect && x.SkillID == toxicEffectGUID.ContentID)
+                .Where(x => x.IsEffect && x.SkillID == toxicEffectGUID.EffectID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();
@@ -262,7 +262,7 @@ internal class UraTheSteamshrieker : MountBalrior
         if (bloodstoneShardMarkerGUID != null)
         {
             var bloodstoneShardAgents = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == bloodstoneShardMarkerGUID.ContentID)
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == bloodstoneShardMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();

@@ -3,7 +3,7 @@
 public class TeamGUIDEvent : IDToGUIDEvent
 {
     internal static TeamGUIDEvent DummyTeamGUID = new();
-    public new ulong ContentID => (ulong)base.ContentID;
+    public ulong TeamID => (ulong)ContentID;
     internal TeamGUIDEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
     }

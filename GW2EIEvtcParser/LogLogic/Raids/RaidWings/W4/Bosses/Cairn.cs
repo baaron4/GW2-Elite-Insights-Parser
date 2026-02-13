@@ -149,7 +149,7 @@ internal class Cairn : BastionOfThePenitent
                 }
                 // Initial green and dash radius
                 uint radius = 120;
-                var guid = greenEffect.GUIDEvent.ContentGUID;
+                var guid = greenEffect.GUIDEvent.GUID;
                 if (guid == EffectGUIDs.CairnGreen4PlayersOrBigNoCount)
                 {
                     radius = 180;
