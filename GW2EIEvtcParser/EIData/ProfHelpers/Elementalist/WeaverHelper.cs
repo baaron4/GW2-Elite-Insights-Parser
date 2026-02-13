@@ -329,7 +329,7 @@ internal static class WeaverHelper
         // Spear additional strikes
         new Buff("Fiery Impact (Additional Strike)", FieryImpactSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FieryImpact),
         new Buff("Galvanize (Additional Strike)", GalvanizeSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Galvanize),
-        new Buff("Frostfire Ward (Additional Strike)", FrostfireWardBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FrostfireWard),
+        new Buff("Frostfire Ward (Additional Strike)", FrostfireWardSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FrostfireWard),
         new Buff("Elutriate (Additional Strike)", ElutriateSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Elutriate),
         new Buff("Soothing Burst (Additional Strike)", SoothingBurstSecondaryAttack, Source.Elementalist, BuffClassification.Other, SkillImages.SoothingBurst),
         new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.ShaleStorm),
