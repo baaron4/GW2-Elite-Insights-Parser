@@ -211,7 +211,7 @@ public class JsonLog
 
     public class TeamDesc
     {
-        // Stable ID of the corresponding team ID
+        // Stable ID of the corresponding team ID in HEX format
         public string? GUID;
     }
 
