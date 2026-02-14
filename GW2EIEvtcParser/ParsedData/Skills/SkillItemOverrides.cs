@@ -648,6 +648,7 @@ public static class SkillItemOverrides
         { ThornsSkill, SkillImages.DefensiveProtocolThorns },
         { ChainReactivityBarrier, TraitImages.ChainReactivity },
         { ChainReactivityBarrier3rdHit, TraitImages.ChainReactivity },
+        { JumpShotBounce, SkillImages.JumpShot },
 #endregion EngineerIcons
             #region GuardianIcons
             { LesserSymbolOfResolution, SkillImages.SymbolOfResolution }, // game uses symbol of swiftness
@@ -752,6 +753,9 @@ public static class SkillItemOverrides
             { PhantasmalSpinningAxe, TraitImages.PhantomPain },
             { Syncopate, TraitImages.Syncopate },
             { TimeBombDamage, TraitImages.TimeBomb },
+            { PsystrikeClone, SkillImages.Psystrike },
+            { PsycutClone, SkillImages.Psycut },
+            { MindPierceClone, SkillImages.MindPierce },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -926,6 +930,10 @@ public static class SkillItemOverrides
             { GlyphOfEmpowermentSkillCA, SkillImages.GlyphOfTheStarsCelestialAvatar },
             { MistralDamage, SkillImages.Mistral },
             { SwoopBirdOwl, SkillImages.SwoopBird },
+            { PhasePounceSoulbeastMerged, SkillImages.PhasePounceWhiteTiger },
+            { BiteWhiteTiger, SkillImages.BiteFeline },
+            { LeyLineVortexAetherHunterPet, SkillImages.LeylineVortexAetherHunter },
+            { LungeAetherHunterPet, SkillImages.LungeVortexAetherHunter },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },

@@ -3139,6 +3139,7 @@ public static class SkillIDs
     public const long WarclawChainPull2 = 54953;
     public const long SandstormShroudDetonation = 54958;
     public const long GlyphOfTheStarsCA = 55026;
+    public const long JumpShotBounce = 55028;
     public const long FeelNoPainSavageInstinct = 55030;
     public const long UnyieldingSpirit = 55044;
     public const long GenerousAbundanceOther = 55047;
@@ -3827,9 +3828,8 @@ public static class SkillIDs
     public const long HarvestTempleLiftOff = 63896;
     public const long VoidPoolCM = 63910;
     public const long DragonsEndContributor10 = 63928;
+    public const long PhasePounceSoulbeastMerged = 63939;
     public const long VoidBeam = 63956;
-    public const long DeathsEmbraceCMBuff = 64386;
-    public const long AbominationSwipe = 64396;
     public const long JadeBusterCannonMechRider = 64016;
     public const long HeavensPalm1 = 64039;
     public const long DestructiveAuraSkill = 64042;
@@ -3852,6 +3852,8 @@ public static class SkillIDs
     public const long BowlOfJadeSeaBounty = 64357;
     public const long TailSlap = 64360;
     public const long TargetOrder3 = 64377;
+    public const long DeathsEmbraceCMBuff = 64386;
+    public const long AbominationSwipe = 64396;
     public const long HeavensPalm2 = 64409;
     public const long ScreamOfZhaitanCM = 64428;
     public const long JadeMine1 = 64435;
@@ -4342,6 +4344,7 @@ public static class SkillIDs
     public const long PoolOfDespairNM = 69809;
     public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
     public const long EnviousGazeNM = 69814;
+    public const long BiteWhiteTiger = 69822;
     public const long DagdaDemonicAuraTimer = 69827;
     public const long CruelDetonation1 = 69828;
     public const long EnviousGazeEmpoweredRearNM = 69829;
@@ -4381,6 +4384,7 @@ public static class SkillIDs
     public const long ResidualAnxiety = 70283;
     public const long WailOfDespairEmpoweredCM = 70292;
     public const long CosmicObservatoryLostControlBuff = 70297;
+    public const long LeyLineVortexAetherHunterPet = 70332;
     public const long RelicOfTheDragonhunterTargetBuff = 70350;
     public const long RelicOfLyhr = 70353;
     public const long InsatiableHungerBigOrbEmpoweredNMCM3 = 70384;
@@ -4435,6 +4439,7 @@ public static class SkillIDs
     public const long PetrifyDamage = 70909;
     public const long RelicOfTheBrawler = 70913;
     public const long MaliciousIntentSpawnDamageCM = 70939;
+    public const long LungeAetherHunterPet = 70950;
     public const long EmpoweredEnvyCerus = 70974;
     public const long RelicOfTheScourge = 70975;
     public const long InvulnerabilityEmbodiment = 70986;
@@ -4616,13 +4621,16 @@ public static class SkillIDs
     public const long EtchingDerecho = 72915;
     public const long FrostfireWardSkill = 72916;
     public const long BeesSting = 72920;
+    public const long PsystrikeClone = 72921;
     public const long DrakesSwipe = 72922;
     public const long DaybreakingSlashWave = 72923;
     public const long DistractingThrowSkill = 72927;
     public const long FalconsStoop = 72928;
     public const long AbyssalFire = 72931; // Renamed from Abyssal Strike during beta
     public const long RavagersAbandon = 72932;
+    public const long PsycutClone = 72934;
     public const long LesserHaboob = 72935;
+    public const long MindPierceClone = 72936;
     public const long AbyssalBlitz = 72938;
     public const long HelioRush = 72940;
     public const long Extirpation = 72941;
@@ -5553,14 +5561,6 @@ public static class SkillIDs
     public const long POV_RelicOfFogGearBuff = 79529;
     #endregion
     // TODO needs icon override and then sort
-    public const long JumpShotBounce = 55028;
-    public const long PhasePounceSoulbeastMerged = 63939;
-    public const long BitePet = 69822;
-    public const long LeyLineVortexAetherHunterPet = 70332;
-    public const long LungeAetherHunterPet = 70950;
-    public const long PsystrikeClone = 72921;
-    public const long PsycutClone = 72934;
-    public const long MindPierceClone = 72936;
     public const long ChainPullWarclaw = 73587;
     public const long PhantasmalJavelinPhantasm = 73743;
     public const long Tracer = 75267;
