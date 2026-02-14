@@ -511,6 +511,7 @@ public static class SkillItemOverrides
         { WarclawChainPull1, SkillImages.WarclawChainPull },
         { WarclawChainPull2, SkillImages.WarclawChainPull },
         { WarclawChainPullPvE, SkillImages.WarclawChainPull },
+        { WarclawChainPull3, SkillImages.WarclawChainPull },
         { WarclawDashWildClaws, SkillImages.WarclawDash },
         // Jackal
         { JackalPounceDamage, SkillImages.JackalPounce },
@@ -745,7 +746,8 @@ public static class SkillItemOverrides
             { PersistenceOfMemory, TraitImages.PersistenceOfMemory },
             { FriendlyFireIllu, SkillImages.FriendlyFire },
             { PhantasmalSharpshooterAttack,SkillImages.PhantasmalSharpshooter },
-            { PhantasmalLancerDamage, SkillImages.PhantasmalLancher },
+            { PhantasmalJavelin, SkillImages.PhantasmalLancer },
+            { PhantasmalLancerDamage, SkillImages.PhantasmalLancer },
             { JabSpearClone, SkillImages.JabMesmerSpear },
             { StabSpearClone, SkillImages.StabMesmerSpear },
             { PhantasmalSwordsman, SkillImages.PhantasmalSwordsman },
@@ -934,6 +936,7 @@ public static class SkillItemOverrides
             { BiteWhiteTiger, SkillImages.BiteFeline },
             { LeyLineVortexAetherHunterPet, SkillImages.LeylineVortexAetherHunter },
             { LungeAetherHunterPet, SkillImages.LungeVortexAetherHunter },
+            { BumbleJanthiriBee, SkillImages.BumbleJanthiriBee },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
@@ -1410,6 +1413,8 @@ public static class SkillItemOverrides
             { RendingThrashCentaurBannerSkill, BuffImages.RendingThrashCentaurBanner },
             { CripplingStrikeCentaurBannerSkill, BuffImages.CripplingStrikeCentaurBanner },
             { KickDustCentaurBannerSkill, BuffImages.KickDustCentaurBanner },
+            //
+            { Tracer, ItemImages.HolographicCommunicator },
         #endregion WvWIcons
         #region FinisherIcons
             { Finisher1, ItemImages.BasicFinisher },

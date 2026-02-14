@@ -4754,10 +4754,12 @@ public static class SkillIDs
     public const long RelicOfTheStormsingerBuff = 73455;
     public const long NoxiousBlight = 73496;
     public const long HuntersProwess = 73541;
+    public const long WarclawChainPull3 = 73587;
     public const long WarclawDashWildClaws = 73653;
     public const long NoxiousBlight2 = 73663;
     public const long LowlandExpertise = 73677;
     public const long RelicOfSorrowHeal = 73714;
+    public const long PhantasmalJavelin = 73743;
     public const long WarclawBattleMaulPvE1 = 73766;
     public const long RelicOfTheBlightbringer = 73794;
     public const long RelicOfTheStormsingerChain = 73851;
@@ -4910,6 +4912,7 @@ public static class SkillIDs
     public const long PressureBlastDamage = 75258;
     public const long ScatteringSporeblast2 = 75262;
     public const long SearingSnipe = 75265;
+    public const long Tracer = 75267;
     public const long POV_WhirlpoolBuff = 75269;
     public const long SparkingAuraTier3 = 75270;
     public const long DeployTrebuchet_InfiniteTrebuchet = 75271;
@@ -4991,6 +4994,7 @@ public static class SkillIDs
     public const long SparkingReverberation = 75651;
     public const long EnlightenedConduitGadgetChargeTier3BuffCM = 75654;
     public const long FractureArmorCM = 75657;
+    public const long BumbleJanthiriBee = 75661;
     public const long TheWorldEndsInDecay = 75665;
     public const long TitanicResistance = 75680;
     public const long ForeshockCM1 = 75683;
@@ -5562,10 +5566,6 @@ public static class SkillIDs
     public const long POV_RelicOfFogGearBuff = 79529;
     #endregion
     // TODO needs icon override and then sort
-    public const long ChainPullWarclaw = 73587;
-    public const long PhantasmalJavelinPhantasm = 73743;
-    public const long Tracer = 75267;
-    public const long BumblePet = 75661;
     public const long OnYourKneesEcho = 76763;
     public const long HoloDancerTaunt = 76797;
     public const long ChantOfRecuperationBarrier = 76862;

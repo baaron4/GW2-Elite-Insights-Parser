@@ -362,7 +362,7 @@ internal static class SkillImages
     public const string SplitSurge = "https://render.guildwars2.com/file/66067CFD182ED01761DC5992E679BFA2057B5954/1770507.png";
     public const string FriendlyFire = "https://render.guildwars2.com/file/BAAD0DF6B8C4AAF520B82BE3CEA7931BC2F52DCF/3256358.png";
     public const string PhantasmalSharpshooter = "https://render.guildwars2.com/file/3499040CA6182B68293313C1000C470828CE1532/3256362.png";
-    public const string PhantasmalLancher = "https://render.guildwars2.com/file/5E6C98FA3B942EE76808530B016FF5621A25764F/3379157.png";
+    public const string PhantasmalLancer = "https://render.guildwars2.com/file/5E6C98FA3B942EE76808530B016FF5621A25764F/3379157.png";
     public const string JabMesmerSpear = "https://render.guildwars2.com/file/BBEF48C50DEB9CD79747FD515958A6FC1129EE7D/103778.png";
     public const string StabMesmerSpear = "https://render.guildwars2.com/file/42066E7EE4A3770FE5D4550BD8EDA8237A0DB769/103777.png";
     public const string PhantasmalSwordsman = "https://render.guildwars2.com/file/755CAC115104F0AA0630DCEB472D0678B62A916E/103723.png";
@@ -560,6 +560,7 @@ internal static class SkillImages
     public const string CripplingThrow = "https://wiki.guildwars2.com/images/c/cd/Crippling_Throw.png";
     public const string LeylineVortexAetherHunter = "https://render.guildwars2.com/file/030E7AB1CB18A4B348FD17B54B2B68FDABDB1DBC/3124961.png";
     public const string LungeVortexAetherHunter = "https://render.guildwars2.com/file/B65ECEBB72F4F10C4144510777E899E477DEE5B2/3124960.png";
+    public const string BumbleJanthiriBee = "https://render.guildwars2.com/file/DCA96000060D21F6E4A9600DB3D8A90CE8AB574B/3594073.png";
     // Galeshot
     public const string Mistral = "https://render.guildwars2.com/file/10E31F10E7D84CABF0963FEA12B77EE0BD950E42/3680194.png";
     #endregion Ranger

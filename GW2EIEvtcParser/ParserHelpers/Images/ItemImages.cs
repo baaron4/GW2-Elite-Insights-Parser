@@ -838,7 +838,9 @@ internal static class ItemImages
     public const string AvatarOfDeathFinisher = "https://wiki.guildwars2.com/images/3/31/Avatar_of_Death_Finisher.png";
     public const string HonorGuardFinisher = "https://wiki.guildwars2.com/images/f/fb/Honor_Guard_Finisher.png";
     #endregion
-
+    #region WvW
+    public const string HolographicCommunicator = "https://render.guildwars2.com/file/685C99F0EFBDAED2B26293E144B192E8A3B50905/625760.png";
+    #endregion
     // Guild
     public const string GuildSwiftnessBanner = "https://render.guildwars2.com/file/3101EC25F03A0D070554277AA6B3DE4EFB00D3B7/543935.png";
     // Primers
