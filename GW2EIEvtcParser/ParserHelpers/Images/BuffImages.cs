@@ -454,6 +454,7 @@ public static class BuffImages
     public const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
     public const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
     public const string Evolved = "https://wiki.guildwars2.com/images/8/8d/Evolved.png";
+    public const string FuelRemaining = "https://wiki.guildwars2.com/images/e/e5/Glob_of_Goo.png";
     #endregion
     #region Guardian
     // Spear

@@ -635,6 +635,8 @@ internal static class SkillImages
     // Sword
     public const string RiftSlash = "https://render.guildwars2.com/file/91913B6196F06B95EBC71FC3EE9B41004B1EDF09/1013002.png";
     public const string UnrelentingAssault = "https://render.guildwars2.com/file/A1E252A0C9F506B73465E09919D119D706702DD8/1013004.png";
+    // Mace
+    public const string ManifestToxin = "https://render.guildwars2.com/file/92803ED295CE684CF8235941E6A6AC1610F0F00F/961459.png";
     #endregion Revenant
     #region Thief
     // Signets
@@ -849,6 +851,7 @@ internal static class SkillImages
     public const string CentaurDash = "https://wiki.guildwars2.com/images/6/6b/Centaur_Dash.png";
     public const string SpikeBarricade = "https://wiki.guildwars2.com/images/3/3f/Spike_Barricade.png";
     public const string OutrunACentaur = "https://wiki.guildwars2.com/images/7/7d/Outrun_a_Centaur.png";
+    public const string GatlingFists = "https://wiki.guildwars2.com/images/8/89/Gatling_Fists.png";
     #endregion WvW
     #region Mount
     // Mounts

@@ -159,6 +159,7 @@ public static class SkillIDs
     public const long JacarandasEmbraceMinion = 1286; // Skill casted by Jacaranda's Embrace NPC
     public const long GraspingVinesDamage = 1290;
     public const long AimedShotWvW = 1421;
+    public const long GatlingFists3 = 1508;
     public const long WhirlingAssault = 1656;
     public const long Freeze1 = 1870;
     public const long LifeBlast = 2064;
@@ -1534,6 +1535,7 @@ public static class SkillIDs
     public const long ProtectiveSolaceTabletBuff = 27334;
     public const long FacetOfLightBuff = 27336;
     public const long FacetOfStrengthBuff = 27376;
+    public const long ManifestToxinChain = 27425;
     public const long ImpossibleOddsBuff = 27581;
     public const long Taunt = 27705;
     public const long LegendaryDragonStanceBuff = 27732;
@@ -1592,6 +1594,7 @@ public static class SkillIDs
     public const long SandSquall = 29453;
     public const long BloodReckoning = 29466;
     public const long ForceOfWill = 29485;
+    public const long ChainReactivityBarrier = 29499;
     public const long BerserkBuff = 29502;
     public const long ShieldOfCourage = 29523;
     public const long WellOfPrecognition = 29526;
@@ -1697,6 +1700,7 @@ public static class SkillIDs
     public const long ExitReaperShroud = 30961;
     public const long BirthdayFinisher = 31079;
     public const long Finisher2 = 31101;
+    public const long FuelRemaining = 31109;
     public const long Bound = 31129;
     public const long Dash = 31187;
     public const long WatchfulEye = 31229;
@@ -2520,6 +2524,7 @@ public static class SkillIDs
     public const long Chapter1DesertBloomSkill = 40787;
     public const long FalseOasis = 40802;
     public const long NefariousFavorSkill = 40813;
+    public const long UnstableSlashMinion = 40860;
     public const long PhotonForgeAbove50Heat = 40884;
     public const long MantraOfPotence = 40915;
     public const long IcerazorsIreSkillMinion = 40916; // cast by created minion, does not hit
@@ -2566,6 +2571,7 @@ public static class SkillIDs
     public const long Chapter3ValiantBulwark = 41836;
     public const long LegendaryRenegadeStanceSkill = 41858;
     public const long CripplingAnguish = 41864;
+    public const long SwoopBirdOwl = 41896;
     public const long KallaSummonsSaluteAnimationSkill = 41897;
     public const long SignetOfFerocity = 41922;
     public const long AshesOfTheJust = 41957;
@@ -2733,6 +2739,7 @@ public static class SkillIDs
     public const long NarcoticSpores = 45262;
     public const long PerfectWeave = 45267;
     public const long WindsOfDisenchantment = 45333;
+    public const long GrimSpecterLifeSteal = 45389;
     public const long POV_TrailOfAnguishMovingBuff = 45424; // reapplied as you move, 150ms duration
     public const long Jaunt = 45449;
     public const long MantraOfLore = 45460;
@@ -5546,13 +5553,6 @@ public static class SkillIDs
     public const long POV_RelicOfFogGearBuff = 79529;
     #endregion
     // TODO needs icon override and then sort
-    public const long GatlingFists = 1508;
-    public const long ManifestToxin = 27425;
-    public const long ChainReactivityBarrier = 29499;
-    public const long FuelRemaining = 31109;
-    public const long UnstableSlashMinion = 40860;
-    public const long SwoopOwlPet = 41896;
-    public const long GrimSpecter = 45389;
     public const long JumpShotBounce = 55028;
     public const long PhasePounceSoulbeastMerged = 63939;
     public const long BitePet = 69822;

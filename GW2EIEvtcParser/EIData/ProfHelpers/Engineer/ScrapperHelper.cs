@@ -51,6 +51,7 @@ internal static class ScrapperHelper
     [
         new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, SkillImages.BulwarkGyro),
         new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, SkillImages.BulwarkGyro),
+        new Buff("Fuel Remaining", FuelRemaining, Source.Scrapper, BuffClassification.Other, BuffImages.FuelRemaining),
     ];
 
     private static readonly HashSet<int> Minions =

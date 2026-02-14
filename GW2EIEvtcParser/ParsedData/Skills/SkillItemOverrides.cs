@@ -813,6 +813,8 @@ public static class SkillItemOverrides
             { SignetOfTheLocusSomething2, SkillImages.SignetOfTheLocust },
             { SignetOfTheLocusSomething3, SkillImages.SignetOfTheLocust },
             { SignetOfTheLocusSomething4, SkillImages.SignetOfTheLocust },
+            { UnstableSlashMinion, SkillImages.BoneSlash },
+            { GrimSpecterLifeSteal, SkillImages.GrimSpecter },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -923,6 +925,7 @@ public static class SkillItemOverrides
             { GlyphOfEmpowermentSkill, SkillImages.GlyphOfTheStars },
             { GlyphOfEmpowermentSkillCA, SkillImages.GlyphOfTheStarsCelestialAvatar },
             { MistralDamage, SkillImages.Mistral },
+            { SwoopBirdOwl, SkillImages.SwoopBird },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
@@ -982,6 +985,7 @@ public static class SkillItemOverrides
             { RapidFlowHealing, TraitImages.RapidFlow },
             { BeguilingHaze6, SkillImages.BeguilingHaze },
             { Mistfire, TraitImages.Mistfire },
+            { ManifestToxinChain, SkillImages.ManifestToxin },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
@@ -1194,8 +1198,9 @@ public static class SkillItemOverrides
         #region Misc
             { WhirlingAssault, SkillImages.WhirlingAssault },
             { PunchGolem, "https://wiki.guildwars2.com/images/8/8f/Punch.png" },
-            { GatlingFists1, "https://wiki.guildwars2.com/images/8/89/Gatling_Fists.png" },
-            { GatlingFists2, "https://wiki.guildwars2.com/images/8/89/Gatling_Fists.png" },
+            { GatlingFists1, SkillImages.GatlingFists },
+            { GatlingFists2, SkillImages.GatlingFists },
+            { GatlingFists3, SkillImages.GatlingFists },
             { HollowedBoulderShot, SkillImages.FireBoulder },
             { SmokeScreen, "https://wiki.guildwars2.com/images/0/0a/Smoke_Screen_%28engineer_skill%29.png" },
             { EjectionSeat, SkillImages.Eject },
