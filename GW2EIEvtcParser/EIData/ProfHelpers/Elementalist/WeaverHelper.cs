@@ -232,9 +232,6 @@ internal static class WeaverHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.January2026Balance),
         new BuffGainCastFinder(ShaleStormSkill, ShaleStormSecondaryAttackBuff)
             .WithBuilds(GW2Builds.January2026Balance),
-
-        new BuffGainCastFinder(SoothingBurst, SoothingBurstSecondaryAttackBuff)
-            .WithBuilds(GW2Builds.January2026Balance),
     ];
 
 
@@ -320,19 +317,19 @@ internal static class WeaverHelper
         new Buff("Elements of Rage", ElementsOfRage, Source.Weaver, BuffClassification.Other, TraitImages.ElementsOfRage),
         new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, SkillImages.StoneResonance),
         new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, SkillImages.GrindingStones),
-        // Spear
-        new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FrostfireWard),
-        new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Galvanize),
-        new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FieryImpact),
-        new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Elutriate),
-        new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.ShaleStorm),
+        // Spear hidden buffs
+        new Buff("Frostfire Ward (Hidden)", FrostfireWardBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FrostfireWard),
+        new Buff("Galvanize (Hidden)", GalvanizeBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Galvanize),
+        new Buff("Fiery Impact (Hidden)", FieryImpactBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.FieryImpact),
+        new Buff("Elutriate (Hidden)", ElutriateBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.Elutriate),
+        new Buff("Shale Storm (Hidden)", ShaleStormBuff, Source.Weaver, BuffClassification.Hidden, SkillImages.ShaleStorm),
         // Spear additional strikes
-        new Buff("Fiery Impact (Additional Strike)", FieryImpactSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FieryImpact),
-        new Buff("Galvanize (Additional Strike)", GalvanizeSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Galvanize),
-        new Buff("Frostfire Ward (Additional Strike)", FrostfireWardSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FrostfireWard),
-        new Buff("Elutriate (Additional Strike)", ElutriateSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Elutriate),
-        new Buff("Soothing Burst (Additional Strike)", SoothingBurstSecondaryAttack, Source.Elementalist, BuffClassification.Other, SkillImages.SoothingBurst),
-        new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Elementalist, BuffClassification.Other, SkillImages.ShaleStorm),
+        new Buff("Fiery Impact (Additional Strike)", FieryImpactSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.FieryImpact),
+        new Buff("Galvanize (Additional Strike)", GalvanizeSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Galvanize),
+        new Buff("Frostfire Ward (Additional Strike)", FrostfireWardSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.FrostfireWard),
+        new Buff("Elutriate (Additional Strike)", ElutriateSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Elutriate),
+        new Buff("Soothing Burst (Additional Strike)", SoothingBurstSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.SoothingBurst),
+        new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShaleStorm),
     ];
 
 

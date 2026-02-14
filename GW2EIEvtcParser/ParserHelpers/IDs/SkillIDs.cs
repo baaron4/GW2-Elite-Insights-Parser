@@ -5490,6 +5490,7 @@ public static class SkillIDs
     public const long KineticBattery = 79338;
     public const long TimeBombBuff = 79339;
     public const long SignetOfTheLocusSomething3 = 79340;
+    public const long SoothingBurstSecondaryAttack = 79342;
     public const long SignetOfTheLocusSomething4 = 79343;
     public const long FieryImpactSecondaryAttackBuff = 79346;
     public const long GalvanizeSecondaryAttackBuff = 79347;
@@ -5572,5 +5573,4 @@ public static class SkillIDs
     public const long DeafeningDrumAfterImage = 76892;
     public const long FlusteringFluteAfterImage = 77176;
     public const long LesserEnchantedDaggers = 78971;
-    public const long SoothingBurstSecondaryAttack = 999999;// TODO find this id
 }
