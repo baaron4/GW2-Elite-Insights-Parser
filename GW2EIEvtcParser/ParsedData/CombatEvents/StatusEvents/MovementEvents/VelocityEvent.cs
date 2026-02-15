@@ -11,6 +11,11 @@ public class VelocityEvent : MovementEvent
 
     internal override void AddPoint3D(CombatReplay replay)
     {
-        replay.AddVelocity(GetParametricPoint3D());
+        var velocity = GetParametricPoint3D();
+        if (velocity.IsNaNOrInfinity())
+        {
+            return;
+        }
+        replay.AddVelocity(velocity);
     }
 }

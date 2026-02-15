@@ -13,6 +13,11 @@ public class RotationEvent : MovementEvent
     //TODO(Rennorb) @cleanup: hoist upwards or rename
     internal override void AddPoint3D(CombatReplay replay)
     {
-        replay.AddRotation(GetParametricPoint3D());
+        var rotation = GetParametricPoint3D();
+        if (rotation.IsNaNOrInfinity())
+        {
+            return;
+        }
+        replay.AddRotation(rotation);
     }
 }

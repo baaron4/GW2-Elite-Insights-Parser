@@ -19,6 +19,12 @@ public readonly struct ParametricPoint3D(in Vector3 value, long time)
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly ParametricPoint3D WithChangedTime(long newTime) => new(XYZ, newTime);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool IsNaNOrInfinity()
+    {
+        return Double.IsNaN(XYZ.X) || Double.IsNaN(XYZ.Y) || Double.IsNaN(XYZ.Z) ||
+               Double.IsInfinity(XYZ.X) || Double.IsInfinity(XYZ.Y) || Double.IsInfinity(XYZ.Z);
+    }
 
     public class Converter : JsonConverter<ParametricPoint3D>
     {
