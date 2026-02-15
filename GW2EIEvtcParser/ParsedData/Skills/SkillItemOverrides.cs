@@ -758,7 +758,6 @@ public static class SkillItemOverrides
             { PsystrikeClone, SkillImages.Psystrike },
             { PsycutClone, SkillImages.Psycut },
             { MindPierceClone, SkillImages.MindPierce },
-            { MindPierceClone, SkillImages.MindPierce },
             { DeafeningDrumAfterImage, SkillImages.DeafeningDrum },
             { FlusteringFluteAfterImage, SkillImages.FlusteringFlute },
             #endregion  MesmerIcons
