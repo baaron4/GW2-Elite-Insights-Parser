@@ -798,6 +798,7 @@ internal static class SkillImages
     public const string ChantOfRecuperation = "https://render.guildwars2.com/file/2D4B0C67FACAADD8612746BD6F5C6BE9A828C9A3/3680227.png";
     public const string ChantOfFreedom = "https://render.guildwars2.com/file/52720B9628A24FE1034815E10F0AFACF5365F3C4/3680226.png";
     public const string WeWillNeverYield = "https://render.guildwars2.com/file/C5740F0D6446CA01FCAA302D352D7F453E6A0709/3680223.png";
+    public const string OnYourKnees = "https://render.guildwars2.com/file/13DF51701AAAF9B150DEDABC5CB3901D3B430871/3680231.png";
     #endregion Warrior
     #region WvW
     public const string TurnLeft = "https://wiki.guildwars2.com/images/4/4c/Turn_Left.png";

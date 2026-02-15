@@ -758,6 +758,9 @@ public static class SkillItemOverrides
             { PsystrikeClone, SkillImages.Psystrike },
             { PsycutClone, SkillImages.Psycut },
             { MindPierceClone, SkillImages.MindPierce },
+            { MindPierceClone, SkillImages.MindPierce },
+            { DeafeningDrumAfterImage, SkillImages.DeafeningDrum },
+            { FlusteringFluteAfterImage, SkillImages.FlusteringFlute },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -997,6 +1000,7 @@ public static class SkillItemOverrides
             { BeguilingHaze6, SkillImages.BeguilingHaze },
             { Mistfire, TraitImages.Mistfire },
             { ManifestToxinChain, SkillImages.ManifestToxin },
+            { LesserEnchantedDaggers, SkillImages.EnchantedDaggers },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
@@ -1060,6 +1064,7 @@ public static class SkillItemOverrides
             { ForgedSurferDashSkillAdditionalBombs, SkillImages.ForgedSurferDash },
             { EternalNightHealing, SkillImages.EternalNight },
             { LarcenousTormentSiphonHealing, TraitImages.LarcenousTorment },
+            { HoloDancerTaunt, SkillImages.HoloDancerDecoy },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },
@@ -1114,6 +1119,9 @@ public static class SkillItemOverrides
             { HammerSwingNPC, SkillImages.HammerSwing },
             { HammerShockNPC, SkillImages.HammerShock },
             { BackBreakerNPC, SkillImages.Backbreaker },
+            { OnYourKneesEcho, SkillImages.OnYourKnees },
+            { ChantOfRecuperationHealing, SkillImages.ChantOfRecuperation },
+            { ChantOfRecuperationBarrier, SkillImages.ChantOfRecuperation },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },

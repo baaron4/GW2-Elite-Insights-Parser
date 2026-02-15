@@ -5189,6 +5189,7 @@ public static class SkillIDs
     public const long MistralSkill = 76757;
     public const long RuptureWanderlust = 76758;
     public const long AlteredChord = 76759;
+    public const long OnYourKneesEcho = 76763;
     public const long XinraesWeaponSharedBuff = 76764;
     public const long ExhilaratingEphemera = 76768;
     public const long NeverSurrender = 76769;
@@ -5199,6 +5200,7 @@ public static class SkillIDs
     public const long CombatHigh = 76785;
     public const long SummonCycloneBow = 76787;
     public const long HarePassive = 76792;
+    public const long HoloDancerTaunt = 76797;
     public const long DefensiveProtocolCleanse = 76798;
     public const long HoloDancerDecoySkill2 = 76800;
     public const long ZapPetSkill = 76803;
@@ -5224,7 +5226,8 @@ public static class SkillIDs
     public const long TaleOfTheSoulkeeper = 76850;
     public const long WindForce = 76855;
     public const long RadiantArmamentsStaffLingering = 76858;
-    public const long ChantOfRecuperationSkill2 = 76863;
+    public const long ChantOfRecuperationBarrier = 76862;
+    public const long ChantOfRecuperationHealing = 76863;
     public const long Anguish = 76864;
     public const long ChantOfActionBuff = 76865;
     public const long OffensiveProtocolShred1 = 76866;
@@ -5236,6 +5239,7 @@ public static class SkillIDs
     public const long WillingHost = 76885;
     public const long AntivenomDraught = 76886;
     public const long RapaciousStrain = 76888;
+    public const long DeafeningDrumAfterImage = 76892;
     public const long ZephyriteSunCrystal = 76895;
     public const long FormOfTheDervishRazahActiveBuff = 76896;
     public const long SummonKryptisTurretSkillUnderwater = 76900;
@@ -5350,6 +5354,7 @@ public static class SkillIDs
     public const long EmpoweredArmaments = 77169;
     public const long SupersonicArrow = 77174;
     public const long FoxPassive = 77175;
+    public const long FlusteringFluteAfterImage = 77176;
     public const long RitualistHealingRain = 77177; // Buff - Applied by Summon Spirits skill with Preservation summoned
     public const long TaleOfTheValiantMarshal = 77178;
     public const long ZapBuffTargetToPlayer = 77180; // Buff applied from the target to the player
@@ -5481,6 +5486,7 @@ public static class SkillIDs
     public const long PiercingShriek = 78873;
     public const long UnstableSkrittBombBuff = 78896;
     public const long FormOfTheMonkVentariActiveBuff = 78930;
+    public const long LesserEnchantedDaggers = 78971;
     public const long LingeringSpiritsWanderlust = 78987;
     public const long NightmareWeaponPersonalBuff = 79077;
     public const long BriskPacingTier1 = 79083;
@@ -5565,12 +5571,4 @@ public static class SkillIDs
     public const long BitingSwarmStackingDamage = 79526;
     public const long POV_RelicOfFogGearBuff = 79529;
     #endregion
-    // TODO needs icon override and then sort
-    public const long OnYourKneesEcho = 76763;
-    public const long HoloDancerTaunt = 76797;
-    public const long ChantOfRecuperationBarrier = 76862;
-    public const long ChantOfRecuperationHealing = 76863;
-    public const long DeafeningDrumAfterImage = 76892;
-    public const long FlusteringFluteAfterImage = 77176;
-    public const long LesserEnchantedDaggers = 78971;
 }
