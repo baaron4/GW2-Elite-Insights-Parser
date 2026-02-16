@@ -48,6 +48,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "Success", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad3a5ec959a120ce2016a7463dd447742", null ],
     [ "Targetless", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ada6d7484a510b238f8a3a86fdc0328ae", null ],
     [ "Targets", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ada6e269761f3f560049150d1b0edb0dd", null ],
+    [ "TeamMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a695ba5fe16190269d66870776a4e0520", null ],
     [ "TimeEnd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a8955c9cf429dde4e5fd562f6bc1c5b17", null ],
     [ "TimeEndStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1eaafbfc1afe1ce4316dc58dcbc90b8f", null ],
     [ "TimeStart", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#af6ddf396b0cf55ba26385824ff25d0de", null ],

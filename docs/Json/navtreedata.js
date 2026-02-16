@@ -44,9 +44,9 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afe5b9eec1c6d795718679f1385ce4848",
-"class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac075875f8eb8fb8be5a415655a951459",
-"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a527fb6a4522c2796c08eb518da2803b8",
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a5bcd838bd26e8adeb93b7204bb900d0d"
+"class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aba1a656991c7a29e4b8a9f0c75482744",
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a397b1cb4cb8eef6fc8af4c33920e6024",
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a58af3c134130048f80389dcdf2cb422e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

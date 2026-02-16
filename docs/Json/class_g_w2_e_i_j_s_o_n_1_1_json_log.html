@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.17.1.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.18.1.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -254,6 +254,8 @@ IReadOnlyList&lt; string &gt;?&#160;</td><td class="memItemRight" valign="bottom
 <tr class="memdesc:aff37c8a04b211b1d7bba6dddf504613b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of buffs' description, the key is in "'b' + id" format.  <br /></td></tr>
 <tr class="memitem:a1274aefc792f7a61d807c02415606a4d" id="r_a1274aefc792f7a61d807c02415606a4d"><td class="memItemLeft" align="right" valign="top">IReadOnlyDictionary&lt; string, <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html">DamageModDesc</a> &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1274aefc792f7a61d807c02415606a4d">DamageModMap</a></td></tr>
 <tr class="memdesc:a1274aefc792f7a61d807c02415606a4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of damage modifiers' description, the key is in "'d' + id" format.  <br /></td></tr>
+<tr class="memitem:a695ba5fe16190269d66870776a4e0520" id="r_a695ba5fe16190269d66870776a4e0520"><td class="memItemLeft" align="right" valign="top">IReadOnlyDictionary&lt; string, TeamDesc &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a695ba5fe16190269d66870776a4e0520">TeamMap</a></td></tr>
+<tr class="memdesc:a695ba5fe16190269d66870776a4e0520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of team id description, the key is in "'t' + id" format.  <br /></td></tr>
 <tr class="memitem:aa753e843e65b1612429894bf8280c2be" id="r_aa753e843e65b1612429894bf8280c2be"><td class="memItemLeft" align="right" valign="top">IReadOnlyDictionary&lt; string, IReadOnlyCollection&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa753e843e65b1612429894bf8280c2be">PersonalBuffs</a></td></tr>
 <tr class="memdesc:aa753e843e65b1612429894bf8280c2be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of personal buffs. The key is the profession, the value is a list of buff ids.  <br /></td></tr>
 <tr class="memitem:a70ad201d4c58d2d8475d62766c081653" id="r_a70ad201d4c58d2d8475d62766c081653"><td class="memItemLeft" align="right" valign="top">IReadOnlyDictionary&lt; string, IReadOnlyCollection&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70ad201d4c58d2d8475d62766c081653">PersonalDamageMods</a></td></tr>
@@ -480,6 +482,23 @@ In boss logs, value[2] will always be the "Full Fight" phase. </p>
 
 <p>The list of targets. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html" title="Class representing an NPC.">JsonNPC</a></dd></dl>
+
+</div>
+</div>
+<a id="a695ba5fe16190269d66870776a4e0520" name="a695ba5fe16190269d66870776a4e0520"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a695ba5fe16190269d66870776a4e0520">&#9670;&#160;</a></span>TeamMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyDictionary&lt;string, TeamDesc&gt;? GW2EIJSON.JsonLog.TeamMap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dictionary of team id description, the key is in "'t' + id" format. </p>
+<dl class="section see"><dt>See also</dt><dd>TeamDesc</dd></dl>
 
 </div>
 </div>
