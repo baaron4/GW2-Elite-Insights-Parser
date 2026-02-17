@@ -63,23 +63,22 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         }
         return res;
     }
-
-    protected void InsertMechanicWithSubMechanics(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, long timeToUse, SingleActor actor)
+    protected void InsertMechanicWithSubMechanics(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor, MechanicEvent mechEvent)
     {
         if (!Ignored)
         {
-            mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
+            mechanicLogs[this].Add(mechEvent);
         }
         foreach (var subMechanic in _subMechanics)
         {
             if (subMechanic.Checker(time, actor, log))
             {
-                mechanicLogs[subMechanic.Mechanic].Add(new MechanicEvent(timeToUse, subMechanic.Mechanic, actor));
+                mechanicLogs[subMechanic.Mechanic].Add(mechEvent.CopyForSubMechanic(subMechanic.Mechanic));
             }
         }
     }
 
-    protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor)
+    protected (long time, SingleActor actor) ComputeTimeAndActor(ParsedEvtcLog log, SingleActor actor, long time)
     {
         long timeToUse = time;
         if (_timeClamper != null)
@@ -91,7 +90,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         {
             actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
         }
-        InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
+        return (timeToUse, actor);
     }
 
     protected virtual bool Keep(Checkable checkable, ParsedEvtcLog log)

@@ -14,14 +14,14 @@ internal class MechanicDto
     public bool EnemyMech { get; set; }
     public bool PlayerMech { get; set; }
 
-    private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, SingleActor actor, PhaseData phase)
+    private static List<double[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, SingleActor actor, PhaseData phase)
     {
-        var res = new List<int[]>(presMech.Count);
+        var res = new List<double[]>(presMech.Count);
 
         foreach (Mechanic mech in presMech)
         {
-            int filterCount = 0;
-            int count = 0;
+            double filterCount = 0;
+            double count = 0;
             if (mech.InternalCooldown > 0)
             {
                 long timeFilter = 0;
@@ -33,21 +33,21 @@ internal class MechanicDto
                     {
                         if (inInterval)
                         {
-                            filterCount++;
+                            filterCount += ml.GetWeight();
                         }
                     }
                     timeFilter = ml.Time;
                     if (inInterval)
                     {
-                        count++;
+                        count += ml.GetWeight();
                     }
                 }
             }
             else
             {
-                count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
+                count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Sum(x => x.GetWeight());
             }
-            res.Add([count - filterCount, count]);
+            res.Add([Math.Round(count - filterCount, 2), Math.Round(count, 2)]);
         }
         return res;
     }
@@ -69,9 +69,9 @@ internal class MechanicDto
         }
     }
 
-    public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<double[]>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<int[]>>(log.Friendlies.Count);
+        var list = new List<List<double[]>>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.LogData.LogStart, log.LogData.LogEnd), log, actor, phase));
@@ -79,10 +79,10 @@ internal class MechanicDto
         return list;
     }
 
-    public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<double[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
     {
         var enemies = log.MechanicData.GetEnemyList(log, log.LogData.LogStart, log.LogData.LogEnd);
-        var list = new List<List<int[]>>(enemies.Count);
+        var list = new List<List<double[]>>(enemies.Count);
         foreach (SingleActor enemy in enemies)
         {
             list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.LogData.LogStart, log.LogData.LogEnd), log, enemy, phase));

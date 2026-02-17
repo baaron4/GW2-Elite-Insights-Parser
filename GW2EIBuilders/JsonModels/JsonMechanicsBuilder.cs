@@ -19,7 +19,8 @@ internal static class JsonMechanicsBuilder
             Time = ml.Time,
             Actor = ml.Actor.Character,
             Instid = ml.Actor.InstID,
-            Id = ml.Actor.ID
+            Id = ml.Actor.ID,
+            Weight = ml.GetWeight(),
         };
         return jsMech;
     }

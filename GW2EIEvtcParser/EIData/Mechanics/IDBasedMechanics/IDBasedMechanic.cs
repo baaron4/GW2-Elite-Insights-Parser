@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-public abstract class IDBasedMechanic<Checkable> : CheckedMechanic<Checkable>
+public abstract class IDBasedMechanic<Checkable> : CounterCheckedMechanic<Checkable>
 {
 
     protected readonly HashSet<long> MechanicIDs = [];
