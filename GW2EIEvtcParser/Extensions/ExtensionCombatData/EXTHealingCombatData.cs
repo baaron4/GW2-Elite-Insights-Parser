@@ -50,7 +50,7 @@ public class EXTHealingCombatData
         var damageData = log.CombatData.GetDamageData(id).Where(x => x.HealthDamage > 0 && !x.IsNotADamageEvent).ToList();
         if (damageData.Count > 0)
         {
-            type = damageData.Any(x => x.IsLifeLeech) || skill.CanSiphon ? EXTHealingType.Hybrid : EXTHealingType.ConversionBased;
+            type = damageData.Any(x => x.IsLifeLeech) || skill.CanHeal ? EXTHealingType.Hybrid : EXTHealingType.ConversionBased;
         }
         else
         {
