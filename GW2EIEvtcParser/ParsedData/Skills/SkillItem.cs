@@ -47,6 +47,7 @@ public class SkillItem
     private readonly WeaponDescriptor? _weaponDescriptor;
     public bool IsWeaponSkill => _weaponDescriptor != null;
     internal readonly GW2APISkill? ApiSkill;
+    public bool CanSiphon => ApiSkill != null && ApiSkill.Facts != null && ApiSkill.Facts.Any(x => x.Target == "Healing" && x.Text != null && x.Text.Contains("Siphon"));
     private SkillInfoEvent? _skillInfo;
 
     internal const string DefaultName = "UNKNOWN";

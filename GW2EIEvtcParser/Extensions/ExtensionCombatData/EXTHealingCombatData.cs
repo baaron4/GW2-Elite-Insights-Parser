@@ -46,9 +46,11 @@ public class EXTHealingCombatData
         {
             return type;
         }
-        if (log.CombatData.GetDamageData(id).Any(x => x.HealthDamage > 0 && !x.IsNotADamageEvent))
+        var skill = log.SkillData.Get(id);
+        var damageData = log.CombatData.GetDamageData(id).Where(x => x.HealthDamage > 0 && !x.IsNotADamageEvent).ToList();
+        if (damageData.Count > 0)
         {
-            type = EXTHealingType.ConversionBased;
+            type = damageData.Any(x => x.IsLifeLeech) || skill.CanSiphon ? EXTHealingType.Hybrid : EXTHealingType.ConversionBased;
         }
         else
         {
