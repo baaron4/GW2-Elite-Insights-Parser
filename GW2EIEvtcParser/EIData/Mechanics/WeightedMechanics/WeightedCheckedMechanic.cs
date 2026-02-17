@@ -12,7 +12,7 @@ public abstract class WeightedCheckedMechanic<Checkable> : CheckedMechanic<Check
     protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor, double weight)
     {
         (long timeToUse, actor) = ComputeTimeAndActor(log, actor, time);
-        InsertMechanicWithSubMechanics(log, mechanicLogs, time, actor, new CounterMechanicEvent(timeToUse, this, actor));
+        InsertMechanicWithSubMechanics(log, mechanicLogs, time, actor, new WeightedMechanicEvent(timeToUse, this, actor, weight));
     }
 
 }
