@@ -122,6 +122,8 @@ public class HealingStatsExtensionHandler : ExtensionHandler
         DeathlyEnervation,
         EchoingErosion,
         PathToVictoryParagon,
+        NightmareWeaponBuff,
+        SovereignOfLight,
         RelicOfTheNauticalBeastDamageHealing,
     ];
 
