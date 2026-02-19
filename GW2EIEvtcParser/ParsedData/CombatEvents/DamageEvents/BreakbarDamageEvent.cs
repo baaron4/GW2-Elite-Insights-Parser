@@ -7,4 +7,8 @@ public class BreakbarDamageEvent : SkillEvent
     {
         BreakbarDamage = Math.Round(evtcItem.Value / 10.0, 1);
     }
+    internal override double GetValue()
+    {
+        return BreakbarDamage;
+    }
 }

@@ -9,5 +9,9 @@ public abstract class EXTBarrierEvent : EXTHealingExtensionEvent
     internal EXTBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
     }
+    internal override double GetValue()
+    {
+        return BarrierGiven;
+    }
 
 }

@@ -35,4 +35,6 @@ public abstract class SkillEvent : TimeCombatEvent
         }
         return _isCondi == 1;
     }
+
+    internal abstract double GetValue();
 }

@@ -16,9 +16,17 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
     internal delegate bool SingleActorChecker(long time, SingleActor actor, ParsedEvtcLog log);
     private readonly List<(SubMechanic Mechanic, SingleActorChecker Checker)> _subMechanics = [];
 
+    private bool _weighted = false;
+
     protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
     {
         Checkers = [];
+    }
+
+    internal CheckedMechanic<Checkable> UsingWeight()
+    {
+        _weighted = true;
+        return this;
     }
 
     internal CheckedMechanic<Checkable> UsingChecker(Checker checker)
@@ -77,8 +85,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             }
         }
     }
-
-    protected (long time, SingleActor actor) ComputeTimeAndActor(ParsedEvtcLog log, SingleActor actor, long time)
+    protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor, double weight = 1.0)
     {
         long timeToUse = time;
         if (_timeClamper != null)
@@ -90,7 +97,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         {
             actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
         }
-        return (timeToUse, actor);
+        InsertMechanicWithSubMechanics(log, mechanicLogs, time, actor, _weighted ? new WeightedMechanicEvent(timeToUse, this, actor, weight) : new CounterMechanicEvent(timeToUse, this, actor));
     }
 
     protected virtual bool Keep(Checkable checkable, ParsedEvtcLog log)

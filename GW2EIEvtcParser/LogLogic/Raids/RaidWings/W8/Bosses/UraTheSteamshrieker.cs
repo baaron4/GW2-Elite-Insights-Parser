@@ -49,8 +49,9 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerDstHealthDamageHitMechanic([ToxicGeyser1, ToxicGeyser2, ToxicGeyserCM], new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCross, Colors.White), "Dispel.Toxc", "Dispelled Toxic Geyser (Removed Hardened Crust)", "Dispelled Toxic Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser)),
-                new WeightedPlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarSquare, Colors.White), "Toxc.BrkDmg", "Breakbar Damage done against Toxic Geysers", "Breakbar Damage Toxic Geysers", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
-                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser)),
+                new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarSquare, Colors.White), "Toxc.BrkDmg", "Breakbar Damage done against Toxic Geysers", "Breakbar Damage Toxic Geysers", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser))
+                    .UsingWeight(),
             ]),
             // Ura
             new MechanicGroup([

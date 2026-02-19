@@ -29,6 +29,10 @@ public abstract class HealthDamageEvent : DamageEvent
         //_damage = Damage;
         HealthDamage = Math.Max(HealthDamage - ShieldDamage, 0);
     }
+    internal override double GetValue()
+    {
+        return HealthDamage;
+    }
 
     internal abstract void MakeIntoAbsorbed();
 
