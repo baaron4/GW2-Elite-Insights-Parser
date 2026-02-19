@@ -240,11 +240,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
         {
             var kcPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, [], "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.Mode.CM : LogData.Mode.Normal);
-            var statues = Targets.Where(x => x.IsAnySpecies(KeepConstruct.KCStatues));
             foreach (var kcPhase in kcPhases)
             {
                 var keepConstruct = kcPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.KeepConstruct));
-                kcPhase.AddTargets(statues, log, PhaseData.TargetPriority.NonBlocking);
                 phases.AddRange(KeepConstruct.ComputePhases(log, keepConstruct, Targets, kcPhase, requirePhases));
             }
         }

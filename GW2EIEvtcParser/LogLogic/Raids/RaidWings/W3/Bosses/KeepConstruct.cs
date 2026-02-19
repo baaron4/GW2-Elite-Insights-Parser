@@ -126,11 +126,12 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var burnPhases = new List<SubPhasePhaseData>(5);
         foreach (Segment seg in segments)
         {
-            var phase = new SubPhasePhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
-            phase.AddTarget(keepConstruct, log);
-            phase.AddParentPhases(mainPhases);
-            phases.Add(phase);
-            burnPhases.Add(phase);
+            var burnPhase = new SubPhasePhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
+            burnPhase.AddTarget(keepConstruct, log);
+            burnPhase.AddParentPhases(mainPhases);
+            AddTargetsToPhase(burnPhase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
+            phases.Add(burnPhase);
+            burnPhases.Add(burnPhase);
         }
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // pre burn phases
@@ -148,11 +149,11 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     long preBurnStart = (prevPhase.End >= preBurnEnd ? prevPhase.Start : prevPhase.End) + 1;
                     if (preBurnEnd - preBurnStart > PhaseTimeLimit)
                     {
-                        var phase = new SubPhasePhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
-                        phase.AddParentPhases(mainPhases);
-                        phase.AddTarget(keepConstruct, log);
-                        AddTargetsToPhase(phase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
-                        preBurnPhases.Add(phase);
+                        var preBurnPhase = new SubPhasePhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
+                        preBurnPhase.AddParentPhases(mainPhases);
+                        preBurnPhase.AddTarget(keepConstruct, log);
+                        AddTargetsToPhase(preBurnPhase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
+                        preBurnPhases.Add(preBurnPhase);
                     }
                 }
             }
@@ -179,6 +180,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                         var leftOverPhase = new SubPhasePhaseData(phase.End, cur.End, "Leftover " + burnIndex);
                         leftOverPhase.AddParentPhases(mainPhases);
                         leftOverPhase.AddTarget(keepConstruct, log);
+                        AddTargetsToPhase(leftOverPhase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
                         leftOverPhases.Add(leftOverPhase);
                     }
                 }
@@ -188,7 +190,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    internal static readonly IReadOnlyList<TargetID> KCStatues = 
+    private static readonly IReadOnlyList<TargetID> KCStatues = 
     [
         TargetID.Jessica,
         TargetID.Olson,
@@ -204,7 +206,6 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(KCStatues)), log, PhaseData.TargetPriority.NonBlocking);
         phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
        
         return phases;
