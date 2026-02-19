@@ -43,6 +43,9 @@ internal class UraTheSteamshrieker : MountBalrior
                     ),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsAnySpecies([TargetID.TitanspawnGeyser, TargetID.TitanspawnGeyserGadget])),
+                new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "Titn.BrkDmg", "Breakbar Damage done against Titanspawn Geysers", "Breakbar Damage Titanspawn Geysers", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
+                    .UsingChecker((brae, log) => brae.To.IsAnySpecies([TargetID.TitanspawnGeyser, TargetID.TitanspawnGeyserGadget]))
+                    .UsingWeight(),
             ]),
             // Toxic Geysers
             new MechanicGroup([
