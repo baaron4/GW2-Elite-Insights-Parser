@@ -28,7 +28,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                     if (log.PlayerAgents.Contains(agentItem) && Keep(effectEvent, log))
                     {
-                        InsertMechanic(log, mechanicLogs, effectEvent.Time, log.FindActor(agentItem), 1);
+                        InsertMechanic(log, mechanicLogs, effectEvent.Time, log.FindActor(agentItem));
                     }
                 }
             }

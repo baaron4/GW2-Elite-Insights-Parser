@@ -21,7 +21,7 @@ internal class AchievementEligibilityMechanic : IDBasedMechanic<AchievementEligi
                 {
                     if (evt.AchievementID == achievementID && Keep(evt, log))
                     {
-                        InsertMechanic(log, mechanicLogs, evt.Time, player, 1);
+                        InsertMechanic(log, mechanicLogs, evt.Time, player);
                     }
                 }
             }
