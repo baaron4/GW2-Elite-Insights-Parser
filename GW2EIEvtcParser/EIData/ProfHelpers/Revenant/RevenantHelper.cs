@@ -146,9 +146,12 @@ internal static class RevenantHelper
     [
         // Legendary Dwarf
         // - Rite of the Great Dwarf
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .UsingSpecSpecificShared(),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .UsingSpecSpecificShared(),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .UsingSpecSpecificShared(),
         // - Vengeful Hammers
         new BuffOnActorDamageModifier(Mod_VengefulHammers, VengefulHammersBuff, "Vengeful Hammers", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         

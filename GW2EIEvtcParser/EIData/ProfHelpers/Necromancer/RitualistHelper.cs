@@ -74,9 +74,11 @@ internal static class RitualistHelper
         new BuffOnActorDamageModifier(Mod_RitualistsShroud, RitualistsShroud, "Ritualist's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.RitualistShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_RitualistsShroud, RitualistsShroud, "Ritualist's Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.RitualistShroud, DamageModifierMode.sPvPWvW),
         // Weapons
-        new BuffOnActorDamageModifier(Mod_ResilientWeaponShared10, ResilientWeaponSharedBuff, "Resilient Weapon", "-10% above 50% hp", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ResilientWeaponShared10, ResilientWeaponSharedBuff, "Resilient Weapon", "-10% above 50% hp", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .UsingChecker((dhe, log) => !dhe.AgainstUnderFifty),
-        new BuffOnActorDamageModifier(Mod_ResilientWeaponShared20, ResilientWeaponSharedBuff, "Resilient Weapon", "-20% below 50% hp", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ResilientWeaponShared20, ResilientWeaponSharedBuff, "Resilient Weapon", "-20% below 50% hp", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .UsingChecker((dhe, log) => dhe.AgainstUnderFifty),
         new BuffOnActorDamageModifier(Mod_ResilientWeaponPersonal10, ResilientWeaponPersonalBuff, "Resilient Weapon", "-10% above 50% hp", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Ritualist, ByPresence, SkillImages.ResilientWeapon, DamageModifierMode.All)
             .UsingChecker((dhe, log) => !dhe.AgainstUnderFifty),

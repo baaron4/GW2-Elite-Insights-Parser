@@ -15,6 +15,7 @@ public abstract class DamageModifier
     public bool SkillBased => DamageModDescriptor.SkillBased;
 
     public bool Approximate => DamageModDescriptor.Approximate;
+    public bool SpecSpecificShared => DamageModDescriptor.SpecSpecificShared;
     public IReadOnlyCollection<Source> Srcs => DamageModDescriptor.Srcs;
     public string Icon => DamageModDescriptor.Icon;
     public string Name => DamageModDescriptor.Name;

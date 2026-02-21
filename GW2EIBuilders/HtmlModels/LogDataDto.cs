@@ -203,7 +203,7 @@ internal class LogDataDto
         // Collect all personal damage mods by spec
         foreach (var pair in log.FriendliesListBySpec)
         {
-            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.ID));
+            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetPersonalOutgoingModifiersPerSpec(pair.Key).Select(x => x.ID));
             var damageModsToUse = new HashSet<OutgoingDamageModifier>(pair.Value.Count);
             foreach (SingleActor actor in pair.Value)
             {
@@ -233,7 +233,7 @@ internal class LogDataDto
         // Collect all personal damage mods by spec
         foreach (var pair in log.FriendliesListBySpec)
         {
-            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.ID));
+            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetPersonalIncomingModifiersPerSpec(pair.Key).Select(x => x.ID));
             var damageModsToUse = new HashSet<IncomingDamageModifier>(pair.Value.Count);
             foreach (SingleActor actor in pair.Value)
             {

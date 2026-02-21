@@ -78,7 +78,8 @@ internal static class SoulbeastHelper
         new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.OppressiveSuperiority, FromHigherThanToHPChecker, DamageModifierMode.All)
             .UsingApproximate(),
         // One Wolf Pack
-        new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.OneWolfPack, DamageModifierMode.All),
+        new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Soulbeast, SkillImages.OneWolfPack, DamageModifierMode.All)
+            .UsingSpecSpecificShared(),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -93,7 +94,8 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-25% under protection", DamageSource.Incoming, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.October2024Balance),
         // Dolyak Stance
-        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, SkillImages.DolyakStance, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, SkillImages.DolyakStance, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.December2018Balance),
     ];
 

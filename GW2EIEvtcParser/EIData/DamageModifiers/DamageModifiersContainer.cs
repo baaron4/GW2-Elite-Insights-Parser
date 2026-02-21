@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -86,15 +87,29 @@ public class DamageModifiersContainer
             {
                 throw new InvalidDataException("Outgoing damage mods must not have DmgSrc as Incoming");
             }
-            foreach (var source in outDamageMod.Srcs)
+            if (outDamageMod.SpecSpecificShared)
             {
-                if (outDamageModsPerSource.TryGetValue(source, out var list))
+                if (outDamageModsPerSource.TryGetValue(Source.Common, out var list))
                 {
                     list.Add(outDamageMod);
                 }
                 else
                 {
-                    outDamageModsPerSource[source] = [outDamageMod];
+                    outDamageModsPerSource[Source.Common] = [outDamageMod];
+                }
+            } 
+            else
+            {
+                foreach (var source in outDamageMod.Srcs)
+                {
+                    if (outDamageModsPerSource.TryGetValue(source, out var list))
+                    {
+                        list.Add(outDamageMod);
+                    }
+                    else
+                    {
+                        outDamageModsPerSource[source] = [outDamageMod];
+                    }
                 }
             }
         }
@@ -180,15 +195,29 @@ public class DamageModifiersContainer
             {
                 throw new InvalidDataException("Incoming damage mods must have DmgSrc as Incoming");
             }
-            foreach (var source in incDamageMod.Srcs)
+            if (incDamageMod.SpecSpecificShared)
             {
-                if (incDamageModsPerSource.TryGetValue(source, out var list))
+                if (incDamageModsPerSource.TryGetValue(Source.Common, out var list))
                 {
                     list.Add(incDamageMod);
                 }
                 else
                 {
-                    incDamageModsPerSource[source] = [incDamageMod];
+                    incDamageModsPerSource[Source.Common] = [incDamageMod];
+                }
+            }
+            else
+            {
+                foreach (var source in incDamageMod.Srcs)
+                {
+                    if (incDamageModsPerSource.TryGetValue(source, out var list))
+                    {
+                        list.Add(incDamageMod);
+                    }
+                    else
+                    {
+                        incDamageModsPerSource[source] = [incDamageMod];
+                    }
                 }
             }
         }
@@ -202,7 +231,7 @@ public class DamageModifiersContainer
         });
     }
 
-    public List<OutgoingDamageModifier> GetOutgoingModifiersPerSpec(ParserHelper.Spec spec)
+    public List<OutgoingDamageModifier> GetPersonalOutgoingModifiersPerSpec(ParserHelper.Spec spec)
     {
         var srcs = ParserHelper.SpecToSources(spec);
         var res = new List<OutgoingDamageModifier>(srcs.Count); //TODO_PERF(Rennorb) @find average complexity
@@ -216,7 +245,7 @@ public class DamageModifiersContainer
         return res;
     }
 
-    public List<IncomingDamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
+    public List<IncomingDamageModifier> GetPersonalIncomingModifiersPerSpec(ParserHelper.Spec spec)
     {
         var srcs = ParserHelper.SpecToSources(spec);
         var res = new List<IncomingDamageModifier>(srcs.Count); //TODO_PERF(Rennorb) @find average complexity

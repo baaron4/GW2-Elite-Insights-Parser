@@ -55,9 +55,11 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervorStrike, ImprovedKallasFervor, "Improved Kalla's Fervor (Strike)", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025Balance),
         // Soulcleave's Summit
-        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Renegade, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Renegade, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.May2021Balance),
         // All for One
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.All)
@@ -71,7 +73,8 @@ internal static class RenegadeHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Breakrazor's Bastion
-        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.BreakrazorsBastion, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, SkillImages.BreakrazorsBastion, DamageModifierMode.All)
+            .UsingSpecSpecificShared(),
         // Righteous Rebel
         new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-33%", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, TraitImages.RighteousRebel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),

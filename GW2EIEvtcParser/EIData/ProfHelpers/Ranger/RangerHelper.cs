@@ -331,7 +331,8 @@ internal static class RangerHelper
             .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.January2026Balance),
         // - Frost Spirit
-        new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
 
         // Marksmanship
@@ -483,7 +484,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
         new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, SkillImages.StormSpirit)
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        // Skills
+         // Skills
         new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, SkillImages.CallOfTheWild)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild)

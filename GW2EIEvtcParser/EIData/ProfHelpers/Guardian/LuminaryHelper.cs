@@ -55,18 +55,23 @@ internal static class LuminaryHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Luminary's Blessing
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.PvE)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-7%", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.WvW)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.January2026Balance),
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-5%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.sPvP)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.January2026Balance),
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-5%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.sPvPWvW)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.January2026Balance),
         // Luminary's Blessing Traited
         new BuffOnActorDamageModifier(Mod_LuminarysBlessingResoluteBlessing, LuminarysBlessing, "Resolute Blessing", "-10% under Luminary's Blessing while traited", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Luminary, ByPresence, TraitImages.ResoluteBlessing, DamageModifierMode.PvEWvW)
@@ -105,7 +110,7 @@ internal static class LuminaryHelper
         new Buff("Piercing Stance", PiercingStanceBuff, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.PiercingStance),
         new Buff("Daring Stance", DaringAdvanceBuff, Source.Luminary, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.DaringAdvance),
         // Traits
-        new Buff("Luminary's Blessing", LuminarysBlessing, Source.Luminary, BuffClassification.Other, TraitImages.LightsGift),
+        new Buff("Luminary's Blessing", LuminarysBlessing, Source.Luminary, BuffClassification.Defensive, TraitImages.LightsGift),
         new Buff("Empowered Armaments", EmpoweredArmaments, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.EmpoweredArmaments),
         // Others
         new Buff("Counterattack (Luminary Shield)", CounterattackLuminary, Source.Luminary, BuffClassification.Other, SkillImages.Counterblow),

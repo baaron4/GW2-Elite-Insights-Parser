@@ -85,7 +85,7 @@ partial class SingleActor
                 damageMods.AddRange(list);
             }
 
-            damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(Spec));
+            damageMods.AddRange(log.DamageModifiers.GetPersonalOutgoingModifiersPerSpec(Spec));
 
             var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 150);
             foreach (OutgoingDamageModifier damageMod in damageMods)
@@ -203,7 +203,7 @@ partial class SingleActor
             {
                 damageMods.AddRange(list);
             }
-            damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(Spec));
+            damageMods.AddRange(log.DamageModifiers.GetPersonalIncomingModifiersPerSpec(Spec));
 
             var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 60);
             foreach (IncomingDamageModifier damageMod in damageMods)

@@ -74,7 +74,8 @@ internal static class HeraldHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Facet of Nature - Dwarf
-        new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All)
+            .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.August2018Balance),
         // Hardening Persistence
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.Incoming, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)

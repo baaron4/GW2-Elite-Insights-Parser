@@ -395,7 +395,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Source"/> given a specific <see cref="Spec"/>.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>
+    private static readonly IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>
     {
         { Spec.Galeshot, [Source.Ranger, Source.Galeshot] },
         { Spec.Untamed, [Source.Ranger, Source.Untamed] },

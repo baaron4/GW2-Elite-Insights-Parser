@@ -34,6 +34,8 @@ internal abstract class DamageModifierDescriptor : IVersionable
     private List<DamageLogChecker> _dlCheckers;
     private List<ActorChecker> _earlyExitCheckers;
 
+    public bool SpecSpecificShared { get; private set; }
+
     internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode) : this(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, [src], icon, gainComputer, mode)
     {
     }
@@ -86,6 +88,15 @@ internal abstract class DamageModifierDescriptor : IVersionable
     internal virtual DamageModifierDescriptor UsingChecker(DamageLogChecker dlChecker)
     {
         _dlCheckers.Add(dlChecker);
+        return this;
+    }
+    /// <summary>
+    /// Will cause the damage modifier to fall into "Common" while still remembering the source spec
+    /// </summary>
+    /// <returns></returns>
+    internal DamageModifierDescriptor UsingSpecSpecificShared()
+    {
+        SpecSpecificShared = true;
         return this;
     }
 
