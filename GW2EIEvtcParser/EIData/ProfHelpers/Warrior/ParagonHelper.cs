@@ -75,7 +75,7 @@ internal static class ParagonHelper
         new Buff("Chant of Action", ChantOfActionBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfAction),
         new Buff("Chant of Recuperation", ChantOfRecuperationBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfRecuperation),
         new Buff("Chant of Freedom", ChantOfFreedomBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfFreedom),
-        new Buff("\"We Will Never Yield!\"", WeWillNeverYieldBuff, Source.Paragon, BuffClassification.Support, SkillImages.WeWillNeverYield),
+        new Buff("\"We Will Never Yield!\"", WeWillNeverYieldBuff, Source.Paragon, BuffClassification.Defensive, SkillImages.WeWillNeverYield),
         new Buff("Brisk Pacing (Tier 1)", BriskPacingTier1, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
         new Buff("Brisk Pacing (Tier 2)", BriskPacingTier2, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
         new Buff("Brisk Pacing (Tier 3)", BriskPacingTier3, Source.Paragon, BuffClassification.Other, TraitImages.BriskPacing),
