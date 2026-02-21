@@ -169,7 +169,7 @@
                 let targets = [];
                 for (let i = 0; i < this.encounterPhase.targets.length; i++) {
                     if (this.encounterPhase.targetPriorities[i] < 2) {
-                        targets.push(i);
+                        targets.push(this.encounterPhase.targets[i]);
                     }
                 }
                 return targets;
