@@ -80,17 +80,21 @@ public class DamageModifiersContainer
             currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
         }
         var outDamageModsPerSource = new Dictionary<ParserHelper.Source, List<OutgoingDamageModifier>>();
-        foreach (var incDamageMod in currentOutgoingDamageMods)
+        foreach (var outDamageMod in currentOutgoingDamageMods)
         {
-            foreach (var source in incDamageMod.Srcs)
+            if (outDamageMod.DmgSrc == DamageModifiersUtils.DamageSource.Incoming)
+            {
+                throw new InvalidDataException("Outgoing damage mods must not have DmgSrc as Incoming");
+            }
+            foreach (var source in outDamageMod.Srcs)
             {
                 if (outDamageModsPerSource.TryGetValue(source, out var list))
                 {
-                    list.Add(incDamageMod);
+                    list.Add(outDamageMod);
                 }
                 else
                 {
-                    outDamageModsPerSource[source] = [incDamageMod];
+                    outDamageModsPerSource[source] = [outDamageMod];
                 }
             }
         }
@@ -172,6 +176,10 @@ public class DamageModifiersContainer
         var incDamageModsPerSource = new Dictionary<ParserHelper.Source, List<IncomingDamageModifier>>();
         foreach (var incDamageMod in currentIncomingDamageMods)
         {
+            if (incDamageMod.DmgSrc != DamageModifiersUtils.DamageSource.Incoming)
+            {
+                throw new InvalidDataException("Incoming damage mods must have DmgSrc as Incoming");
+            }
             foreach (var source in incDamageMod.Srcs)
             {
                 if (incDamageModsPerSource.TryGetValue(source, out var list))
