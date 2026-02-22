@@ -88,6 +88,27 @@ internal class StatueOfDeath : HallOfChains
         return startToUse;
     }
 
+    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
+    {
+        if (agentData.GetNPCsByIDs([TargetID.TwistedSpirit, TargetID.LostSpirit1, TargetID.LostSpirit2]).Any(x => x.FirstAware < 7000))
+        {
+            return LogData.StartStatus.Late;
+        }
+        var baseStatus = base.GetLogStartStatus(combatData, agentData, logData);
+        var logStartNPCUpdateEvent = combatData.GetLogNPCUpdateEvents().FirstOrDefault();
+        if (baseStatus != LogData.StartStatus.Normal || logStartNPCUpdateEvent == null)
+        {
+            return baseStatus;
+        }
+        var peasants = new List<AgentItem>(agentData.GetNPCsByID(TargetID.AscalonianPeasant1));
+        peasants.AddRange(agentData.GetNPCsByID(TargetID.AscalonianPeasant2));
+        if (!peasants.Any(x => x.LastAware <= 0))
+        {
+            return LogData.StartStatus.Late;
+        }
+        return LogData.StartStatus.Normal;
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
