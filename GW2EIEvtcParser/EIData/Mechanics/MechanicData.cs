@@ -28,7 +28,8 @@ public class MechanicData
         var logMechanics = _mechanicLogs;
         //TODO_PERF(Rennorb) @find average complexity
         var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(logMechanics.Count / 2);
-        var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(logMechanics.Count);
+        var errorMechanicShortNaming = new Dictionary<string, Mechanic>(logMechanics.Count);
+        var errorMechanicNaming = new Dictionary<string, Dictionary<string, List<Mechanic>>>(logMechanics.Count);
         foreach (Mechanic m in logMechanics.Keys)
         {
             if (m.Ignored)
@@ -62,17 +63,22 @@ public class MechanicData
                 }
             }
             {
-                if (!errorMechanicNaming.TryGetValue(m.FullName, out var shortNameDict))
+                if (!errorMechanicShortNaming.TryGetValue(m.ShortName, out var mech))
                 {
-                    //TODO_PERF(Rennorb)
-                    shortNameDict = [];
-                    errorMechanicNaming[m.FullName] = shortNameDict;
+                    errorMechanicShortNaming.Add(m.ShortName, m);
                 }
-                if (!shortNameDict.TryGetValue(m.ShortName, out var descriptionDict))
+                else
+                {
+                    throw new InvalidDataException(m.ShortName + " is not a unique short name");
+                }
+            }
+            {
+
+                if (!errorMechanicNaming.TryGetValue(m.FullName, out var descriptionDict))
                 {
                     //TODO_PERF(Rennorb)
                     descriptionDict = [];
-                    shortNameDict[m.ShortName] = descriptionDict;
+                    errorMechanicNaming[m.FullName] = descriptionDict;
                 }
                 if (!descriptionDict.TryGetValue(m.Description, out var mList))
                 {
@@ -83,12 +89,13 @@ public class MechanicData
                 mList.Add(m);
                 if (mList.Count > 1)
                 {
-                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming configuration");
+                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming/desc configuration");
                 }
             }
         }
 
         Tracing.Trace.TrackAverageStat("errorMechanicConfig", errorMechanicConfig.Count);
+        Tracing.Trace.TrackAverageStat("errorMechanicShortNaming", errorMechanicShortNaming.Count);
         Tracing.Trace.TrackAverageStat("errorMechanicNaming", errorMechanicNaming.Count);
     }
 
