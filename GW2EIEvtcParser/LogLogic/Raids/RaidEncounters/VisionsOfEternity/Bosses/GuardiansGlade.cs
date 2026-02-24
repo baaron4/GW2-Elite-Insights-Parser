@@ -325,7 +325,8 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.Mode.Normal;
+        SingleActor kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
+        return (kela.GetHealth(combatData) > 70e6) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
