@@ -15,5 +15,9 @@ public abstract class EXTHealingEvent : EXTHealingExtensionEvent
     {
         return log.CombatData.EXTHealingCombatData.GetHealingType(Skill, log);
     }
+    internal override double GetValue()
+    {
+        return HealingDone;
+    }
 
 }

@@ -33,7 +33,7 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
 
     protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor)
     {
-        InsertMechanic(log, mechanicLogs, ba.Time, actor);
+        InsertMechanic(log, mechanicLogs, ba.Time, actor, ba.AppliedDuration);
     }
 
 

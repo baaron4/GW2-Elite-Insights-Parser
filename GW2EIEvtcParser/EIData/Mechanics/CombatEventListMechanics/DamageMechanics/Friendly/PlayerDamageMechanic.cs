@@ -17,7 +17,7 @@ internal class PlayerDamageMechanic : DamageMechanic
             {
                 if (Keep(c, log))
                 {
-                    InsertMechanic(log, mechanicLogs, c.Time, p);
+                    InsertMechanic(log, mechanicLogs, c.Time, p, c.HealthDamage);
                 }
             }
         }

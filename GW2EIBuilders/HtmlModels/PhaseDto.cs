@@ -142,8 +142,8 @@ internal class PhaseDto
     public List<DamageModData> DmgIncModifiersPers;
 
 
-    public List<List<int[]>> MechanicStats;
-    public List<List<int[]>> EnemyMechanicStats;
+    public List<List<double[]>> MechanicStats;
+    public List<List<double[]>> EnemyMechanicStats;
     public List<long> PlayerActiveTimes;
 
     public List<double>? MarkupLines;

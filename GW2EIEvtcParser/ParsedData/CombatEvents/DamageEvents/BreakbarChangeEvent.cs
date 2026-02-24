@@ -7,4 +7,9 @@ internal class BreakbarChangeEvent : SkillEvent
     {
         BreakbarChanged = Math.Round(evtcItem.Value / 10.0, 1);
     }
+
+    internal override double GetValue()
+    {
+        return BreakbarChanged;
+    }
 }

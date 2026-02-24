@@ -60,7 +60,7 @@ internal abstract class SkillMechanic<T> : IDBasedMechanic<T> where T : SkillEve
             {
                 if (TryGetActor(log, GetCreditedAgentItem(evt), regroupedMobs, out var amp) && Keep(evt, log))
                 {
-                    InsertMechanic(log, mechanicLogs, evt.Time, amp);
+                    InsertMechanic(log, mechanicLogs, evt.Time, amp, evt.GetValue());
                 }
             }
         }

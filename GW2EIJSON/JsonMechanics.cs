@@ -29,6 +29,10 @@ public class JsonMechanics
         /// Instance ID of the Actor
         /// </summary>
         public int Instid;
+        /// <summary>
+        /// Weight of the event
+        /// </summary>
+        public double Weight;
     }
 
 

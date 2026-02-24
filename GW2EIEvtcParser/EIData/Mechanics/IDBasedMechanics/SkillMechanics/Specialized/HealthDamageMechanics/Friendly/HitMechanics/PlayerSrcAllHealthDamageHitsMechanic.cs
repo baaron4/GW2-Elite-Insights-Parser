@@ -28,7 +28,7 @@ internal class PlayerSrcAllHealthDamageHitsMechanic : PlayerSrcHealthDamageHitMe
             {
                 if (Keep(ahde, log))
                 {
-                    InsertMechanic(log, mechanicLogs, ahde.Time, p);
+                    InsertMechanic(log, mechanicLogs, ahde.Time, p, ahde.HealthDamage);
                 }
             }
         }

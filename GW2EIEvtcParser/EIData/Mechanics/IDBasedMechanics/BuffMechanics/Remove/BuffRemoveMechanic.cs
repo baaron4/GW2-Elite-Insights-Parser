@@ -32,7 +32,7 @@ internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : Abs
 
     protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, T brae, SingleActor actor)
     {
-        InsertMechanic(log, mechanicLogs, brae.Time, actor);
+        InsertMechanic(log, mechanicLogs, brae.Time, actor, brae.RemovedDuration);
     }
 
     internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)

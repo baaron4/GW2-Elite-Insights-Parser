@@ -27,7 +27,7 @@ internal abstract class CastMechanic : IDBasedMechanic<CastEvent>
             {
                 if (TryGetActor(log, c.Caster, regroupedMobs, out var amp) && Keep(c, log))
                 {
-                    InsertMechanic(log, mechanicLogs, GetTime(c), amp);
+                    InsertMechanic(log, mechanicLogs, GetTime(c), amp, c.ActualDuration);
                 }
             }
         }

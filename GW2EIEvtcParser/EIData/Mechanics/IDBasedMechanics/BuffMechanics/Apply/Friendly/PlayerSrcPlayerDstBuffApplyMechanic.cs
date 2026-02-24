@@ -19,8 +19,8 @@ internal class PlayerSrcPlayerDstBuffApplyMechanic : PlayerSrcBuffApplyMechanic
         SingleActor? dst = MechanicHelper.FindPlayerActor(log, ba.To);
         if (dst != null)
         {
-            InsertMechanic(log, mechanicLogs, ba.Time, actor);
-            InsertMechanic(log, mechanicLogs, ba.Time, dst);
+            InsertMechanic(log, mechanicLogs, ba.Time, actor, ba.AppliedDuration);
+            InsertMechanic(log, mechanicLogs, ba.Time, dst, ba.AppliedDuration);
         }
     }
 }
