@@ -497,15 +497,28 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
 
         // Sand
-        foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
+        if (log.CombatData.GetGW2BuildEvent().Build >= GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance)
         {
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSand, out var sands))
+            foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
             {
-                AddSandDecorations(log, environmentDecorations, sands, 2500, Colors.Yellow, 0.1, true);
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSandBorder, out var borders))
+                {
+                    AddSandDecorations(log, environmentDecorations, borders, 2500, Colors.Yellow, 0.1, true, Colors.Red, 0.2);
+                }
             }
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSandBorder, out var borders))
+        } 
+        else
+        {
+            foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
             {
-                AddSandDecorations(log, environmentDecorations, borders, 3500, Colors.Red, 0.2, false);
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSand, out var sands))
+                {
+                    AddSandDecorations(log, environmentDecorations, sands, 2500, Colors.Yellow, 0.1, true);
+                }
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSandBorder, out var borders))
+                {
+                    AddSandDecorations(log, environmentDecorations, borders, 3500, Colors.Red, 0.2, false);
+                }
             }
         }
 
@@ -570,7 +583,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             base.SetInstanceBuffs(log, instanceBuffs);
         }
     }
-    private static void AddSandDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, IReadOnlyList<EffectEvent> effects, long defaultDuration, Color color, double opacity, bool filled)
+    private static void AddSandDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, IReadOnlyList<EffectEvent> effects, long defaultDuration, Color color, double opacity, bool filled, Color? borderColor = null, double borderOpacity = 0)
     {
         const uint maxInterval = 2500; // usually 2s interval
         const uint baseRadius = 240;
@@ -594,7 +607,14 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             var radius = (uint)(effect.Scale * baseRadius);
             var decoration = new CircleDecoration(radius, (start, end), color, opacity, new PositionConnector(effect.Position))
                 .UsingFilled(filled);
-            decorations.Add(decoration);
+            if (borderColor != null)
+            {
+                decorations.AddWithBorder(decoration, borderColor, borderOpacity);
+            }
+            else
+            {
+                decorations.Add(decoration);
+            }
             mergedStart = long.MaxValue;
         }
     }
