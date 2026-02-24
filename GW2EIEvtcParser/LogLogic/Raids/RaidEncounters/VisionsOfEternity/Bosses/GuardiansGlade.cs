@@ -432,7 +432,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                     var tantrumCasts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == KelaTantrum1 || x.SkillID == KelaTantrum2).ToList();
                     foreach (var cast in tantrumCasts)
                     {
-                        var decoration = new CircleDecoration(1800, (cast.Time, cast.EndTime), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false);
+                        var decoration = new CircleDecoration(1800, (cast.Time, cast.EndTime), Colors.DarkRed, 0.8, new AgentConnector(target)).UsingFilled(false);
                         replay.Decorations.Add(decoration);
                     }
                     break;
