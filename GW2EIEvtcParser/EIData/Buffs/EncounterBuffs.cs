@@ -758,6 +758,8 @@ internal static class EncounterBuffs
             new Buff("Biting Swarm", BitingSwarmStackingDamage, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, BuffImages.TargetedLocust),
             new Buff("Relentless Speed", RelentlessSpeed, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RelentlessSpeed),
             new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
+            new Buff("Achievement Eligibility: Surefooted", AchievementEligibilitySurefooted, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: See You Later, Alligator", AchievementEligibilitySeeYouLaterAlligator, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Convergences
             // - Outer Nayos
             new Buff("Unstable Attunement (SotO)", UnstableAttunementSotO, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.DebilitatingVoid),
