@@ -5571,6 +5571,7 @@ public static class SkillIDs
     public const long BitingSwarmStackingDamage = 79526;
     public const long POV_RelicOfFogGearBuff = 79529;
     public const long AchievementEligibilitySeeYouLaterAlligator = 79542;
+    public const long DefenderMoralBoost = 79544;
     public const long AchievementEligibilitySurefooted = 79546;
     #endregion
 

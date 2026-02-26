@@ -79,6 +79,7 @@ internal static class WvWBuffs
         new Buff("Healing Mist", ChillingFog_HealingMistBuff, Source.Common, BuffClassification.Defensive, BuffImages.HealingMistWvW).WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
         new Buff("Banner Drop Warning", BannerDropWarning, Source.Common, BuffClassification.Other, BuffImages.Tracked),
         new Buff("Greater Call of the Mists (WvW)", GreaterCallOfTheMistsWvW, Source.Common, BuffClassification.Other, BuffImages.GloriousFervor),
+        new Buff("Defender Moral Boost", DefenderMoralBoost, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
         // Edge of the Mists
         new Buff("Marked (Mists Arena)", MarkedMistsArena, Source.Common, BuffClassification.Debuff, SkillImages.FireTrebuchet),
         new Buff("Marked (Red Sentry Turret)", MarkedSentryTurretRed, Source.Common, BuffClassification.Debuff, SkillImages.FireTrebuchet),
