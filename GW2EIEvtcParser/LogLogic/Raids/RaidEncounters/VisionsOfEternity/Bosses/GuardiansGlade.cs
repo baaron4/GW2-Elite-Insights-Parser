@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -81,8 +81,17 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new PlayerDstHealthDamageHitMechanic(ScaldingWave, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "ScalWave.H", "Hit by Scalding Wave", "Scalding Wave Hit", 0),
         new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela", "Kela Fixated", 0),
         new PlayerDstBuffApplyMechanic(Hunted, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "Croc.Fix", "Fixated by Crocodilian Razortooth", "Croc Fixated", 0),
-        new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", 0),
         new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", 0),
+        // Loose Sand
+        new MechanicGroup([
+            new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", 0),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_Surefooted, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkPurple), "Achiv.Sand.L", "Achievement Eligibility: Surefooted Lost", "Achiv: Surefooted Lost", 0)
+                    .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_Surefooted, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Achiv.Sand.K", "Achievement Eligibility: Surefooted Kept", "Achiv: Surefooted Kept", 0)
+                    .UsingChecker((evt, log) => !evt.Lost)
+            ]),
+        ]),
         // Biting Swarm
         new MechanicGroup([
             new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", 0)
@@ -575,14 +584,55 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
+
+        var surefooted = new List<AchievementEligibilityEvent>();
+        var kelaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+        var sandApplications = log.CombatData.GetBuffApplyData(LooseSand);
+
+        foreach (AbstractBuffApplyEvent apply in sandApplications)
+        {
+            // If the Executor is alive, Loose Sand is applied by the Executor and you lose the eligibility.
+            // If the Executor is dead, Loose Sand is applied by Kela and you do NOT lose the eligibility.
+            // This will require a GW2 build check in case it gets fixed in game.
+            if (apply.By.IsSpecies(TargetID.ExecutorOfWaves) && apply.To.Is(p.AgentItem) && p.InAwareTimes(apply.Time))
+            {
+                InsertAchievementEligibityEventAndRemovePhase(kelaPhases, surefooted, apply.Time, Ach_Surefooted, p);
+            }
+        }
+
+        AddSuccessBasedAchievementEligibityEvents(kelaPhases, surefooted, Ach_Surefooted, p);
+        achievementEligibilityEvents.AddRange(surefooted);
     }
+
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
+
+        var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
+        var crocs = log.AgentData.GetNPCsByIDs([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth]).ToList();
+        bool found = false;
+
+        foreach (AgentItem croc in crocs)
+        {
+            if (log.CombatData.GetAnimatedCastData(croc).Where(x => x.SkillID == CrocodilianRazortoothTackle).Any())
+            {
+                found = true;
+                break;
+            }
+        }
+
+        foreach (var encounterPhase in encounterPhases)
+        {
+            if (encounterPhase.Success && encounterPhase.IsCM && !found)
+            {
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySeeYouLaterAlligator], 1, encounterPhase));
+            }
+        }
     }
+
     private static void AddSandDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, IReadOnlyList<EffectEvent> effects, long defaultDuration, Color color, double opacity, bool filled, Color? borderColor = null, double borderOpacity = 0)
     {
         const uint maxInterval = 2500; // usually 2s interval
