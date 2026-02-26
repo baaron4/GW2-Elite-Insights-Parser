@@ -27,4 +27,5 @@ public static class AchievementEligibilityIDs
     public const long Ach_Unplagued = 14;
     public const long Ach_TakingTurns = 15;
     public const long Ach_ThisBugCanDance = 15;
+    public const long Ach_Surefooted = 16;
 }
