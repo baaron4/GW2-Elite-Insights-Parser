@@ -612,7 +612,9 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
 
         var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
-        
+        var tackleCasts = log.CombatData.GetAnimatedCastData(CrocodilianRazortoothTackle)
+                .Where(x => x.Caster.IsAnySpecies([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth])).ToList();
+
         foreach (var phase in encounterPhases)
         {
             if (!phase.Success || !phase.IsCM)
@@ -620,20 +622,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                 continue;
             }
 
-            bool found = false;
-            var crocs = log.AgentData.GetNPCsByIDs([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth])
-                .Where(x => x.FirstAware >= phase.Start && x.LastAware <= phase.End);
-
-            foreach (AgentItem croc in crocs)
-            {
-                if (log.CombatData.GetAnimatedCastData(croc).Where(x => x.SkillID == CrocodilianRazortoothTackle).Any())
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
+            if (!tackleCasts.Any(x => phase.InInterval(x.Time)))
             {
                 instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySeeYouLaterAlligator], 1, phase));
             }
