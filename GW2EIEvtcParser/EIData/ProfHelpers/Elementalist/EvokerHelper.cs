@@ -147,7 +147,12 @@ internal static class EvokerHelper
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-15% after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-10% after familiar skill", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // 
-        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-10% under Protection while Toad active", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 

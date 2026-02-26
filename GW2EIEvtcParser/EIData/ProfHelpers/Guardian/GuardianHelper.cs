@@ -124,17 +124,26 @@ internal static class GuardianHelper
     [
         // Zeal
         // - Fiery Wrath
-        new BuffOnFoeDamageModifier(Mod_FieryWrath, Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FieryWrath, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_FieryWrath, Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FieryWrath, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnFoeDamageModifier(Mod_FieryWrath, Burning, "Fiery Wrath", "5% on burning target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FieryWrath, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
         // - Symbolic Exposure
         new BuffOnFoeDamageModifier(Mod_SymbolicExposure, Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.SymbolicExposure, DamageModifierMode.All),
         // - Symbolic Avenger
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2026Balance),
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger_Jan2026, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.January2026Balance),
+            .WithBuilds(GW2Builds.January2026Balance, GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger_Jan2026, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
         // - Furious Focus
         new BuffOnActorDamageModifier(Mod_FuriousFocus, Fury, "Furious Focus", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FuriousFocus, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.January2026Balance),
+            .WithBuilds(GW2Builds.January2026Balance, GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnActorDamageModifier(Mod_FuriousFocus, Fury, "Furious Focus", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FuriousFocus, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        new BuffOnActorDamageModifier(Mod_FuriousFocus, Fury, "Furious Focus", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FuriousFocus, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
 
         // Radiance
         // - Retribution
