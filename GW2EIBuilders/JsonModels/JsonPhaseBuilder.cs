@@ -65,7 +65,7 @@ internal static class JsonPhaseBuilder
                     var encounterPhase = (EncounterPhaseData)phase;
                     jsPhase.Success = encounterPhase.Success;
                     jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
-                    jsPhase.IsCM = encounterPhase.IsCM;
+                    jsPhase.IsCM = encounterPhase.IsCM || encounterPhase.IsLegendaryCM;
                     jsPhase.EIEncounterID = encounterPhase.ID;
                     jsPhase.EncounterIcon = encounterPhase.Icon;
                     jsPhase.EncounterIsLateStart = encounterPhase.IsLateStart;

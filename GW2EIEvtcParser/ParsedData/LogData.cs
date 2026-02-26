@@ -47,7 +47,7 @@ public class LogData
     {
         public bool Success => _logData.Success;
         public long Time => _logData.LogEnd;
-        private LogData _logData;
+        private readonly LogData _logData;
 
         internal LogSuccessHandler(LogData logData)
         {
@@ -72,8 +72,6 @@ public class LogData
         Unknown,
     }
     private Mode LogMode = Mode.NotSet;
-    private bool LogIsCM => LogMode == Mode.CMNoName || LogMode == Mode.CM;
-    private bool LogIsLegendaryCM => LogMode == Mode.LegendaryCM;
 
     public enum StartStatus
     {
@@ -111,7 +109,7 @@ public class LogData
         TriggerID = Logic.GetTriggerID();
     }
 
-    static internal LogLogic.LogLogic DetectLogic(int id, AgentData agentData, EvtcParserSettings parserSettings, EvtcVersionEvent evtcVersion)
+    internal static LogLogic.LogLogic DetectLogic(int id, AgentData agentData, EvtcParserSettings parserSettings, EvtcVersionEvent evtcVersion)
     {
         var targetID = GetTargetID(id);
         // Special cases
