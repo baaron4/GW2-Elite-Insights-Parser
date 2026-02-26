@@ -587,14 +587,14 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
         var surefooted = new List<AchievementEligibilityEvent>();
         var kelaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID && x.IsCM && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
-        var sandApplications = log.CombatData.GetBuffApplyData(LooseSand);
+        var sandApplications = log.CombatData.GetBuffApplyDataByIDByDst(LooseSand, p.AgentItem);
 
         foreach (AbstractBuffApplyEvent apply in sandApplications)
         {
             // If the Executor is alive, Loose Sand is applied by the Executor and you lose the eligibility.
             // If the Executor is dead, Loose Sand is applied by Kela and you do NOT lose the eligibility.
             // This will require a GW2 build check in case it gets fixed in game.
-            if (apply.By.IsSpecies(TargetID.ExecutorOfWaves) && apply.To.Is(p.AgentItem) && p.InAwareTimes(apply.Time))
+            if (apply.By.IsSpecies(TargetID.ExecutorOfWaves))
             {
                 InsertAchievementEligibityEventAndRemovePhase(kelaPhases, surefooted, apply.Time, Ach_Surefooted, p);
             }
@@ -612,23 +612,30 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
 
         var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
-        var crocs = log.AgentData.GetNPCsByIDs([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth]).ToList();
-        bool found = false;
-
-        foreach (AgentItem croc in crocs)
+        
+        foreach (var phase in encounterPhases)
         {
-            if (log.CombatData.GetAnimatedCastData(croc).Where(x => x.SkillID == CrocodilianRazortoothTackle).Any())
+            if (!phase.Success || !phase.IsCM)
             {
-                found = true;
-                break;
+                continue;
             }
-        }
 
-        foreach (var encounterPhase in encounterPhases)
-        {
-            if (encounterPhase.Success && encounterPhase.IsCM && !found)
+            bool found = false;
+            var crocs = log.AgentData.GetNPCsByIDs([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth])
+                .Where(x => x.FirstAware >= phase.Start && x.LastAware <= phase.End);
+
+            foreach (AgentItem croc in crocs)
             {
-                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySeeYouLaterAlligator], 1, encounterPhase));
+                if (log.CombatData.GetAnimatedCastData(croc).Where(x => x.SkillID == CrocodilianRazortoothTackle).Any())
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySeeYouLaterAlligator], 1, phase));
             }
         }
     }
