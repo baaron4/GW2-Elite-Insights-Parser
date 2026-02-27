@@ -95,7 +95,10 @@
                 var phase = this.getPhaseData(id);
                 var target = this.getTargetData(phase.targets[0]);
                 var breakbarTaken = target.details.dmgDistributionsTaken[id].contributedBreakbarDamage;
-                return this.getPhaseTooltip(id) + '<br /> Breakbar Damage: ' + breakbarTaken;
+                return this.getPhaseTooltip(id) +
+                    '<br /> Breakbar Active: ' + phase.breakbarStart +
+                    '<br /> Breakbar Damage: ' + breakbarTaken +
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + phase.breakbarRecovered;
             }
         }
     });
