@@ -406,10 +406,6 @@ public class LogData
             {
                 throw new InvalidDataException("Phases can only have targets");
             }
-            if (_phases.Any(x => x.BreakbarPhase && x.Targets.Count != 1))
-            {
-                throw new InvalidDataException("Breakbar phases can only have one target");
-            }
             _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
             var badPhases = _phases.Where(x => x.Start < LogStart || x.End > LogEnd);
             if (badPhases.Any())

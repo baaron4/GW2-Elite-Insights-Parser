@@ -398,7 +398,7 @@ public abstract class LogLogic
 
                 long start = Math.Max(breakbarActive.Start - BreakbarPhaseTimeBuildup, log.LogData.LogStart);
                 long end = Math.Min(breakbarActive.End, log.LogData.LogEnd);
-                var phase = new BreakbarPhaseData(start, end, target.Character + " Breakbar " + ++i);
+                var phase = new BreakbarPhaseData(start, end, target.Character + " Breakbar " + ++i, start - breakbarActive.Start);
                 phase.AddTarget(target, log);
                 breakbarPhases.Add(phase);
             }

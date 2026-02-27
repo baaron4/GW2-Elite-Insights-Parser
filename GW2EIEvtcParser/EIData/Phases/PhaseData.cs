@@ -91,13 +91,13 @@ public abstract class PhaseData
         return minEnd - maxStart > 0;
     }
 
-    internal void RemoveTarget(SingleActor target)
+    internal virtual void RemoveTarget(SingleActor target)
     {
         //TODO_PERF(Rennorb)
         _targets.Remove(target);
     }
 
-    internal void AddTarget(SingleActor? target, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
+    internal virtual void AddTarget(SingleActor? target, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
     {
         if (target == null)
         {
@@ -123,7 +123,7 @@ public abstract class PhaseData
         }
     }
 
-    internal void AddTargets(IEnumerable<SingleActor?> targets, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
+    internal virtual void AddTargets(IEnumerable<SingleActor?> targets, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
     {
         foreach (SingleActor? target in targets)
         {
