@@ -94,6 +94,11 @@ internal static class JsonPhaseBuilder
             {
                 jsPhase.SubPhases = subPhases;
             }
+        } 
+        else
+        {
+            jsPhase.BreakbarRecovered = ((BreakbarPhaseData)phase).BreakbarRecovered;
+            jsPhase.BreakbarActive = phase.Start + ((BreakbarPhaseData)phase).Offset;
         }
         return jsPhase;
     }

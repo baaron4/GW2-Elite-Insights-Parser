@@ -121,4 +121,15 @@ public class JsonPhase
     /// The targets breakbar will be active 2 seconds after the start of the phase
     /// </summary>
     public bool BreakbarPhase;
+
+    /// <summary>
+    /// Only relevant for breakbar phases \n
+    /// The amount of breakbar recovered by the target. Breakbar recovery is defined as "Regeneration + Soft CC", as such it may be negative.
+    /// </summary>
+    public double BreakbarRecovered;
+    /// <summary>
+    /// Only relevant for breakbar phases \n
+    /// Time at which the breakbar became active.
+    /// </summary>
+    public long BreakbarActive;
 }
