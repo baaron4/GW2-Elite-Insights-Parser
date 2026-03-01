@@ -31,15 +31,15 @@ internal class Sabetha : SpiritVale
             new PlayerDstHealthDamageHitMechanic(FlakShot, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.LightOrange), "Flak", "Flak Shot (Fire Patches)","Flak Shot", 0),
             new PlayerDstHealthDamageHitMechanic(CannonBarrage, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Cannon", "Cannon Barrage (stood in AoE)","Cannon Shot", 0),
             new PlayerDstHealthDamageHitMechanic(FlameBlast, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Yellow), "Karde Flame", "Flame Blast (Karde's Flamethrower)","Flamethrower (Karde)", 0),
-            new PlayerDstHealthDamageHitMechanic(BanditKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by Bandit","Bandit Kick", 0)
+            new PlayerDstHealthDamageHitMechanic(BanditKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick.B", "Kicked by Bandit","Bandit Kick", 0)
                 .UsingBuffChecker(Stability, false),
             new PlayerCastStartMechanic(KickHeavyBomb, new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", 0)
                 .UsingChecker((ce, log) => !ce.IsInterrupted && !ce.IsUnknown),
             new MechanicGroup([
-                new EnemyCastStartMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Platform Quake (Breakbar)","Breakbar",0),
-                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Platform Quake (Breakbar broken) ","CCed", 0)
+                new EnemyCastStartMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.K", "Platform Quake (Breakbar)","Breakbar",0),
+                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.K", "Platform Quake (Breakbar broken) ","CCed", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 4400),
-                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Platform Quake (Breakbar failed) ","CC Fail", 0)
+                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.K Fail", "Platform Quake (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker( (ce,log) =>  ce.ActualDuration > 4400),
             ]),
         ]);

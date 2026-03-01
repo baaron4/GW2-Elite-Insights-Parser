@@ -39,10 +39,10 @@ internal class ValeGuardian : SpiritVale
                 new PlayerDstHealthDamageHitMechanic(UnstablePylonGreen, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G", "Unstable Pylon (Green Floor dmg)","Floor dmg", 0),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Magic Storm (Breakbar)","Breakbar",0),
-                new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Magic Storm (Breakbar broken) ","CCed", 0)
+                new EnemyCastStartMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.VG", "Magic Storm (Breakbar)","Breakbar",0),
+                new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.VG", "Magic Storm (Breakbar broken) ","CCed", 0)
                     .UsingChecker((c, log) => c.ActualDuration <= 8544),
-                new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Magic Storm (Breakbar failed) ","CC Fail", 0)
+                new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.VG Fail", "Magic Storm (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker((c, log) => c.ActualDuration > 8544),
             ]),
         ]);

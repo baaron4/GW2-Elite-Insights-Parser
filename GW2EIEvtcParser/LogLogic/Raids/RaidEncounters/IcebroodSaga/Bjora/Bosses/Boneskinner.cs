@@ -36,7 +36,7 @@ internal class Boneskinner : Bjora
             new PlayerDstHealthDamageHitMechanic(BarrageWispBoneskinner, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "Barrage.H", "Hit by Barrage (Wisp AoE)", "Barrage Hit", 0),
             new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
             new EnemyCastStartMechanic(BoneskinnerBreakbar, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Breakbar", "Casting a Breakbar", "Breakbar", 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Pink), "Exposed", "Gained Exposed (Breakbar broken)", "Exposed", 0),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Pink), "Exposed.E", "Gained Exposed (Breakbar broken)", "Exposed", 0),
         ])
         );
         Extension = "boneskin";

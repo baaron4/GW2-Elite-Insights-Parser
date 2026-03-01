@@ -38,17 +38,17 @@ internal class SoullessHorror : HallOfChains
                 new PlayerDstBuffApplyMechanic(FixatedSH, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated (Special Action Key)","Fixated", 0),
                 new PlayerDstBuffApplyMechanic(Necrosis, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Necrosis", "Necrosis (Tanking Debuff)","Necrosis Debuff", 50),
             ]),
-            new PlayerDstHealthDamageHitMechanic(CorruptTheLiving, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin", "Corrupt the Living (Torment+Poison Spin)","Torment+Poison Spin", 0),
+            new PlayerDstHealthDamageHitMechanic(CorruptTheLiving, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin.SH", "Corrupt the Living (Torment+Poison Spin)","Torment+Poison Spin", 0),
             new PlayerDstHealthDamageHitMechanic(WurmSpit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit", "Wurm Spit","Wurm Spit", 0),
             new MechanicGroup([
-                new EnemyCastStartMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Howling Death (Breakbar)","Breakbar", 0),
-                new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Howling Death (Breakbar) broken","CCed", 0)
+                new EnemyCastStartMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.SH", "Howling Death (Breakbar)","Breakbar", 0),
+                new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.SH", "Howling Death (Breakbar) broken","CCed", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 6800),
-                new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Howling Death (Breakbar failed) ","CC Fail", 0)
+                new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.SH Fail", "Howling Death (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker((ce,log) => ce.ActualDuration > 6800),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(SoulRift, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem", "Soul Rift (stood in Golem Aoe)","Golem Aoe", 0),
+                new PlayerDstHealthDamageHitMechanic(SoulRift, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem.SH", "Soul Rift (stood in Golem Aoe)","Golem Aoe", 0),
                 new PlayerSrcBuffApplyMechanic(Immobile, new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem", "Immobilized Golem","Immobilized Golem", 50).UsingChecker((ce, log) => ce.To.IsSpecies(TargetID.TormentedDead)),
             ]),
         ]);

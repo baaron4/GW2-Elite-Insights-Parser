@@ -90,8 +90,10 @@ internal class Qadim : MythwrightGambit
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K", "Pyre Killed","Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K", "Stab Pyre Killed","Stab Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K", "Protect Pyre Killed","Protect Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
+                    .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
+                    .WithBuilds(GW2Builds.May2021Balance),
             ]),
         ]);
     public Qadim(int triggerID) : base(triggerID)

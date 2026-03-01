@@ -20,7 +20,7 @@ internal class Arkk : ShatteredObservatory
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", 0),
+                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike.A", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", 0),
                     new PlayerDstHealthDamageHitMechanic(HorizonStrikeNormal, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm", "Horizon Strike (normal during Arkk)","Horizon Strike (normal, Arkk)", 0),
                 ]
             ),

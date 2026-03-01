@@ -27,19 +27,19 @@ internal class Ensolyss : Nightmare
                     new PlayerDstHealthDamageHitMechanic(UpswingHallucination, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
                 ]
             ),
-            new PlayerDstHealthDamageHitMechanic([ NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo", "Nightmare Miasma (Goo)","Miasma", 0),
+            new PlayerDstHealthDamageHitMechanic([ NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo.E", "Nightmare Miasma (Goo)","Miasma", 0),
             new MechanicGroup(
                 [
-                    new EnemyCastStartMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "After Phase CC","Breakbar", 0),
-                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "After Phase CC Failed","CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
+                    new EnemyCastStartMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.E", "After Phase CC","Breakbar", 0),
+                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.E Fail", "After Phase CC Failed","CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
                     new EnemyCastEndMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "After Phase CC Success","CCed", 0).UsingChecker( (ce, log) => ce.ActualDuration < 15260),
                     new PlayerDstHealthDamageHitMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB", "Knockback hourglass during CC","CC KB", 0),
                 ]
             ),
-            new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (bubble attack)","Bubble", 0),
-            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash Ensolyss (half circle Knockback)","Tail Lash (Ensolyss)", 0),
+            new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble.E", "Nightmare Devastation (bubble attack)","Bubble", 0),
+            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail.E", "Tail Lash Ensolyss (half circle Knockback)","Tail Lash (Ensolyss)", 0),
             new PlayerDstHealthDamageHitMechanic(RampageEnsolyss, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage", "Rampage (asterisk shaped Arrow attack)","Rampage", 150),
-            new PlayerDstHealthDamageHitMechanic(CausticGrasp, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull", "Caustic Grasp (Arena Wide Pull)","Pull", 0),
+            new PlayerDstHealthDamageHitMechanic(CausticGrasp, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull.E", "Caustic Grasp (Arena Wide Pull)","Pull", 0),
             new PlayerDstHealthDamageHitMechanic(TormentingBlast, new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter", "Tormenting Blast (Two Quarter Circle attacks)","Quarter circle", 0),
         ]);
     public Ensolyss(int triggerID) : base(triggerID)

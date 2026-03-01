@@ -18,15 +18,15 @@ internal class Siax : Nightmare
     internal readonly MechanicGroup Mechanics = new(
         [
             new PlayerDstHealthDamageHitMechanic(VileSpit, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", 0),
-            new PlayerDstHealthDamageHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash Siax (half circle Knockback)","Tail Lash (Siax)", 0),
+            new PlayerDstHealthDamageHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail.S", "Tail Lash Siax (half circle Knockback)","Tail Lash (Siax)", 0),
             new SpawnMechanic((int)TargetID.NightmareHallucinationSiax, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu", "Nightmare Hallucination Spawn","Hallucination", 0),
             new MechanicGroup(
                 [
                     new EnemyCastStartMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase", "Phase Start","Phase", 0),
                     new EnemyCastEndMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail", "Phase Fail (Failed to kill Echos in time)","Phase Fail", 0)
                         .UsingChecker((ce,log) => ce.ActualDuration >= 20649), //
-                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC", "Breakbar Start","Breakbar", 0),
-                    new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC Fail", "Failed to CC in time","CC Fail", 0)
+                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC.S", "Breakbar Start","Breakbar", 0),
+                    new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC.S Fail", "Failed to CC in time","CC Fail", 0)
                         .UsingChecker( (ce,log) => ce.ActualDuration >= 15232),
                 ]
             ),

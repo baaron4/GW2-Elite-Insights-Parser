@@ -22,7 +22,7 @@ internal class StatueOfDarkness : HallOfChains
                 new PlayerCastStartMechanic(Flare, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate", "Flare (detonate light orb to incapacitate eye)","Detonate orb", 0)
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
-            new PlayerDstHealthDamageHitMechanic(PiercingShadow, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin", "Piercing Shadow (damaging spin to all players in sight)","Eye Spin", 0),
+            new PlayerDstHealthDamageHitMechanic(PiercingShadow, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin.SoD", "Piercing Shadow (damaging spin to all players in sight)","Eye Spin", 0),
             new PlayerDstHealthDamageHitMechanic(DeepAbyss, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam", "Deep Abyss (ticking eye beam)","Eye Beam", 0),
             new MechanicGroup([
                 new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate", "Applied Daze/Fear/Knockdown on Eye of Fate","CC Fate", 50)

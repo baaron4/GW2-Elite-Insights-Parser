@@ -23,7 +23,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             new PlayerDstHealthDamageHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "Red.VermIndi.H", "Hit by Boiling Aether (Vermilion & Indigo)", "Boiling Aether Hit (Vermilion & Indigo)", 0),
             // Vermilion
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied Vermilion", "Fixated Applied to Vermilion", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM])),
                 new MechanicGroup([
                     new MechanicGroup([
@@ -40,7 +40,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             ]),
             // Arsenite
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied Arsenite", "Fixated Applied to Arsenite", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM])),
                 new PlayerDstHealthDamageHitMechanic([BoilingAetherGreenNM, BoilingAetherGreenCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Red.Arse.H", "Hit by Boiling Aether (Arsenite)", "Boiling Aether Hit (Arsenite)", 0),
                 new MechanicGroup([
@@ -58,7 +58,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             ]),
             // Indigo
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied Indigo", "Fixated Applied to Indigo", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM])),
                 new PlayerDstHealthDamageHitMechanic([TriBolt, TriBoltCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "TriBolt.H", "Hit by Tri Bolt (Spread AoEs)", "Tri Bolt Hit", 150),
                 new PlayerDstHealthDamageHitMechanic([Tribocharge, TribochargeCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),

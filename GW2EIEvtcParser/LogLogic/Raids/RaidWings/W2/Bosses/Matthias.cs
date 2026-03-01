@@ -32,7 +32,7 @@ internal class Matthias : SalvationPass
                     .WithMinions(),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado Matthias)","Tornado (Matthias)", 250),
+                new PlayerDstHealthDamageHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado.M", "Fiery Vortex (Tornado Matthias)","Tornado (Matthias)", 250),
                 new PlayerDstBuffApplyMechanic(Slow, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD", "Knockdown by Icy Patch","Icy Patch KD", 0)
                     .UsingBuffChecker(Stability, false)
                     .UsingChecker((br,log) => br.AppliedDuration == 10000),

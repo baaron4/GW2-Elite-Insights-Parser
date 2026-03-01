@@ -17,8 +17,8 @@ internal class TwinLargos : MythwrightGambit
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Breakbar","Breakbar", 0),
-                new EnemyCastEndMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", 0),
+                new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.L", "Breakbar","Breakbar", 0),
+                new EnemyCastEndMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.L", "Breakbar broken","CCed", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Waterlogged, new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff", "Waterlogged (stacking water debuff)","Waterlogged", 0),
