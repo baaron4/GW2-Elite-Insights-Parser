@@ -548,12 +548,26 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in waves)
             {
-                // TODO - Investigate if it's possible to update the behaviour of the wave to be a moving rectangle.
-                // If it's possible, update the indicator above to last since its spawn time until the wave ends.
+                int durationWave = 4666;
+                lifespan = effect.ComputeLifespan(log, durationWave);
+                var rotationAngle = new AngleConnector(effect.Rotation.Z);
+
+                // Background wave
                 var position = new PositionConnector(effect.Position).WithOffset(new Vector3(0f, -0.5f * waveLength, 0f), true);
-                var decoration = new RectangleDecoration(2000, waveLength, effect.ComputeLifespan(log, 4666), Colors.LightBlue, 0.2, position)
-                   .UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                var decoration = new RectangleDecoration(2000, waveLength, lifespan, Colors.LightBlue, 0.2, position)
+                   .UsingRotationConnector(rotationAngle);
                 environmentDecorations.Add(decoration);
+
+                // Moving wave
+                int velocity = 1000;
+                uint movingWaveLength = 300;
+                var direction = new Vector3((float)Math.Cos(effect.Orientation.Z + Math.PI / 2), (float)Math.Sin(effect.Orientation.Z + Math.PI / 2), 0);
+                var shiftedStart = effect.Position + direction * movingWaveLength / 2;
+                var initialPosition = new ParametricPoint3D(shiftedStart, lifespan.start);
+                var finalPosition = new ParametricPoint3D(shiftedStart + (velocity * durationWave / 1000.0f) * direction, lifespan.end);
+                var movingWave = new RectangleDecoration(2000, movingWaveLength, lifespan, Colors.CobaltBlue, 0.5, new InterpolationConnector([initialPosition, finalPosition]))
+                   .UsingRotationConnector(rotationAngle);
+                environmentDecorations.Add(movingWave);
             }
         }
 
