@@ -126,10 +126,12 @@ public class JsonPhase
     /// Only relevant for breakbar phases \n
     /// The amount of breakbar recovered by the target. Breakbar recovery is defined as "Regeneration + Soft CC", as such it may be negative.
     /// </summary>
-    public double BreakbarRecovered;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public double? BreakbarRecovered;
     /// <summary>
     /// Only relevant for breakbar phases \n
     /// Time at which the breakbar became active.
     /// </summary>
-    public long BreakbarActive;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public long? BreakbarActive;
 }
