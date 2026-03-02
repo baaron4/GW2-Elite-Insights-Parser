@@ -1,5 +1,11 @@
 var NAVTREEINDEX3 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a31330062483063f1e5acb9b01a2d3ac8":[1,0,0,3,0],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a32d905a979ecfbb52c44d77f76900a55":[0,0,0,3,20],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a32d905a979ecfbb52c44d77f76900a55":[1,0,0,3,20],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a36d801e8bb1b334e1b1cc2f63c153c2c":[0,0,0,3,22],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a36d801e8bb1b334e1b1cc2f63c153c2c":[1,0,0,3,22],
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a397b1cb4cb8eef6fc8af4c33920e6024":[0,0,0,3,46],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a397b1cb4cb8eef6fc8af4c33920e6024":[1,0,0,3,46],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a527fb6a4522c2796c08eb518da2803b8":[0,0,0,3,38],
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a527fb6a4522c2796c08eb518da2803b8":[1,0,0,3,38],
@@ -243,11 +249,5 @@ var NAVTREEINDEX3 =
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a1d1d265d1c72e0cb00dc8bb48a90bc11":[1,0,0,14,2,22],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a245ec103eb4a3cea3106937122a17b3b":[0,0,0,14,2,25],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a245ec103eb4a3cea3106937122a17b3b":[1,0,0,14,2,25],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a2de544156f019b3e571bd36e8d40876e":[0,0,0,14,2,8],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a2de544156f019b3e571bd36e8d40876e":[1,0,0,14,2,8],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a40648ecf4798a86eeaffa7a3b05db44c":[0,0,0,14,2,23],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a40648ecf4798a86eeaffa7a3b05db44c":[1,0,0,14,2,23],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a49c939db28eea476e32c2fdd4bffe066":[0,0,0,14,2,16],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a49c939db28eea476e32c2fdd4bffe066":[1,0,0,14,2,16],
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a58af3c134130048f80389dcdf2cb422e":[0,0,0,14,2,15]
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a2de544156f019b3e571bd36e8d40876e":[0,0,0,14,2,8]
 };

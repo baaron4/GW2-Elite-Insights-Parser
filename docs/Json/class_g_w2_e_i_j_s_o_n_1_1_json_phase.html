@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.18.1.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.19.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -161,6 +161,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>BreakbarPhase</b></td
 <tr class="memdesc:a9de854e4fa498844fa1b28b8bee42b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that the phase is a breakbar phase <br  />
 Only one target will be present in <a class="el" href="#af9254a49a7c54cc358f277f48fe9e426" title="DEPRECATED please use JsonPhase.TargetPrioritiesinstead.  Index of targets tracked during the phase.">Targets</a> <br  />
 The targets breakbar will be active 2 seconds after the start of the phase. <br /></td></tr>
+<tr class="memitem:a87d16c8215a984e679572c134e11453b" id="r_a87d16c8215a984e679572c134e11453b"><td class="memItemLeft" align="right" valign="top"><a id="a87d16c8215a984e679572c134e11453b" name="a87d16c8215a984e679572c134e11453b"></a>
+double?&#160;</td><td class="memItemRight" valign="bottom"><b>BreakbarRecovered</b></td></tr>
+<tr class="memdesc:a87d16c8215a984e679572c134e11453b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only relevant for breakbar phases <br  />
+The amount of breakbar recovered by the target. Breakbar recovery is defined as "Regeneration + Soft CC", as such it may be negative. <br /></td></tr>
+<tr class="memitem:a0ef54f12c513178fd7cbea1d4e78b905" id="r_a0ef54f12c513178fd7cbea1d4e78b905"><td class="memItemLeft" align="right" valign="top"><a id="a0ef54f12c513178fd7cbea1d4e78b905" name="a0ef54f12c513178fd7cbea1d4e78b905"></a>
+long?&#160;</td><td class="memItemRight" valign="bottom"><b>BreakbarActive</b></td></tr>
+<tr class="memdesc:a0ef54f12c513178fd7cbea1d4e78b905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only relevant for breakbar phases <br  />
+Time at which the breakbar became active. <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class corresponding to a phase. </p>

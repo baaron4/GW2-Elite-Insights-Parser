@@ -1,6 +1,8 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_phase =
 [
+    [ "BreakbarActive", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a0ef54f12c513178fd7cbea1d4e78b905", null ],
     [ "BreakbarPhase", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a9de854e4fa498844fa1b28b8bee42b63", null ],
+    [ "BreakbarRecovered", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a87d16c8215a984e679572c134e11453b", null ],
     [ "EIEncounterID", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a598611f0cf91154f665a5491babb82c7", null ],
     [ "EncounterIcon", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a75a3832eacf7dc24cbdf6d7d76dd357f", null ],
     [ "EncounterIsLateStart", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#aa0a170275326d363874d8ad4e00514c8", null ],
