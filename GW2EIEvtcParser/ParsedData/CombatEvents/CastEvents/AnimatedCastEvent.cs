@@ -144,4 +144,13 @@ public class AnimatedCastEvent : CastEvent
         }
         return EndTime;
     }
+
+    public bool IntersectsExpectedCastWindow(long time, long threshold = ParserHelper.ServerDelayConstant)
+    {
+        return time >= Time - threshold && ExpectedEndTime + threshold >= time;
+    }
+    public bool IntersectsActualCastWindow(long time, long threshold = ParserHelper.ServerDelayConstant)
+    {
+        return time >= Time - threshold && EndTime + threshold >= time;
+    }
 }

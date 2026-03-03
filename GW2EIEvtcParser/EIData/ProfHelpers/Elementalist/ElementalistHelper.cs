@@ -423,7 +423,7 @@ internal static class ElementalistHelper
             {
                 SkillModeDescriptor skill;
                 string icon;
-                var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
+                var firestormCastsOnEffect = firestormCasts.Where(x => x.IntersectsExpectedCastWindow(effect.Time)).ToList();
                 if (firestormCastsOnEffect.Count == 1)
                 {
                     skill = new SkillModeDescriptor(player, Spec.Elementalist, firestormCastsOnEffect.First().SkillID);

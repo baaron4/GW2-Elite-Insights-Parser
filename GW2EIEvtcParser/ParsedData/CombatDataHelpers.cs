@@ -21,7 +21,7 @@ partial class CombatData
     public bool IsCasting(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         return GetAnimatedCastData(skillID)
-            .Any(cast => cast.Caster.Is(agent) && cast.Time - epsilon <= time && cast.EndTime + epsilon >= time);
+            .Any(cast => cast.Caster.Is(agent) && cast.IntersectsActualCastWindow(time, epsilon));
     }
     public bool HasGainedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
