@@ -553,45 +553,69 @@ internal static class GuardianHelper
         }
     }
 
-    internal static void AddSymbolDecorationsWithLesserUncertainty(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, (GUID regular, GUID large) effects, long duration, string icon)
+    private static void AddSymbolDecorationsWithLesserUncertainty(List<AnimatedCastEvent> mainSkillCasts, PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, GUID effectGUID, uint radius, long duration, string icon)
     {
-        var durationLarge = duration + 2000;
-        var mainSkillCasts = player.GetAnimatedCastEvents(log).Where(x => x.SkillID == mainSkill.SkillID).ToList();
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.regular, out var symbols))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out var symbols))
         {
-            foreach (EffectEvent effect in symbols)
+            var symbolIndex = 0;
+            var candidateMainSymbols = new Dictionary<AnimatedCastEvent, List<EffectEvent>>(mainSkillCasts.Count);
+            foreach (var cast in mainSkillCasts)
             {
-                var lifespan = effect.ComputeLifespan(log, duration);
-                var mainSkillCastsOnEffect = mainSkillCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
-                SkillModeDescriptor skill;
-                if (mainSkillCastsOnEffect.Count <= 1)
+                for (; symbolIndex < symbols.Count; symbolIndex++)
+                {
+                    var symbolEffect = symbols[symbolIndex];
+                    if (cast.IntersectsExpectedCastWindow(symbolEffect.Time))
+                    {
+                        if (candidateMainSymbols.TryGetValue(cast, out var candidates))
+                        {
+                            candidates.Add(symbolEffect);
+                        }
+                        else
+            {
+                            candidateMainSymbols[cast] = [symbolEffect];
+                        }
+                    }
+                    // Effect after cast
+                    else if (cast.ExpectedEndTime <= symbolEffect.Time + ServerDelayConstant)
                 {           
-                    skill = mainSkillCasts.Count == 1 ? mainSkill : lesserSkill;
+                        break;
                 } 
+                    // Effect before cast
                 else
                 {
-                    skill = uncertainSkill;
+                        var skill = lesserSkill;
+                        var lifespan = symbolEffect.ComputeLifespan(log, duration);
+                        AddCircleSkillDecoration(replay, symbolEffect, Colors.Guardian, skill, lifespan, radius, icon);
                 }
                 AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 180, icon);
             }
         }
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effects.large, out var symbolsLarge))
+            // All remaining effects are without cast
+            for (; symbolIndex < symbols.Count; ++symbolIndex)
         {
-            foreach (EffectEvent effect in symbolsLarge)
+                var symbolEffect = symbols[symbolIndex];
+                var skill = lesserSkill;
+                var lifespan = symbolEffect.ComputeLifespan(log, duration);
+                AddCircleSkillDecoration(replay, symbolEffect, Colors.Guardian, skill, lifespan, radius, icon);
+            }
+            foreach (var pair in candidateMainSymbols)
             {
-                var lifespan = effect.ComputeLifespan(log, durationLarge);
-                var mainSkillCastsOnEffect = mainSkillCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
-                SkillModeDescriptor skill;
-                if (mainSkillCastsOnEffect.Count <= 1)
+                SkillModeDescriptor skill = pair.Value.Count == 1 ? mainSkill : uncertainSkill;
+                foreach (EffectEvent effect in pair.Value)
                 {
-                    skill = mainSkillCasts.Count == 1 ? mainSkill : lesserSkill;
+                    var lifespan = effect.ComputeLifespan(log, duration);
+                    AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, radius, icon);
                 }
-                else
-                {
-                    skill = uncertainSkill;
+
                 }
-                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 240, icon);
             }
         }
+
+    internal static void AddSymbolDecorationsWithLesserUncertainty(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, (GUID regular, GUID large) effects, long duration, string icon)
+    {
+        var durationLarge = duration + 2000;
+        var mainSkillCasts = player.GetAnimatedCastEvents(log).Where(x => x.SkillID == mainSkill.SkillID && !x.IsInterrupted).ToList();
+        AddSymbolDecorationsWithLesserUncertainty(mainSkillCasts, player, log, replay, mainSkill, lesserSkill, uncertainSkill, effects.regular, 180, duration, icon);
+        AddSymbolDecorationsWithLesserUncertainty(mainSkillCasts, player, log, replay, mainSkill, lesserSkill, uncertainSkill, effects.large, 240, duration + 2000, icon);
     }
 }
