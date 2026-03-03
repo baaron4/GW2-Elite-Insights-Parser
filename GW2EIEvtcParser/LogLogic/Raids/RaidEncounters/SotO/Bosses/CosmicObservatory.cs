@@ -482,12 +482,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
             }
         }
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-        // Security check to stop dagda from going back to 100%
-        var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-        if (dagdaHPUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(dagdaHPUpdates.LastOrDefault()!) == 100)
-        {
-            dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[^2].DstAgent);
-        }
+        SanitizeLastHealthUpdateEvents(dagda, combatData);
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
