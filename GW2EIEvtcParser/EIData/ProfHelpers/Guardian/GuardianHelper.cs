@@ -81,7 +81,7 @@ internal static class GuardianHelper
             .UsingNoAnimatedCastChecker(SymbolOfBlades)
             .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
-        new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution)
+        new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution_LuminaryLuminousStaffSymbol)
             .UsingNoAnimatedCastChecker(SymbolOfWrath_SymbolOfResolution)
             .UsingNoAnimatedCastChecker(LuminousStaff)
             .UsingNotAccurate()
@@ -356,6 +356,7 @@ internal static class GuardianHelper
         );
 
         // Symbol of Resolution & Lesser Symbol of Resolution
+        // TODO, handle collision with Luminous Staff symbol (no writ of persistence)
         AddSymbolDecorationsWithLesserUncertainty(
             player,
             log,
@@ -363,7 +364,7 @@ internal static class GuardianHelper
             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution),
             new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution),
             new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser),
-            (EffectGUIDs.GuardianSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge),
+            (EffectGUIDs.GuardianSymbolOfResolution_LuminaryLuminousStaffSymbol, EffectGUIDs.GuardianSymbolOfResolutionLarge),
             4000,
             EffectImages.EffectSymbolOfResolution
         );
