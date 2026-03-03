@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.LogLogic;
-using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -84,6 +83,7 @@ internal static class GuardianHelper
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolution)
             .UsingNoAnimatedCastChecker(SymbolOfWrath_SymbolOfResolution)
+            .UsingNoAnimatedCastChecker(LuminousStaff)
             .UsingNotAccurate()
             .UsingOrigin(InstantCastOrigin.Trait),
         new EffectCastFinder(LesserSymbolOfResolution, EffectGUIDs.GuardianSymbolOfResolutionLarge)
@@ -571,28 +571,27 @@ internal static class GuardianHelper
                             candidates.Add(symbolEffect);
                         }
                         else
-            {
+                        {
                             candidateMainSymbols[cast] = [symbolEffect];
                         }
                     }
                     // Effect after cast
                     else if (cast.ExpectedEndTime <= symbolEffect.Time + ServerDelayConstant)
-                {           
+                    {
                         break;
-                } 
+                    }
                     // Effect before cast
-                else
-                {
+                    else
+                    {
                         var skill = lesserSkill;
                         var lifespan = symbolEffect.ComputeLifespan(log, duration);
                         AddCircleSkillDecoration(replay, symbolEffect, Colors.Guardian, skill, lifespan, radius, icon);
+                    }
                 }
-                AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, 180, icon);
             }
-        }
             // All remaining effects are without cast
             for (; symbolIndex < symbols.Count; ++symbolIndex)
-        {
+            {
                 var symbolEffect = symbols[symbolIndex];
                 var skill = lesserSkill;
                 var lifespan = symbolEffect.ComputeLifespan(log, duration);
@@ -607,9 +606,9 @@ internal static class GuardianHelper
                     AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, radius, icon);
                 }
 
-                }
             }
         }
+    }
 
     internal static void AddSymbolDecorationsWithLesserUncertainty(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, (GUID regular, GUID large) effects, long duration, string icon)
     {
