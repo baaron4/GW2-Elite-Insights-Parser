@@ -166,7 +166,9 @@
                     <td></td>
                     <td></td>
                     <td v-if="actor !== null"></td>
-                    <td></td>
+                    <td>
+                        {{ totalHits }}
+                    </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
                         {{round2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting))}}
@@ -270,6 +272,15 @@
             },
             UIIcons: function() {
                 return UIIcons;
+            },
+            totalHits() {
+                var total = 0;
+
+                for (const row of this.barrierdist.distribution) {
+                    total += this.getConnectedHits(row);
+                }
+
+                return total;
             }
         }
     });

@@ -271,7 +271,9 @@
                         {{dmgdist.contributedBreakbarDamage}}
                     </td>
                     <td v-if="actor !== null"></td>           
-                    <td></td>
+                    <td :data-original-title="totalHits.notConnected + ' hit(s) not connected'">
+                        {{ totalHits.connected }}
+                    </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
                         {{round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))}}
@@ -410,6 +412,22 @@
             },
             UIIcons: function() {
                 return UIIcons;
+            },
+            totalHits() {
+                var totals = {
+                    connected: 0,
+                    notConnected: 0
+                };
+
+                for (const row of this.dmgdist.distribution) {
+                    var connected = this.getConnectedHits(row);
+                    var all = this.getAllHits(row);
+
+                    totals.connected += connected;
+                    totals.notConnected += (all - connected);
+                }
+
+                return totals;
             }
         }
     });
