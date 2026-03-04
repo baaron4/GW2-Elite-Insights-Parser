@@ -5,6 +5,54 @@ namespace GW2EIEvtcParser.ParsedData;
 
 internal class WeaponDescriptor
 {
+    private static readonly HashSet<string> _underwaterWeapons = [
+        "Trident",
+        "Speargun",
+        "Spear",
+    ];
+
+    private static readonly HashSet<string> _hybridWeapons = [
+        "Spear"
+    ];
+
+    private static readonly HashSet<string> _twoHandedLandWeapons = [
+        "Greatsword",
+        "Staff",
+        "Rifle",
+        "Longbow",
+        "Shortbow",
+        "Hammer",
+    ];
+
+    internal static HashSet<string> AllowedWeaponTypes = [
+        .._underwaterWeapons,
+
+        .._twoHandedLandWeapons,
+
+        "Axe",
+        "Dagger",
+        "Mace",
+        "Pistol",
+        "Scepter",
+        "Sword",
+        "Focus",
+        "Shield",
+        "Torch",
+        "Warhorn",
+    ];
+
+    private static readonly HashSet<string> _mainWeaponSlots = [
+        "Weapon_1",
+        "Weapon_2",
+        "Weapon_3",
+    ];
+
+    private static readonly HashSet<string> _weaponSlots = [
+        .._mainWeaponSlots,
+        "Weapon_4",
+        "Weapon_5",
+    ];
+
     public enum Hand { MainHand, TwoHand, OffHand, Dual }
 
     public enum WeaponEstimateResult { NotApplicable, Updated, NeedNewSet }
@@ -14,12 +62,12 @@ internal class WeaponDescriptor
 
     public WeaponDescriptor(GW2APISkill apiSkill)
     {
-        if (apiSkill.WeaponType == "Trident" || apiSkill.WeaponType == "Speargun" || apiSkill.WeaponType == "Spear")
+        if (_underwaterWeapons.Contains(apiSkill.WeaponType))
         {
             IsLand = false;
             WeaponSlot = Hand.TwoHand;
             // Use flags to know if land or water
-            if (apiSkill.WeaponType == "Spear" && apiSkill.Flags != null && apiSkill.Flags.Contains("NoUnderwater"))
+            if (_hybridWeapons.Contains(apiSkill.WeaponType) && apiSkill.Flags != null && apiSkill.Flags.Contains("NoUnderwater"))
             {
                 IsLand = true;
             }
@@ -31,20 +79,20 @@ internal class WeaponDescriptor
             {
                 WeaponSlot = Hand.Dual;
             }
-            else if (apiSkill.WeaponType == "Greatsword" || apiSkill.WeaponType == "Staff" || apiSkill.WeaponType == "Rifle" || apiSkill.WeaponType == "Longbow" || apiSkill.WeaponType == "Shortbow" || apiSkill.WeaponType == "Hammer")
+            else if (_twoHandedLandWeapons.Contains(apiSkill.WeaponType))
             {
                 WeaponSlot = Hand.TwoHand;
             }
             else
             {
-                WeaponSlot = apiSkill.Slot == "Weapon_1" || apiSkill.Slot == "Weapon_2" || apiSkill.Slot == "Weapon_3" ? Hand.MainHand : Hand.OffHand;
+                WeaponSlot = _mainWeaponSlots.Contains(apiSkill.Slot) ? Hand.MainHand : Hand.OffHand;
             }
         }
     }
 
     public static bool IsWeaponSlot(string slot)
     {
-        return slot == "Weapon_1" || slot == "Weapon_2" || slot == "Weapon_3" || slot == "Weapon_4" || slot == "Weapon_5";
+        return _weaponSlots.Contains(slot);
     }
 
     internal int FindFirstWeaponSet(IReadOnlyList<WeaponSwapEvent> swaps)
