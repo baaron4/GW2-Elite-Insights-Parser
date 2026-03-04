@@ -98,7 +98,8 @@ public class SkillItem
             Icon = ApiSkill != null ? ApiSkill.Icon : DefaultIcon;
         }
         if (ApiSkill != null && ApiSkill.Type == "Weapon"
-            && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0
+            && AllowedWeaponTypes.Contains(ApiSkill.WeaponType)
+            && ApiSkill.Professions.Count > 0
             && IsWeaponSlot(ApiSkill.Slot))
         {
             // Special handling of specter shroud as it is not done in the same way
