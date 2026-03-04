@@ -249,12 +249,14 @@ public abstract partial class SingleActor : Actor
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
     {
-        return InitCombatReplay(log).Positions;
+        InitCombatReplay(log);
+        return CombatReplay.Positions;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
     {
-        return InitCombatReplay(log).PolledPositions;
+        InitCombatReplay(log);
+        return CombatReplay.PolledPositions;
     }
     private IReadOnlyList<ParametricPoint3D?>? CombatReplayActivePositions;
     /// <summary> Calculates a list of positions of the player which are null in places where the player is dead or disconnected. </summary>
@@ -299,12 +301,14 @@ public abstract partial class SingleActor : Actor
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledRotations(ParsedEvtcLog log)
     {
-        return InitCombatReplay(log).Rotations;
+        InitCombatReplay(log);
+        return CombatReplay.Rotations;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledRotations(ParsedEvtcLog log)
     {
-        return InitCombatReplay(log).PolledRotations;
+        InitCombatReplay(log);
+        return CombatReplay.PolledRotations;
     }
 
     protected virtual IReadOnlyList<Segment> GetActiveSegmentsForCRTrim(ParsedEvtcLog log)
@@ -347,17 +351,17 @@ public abstract partial class SingleActor : Actor
     }
     
     [MemberNotNull(nameof(CombatReplay))]
-    protected CombatReplay InitCombatReplay(ParsedEvtcLog log)
+    protected void InitCombatReplay(ParsedEvtcLog log)
     {
         if (CombatReplay != null)
         {
-            return CombatReplay;
+            return;
         }
         CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log) : new CombatReplay(log);
         if (!log.CombatData.HasMovementData)
         {
             // no combat replay support on log
-            return CombatReplay;
+            return;
         }
         if (AgentItem.IsEnglobedAgent)
         {
@@ -381,17 +385,21 @@ public abstract partial class SingleActor : Actor
             CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
         }
         TrimCombatReplay(log, CombatReplay);
+    }
+
+    protected CombatReplay GetCombatReplay(ParsedEvtcLog log)
+    {
+        InitCombatReplay(log);
+        if (CombatReplay.Decorations.IsEmpty() && !IsFakeActor && !AgentItem.IsEnglobingAgent)
+        {
+            InitAdditionalCombatReplayData(log, CombatReplay);
+        }
         return CombatReplay;
     }
 
     internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var cr = InitCombatReplay(log);
-        if (cr.Decorations.IsEmpty() && !IsFakeActor && !AgentItem.IsEnglobingAgent)
-        {
-            InitAdditionalCombatReplayData(log, CombatReplay);
-        }
-        return cr.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
+        return GetCombatReplay(log).Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
     protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)

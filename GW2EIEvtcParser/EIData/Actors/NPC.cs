@@ -103,6 +103,6 @@ public class NPC : SingleActor
 
     public override SingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
     {
-        return new NPCCombatReplayDescription(this, log, map, InitCombatReplay(log));
+        return new NPCCombatReplayDescription(this, log, map, GetCombatReplay(log));
     }
 }

@@ -77,6 +77,6 @@ public abstract class PlayerActor : SingleActor
 
     public override SingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
     {
-        return new PlayerCombatReplayDescription(this, log, map, InitCombatReplay(log));
+        return new PlayerCombatReplayDescription(this, log, map, GetCombatReplay(log));
     }
 }
