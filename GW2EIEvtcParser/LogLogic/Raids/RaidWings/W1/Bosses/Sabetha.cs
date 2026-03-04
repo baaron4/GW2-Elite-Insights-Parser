@@ -278,6 +278,8 @@ internal class Sabetha : SpiritVale
                     }
                     replay.Hidden.Add(new Segment(hideStart, target.LastAware));
                 }
+                var sabethaPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID).ToList();
+                replay.AddHideByEncounterPhases(sabethaPhases, log);
                 break;
             default:
                 break;
