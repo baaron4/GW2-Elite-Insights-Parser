@@ -544,7 +544,6 @@ public class CombatReplay
             }
         }
         Hidden.Add(new(nextInvisible, log.LogData.EvtcLogEnd));
-        Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
     }
 }
 
