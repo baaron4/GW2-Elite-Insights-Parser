@@ -439,4 +439,17 @@ internal static class LogLogicUtils
             achievementEligibilityEvents.Add(new AchievementEligibilityEvent(encounterPhase.End, achievementID, p, !encounterPhase.Success));
         }
     }
+
+    /// <summary>
+    /// Some bosses may have a health update event at the end of the log that heals them back up to 100% HP.<br></br>
+    /// Override the last health event DstAgent (health %) to the previous one.
+    /// </summary>
+    internal static void SanitizeLastHealthUpdateEvents(SingleActor actor, List<CombatItem> combatData)
+    {
+        var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(actor.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
+        if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
+        {
+            hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
+        }
+    }
 }

@@ -782,16 +782,12 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         }
     }
 
-    internal static void SanitizeLastHealthUpdateEvents(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    internal static void EchoOfScarletSanitizeLastHealthUpdateEvents(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
     {
         var echoesOfScarlet = targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
         foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {
-            var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-            if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
-            {
-                hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
-            }
+            SanitizeLastHealthUpdateEvents(echoOfScarlet, combatData);
         }
     }
 
@@ -806,7 +802,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        SanitizeLastHealthUpdateEvents(Targets, combatData);
+        EchoOfScarletSanitizeLastHealthUpdateEvents(Targets, combatData);
         RenameScarletPhantoms(Targets);
     }
 

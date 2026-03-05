@@ -202,6 +202,9 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
         RenameCrocodilianRazortooth(Targets);
 
+        SingleActor kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
+        SanitizeLastHealthUpdateEvents(kela, combatData);
+
         /*var chest = agentData.GetGadgetsByID(ChestID.GrandRaidKelaChest).FirstOrDefault();
         if (chest != null)
         {
