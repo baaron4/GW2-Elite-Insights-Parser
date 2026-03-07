@@ -356,18 +356,21 @@ internal static class GuardianHelper
         );
 
         // Symbol of Resolution & Lesser Symbol of Resolution
-        // TODO, handle collision with Luminous Staff symbol (no writ of persistence)
-        AddSymbolDecorationsWithLesserUncertainty(
-            player,
-            log,
-            replay,
-            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution),
-            new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution),
-            new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser),
-            (EffectGUIDs.GuardianSymbolOfResolution_LuminaryLuminousStaffSymbol, EffectGUIDs.GuardianSymbolOfResolutionLarge),
-            4000,
-            EffectImages.EffectSymbolOfResolution
-        );
+        // Collision with Luminous Staff
+        if (player.Spec != Spec.Luminary)
+        {
+            AddSymbolDecorationsWithLesserUncertainty(
+                player,
+                log,
+                replay,
+                new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution),
+                new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution),
+                new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser),
+                (EffectGUIDs.GuardianSymbolOfResolution_LuminaryLuminousStaffSymbol, EffectGUIDs.GuardianSymbolOfResolutionLarge),
+                4000,
+                EffectImages.EffectSymbolOfResolution
+            );
+        }
 
         // Symbol of Protection & Lesser Symbol of Protection
         AddSymbolDecorationsWithLesserUncertainty(
@@ -554,7 +557,7 @@ internal static class GuardianHelper
         }
     }
 
-    private static void AddSymbolDecorationsWithLesserUncertainty(List<AnimatedCastEvent> mainSkillCasts, PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, GUID effectGUID, uint radius, long duration, string icon)
+    internal static void AddSymbolDecorationsWithLesserUncertainty(List<AnimatedCastEvent> mainSkillCasts, PlayerActor player, ParsedEvtcLog log, CombatReplay replay, SkillModeDescriptor mainSkill, SkillModeDescriptor lesserSkill, SkillModeDescriptor uncertainSkill, GUID effectGUID, uint radius, long duration, string icon)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out var symbols))
         {

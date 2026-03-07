@@ -111,6 +111,7 @@ public static class SkillItemOverrides
         { SymbolOfBladesOrLesser, "(Lesser) Symbol Of Blades" },
         { SymbolOfProtectionOrLesser, "(Lesser) Symbol of Protection" },
         { SymbolOfResolutionOrLesser, "(Lesser) Symbol Of Resolution" },
+        { SymbolOfResolutionOrLesserOrLuminousStaff, "(Lesser) Symbol Of Resolution or Luminous Staff" },
         { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
         { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
         { HuntersVerdictPull, "Hunter's Verdict (Pull)" },

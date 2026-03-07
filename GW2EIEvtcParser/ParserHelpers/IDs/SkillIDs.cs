@@ -73,6 +73,7 @@ public static class SkillIDs
     public const long SymbolOfBladesOrLesser = -54;
     public const long SymbolOfProtectionOrLesser = -55;
     public const long SymbolOfResolutionOrLesser = -56;
+    public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

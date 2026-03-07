@@ -1,16 +1,22 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.InstantCastFinder;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
 internal static class LuminaryHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         // Virtues
         new EffectCastFinder(RadiantJusticeSkill, EffectGUIDs.LuminaryRadiantJustice1)
@@ -31,7 +37,7 @@ internal static class LuminaryHelper
         new BuffLossCastFinder(EffulgentStanceDamage, EffulgentStanceStackDamageBuff), // TODO Improve? https://wiki.guildwars2.com/wiki/Effulgent_Stance
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Empowered Armaments
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.PvE)
@@ -117,4 +123,104 @@ internal static class LuminaryHelper
         new Buff("Restorative Glow (Personal)", RestorativeGlowPersonalBuff, Source.Luminary, BuffClassification.Other, SkillImages.RestorativeGlow),
         new Buff("Restorative Glow (Shared)", RestorativeGlowSharedBuff, Source.Luminary, BuffClassification.Defensive, SkillImages.RestorativeGlow),
     ];
+
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
+    {
+        {
+            var duration = 4000;
+            var durationLarge = duration + 2000;
+            uint radius = 180;
+            uint radiusLarge = 240;
+
+            var symbolOfResolutionAndLuminousStaffCasts = player.GetAnimatedCastEvents(log).Where(x => (x.SkillID == SymbolOfWrath_SymbolOfResolution || x.SkillID == LuminousStaff) && !x.IsInterrupted).ToList();
+            var symbolOfResolutionCasts = symbolOfResolutionAndLuminousStaffCasts.Where(x => x.SkillID == SymbolOfWrath_SymbolOfResolution).ToList();
+
+            var symbolOfResolutionSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution);
+            var lesserSymbolfOfResolutionSkill = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution);
+            
+            var luminousStaffSkill = new SkillModeDescriptor(player, Spec.Guardian, LuminousStaff);
+            
+            var luminousStaffOrSymbolOfResolutionOrLesserSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesserOrLuminousStaff);
+            var symbolOfResolutionOrLesserSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser);
+
+            // Small, collision
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolution_LuminaryLuminousStaffSymbol, out var symbols))
+            {
+                var symbolIndex = 0;
+                var candidateMainSymbols = new Dictionary<AnimatedCastEvent, List<EffectEvent>>(symbolOfResolutionAndLuminousStaffCasts.Count);
+                foreach (var cast in symbolOfResolutionAndLuminousStaffCasts)
+                {
+                    for (; symbolIndex < symbols.Count; symbolIndex++)
+                    {
+                        var symbolEffect = symbols[symbolIndex];
+                        if (cast.IntersectsExpectedCastWindow(symbolEffect.Time))
+                        {
+                            if (candidateMainSymbols.TryGetValue(cast, out var candidates))
+                            {
+                                candidates.Add(symbolEffect);
+                            }
+                            else
+                            {
+                                candidateMainSymbols[cast] = [symbolEffect];
+                            }
+                        }
+                        // Effect after cast
+                        else if (cast.ExpectedEndTime <= symbolEffect.Time + ServerDelayConstant)
+                        {
+                            break;
+                        }
+                        // Effect before cast
+                        else
+                        {
+                            var skill = lesserSymbolfOfResolutionSkill;
+                            var lifespan = symbolEffect.ComputeLifespan(log, duration);
+                            AddCircleSkillDecoration(replay, symbolEffect, Colors.Guardian, skill, lifespan, radius, EffectImages.EffectSymbolOfResolution);
+                        }
+                    }
+                }
+                // All remaining effects are without cast
+                for (; symbolIndex < symbols.Count; ++symbolIndex)
+                {
+                    var symbolEffect = symbols[symbolIndex];
+                    var skill = lesserSymbolfOfResolutionSkill;
+                    var lifespan = symbolEffect.ComputeLifespan(log, duration);
+                    AddCircleSkillDecoration(replay, symbolEffect, Colors.Guardian, skill, lifespan, radius, EffectImages.EffectSymbolOfResolution);
+                }
+                foreach (var pair in candidateMainSymbols)
+                {
+                    SkillModeDescriptor skill = pair.Value.Count == 1 ? 
+                        (pair.Key.SkillID == SymbolOfWrath_SymbolOfResolution ? symbolOfResolutionSkill : luminousStaffSkill) 
+                        : 
+                        luminousStaffOrSymbolOfResolutionOrLesserSkill
+                    ;
+                    var icon = skill.SkillID == SymbolOfWrath_SymbolOfResolution ?
+                        EffectImages.EffectSymbolOfResolution 
+                        : (skill.SkillID == LuminousStaff ? 
+                            EffectImages.EffectLuminousStaff
+                            :
+                            EffectImages.EffectSymbolOfResolutionOrLuminousStaff
+                       )
+                    ;
+                    foreach (EffectEvent effect in pair.Value)
+                    {
+                        var lifespan = effect.ComputeLifespan(log, duration);
+                        AddCircleSkillDecoration(replay, effect, Colors.Guardian, skill, lifespan, radius, icon);
+                    }
+
+                }
+            }
+
+            // Large, no collision, use generic methods
+            GuardianHelper.AddSymbolDecorationsWithLesserUncertainty(symbolOfResolutionCasts, player, log, replay, symbolOfResolutionSkill, lesserSymbolfOfResolutionSkill, symbolOfResolutionOrLesserSkill, EffectGUIDs.GuardianSymbolOfResolutionLarge, radiusLarge, durationLarge, EffectImages.EffectSymbolOfResolution);
+
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.LuminaryLuminousStaffSymbolLarge, out var luminousStaffLarges))
+            {
+                foreach (EffectEvent effect in luminousStaffLarges)
+                {
+                    var lifespan = effect.ComputeLifespan(log, durationLarge);
+                    AddCircleSkillDecoration(replay, effect, Colors.Guardian, luminousStaffSkill, lifespan, radiusLarge, EffectImages.EffectLuminousStaff);
+                }
+            }
+        }
+    }
 }

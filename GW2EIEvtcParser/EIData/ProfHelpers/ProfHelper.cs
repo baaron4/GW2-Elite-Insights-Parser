@@ -589,15 +589,16 @@ internal static class ProfHelper
             // Guardian
             case Spec.Guardian:
             case Spec.Dragonhunter:
+            case Spec.Willbender:
                 GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Firebrand:
                 GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 FirebrandHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
-            case Spec.Willbender:
             case Spec.Luminary:
                 GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                LuminaryHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Mesmer
             case Spec.Mesmer:
