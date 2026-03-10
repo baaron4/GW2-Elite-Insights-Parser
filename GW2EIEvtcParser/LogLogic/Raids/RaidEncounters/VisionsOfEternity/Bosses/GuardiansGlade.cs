@@ -630,7 +630,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
         var encounterPhases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
         var tackleCasts = log.CombatData.GetAnimatedCastData(CrocodilianRazortoothTackle)
-                .Where(x => x.Caster.IsAnySpecies([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth])).ToList();
+                .Where(x => x.Caster.IsAnySpecies([TargetID.VeteranCrocodilianRazortooth, TargetID.EliteCrocodilianRazortooth]) && !x.IsInterrupted).ToList();
 
         foreach (var phase in encounterPhases)
         {
