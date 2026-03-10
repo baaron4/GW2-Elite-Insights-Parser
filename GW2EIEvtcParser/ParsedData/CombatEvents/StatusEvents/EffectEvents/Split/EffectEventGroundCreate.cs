@@ -36,6 +36,10 @@ public class EffectEventGroundCreate : SplitEffectEvent
         scaleBytes.PushNative(evtcItem.IsShields);
         scaleBytes.PushNative(evtcItem.IsOffcycle);
         Scale = BitConverter.ToUInt16(scaleBytes) * OrientationAndScaleConvertConstant;
+        if (Scale == 0)
+        {
+            Scale = 1.0f;
+        }
         // ScaleSomething
         var scaleSomethingBytes = new ByteBuffer(stackalloc byte[sizeof(ushort)]);
         scaleSomethingBytes.PushNative(evtcItem.IsFifty);
