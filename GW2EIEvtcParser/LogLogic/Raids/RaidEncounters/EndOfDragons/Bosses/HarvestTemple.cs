@@ -1091,6 +1091,12 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             }
             if (nextExpected != (int)TargetID.Unknown)
             {
+                if (curDragonIndex < sortedDragons.Count - 1)
+                {
+                    var nextDragon = sortedDragons[curDragonIndex + 1];
+                    nextDragon.OverrideID(nextExpected, agentData);
+                    continue;
+                }
                 List<TargetID> idsToAdd;
                 switch (nextExpected)
                 {
