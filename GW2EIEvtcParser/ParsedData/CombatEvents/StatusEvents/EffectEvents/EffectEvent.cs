@@ -73,7 +73,7 @@ public abstract class EffectEvent : StatusEvent
     /// </summary>
     public float Scale { get; protected set; } = 0.0f;
 
-    public bool IsScaled => Scale >= 1.0f;
+    public virtual bool IsScaled => false;
 
     /// <summary>
     /// Scale something of the effect

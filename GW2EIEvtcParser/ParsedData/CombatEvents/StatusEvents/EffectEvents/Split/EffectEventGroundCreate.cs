@@ -6,6 +6,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class EffectEventGroundCreate : SplitEffectEvent
 {
+    public override bool IsScaled => true;
     internal EffectEventGroundCreate(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs, Dictionary<long, List<EffectEventGroundCreate>> effectEventsByTrackingID) : base(evtcItem, agentData, effectGUIDs)
     {
         // Vectors
