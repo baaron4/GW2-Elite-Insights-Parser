@@ -240,6 +240,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
+        var caEncounters = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID).ToList();
+        var finalCAEncounter = caEncounters.LastOrDefault();
         switch (target.ID)
         {
             case (int)TargetID.ConjuredAmalgamate:
@@ -249,9 +251,17 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 {
                     replay.Decorations.Add(new CircleDecoration(CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                 }
+                if (finalCAEncounter != null)
+                {
+                    replay.Hidden.Add(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
+                }
                 break;
             case (int)TargetID.CALeftArm:
             case (int)TargetID.CARightArm:
+                if (finalCAEncounter != null)
+                {
+                    replay.Hidden.Add(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
+                }
                 break;
             case (int)TargetID.CABodyAttackTarget:
                 var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
@@ -262,6 +272,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 {
                     replay.Hidden.Add(new Segment(bodyAtHideStart, noInvul.Start));
                     bodyAtHideStart = noInvul.End;
+                }
+                if (finalCAEncounter != null)
+                {
+                    bodyAtHideStart = Math.Min(bodyAtHideStart, finalCAEncounter.End);
                 }
                 replay.Hidden.Add(new Segment(bodyAtHideStart, log.LogData.LogEnd));
                 break;
@@ -279,6 +293,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     {
                         armAtHideStart = targetable.Time;
                     }
+                }
+                if (finalCAEncounter != null)
+                {
+                    armAtHideStart = Math.Min(armAtHideStart, finalCAEncounter.End);
                 }
                 replay.Hidden.Add(new Segment(armAtHideStart, log.LogData.LogEnd));
                 break;
