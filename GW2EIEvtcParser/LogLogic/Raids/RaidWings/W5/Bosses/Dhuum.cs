@@ -66,6 +66,13 @@ internal class Dhuum : HallOfChains
                 new PlayerDstBuffApplyMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU", "Picked up by Ender's Echo","Ender's Pick up", 3000),
                 new PlayerDstBuffRemoveMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0)
                     .UsingChecker((br,log) => !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(x.Time - br.Time) <= 150)),
+                new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "Echo.BrkDmg", "Breakbar damage done against Ender's Echo while a player is picked", "Breakbar Damage Ender's Echo", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
+                    .UsingChecker((brae, log) => EchoBreakbarMechanicChecker(log, brae.Time))
+                    .UsingWeight(),
+                new PlayerSrcBuffApplyMechanic([Fear, Taunt, Immobile, Slow], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Echo.BrkCndApp1", "Applied Fear, Taunt, Immobile, Slow against Ender's Echo breakbar while a player is picked", "Strong Condition Breakbar Ender's Echo", 0)
+                    .UsingChecker((bae, log) => EchoBreakbarMechanicChecker(log, bae.Time)),
+                new PlayerSrcBuffApplyMechanic([Chilled, Blind, Weakness, Crippled], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightRed), "Echo.BrkCndApp2", "Applied Chilled, Blind, Weakness, Crippled against Ender's Echo breakbar while a player is picked", "Weak Condition Breakbar Ender's Echo", 0)
+                    .UsingChecker((bae, log) => EchoBreakbarMechanicChecker(log, bae.Time)),
             ]),
             new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10)
                 .UsingChecker((bae, log) =>
@@ -927,5 +934,27 @@ internal class Dhuum : HallOfChains
         replay.Decorations.Add(hitbox);
         replay.Decorations.Add(line);
         replay.Decorations.Add(icon);
+    }
+
+    /// <summary>
+    /// Check if the conditions applied or the breakbar damage dealt have happened while another player is picked up by the Echo.
+    /// </summary>
+    /// <remarks>
+    /// Conditions checked: Fear, Taunt, Immobile, Slow, Chilled, Blind, Weakness, Crippled.
+    /// </remarks>
+    private static bool EchoBreakbarMechanicChecker(ParsedEvtcLog log, long time)
+    {
+        foreach (Player player in log.PlayerList)
+        {
+            var pickups = GetBuffApplyRemoveSequence(log.CombatData, EchosPickup, player.AgentItem, true, true);
+            for (int i = 0; i < pickups.Count; i++)
+            {
+                if (pickups[i] is BuffApplyEvent apply && pickups[i + 1] is BuffRemoveAllEvent remove && time >= apply.Time && time <= remove.Time)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
