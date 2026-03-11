@@ -67,12 +67,12 @@ internal class Dhuum : HallOfChains
                 new PlayerDstBuffRemoveMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0)
                     .UsingChecker((br,log) => !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(x.Time - br.Time) <= 150)),
                 new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "Echo.BrkDmg", "Breakbar damage done against Ender's Echo while a player is picked", "Breakbar Damage Ender's Echo", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
-                    .UsingChecker((brae, log) => EchoBreakbarMechanicChecker(log, brae.Time))
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, brae.Time))
                     .UsingWeight(),
                 new PlayerSrcBuffApplyMechanic([Fear, Taunt, Immobile, Slow], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Echo.BrkCndApp1", "Applied Fear, Taunt, Immobile, Slow against Ender's Echo breakbar while a player is picked", "Strong Condition Breakbar Ender's Echo", 0)
-                    .UsingChecker((bae, log) => EchoBreakbarMechanicChecker(log, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, bae.Time)),
                 new PlayerSrcBuffApplyMechanic([Chilled, Blind, Weakness, Crippled], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightRed), "Echo.BrkCndApp2", "Applied Chilled, Blind, Weakness, Crippled against Ender's Echo breakbar while a player is picked", "Weak Condition Breakbar Ender's Echo", 0)
-                    .UsingChecker((bae, log) => EchoBreakbarMechanicChecker(log, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, bae.Time)),
             ]),
             new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10)
                 .UsingChecker((bae, log) =>
