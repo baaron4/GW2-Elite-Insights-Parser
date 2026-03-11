@@ -208,8 +208,8 @@ internal class MythwrightGambitInstance : MythwrightGambit
             foreach (var caPhase in caPhases)
             {
                 var ca = caPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.ConjuredAmalgamate));
-                var rightArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
-                var leftArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
+                var leftArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
+                var rightArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
                 phases.AddRange(ConjuredAmalgamate.ComputePhases(log, ca, rightArm, leftArm, caPhase, requirePhases));
             }
         }
