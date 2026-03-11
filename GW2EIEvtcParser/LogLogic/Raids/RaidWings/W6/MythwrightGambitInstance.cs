@@ -212,6 +212,11 @@ internal class MythwrightGambitInstance : MythwrightGambit
                 var rightArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
                 phases.AddRange(ConjuredAmalgamate.ComputePhases(log, ca, rightArm, leftArm, caPhase, requirePhases));
             }
+            var swordAgent = log.AgentData.GetNPCsByID(TargetID.ConjuredPlayerSword).FirstOrDefault();
+            if (caPhases.Count > 0 && swordAgent != null)
+            {
+                swordAgent.OverrideAwareTimes(caPhases.First().Start, caPhases.Last().End);
+            }
         }
         {
             var twinLargosPhases = HandleTwinLargosPhases(targetsByIDs, log, phases);
