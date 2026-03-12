@@ -597,6 +597,10 @@ public class AgentItem
     internal void AddRegroupedFrom(AgentItem regroupedFrom)
     {
         _regrouped ??= [];
+        if (regroupedFrom.LastAware - regroupedFrom.FirstAware < ParserHelper.ServerDelayConstant)
+        {
+            return;
+        }
         _regrouped.Add(new MergedAgentItem(regroupedFrom, regroupedFrom.FirstAware, regroupedFrom.LastAware));
     }
 
