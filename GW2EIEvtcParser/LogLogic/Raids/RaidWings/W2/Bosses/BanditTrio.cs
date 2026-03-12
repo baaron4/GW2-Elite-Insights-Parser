@@ -175,9 +175,15 @@ internal class BanditTrio : SalvationPass
 
     internal static void RedirectInsectSwarmsToCustomMaster(AgentItem bees, AgentData agentData)
     {
+        var minions = new List<AgentItem>();
         foreach (var bee in agentData.GetNPCsByID(MinionID.InsectSwarm))
         {
+            minions.Add(bee);
             bee.SetMaster(bees);
+        }
+        if (minions.Count > 0)
+        {
+            bees.OverrideAwareTimes(minions.Min(x => x.FirstAware), minions.Max(x => x.LastAware));
         }
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
