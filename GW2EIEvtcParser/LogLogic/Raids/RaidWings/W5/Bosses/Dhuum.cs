@@ -946,13 +946,9 @@ internal class Dhuum : HallOfChains
     {
         foreach (Player player in log.PlayerList)
         {
-            var pickups = GetBuffApplyRemoveSequence(log.CombatData, EchosPickup, player.AgentItem, true, true);
-            for (int i = 0; i < pickups.Count; i++)
+            if (player.HasBuff(log, EchosPickup, time, ServerDelayConstant))
             {
-                if (pickups[i] is BuffApplyEvent apply && pickups[i + 1] is BuffRemoveAllEvent remove && time >= apply.Time && time <= remove.Time)
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
