@@ -220,7 +220,8 @@ public static class AgentManipulationHelper
                     long start = enterCombat.Time;
                     if (originalPlayer.Regrouped.Count > 0)
                     {
-                        var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.InAwareTimes(start));
+
+                        var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.FirstAware <= start && x.Merged.BaseSpec == SpecToBaseSpec(enterCombat.Spec));
                         if (copyFrom != null)
                         {
                             list.Add((start, copyFrom.Value.Merged, enterCombat.Spec, enterCombat.Subgroup, true));
@@ -236,10 +237,6 @@ public static class AgentManipulationHelper
                     }
                 }
             }
-        }
-        foreach (var regrouped in originalPlayer.Regrouped)
-        {
-            list.Add((regrouped.MergeStart, regrouped.Merged, regrouped.Merged.Spec, new Player(regrouped.Merged, false).Group, false));
         }
         list.Sort((x,y) => x.start.CompareTo(y.start));
         var previousPlayerAgent = originalPlayer;
