@@ -72,7 +72,42 @@ partial class SingleActor
         }
     }
     #region STATUS
-    private void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
+
+    protected void FillStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, IReadOnlyList<(long Time, StatusEvent evt)> status)
+    {
+        AddSegment(dc, long.MinValue, FirstAware);
+
+        if (status.Count == 0)
+        {
+            AddSegment(actives, FirstAware, LastAware);
+            AddSegment(dc, LastAware, long.MaxValue);
+            return;
+        }
+        status = status.OrderBy(x => x.Time).ToList();
+
+        for (int i = 0; i < status.Count - 1; i++)
+        {
+            var cur = status[i];
+            var next = status[i + 1];
+            AddValueToStatusList(dead, down, dc, actives, cur, next, FirstAware, i);
+        }
+
+        // check last value
+        if (status.Count > 0)
+        {
+            var cur = status.Last();
+            AddValueToStatusList(dead, down, dc, actives, cur, (LastAware, null), FirstAware, status.Count - 1);
+            if (cur.evt is DeadEvent)
+            {
+                AddSegment(dead, LastAware, long.MaxValue);
+            }
+            else
+            {
+                AddSegment(dc, LastAware, long.MaxValue);
+            }
+        }
+    }
+    protected virtual void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
         var downEvents = combatData.GetDownEvents(AgentItem);
         var aliveEvents = combatData.GetAliveEvents(AgentItem);
@@ -116,37 +151,8 @@ partial class SingleActor
         status.AddRange(despawnEvents.Select(x => (x.Time, (StatusEvent)x)));
         status.AddRange(regroupedEvents.Select(x => (x.Item2.Time, (StatusEvent)x.Item2)));
 
-        AddSegment(dc, long.MinValue, FirstAware);
+        FillStatus(dead, down, dc, actives, status);
 
-        if (status.Count == 0)
-        {
-            AddSegment(actives, FirstAware, LastAware);
-            AddSegment(dc, LastAware, long.MaxValue);
-            return;
-        }
-        status = status.OrderBy(x => x.Time).ToList();
-
-        for (int i = 0; i < status.Count - 1; i++)
-        {
-            var cur = status[i];
-            var next = status[i + 1];
-            AddValueToStatusList(dead, down, dc, actives, cur, next, FirstAware, i);
-        }
-
-        // check last value
-        if (status.Count > 0)
-        {
-            var cur = status.Last();
-            AddValueToStatusList(dead, down, dc, actives, cur, (LastAware, null), FirstAware, status.Count - 1);
-            if (cur.evt is DeadEvent)
-            {
-                AddSegment(dead, LastAware, long.MaxValue);
-            }
-            else
-            {
-                AddSegment(dc, LastAware, long.MaxValue);
-            }
-        }
     }
     public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(ParsedEvtcLog log)
     {
