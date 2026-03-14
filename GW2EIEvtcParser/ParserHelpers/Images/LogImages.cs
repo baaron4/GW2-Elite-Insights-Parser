@@ -114,6 +114,7 @@ internal static class LogImages
     internal const string CombatReplayKeepConstruct = "https://i.imgur.com/dEwDsOJ.png";
     internal const string CombatReplayTwistedCastle = "https://i.imgur.com/txFtRNN.png";
     internal const string CombatReplayXera = "https://i.imgur.com/mGOHGwN.png";
+    internal const string CombatReplayBastionOfThePenitent = "https://wiki.guildwars2.com/images/6/6c/Bastion_of_the_Penitent_map.jpg";
     internal const string CombatReplayCairn = "https://i.imgur.com/NlpsLZa.png";
     internal const string CombatReplayMursaatOverseer = "https://i.imgur.com/lT1FW2r.png";
     internal const string CombatReplaySamarog = "https://i.imgur.com/znpsqsI.png";
