@@ -295,15 +295,19 @@ internal class Deimos : BastionOfThePenitent
 
     internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData)
     {
-        var shackledPrisonerMaxHPs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate);
-        foreach(var shackledPrisonerMaxHP in shackledPrisonerMaxHPs)
+        var deimosEncounterNPCs = agentData.GetNPCsByIDs([TargetID.Pride, TargetID.Greed, TargetID.Deimos]);
+        if (deimosEncounterNPCs.Count == 0)
         {
-            AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
-            if (shackledPrisoner.ID > 0) // sanity check against unknown
-            {
-                shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
-                shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
-            }
+            return;
+        }
+        long minFirstAware = deimosEncounterNPCs.Count > 0 ? deimosEncounterNPCs.Min(x => x.FirstAware - 2000) : long.MinValue;
+        var shackledPrisoners = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.ID > 0).Distinct();
+        foreach (var shackledPrisoner in shackledPrisoners)
+        {
+            long expectedStart = Math.Max(shackledPrisoner.FirstAware, minFirstAware);
+            var encounterShackledPrisoner = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
+            encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
+            encounterShackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
     }
 

@@ -452,4 +452,45 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, redirectFrom.FirstAware, redirectFrom.LastAware);
     }
 
+    /// <summary>
+    /// Creates an englobed agent matching given interval from originalAgent, if necessary, returns originalAgent otherwise
+    /// </summary>
+    /// <param name="originalAgent"></param>
+    /// <param name="agentData"></param>
+    /// <param name="expectedStart"></param>
+    /// <param name="expectedEnd"></param>
+    /// <returns></returns>
+    internal static AgentItem CreateAgentInIntervalAndDummiesAround(AgentItem originalAgent, AgentData agentData, long expectedStart, long expectedEnd)
+    {
+        AgentItem newAgentItem;
+        if (expectedStart != originalAgent.FirstAware && expectedEnd != originalAgent.LastAware)
+        {
+            var previousDummy = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedStart - 1, originalAgent.Spec);
+            previousDummy.SetEnglobingAgentItem(originalAgent, agentData);
+            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, expectedStart, expectedEnd - 1, originalAgent.Spec);
+            newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
+            var followingDummy = agentData.AddCustomAgentFrom(originalAgent, expectedEnd, originalAgent.LastAware, originalAgent.Spec);
+            followingDummy.SetEnglobingAgentItem(originalAgent, agentData);
+        }
+        else if (expectedStart != originalAgent.FirstAware)
+        {
+            var previousDummy = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedStart - 1, originalAgent.Spec);
+            previousDummy.SetEnglobingAgentItem(originalAgent, agentData);
+            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, expectedStart, originalAgent.LastAware, originalAgent.Spec);
+            newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
+        }
+        else if (expectedEnd != originalAgent.LastAware)
+        {
+            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedEnd - 1, originalAgent.Spec);
+            newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
+            var followingDummy = agentData.AddCustomAgentFrom(originalAgent, expectedEnd, originalAgent.LastAware, originalAgent.Spec);
+            followingDummy.SetEnglobingAgentItem(originalAgent, agentData);
+        }
+        else
+        {
+            newAgentItem = originalAgent;
+        }
+        return newAgentItem;
+    }
+
 }

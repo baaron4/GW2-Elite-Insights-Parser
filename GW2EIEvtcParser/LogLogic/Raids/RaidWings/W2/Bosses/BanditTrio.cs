@@ -93,6 +93,22 @@ internal class BanditTrio : SalvationPass
         return crMap;
     }
 
+    private static readonly HashSet<TargetID> TrashMobsToCheck =
+    [
+        TargetID.BanditAssassin,
+        TargetID.BanditAssassin2,
+        TargetID.BanditSapperTrio,
+        TargetID.BanditDeathsayer,
+        TargetID.BanditDeathsayer2,
+        TargetID.BanditBrawler,
+        TargetID.BanditBrawler2,
+        TargetID.BanditBattlemage,
+        TargetID.BanditBattlemage2,
+        TargetID.BanditCleric,
+        TargetID.BanditCleric2,
+        TargetID.BanditBombardier,
+        TargetID.BanditSniper,
+    ];
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericLogOffset(logData);
@@ -121,23 +137,7 @@ internal class BanditTrio : SalvationPass
             // Thrash mob start check
             var boxStart = new Vector2(-2200, -11300);
             var boxEnd = new Vector2(1000, -7200);
-            HashSet<TargetID> trashMobsToCheck =
-            [
-                TargetID.BanditAssassin,
-                TargetID.BanditAssassin2,
-                TargetID.BanditSapperTrio,
-                TargetID.BanditDeathsayer,
-                TargetID.BanditDeathsayer2,
-                TargetID.BanditBrawler,
-                TargetID.BanditBrawler2,
-                TargetID.BanditBattlemage,
-                TargetID.BanditBattlemage2,
-                TargetID.BanditCleric,
-                TargetID.BanditCleric2,
-                TargetID.BanditBombardier,
-                TargetID.BanditSniper,
-            ];
-            var banditPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
+            var banditPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(TrashMobsToCheck))
                 .Select(x => new PositionEvent(x, agentData));
             var banditsInBox = banditPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
                 .Select(x => x.Src)
@@ -152,19 +152,33 @@ internal class BanditTrio : SalvationPass
 
     internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData)
     {
-        // Cage
-        AgentItem? cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
-        if (cage != null)
+        var banditTrioBosses = agentData.GetNPCsByIDs([TargetID.Berg, TargetID.Narella, TargetID.Zane]);
+        if (banditTrioBosses.Count == 0)
         {
-            cage.OverrideType(AgentItem.AgentType.NPC, agentData);
-            cage.OverrideID(TargetID.Cage, agentData);
+            return;
+        }
+        var banditTrioNPCs = agentData.GetNPCsByIDs([.. TrashMobsToCheck.ToArray(), TargetID.Berg, TargetID.Narella, TargetID.Zane]);
+        long minFirstAware = banditTrioNPCs.Count > 0 ? banditTrioNPCs.Min(x => x.FirstAware - 2000) : long.MinValue;
+        long maxLastAware = banditTrioBosses.Count > 0 ? banditTrioBosses.Max(x => x.LastAware + 2000) : long.MaxValue;
+        // Cage
+        var cages = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).Distinct();
+        foreach (var cage in cages)
+        {
+            long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
+            long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
+            AgentItem encounterCage = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(cage, agentData, expectedStart, expectedEnd);
+            encounterCage.OverrideType(AgentItem.AgentType.NPC, agentData);
+            encounterCage.OverrideID(TargetID.Cage, agentData);
         }
         // Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(TargetID.Bombs, agentData);
+            long expectedStart = Math.Max(minFirstAware, bomb.FirstAware);
+            long expectedEnd = Math.Min(maxLastAware, bomb.LastAware);
+            AgentItem encounterBomb = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(bomb, agentData, expectedStart, expectedEnd);
+            encounterBomb.OverrideType(AgentItem.AgentType.NPC, agentData);
+            encounterBomb.OverrideID(TargetID.Bombs, agentData);
         }
     }
 
