@@ -117,7 +117,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
                 var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
-                var greenApplies = log.CombatData.GetBuffApplyData(GreenTeleport);
+                var greenApplies = log.CombatData.GetBuffApplyData(DeimosSelectedByGreen);
                 foreach (AbstractBuffApplyEvent buffApplyEvent in greenApplies)
                 {
                     if (buffApplyEvent.Time >= encounterStartThreshold)
@@ -130,7 +130,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                             var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(demonicBond.AgentItem);
                             foreach (var attackTargetEvent in attackTargetEvents)
                             {
-                                var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Time >= buffApplyEvent.Time - 2000 && x.Time <= buffApplyEvent.Time);
+                                var targetableEvents = attackTargetEvent.GetTargetableEvents(log);
+                                var targetableEvent = targetableEvents.FirstOrDefault(x => x.Targetable && x.Time >= buffApplyEvent.Time - 6000 && x.Time <= buffApplyEvent.Time);
                                 if (targetableEvent != null)
                                 {
                                     start = targetableEvent.Time;
@@ -163,7 +164,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                                 var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(demonicBond.AgentItem);
                                 foreach (var attackTargetEvent in attackTargetEvents)
                                 {
-                                    var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Time >= start + 5000);
+                                    var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Targetable && x.Time >= start + 5000);
                                     if (targetableEvent != null)
                                     {
                                         if (target.FirstAware > targetableEvent.Time)
@@ -188,6 +189,10 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                             {
                                 end = Math.Max(greeds.Max(x => x.LastAware), end);
                             }
+                        } 
+                        else
+                        {
+                            end = target.LastAware;
                         }
                         if (end == long.MinValue)
                         {
