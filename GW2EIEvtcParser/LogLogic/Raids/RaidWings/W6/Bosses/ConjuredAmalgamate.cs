@@ -213,7 +213,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal static AgentItem CreateCustomSwordAgent(LogData logData, AgentData agentData)
     {    
-        return agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
+        return agentData.AddCustomNPCAgent(long.MinValue, long.MinValue, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
     }
 
     internal static void RedirectSwordDamageToSwordAgent(AgentItem sword, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -223,6 +223,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
             if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
             {
                 c.OverrideSrcAgent(sword);
+                if (sword.FirstAware == long.MinValue)
+                {
+                    sword.OverrideAwareTimes(c.Time, c.Time);
+                } else
+                {
+                    sword.OverrideAwareTimes(sword.FirstAware, c.Time);
+                }
             }
         }
     }
