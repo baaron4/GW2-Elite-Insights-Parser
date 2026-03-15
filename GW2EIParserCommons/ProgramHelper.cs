@@ -329,7 +329,10 @@ public sealed class ProgramHelper : IDisposable
                                             Settings.ParseCombatReplay,
                                             Settings.ComputeDamageModifiers,
                                             Settings.CustomTooShort,
-                                            Settings.CustomTooBig,
+                                            (Settings.UploadToDPSReports || Settings.UploadToWingman) ?
+                                                Math.Min(150, Settings.CustomTooBig)
+                                                :
+                                                Settings.CustomTooBig,
                                             Settings.DetailledWvW),
                                         APIController);
 
