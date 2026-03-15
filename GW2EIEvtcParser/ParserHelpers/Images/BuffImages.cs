@@ -111,9 +111,9 @@ public static class BuffImages
     public const string KodasArmor = "https://wiki.guildwars2.com/images/8/88/Koda%27s_Armor.png";
     public const string SpoiledSupply = "https://wiki.guildwars2.com/images/e/e2/Spoiled_Supply.png";
     public const string EmergencyWaypoint = "https://wiki.guildwars2.com/images/8/87/Emergency_Waypoint.png";
-    public const string GuildHallPvEMode = "https://wiki.guildwars2.com/images/4/4b/3240357.png";
-    public const string GuildHallsPvPMode = "https://wiki.guildwars2.com/images/8/87/3240358.png";
-    public const string GuildHallWvWMode = "https://wiki.guildwars2.com/images/7/70/3240359.png";
+    public const string GuildHallPvEMode = "https://wiki.guildwars2.com/images/a/af/PvE_Balance.png";
+    public const string GuildHallsPvPMode = "https://wiki.guildwars2.com/images/d/d0/PvP_Balance.png";
+    public const string GuildHallWvWMode = "https://wiki.guildwars2.com/images/c/c7/WvW_Balance.png";
     public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
     public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
     public const string NoDownedState = "https://wiki.guildwars2.com/images/4/48/No_Downed_State.png";
