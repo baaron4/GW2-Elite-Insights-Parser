@@ -97,8 +97,8 @@ internal static class EffectImages
     internal const string EffectMineField = "https://i.imgur.com/Miy0H2G.png";
     internal const string EffectDetonateThrowMineOrMineField = "https://i.imgur.com/0Jbtf2q.png";
     internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
-    internal const string EffectLuminousStaff = "https://i.imgur.com/Vy3948S.png"; // TODO
-    internal const string EffectSymbolOfResolutionOrLuminousStaff = "https://i.imgur.com/Vy3948S.png"; // TODO
+    internal const string EffectLuminousStaff = "https://i.imgur.com/5IIzT3G.png";
+    internal const string EffectSymbolOfResolutionOrLuminousStaff = "https://i.imgur.com/GOp2m5y.png";
     internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
     internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
     internal const string EffectSymbolOfFaith = "https://i.imgur.com/yfe04jz.png";
