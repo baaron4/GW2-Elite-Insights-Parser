@@ -67,7 +67,7 @@ internal abstract class RaidWingLogic : RaidLogic
             {
                 foreach (var player in log.PlayerList)
                 {
-                    if (encounterPhase.IntersectsWindow(player.FirstAware, player.LastAware) && player.HasBuff(log, downAndOutID, encounterPhase.End, 100))
+                    if (encounterPhase.IntersectsWindow(player.FirstAware, player.LastAware) && player.HasBuff(log, downAndOutID, encounterPhase.End, ParserHelper.ServerDelayConstant))
                     {
                         instanceBuffs.Add(new InstanceBuff(log.Buffs.BuffsByIDs[downAndOutID], 1, mainPhase));
                         break;
