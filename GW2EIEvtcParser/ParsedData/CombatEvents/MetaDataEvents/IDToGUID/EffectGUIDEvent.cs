@@ -16,7 +16,7 @@ public class EffectGUIDEvent : IDToGUIDEvent
         }
     }
 
-    internal EffectGUIDEvent() : base()
+    private EffectGUIDEvent() : base()
     {
     }
 }

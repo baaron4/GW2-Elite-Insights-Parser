@@ -8,7 +8,7 @@ public class EmoteGUIDEvent : IDToGUIDEvent
     {
     }
 
-    internal EmoteGUIDEvent() : base()
+    private EmoteGUIDEvent() : base()
     {
     }
 }

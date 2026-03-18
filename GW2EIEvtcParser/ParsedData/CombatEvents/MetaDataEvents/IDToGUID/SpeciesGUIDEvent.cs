@@ -8,7 +8,7 @@ public class SpeciesGUIDEvent : IDToGUIDEvent
     {
     }
 
-    internal SpeciesGUIDEvent() : base()
+    private SpeciesGUIDEvent() : base()
     {
     }
 }

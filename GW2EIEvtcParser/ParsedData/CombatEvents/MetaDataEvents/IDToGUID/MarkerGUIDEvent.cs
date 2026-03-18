@@ -17,7 +17,7 @@ public class MarkerGUIDEvent : IDToGUIDEvent
         }
     }
 
-    internal MarkerGUIDEvent() : base()
+    private MarkerGUIDEvent() : base()
     {
     }
 

@@ -8,7 +8,7 @@ public class TeamGUIDEvent : IDToGUIDEvent
     {
     }
 
-    internal TeamGUIDEvent() : base()
+    private TeamGUIDEvent() : base()
     {
     }
 }

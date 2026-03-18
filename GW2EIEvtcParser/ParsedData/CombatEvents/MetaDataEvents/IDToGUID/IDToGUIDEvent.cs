@@ -13,7 +13,7 @@ public abstract class IDToGUIDEvent : MetaDataEvent
         ContentID = evtcItem.SkillID;
     }
 
-    internal IDToGUIDEvent() : base()
+    protected IDToGUIDEvent() : base()
     {
         GUID = new();
         ContentID = long.MinValue;

@@ -8,7 +8,7 @@ public class SkillGUIDEvent : IDToGUIDEvent
     {
     }
 
-    internal SkillGUIDEvent() : base()
+    private SkillGUIDEvent() : base()
     {
     }
 }
