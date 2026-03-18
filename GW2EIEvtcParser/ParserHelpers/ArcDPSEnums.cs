@@ -111,7 +111,56 @@ public static class ArcDPSEnums
     {
         return bt < (byte)Activation.Unknown ? (Activation)bt : Activation.Unknown;
     }
+#if DEBUG
+    public enum AnimationStart : byte
+    {
+        None = 0,
+        Command = 1,
+        Dodge = 2,
+        StowDraw = 3,
+        MoveSkill = 4,
+        MotionSkill = 5,
+        GadgetInteract = 6,
+        Emote = 7,
 
+        Unknown
+    };
+
+    public static AnimationStart GetAnimationStart(byte bt)
+    {
+        return bt < (byte)AnimationStart.Unknown ? (AnimationStart)bt : AnimationStart.Unknown;
+    }
+    public enum AnimationStop : byte
+    {
+        None = 0,
+        Instant = 1,
+        MultiDefunc = 2,
+        Transition = 3,
+        Partial = 4,
+        Ended = 5,
+        Cancel = 6,
+        StowDraw = 7,
+        Interrupt = 8,
+        Death = 9,
+        Downed = 10,
+        CrowdControl = 11,
+        Command = 12,
+        MotionSkill = 13,
+        MoveDodge = 14,
+        MotionSkillViaReset = 15,
+        MoveSkill = 16,
+        MovePos = 17,
+        Any = 18,
+        AnyViaReset = 19,
+
+        Unknown
+    };
+
+    public static AnimationStop GetAnimationStop(byte bt)
+    {
+        return bt < (byte)AnimationStop.Unknown ? (AnimationStop)bt : AnimationStop.Unknown;
+    }
+#endif
     // Buff remove
     public enum BuffRemove : byte
     {
