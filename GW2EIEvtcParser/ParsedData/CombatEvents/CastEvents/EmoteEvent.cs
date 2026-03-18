@@ -6,10 +6,14 @@ namespace GW2EIEvtcParser.ParsedData;
 public class EmoteEvent : AnimatedCastEvent
 {
     public readonly long EmoteID;
-
-    internal EmoteEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
+    public readonly EmoteGUIDEvent EmoteGUIDEvent = EmoteGUIDEvent.DummyEmoteGUID;
+    internal EmoteEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         EmoteID = (startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null")).Pad;
+        if (emoteGUIDict.TryGetValue(EmoteID, out var emoteGUIDEvent))
+        {
+            EmoteGUIDEvent = emoteGUIDEvent;
+        }
     }
 
 }

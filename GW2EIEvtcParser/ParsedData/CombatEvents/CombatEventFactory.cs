@@ -517,17 +517,21 @@ internal static class CombatEventFactory
         }
     }
 
-    private static AnimatedCastEvent CreateAnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, LogData logData, CombatItem? endItem, long id)
+    private static AnimatedCastEvent CreateAnimatedCastEvent(EvtcVersionEvent evtcVersion, CombatItem? startItem, AgentData agentData, SkillData skillData, LogData logData, CombatItem? endItem, long id, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
+        if (evtcVersion.Build < ArcDPSBuilds.EmoteAndGadgetInteractionAdded)
+        {
+            return new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd);
+        }
         return id switch
         {
-            SkillIDs.ArcDPSEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }
 
-    public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData)
+    public static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
         using var _t = new AutoTrace("CreateCastEvents");
         //TODO_PERF(Rennorb)
@@ -547,7 +551,7 @@ internal static class CombatEventFactory
                         // missing end
                         if (startItem != null)
                         {
-                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
                         }
                         startItem = c;
                     }
@@ -555,13 +559,13 @@ internal static class CombatEventFactory
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, c, skillID));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, c, skillID, emoteGUIDict));
                             startItem = null;
                         }
                         // missing start
                         else
                         {
-                            var toCheck = CreateAnimatedCastEvent(null, agentData, skillData, logData, c, skillID);
+                            var toCheck = CreateAnimatedCastEvent(evtcVersion, null, agentData, skillData, logData, c, skillID, emoteGUIDict);
                             // we are only interested in animations started before log starts
                             if (toCheck.Time < logData.EvtcLogStart)
                             {
@@ -574,7 +578,7 @@ internal static class CombatEventFactory
                 // missing end
                 if (startItem != null)
                 {
-                    resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID));
+                    resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
                 }
                 resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                 resBySrcAgent.AddRange(resBySrcAgentBySkillID);

@@ -82,6 +82,7 @@ public partial class CombatData
     public readonly bool HasCrowdControlData = false;
     public readonly bool HasEffectData = false;
     public readonly bool HasMarkerData = false;
+    public readonly bool HasEmoteData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
 
@@ -596,17 +597,18 @@ public partial class CombatData
         skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
-        List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, logData);
+        List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(evtcVersion, castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO_PERF(Rennorb)
         _instantCastData = [];
         _instantCastDataByID = [];
         _animatedCastDataByID = animatedCastData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
-        if (_animatedCastDataByID.TryGetValue(ArcDPSEmote, out var emoteCasts))
+        if (evtcVersion.Build >= ArcDPSBuilds.EmoteAndGadgetInteractionAdded && _animatedCastDataByID.TryGetValue(ArcDPSEmote, out var emoteCasts))
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Emote Events");
             var emotes = emoteCasts.OfType<EmoteEvent>().ToList();
+            HasEmoteData = emotes.Count > 0;
             _emoteCastData = emotes.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _emoteCastDataByEmoteID = emotes.GroupBy(x => x.EmoteID).ToDictionary(x => x.Key, x => x.ToList());
         } 

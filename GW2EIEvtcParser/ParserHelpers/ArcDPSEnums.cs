@@ -34,6 +34,7 @@ public static class ArcDPSEnums
         public const int SpeciesSkillGUIDs = 20250428;
         public const int MissilesIntroduced = 20250525;
         public const int BuffFormulaOriginalAttribute = 20250913;
+        public const int EmoteAndGadgetInteractionAdded = 99999999;
         //
         public const int EndOfLife = int.MaxValue;
     }
