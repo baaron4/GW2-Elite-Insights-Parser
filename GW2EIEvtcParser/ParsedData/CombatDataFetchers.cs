@@ -651,17 +651,6 @@ partial class CombatData
         return false;
     }
 
-    /// <summary>
-    /// Appends effect events by the given agent and effect GUID.
-    /// </summary>
-    public void AppendEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
-    {
-        if (TryGetEffectEventsByGUID(effect, out var effects))
-        {
-            effectEvents.AddRange(GetSrcEffectEventsCheckingParent(agent, effects));
-        }
-    }
-
 
     /// <summary>
     /// Returns effect events on the given agent and effect GUID.
@@ -682,28 +671,21 @@ partial class CombatData
         effectEvents = null;
         return false;
     }
-    /// <summary>
-    /// Append effect events on the given agent and effect GUID.
-    /// </summary>
-    public void AppendEffectEventsByDstWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
-    {
-        if (TryGetEffectEventsByGUID(effect, out var effects))
-        {
-            effectEvents.AddRange(GetDstEffectEventsCheckingParent(agent, effects));
-        }
-    }
 
     /// <summary>
     /// Returns effect events by the given agent and effect GUIDs.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effectGUIDs, out List<EffectEvent> effectEvents)
     {
         //TODO_PERF(Rennorb): find average complexity
-        effectEvents = new List<EffectEvent>(effects.Length * 10);
-        foreach (var effectGUID in effects)
+        effectEvents = new List<EffectEvent>(effectGUIDs.Length * 10);
+        foreach (var effectGUID in effectGUIDs)
         {
-            AppendEffectEventsBySrcWithGUID(agent, effectGUID, effectEvents);
+            if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        {
+                effectEvents.AddRange(GetSrcEffectEventsCheckingParent(agent, effects));
+            }
         }
 
         return effectEvents.Count > 0;
@@ -712,13 +694,16 @@ partial class CombatData
     /// Returns effect events on the given agent and effect GUIDs.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effectGUIDs, out List<EffectEvent> effectEvents)
     {
         //TODO_PERF(Rennorb): find average complexity
-        effectEvents = new List<EffectEvent>(effects.Length * 10);
-        foreach (var effectGUID in effects)
+        effectEvents = new List<EffectEvent>(effectGUIDs.Length * 10);
+        foreach (var effectGUID in effectGUIDs)
         {
-            AppendEffectEventsByDstWithGUID(agent, effectGUID, effectEvents);
+            if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        {
+                effectEvents.AddRange(GetDstEffectEventsCheckingParent(agent, effects));
+            }
         }
 
         return effectEvents.Count > 0;
@@ -745,26 +730,18 @@ partial class CombatData
     }
 
     /// <summary>
-    /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
-    /// </summary>
-    public void AppendEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
-    {
-        if (TryGetEffectEventsByGUID(effect, out var effects))
-        {
-            effectEvents.AddRange(GetSrcWithMasterEffectEventsCheckingParent(agent, effects));
-        }
-    }
-
-    /// <summary>
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUIDs.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, Span<GUID> effects, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, Span<GUID> effectGUIDs, out List<EffectEvent> effectEvents)
     {
         effectEvents = [];
-        foreach (var effectGUID in effects)
+        foreach (var effectGUID in effectGUIDs)
         {
-            AppendEffectEventsByMasterWithGUID(agent, effectGUID, effectEvents);
+            if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        {
+                effectEvents.AddRange(GetSrcWithMasterEffectEventsCheckingParent(agent, effects));
+            }
         }
 
         return effectEvents.Count > 0;
