@@ -59,6 +59,9 @@ public partial class CombatData
     private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
     private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataByID;
 
+    private readonly Dictionary<AgentItem, List<EmoteEvent>> _emoteCastData;
+    private readonly Dictionary<long, List<EmoteEvent>> _emoteCastDataByEmoteID;
+
     private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
     private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataByID;
 
@@ -600,8 +603,19 @@ public partial class CombatData
         _instantCastData = [];
         _instantCastDataByID = [];
         _animatedCastDataByID = animatedCastData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
-        
-        operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
+        if (_animatedCastDataByID.TryGetValue(ArcDPSEmote, out var emoteCasts))
+        {
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Emote Events");
+            var emotes = emoteCasts.OfType<EmoteEvent>().ToList();
+            _emoteCastData = emotes.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
+            _emoteCastDataByEmoteID = emotes.GroupBy(x => x.EmoteID).ToDictionary(x => x.Key, x => x.ToList());
+        } 
+        else
+        {
+            _emoteCastData = [];
+            _emoteCastDataByEmoteID = [];
+        }
+         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _buffDataBySrc = buffEvents.Where(x => x is not BuffExtensionEvent).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());

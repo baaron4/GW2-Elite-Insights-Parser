@@ -896,6 +896,16 @@ partial class CombatData
         return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SpeciesGUIDEvent.DummySpeciesGUID : null;
     }
 
+    public EmoteGUIDEvent GetEmoteGUIDEventByGUID(GUID emote)
+    {
+        return _metaDataEvents.EmoteGUIDEventsByGUID.TryGetValue(emote, out var evt) ? evt : EmoteGUIDEvent.DummyEmoteGUID;
+    }
+
+    public EmoteGUIDEvent GetEmoteGUIDEventByEmoteID(long emoteID)
+    {
+        return _metaDataEvents.EmoteGUIDEventsByEmoteID.TryGetValue(emoteID, out var evt) ? evt : EmoteGUIDEvent.DummyEmoteGUID;
+    }
+
     public MarkerGUIDEvent GetMarkerGUIDEventByGUID(GUID marker)
     {
         return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;

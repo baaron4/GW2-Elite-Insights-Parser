@@ -352,6 +352,11 @@ internal static class CombatEventFactory
                             metaDataEvents.TeamGUIDEventsByTeamID[teamGUID.TeamID] = teamGUID;
                             metaDataEvents.TeamGUIDEventsByGUID[teamGUID.GUID] = teamGUID;
                             break;
+                        case ContentLocal.Emote:
+                            var emoteGUID = new EmoteGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.EmoteGUIDEventsByEmoteID[emoteGUID.EmoteID] = emoteGUID;
+                            metaDataEvents.EmoteGUIDEventsByGUID[emoteGUID.GUID] = emoteGUID;
+                            break;
                         default:
                             break;
                     }
