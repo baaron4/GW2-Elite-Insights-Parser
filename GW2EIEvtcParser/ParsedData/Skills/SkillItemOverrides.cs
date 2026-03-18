@@ -13,10 +13,14 @@ public static class SkillItemOverrides
         { Resurrect, "Resurrect" },
         { Resurrect2, "Resurrect" },
         { Bandage, "Bandage" },
+#region ArcDPS
         { ArcDPSDodge, "Dodge" },
         { ArcDPSDodge20220307, "Dodge" },
         { ArcDPSGenericBreakbar, "Generic Breakbar" },
         { ArcDPSGenericBreakbar20220307, "Generic Breakbar" },
+        { ArcDPSGadgetInteract, "Gadget Interaction" },
+        { ArcDPSEmote, "Emote" },
+#endregion
         { WaterBlastCombo1, "Water Blast Combo" },
         { WaterBlastCombo2, "Water Blast Combo" },
         { WaterLeapCombo, "Water Leap Combo" },

@@ -512,6 +512,16 @@ internal static class CombatEventFactory
         }
     }
 
+    private static AnimatedCastEvent CreateAnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, LogData logData, CombatItem? endItem, long id)
+    {
+        return id switch
+        {
+            SkillIDs.ArcDPSEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+        };
+    }
+
     public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData)
     {
         using var _t = new AutoTrace("CreateCastEvents");
@@ -520,10 +530,11 @@ internal static class CombatEventFactory
         foreach (var castEvents in castEventsBySrcAgent.Values)
         {
             var resBySrcAgent = new List<AnimatedCastEvent>();
-            foreach (var castEventsBySkillID in castEvents.GroupBy(x => x.SkillID))
+            foreach (var castEventsBySkillID in castEvents.GroupBy(x => (long)x.SkillID))
             {
                 var resBySrcAgentBySkillID = new List<AnimatedCastEvent>();
                 CombatItem? startItem = null;
+                var skillID = castEventsBySkillID.Key;
                 foreach (CombatItem c in castEventsBySkillID)
                 {
                     if (c.StartCasting())
@@ -531,7 +542,7 @@ internal static class CombatEventFactory
                         // missing end
                         if (startItem != null)
                         {
-                            resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, logData.EvtcLogEnd));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID));
                         }
                         startItem = c;
                     }
@@ -539,13 +550,13 @@ internal static class CombatEventFactory
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, c));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, c, skillID));
                             startItem = null;
                         }
                         // missing start
                         else
                         {
-                            var toCheck = new AnimatedCastEvent(agentData, skillData, c);
+                            var toCheck = CreateAnimatedCastEvent(null, agentData, skillData, logData, c, skillID);
                             // we are only interested in animations started before log starts
                             if (toCheck.Time < logData.EvtcLogStart)
                             {
@@ -558,7 +569,7 @@ internal static class CombatEventFactory
                 // missing end
                 if (startItem != null)
                 {
-                    resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, logData.EvtcLogEnd));
+                    resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID));
                 }
                 resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                 resBySrcAgent.AddRange(resBySrcAgentBySkillID);
