@@ -468,6 +468,7 @@ internal static class ParserIcons
     private const string CrocodilianRazortooth = "https://i.imgur.com/tyLGqy5.png";
     private const string DownedCrocodilianRazortooth = "https://i.imgur.com/v3Z6ZvX.png";
     private const string LightThief = "https://i.imgur.com/qJZ9arr.png";
+    private const string EtherealSeal = "https://i.imgur.com/9alXwPm.png";
     #endregion
 
     #region Minion
@@ -1376,6 +1377,7 @@ internal static class ParserIcons
         { TargetID.ExecutorOfWaves, ExecutorOfWaves },
         { TargetID.GuardiansGladeTornado, TrashSmallJumpyTornado },
         { TargetID.LightThief, LightThief },
+        { TargetID.EtherealSeal, EtherealSeal },
     };
 
     /// <summary>
