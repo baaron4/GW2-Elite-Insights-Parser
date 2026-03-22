@@ -52,6 +52,7 @@ public class AnimatedCastEvent : CastEvent
                     break;
             }
         }
+        AcceleratedToNonAcceleratedRatio = nonScaledToScaledRatio;
         Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
     }
 

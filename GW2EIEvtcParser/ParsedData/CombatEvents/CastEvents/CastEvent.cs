@@ -29,6 +29,7 @@ public abstract class CastEvent : TimeCombatEvent
     public long ExpectedEndTime => Time + ExpectedDuration;
 
     public double Acceleration { get; protected set; } = 0;
+    public double AcceleratedToNonAcceleratedRatio = 1.0;
 
     internal CastEvent(CombatItem baseItem, AgentData agentData, SkillData skillData) : base(baseItem.Time)
     {
