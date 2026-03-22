@@ -817,7 +817,7 @@ internal class Dhuum : HallOfChains
             if (gadgetInteract.Gadget.IsSpecies(TargetID.EtherealSeal))
             {
                 // Hardcoded to 3000 ms as expected duration on cast start events for gadget interact is wrong
-                replay.Decorations.AddCastBar(p, gadgetInteract, 3000);
+                replay.Decorations.AddPlayerCastBar(p, gadgetInteract, 3000);
             }
         }
     }

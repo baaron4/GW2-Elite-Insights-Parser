@@ -581,16 +581,16 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Add a cast bar for given cast event, using a different color if interrupted
+    /// Add a cast bar for given cast event for given player, using a different color if interrupted
     /// </summary>
-    /// <param name="actor"></param>
+    /// <param name="player"></param>
     /// <param name="castEvent"></param>
-    internal void AddCastBar(SingleActor actor, AnimatedCastEvent castEvent, long expectedDuration = 0)
+    internal void AddPlayerCastBar(Player player, AnimatedCastEvent castEvent, long expectedDuration = 0)
     {
         long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + (long)(expectedDuration * castEvent.AcceleratedToNonAcceleratedRatio);
         Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (castEvent.Time, castEvent.EndTime),
                         castEvent.IsInterrupted ? Colors.LightRed : Colors.DarkYellow, 0.8, Colors.Black, 0.6,
-                        [(castEvent.Time, 0), (expectedScaledEndTime, 100)], new AgentConnector(actor))
+                        [(castEvent.Time, 0), (expectedScaledEndTime, 100)], new AgentConnector(player))
            .UsingRotationConnector(new AngleConnector(180))
         );
     }
