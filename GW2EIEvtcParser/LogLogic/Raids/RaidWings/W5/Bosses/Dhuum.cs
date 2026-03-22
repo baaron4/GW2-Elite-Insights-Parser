@@ -811,6 +811,15 @@ internal class Dhuum : HallOfChains
             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
+        // Ethereal Seal
+        foreach (var gadgetInteract in log.CombatData.GetGadgetInteractCastData(p.AgentItem))
+        {
+            if (gadgetInteract.Gadget.IsSpecies(TargetID.EtherealSeal))
+            {
+                // Hardcoded to 3000 ms as expected duration on cast start events for gadget interact is wrong
+                replay.Decorations.AddCastBar(p, gadgetInteract, 3000);
+            }
+        }
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

@@ -581,6 +581,21 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add a cast bar for given cast event, using a different color if interrupted
+    /// </summary>
+    /// <param name="actor"></param>
+    /// <param name="castEvent"></param>
+    internal void AddCastBar(SingleActor actor, AnimatedCastEvent castEvent, long expectedDuration = 0)
+    {
+        long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + (long)(expectedDuration * castEvent.AcceleratedToNonAcceleratedRatio);
+        Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (castEvent.Time, castEvent.EndTime),
+                        castEvent.IsInterrupted ? Colors.LightRed : Colors.DarkYellow, 0.8, Colors.Black, 0.6,
+                        [(castEvent.Time, 0), (expectedScaledEndTime, 100)], new AgentConnector(actor))
+           .UsingRotationConnector(new AngleConnector(180))
+        );
+    }
+
+    /// <summary>
     /// Adds a dynamic breakbar decoration.<br></br>
     /// To be used during active state only.
     /// </summary>

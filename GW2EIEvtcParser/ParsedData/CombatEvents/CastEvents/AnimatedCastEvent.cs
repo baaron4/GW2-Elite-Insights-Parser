@@ -52,7 +52,7 @@ public class AnimatedCastEvent : CastEvent
                     break;
             }
         }
-        AcceleratedToNonAcceleratedRatio = nonScaledToScaledRatio;
+        AcceleratedToNonAcceleratedRatio = 1.0 / nonScaledToScaledRatio;
         Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
     }
 
