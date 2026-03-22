@@ -622,19 +622,20 @@ public partial class CombatData
             _emoteCastData = [];
             _emoteCastDataByEmoteID = [];
         }
-        if (evtcVersion.Build >= ArcDPSBuilds.EmoteAndGadgetInteractionAdded && _animatedCastDataByID.TryGetValue(ArcDPSEmote, out var gadgetInteractCasts))
+        if (evtcVersion.Build >= ArcDPSBuilds.EmoteAndGadgetInteractionAdded && _animatedCastDataByID.TryGetValue(ArcDPSGadgetInteract, out var gadgetInteractCasts))
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Gadget Iteract Events");
             var gadgetInteracts = gadgetInteractCasts.OfType<GadgetInteractEvent>().ToList();
             HasGadgetInteractData = gadgetInteracts.Count > 0;
             _gadgetInteractCastData = gadgetInteracts.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
             _gadgetInteractCastDataByGadget = gadgetInteracts.GroupBy(x => x.Gadget).ToDictionary(x => x.Key, x => x.ToList());
-            _gadgetInteractCastDataBySpeciesID = gadgetInteracts.GroupBy(x => x.Gadget.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _gadgetInteractCastDataBySpeciesID = gadgetInteracts.GroupBy(x => (long)x.Gadget.ID).ToDictionary(x => x.Key, x => x.ToList());
         }
         else
         {
-            _emoteCastData = [];
-            _emoteCastDataByEmoteID = [];
+            _gadgetInteractCastData = [];
+            _gadgetInteractCastDataByGadget = [];
+            _gadgetInteractCastDataBySpeciesID = [];
         }
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
