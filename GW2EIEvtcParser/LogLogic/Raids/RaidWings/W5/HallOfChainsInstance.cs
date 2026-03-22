@@ -335,6 +335,7 @@ internal class HallOfChainsInstance : HallOfChains
     {
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
         Dhuum.HandleYourSouls(agentData, combatData);
+        Dhuum.HandleEtherealSeals(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         foreach (var target in Targets)
         {
