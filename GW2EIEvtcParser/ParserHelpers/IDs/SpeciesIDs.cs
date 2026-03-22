@@ -217,6 +217,7 @@ public static class SpeciesIDs
         UnderworldReaper = 19831,
         DhuumDesmina = 19481,
         YourSoul = SpeciesIDs.YourSoul,
+        EtherealSeal = SpeciesIDs.EtherealSeal,
         // - Wing 6
         // - Conjured Amalgamate
         ConjuredAmalgamate = 43974, // Gadget
@@ -1248,6 +1249,7 @@ public static class SpeciesIDs
     private const int HTGreenSooWonSouth = -121;
     private const int GrandRaidKelaChest = -122;
     private const int InsectSwarms = -123;
+    private const int EtherealSeal = -124;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

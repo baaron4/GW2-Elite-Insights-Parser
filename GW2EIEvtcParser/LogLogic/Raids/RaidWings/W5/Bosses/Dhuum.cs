@@ -270,7 +270,7 @@ internal class Dhuum : HallOfChains
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -287,7 +287,8 @@ internal class Dhuum : HallOfChains
         [
             TargetID.DhuumsMessenger,
             TargetID.Deathling,
-            TargetID.DhuumDesmina
+            TargetID.DhuumDesmina,
+            TargetID.EtherealSeal,
         ];
     }
 
@@ -331,6 +332,29 @@ internal class Dhuum : HallOfChains
         }
     }
 
+    internal static void HandleEtherealSeals(AgentData agentData, List<CombatItem> combatData)
+    {
+        // There are other gadgets with MaxHP 0, Width 16 and Height 300.
+        var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0);
+        foreach (CombatItem maxHP in maxHPs)
+        {
+            AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
+            if (candidate.Type == AgentItem.AgentType.Gadget && candidate.HitboxWidth == 16 && candidate.HitboxHeight == 300)
+            {
+                var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPoint3D).ToList();
+                foreach (KeyValuePair<int, Vector3> position in EtherealSealsPositions)
+                {
+                    if (positions.Any(x => x == position.Value))
+                    {
+                        candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                        candidate.OverrideID(TargetID.EtherealSeal, agentData);
+                        candidate.OverrideName("Ethereal Seal " + position.Key);
+                    }
+                }
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
@@ -338,6 +362,7 @@ internal class Dhuum : HallOfChains
             throw new MissingKeyActorsException("Dhuum not found");
         }
         HandleYourSouls(agentData, combatData);
+        HandleEtherealSeals(agentData, combatData);
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
@@ -366,6 +391,17 @@ internal class Dhuum : HallOfChains
         (new(14929, 1762, -6215), 5),
         (new(16062, 1991, -6215), 6),
     ];
+
+    private static readonly Dictionary<int, Vector3> EtherealSealsPositions = new()
+    {
+        { 1, new(16894.21f, 1212.2545f, -6209.89f) },
+        { 2, new(16844.303f, 78.949524f, -6211.9116f) },
+        { 3, new(15938.565f, -579.9974f, -6211.4263f) },
+        { 4, new(14871.911f, -256.8926f, -6211.333f) },
+        { 5, new(14406.419f, 766.09796f, -6211.3896f) },
+        { 6, new(14923.716f, 1766.715f, -6210.4927f) },
+        { 7, new(16053.133f, 1966.0598f, -6207.706f) },
+    };
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -687,6 +723,16 @@ internal class Dhuum : HallOfChains
 
                     }
                 }
+                break;
+            case (int)TargetID.EtherealSeal:
+                long hideStart = target.FirstAware;
+                var majorSoulSplit = log.CombatData.GetAnimatedCastData(MajorSoulSplit);
+                foreach (var split in majorSoulSplit)
+                {
+                    replay.Hidden.Add(new(hideStart, split.Time));
+                    hideStart = split.Caster.LastAware;
+                }
+                replay.Hidden.Add(new(hideStart, target.LastAware));
                 break;
             default:
                 break;
