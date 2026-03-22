@@ -336,15 +336,16 @@ internal class Dhuum : HallOfChains
     {
         // There are other gadgets with MaxHP 0, Width 16 and Height 300.
         var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0);
+        var positionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position).ToList();
         foreach (CombatItem maxHP in maxHPs)
         {
             AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
             if (candidate.Type == AgentItem.AgentType.Gadget && candidate.HitboxWidth == 16 && candidate.HitboxHeight == 300)
             {
-                var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPoint3D).ToList();
+                var positions = positionEvents.Where(x => x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPoint3D).ToList();
                 foreach (KeyValuePair<int, Vector3> position in EtherealSealsPositions)
                 {
-                    if (positions.Any(x => x == position.Value))
+                    if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
                     {
                         candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                         candidate.OverrideID(TargetID.EtherealSeal, agentData);
