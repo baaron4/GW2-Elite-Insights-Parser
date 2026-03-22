@@ -30,9 +30,12 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public readonly int ID;
     public string InitialTooltip { get; protected set; }
 
+    public bool FoeAlwaysMaster { get; private set; }
+    public bool ActorAlwaysMaster { get; private set; }
+
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
-    private List<DamageLogChecker> _dlCheckers;
-    private List<ActorChecker> _earlyExitCheckers;
+    private readonly List<DamageLogChecker> _dlCheckers;
+    private readonly List<ActorChecker> _earlyExitCheckers;
 
     public bool SpecSpecificShared { get; private set; }
 
@@ -82,6 +85,18 @@ internal abstract class DamageModifierDescriptor : IVersionable
     internal virtual DamageModifierDescriptor UsingEarlyExit(ActorChecker actorChecker)
     {
         _earlyExitCheckers.Add(actorChecker);
+        return this;
+    }
+
+    internal virtual DamageModifierDescriptor UsingActorFetchIsAlwaysMaster()
+    {
+        ActorAlwaysMaster = true;
+        return this;
+    }
+
+    internal virtual DamageModifierDescriptor UsingFoeFetchIsAlwaysMaster()
+    {
+        FoeAlwaysMaster = true;
         return this;
     }
 

@@ -38,11 +38,11 @@ public class IncomingDamageModifier : DamageModifier
     }
     internal override AgentItem GetFoe(HealthDamageEvent evt)
     {
-        return evt.From;
+        return FoeAlwaysMaster ? evt.From.GetFinalMaster() : evt.From;
     }
 
     internal override AgentItem GetActor(HealthDamageEvent evt)
     {
-        return evt.To;
+        return ActorAlwaysMaster ? evt.To.GetFinalMaster() : evt.To;
     }
 }

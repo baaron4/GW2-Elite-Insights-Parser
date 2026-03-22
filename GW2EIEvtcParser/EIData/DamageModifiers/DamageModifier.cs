@@ -26,6 +26,8 @@ public abstract class DamageModifier
     public bool Incoming { get; protected set; }
 
     public bool NeedsMinions => DmgSrc == DamageSource.All || DmgSrc == DamageSource.PetsOnly;
+    protected bool FoeAlwaysMaster => DamageModDescriptor.FoeAlwaysMaster;
+    protected bool ActorAlwaysMaster => DamageModDescriptor.ActorAlwaysMaster;
 
     internal DamageModifier(DamageModifierDescriptor damageModDescriptor)
     {

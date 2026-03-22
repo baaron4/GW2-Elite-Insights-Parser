@@ -45,6 +45,7 @@ internal static class ChronomancerHelper
         new BuffOnActorDamageModifier(Mod_DangerTime, DangerTime, "Danger Time", "10%", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .UsingChecker(MesmerHelper.IllusionsWithMesmerChecker)
+            .UsingActorFetchIsAlwaysMaster()
             .WithBuilds(GW2Builds.January2026Balance),
         // Time Bomb
         new BuffOnFoeDamageModifier(Mod_TimeBomb, TimeBombBuff, "Time Bomb", "15%", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.TimeBomb, DamageModifierMode.All)

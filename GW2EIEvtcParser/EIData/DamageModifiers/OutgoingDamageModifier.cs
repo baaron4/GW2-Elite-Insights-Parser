@@ -147,13 +147,15 @@ public class OutgoingDamageModifier : DamageModifier
         }
         throw new NotImplementedException("Not implemented damage source " + DmgSrc);
     }
+
+
     internal override AgentItem GetFoe(HealthDamageEvent evt)
     {
-        return evt.To;
+        return FoeAlwaysMaster ? evt.To.GetFinalMaster() : evt.To;
     }
 
     internal override AgentItem GetActor(HealthDamageEvent evt)
     {
-        return evt.From;
+        return ActorAlwaysMaster ? evt.From.GetFinalMaster() : evt.From;
     }
 }

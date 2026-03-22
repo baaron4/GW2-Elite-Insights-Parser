@@ -193,6 +193,7 @@ internal static class MesmerHelper
         // - Phantasmal Force
         new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
             .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsPhantasm(x.ReferenceAgentItem)))
+            .UsingActorFetchIsAlwaysMaster()
             .UsingChecker(PhantasmsChecker),
         
         // Chaos
