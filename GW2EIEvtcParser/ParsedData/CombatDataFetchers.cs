@@ -532,6 +532,29 @@ partial class CombatData
     {
         return _animatedCastDataByID.GetValueOrEmpty(skillID);
     }
+    #region GADGET INTERACT
+    /// <summary>
+    /// Returns list of gadget interact cast events done by Agent
+    /// </summary>
+    public IReadOnlyList<GadgetInteractEvent> GetGadgetInteractCastData(AgentItem caster)
+    {
+        return GetTimeValueOrEmpty(_gadgetInteractCastData, caster);
+    }
+    /// <summary>
+    /// Returns list of gadget interact cast events attached to gadget
+    /// </summary>
+    public IReadOnlyList<GadgetInteractEvent> GetGadgetInteractCastDataByGadget(AgentItem gadget)
+    {
+        return GetTimeValueOrEmpty(_gadgetInteractCastDataByGadget, gadget);
+    }
+    /// <summary>
+    /// Returns list of gadget interact cast events attached to gadget
+    /// </summary>
+    public IReadOnlyList<GadgetInteractEvent> GetGadgetInteractCastDataByGadgetSpeciesID(long id)
+    {
+        return _gadgetInteractCastDataBySpeciesID.GetValueOrEmpty(id);
+    }
+    #endregion GADGET INTERACT
     #region EMOTES
     /// <summary>
     /// Returns list of emote cast events from emote ID
