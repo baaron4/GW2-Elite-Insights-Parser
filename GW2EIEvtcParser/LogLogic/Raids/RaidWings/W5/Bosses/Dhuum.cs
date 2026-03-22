@@ -725,24 +725,14 @@ internal class Dhuum : HallOfChains
                 }
                 break;
             case (int)TargetID.EtherealSeal:
-                var phases = log.LogData.GetEncounterPhases(log).Where(x => x.ID == LogID);
-                var underworldReaper = log.AgentData.GetNPCsByID(TargetID.UnderworldReaper).FirstOrDefault();
-                if (underworldReaper != null)
+                long hideStart = target.FirstAware;
+                var majorSoulSplit = log.CombatData.GetAnimatedCastData(MajorSoulSplit);
+                foreach (var split in majorSoulSplit)
                 {
-                    var phase = phases.FirstOrDefault(x => x.IntersectsWindow(underworldReaper.FirstAware, underworldReaper.LastAware));
-                    if (phase != null)
-                    {
-                        var deathEvent = log.CombatData.GetDeadEvents(underworldReaper).FirstOrDefault(x => x.Time >= phase.Start && x.Time <= phase.End);
-                        long time = deathEvent != null ? deathEvent.Time : phase.End;
-                        foreach (Vector3 vector in EtherealSealsPositions.Select(x => x.Value))
-                        {
-                            if (target.TryGetCurrentInterpolatedPosition(log, target.FirstAware, out var sealPosition) && sealPosition == vector)
-                            {
-                                replay.Hidden.Add(new(target.AgentItem.FirstAware, time));
-                            }
-                        }
-                    }
+                    replay.Hidden.Add(new(hideStart, split.Time));
+                    hideStart = split.Caster.LastAware;
                 }
+                replay.Hidden.Add(new(hideStart, target.LastAware));
                 break;
             default:
                 break;
