@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData;
 
 
-internal abstract class EnemyCastMechanic : CastMechanic
+internal abstract class EnemyCastMechanic : AnimatedCastMechanic
 {
 
     public EnemyCastMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
