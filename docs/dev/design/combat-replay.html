@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GW2 Combat Replay — Wireframe</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:       #272b30;
+  --bg-side:  #1e2226;
+  --bg-panel: #2c3138;
+  --bg-deep:  #181c20;
+  --bg-hover: #30363d;
+  --border:   #363c44;
+  --border-l: rgba(54,60,68,0.6);
+  --text:     #aaaaaa;
+  --text-dim: #7a8490;
+  --text-hi:  #d0d4d8;
+  --accent:   #4d8fc4;
+  --accent-hi:#6aaad8;
+  --green:    #6db88a;
+  --warn:     #c07850;
+  --red:      #c05858;
+  --ff: 'Noto Sans', sans-serif;
+}
+body { font-family: var(--ff); background: var(--bg-side); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* META */
+.meta { background: var(--bg-deep); border-bottom: 1px solid var(--border); padding: 7px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.meta-title { font-size: 12px; font-weight: 600; color: var(--text-hi); }
+.meta-sub   { font-size: 11px; color: var(--text-dim); }
+.meta-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); color: var(--text-dim); }
+.meta-badge.success { border-color: rgba(109,184,138,.35); color: var(--green); }
+
+/* SHELL */
+.shell { flex: 1; display: flex; overflow: hidden; }
+
+/* ══ LEFT SIDEBAR ══ */
+.left-sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: var(--bg-side);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: width .18s ease;
+  position: relative;
+}
+.left-sidebar.collapsed { width: 38px; }
+
+.sidebar-toggle {
+  position: absolute; top: 8px; right: 6px;
+  width: 22px; height: 22px;
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: 3px; cursor: pointer; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--text-dim);
+  transition: all .1s;
+}
+.sidebar-toggle:hover { color: var(--text); }
+
+/* icon strip (collapsed) */
+.icon-strip {
+  display: none;
+  flex-direction: column; align-items: center;
+  gap: 2px; padding-top: 36px;
+}
+.left-sidebar.collapsed .icon-strip { display: flex; }
+.left-sidebar.collapsed .sidebar-content { display: none; }
+.icon-strip-btn {
+  width: 30px; height: 30px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; color: var(--text-dim);
+  transition: background .1s;
+}
+.icon-strip-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+/* sidebar content */
+.sidebar-content { flex: 1; overflow-y: auto; padding-top: 34px; }
+
+/* damage mini-table */
+.dmg-table-wrap { padding: 8px 8px 4px; border-bottom: 1px solid var(--border); }
+.dmg-table { width: 100%; border-collapse: collapse; }
+.dmg-table th { font-size: 9px; font-weight: 600; color: var(--text-dim); padding: 2px 4px; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; }
+.dmg-table td { font-size: 10px; color: var(--text); padding: 3px 4px; border-bottom: 1px solid var(--border-l); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dmg-table tr:hover td { background: var(--bg-hover); }
+.dmg-table td.name-cell { max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+.bar-mini { position: relative; }
+.bar-mini-bg { position: absolute; top: 20%; left: 0; height: 60%; border-radius: 1px; background: var(--accent); opacity: .13; pointer-events: none; }
+.bar-mini-val { position: relative; z-index: 1; }
+
+/* accordion */
+.acc-item { border-bottom: 1px solid var(--border-l); }
+.acc-head {
+  display: flex; align-items: center; gap: 7px;
+  padding: 7px 10px; cursor: pointer;
+  font-size: 11px; font-weight: 600; color: var(--text-dim);
+  user-select: none;
+}
+.acc-head:hover { color: var(--text); background: var(--bg-hover); }
+.acc-icon { font-size: 12px; flex-shrink: 0; }
+.acc-arrow { margin-left: auto; font-size: 9px; transition: transform .15s; }
+.acc-arrow.open { transform: rotate(90deg); }
+.acc-body { display: none; padding: 6px 10px 8px; }
+.acc-body.open { display: block; }
+
+/* checkbox rows */
+.chk-grid { display: flex; flex-wrap: wrap; gap: 3px 10px; }
+.chk-row { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text); cursor: pointer; user-select: none; }
+.chk-box { width: 11px; height: 11px; border-radius: 2px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 7px; }
+.chk-box.checked { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* range inputs */
+.range-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; font-size: 10px; color: var(--text); }
+.range-input { width: 48px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 2px; color: var(--text); font-family: var(--ff); font-size: 10px; padding: 2px 5px; text-align: center; }
+.range-label { color: var(--text-dim); font-size: 10px; width: 44px; }
+
+/* ══ CENTER ══ */
+.center { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); min-width: 0; }
+
+/* phase bar */
+.phase-bar {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 10px;
+  display: flex; gap: 4px; align-items: center;
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.phase-chip {
+  font-size: 11px; padding: 3px 10px; border-radius: 3px;
+  border: 1px solid var(--border); color: var(--text-dim);
+  cursor: pointer; user-select: none; white-space: nowrap;
+  transition: all .1s;
+}
+.phase-chip:hover { color: var(--text); border-color: #556; }
+.phase-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.phase-chip.sub { font-size: 10px; padding: 2px 8px; }
+
+/* canvas area */
+.canvas-area {
+  flex: 1; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: #1e2226;
+}
+
+/* canvas placeholder */
+.canvas-ph {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+/* arena circle */
+.arena {
+  width: min(calc(100% - 20px), calc(100vh - 280px));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #2a2f35 0%, #1a1e22 100%);
+  border: 1.5px solid #3a4248;
+  position: relative;
+  flex-shrink: 0;
+}
+.arena-inner {
+  position: absolute; inset: 22%;
+  border-radius: 50%;
+  background: rgba(30,34,40,0.5);
+  border: 1px solid rgba(90,100,112,0.25);
+}
+.player-dot {
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1.5px solid rgba(109,184,138,.7);
+  background: rgba(109,184,138,.25);
+  transform: translate(-50%,-50%);
+}
+.enemy-dot {
+  position: absolute;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.5px solid rgba(192,88,88,.7);
+  background: rgba(192,88,88,.2);
+  transform: translate(-50%,-50%);
+}
+.range-circle {
+  position: absolute; border-radius: 50%;
+  border: 1px dashed rgba(100,130,160,.3);
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.arena-label { position: absolute; font-size: 9px; color: rgba(170,170,170,.4); }
+
+/* overlay: top-left controls */
+.canvas-overlay-tl {
+  position: absolute; top: 10px; left: 10px;
+  display: flex; flex-direction: column; gap: 6px; z-index: 5;
+}
+.speed-pills { display: flex; gap: 3px; }
+.speed-pill {
+  font-size: 10px; padding: 2px 8px; border-radius: 3px;
+  background: rgba(30,34,40,.85); border: 1px solid rgba(54,60,68,.8);
+  color: var(--text-dim); cursor: pointer; backdrop-filter: blur(4px);
+}
+.speed-pill:hover { color: var(--text); }
+.speed-pill.active { background: rgba(77,143,196,.3); border-color: rgba(77,143,196,.5); color: var(--accent-hi); }
+.view-pills { display: flex; gap: 3px; }
+.view-pill {
+  font-size: 9px; padding: 2px 7px; border-radius: 3px;
+  background: rgba(30,34,40,.75); border: 1px solid rgba(54,60,68,.7);
+  color: var(--text-dim); cursor: pointer; backdrop-filter: blur(4px);
+}
+.view-pill.active { color: var(--accent-hi); border-color: rgba(77,143,196,.4); }
+
+/* overlay: bottom playback */
+.canvas-overlay-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
+  background: linear-gradient(to top, rgba(15,18,22,.92) 0%, rgba(15,18,22,.0) 100%);
+  padding: 28px 14px 10px;
+}
+.playback-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.pb-btn {
+  font-family: var(--ff); font-size: 11px;
+  padding: 4px 12px; border-radius: 3px;
+  background: rgba(40,46,54,.9); border: 1px solid rgba(70,80,92,.8);
+  color: var(--text); cursor: pointer; white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+.pb-btn:hover { background: rgba(55,63,74,.9); }
+.pb-btn.primary { background: rgba(77,143,196,.35); border-color: rgba(77,143,196,.5); color: var(--accent-hi); }
+.pb-time { font-size: 11px; color: var(--text-dim); font-variant-numeric: tabular-nums; margin-left: auto; }
+/* scrubber */
+.scrubber-wrap { position: relative; height: 20px; display: flex; align-items: center; }
+.scrubber-track { width: 100%; height: 3px; background: rgba(80,90,100,.4); border-radius: 2px; position: relative; cursor: pointer; }
+.scrubber-fill { height: 100%; width: 52%; background: var(--accent); border-radius: 2px; opacity: .7; }
+.scrubber-thumb {
+  position: absolute; top: 50%; left: 52%;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent-hi); transform: translate(-50%,-50%);
+  border: 2px solid rgba(20,24,28,.8); cursor: grab;
+}
+/* phase markers on scrubber */
+.scrubber-marker {
+  position: absolute; top: 50%; width: 2px; height: 10px;
+  background: rgba(170,170,170,.3); transform: translate(-50%,-50%);
+  cursor: pointer;
+}
+.scrubber-marker:hover { background: rgba(170,170,170,.7); }
+.scrubber-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--text-dim);
+  margin-top: 3px; padding: 0 1px;
+}
+
+/* ══ RIGHT PANEL ══ */
+.right-panel {
+  width: 270px; flex-shrink: 0;
+  background: var(--bg-side);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.rp-section-label {
+  padding: 6px 10px 4px;
+  font-size: 9px; font-weight: 600; letter-spacing: 1px;
+  color: var(--text-dim); text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Target health area */
+.target-area {
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  padding: 8px 10px;
+}
+.target-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 7px 10px;
+  margin-bottom: 5px;
+}
+.target-card:last-child { margin-bottom: 0; }
+.target-name { font-size: 12px; font-weight: 600; color: var(--text-hi); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.target-hp-bar { height: 5px; background: var(--bg-deep); border-radius: 3px; overflow: hidden; margin-bottom: 2px; }
+.target-hp-fill { height: 100%; border-radius: 3px; }
+.target-hp-label { font-size: 10px; color: var(--text-dim); }
+.target-bb-bar { height: 3px; background: var(--bg-deep); border-radius: 2px; overflow: hidden; margin-top: 3px; }
+.target-bb-fill { height: 100%; border-radius: 2px; background: #8080c0; opacity: .7; }
+
+/* Display options strip */
+.disp-strip {
+  border-bottom: 1px solid var(--border);
+  padding: 5px 8px;
+  display: flex; gap: 3px; flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.disp-pill {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  border: 1px solid var(--border); color: var(--text-dim);
+  cursor: pointer; user-select: none;
+}
+.disp-pill.active { border-color: rgba(77,143,196,.4); color: var(--accent-hi); background: rgba(77,143,196,.1); }
+
+/* Player frames */
+.players-area { flex: 1; overflow-y: auto; }
+.group-header {
+  padding: 5px 10px 3px;
+  font-size: 9px; font-weight: 600; letter-spacing: 1px;
+  color: var(--text-dim); text-transform: uppercase;
+  position: sticky; top: 0; background: var(--bg-side); z-index: 1;
+}
+.player-frame {
+  display: flex; align-items: center; gap: 0;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border-l);
+  cursor: pointer;
+}
+.player-frame:hover { background: var(--bg-hover); }
+.player-frame.selected { background: rgba(77,143,196,.08); }
+.pf-avatar {
+  width: 28px; height: 28px; border-radius: 3px;
+  background: var(--bg-deep); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--text-dim);
+  flex-shrink: 0; margin-right: 6px;
+}
+.pf-avatar.on { border-color: var(--green); color: var(--text); }
+.pf-info { flex: 1; min-width: 0; }
+.pf-name { font-size: 11px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-bars { display: flex; gap: 2px; margin-top: 3px; }
+.pf-bar { height: 3px; flex: 1; border-radius: 1px; background: var(--bg-deep); overflow: hidden; }
+.pf-bar-fill { height: 100%; border-radius: 1px; }
+.boon-row { display: flex; gap: 2px; margin-left: 4px; align-items: center; }
+.boon-ic {
+  width: 16px; height: 16px; border-radius: 2px;
+  background: var(--bg-panel); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7px; color: var(--text-dim); flex-shrink: 0;
+}
+.boon-ic.up { border-color: rgba(109,184,138,.4); background: rgba(109,184,138,.1); color: var(--green); }
+.pf-pct { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* TWEAKS */
+#tweaks-panel {
+  position: fixed; bottom: 14px; right: 14px;
+  background: var(--bg-side); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px; width: 185px;
+  z-index: 200; display: none; font-family: var(--ff);
+}
+#tweaks-panel h3 { font-size: 11px; font-weight: 700; color: var(--text-hi); margin-bottom: 10px; letter-spacing: .5px; text-transform: uppercase; }
+.tw-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.tw-row label { font-size: 11px; color: var(--text-dim); }
+.tw-tog { width: 28px; height: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-deep); position: relative; cursor: pointer; }
+.tw-tog.on { background: var(--accent); border-color: var(--accent); }
+.tw-tog::after { content:''; position:absolute; top:2px; left:2px; width:9px; height:9px; border-radius:50%; background: var(--text-dim); transition: left .12s; }
+.tw-tog.on::after { left:15px; background:#fff; }
+</style>
+</head>
+<body>
+
+<!-- META -->
+<div class="meta">
+  <span class="meta-title">GW2 Combat Replay</span>
+  <span class="meta-badge">Deimos</span>
+  <span class="meta-badge">Normal Mode</span>
+  <span class="meta-badge success">✓ Success</span>
+  <span class="meta-sub" style="margin-left:4px">2m 53s 949ms</span>
+</div>
+
+<div class="shell">
+
+  <!-- ══ LEFT SIDEBAR ══ -->
+  <div class="left-sidebar" id="leftSidebar">
+    <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Collapse panel">‹</div>
+
+    <!-- Icon strip (collapsed) -->
+    <div class="icon-strip">
+      <div class="icon-strip-btn" title="Damage Table">📊</div>
+      <div class="icon-strip-btn" title="Display Settings">⚙</div>
+      <div class="icon-strip-btn" title="Skill Settings">⚔</div>
+      <div class="icon-strip-btn" title="Range & Cone">⭕</div>
+    </div>
+
+    <!-- Full content -->
+    <div class="sidebar-content">
+
+      <!-- Damage mini-table -->
+      <div class="dmg-table-wrap">
+        <div style="font-size:9px;font-weight:600;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between">
+          Damage
+          <div style="display:flex;gap:3px">
+            <div class="view-pill active" style="font-size:9px">PS</div>
+            <div class="view-pill" style="font-size:9px">Cond</div>
+            <div class="view-pill" style="font-size:9px">Cum.</div>
+          </div>
+        </div>
+        <table class="dmg-table">
+          <thead>
+            <tr><th>Name</th><th class="sorted">All ↕</th><th>Taken ↕</th><th>Target ↕</th></tr>
+          </thead>
+          <tbody id="dmgTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Display Settings accordion -->
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc('disp')">
+          <span class="acc-icon">⚙</span>Display
+          <span class="acc-arrow open" id="acc-arr-disp">›</span>
+        </div>
+        <div class="acc-body open" id="acc-body-disp">
+          <div class="chk-grid">
+            <label class="chk-row"><div class="chk-box checked">✓</div>Follow Selected</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Highlight Group</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Secondary NPCs</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Mechanics</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Markers</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Skills</label>
+            <label class="chk-row"><div class="chk-box"></div>Hitbox Size</label>
+            <label class="chk-row"><div class="chk-box"></div>All Minions</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Own Minions</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skill Settings accordion -->
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc('skill')">
+          <span class="acc-icon">⚔</span>Skills
+          <span class="acc-arrow" id="acc-arr-skill">›</span>
+        </div>
+        <div class="acc-body" id="acc-body-skill">
+          <div class="chk-grid">
+            <label class="chk-row"><div class="chk-box checked">✓</div>Show On Select</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Important Buffs</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Proj. Mgmt</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Heal</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Cleanse</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Strip</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>Portal</label>
+            <label class="chk-row"><div class="chk-box checked">✓</div>CC</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Range & Cone accordion -->
+      <div class="acc-item">
+        <div class="acc-head" onclick="toggleAcc('range')">
+          <span class="acc-icon">⭕</span>Range &amp; Cone
+          <span class="acc-arrow" id="acc-arr-range">›</span>
+        </div>
+        <div class="acc-body" id="acc-body-range">
+          <div style="margin-bottom:6px">
+            <div class="range-row"><div class="chk-box checked">✓</div><span class="range-label">Circle 1</span><span style="color:var(--text-dim);font-size:10px">R:</span><input class="range-input" value="180"></div>
+            <div class="range-row"><div class="chk-box"></div><span class="range-label">Circle 2</span><span style="color:var(--text-dim);font-size:10px">R:</span><input class="range-input" value="360"></div>
+          </div>
+          <div>
+            <div class="range-row"><div class="chk-box"></div><span class="range-label">Cone</span><span style="color:var(--text-dim);font-size:10px">R:</span><input class="range-input" value="360"></div>
+            <div class="range-row" style="padding-left:18px"><span class="range-label">Opening</span><input class="range-input" value="90">°</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CENTER ══ -->
+  <div class="center">
+
+    <!-- Phase bar -->
+    <div class="phase-bar">
+      <div class="phase-chip active" onclick="setPhase(this)">Full Fight</div>
+      <div class="phase-chip" onclick="setPhase(this)">Pre Event</div>
+      <div class="phase-chip" onclick="setPhase(this)">Main Fight</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">100%–10%</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Burst 1</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Thief</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Burst 2</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Drunkard</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Burst 3</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">Gambler</div>
+      <div class="phase-chip sub" onclick="setPhase(this)">10%–0%</div>
+    </div>
+
+    <!-- Canvas area -->
+    <div class="canvas-area">
+      <div class="canvas-ph">
+
+        <!-- Arena -->
+        <div class="arena" id="arena">
+          <div class="arena-inner"></div>
+
+          <!-- Range rings (dashed) -->
+          <div class="range-circle" style="width:28%;height:28%;top:50%;left:50%;border-color:rgba(77,143,196,.2)"></div>
+          <div class="range-circle" style="width:55%;height:55%;top:50%;left:50%;border-color:rgba(77,143,196,.15)"></div>
+
+          <!-- Boss (center) -->
+          <div class="enemy-dot" style="top:50%;left:50%;width:18px;height:18px;border-color:rgba(192,88,88,.9);border-width:2px"></div>
+
+          <!-- Mechanic AoEs (red puddles) -->
+          <div style="position:absolute;top:32%;left:28%;width:11%;height:11%;border-radius:50%;background:rgba(192,88,88,.12);border:1px solid rgba(192,88,88,.25)"></div>
+          <div style="position:absolute;top:55%;left:22%;width:9%;height:9%;border-radius:50%;background:rgba(192,88,88,.12);border:1px solid rgba(192,88,88,.25)"></div>
+          <div style="position:absolute;top:65%;left:45%;width:10%;height:10%;border-radius:50%;background:rgba(192,88,88,.12);border:1px solid rgba(192,88,88,.25)"></div>
+          <div style="position:absolute;top:38%;left:62%;width:8%;height:8%;border-radius:50%;background:rgba(192,88,88,.1);border:1px solid rgba(192,88,88,.2)"></div>
+
+          <!-- Players -->
+          <div class="player-dot" style="top:43%;left:48%"></div>
+          <div class="player-dot" style="top:55%;left:44%"></div>
+          <div class="player-dot" style="top:47%;left:55%"></div>
+          <div class="player-dot" style="top:60%;left:52%"></div>
+          <div class="player-dot" style="top:52%;left:60%"></div>
+          <div class="player-dot" style="top:38%;left:53%"></div>
+          <div class="player-dot" style="top:62%;left:40%"></div>
+          <div class="player-dot" style="top:44%;left:42%"></div>
+          <div class="player-dot" style="top:57%;left:57%"></div>
+
+          <!-- Sub-boss -->
+          <div class="enemy-dot" style="top:72%;left:34%;width:10px;height:10px;border-width:1.5px;opacity:.7"></div>
+
+          <!-- Scale label -->
+          <div class="arena-label" style="bottom:7%;left:10%">←———→</div>
+          <div class="arena-label" style="bottom:5%;left:10%">800 units</div>
+        </div>
+
+      </div>
+
+      <!-- Overlay: speed + view controls (top-left) -->
+      <div class="canvas-overlay-tl">
+        <div class="speed-pills">
+          <div class="speed-pill active" onclick="setPill(this,'.speed-pill')">Full</div>
+          <div class="speed-pill" onclick="setPill(this,'.speed-pill')">4×</div>
+          <div class="speed-pill" onclick="setPill(this,'.speed-pill')">10×</div>
+          <div class="speed-pill" onclick="setPill(this,'.speed-pill')">20×</div>
+        </div>
+        <div class="view-pills">
+          <div class="view-pill active" onclick="setPill(this,'.view-pill')">PS</div>
+          <div class="view-pill" onclick="setPill(this,'.view-pill')">Condi</div>
+          <div class="view-pill" onclick="setPill(this,'.view-pill')">Cumulative</div>
+        </div>
+      </div>
+
+      <!-- Overlay: playback + scrubber (bottom) -->
+      <div class="canvas-overlay-bottom">
+        <div class="playback-row">
+          <button class="pb-btn primary" onclick="togglePlay(this)">▶ Play</button>
+          <button class="pb-btn" onclick="">⟳ Restart</button>
+          <button class="pb-btn">← Back</button>
+          <button class="pb-btn">⊡ Reset View</button>
+          <span class="pb-time">01:31.5 / 02:53.9</span>
+        </div>
+        <div class="scrubber-wrap">
+          <div class="scrubber-track" id="scrubberTrack" onclick="scrubClick(event)">
+            <div class="scrubber-fill" id="scrubberFill"></div>
+            <!-- Phase markers -->
+            <div class="scrubber-marker" style="left:8%"  title="Pre Event"></div>
+            <div class="scrubber-marker" style="left:14%" title="Main Fight"></div>
+            <div class="scrubber-marker" style="left:30%" title="Burst 1"></div>
+            <div class="scrubber-marker" style="left:46%" title="Thief"></div>
+            <div class="scrubber-marker" style="left:58%" title="Burst 2"></div>
+            <div class="scrubber-marker" style="left:68%" title="Drunkard"></div>
+            <div class="scrubber-marker" style="left:75%" title="Burst 3"></div>
+            <div class="scrubber-marker" style="left:82%" title="Gambler"></div>
+            <div class="scrubber-marker" style="left:90%" title="10%–0%"></div>
+            <div class="scrubber-thumb" id="scrubberThumb"></div>
+          </div>
+        </div>
+        <div class="scrubber-labels">
+          <span>0s</span><span>30s</span><span>1m</span><span>1m 30s</span><span>2m</span><span>2m 30s</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <div class="right-panel">
+
+    <!-- Target health -->
+    <div class="target-area">
+      <div class="rp-section-label" style="padding-left:0;margin-bottom:4px">Targets</div>
+      <div class="target-card">
+        <div class="target-name">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+          Deimos
+          <span style="font-size:10px;font-weight:400;color:var(--text-dim);margin-left:auto">boss</span>
+        </div>
+        <div class="target-hp-bar" style="width:100%">
+          <div class="target-hp-fill" style="width:62%;background:var(--warn);opacity:.75"></div>
+        </div>
+        <div class="target-hp-label">31,581,456 / 50,041,000 HP</div>
+        <div class="target-bb-bar">
+          <div class="target-bb-fill" style="width:100%"></div>
+        </div>
+        <div class="target-hp-label" style="margin-top:1px">Breakbar full</div>
+      </div>
+      <div class="target-card" style="opacity:.6">
+        <div class="target-name" style="font-size:11px">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--text-dim);flex-shrink:0"></div>
+          Shackled Prisoner
+        </div>
+        <div class="target-hp-bar"><div class="target-hp-fill" style="width:100%;background:var(--text-dim);opacity:.4"></div></div>
+        <div class="target-hp-label">alive</div>
+      </div>
+    </div>
+
+    <!-- Display options -->
+    <div class="disp-strip">
+      <div class="disp-pill active" onclick="pillToggle(this)">Boons</div>
+      <div class="disp-pill" onclick="pillToggle(this)">Conditions</div>
+      <div class="disp-pill active" onclick="pillToggle(this)">Buffs</div>
+      <div class="disp-pill" onclick="pillToggle(this)">Rotation</div>
+      <div class="disp-pill active" onclick="pillToggle(this)">HP bar</div>
+    </div>
+
+    <!-- Player frames -->
+    <div class="players-area">
+      <div class="group-header">Group 1</div>
+      <div id="g1frames"></div>
+      <div class="group-header">Group 2</div>
+      <div id="g2frames"></div>
+      <div class="group-header">NPCs / Other</div>
+      <div id="g3frames"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="tweaks-panel">
+  <h3>Tweaks</h3>
+  <div class="tw-row"><label>Show boon icons</label><div class="tw-tog on" id="tw-boons" onclick="twT('boons')"></div></div>
+  <div class="tw-row"><label>HP bars on frames</label><div class="tw-tog on" id="tw-hp" onclick="twT('hp')"></div></div>
+  <div class="tw-row"><label>Overlay controls</label><div class="tw-tog on" id="tw-ov" onclick="twT('ov')"></div></div>
+</div>
+
+<script>
+// ── DATA ──
+const G1 = [
+  {cls:'Nc',name:'Howitzer Ssalg', hp:92,boons:[1,1,1,1,0,1]},
+  {cls:'Rn',name:'Ivy Stormrush',  hp:100,boons:[1,1,0,1,1,1]},
+  {cls:'Ms',name:'Lady Schehe.',   hp:84,boons:[1,1,1,0,1,1]},
+  {cls:'Gd',name:'Lynetheth T.',   hp:100,boons:[1,1,1,1,1,0]},
+  {cls:'Wr',name:'Two Hundred K.', hp:100,boons:[1,0,1,1,1,1]},
+];
+const G2 = [
+  {cls:'El',name:'Aaron Boomstick',hp:100,boons:[1,1,1,1,0,1]},
+  {cls:'Th',name:'Eleven F',       hp:83,boons:[1,1,0,1,1,1]},
+  {cls:'En',name:'Henk Popie',     hp:100,boons:[0,1,1,1,1,1]},
+  {cls:'Ms',name:'Myrfs',          hp:100,boons:[1,1,1,0,1,1]},
+  {cls:'Rv',name:'Shadower W',     hp:94,boons:[1,1,1,1,1,0]},
+];
+const G3 = [
+  {cls:'NPC',name:'Shackled P.',   hp:100,boons:[]},
+];
+const BOON_ICONS = ['Q','F','M','A','S','P']; // Quickness Fury Might Alac Swiftness Prot abbrevs
+
+let showBoons = true, showHp = true;
+
+function buildFrames(players, containerId) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  players.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'player-frame' + (i===0&&containerId==='g1frames'?' selected':'');
+    let boonHtml = '';
+    if (showBoons && p.boons.length) {
+      boonHtml = '<div class="boon-row">' + p.boons.map((on,bi) =>
+        `<div class="boon-ic ${on?'up':''}" title="${BOON_ICONS[bi]}">${BOON_ICONS[bi]}</div>`
+      ).join('') + '</div>';
+    }
+    const hpBarHtml = showHp ? `<div class="pf-bars">
+      <div class="pf-bar"><div class="pf-bar-fill" style="width:${p.hp}%;background:${p.hp>80?'var(--green)':p.hp>50?'var(--warn)':'var(--red)'}"></div></div>
+    </div>
+    <div class="pf-pct">${p.hp}% HP</div>` : '';
+    div.innerHTML = `
+      <div class="pf-avatar on">${p.cls}</div>
+      <div class="pf-info">
+        <div class="pf-name">${p.name}</div>
+        ${hpBarHtml}
+      </div>
+      ${boonHtml}
+    `;
+    c.appendChild(div);
+  });
+}
+
+const DMG = [
+  {name:'Howitzer S.',all:35914,taken:248,target:26308},
+  {name:'Henk Popie', all:32366,taken:236,target:23285},
+  {name:'Aaron B.',   all:31332,taken:190,target:25147},
+  {name:'Two Hundred',all:31296,taken:255,target:25210},
+  {name:'Shadower W', all:29603,taken:228,target:23059},
+  {name:'Lady Sche.', all:27689,taken:201,target:18503},
+  {name:'Myrfs',      all:24125,taken:190,target:19371},
+  {name:'Ivy Storm.',  all:23468,taken:255,target:16278},
+  {name:'Eleven F',   all:22031,taken:243,target:16326},
+  {name:'Lynetheth',  all:2044, taken:580,target:1390},
+];
+const maxDmg = 35914;
+
+function buildDmgTable() {
+  const tb = document.getElementById('dmgTableBody');
+  tb.innerHTML = DMG.map(p => `<tr>
+    <td class="name-cell">${p.name}</td>
+    <td class="bar-mini">
+      <div class="bar-mini-bg" style="width:${Math.round(p.all/maxDmg*100)}%"></div>
+      <span class="bar-mini-val">${(p.all/1000).toFixed(0)}k</span>
+    </td>
+    <td style="color:var(--text-dim)">${(p.taken/1000).toFixed(0)}k</td>
+    <td>${(p.target/1000).toFixed(0)}k</td>
+  </tr>`).join('') + `<tr style="border-top:1px solid var(--border)">
+    <td style="color:var(--text-dim)">Total</td>
+    <td style="color:var(--text-dim)">259k</td>
+    <td style="color:var(--text-dim)">2.7k</td>
+    <td style="color:var(--text-dim)">194k</td>
+  </tr>`;
+}
+
+// ── SIDEBAR ──
+let sidebarOpen = true;
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  document.getElementById('leftSidebar').classList.toggle('collapsed', !sidebarOpen);
+  document.getElementById('sidebarToggle').textContent = sidebarOpen ? '‹' : '›';
+}
+
+// ── ACCORDION ──
+function toggleAcc(name) {
+  const body = document.getElementById('acc-body-' + name);
+  const arr  = document.getElementById('acc-arr-' + name);
+  const open = body.classList.toggle('open');
+  arr.classList.toggle('open', open);
+}
+
+// ── PHASE ──
+function setPhase(el) {
+  document.querySelectorAll('.phase-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  // simulate scrubber seek
+  const idx = [...document.querySelectorAll('.phase-chip')].indexOf(el);
+  const pct = [0,8,14,30,46,58,68,75,82,90][idx] || 0;
+  setScrubberPct(pct);
+}
+
+// ── SCRUBBER ──
+let scrubPct = 52;
+function setScrubberPct(pct) {
+  scrubPct = Math.max(0, Math.min(100, pct));
+  document.getElementById('scrubberFill').style.width = scrubPct + '%';
+  document.getElementById('scrubberThumb').style.left = scrubPct + '%';
+}
+function scrubClick(e) {
+  const track = document.getElementById('scrubberTrack');
+  const rect = track.getBoundingClientRect();
+  setScrubberPct(Math.round((e.clientX - rect.left) / rect.width * 100));
+}
+
+// ── PLAY TOGGLE ──
+function togglePlay(btn) {
+  const playing = btn.textContent.includes('Pause');
+  btn.textContent = playing ? '▶ Play' : '⏸ Pause';
+}
+
+// ── SPEED / VIEW PILLS ──
+function setPill(btn, selector) {
+  const row = btn.closest('.speed-pills, .view-pills');
+  if (!row) return;
+  row.querySelectorAll(selector).forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── DISPLAY PILLS ──
+function pillToggle(el) { el.classList.toggle('active'); }
+
+// ── TWEAKS ──
+const tw = { boons: true, hp: true, ov: true };
+function twT(k) {
+  tw[k] = !tw[k];
+  document.getElementById('tw-' + k).classList.toggle('on', tw[k]);
+  if (k === 'boons') { showBoons = tw[k]; buildFrames(G1,'g1frames'); buildFrames(G2,'g2frames'); buildFrames(G3,'g3frames'); }
+  if (k === 'hp')    { showHp    = tw[k]; buildFrames(G1,'g1frames'); buildFrames(G2,'g2frames'); buildFrames(G3,'g3frames'); }
+  if (k === 'ov') {
+    document.querySelector('.canvas-overlay-tl').style.display = tw[k] ? '' : 'none';
+    document.querySelector('.canvas-overlay-bottom').style.display = tw[k] ? '' : 'none';
+  }
+}
+
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode')   document.getElementById('tweaks-panel').style.display = 'block';
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"showBoons":true,"showHp":true,"showOverlay":true}/*EDITMODE-END*/;
+
+// ── INIT ──
+buildFrames(G1,'g1frames');
+buildFrames(G2,'g2frames');
+buildFrames(G3,'g3frames');
+buildDmgTable();
+setScrubberPct(52);
+</script>
+</body>
+</html>

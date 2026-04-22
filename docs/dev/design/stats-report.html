@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GW2 DPS Report — Wireframes v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ff: 'Noto Sans', sans-serif;
+}
+
+/* ── THEMES ── */
+body.theme-comfy {
+  --bg:        #272b30;
+  --bg-side:   #1e2226;
+  --bg-panel:  #2c3138;
+  --bg-hover:  #30363d;
+  --bg-row-alt:#272b30;
+  --bg-input:  #1a1e22;
+  --border:    #363c44;
+  --border-l:  transparent;
+  --text:      #aaaaaa;
+  --text-dim:  #7a8490;
+  --text-hi:   #d0d4d8;
+  --accent:    #4d8fc4;
+  --accent-hi: #6aaad8;
+  --green:     #6db88a;
+  --warn:      #c07850;
+  --row-h: 44px;
+  --cell-px: 12px;
+  --cell-py: 10px;
+  --fs-base: 13px;
+  --fs-sm: 11px;
+  --sidebar-w: 230px;
+  --phase-py: 7px;
+  /* comfy: card shadows instead of lines */
+  --section-shadow: 0 1px 0 var(--border);
+  --row-border: none;
+  --row-radius: 0;
+}
+
+body.theme-contrast {
+  --bg:        #181b1f;
+  --bg-side:   #0f1215;
+  --bg-panel:  #1e2228;
+  --bg-hover:  #252b32;
+  --bg-row-alt:#1a1e24;
+  --bg-input:  #0c0e11;
+  --border:    #2e3540;
+  --border-l:  rgba(46,53,64,0.7);
+  --text:      #c8cdd3;
+  --text-dim:  #505862;
+  --text-hi:   #eef0f3;
+  --accent:    #3a9de0;
+  --accent-hi: #5ab4f0;
+  --green:     #52c47a;
+  --warn:      #e08060;
+  --row-h: 44px;
+  --cell-px: 12px;
+  --cell-py: 10px;
+  --fs-base: 13px;
+  --fs-sm: 11px;
+  --sidebar-w: 230px;
+  --phase-py: 7px;
+  --section-shadow: 0 1px 0 var(--border);
+  --row-border: 1px solid var(--border-l);
+  --row-radius: 0;
+}
+
+body {
+  font-family: var(--ff);
+  background: var(--bg-side);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── META BAR ── */
+.meta {
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0; z-index: 10;
+}
+.meta-title { font-size: 12px; font-weight: 600; color: var(--text-hi); }
+.meta-sub { font-size: 11px; color: var(--text-dim); }
+.style-switcher { margin-left: auto; display: flex; gap: 2px; }
+.s-btn {
+  font-family: var(--ff); font-size: 11px; font-weight: 500;
+  padding: 4px 12px; border-radius: 3px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim);
+  cursor: pointer; transition: all .12s;
+}
+.s-btn:hover { color: var(--text); }
+.s-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── LAYOUT ── */
+.shell { flex: 1; display: flex; overflow: hidden; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg-side);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-boss {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.boss-name { font-size: 13px; font-weight: 700; color: var(--text-hi); }
+.boss-badges { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+.badge {
+  font-size: 10px; padding: 1px 7px; border-radius: 10px;
+  border: 1px solid var(--border); color: var(--text-dim);
+}
+.badge.success { border-color: rgba(109,184,138,0.35); color: var(--green); }
+
+/* ── COLLAPSIBLE FILTER ITEMS ── */
+.filters-area { flex-shrink: 0; border-bottom: 1px solid var(--border); }
+.filter-section-label {
+  padding: 8px 14px 3px;
+  font-size: 9px; font-weight: 600; letter-spacing: 1.2px;
+  color: var(--text-dim); text-transform: uppercase;
+}
+.filter-block { border-bottom: 1px solid var(--border); }
+.filter-block:last-child { border-bottom: none; }
+
+/* collapsed state — one line */
+.filter-collapsed {
+  padding: var(--phase-py) 14px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; user-select: none;
+  transition: background .1s;
+}
+.filter-collapsed:hover { background: var(--bg-hover); }
+.filter-icon { font-size: 11px; color: var(--text-dim); flex-shrink: 0; width: 14px; text-align: center; }
+.filter-summary { font-size: 12px; color: var(--text); flex: 1; min-width: 0; }
+.filter-summary span { color: var(--accent-hi); font-weight: 500; }
+.filter-chevron { font-size: 9px; color: var(--text-dim); transition: transform .15s; flex-shrink: 0; }
+.filter-chevron.open { transform: rotate(90deg); }
+
+/* expanded state */
+.filter-expanded { display: none; background: var(--bg-input); }
+.filter-expanded.open { display: block; }
+
+/* phase list inside expanded */
+.phase-list { padding: 4px 0; }
+.phase-item {
+  padding: 5px 14px 5px 28px;
+  font-size: 11px; color: var(--text-dim);
+  cursor: pointer; border-left: 2px solid transparent;
+  display: flex; align-items: center;
+}
+.phase-item:hover { color: var(--text); background: var(--bg-hover); }
+.phase-item.active { color: var(--accent-hi); border-left-color: var(--accent); }
+.phase-item.child { padding-left: 38px; font-size: 10.5px; }
+.phase-pct { margin-left: auto; font-size: 9px; color: var(--text-dim); }
+
+/* player list inside expanded */
+.player-list { padding: 6px 10px; display: flex; flex-direction: column; gap: 2px; }
+.player-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 3px 6px; border-radius: 3px; cursor: pointer;
+  font-size: 11px; color: var(--text);
+}
+.player-row:hover { background: var(--bg-hover); }
+.player-row.off { opacity: 0.35; }
+.group-label { font-size: 9px; font-weight: 600; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; padding: 6px 6px 3px; }
+.av-sm {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg-panel); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700; color: var(--text-dim);
+}
+.av-sm.on { border-color: var(--green); color: var(--text); }
+.av-sm.off { opacity: 0.4; }
+.player-name { flex: 1; }
+.player-on-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+/* compact avatar row shown when collapsed */
+.av-row { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+.av-chip {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--bg-panel); border: 1.5px solid var(--border);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 7px; font-weight: 700; color: var(--text-dim);
+}
+.av-chip.on { border-color: rgba(109,184,138,0.5); color: var(--text); }
+.av-sep { width: 1px; height: 14px; background: var(--border); margin: 0 2px; flex-shrink: 0; }
+
+/* target list */
+.target-list { padding: 6px 10px; display: flex; flex-direction: column; gap: 2px; }
+.target-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px 6px; border-radius: 3px; cursor: pointer;
+  font-size: 11px; color: var(--text-dim);
+}
+.target-row:hover { color: var(--text); background: var(--bg-hover); }
+.target-row.active { color: var(--accent-hi); }
+.target-check { width: 12px; height: 12px; border-radius: 2px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+.target-check.checked { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+/* ── NAV ── */
+.sidebar-section-label {
+  padding: 8px 14px 3px;
+  font-size: 9px; font-weight: 600; letter-spacing: 1.2px;
+  color: var(--text-dim); text-transform: uppercase;
+  flex-shrink: 0;
+}
+.nav-list { flex: 1; overflow-y: auto; padding: 3px 0 8px; }
+.nav-item {
+  padding: var(--phase-py) 14px;
+  font-size: 12px; color: var(--text-dim);
+  cursor: pointer; border-left: 2px solid transparent;
+  display: flex; align-items: center; gap: 6px;
+  user-select: none;
+}
+.nav-item:hover { color: var(--text); background: var(--bg-hover); }
+.nav-item.active { color: var(--text-hi); border-left-color: var(--accent); background: rgba(77,143,196,0.07); font-weight: 500; }
+.nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+.nav-item.active .nav-dot { background: var(--accent); }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+
+/* ── SECTION HEADER ── */
+.section-header { flex-shrink: 0; box-shadow: var(--section-shadow); }
+
+/* General — boss portrait */
+.header-general {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 16px 20px 14px;
+  background: var(--bg-panel);
+}
+.boss-portrait {
+  width: 72px; height: 72px; flex-shrink: 0;
+  background: var(--bg-input); border: 1px dashed var(--border);
+  border-radius: 4px; display: flex; align-items: center;
+  justify-content: center; font-size: 9px; color: var(--text-dim); text-align: center;
+}
+.boss-detail-name { font-size: 20px; font-weight: 700; color: var(--text-hi); line-height: 1; margin-bottom: 6px; }
+.boss-stats-row { display: flex; gap: 22px; margin-bottom: 8px; }
+.boss-stat { font-size: 11px; color: var(--text-dim); }
+.boss-stat b { color: var(--text-hi); font-weight: 600; }
+.hp-bar { height: 4px; border-radius: 2px; background: var(--bg-input); overflow: hidden; margin-bottom: 2px; }
+.hp-fill { height: 100%; border-radius: 2px; }
+.hp-label { font-size: 10px; color: var(--text-dim); margin-bottom: 5px; }
+
+/* sub-tabs */
+.subsection-tabs { display: flex; background: var(--bg-side); border-top: 1px solid var(--border); }
+.ss-tab {
+  padding: 7px 16px; font-size: 11px; font-weight: 500;
+  color: var(--text-dim); cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.ss-tab:hover { color: var(--text); }
+.ss-tab.active { color: var(--text-hi); border-bottom-color: var(--accent); }
+
+/* Generic section headers */
+.header-generic {
+  background: var(--bg-panel);
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 44px;
+}
+.header-buffs { background: var(--bg-panel); }
+.ctrl-row {
+  padding: 7px 18px; display: flex; align-items: center;
+  gap: 5px; flex-wrap: wrap; border-bottom: 1px solid var(--border);
+}
+.ctrl-row:last-child { border-bottom: none; }
+.section-title { font-size: 12px; font-weight: 600; color: var(--text-hi); flex-shrink: 0; }
+.ctrl-div { width: 1px; height: 18px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+
+.ctrl-btn {
+  font-family: var(--ff); font-size: 11px; font-weight: 400;
+  padding: 3px 10px; border-radius: 3px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim);
+  cursor: pointer; transition: all .1s; white-space: nowrap;
+}
+.ctrl-btn:hover { color: var(--text); border-color: #556; }
+.ctrl-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.ctrl-btn.pill { border-radius: 10px; }
+.ctrl-btn.pill.active { background: rgba(77,143,196,0.15); color: var(--accent-hi); border-color: rgba(77,143,196,0.4); font-weight: 400; }
+
+/* ── COMFY style: card-ified table ── */
+body.theme-comfy .table-wrap { padding: 12px 16px; gap: 6px; }
+body.theme-comfy table { border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+body.theme-comfy tbody tr:nth-child(even) td { background: rgba(0,0,0,0.08); }
+body.theme-comfy tbody tr:hover td { background: rgba(77,143,196,0.07); }
+
+/* ── CONTRAST style: strong borders ── */
+body.theme-contrast table { border-top: 1px solid var(--border); }
+body.theme-contrast tbody td { border-bottom: var(--row-border); }
+body.theme-contrast thead th { border-right: 1px solid var(--border-l); }
+body.theme-contrast thead th:last-child { border-right: none; }
+
+/* ── TABLE ── */
+.table-wrap { flex: 1; overflow: auto; }
+body.theme-comfy .table-wrap { overflow: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--bg-side);
+  padding: var(--cell-py) var(--cell-px);
+  font-size: var(--fs-sm); font-weight: 600;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap; text-align: left;
+  cursor: pointer; user-select: none;
+}
+thead th:hover { color: var(--text); }
+thead th.sorted { color: var(--accent-hi); }
+tbody td {
+  padding: var(--cell-py) var(--cell-px);
+  font-size: var(--fs-base);
+  color: var(--text);
+  border-bottom: 1px solid rgba(50,57,65,0.4);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+tbody tr:hover td { background: var(--bg-hover); }
+tbody tr.group-row td {
+  color: var(--text-dim); font-size: var(--fs-sm);
+  background: rgba(20,24,28,0.3);
+  border-top: 1px solid var(--border);
+}
+.bar-cell { position: relative; min-width: 90px; }
+.bar-bg { position: absolute; top: 22%; left: 0; height: 56%; border-radius: 2px; pointer-events: none; }
+.bar-val { position: relative; z-index: 1; }
+.cls-badge { font-size: 10px; font-weight: 700; color: var(--text-dim); letter-spacing: .3px; }
+.top-row-mark { background: rgba(77,143,196,0.04); }
+.expand-row td { padding: 0; background: rgba(14,18,22,0.5) !important; }
+.expand-inner {
+  padding: 7px 16px 7px 36px;
+  display: flex; gap: 24px; flex-wrap: wrap;
+  border-left: 2px solid var(--accent);
+}
+.stat-mini { font-size: 10.5px; color: var(--text-dim); }
+.stat-mini b { color: var(--text); font-weight: 600; }
+
+/* placeholder areas */
+.placeholder-area {
+  margin: 16px 20px; border-radius: 5px;
+  border: 1px dashed var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; color: var(--text-dim);
+  min-height: 300px;
+}
+.placeholder-area .ico { font-size: 32px; }
+.placeholder-area .lbl { font-size: 12px; }
+.placeholder-area .sub { font-size: 10px; color: var(--text-dim); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* TWEAKS */
+#tweaks-panel {
+  position: fixed; bottom: 14px; right: 14px;
+  background: var(--bg-side); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px;
+  width: 180px; z-index: 200; display: none;
+  font-family: var(--ff); font-size: 12px;
+}
+#tweaks-panel h3 { font-size: 11px; font-weight: 700; color: var(--text-hi); margin-bottom: 10px; letter-spacing: .5px; text-transform: uppercase; }
+.tw-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.tw-row label { font-size: 11px; color: var(--text-dim); }
+.tw-tog { width: 28px; height: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-input); position: relative; cursor: pointer; }
+.tw-tog.on { background: var(--accent); border-color: var(--accent); }
+.tw-tog::after { content:''; position:absolute; top:2px; left:2px; width:9px; height:9px; border-radius:50%; background:var(--text-dim); transition:left .12s; }
+.tw-tog.on::after { left:15px; background:#fff; }
+</style>
+</head>
+<body class="theme-comfy">
+
+<div class="meta">
+  <span class="meta-title">GW2 DPS Report — v3</span>
+  <span class="meta-sub">Concept B · spacious · collapsible sidebar filters</span>
+  <div style="display:flex;align-items:center;gap:6px;margin-left:12px">
+    <span style="font-size:10px;color:var(--text-dim)">Gradient:</span>
+    <div id="grad-swatches" style="display:flex;gap:4px;align-items:center"></div>
+    <button class="s-btn" id="grad-prev" onclick="cycleGrad(-1)" style="padding:3px 8px">‹</button>
+    <span id="grad-name" style="font-size:10px;color:var(--text-dim);min-width:110px;text-align:center"></span>
+    <button class="s-btn" id="grad-next" onclick="cycleGrad(1)" style="padding:3px 8px">›</button>
+  </div>
+  <div class="style-switcher">
+    <button class="s-btn active" onclick="setTheme('comfy')">Comfy</button>
+    <button class="s-btn" onclick="setTheme('contrast')">High Contrast</button>
+  </div>
+</div>
+
+<div class="shell">
+
+  <!-- ── SIDEBAR ── -->
+  <div class="sidebar">
+
+    <!-- Boss compact -->
+    <div class="sidebar-boss">
+      <div class="boss-name">Deimos</div>
+      <div class="boss-badges">
+        <span class="badge">Normal Mode</span>
+        <span class="badge success">✓ Success</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:5px">3m 42s · 10 players</div>
+    </div>
+
+    <!-- Collapsible filters -->
+    <div class="filters-area">
+      <div class="filter-section-label">Filters</div>
+
+      <!-- Phase -->
+      <div class="filter-block">
+        <div class="filter-collapsed" onclick="toggleFilter('phase')">
+          <span class="filter-icon">◈</span>
+          <span class="filter-summary">Phase: <span id="phase-label">Full Fight</span></span>
+          <span class="filter-chevron" id="chevron-phase">›</span>
+        </div>
+        <div class="filter-expanded" id="exp-phase">
+          <div class="phase-list">
+            <div class="phase-item active" onclick="selectPhase(this,'Full Fight')">Full Fight <span class="phase-pct">100%</span></div>
+            <div class="phase-item" onclick="selectPhase(this,'Pre Event')">Pre Event <span class="phase-pct">8%</span></div>
+            <div class="phase-item" onclick="selectPhase(this,'Main Fight')">Main Fight <span class="phase-pct">92%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'100%–10%')">100% – 10% <span class="phase-pct">45%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Burst 1')">Burst 1 <span class="phase-pct">12%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Burst 2')">Burst 2 <span class="phase-pct">11%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Burst 3')">Burst 3 <span class="phase-pct">10%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Thief')">Thief <span class="phase-pct">8%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Drunkard')">Drunkard <span class="phase-pct">3%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'Gambler')">Gambler <span class="phase-pct">3%</span></div>
+            <div class="phase-item child" onclick="selectPhase(this,'10%–0%')">10% – 0% <span class="phase-pct">35%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Players -->
+      <div class="filter-block">
+        <div class="filter-collapsed" onclick="toggleFilter('players')">
+          <span class="filter-icon">👥</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11px;color:var(--text);margin-bottom:3px"><span style="color:var(--accent-hi);font-weight:500">10</span> players</div>
+            <div class="av-row" id="player-av-row">
+              <div class="av-chip on">Nc</div><div class="av-chip on">Gd</div><div class="av-chip on">Ms</div><div class="av-chip on">Rn</div><div class="av-chip on">Wr</div>
+              <div class="av-sep"></div>
+              <div class="av-chip on">El</div><div class="av-chip on">Th</div><div class="av-chip on">Ms</div><div class="av-chip on">En</div><div class="av-chip" style="opacity:.35">Rv</div>
+            </div>
+          </div>
+          <span class="filter-chevron" id="chevron-players">›</span>
+        </div>
+        <div class="filter-expanded" id="exp-players">
+          <div class="player-list">
+            <div class="group-label">Group 1</div>
+            <div class="player-row" onclick="togglePlayer(this,'Nc')"><div class="av-sm on">Nc</div><span class="player-name">Asterius Vel.</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Gd')"><div class="av-sm on">Gd</div><span class="player-name">Floxire Elayne</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Ms')"><div class="av-sm on">Ms</div><span class="player-name">Althea Deathd.</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Rn')"><div class="av-sm on">Rn</div><span class="player-name">Yandere Faun</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Wr')"><div class="av-sm on">Wr</div><span class="player-name">Lady Hulky</span><div class="player-on-dot"></div></div>
+            <div class="group-label">Group 2</div>
+            <div class="player-row" onclick="togglePlayer(this,'El')"><div class="av-sm on">El</div><span class="player-name">Venti Vindi V.</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Th')"><div class="av-sm on">Th</div><span class="player-name">Oaschale</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'Ms2')"><div class="av-sm on">Ms</div><span class="player-name">Diane Pinkamina</span><div class="player-on-dot"></div></div>
+            <div class="player-row" onclick="togglePlayer(this,'En')"><div class="av-sm on">En</div><span class="player-name">Boon Bearer</span><div class="player-on-dot"></div></div>
+            <div class="player-row off" onclick="togglePlayer(this,'Rv')"><div class="av-sm off">Rv</div><span class="player-name" style="color:var(--text-dim)">Sergeant Oneil</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Targets -->
+      <div class="filter-block">
+        <div class="filter-collapsed" onclick="toggleFilter('targets')">
+          <span class="filter-icon">🎯</span>
+          <span class="filter-summary">Target: <span id="target-label">All enemies</span></span>
+          <span class="filter-chevron" id="chevron-targets">›</span>
+        </div>
+        <div class="filter-expanded" id="exp-targets">
+          <div class="target-list">
+            <div class="target-row active" onclick="selectTarget(this,'All enemies')">
+              <div class="target-check checked">✓</div> All enemies
+            </div>
+            <div class="target-row" onclick="selectTarget(this,'Deimos')">
+              <div class="target-check"></div> Deimos
+            </div>
+            <div class="target-row" onclick="selectTarget(this,'Shackled Prisoner')">
+              <div class="target-check"></div> Shackled Prisoner
+            </div>
+            <div class="target-row" onclick="selectTarget(this,'Saul D\'Alessio')">
+              <div class="target-check"></div> Saul D'Alessio
+            </div>
+            <div class="target-row" onclick="selectTarget(this,'Gambler')">
+              <div class="target-check"></div> Gambler
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section nav -->
+    <div class="sidebar-section-label">Section</div>
+    <div class="nav-list">
+      <div class="nav-item active" onclick="setSection('general')"><div class="nav-dot"></div>General Stats</div>
+      <div class="nav-item" onclick="setSection('buffs')"><div class="nav-dot"></div>Buffs</div>
+      <div class="nav-item" onclick="setSection('dmgmod')"><div class="nav-dot"></div>Damage Modifiers</div>
+      <div class="nav-item" onclick="setSection('mechanics')"><div class="nav-dot"></div>Mechanics</div>
+      <div class="nav-item" onclick="setSection('graph')"><div class="nav-dot"></div>Graph</div>
+      <div class="nav-item" onclick="setSection('rotations')"><div class="nav-dot"></div>Rotations</div>
+      <div class="nav-item" onclick="setSection('targets')"><div class="nav-dot"></div>Targets Summary</div>
+      <div class="nav-item" onclick="setSection('players')"><div class="nav-dot"></div>Player Summary</div>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- GENERAL STATS HEADER -->
+    <div class="section-header" id="hdr-general">
+      <div class="header-general">
+        <div class="boss-portrait">boss<br>portrait</div>
+        <div style="flex:1">
+          <div class="boss-detail-name">Deimos</div>
+          <div class="boss-stats-row">
+            <div class="boss-stat"><b>Normal Mode</b></div>
+            <div class="boss-stat">Duration <b>3m 42s 182ms</b></div>
+            <div class="boss-stat" style="color:var(--green)"><b>✓ Success</b></div>
+            <div class="boss-stat">Phase: <b style="color:var(--accent-hi)">Full Fight</b></div>
+          </div>
+          <div style="width:280px">
+            <div class="hp-bar"><div class="hp-fill" style="width:63%;background:var(--accent);opacity:.65"></div></div>
+            <div class="hp-label">31,581,456 / 50,041,000 HP</div>
+            <div class="hp-bar"><div class="hp-fill" style="width:100%;background:var(--warn);opacity:.5"></div></div>
+            <div class="hp-label">Breakbar · 5,004,000 max</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;align-self:flex-start">
+          <button class="ctrl-btn active">Statistics</button>
+          <button class="ctrl-btn">Healing</button>
+        </div>
+      </div>
+      <div class="subsection-tabs">
+        <div class="ss-tab active" onclick="setSub(this,'damage')">Damage Stats</div>
+        <div class="ss-tab" onclick="setSub(this,'gameplay')">Gameplay Stats</div>
+        <div class="ss-tab" onclick="setSub(this,'offensive')">Offensive Stats</div>
+        <div class="ss-tab" onclick="setSub(this,'defensive')">Defensive Stats</div>
+        <div class="ss-tab" onclick="setSub(this,'support')">Support Stats</div>
+      </div>
+    </div>
+
+    <!-- BUFFS HEADER -->
+    <div class="section-header" id="hdr-buffs" style="display:none">
+      <div class="header-buffs">
+        <div class="ctrl-row">
+          <span class="section-title">Buffs</span><div class="ctrl-div"></div>
+          <button class="ctrl-btn active" onclick="ctrlExcl(this)">Uptimes</button>
+          <button class="ctrl-btn" onclick="ctrlExcl(this)">Volumes</button>
+          <div class="ctrl-div"></div>
+          <span style="font-size:10px;color:var(--text-dim)">View:</span>
+          <button class="ctrl-btn pill active" onclick="ctrlPill(this,1)">Uptime</button>
+          <button class="ctrl-btn pill" onclick="ctrlPill(this,1)">Generation Self</button>
+          <button class="ctrl-btn pill" onclick="ctrlPill(this,1)">Generation Group</button>
+          <button class="ctrl-btn pill" onclick="ctrlPill(this,1)">Gen. Off-Group</button>
+          <button class="ctrl-btn pill" onclick="ctrlPill(this,1)">Generation Squad</button>
+          <div class="ctrl-div"></div>
+          <button class="ctrl-btn pill active" onclick="ctrlPill(this,2)">Phase duration</button>
+          <button class="ctrl-btn pill" onclick="ctrlPill(this,2)">Phase active dur.</button>
+        </div>
+        <div class="ctrl-row">
+          <span style="font-size:10px;color:var(--text-dim);flex-shrink:0">Buff type:</span>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Boons</button>
+          <button class="ctrl-btn pill active" onclick="ctrlTogglePill(this)">Offensive</button>
+          <button class="ctrl-btn pill active" onclick="ctrlTogglePill(this)">Support</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Defensive</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Conditions</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Gear Buffs</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Debuffs</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Nourishments</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Enhancements</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Consumables</button>
+          <button class="ctrl-btn pill" onclick="ctrlTogglePill(this)">Personal Buffs</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAMAGE MODIFIERS HEADER -->
+    <div class="section-header" id="hdr-dmgmod" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">Damage Modifiers</span><div class="ctrl-div"></div>
+        <button class="ctrl-btn active" onclick="ctrlExcl(this)">All</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">DPS Modifiers</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Offensive</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Shared</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Gear</button>
+        <div class="ctrl-div"></div>
+        <span style="font-size:10px;color:var(--text-dim)">Normalise:</span>
+        <button class="ctrl-btn pill active" onclick="ctrlPill(this,3)">By hits</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,3)">By damage</button>
+      </div>
+    </div>
+
+    <!-- MECHANICS HEADER -->
+    <div class="section-header" id="hdr-mechanics" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">Mechanics</span><div class="ctrl-div"></div>
+        <button class="ctrl-btn active" onclick="ctrlExcl(this)">All</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Avoid-type</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Boss mechanics</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Debuffs</button>
+        <div class="ctrl-div"></div>
+        <button class="ctrl-btn pill active" onclick="ctrlPill(this,4)">By count</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,4)">By name</button>
+      </div>
+    </div>
+
+    <!-- GRAPH HEADER -->
+    <div class="section-header" id="hdr-graph" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">DPS Graph</span><div class="ctrl-div"></div>
+        <button class="ctrl-btn active" onclick="ctrlExcl(this)">DPS</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Damage</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Breakbar</button>
+        <div class="ctrl-div"></div>
+        <button class="ctrl-btn pill active" onclick="ctrlPill(this,5)">1s smooth</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,5)">5s avg</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,5)">10s avg</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,5)">Total</button>
+      </div>
+    </div>
+
+    <!-- ROTATIONS HEADER -->
+    <div class="section-header" id="hdr-rotations" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">Rotations</span><div class="ctrl-div"></div>
+        <span style="font-size:10px;color:var(--text-dim)">Player:</span>
+        <button class="ctrl-btn active">Asterius Vel. ▾</button>
+        <div class="ctrl-div"></div>
+        <button class="ctrl-btn pill active" onclick="ctrlPill(this,6)">Skills</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,6)">Boons</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,6)">Conditions</button>
+      </div>
+    </div>
+
+    <!-- TARGETS SUMMARY HEADER -->
+    <div class="section-header" id="hdr-targets" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">Targets Summary</span><div class="ctrl-div"></div>
+        <button class="ctrl-btn active" onclick="ctrlExcl(this)">All Enemies</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Deimos</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Shackled Prisoner</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Saul D'Alessio</button>
+      </div>
+    </div>
+
+    <!-- PLAYER SUMMARY HEADER -->
+    <div class="section-header" id="hdr-players" style="display:none">
+      <div class="header-generic">
+        <span class="section-title">Player Summary</span><div class="ctrl-div"></div>
+        <button class="ctrl-btn active" onclick="ctrlExcl(this)">All</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Group 1</button>
+        <button class="ctrl-btn" onclick="ctrlExcl(this)">Group 2</button>
+        <div class="ctrl-div"></div>
+        <button class="ctrl-btn pill active" onclick="ctrlPill(this,7)">Stats</button>
+        <button class="ctrl-btn pill" onclick="ctrlPill(this,7)">Timeline</button>
+      </div>
+    </div>
+
+    <!-- TABLE / CONTENT -->
+    <div class="table-wrap" id="tableWrap">
+      <table id="mainTable">
+        <thead id="tHead"></thead>
+        <tbody id="tBody"></tbody>
+      </table>
+      <div id="graphPh" class="placeholder-area" style="display:none">
+        <div class="ico">📈</div>
+        <div class="lbl">DPS over time — all players · Full Fight</div>
+        <div class="sub">[line chart: one series per player, phase markers on x-axis]</div>
+      </div>
+      <div id="rotPh" class="placeholder-area" style="display:none">
+        <div class="ico">⏱</div>
+        <div class="lbl">Skill rotation timeline — Asterius Vel.</div>
+        <div class="sub">[horizontal timeline, one row per skill slot, phase markers]</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tweaks-panel">
+  <h3>Tweaks</h3>
+  <div class="tw-row"><label>Bar viz</label><div class="tw-tog on" id="tw-bars" onclick="twT('bars')"></div></div>
+  <div class="tw-row"><label>Expand top row</label><div class="tw-tog on" id="tw-exp" onclick="twT('exp')"></div></div>
+</div>
+
+<script>
+const PLAYERS = [
+  {sub:2,cls:'Nc',name:'Asterius Vel.',    acc:'asterius.3941', tdps:26387,tdmg:24696,condi:1691,adps:31799,admg:29801,ccs:1998,pct:'—'},
+  {sub:2,cls:'Gd',name:'Floxire Elayne',   acc:'Floxire.5631',  tdps:25527,tdmg:24802,condi:725, adps:30523,admg:29687,ccs:836, pct:'0.10%'},
+  {sub:1,cls:'Ms',name:'Althea Deathd.',   acc:'Darkz.7394',    tdps:24898,tdmg:24741,condi:157, adps:30778,admg:30601,ccs:178, pct:'0.30%'},
+  {sub:1,cls:'Rn',name:'Yandere Faun',     acc:'Jokuc.3478',    tdps:23086,tdmg:22439,condi:647, adps:27719,admg:26994,ccs:725, pct:'—'},
+  {sub:1,cls:'Wr',name:'Lady Hulky',       acc:'Mike.8061',     tdps:19309,tdmg:18669,condi:640, adps:23173,admg:22498,ccs:675, pct:'0.10%'},
+  {sub:2,cls:'El',name:'Venti Vindi V.',   acc:'BowlFish.2463', tdps:17746,tdmg:17579,condi:167, adps:20641,admg:20464,ccs:177, pct:'—'},
+  {sub:2,cls:'Th',name:'Oaschale',         acc:'Baste.9875',    tdps:15549,tdmg:15381,condi:168, adps:18671,admg:18477,ccs:195, pct:'—'},
+  {sub:1,cls:'Ms',name:'Diane Pinkamina',  acc:'FirePuMa.2708', tdps:8303, tdmg:7988, condi:316, adps:12047,admg:11631,ccs:416, pct:'1.59%'},
+  {sub:1,cls:'En',name:'Boon Bearer',      acc:'Suoid.5489',    tdps:2312, tdmg:1891, condi:420, adps:2450, admg:2004, ccs:447, pct:'1.04%'},
+  {sub:1,cls:'Rv',name:'Sergeant Oneil',   acc:'Oneil.4190',    tdps:52,   tdmg:52,   condi:0,   adps:52,   admg:52,   ccs:0,   pct:'—'},
+];
+const BUFFS = [
+  {sub:1,cls:'En',name:'Boon Bearer',    p:['66.2%','19.0%','18.8%','—','—','4.1%']},
+  {sub:1,cls:'Ms',name:'Diane Pinkamina',p:['—','15.7%','3.6%','—','2.2%','20.0%']},
+  {sub:1,cls:'Rv',name:'Sergeant Oneil', p:['58.5%','2.2%','—','—','—','—']},
+  {sub:2,cls:'El',name:'Venti Vindi V.', p:['—','9.0%','4.5%','4.5%','—','5.4%']},
+  {sub:1,cls:'Rn',name:'Yandere Faun',   p:['—','11.2%','2.3%','4.5%','11.2%','1.4%']},
+  {sub:2,cls:'Ms',name:'Althea Deathd.', p:['—','24.7%','13.3%','7.9%','19.7%','25.1%']},
+  {sub:2,cls:'Nc',name:'Asterius Vel.',  p:['—','27.4%','16.9%','5.3%','2.8%','27.8%']},
+  {sub:2,cls:'Gd',name:'Floxire Elayne', p:['—','29.2%','13.3%','13.1%','—','27.8%']},
+  {sub:1,cls:'Wr',name:'Lady Hulky',     p:['—','22.5%','10.0%','7.6%','4.6%','26.5%']},
+  {sub:2,cls:'Th',name:'Oaschale',       p:['—','33.7%','8.1%','5.3%','—','30.5%']},
+];
+
+const maxDPS = 26387;
+let showBars = true, showExp = true;
+let curSection = 'general', curSub = 'damage';
+
+// ── THEME ──
+function setTheme(t) {
+  document.body.className = 'theme-' + t;
+  document.querySelectorAll('.s-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(t === 'comfy' ? 'comfy' : 'contrast')));
+}
+
+// ── FILTER TOGGLES ──
+function toggleFilter(name) {
+  const exp = document.getElementById('exp-' + name);
+  const chev = document.getElementById('chevron-' + name);
+  const isOpen = exp.classList.toggle('open');
+  chev.classList.toggle('open', isOpen);
+}
+function selectPhase(el, label) {
+  document.querySelectorAll('.phase-item').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('phase-label').textContent = label;
+}
+function togglePlayer(row) {
+  row.classList.toggle('off');
+}
+function selectTarget(el, label) {
+  document.querySelectorAll('.target-row').forEach(t => { t.classList.remove('active'); t.querySelector('.target-check').classList.remove('checked'); t.querySelector('.target-check').textContent = ''; });
+  el.classList.add('active');
+  const chk = el.querySelector('.target-check');
+  chk.classList.add('checked'); chk.textContent = '✓';
+  document.getElementById('target-label').textContent = label;
+}
+
+// ── SECTION NAV ──
+const ALL = ['general','buffs','dmgmod','mechanics','graph','rotations','targets','players'];
+function setSection(s) {
+  curSection = s;
+  document.querySelectorAll('.nav-item').forEach((el,i) => el.classList.toggle('active', ALL[i] === s));
+  ALL.forEach(k => { const h = document.getElementById('hdr-'+k); if(h) h.style.display = k===s ? '' : 'none'; });
+  const tbl = document.getElementById('mainTable');
+  const gph = document.getElementById('graphPh');
+  const rot = document.getElementById('rotPh');
+  tbl.style.display = (s==='graph'||s==='rotations') ? 'none' : '';
+  gph.style.display = s==='graph' ? '' : 'none';
+  rot.style.display = s==='rotations' ? '' : 'none';
+  render();
+}
+
+// ── SUB TABS ──
+function setSub(el, sub) {
+  curSub = sub;
+  document.querySelectorAll('.ss-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ── CTRL BUTTONS ──
+function ctrlExcl(btn) {
+  const row = btn.closest('.ctrl-row,.header-generic');
+  if (!row) return;
+  row.querySelectorAll('.ctrl-btn:not(.pill)').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+const pillGroups = {};
+function ctrlPill(btn, g) {
+  if (!pillGroups[g]) pillGroups[g] = [];
+  if (!pillGroups[g].length) {
+    // find all siblings with same onclick group
+    const row = btn.closest('.ctrl-row,.header-generic');
+    if (row) row.querySelectorAll(`.ctrl-btn.pill[onclick*="ctrlPill(this,${g})"]`).forEach(b => { pillGroups[g].push(b); });
+  }
+  pillGroups[g].forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function ctrlTogglePill(btn) { btn.classList.toggle('active'); }
+
+// ── RENDER ──
+function render() {
+  const head = document.getElementById('tHead');
+  const body = document.getElementById('tBody');
+  if (curSection === 'buffs') {
+    head.innerHTML = `<tr><th>Sub</th><th></th><th>Name</th><th class="sorted">Quickness ↕</th><th>Fury ↕</th><th>Might ↕</th><th>Alacrity ↕</th><th>Swiftness ↕</th><th>Protection ↕</th></tr>`;
+    body.innerHTML = BUFFS.map(p => `<tr>
+      <td>${p.sub}</td><td class="cls-badge">${p.cls}</td><td style="font-weight:500">${p.name}</td>
+      ${p.p.map(v => `<td style="color:${v==='—'?'var(--text-dim)':parseFloat(v)>20?'var(--text-hi)':'var(--text)'};font-weight:${parseFloat(v)>20?600:400}">${v}</td>`).join('')}
+    </tr>`).join('') +
+    `<tr class="group-row"><td colspan="2"></td><td>Group 1</td><td>24.9%</td><td>11.4%</td><td>5.8%</td><td>0.9%</td><td>3.6%</td><td>6.2%</td></tr>
+     <tr class="group-row"><td colspan="2"></td><td>Group 2</td><td>27.5%</td><td>12.3%</td><td>7.8%</td><td>5.4%</td><td>—</td><td>27.6%</td></tr>
+     <tr class="group-row"><td colspan="2"></td><td>Total</td><td>12.5%</td><td>19.5%</td><td>9.1%</td><td>4.4%</td><td>4.5%</td><td>16.9%</td></tr>`;
+    return;
+  }
+  if (curSection === 'mechanics') {
+    head.innerHTML = `<tr><th>Sub</th><th></th><th>Name</th><th>Oils ↕</th><th>Black Zones ↕</th><th>Greens ↕</th><th>Knockback ↕</th><th>Shackled ↕</th></tr>`;
+    body.innerHTML = PLAYERS.map(p => `<tr>
+      <td>${p.sub}</td><td class="cls-badge">${p.cls}</td><td>${p.name}</td>
+      <td>${Math.random()>.7?'<span style="color:var(--warn)">1</span>':'—'}</td>
+      <td>${Math.random()>.8?'<span style="color:var(--warn)">1</span>':'—'}</td>
+      <td>${Math.random()>.3?'<span style="color:var(--green)">1</span>':'—'}</td>
+      <td>${Math.random()>.6?1:'—'}</td><td>—</td>
+    </tr>`).join('');
+    return;
+  }
+  if (curSection !== 'general') {
+    const subCols = {
+      targets:  ['Sub','','Name','DPS ↕','Damage ↕','Condi ↕','Power ↕','DPS% ↕'],
+      players:  ['Sub','','Name','DPS ↕','Damage ↕','Resumes ↕','CC ↕','Healing ↕'],
+      dmgmod:   ['Sub','','Name','Account','Scholar ↕','Eagle ↕','Furious ↕','Exposed ↕','Vuln ↕','Total mod ↕'],
+    };
+    const cols = subCols[curSection] || subCols.targets;
+    head.innerHTML = '<tr>' + cols.map((c,i) => `<th${i===cols.length-1?' class="sorted"':''}>${c}</th>`).join('') + '</tr>';
+    body.innerHTML = PLAYERS.map(p => `<tr>
+      <td>${p.sub}</td><td class="cls-badge">${p.cls}</td><td style="font-weight:500">${p.name}</td>
+      ${cols.slice(3).map((_,i) => `<td>${i===0?p.tdps.toLocaleString():i===1?p.tdmg.toLocaleString():'—'}</td>`).join('')}
+    </tr>`).join('');
+    return;
+  }
+
+  // General stats
+  if (curSub === 'damage') {
+    head.innerHTML = `<tr>
+      <th>Sub</th><th></th><th>Name</th>
+      <th style="font-weight:400;color:var(--text-dim)">Account</th>
+      <th class="sorted">Target DPS ↕</th><th>Target Dmg ↕</th>
+      <th>Condi ↕</th><th>Power ↕</th>
+      <th>All DPS ↕</th><th>All Dmg ↕</th>
+      <th>CCs ↕</th><th>Scholar% ↕</th>
+    </tr>`;
+    let html = '';
+    PLAYERS.forEach((p,i) => {
+      const bw = showBars ? Math.round(p.tdps/maxDPS*100) : 0;
+      html += `<tr class="${i===0?'top-row-mark':''}">
+        <td>${p.sub}</td>
+        <td class="cls-badge">${p.cls}</td>
+        <td style="font-weight:${i===0?600:500};color:${i===0?'var(--text-hi)':'var(--text)'}">${p.name}</td>
+        <td style="color:var(--text-dim);font-size:var(--fs-sm)">${p.acc}</td>
+        <td class="bar-cell">
+          ${showBars?`<div class="bar-bg" style="width:${bw}%;background:var(--accent);opacity:0.13"></div>`:''}
+          <span class="bar-val" style="font-weight:${i===0?600:400}">${p.tdps.toLocaleString()}</span>
+        </td>
+        <td>${p.tdmg.toLocaleString()}</td>
+        <td>${p.condi.toLocaleString()}</td>
+        <td>${(p.tdmg-p.condi).toLocaleString()}</td>
+        <td>${p.adps.toLocaleString()}</td>
+        <td>${p.admg.toLocaleString()}</td>
+        <td>${p.ccs.toLocaleString()}</td>
+        <td style="color:var(--text-dim)">${p.pct}</td>
+      </tr>`;
+      if (i===0 && showExp) {
+        html += `<tr class="expand-row"><td colspan="12"><div class="expand-inner">
+          <div class="stat-mini">Avg hit <b>4,231</b></div>
+          <div class="stat-mini">Crit <b>82.4%</b></div>
+          <div class="stat-mini">Flanking <b>71.2%</b></div>
+          <div class="stat-mini">Glancing <b>1.3%</b></div>
+          <div class="stat-mini">Missed <b>0.8%</b></div>
+          <div class="stat-mini">Scholar uptime <b>94.1%</b></div>
+          <div class="stat-mini">Avg DPS <b>26,387</b></div>
+          <div class="stat-mini">Peak DPS <b>41,202</b></div>
+        </div></td></tr>`;
+      }
+    });
+    html += `<tr class="group-row"><td colspan="2"></td><td>Group 1</td><td></td><td>51,498</td><td>49,949</td><td>1,549</td><td></td><td>62,909</td><td>61,145</td><td>1,764</td><td></td></tr>`;
+    html += `<tr class="group-row"><td colspan="2"></td><td>Group 2</td><td></td><td>43,962</td><td>42,891</td><td>1,071</td><td></td><td>53,861</td><td>52,628</td><td>1,235</td><td></td></tr>`;
+    body.innerHTML = html;
+  } else {
+    const subCols = {
+      gameplay:  ['Sub','','Name','Account','Dist. to boss ↕','Dist. moved ↕','Missed ↕','Blocked ↕','Evaded ↕','Interrupted ↕','Time CC\'d ↕'],
+      offensive: ['Sub','','Name','Account','Crit% ↕','Flanking% ↕','Glancing% ↕','Scholar% ↕','Seaweed% ↕','Avg DPS ↕','Peak DPS ↕'],
+      defensive: ['Sub','','Name','Account','Dmg taken ↕','Blocked ↕','Evaded ↕','Absorbed ↕','Downed ↕','Dead ↕','Barrier ↕'],
+      support:   ['Sub','','Name','Account','Res time ↕','Res count ↕','Stab ↕','Aegis ↕','Might ↕','Fury ↕','Healing ↕'],
+    };
+    const cols = subCols[curSub] || subCols.gameplay;
+    head.innerHTML = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>';
+    body.innerHTML = PLAYERS.map(p => `<tr>
+      <td>${p.sub}</td><td class="cls-badge">${p.cls}</td>
+      <td style="font-weight:500">${p.name}</td>
+      <td style="color:var(--text-dim);font-size:var(--fs-sm)">${p.acc}</td>
+      ${cols.slice(4).map(() => `<td style="color:var(--text-dim)">—</td>`).join('')}
+    </tr>`).join('');
+  }
+}
+
+// ── TWEAKS ──
+const tw = { bars: true, exp: true };
+function twT(k) {
+  tw[k] = !tw[k];
+  document.getElementById('tw-' + k).classList.toggle('on', tw[k]);
+  if (k==='bars') { showBars = tw[k]; render(); }
+  if (k==='exp')  { showExp  = tw[k]; render(); }
+}
+
+// ── GRADIENTS ──
+const GRADIENTS = [
+  { name: 'None (flat)',        bg: '#272b30',                                                       panel: '#2c3138' },
+  { name: 'Deep Ocean',         bg: 'linear-gradient(135deg, #1e2d3d 0%, #272b30 55%, #1a2535 100%)', panel: '#253040' },
+  { name: 'Midnight Purple',    bg: 'linear-gradient(135deg, #231e30 0%, #272b30 50%, #1f2430 100%)', panel: '#2a2638' },
+  { name: 'Warm Ember',         bg: 'linear-gradient(135deg, #2a2420 0%, #272b30 55%, #251e1a 100%)', panel: '#302820' },
+  { name: 'Forest Depth',       bg: 'linear-gradient(135deg, #1c2820 0%, #272b30 55%, #1e2a22 100%)', panel: '#222e24' },
+  { name: 'Steel Blue',         bg: 'linear-gradient(160deg, #1e2530 0%, #272b30 60%, #1f2a35 100%)', panel: '#252d38' },
+  { name: 'Slate Violet',       bg: 'linear-gradient(145deg, #23202e 0%, #272b30 50%, #20262e 100%)', panel: '#28253a' },
+  { name: 'Charcoal Rose',      bg: 'linear-gradient(135deg, #2a2128 0%, #272b30 55%, #231e28 100%)', panel: '#2e2330' },
+  { name: 'Polar Night',        bg: 'linear-gradient(180deg, #1c2230 0%, #272b30 100%)',              panel: '#222a38' },
+  { name: 'Amber Dusk',         bg: 'linear-gradient(135deg, #28241c 0%, #272b30 60%, #22201a 100%)', panel: '#2e2a20' },
+  { name: 'Teal Depths',        bg: 'linear-gradient(135deg, #1a2a28 0%, #272b30 55%, #1c2b2a 100%)', panel: '#20302e' },
+  { name: 'Radial Center',      bg: 'radial-gradient(ellipse at 60% 40%, #2e3540 0%, #1f2328 100%)',  panel: '#2a3240' },
+  { name: 'Radial Warm',        bg: 'radial-gradient(ellipse at 40% 60%, #2e2a20 0%, #1e2226 100%)',  panel: '#302820' },
+  { name: 'Top Light',          bg: 'linear-gradient(180deg, #303840 0%, #22262a 100%)',              panel: '#353e48' },
+  { name: 'Side Glow Blue',     bg: 'linear-gradient(90deg, #1e2a38 0%, #272b30 40%, #272b30 100%)', panel: '#253040' },
+];
+let curGrad = 0;
+
+function buildSwatches() {
+  const container = document.getElementById('grad-swatches');
+  container.innerHTML = '';
+  GRADIENTS.forEach((g, i) => {
+    const s = document.createElement('div');
+    s.title = g.name;
+    s.style.cssText = `width:14px;height:14px;border-radius:3px;cursor:pointer;background:${g.bg};border:1.5px solid ${i===curGrad?'var(--accent-hi)':'transparent'};flex-shrink:0;transition:border-color .1s`;
+    s.onclick = () => { curGrad = i; applyGrad(); };
+    container.appendChild(s);
+  });
+}
+
+function applyGrad() {
+  const g = GRADIENTS[curGrad];
+  document.querySelector('.main').style.background = g.bg;
+  // update panel color via CSS variable override on .main
+  document.querySelector('.main').style.setProperty('--bg', 'transparent');
+  document.documentElement.style.setProperty('--grad-panel', g.panel);
+  // apply panel bg to section headers
+  document.querySelectorAll('.header-general,.header-buffs,.header-generic,.header-graph,.header-mechanics').forEach(el => {
+    el.style.background = g.panel;
+  });
+  document.querySelectorAll('.subsection-tabs').forEach(el => el.style.background = g.panel);
+  document.getElementById('grad-name').textContent = g.name;
+  buildSwatches();
+}
+
+function cycleGrad(dir) {
+  curGrad = (curGrad + dir + GRADIENTS.length) % GRADIENTS.length;
+  applyGrad();
+}
+
+// init
+buildSwatches();
+document.getElementById('grad-name').textContent = GRADIENTS[0].name;
+
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode')   document.getElementById('tweaks-panel').style.display = 'block';
+  if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"showBars":true,"showExp":true}/*EDITMODE-END*/;
+
+render();
+</script>
+</body>
+</html>
