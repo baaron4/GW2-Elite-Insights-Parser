@@ -1,5 +1,30 @@
 <template>
-    <div class="card fight-summary" style="min-width: 350px;">
+    <!-- ── COMPACT SIDEBAR MODE ── -->
+    <div v-if="compact">
+        <div v-if="isMultiEncounterLog" class="ei-encounter-dropdown">
+            <div class="ei-boss-name" @click="dropdownOpen = !dropdownOpen" style="cursor:pointer;user-select:none">
+                {{ encounterData.nameNoMode }} <span style="font-size:10px;color:var(--text-dim)">▾</span>
+            </div>
+            <div v-if="dropdownOpen" class="ei-encounter-dropdown-menu">
+                <div v-for="(enc, i) in encountersData" :key="i"
+                     class="ei-encounter-dropdown-item"
+                     @click="select(i); dropdownOpen = false">
+                    {{ enc.nameNoMode }}
+                </div>
+            </div>
+        </div>
+        <div v-else class="ei-boss-name">{{ encounterData.nameNoMode }}</div>
+        <div class="ei-boss-badges">
+            <span v-if="encounterData.mode" class="ei-badge">{{ encounterData.mode }}</span>
+            <span class="ei-badge" :class="encounterData.success ? 'ei-badge-success' : 'ei-badge-danger'">
+                {{ encounterData.success ? '✓ Success' : '✗ Failure' }}
+            </span>
+        </div>
+        <div class="ei-boss-meta">{{ encounterData.duration }}</div>
+    </div>
+
+    <!-- ── FULL CARD MODE ── -->
+    <div v-if="!compact" class="card fight-summary" style="min-width: 350px;">
         <h3 v-if="isMultiEncounterLog" class="card-header text-center" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Select Encounter">
                 <div :style="getMinWidth()">{{ encounterData.nameNoMode }}</div>
@@ -8,7 +33,7 @@
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" :style="getMinWidth()" style="max-height: 500px;">
                 <li v-for="(encounterData, index) in encountersData" :key="index" :style="index === 0 ? {'border-bottom': '2px solid #bbb;'} : ''">
                    <a @click="select(index)" @click.stop="stopClickEvent" href="#" class="dropdown-item"
-                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">         
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
                         <img class="icon-ll" :src="encounterData.icon">
                         {{encounterData.name}}
                     </a>
@@ -84,11 +109,12 @@
     }
 
     Vue.component("encounter-component", {
-        props: ["light", "encounters"],
+        props: ["light", "encounters", "compact"],
         template: `${template}`,
         data: function () {
             return {
                 isMultiEncounterLog: IsMultiEncounterLog,
+                dropdownOpen: false,
             };
         },
         methods: {
@@ -115,20 +141,19 @@
                 for (let i = 0; i < reactiveLogdata.phases.length; i++) {
                     reactiveLogdata.phases[i].active = false;
                 }
-                reactiveLogdata.phases[index].active = true;   
+                reactiveLogdata.phases[index].active = true;
                 // Select an appropriate player
                 const encounterPhase = logData.phases[this.encounters[encounterIndex].index];
-                const players = getActiveNonFakePlayersForPhase(encounterPhase);      
-                let selectedPlayerIndex = reactiveLogdata.activeEncounterPhaseData[encounterIndex].player; 
+                const players = getActiveNonFakePlayersForPhase(encounterPhase);
+                let selectedPlayerIndex = reactiveLogdata.activeEncounterPhaseData[encounterIndex].player;
                 for (let i = 0; i < reactiveLogdata.players.length; i++) {
                     reactiveLogdata.players[i].active = false;
                 }
                 if (players[selectedPlayerIndex]) {
-                    reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    reactiveLogdata.players[selectedPlayerIndex].active = true;
                 } else {
                     const originalPlayer = logData.players[selectedPlayerIndex];
                     selectedPlayerIndex = -1;
-                    // Look for the same player that is active in that encounter
                     for (let i = 0; i < logData.players.length; i++) {
                         const curPlayer = logData.players[i];
                         if (curPlayer.acc === originalPlayer.acc && players[i]) {
@@ -136,10 +161,9 @@
                             break;
                         }
                     }
-                    if (selectedPlayerIndex >= 0) {           
-                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    if (selectedPlayerIndex >= 0) {
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;
                     } else {
-                        // Default to pov player active in that encounter
                         for (let i = 0; i < logData.players.length; i++) {
                             const curPlayer = logData.players[i];
                             if (curPlayer.isPoV && players[i]) {
@@ -147,7 +171,7 @@
                                 break;
                             }
                         }
-                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;
                     }
                     reactiveLogdata.activeEncounterPhaseData[encounterIndex].player = selectedPlayerIndex;
                 }
@@ -166,7 +190,6 @@
                 }
                 let healthAndBarrier = hpLeftPercent + barrierLeftPercent;
                 if (healthAndBarrier > maxPercent) {
-                    // So that barrier remains fully visible like in game
                     hpLeftPercent -= healthAndBarrier - maxPercent;
                     healthAndBarrier = maxPercent;
                 }
@@ -175,15 +198,15 @@
                 const redStart = "red " + minPercent + "%";
                 const red = "red " + hpLeftPercent + "%";
                 const yellow = "yellow " + hpLeftPercent + "% " + healthAndBarrier + "%";
-                const green = "green " + healthAndBarrier + "%";      
-                const greenEnd = "green " + maxPercent + "%";  
-                const greyHighStart = "grey  " + maxPercent + "%"; 
+                const green = "green " + healthAndBarrier + "%";
+                const greenEnd = "green " + maxPercent + "%";
+                const greyHighStart = "grey  " + maxPercent + "%";
                 const greyHighEnd = "grey  " + 100 + "%";
-                const template = `linear-gradient(to right, 
-                        ${greyLowStart}, ${greyLowEnd}, 
-                        ${redStart}, ${red}, 
-                        ${yellow}, 
-                        ${green}, ${greenEnd}, 
+                const template = `linear-gradient(to right,
+                        ${greyLowStart}, ${greyLowEnd},
+                        ${redStart}, ${red},
+                        ${yellow},
+                        ${green}, ${greenEnd},
                         ${greyHighStart}, ${greyHighEnd}
                 )`;
                 return template;
@@ -221,7 +244,7 @@
                     }
                 }
                 const barrierLeft = hpBar && hpBarIsActive(hpBar) ? target.barrierLeftPercent : 0;
-                if ((hpLeft > minPercent && barrierLeft > 0) || (hpLeft == minPercent && barrierLeft > 0)) { // If only barrier is left, show 0 + x.y barrier
+                if ((hpLeft > minPercent && barrierLeft > 0) || (hpLeft == minPercent && barrierLeft > 0)) {
                     return health + " HP (" + hpLeft + "% + " + barrierLeft + "%)";
                 }
                 else if (hpLeft > minPercent && barrierLeft == 0) {
@@ -231,29 +254,14 @@
             },
             fightModeColorClass: function (mode) {
                 switch (mode) {
-                    case "Unknown":
-                        return { 'fm-unknown': true };
-                        break;
-                    case "Story Mode":
-                        return { 'fm-story': true };
-                        break;
-                    case "Quickplay Normal Mode":
-                        return { 'fm-quickplay': true };
-                        break;
-                    case "Emboldened Normal Mode":
-                        return { 'fm-emboldened': true };
-                        break;
-                    case "Normal Mode":
-                        return { 'fm-normal': true };
-                        break;
-                    case "Challenge Mode":
-                        return { 'fm-challenge': true };
-                        break;
-                    case "Legendary Challenge Mode":
-                        return { 'fm-legendary': true };
-                        break;
-                    default:
-                        break;
+                    case "Unknown":           return { 'fm-unknown': true };
+                    case "Story Mode":        return { 'fm-story': true };
+                    case "Quickplay Normal Mode": return { 'fm-quickplay': true };
+                    case "Emboldened Normal Mode": return { 'fm-emboldened': true };
+                    case "Normal Mode":       return { 'fm-normal': true };
+                    case "Challenge Mode":    return { 'fm-challenge': true };
+                    case "Legendary Challenge Mode": return { 'fm-legendary': true };
+                    default: break;
                 }
                 return;
             },
@@ -271,9 +279,7 @@
                     let targetCount = 0;
                     let presentAccounts = new Set();
                     for (let i = 0; i < phase.targets.length; i++) {
-                        if (phase.targetPriorities[i] > 0) {
-                            continue;
-                        }
+                        if (phase.targetPriorities[i] > 0) { continue; }
                         targetCount++;
                         if (!noTargets && targets.length < 10) {
                             const targetIndex = phase.targets[i];
@@ -294,9 +300,7 @@
                         targets: targets,
                         targetCount: targetCount,
                         playerCount: squadPlayers.filter(x => {
-                            if (presentAccounts.has(x.acc)) {
-                                return false;
-                            }
+                            if (presentAccounts.has(x.acc)) { return false; }
                             presentAccounts.add(x.acc);
                             return true;
                         }).length,
@@ -308,16 +312,14 @@
                         instanceBuffs: null,
                     };
                     if (logData.instanceBuffs.length > 0) {
-                        const res = [];
+                        const res2 = [];
                         for (let i = 0; i < logData.instanceBuffs.length; i++) {
                             const cur = logData.instanceBuffs[i];
                             if (cur[2] <= phase.start && cur[3] >= phase.end) {
-                                res.push({buff: findSkill(true, cur[0]), stack: cur[1]});
+                                res2.push({buff: findSkill(true, cur[0]), stack: cur[1]});
                             }
                         }
-                        if (res.length > 0) {
-                            encounter.instanceBuffs = res;
-                        }
+                        if (res2.length > 0) { encounter.instanceBuffs = res2; }
                     }
                     res.push(encounter);
                 }
@@ -332,14 +334,12 @@
                 }
                 return this.encountersData[0];
             },
-            fractalScale: function () {
-                return logData.fractalScale;
-            },
-            instancePrivacy: function () {
-                return logData.instancePrivacy;
-            },
+            fractalScale: function () { return logData.fractalScale; },
+            instancePrivacy: function () { return logData.instancePrivacy; },
             resultStatus: function () {
-                return this.encounterData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
+                return this.encounterData.success
+                    ? { text: 'Success', class: ["text-success"] }
+                    : { text: 'Failure', class: ["text-danger"] };
             },
         }
     });

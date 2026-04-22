@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
     <link id="theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"
           crossorigin="anonymous">
     <!--${Css}-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-3.0.0.min.js"></script>
@@ -69,43 +69,22 @@
             </div>
         </div>
     </div>
-    <div v-cloak id="content" :class="{'ei-container-small':mode !== 1, 'ei-container-big':mode === 1}">
-        <div class="d-flex flex-row justify-content-center align-items-center mt-2 ">
-            <div v-if="!!errorMessages" class="d-flex flex-column justify-content-center align-items-center">
-                <img v-for="message in errorMessages" class="mb-1 icon" :src="UIIcons.ExclamationMark" :data-original-title="message" />
-            </div>
-            <encounter-component :light="light" :encounters="reactiveLogdata.encounters"></encounter-component>
-            <div class="d-flex flex-column justify-content-center align-items-center ml-5">
-                <div class="d-flex flex-row justify-content-center align-items-center mt-2 mb-2">
-                    <ul class="nav nav-pills" style="pointer-events:auto;">
-                        <li class="nav-item">
-                            <a class="nav-link" @click="switchTheme(true)" :class="{active: light}">Light Theme</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" @click="switchTheme(false)" :class="{active: !light }">Dark Theme</a>
-                        </li>
-                    </ul>
-                </div>
-                <div v-if="cr || healingExtShow" class="d-flex flex-row justify-content-center align-items-center">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item mb-1">
-                            <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Statistics</a>
-                        </li>
-                        <li v-if="cr" class="nav-item">
-                            <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Combat Replay</a>
-                        </li>                      
-                        <li v-if="healingExtShow" class="nav-item">
-                            <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }">Healing Statistics</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div>
+    <div v-cloak id="content" class="ei-shell">
+        <ei-sidebar-component
+            :light="light"
+            :cr="cr"
+            :mode="mode"
+            :healing-ext-show="healingExtShow"
+            :encounters="reactiveLogdata.encounters"
+            :error-messages="errorMessages"
+            @switch-theme="switchTheme($event)"
+            @switch-mode="mode = $event">
+        </ei-sidebar-component>
+        <div class="ei-main">
             <keep-alive>
                 <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
                 <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
-                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>            
+                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>
             </keep-alive>
             <div v-show="mode === 2 && !healingExt" class="mt-3 mb-3">
                 <h2 class="text-center">
@@ -114,34 +93,34 @@
                     logging features.
                 </h2>
             </div>
-        </div>
-        <div class="footer">
-            <div>
-                Time Start: {{getLogData().logStart}} | 
-                Time End: {{getLogData().logEnd}} | 
-                EVTC Duration: {{ getLogData().evtcRecordingDuration}}
-            </div>      
-            <div v-if="getLogData().instanceStart">
-                Instance Start: {{getLogData().instanceStart}} 
-                {{ getLogData().instanceIP ? ' | Instance IP: ' + getLogData().instanceIP : '' }}
-                {{ getLogData().region ? ' | Region: ' + getLogData().region : '' }}
+            <div class="ei-footer">
+                <div>
+                    Time Start: {{getLogData().logStart}} |
+                    Time End: {{getLogData().logEnd}} |
+                    EVTC Duration: {{ getLogData().evtcRecordingDuration}}
+                </div>
+                <div v-if="getLogData().instanceStart">
+                    Instance Start: {{getLogData().instanceStart}}
+                    {{ getLogData().instanceIP ? ' | Instance IP: ' + getLogData().instanceIP : '' }}
+                    {{ getLogData().region ? ' | Region: ' + getLogData().region : '' }}
+                </div>
+                <div>
+                    ARC: {{getLogData().arcVersion}} |
+                    GW2 Build: {{getLogData().gw2Build}} |
+                    Trigger ID: {{getLogData().triggerID}} |
+                    Log ID: {{getLogData().logID}} |
+                    Map ID: {{getLogData().mapID}} |
+                    {{getLogData().parser}}
+                </div>
+                <div v-if="uploadLinks">
+                    <p v-for="link in uploadLinks" v-if="link.url.length > 0">{{link.key}}: <a :href="link.url">{{link.url}}</a></p>
+                </div>
+                <div v-if="usedExtensions">
+                    <span>Used Extensions: </span>
+                    <span v-for="(usedExtension, id) in usedExtensions">{{(id > 0 ? "|" : "") + usedExtension}}</span>
+                </div>
+                <div>File recorded by: {{getLogData().recordedBy}} - {{getLogData().recordedAccountBy}}</div>
             </div>
-            <div>
-                ARC: {{getLogData().arcVersion}} | 
-                GW2 Build: {{getLogData().gw2Build}} | 
-                Trigger ID: {{getLogData().triggerID}} | 
-                Log ID: {{getLogData().logID}} | 
-                Map ID: {{getLogData().mapID}} | 
-                {{getLogData().parser}}
-            </div>
-            <div v-if="uploadLinks">
-                <p v-for="link in uploadLinks" v-if="link.url.length > 0">{{link.key}}: <a :href="link.url">{{link.url}}</a> </p>
-            </div>
-            <div v-if="usedExtensions">
-                <span>Used Extensions: </span>
-                <span v-for="(usedExtension, id) in usedExtensions">{{(id > 0 ? "|" : "") + usedExtension}}</span>
-            </div>
-            <div class="mb-2">File recorded by: {{getLogData().recordedBy}} - {{getLogData().recordedAccountBy}}</div>
         </div>
     </div>
 </body>
