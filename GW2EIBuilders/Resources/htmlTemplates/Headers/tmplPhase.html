@@ -1,32 +1,26 @@
 <template>
-    <div>
-        <ul v-if="showNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
-            <li class="nav-item" v-for="phase in phasesToUse" v-show="!getPhaseData(phase.index).breakbarPhase"
-                :data-original-title="getPhaseTooltip(phase.index)">
-                <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseName(phase.index)}}</a>
-            </li>
-        </ul>
-        <div v-if="hasBreakbarPhases" class="d-flex flex-row justify-content-center align-items-center">
-            <span class="mr-1">Breakbar Phases: </span>
-            <div style="max-width: 1200px;" class="d-flex flex-row align-items-center scrollable-x">
-                <div v-for="data in breakbarPhasesPerTarget"
-                class="d-flex flex-row flex-nowrap  align-items-center mr-1 ml-1">
-                <img class="icon-sl mr-2" :src="getTargetData(data.targetId).icon"
-                    :alt="getTargetData(data.targetId).name" :data-original-title="getTargetData(data.targetId).name"
-                    >
-                <ul class="nav nav-pills d-flex flex-row flex-nowrap">
-                    <li class="nav-item" v-for="(phase, id) in data.phases"
-                        v-show="getPhaseData(phase.index).breakbarPhase"
-                        :data-original-title="getBreakbarPhaseTooltip(phase.index)">
-                        <a class="nav-link" @click="select(phase)"
-                            :class="{active: phase.active}">{{id + 1}}</a>
-                    </li>
-                </ul>
-            </div>
-            </div>
-
+    <div class="ei-phase-list">
+        <div v-for="phase in normalPhases"
+             class="ei-phase-item"
+             :class="{ active: phase.active }"
+             :data-original-title="getPhaseTooltip(phase.index)"
+             @click="select(phase)">
+            {{ getPhaseName(phase.index) }}
+            <span class="ei-phase-pct">{{ getPhasePct(phase.index) }}</span>
         </div>
-
+        <div v-if="hasBreakbarPhases">
+            <div class="ei-group-label" style="padding-left:26px;margin-top:2px">Breakbar</div>
+            <div v-for="data in breakbarPhasesPerTarget">
+                <div v-for="(phase, id) in data.phases"
+                     class="ei-phase-item child"
+                     :class="{ active: phase.active }"
+                     :data-original-title="getBreakbarPhaseTooltip(phase.index)"
+                     @click="select(phase)">
+                    {{ getTargetData(data.targetId).name }} #{{ id + 1 }}
+                    <span class="ei-phase-pct">{{ getPhasePct(phase.index) }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -39,11 +33,8 @@
             phasesToUse: function() {
                 return getPhasesForSelectedEncounter(this.phases, this.encounters);
             },
-            showNormalPhases: function () {
-                return this.normalPhases.length > 1 || this.hasBreakbarPhases;
-            },
             normalPhases: function () {
-                return this.phasesToUse.filter(phase => !phase.breakbarPhase);
+                return this.phasesToUse.filter(function(phase) { return !logData.phases[phase.index].breakbarPhase; });
             },
             hasBreakbarPhases: function () {
                 return this.breakbarPhasesPerTarget.length > 0;
@@ -51,16 +42,12 @@
             breakbarPhasesPerTarget: function () {
                 var res = [];
                 for (var targetId = 0; targetId < logData.targets.length; targetId++) {
-                    var brPhases = this.phasesToUse.filter(phase => {
+                    var brPhases = this.phasesToUse.filter(function(phase) {
                         const logPhase = logData.phases[phase.index];
                         return logPhase.breakbarPhase && logPhase.targets.indexOf(targetId) > -1;
                     });
-                    var phases = [];
-                    for (var brPhaseId = 0; brPhaseId < brPhases.length; brPhaseId++) {
-                        phases.push(brPhases[brPhaseId]);
-                    }
-                    if (phases.length > 0) {
-                        res.push({ targetId: targetId, phases: phases });
+                    if (brPhases.length > 0) {
+                        res.push({ targetId: targetId, phases: brPhases });
                     }
                 }
                 return res;
@@ -84,6 +71,12 @@
                 const phase = this.getPhaseData(id);
                 return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
             },
+            getPhasePct: function (id) {
+                const phase = this.getPhaseData(id);
+                const enc = this.encounterPhase;
+                if (!enc || enc.duration === 0) return '';
+                return Math.round(phase.duration / enc.duration * 100) + '%';
+            },
             getTargetData: function (id) {
                 return logData.targets[id];
             },
@@ -99,7 +92,7 @@
                     '<br /> Breakbar Active at: ' + phase.breakbarStart +
                     '<br /> Breakbar Damage: ' + breakbarTaken +
                     '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + phase.breakbarRecovered;
-            }
+            },
         }
     });
 </script>

@@ -2010,7 +2010,13 @@ namespace GW2EIBuilders.Properties {
                 return ResourceManager.GetString("tmplSimpleRotation", resourceCulture);
             }
         }
-        
+
+        internal static string tmplSidebar {
+            get {
+                return ResourceManager.GetString("tmplSidebar", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;

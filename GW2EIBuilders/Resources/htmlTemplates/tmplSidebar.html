@@ -1,0 +1,215 @@
+<template>
+    <div class="ei-sidebar">
+
+        <!-- Top controls: mode + theme -->
+        <div class="ei-sidebar-top">
+            <div class="ei-mode-tabs">
+                <div class="ei-mode-tab" :class="{ active: mode === 0 }" @click="$emit('switch-mode', 0)">Stats</div>
+                <div class="ei-mode-tab" :class="{ active: mode === 1, 'ei-mode-disabled': !cr }"
+                    :title="!cr ? 'Combat replay was not enabled in the parser' : ''"
+                    @click="cr && $emit('switch-mode', 1)">Replay</div>
+                <div class="ei-mode-tab" :class="{ active: mode === 2, 'ei-mode-disabled': !healingExtShow }"
+                    :title="!healingExtShow ? 'Healing extension data not available' : ''"
+                    @click="healingExtShow && $emit('switch-mode', 2)">Healing</div>
+            </div>
+            <div class="ei-theme-toggle" @click="$emit('switch-theme', !light)"
+                :title="light ? 'Switch to dark mode' : 'Switch to light mode'">
+                <span class="ei-theme-icon">{{ light ? '&#9728;' : '&#9790;' }}</span>
+                <span>{{ light ? 'Light mode' : 'Dark mode' }}</span>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="ei-filters">
+            <div class="ei-filter-section-label">Filters</div>
+
+            <!-- Phase filter -->
+            <div class="ei-filter-block" v-if="hasPhasesFilter">
+                <div class="ei-filter-header" @click="phaseOpen = !phaseOpen">
+                    <span class="ei-filter-icon">&#9672;</span>
+                    <span class="ei-filter-summary">Phase: <span>{{ activePhaseLabel }}</span></span>
+                    <span class="ei-filter-chevron" :class="{ open: phaseOpen }">›</span>
+                </div>
+                <div class="ei-filter-body" v-show="phaseOpen">
+                    <phase-component :phases="reactiveLogdata.phases"></phase-component>
+                </div>
+            </div>
+
+            <!-- Players filter -->
+            <div class="ei-filter-block">
+                <div class="ei-filter-header" @click="playersOpen = !playersOpen">
+                    <span class="ei-filter-icon">&#128101;</span>
+                    <div style="flex:1;min-width:0">
+                        <div v-if="selectedPlayerName !== 'All Players'" style="color:var(--accent-hi);font-weight:500;line-height:1.3">{{ selectedPlayerName }}</div>
+                        <div v-if="!playersOpen">
+                            <div v-for="group in playerChipGroups" class="ei-av-row">
+                                <div v-for="chip in group" class="ei-av-chip" :class="{ on: chip.active, off: !chip.active }">
+                                    <img :src="chip.icon" :alt="chip.profession" :data-original-title="chip.name + ' \xb7 ' + chip.profession">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="ei-filter-chevron" :class="{ open: playersOpen }">›</span>
+                </div>
+                <div class="ei-filter-body" v-show="playersOpen">
+                    <player-component :players="reactiveLogdata.players" :phaseindex="activePhaseIndex"></player-component>
+                </div>
+            </div>
+
+            <!-- Targets filter -->
+            <div class="ei-filter-block" v-if="hasTargets">
+                <div class="ei-filter-header" @click="targetsOpen = !targetsOpen">
+                    <span class="ei-filter-icon">&#127919;</span>
+                    <span class="ei-filter-summary">Target: <span>{{ activeTargetLabel }}</span></span>
+                    <span class="ei-filter-chevron" :class="{ open: targetsOpen }">›</span>
+                </div>
+                <div class="ei-filter-body" v-show="targetsOpen">
+                    <target-component :targets="reactiveLogdata.targets" :phaseindex="activePhaseIndex"></target-component>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section nav -->
+        <div v-if="mode === 0" class="ei-sidebar-section-label">Section</div>
+        <div class="ei-nav-list">
+            <div v-if="mode === 0">
+                <div class="ei-nav-item" :class="{ active: tab === 0 }" @click="setTab(0)">
+                    <div class="ei-nav-dot"></div> General Stats
+                </div>
+                <div class="ei-nav-item" :class="{ active: tab === 1 }" @click="setTab(1)">
+                    <div class="ei-nav-dot"></div> Buffs
+                </div>
+                <div class="ei-nav-item" v-if="hasDamageMods" :class="{ active: tab === 2 }" @click="setTab(2)">
+                    <div class="ei-nav-dot"></div> Damage Modifiers
+                </div>
+                <div class="ei-nav-item" v-if="hasMechanics" :class="{ active: tab === 3 }" @click="setTab(3)">
+                    <div class="ei-nav-dot"></div> Mechanics
+                </div>
+                <div class="ei-nav-item" :class="{ active: tab === 4 }" @click="setTab(4)">
+                    <div class="ei-nav-dot"></div> Graph
+                </div>
+                <div class="ei-nav-item" v-if="hasRotations" :class="{ active: tab === 7 }" @click="setTab(7)">
+                    <div class="ei-nav-dot"></div> Rotations
+                </div>
+                <div class="ei-nav-item" v-if="hasTargets" :class="{ active: tab === 5 }" @click="setTab(5)">
+                    <div class="ei-nav-dot"></div> Targets Summary
+                </div>
+                <div class="ei-nav-item" :class="{ active: tab === 6 }" @click="setTab(6)">
+                    <div class="ei-nav-dot"></div> Player Summary
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</template>
+
+<script>
+    Vue.component("ei-sidebar-component", {
+        props: ["light", "cr", "mode", "healingExtShow", "encounters", "errorMessages"],
+        mixins: [encounterPhaseComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                phaseOpen: false,
+                playersOpen: false,
+                targetsOpen: false,
+                reactiveLogdata: reactiveLogdata,
+            };
+        },
+        computed: {
+            tab: function () { return reactiveLogdata.tab; },
+            UIIcons: function () { return UIIcons; },
+            activePhaseIndex: function () {
+                var phases = reactiveLogdata.phases;
+                for (var i = 0; i < phases.length; i++) {
+                    if (phases[i].active) return i;
+                }
+                return 0;
+            },
+            activePhaseLabel: function () {
+                var phase = logData.phases[this.activePhaseIndex];
+                if (!phase) return "—";
+                return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
+            },
+            hasPhasesFilter: function () {
+                var phases = getPhasesForSelectedEncounter(reactiveLogdata.phases, this.encounters);
+                if (!phases) return false;
+                return phases.filter(function(p) { return !logData.phases[p.index].breakbarPhase; }).length > 1;
+            },
+            hasTargets: function () { return hasTargets(); },
+            hasDamageMods: function () { return hasDamageMods(); },
+            hasMechanics: function () { return hasMechanics(); },
+            hasRotations: function () { return hasRotations(); },
+            playerCount: function () {
+                var count = 0;
+                for (var i = 0; i < logData.players.length; i++) {
+                    if (!logData.players[i].isFake) count++;
+                }
+                return count;
+            },
+            playerChipGroups: function () {
+                var groups = [];
+                var current = [];
+                var prevGroup = null;
+                for (var i = 0; i < logData.players.length; i++) {
+                    var p = logData.players[i];
+                    if (p.isFake) continue;
+                    if (prevGroup !== null && p.group !== prevGroup) {
+                        groups.push(current);
+                        current = [];
+                    }
+                    current.push({
+                        icon: p.icon,
+                        profession: p.profession,
+                        name: p.name,
+                        active: reactiveLogdata.players[i].active,
+                    });
+                    prevGroup = p.group;
+                }
+                if (current.length) groups.push(current);
+                return groups;
+            },
+            selectedPlayerName: function () {
+                for (var i = 0; i < logData.players.length; i++) {
+                    if (logData.players[i].isFake) continue;
+                    if (reactiveLogdata.players[i] && reactiveLogdata.players[i].active) {
+                        return logData.players[i].name;
+                    }
+                }
+                return 'All Players';
+            },
+            activeTargetLabel: function () {
+                if (!this.hasTargets) return "—";
+                var phase = logData.phases[this.activePhaseIndex];
+                if (!phase) return "—";
+                var activeNames = [];
+                for (var i = 0; i < phase.targets.length; i++) {
+                    var tIdx = phase.targets[i];
+                    var tReactive = reactiveLogdata.targets[tIdx];
+                    if (tReactive && tReactive[this.activePhaseIndex] && tReactive[this.activePhaseIndex].active) {
+                        activeNames.push(logData.targets[tIdx].name);
+                    }
+                }
+                if (activeNames.length === 0) return "None";
+                if (activeNames.length >= phase.targets.length) return "All enemies";
+                if (activeNames.length === 1) return activeNames[0];
+                return activeNames.length + " targets";
+            },
+        },
+        watch: {
+            'reactiveLogdata.expandSidebarFilter': function (val) {
+                if (!val) return;
+                if (val === 'phase') this.phaseOpen = true;
+                else if (val === 'players') this.playersOpen = true;
+                else if (val === 'targets') this.targetsOpen = true;
+                reactiveLogdata.expandSidebarFilter = '';
+            },
+        },
+        methods: {
+            setTab: function (tab) {
+                reactiveLogdata.tab = tab;
+            },
+        },
+    });
+</script>

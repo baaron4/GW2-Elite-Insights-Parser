@@ -1,54 +1,24 @@
 <template>
-    <div class="d-flex flex-row">
-        <div class="d-flex flex-column mr-1">
-            <img class="icon" :src="UIIcons.QuestionMark" :data-original-title="scoreExpl" />
-            <img class="icon" :src="UIIcons.QuestionMark" :data-original-title="weaponExpl" />
-        </div>
-        <div class="d-flex flex-column max-wd-900px">
-            <div v-for="group in groups" class="d-flex flex-wrap mb-1">
-                <div v-for="player in group"
-                    class="player-cell d-flex flex-column align-items-center justify-content-center"
-                    :class="{active: player.active}" @click="select(player.id)">
-                    <div>
-                        <img :src="player.icon" :alt="player.profession" class="icon"
-                            :data-original-title="player.profession">
-                        <img v-if="player.health > 0" :src="UIIcons.VitalityChar"
-                            alt="Health" class="icon" :data-original-title="'Health: ' + player.health">
-                        <img v-if="player.condi > 0" :src="UIIcons.ConditionDamageChar"
-                            alt="Condition Damage" class="icon"
-                            :data-original-title="scoreV2 ? 'Condition Damage' : 'Condition Damage: ' + player.condi">
-                        <img v-if="player.conc > 0" :src="UIIcons.BoonDurationChar"
-                            alt="Concentration" class="icon" :data-original-title="scoreV2 ? 'Concentration' : 'Concentration: ' + player.conc">
-                        <img v-if="player.heal > 0" :src="UIIcons.HealingPowerChar"
-                            alt="Healing Power" class="icon" :data-original-title="scoreV2 ? 'Healing Power' : 'Healing Power: ' + player.heal">
-                        <img v-if="player.tough > 0" :src="UIIcons.ToughnessChar"
-                            alt="Toughness" class="icon" :data-original-title="scoreV2 ? 'Toughness' : 'Toughness: ' + player.tough">
+    <div>
+        <div v-for="group in groups">
+            <div class="ei-player-list">
+                <div class="ei-group-label">Group {{ group.num }}</div>
+                <div v-for="player in group.players"
+                     class="ei-player-row"
+                     :class="{ off: !player.active }"
+                     :data-original-title="player.name + ' · ' + player.acc + ' · ' + player.profession"
+                     @click="select(player.id)">
+                    <div class="ei-av" :class="{ on: player.active }">
+                        <img :src="player.icon" :alt="player.profession">
                     </div>
-                    <div v-for="(weaponSet, weaponSetIndex) in player.weaponSets">
-                        <div v-show="showWeaponSet(weaponSetIndex, player.weaponSets, encounterPhase)">
-                            <div v-if="weaponSet.l1Set.length > 0 || weaponSet.l2Set.length > 0">
-                                <img v-for="wep in weaponSet.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                                <span v-if="weaponSet.l1Set.length > 0 && weaponSet.l2Set.length > 0">/</span>
-                                <img v-for="wep in weaponSet.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                            </div>
-                            <div v-if="weaponSet.a1Set.length > 0 || weaponSet.a2Set.length > 0">
-                                <img v-for="wep in weaponSet.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                                <span v-if="weaponSet.a1Set.length > 0 && weaponSet.a2Set.length > 0">/</span>
-                                <img v-for="wep in weaponSet.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <img v-if="runningExtensions && runningExtensions[player.id]"
-                            :src="UIIcons.GreenFlag" alt="Extensions"
-                            class="icon" :data-original-title="computeExtensionTooltip(runningExtensions[player.id])">
-                        <img v-if="player.isCommander"
-                            :src="UIIcons.Commander" alt="Commander"
-                            class="icon" :data-original-title="getCommanderTooltip(player)">
-                        <span class="player-cell-shorten" :data-original-title="player.name + ' - ' + player.acc">
-                            {{ player.name }}
-                        </span>
-                    </div>
+                    <span class="ei-player-name">{{ player.name }}</span>
+                    <div v-if="player.active" class="ei-player-dot"></div>
+                    <img v-if="runningExtensions && runningExtensions[player.id]"
+                         :src="UIIcons.GreenFlag" alt="Extensions"
+                         class="icon-s" :data-original-title="computeExtensionTooltip(runningExtensions[player.id])">
+                    <img v-if="player.isCommander"
+                         :src="UIIcons.Commander" alt="Commander"
+                         class="icon-s" :data-original-title="getCommanderTooltip(player)">
                 </div>
             </div>
         </div>
@@ -77,73 +47,27 @@
                 var str = "Player is running: <br>";
                 for (var i = 0; i < data.length; i++) {
                     str += "- " + data[i] + " Extension";
-                    if (i !== data.length - 1) {
-                        str += "<br>";
-                    }
+                    if (i !== data.length - 1) { str += "<br>"; }
                 }
                 return str;
             }
         },
         computed: {
-            scoreV2: function() {
-                return logData.evtcBuild > 20210800;
-            },
-            scoreExpl: function () {
-                if (this.scoreV2) {
-                    return `
-                        <span style='text-align:left;display: block;'>
-                        A player has a stat score if they are above 60% of the maximum stat present in the squad. For example if the maximum healing power stat inside the squad is 1000, anybody with a healing power stat above 600 will be flagged as with healing power. 
-                        </span>
-                    `;
-                }
-                return `
-                <span style='text-align:left;display: block;'>
-                Scores are relative to the squad. 10 means that that player had the highest stat in the squad. 8 means that that player had between 80% and 89% of the highest scored player's stat.
-                </span>
-                `
-            },
-            weaponExpl: function () {
-                if (IsMultiEncounterLog) {
-                    return `
-                    <span style='text-align:left;display: block;'>
-                    Weapons are estimated based on skills that were cast by the player. 
-                    <br>
-                    If the player has changed weapons during the instance, only the weapons used during the selected encounter will be displayed. 
-                    <br>
-                    If the whole instance is selected, the first encountered weapon set will be shown instead.
-                    </span>
-                    `;
-                }
-                return `
-                <span style='text-align:left;display: block;'>
-                Weapons are estimated based on skills that were cast by the player.
-                </span>
-                `;
-            },
+            UIIcons: function () { return UIIcons; },
             groups: function () {
-                var aux = [];
+                var auxMap = {};
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < players.length; i++) {
                     var playerData = players[i];
-                    if (!playerData) {
-                        continue;
-                    }
-                    if (!aux[playerData.group]) {
-                        aux[playerData.group] = [];
-                    }
+                    if (!playerData) { continue; }
+                    var g = playerData.group;
+                    if (!auxMap[g]) { auxMap[g] = { num: g, players: [] }; }
                     var toPush = {};
                     Object.assign(toPush, playerData);
                     toPush.active = this.players[i].active;
-                    aux[playerData.group].push(toPush);
+                    auxMap[g].players.push(toPush);
                 }
-
-                var noUndefinedGroups = [];
-                for (var i = 0; i < aux.length; i++) {
-                    if (aux[i]) {
-                        noUndefinedGroups.push(aux[i]);
-                    }
-                }
-                return noUndefinedGroups;
+                return Object.values(auxMap).sort(function(a, b) { return a.num - b.num; });
             },
             runningExtensions: function () {
                 if (logData.usedExtensions) {
@@ -151,10 +75,7 @@
                     const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                     for (var i = 0; i < players.length; i++) {
                         var playerData = players[i];
-                        if (!playerData) {
-                            res.push(null);
-                            continue;
-                        }
+                        if (!playerData) { res.push(null); continue; }
                         var subRes = [];
                         for (var j = 0; j < logData.usedExtensions.length; j++) {
                             var usedExtension = logData.usedExtensions[j];
@@ -163,16 +84,11 @@
                                 subRes.push(usedExtension.split(" - ")[0]);
                             }
                         }
-                        if (subRes.length > 0) {
-                            res.push(subRes);
-                        } else {
-                            res.push(null);
-                        }
+                        res.push(subRes.length > 0 ? subRes : null);
                     }
                     return res;
-                } else {
-                    return null;
                 }
+                return null;
             },
         }
     });

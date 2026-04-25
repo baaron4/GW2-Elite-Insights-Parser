@@ -1,41 +1,29 @@
 <template>
-    <div class="d-flex flex-row justify-content-center flex-wrap" :style="{'width': totalWidth}">
-        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 408px;">
-            <div v-for="target in mainTargets">
-                <img class="icon-lg mr-2 ml-2 target-cell" 
-                    :src="getTargetData(target.id).icon" 
-                    :alt="getTargetData(target.id).name"
-                    :data-original-title="getTargetData(target.id).name" 
-                    :class="{active: target.data.active}"
-                    @click="target.data.active = !target.data.active">
-                <target-data-component :targetid="target.id"></target-data-component>
-            </div>
+    <div class="ei-target-list">
+        <!-- All enemies toggle -->
+        <div class="ei-target-row" @click="toggleAll">
+            <div class="ei-target-check" :class="{ checked: allActive }">{{ allActive ? '✓' : '' }}</div>
+            <span style="color:var(--text)">All enemies</span>
         </div>
-        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" style="max-width: 362px;">           
-            <div class="d-flex flex-row justify-content-center align-items-center flex-wrap">
-                <div v-for="target in secondaryTargets">
-                    <img class=" icon-ll mr-2 ml-2 target-cell" 
-                        :src="getTargetData(target.id).icon" 
-                        :alt="getTargetData(target.id).name"
-                        :data-original-title="getTargetData(target.id).name" 
-                        :class="{active: target.data.active}"
-                        @click="target.data.active = !target.data.active">
-                    <target-data-component :targetid="target.id"></target-data-component>
-                </div>
-            </div>
-            <div v-show="secondaryTargets.length > 1">
-                <ul class="scale85 nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link" @click="selectAllSecondaries(true)">
-                            Select All
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" @click="selectAllSecondaries(false)">
-                            Deselect All
-                        </a>
-                    </li>
-                </ul>
+        <!-- Main targets -->
+        <div v-for="target in mainTargets"
+             class="ei-target-row"
+             :data-original-title="getTargetData(target.id).name"
+             @click="target.data.active = !target.data.active">
+            <div class="ei-target-check" :class="{ checked: target.data.active }">{{ target.data.active ? '✓' : '' }}</div>
+            <img class="ei-target-icon" :src="getTargetData(target.id).icon" :alt="getTargetData(target.id).name">
+            <span>{{ getTargetData(target.id).name }}</span>
+        </div>
+        <!-- Secondary targets -->
+        <div v-if="secondaryTargets.length > 0">
+            <div class="ei-group-label" style="padding-left:6px">Secondary</div>
+            <div v-for="target in secondaryTargets"
+                 class="ei-target-row"
+                 :data-original-title="getTargetData(target.id).name"
+                 @click="target.data.active = !target.data.active">
+                <div class="ei-target-check" :class="{ checked: target.data.active }">{{ target.data.active ? '✓' : '' }}</div>
+                <img class="ei-target-icon" :src="getTargetData(target.id).icon" :alt="getTargetData(target.id).name">
+                <span>{{ getTargetData(target.id).name }}</span>
             </div>
         </div>
     </div>
@@ -46,20 +34,6 @@
         props: ["targets", "phaseindex"],
         template: `${template}`,
         computed: {
-            totalWidth: function() {
-                let totalWidth = Math.min(this.mainTargets.length, 5) * 80;
-                if (this.secondaryTargets.length > 0) {
-                    // margin between main and secondary
-                    totalWidth += 40;
-                    if (this.secondaryTargets.length == 2) {
-                        // Select all/deselect all are bigger than 2 icons
-                        totalWidth += 210;
-                    } else {
-                        totalWidth += Math.min(this.secondaryTargets.length, 5) * 72;
-                    }
-                }
-                return `${totalWidth}px`;
-            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
@@ -82,16 +56,19 @@
                     }
                 }
                 return result;
-            }
+            },
+            allActive: function () {
+                var all = this.mainTargets.concat(this.secondaryTargets);
+                return all.length > 0 && all.every(function(t) { return t.data.active; });
+            },
         },
         methods: {
             show: function (index) {
                 return this.phase.targets.indexOf(index) !== -1;
             },
-            selectAllSecondaries: function(onOff) {
-                for (let i = 0; i < this.secondaryTargets.length; i++) {
-                    this.secondaryTargets[i].data.active = onOff;
-                }
+            toggleAll: function() {
+                var newState = !this.allActive;
+                this.mainTargets.concat(this.secondaryTargets).forEach(function(t) { t.data.active = newState; });
             },
             getTargetData: function (id) {
                 return logData.targets[id];

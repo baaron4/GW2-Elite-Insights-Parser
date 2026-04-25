@@ -1,22 +1,13 @@
 <template>
-    <div>
-        <ul class="nav nav-tabs">
-            <li>
-                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Damage Stats</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Gameplay Stats</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Offensive Stats</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Defensive Stats</a>
-            </li>
-            <li>
-                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Support Stats</a>
-            </li>
-        </ul>
+    <div class="ei-stat-tables">
+        <div class="ei-ss-tabs">
+            <div class="ei-ss-tab" :class="{active: tab === 0}" @click="tab = 0">Damage Stats</div>
+            <div class="ei-ss-tab" :class="{active: tab === 1}" @click="tab = 1">Gameplay Stats</div>
+            <div class="ei-ss-tab" :class="{active: tab === 4}" @click="tab = 4">Offensive Stats</div>
+            <div class="ei-ss-tab" :class="{active: tab === 2}" @click="tab = 2">Defensive Stats</div>
+            <div class="ei-ss-tab" :class="{active: tab === 3}" @click="tab = 3">Support Stats</div>
+        </div>
+        <div class="ei-stat-table-body">
         <keep-alive>
             <damage-stats-component v-if="tab === 0" :key="'damage'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets"></damage-stats-component>
@@ -31,6 +22,7 @@
             <support-stats-component v-if="tab === 3" :key="'support'" :phaseindex="phaseindex"
                 :playerindex="playerindex"></support-stats-component>
         </keep-alive>
+        </div>
     </div>
 
 </template>

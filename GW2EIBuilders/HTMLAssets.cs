@@ -142,6 +142,7 @@ public class HTMLAssets
             Properties.Resources.tmplTargetTabGraph,
             Properties.Resources.tmplTargetTabPerPlayerGraph,
             Properties.Resources.tmplTargetData,
+            Properties.Resources.tmplSidebar,
             Properties.Resources.tmplMainView,
         };
         var res = new List<string>();
