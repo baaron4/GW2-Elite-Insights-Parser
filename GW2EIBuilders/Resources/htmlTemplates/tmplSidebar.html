@@ -1,11 +1,21 @@
 <template>
     <div class="ei-sidebar">
 
-        <!-- Boss info -->
-        <div class="ei-sidebar-boss">
-            <encounter-component :compact="true" :light="light" :encounters="encounters"></encounter-component>
-            <div v-if="errorMessages" style="margin-top:4px;display:flex;flex-wrap:wrap;gap:3px">
-                <img v-for="message in errorMessages" class="icon-s" :src="UIIcons.ExclamationMark" :data-original-title="message" />
+        <!-- Top controls: mode + theme -->
+        <div class="ei-sidebar-top">
+            <div class="ei-mode-tabs">
+                <div class="ei-mode-tab" :class="{ active: mode === 0 }" @click="$emit('switch-mode', 0)">Stats</div>
+                <div class="ei-mode-tab" :class="{ active: mode === 1, 'ei-mode-disabled': !cr }"
+                    :title="!cr ? 'Combat replay was not enabled in the parser' : ''"
+                    @click="cr && $emit('switch-mode', 1)">Replay</div>
+                <div class="ei-mode-tab" :class="{ active: mode === 2, 'ei-mode-disabled': !healingExtShow }"
+                    :title="!healingExtShow ? 'Healing extension data not available' : ''"
+                    @click="healingExtShow && $emit('switch-mode', 2)">Healing</div>
+            </div>
+            <div class="ei-theme-toggle" @click="$emit('switch-theme', !light)"
+                :title="light ? 'Switch to dark mode' : 'Switch to light mode'">
+                <span class="ei-theme-icon">{{ light ? '&#9728;' : '&#9790;' }}</span>
+                <span>{{ light ? 'Light mode' : 'Dark mode' }}</span>
             </div>
         </div>
 
@@ -90,18 +100,6 @@
             </div>
         </div>
 
-        <!-- Bottom controls -->
-        <div class="ei-sidebar-bottom">
-            <div class="ei-pill-row" v-if="cr || healingExtShow">
-                <button class="ei-pill" :class="{ active: mode === 0 }" @click="$emit('switch-mode', 0)">Stats</button>
-                <button class="ei-pill" v-if="cr" :class="{ active: mode === 1 }" @click="$emit('switch-mode', 1)">Replay</button>
-                <button class="ei-pill" v-if="healingExtShow" :class="{ active: mode === 2 }" @click="$emit('switch-mode', 2)">Healing</button>
-            </div>
-            <div class="ei-pill-row">
-                <button class="ei-pill" :class="{ active: !light }" @click="$emit('switch-theme', false)">Dark</button>
-                <button class="ei-pill" :class="{ active: light }" @click="$emit('switch-theme', true)">Light</button>
-            </div>
-        </div>
 
     </div>
 </template>

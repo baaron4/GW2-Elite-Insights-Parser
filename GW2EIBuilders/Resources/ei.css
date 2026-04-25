@@ -1105,62 +1105,33 @@ html, body { height: 100%; }
     font-size: 14px;
 }
 
-/* ── BOSS INFO BLOCK ── */
-.ei-sidebar-boss {
-    padding: 10px 14px 8px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-}
-.ei-boss-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-hi);
+/* ── SIDEBAR TOP CONTROLS ── */
+.ei-sidebar-top { flex-shrink: 0; border-bottom: 1px solid var(--border); }
+
+.ei-mode-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.ei-mode-tab {
+    flex: 1; text-align: center;
+    padding: 9px 2px;
+    font-size: 11px; font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer; user-select: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.1s, border-color 0.1s;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
-.ei-boss-badges {
-    display: flex;
-    gap: 4px;
-    margin-top: 4px;
-    flex-wrap: wrap;
+.ei-mode-tab:not(.ei-mode-disabled):hover { color: var(--text); }
+.ei-mode-tab.active { color: var(--text-hi); border-bottom-color: var(--accent); }
+.ei-mode-tab.ei-mode-disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ei-theme-toggle {
+    display: flex; align-items: center; gap: 7px;
+    padding: 5px 14px;
+    font-size: 11px; color: var(--text-dim);
+    cursor: pointer; user-select: none;
+    transition: background 0.1s, color 0.1s;
 }
-.ei-badge {
-    font-size: 11px;
-    padding: 1px 6px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-}
-.ei-badge-success { border-color: rgba(109,184,138,0.45); color: var(--green); }
-.ei-badge-danger  { color: #c05858; border-color: rgba(192,88,88,0.45); }
-.ei-boss-meta {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 4px;
-}
-.ei-encounter-dropdown {
-    position: relative;
-    cursor: pointer;
-}
-.ei-encounter-dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 200;
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    min-width: 180px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.ei-encounter-dropdown-item {
-    padding: 5px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    color: var(--text);
-}
-.ei-encounter-dropdown-item:hover { background: var(--bg-hover); }
+.ei-theme-toggle:hover { background: var(--bg-hover); color: var(--text); }
+.ei-theme-icon { font-size: 13px; line-height: 1; }
 
 /* ── SIDEBAR FILTERS ── */
 .ei-filters { flex-shrink: 0; border-bottom: 1px solid var(--border); }
@@ -1331,15 +1302,7 @@ html, body { height: 100%; }
 .ei-nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
 .ei-nav-item.active .ei-nav-dot { background: var(--accent); }
 
-/* ── SIDEBAR BOTTOM ── */
-.ei-sidebar-bottom {
-    flex-shrink: 0;
-    border-top: 1px solid var(--border);
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
+/* .ei-sidebar-bottom removed — controls moved to .ei-sidebar-top */
 .ei-pill-row { display: flex; gap: 2px; }
 .ei-pill {
     font-family: inherit;
@@ -1357,6 +1320,20 @@ html, body { height: 100%; }
 }
 .ei-pill:hover { color: var(--text); }
 .ei-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ei-pill:disabled { opacity: 0.35; cursor: not-allowed; }
+.ei-pill:disabled:hover { color: var(--text-dim); background: transparent; }
+
+/* ── THEME TOGGLE (subtle, below mode pills) ── */
+.ei-theme-row { display: flex; gap: 2px; margin-top: 3px; }
+.ei-theme-btn {
+    font-family: inherit; font-size: 10px;
+    padding: 2px 0; border-radius: 3px; border: none;
+    background: transparent; color: var(--text-dim);
+    cursor: pointer; flex: 1; text-align: center;
+    transition: color 0.1s;
+}
+.ei-theme-btn:hover { color: var(--text); }
+.ei-theme-btn.active { color: var(--text-hi); font-weight: 600; }
 
 /* ── FOOTER ── */
 .ei-footer {
@@ -1462,6 +1439,17 @@ html, body { height: 100%; }
     background: rgba(20,24,28,0.3) !important;
     font-variant-numeric: tabular-nums;
 }
+
+/* ── FIGHT INFO CARD: instance buffs + target HP bars ── */
+.ei-instance-buffs { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.ei-instance-buff { display: flex; align-items: center; gap: 3px; }
+.ei-instance-buff-stack { font-size: 10px; color: var(--text-dim); }
+.ei-target-hp-list { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; max-width: 280px; }
+.ei-target-hp-group { display: flex; flex-direction: column; gap: 2px; }
+.ei-target-hp-name { font-size: 10px; color: var(--text-dim); margin-bottom: 1px; }
+.ei-hp-wrap { display: flex; flex-direction: column; gap: 2px; margin-bottom: 2px; }
+.ei-hp-bar { height: 4px; border-radius: 2px; overflow: hidden; }
+.ei-hp-label { font-size: 10px; color: var(--text-dim); }
 
 .ei-ctx-pills { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
 .ei-ctx-pill {

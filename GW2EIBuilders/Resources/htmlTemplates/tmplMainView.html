@@ -15,9 +15,38 @@
                     <div class="ei-boss-stats-row">
                         <div v-if="activeEncounterData.mode" class="ei-boss-stat"><b>{{ activeEncounterData.mode }}</b></div>
                         <div class="ei-boss-stat">Duration <b>{{ activeEncounterData.duration }}</b></div>
-                        <div class="ei-boss-stat" :class="activeEncounterData.success ? 'success' : 'failure'">
+                        <div v-if="!activeEncounterData.hideResult" class="ei-boss-stat" :class="activeEncounterData.success ? 'success' : 'failure'">
                             <b>{{ activeEncounterData.success ? '&#10003; Success' : '&#10007; Failure' }}</b>
                         </div>
+                        <div v-if="activeEncounterData.fractalScale > 0" class="ei-boss-stat">Fractal Scale <b>{{ activeEncounterData.fractalScale }}</b></div>
+                        <div v-if="activeEncounterData.instancePrivacy" class="ei-boss-stat">{{ activeEncounterData.instancePrivacy }}</div>
+                        <div v-if="activeEncounterData.startStatus" class="ei-boss-stat" style="color:var(--warn)"><b>{{ activeEncounterData.startStatus }}</b></div>
+                    </div>
+                    <div v-if="tab === 0 && activeEncounterData.instanceBuffs" class="ei-instance-buffs">
+                        <span v-for="b in activeEncounterData.instanceBuffs" class="ei-instance-buff">
+                            <span v-if="b.stack > 1" class="ei-instance-buff-stack">{{ b.stack }}&#215;</span>
+                            <img :src="b.buff.icon" :alt="b.buff.name" class="icon icon-hover" :data-original-title="b.buff.name + (b.buff.description ? '<br>' + b.buff.description : '')">
+                        </span>
+                    </div>
+                    <div v-if="tab === 0 && !activeEncounterData.hideTargets && activeEncounterData.targets && activeEncounterData.targets.length" class="ei-target-hp-list">
+                        <div v-for="target in activeEncounterData.targets" class="ei-target-hp-group">
+                            <div v-if="activeEncounterData.targets.length > 1" class="ei-target-hp-name">{{ target.name }}</div>
+                            <div v-if="target.hpBars">
+                                <div v-for="hpBar in target.hpBars" class="ei-hp-wrap">
+                                    <div class="ei-hp-bar" :style="{background: getGradient(target, hpBar)}"></div>
+                                    <div v-if="target.health > 0" class="ei-hp-label">{{ targetHealthValues(target, hpBar) }}</div>
+                                </div>
+                            </div>
+                            <div v-if="!target.hpBars" class="ei-hp-wrap">
+                                <div class="ei-hp-bar" :style="{background: getGradient(target, null)}"></div>
+                                <div v-if="target.health > 0" class="ei-hp-label">{{ targetHealthValues(target, null) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="tab === 0 && activeEncounterData.hideTargets" class="ei-boss-stats-row" style="margin-top:6px">
+                        <div class="ei-boss-stat">Players <b>{{ activeEncounterData.playerCount }}</b></div>
+                        <div class="ei-boss-stat">Friendlies <b>{{ activeEncounterData.nonSquadFriendlyCount }}</b></div>
+                        <div class="ei-boss-stat">Enemies <b>{{ activeEncounterData.targetCount }}</b></div>
                     </div>
                     <div class="ei-ctx-pills" style="margin-top:8px">
                         <button class="ei-ctx-pill" v-if="hasPhasesFilter" @click="expandFilter('phase')">&#9672; {{ phaseName }}</button>
@@ -108,12 +137,54 @@
                 }
                 if (!active) return {};
                 var p = logData.phases[active.index];
+                var targets = [];
+                var targetCount = 0;
+                var noTargets = !!logData.targetless;
+                for (var i = 0; i < p.targets.length; i++) {
+                    if (p.targetPriorities[i] > 0) continue;
+                    targetCount++;
+                    if (!noTargets && targets.length < 10) {
+                        targets.push(logData.targets[p.targets[i]]);
+                    }
+                }
+                var hideTargets = logData.wvw || (p.type === PhaseTypes.INSTANCE && IsMultiEncounterLog);
+                var players = getActiveNonFakePlayersForPhase(p);
+                var presentAccounts = new Set();
+                var playerCount = players.filter(function(x) {
+                    if (!x || x.notInSquad) return false;
+                    if (presentAccounts.has(x.acc)) return false;
+                    presentAccounts.add(x.acc);
+                    return true;
+                }).length;
+                var nonSquadFriendlyCount = players.filter(function(x) { return x && !!x.notInSquad; }).length;
+                var instanceBuffs = null;
+                var ibs = logData.instanceBuffs || [];
+                if (ibs.length > 0) {
+                    var ib = [];
+                    for (var j = 0; j < ibs.length; j++) {
+                        var cur = ibs[j];
+                        if (cur[2] <= p.start && cur[3] >= p.end) {
+                            ib.push({ buff: findSkill(true, cur[0]), stack: cur[1] });
+                        }
+                    }
+                    if (ib.length > 0) instanceBuffs = ib;
+                }
                 return {
                     nameNoMode: p === logData.phases[0] ? logData.logName : p.nameNoMode,
                     success: p.success,
                     icon: _buildFallBackURL(p.icon),
                     duration: p.encounterDuration,
                     mode: p.mode,
+                    targets: targets,
+                    targetCount: targetCount,
+                    hideTargets: hideTargets,
+                    hideResult: hideTargets,
+                    playerCount: playerCount,
+                    nonSquadFriendlyCount: nonSquadFriendlyCount,
+                    instanceBuffs: instanceBuffs,
+                    fractalScale: logData.fractalScale || 0,
+                    instancePrivacy: logData.instancePrivacy || '',
+                    startStatus: p.startStatus || '',
                 };
             },
             sectionTitle: function() {
@@ -204,6 +275,38 @@
         methods: {
             expandFilter: function (type) {
                 reactiveLogdata.expandSidebarFilter = type;
+            },
+            getGradient: function(target, hpBar) {
+                var minPct = hpBar ? hpBar[0] : 0;
+                var maxPct = hpBar ? hpBar[1] : 100;
+                var hpLeft = target.hpLeftPercent;
+                var barrier = (hpBar && hpBar[3] === 1) ? target.barrierLeftPercent : 0;
+                if (hpBar) {
+                    if (hpBar[3] === 0) hpLeft = minPct;
+                    else if (hpBar[3] === 2) hpLeft = maxPct;
+                }
+                var hb = hpLeft + barrier;
+                if (hb > maxPct) { hpLeft -= hb - maxPct; hb = maxPct; }
+                return 'linear-gradient(to right,'
+                    + ' grey ' + 0 + '%, grey ' + minPct + '%,'
+                    + ' red ' + minPct + '%, red ' + hpLeft + '%,'
+                    + ' yellow ' + hpLeft + '% ' + hb + '%,'
+                    + ' green ' + hb + '%, green ' + maxPct + '%,'
+                    + ' grey ' + maxPct + '%, grey 100%)';
+            },
+            targetHealthValues: function(target, hpBar) {
+                var minPct = hpBar ? hpBar[0] : 0;
+                var maxPct = hpBar ? hpBar[1] : 100;
+                var health = hpBar ? hpBar[2] : target.health;
+                var hpLeft = target.hpLeftPercent;
+                if (hpBar) {
+                    if (hpBar[3] === 0) hpLeft = minPct;
+                    else if (hpBar[3] === 2) hpLeft = maxPct;
+                }
+                var barrier = (hpBar && hpBar[3] === 1) ? target.barrierLeftPercent : 0;
+                if (barrier > 0) return health + ' HP (' + hpLeft + '% + ' + barrier + '%)';
+                if (hpLeft > minPct) return health + ' HP (' + hpLeft + '%)';
+                return health + ' HP';
             },
         },
     });
