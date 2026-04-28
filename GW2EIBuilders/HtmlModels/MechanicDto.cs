@@ -14,6 +14,8 @@ internal class MechanicDto
     public bool EnemyMech { get; set; }
     public bool PlayerMech { get; set; }
 
+    public int Severity { get; set; }
+
     private static List<double[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, SingleActor actor, PhaseData phase)
     {
         var res = new List<double[]>(presMech.Count);
@@ -63,7 +65,8 @@ internal class MechanicDto
                 Description = mech.Description,
                 PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
                 EnemyMech = mech.IsEnemyMechanic,
-                Icd = mech.InternalCooldown
+                Icd = mech.InternalCooldown,
+                Severity = (int)mech.Severity,
             };
             mechsDtos.Add(dto);
         }

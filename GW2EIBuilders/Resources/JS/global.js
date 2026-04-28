@@ -34,6 +34,16 @@ const GraphType = {
     CenteredDPS: 2
 };
 
+const MechanicSeverity = {
+    Success: 1,
+    Failure: 2,
+    Neutral: 4,
+
+    P0: 8,
+    P1: 16,
+    P2: 32,
+}
+
 const reactiveLogdata = {
     phases: [],
     players: [],
@@ -41,6 +51,7 @@ const reactiveLogdata = {
     encounters: [],
     activeEncounterPhaseData: [],
 };
+
 let IsMultiEncounterLog = false;
 const mainComponentWidth =  Math.max(Math.min(0.9 * window.screen.width, 1600), 1450);
 const maxMechColumns = Math.floor((mainComponentWidth - 150) / 120);

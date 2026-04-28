@@ -41,11 +41,37 @@ public class MechanicPlotlySetting
 
 public abstract class Mechanic : MechanicContainer
 {
+    [Flags]
+    public enum MechanicSeverity
+    {
+        Success = 1,
+        Failure = 2,
+        Neutral = 4,
+
+        P0 = 8,
+        P0Success = P0 | Success,
+        P0Failure = P0 | Failure,
+        P0Neutral = P0 | Neutral,
+
+        P1 = 16,
+        P1Success = P1 | Success,
+        P1Failure = P1 | Failure,
+        P1Neutral = P1 | Neutral,
+
+        P2 = 32,
+        P2Success = P2 | Success,
+        P2Failure = P2 | Failure,
+        P2Neutral = P2 | Neutral,
+    }
+
     public readonly int InternalCooldown;
     public readonly MechanicPlotlySetting PlotlySetting;
     public readonly string Description;
     public readonly string ShortName;
     public readonly string FullName;
+
+    public readonly MechanicSeverity Severity;
+
     public bool IsEnemyMechanic { get; protected set; }
     public bool ShowOnTable { get; private set; }
     public bool Ignored { get; private set; }
@@ -66,7 +92,7 @@ public abstract class Mechanic : MechanicContainer
     /// <param name="description">description of the mechanic</param>
     /// <param name="fullName">full name of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
+    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown)
     {
         PlotlySetting = plotlySetting;
         ShortName = shortName;
@@ -74,6 +100,7 @@ public abstract class Mechanic : MechanicContainer
         Description = description;
         InternalCooldown = internalCoolDown;
         ShowOnTable = true;
+        Severity = severity;
         _enableConditions = [];
     }
 
