@@ -6,8 +6,9 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -18,28 +19,28 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class Slothasor : SalvationPass
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstHealthDamageHitMechanic(TantrumDamage, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum", "Tantrum (Triple Circles after Ground slamming)","Tantrum", 5000),
+            new PlayerDstHealthDamageHitMechanic(TantrumDamage, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum", "Tantrum (Triple Circles after Ground slamming)","Tantrum", MechanicSeverity.P0, 5000),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(VolatilePoisonBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison", "Volatile Poison Application (Special Action Key)","Poison (Action Key)", 0),
-                new PlayerDstHealthDamageHitMechanic(VolatilePoisonSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg", "Stood in Volatile Poison","Poison dmg", 0),
+                new PlayerDstBuffApplyMechanic(VolatilePoisonBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison", "Volatile Poison Application (Special Action Key)","Poison (Action Key)", MechanicSeverity.P0, 0),
+                new PlayerDstHealthDamageHitMechanic(VolatilePoisonSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Poison dmg", "Stood in Volatile Poison","Poison dmg", MechanicSeverity.P0, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic(Halitosis, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath", "Halitosis (Flame Breath)","Flame Breath", 0),
-            new PlayerDstHealthDamageHitMechanic(SporeRelease, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake", "Spore Release (Coconut Shake)","Shake", 0),
-            new PlayerDstBuffApplyMechanic(MagicTransformation, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Teal), "Slub", "Magic Transformation (Ate Magic Mushroom)","Slub Transform", 0)
+            new PlayerDstHealthDamageHitMechanic(Halitosis, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Breath", "Halitosis (Flame Breath)","Flame Breath", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic(SporeRelease, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Shake", "Spore Release (Coconut Shake)","Shake", MechanicSeverity.P0, 0),
+            new PlayerDstBuffApplyMechanic(MagicTransformation, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Teal), "Slub", "Magic Transformation (Ate Magic Mushroom)","Slub Transform", MechanicSeverity.P0, 0)
                     .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)), 
             //new Mechanic(Nauseated, "Nauseated", ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open",Colors.LightPurple), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new PlayerDstBuffApplyMechanic(FixatedSlothasor, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Slothasor","Fixated", 0),
-            new PlayerDstHealthDamageHitMechanic([ToxicCloud1, ToxicCloud2], new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor", "Toxic Cloud (stood in green floor poison)","Toxic Floor", 0),
+            new PlayerDstBuffApplyMechanic(FixatedSlothasor, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Slothasor","Fixated", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic([ToxicCloud1, ToxicCloud2], new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor", "Toxic Cloud (stood in green floor poison)","Toxic Floor", MechanicSeverity.P1, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear", "Hit by fear after breakbar","Feared", 0)
+                new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear", "Hit by fear after breakbar","Feared", MechanicSeverity.P2, 0)
                     .UsingChecker((ba,log) => ba.AppliedDuration == 8000),
-                new EnemyDstBuffApplyMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.Slth", "Narcolepsy (Breakbar)","Breakbar", 0),
-                new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Slth Fail", "Narcolepsy (Failed CC)","CC Fail", 0)
+                new EnemyDstBuffApplyMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.Slth", "Narcolepsy (Breakbar)","Breakbar", MechanicSeverity.P2, 0),
+                new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Slth Fail", "Narcolepsy (Failed CC)","CC Fail", MechanicSeverity.P0, 0)
                     .UsingChecker((br,log) => br.RemovedDuration > 120000),
-                new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.Slth", "Narcolepsy (Breakbar broken)","CCed", 0)
+                new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.Slth", "Narcolepsy (Breakbar broken)","CCed", MechanicSeverity.P0, 0)
                     .UsingChecker( (br,log) => br.RemovedDuration <= 120000),
             ]),
-            new PlayerDstBuffApplyMechanic(SlipperySlubling, new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb", "Slippery Slubling","Slippery Slubling", 0),
+            new PlayerDstBuffApplyMechanic(SlipperySlubling, new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb", "Slippery Slubling","Slippery Slubling", MechanicSeverity.P2, 0),
         ]);
     public Slothasor(int triggerID) : base(triggerID)
     {
