@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -18,12 +19,12 @@ internal class Artsariiv : ShatteredObservatory
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault", "Vault from Big Adds","Vault (Add)", 0),
-            new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam", "Slam (Vault) from Boss","Vault (Arts)", 0),
-            new PlayerDstHealthDamageHitMechanic(TeleportLunge, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump", "Triple Jump Mid->Edge","Triple Jump", 0),
-            new PlayerDstHealthDamageHitMechanic(AstralSurge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle", "Different sized spiraling circles","1000 Circles", 0),
-            new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble", "Red KD Marble after Jump","Red Marble", 0),
-            new SpawnMechanic((int)TargetID.Spark, new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
+            new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault", "Vault from Big Adds","Vault (Add)", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam", "Slam (Vault) from Boss","Vault (Arts)", MechanicSeverity.P0, 0),
+            new PlayerDstHealthDamageHitMechanic(TeleportLunge, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump", "Triple Jump Mid->Edge","Triple Jump", MechanicSeverity.P0, 0),
+            new PlayerDstHealthDamageHitMechanic(AstralSurge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle", "Different sized spiraling circles","1000 Circles", MechanicSeverity.P0, 0),
+            new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble", "Red KD Marble after Jump","Red Marble", MechanicSeverity.P0, 0),
+            new SpawnMechanic((int)TargetID.Spark, new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark", MechanicSeverity.P0,0),
         ]);
     public Artsariiv(int triggerID) : base(triggerID)
     {

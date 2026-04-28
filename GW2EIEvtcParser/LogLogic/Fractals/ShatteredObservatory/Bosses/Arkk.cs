@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -20,46 +21,50 @@ internal class Arkk : ShatteredObservatory
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike.A", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", 0),
-                    new PlayerDstHealthDamageHitMechanic(HorizonStrikeNormal, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm", "Horizon Strike (normal during Arkk)","Horizon Strike (normal, Arkk)", 0),
+                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike.A", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", MechanicSeverity.P0, 0),
+                    new PlayerDstHealthDamageHitMechanic(HorizonStrikeNormal, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm", "Horizon Strike (normal during Arkk)","Horizon Strike (normal, Arkk)", MechanicSeverity.P0, 0),
                 ]
             ),
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic(SolarFury, new MechanicPlotlySetting(Symbols.Circle,Colors.LightRed), "Ball", "Stood in Red Overhead Ball Field","Red Ball Aoe", 0),
-                    new PlayerDstHealthDamageHitMechanic(SolarDischarge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Shockwave", "Knockback shockwave after Overhead Balls","Shockwave", 0),
-                    new PlayerDstHealthDamageHitMechanic(SolarStomp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Stomp", "Solar Stomp (Evading Stomp)","Evading Jump", 0),
+                    new PlayerDstHealthDamageHitMechanic(SolarFury, new MechanicPlotlySetting(Symbols.Circle,Colors.LightRed), "Ball", "Stood in Red Overhead Ball Field","Red Ball Aoe", MechanicSeverity.P0, 0),
+                    new PlayerDstHealthDamageHitMechanic(SolarDischarge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Shockwave", "Knockback shockwave after Overhead Balls","Shockwave", MechanicSeverity.P0, 0),
+                    new PlayerDstHealthDamageHitMechanic(SolarStomp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Stomp", "Solar Stomp (Evading Stomp)","Evading Jump", MechanicSeverity.P1, 0),
                 ]
             ),
-            new PlayerDstHealthDamageHitMechanic([ DiffractiveEdge1, DiffractiveEdge2 ], new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "5 Cone", "Diffractive Edge (5 Cone Knockback)","Five Cones", 0),
-            new PlayerDstHealthDamageHitMechanic(FocusedRage, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Cone KB", "Knockback in Cone with overhead crosshair","Knockback Cone", 0),
-            new PlayerDstHealthDamageHitMechanic([ StarbustCascade1, StarbustCascade2 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring", "Starburst Cascade (Expanding/Retracting Lifting Ring)","Float Ring", 500),
-            new PlayerDstHealthDamageHitMechanic(OverheadSmash, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash", "Overhead Smash","Overhead Smash",0),
-            new PlayerDstHealthDamageHitMechanic(ExplodeArkk, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode", "Hit by Solar Bloom explosion","Bloom Explosion", 0),
-            new PlayerDstBuffApplyMechanic(CosmicMeteor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green", "Temporal Realignment (Green) application","Green", 0),
+            new MechanicGroup([
+                new PlayerDstHealthDamageHitMechanic([ DiffractiveEdge1, DiffractiveEdge2 ], new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "5 Cone", "Diffractive Edge (5 Cone Knockback)","Five Cones", MechanicSeverity.P1, 0),
+                new PlayerDstHealthDamageHitMechanic(FocusedRage, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Cone KB", "Knockback in Cone with overhead crosshair","Knockback Cone", MechanicSeverity.P1, 0),
+            ]),
+            new PlayerDstHealthDamageHitMechanic([ StarbustCascade1, StarbustCascade2 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring", "Starburst Cascade (Expanding/Retracting Lifting Ring)","Float Ring", MechanicSeverity.P0, 500),
+            new PlayerDstHealthDamageHitMechanic(OverheadSmash, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash", "Overhead Smash","Overhead Smash", MechanicSeverity.P0,0),
+            new PlayerDstHealthDamageHitMechanic(ExplodeArkk, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode", "Hit by Solar Bloom explosion","Bloom Explosion", MechanicSeverity.P0, 0),
+            new PlayerDstBuffApplyMechanic(CosmicMeteor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green", "Temporal Realignment (Green) application","Green", MechanicSeverity.P0, 0),
             new MechanicGroup(
                 [
-                    new EnemyCastStartMechanic(ArkkBreakbarCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar", "Start Breakbar","CC", 0),
-                    new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail", "Breakbar (Failed CC)","CC Fail", 0)
+                    new EnemyCastStartMechanic(ArkkBreakbarCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar", "Start Breakbar","CC", MechanicSeverity.P2, 0),
+                    new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail", "Breakbar (Failed CC)","CC Fail", MechanicSeverity.P0, 0)
                         .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To.Is(x.Caster) && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
-                    new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", 0)
+                    new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", MechanicSeverity.P0, 0)
                         .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To.Is(x.Caster) && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
                 ]
             ),
-            new PlayerDstHealthDamageHitMechanic(OverheadSmashArchdiviner, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightRed), "A.Smsh", "Overhead Smash (Arcdiviner)","Smash (Add)", 0),
-            new PlayerDstHealthDamageHitMechanic(RollingChaos, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightRed), "KD Marble", "Rolling Chaos (Arrow marble)","KD Marble", 0),
-            new EnemyCastStartMechanic(CosmicStreaks, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Pink), "DDR Beam", "Triple Death Ray Cast (last phase)","Death Ray Cast", 0),
-            new PlayerDstHealthDamageHitMechanic(WhirlingDevastation, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkPink), "Whirl", "Whirling Devastation (Gladiator Spin)","Gladiator Spin", 300),
-            new MechanicGroup(
-                [
-                    new EnemyCastStartMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkTeal), "Pull", "Pull Charge (Gladiator Pull)","Gladiator Pull", 0), //
-                    new EnemyCastEndMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pull CC Fail", "Pull Charge CC failed","CC fail (Gladiator)", 0)
-                        .UsingChecker((ce,log) => ce.ActualDuration > 3200), //
-                    new EnemyCastEndMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkGreen), "Pull CCed", "Pull Charge CCed","CCed (Gladiator)", 0)
-                        .UsingChecker((ce, log) => ce.ActualDuration < 3200), //
-                ]
-            ),
-            new PlayerDstHealthDamageHitMechanic(SpinningCut, new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightPurple), "Daze", "Spinning Cut (3rd Gladiator Auto->Daze)","Gladiator Daze", 0), //
+            new PlayerDstHealthDamageHitMechanic(OverheadSmashArchdiviner, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightRed), "A.Smsh", "Overhead Smash (Arcdiviner)","Smash (Add)", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic(RollingChaos, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightRed), "KD Marble", "Rolling Chaos (Arrow marble)","KD Marble", MechanicSeverity.P1, 0),
+            new EnemyCastStartMechanic(CosmicStreaks, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Pink), "DDR Beam", "Triple Death Ray Cast (last phase)","Death Ray Cast", MechanicSeverity.P0, 0),
+            new MechanicGroup([
+                new PlayerDstHealthDamageHitMechanic(WhirlingDevastation, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkPink), "Whirl", "Whirling Devastation (Gladiator Spin)","Gladiator Spin", MechanicSeverity.P1, 300),
+                new MechanicGroup(
+                    [
+                        new EnemyCastStartMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkTeal), "Pull", "Pull Charge (Gladiator Pull)","Gladiator Pull", MechanicSeverity.P1, 0), //
+                        new EnemyCastEndMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pull CC Fail", "Pull Charge CC failed","CC fail (Gladiator)", MechanicSeverity.P1, 0)
+                            .UsingChecker((ce,log) => ce.ActualDuration > 3200), //
+                        new EnemyCastEndMechanic(PullCharge, new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkGreen), "Pull CCed", "Pull Charge CCed","CCed (Gladiator)", MechanicSeverity.P1, 0)
+                            .UsingChecker((ce, log) => ce.ActualDuration < 3200), //
+                    ]
+                ),
+                new PlayerDstHealthDamageHitMechanic(SpinningCut, new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightPurple), "Daze", "Spinning Cut (3rd Gladiator Auto->Daze)","Gladiator Daze", MechanicSeverity.P0, 0), //
+            ]),
         ]);
     public Arkk(int triggerID) : base(triggerID)
     {
