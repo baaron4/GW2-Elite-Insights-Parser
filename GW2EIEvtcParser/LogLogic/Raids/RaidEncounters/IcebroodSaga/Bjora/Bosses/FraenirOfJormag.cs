@@ -3,8 +3,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -17,31 +18,31 @@ internal class FraenirOfJormag : Bjora
     public FraenirOfJormag(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([      
-            new PlayerDstHealthDamageHitMechanic(Icequake, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Red), "Icequake", "Knocked by Icequake", "Icequake", 4000)
+            new PlayerDstHealthDamageHitMechanic(Icequake, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Red), "Icequake", "Knocked by Icequake", "Icequake", MechanicSeverity.P0, 4000)
                 .UsingBuffChecker(Stability, false),
-            new PlayerDstHealthDamageHitMechanic(IceShockWaveFraenir, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Ice Shock Wave", "Knocked by Ice Shock Wave", "Ice Shock Wave", 4000)
+            new PlayerDstHealthDamageHitMechanic(IceShockWaveFraenir, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Ice Shock Wave", "Knocked by Ice Shock Wave", "Ice Shock Wave", MechanicSeverity.P0, 4000)
                 .UsingBuffChecker(Stability, false),
-            new PlayerDstHealthDamageHitMechanic(IceArmSwingFraenir, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Orange), "IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing", 4000)
+            new PlayerDstHealthDamageHitMechanic(IceArmSwingFraenir, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Orange), "IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing", MechanicSeverity.P0, 4000)
                 .UsingBuffChecker(Stability, false),
             new MechanicGroup([          
-                new PlayerDstHealthDamageHitMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile", 4000)
+                new PlayerDstHealthDamageHitMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile", MechanicSeverity.P0, 4000)
                     .UsingBuffChecker(Stability, false),
-                new EnemyCastStartMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightOrange), "Frozen Missile", "Cast Frozen Missile", "Frozen Missile", 4000),
+                new EnemyCastStartMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightOrange), "Frozen Missile", "Cast Frozen Missile", "Frozen Missile", MechanicSeverity.P2, 4000),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "SeismicCrush.CC", "Knocked by Seismic Crush", "Seismic Crush", 4000)
+                new PlayerDstHealthDamageHitMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "SeismicCrush.CC", "Knocked by Seismic Crush", "Seismic Crush", MechanicSeverity.P0, 4000)
                     .UsingBuffChecker(Stability, false),
-                new EnemyCastStartMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Seismic Crush (Breakbar)", "Cast Seismic Crush & Breakbar", "Seismic Crush", 0),
+                new EnemyCastStartMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Seismic Crush (Breakbar)", "Cast Seismic Crush & Breakbar", "Seismic Crush", MechanicSeverity.P2, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Teal), "FrigidFusillade.H", "Hit by Frigid Fusillade (Fraenir Arrows)", "Frigid Fusillade", 0),
-                new EnemyCastStartMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkTeal), "Frigid Fusillade", "Cast Frigid Fusillade", "Frigid Fusillade", 0),
+                new PlayerDstHealthDamageHitMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Teal), "FrigidFusillade.H", "Hit by Frigid Fusillade (Fraenir Arrows)", "Frigid Fusillade", MechanicSeverity.P1, 0),
+                new EnemyCastStartMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkTeal), "Frigid Fusillade", "Cast Frigid Fusillade", "Frigid Fusillade", MechanicSeverity.P2, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(Frozen, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Frozen", "Frozen", "Frozen", 500),
-                new PlayerDstBuffRemoveMechanic(Frozen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Unfrozen", "Unfrozen", "Unfrozen", 500),
+                new PlayerDstBuffApplyMechanic(Frozen, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Frozen", "Frozen", "Frozen", MechanicSeverity.P0, 500),
+                new PlayerDstBuffRemoveMechanic(Frozen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Unfrozen", "Unfrozen", "Unfrozen", MechanicSeverity.P0, 500),
             ]),
-            new PlayerDstBuffApplyMechanic(Snowblind, new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Snowblind", "Snowblind", "Snowblind", 500),
+            new PlayerDstBuffApplyMechanic(Snowblind, new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Snowblind", "Snowblind", "Snowblind", MechanicSeverity.P1, 500),
         ])
         );
         Extension = "fraenir";
