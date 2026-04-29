@@ -40,7 +40,7 @@ const MechanicSeverity = {
     P2: 2,
     P3: 3,
 
-    SeverityMask: 4,
+    SeverityMask: 0 | 1 | 2 | 3,
 
     Success: 8,
     Failure: 16,

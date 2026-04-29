@@ -49,7 +49,7 @@ public abstract class Mechanic : MechanicContainer
         P2 = 2,
         P3 = 3,
 
-        SeverityMask = 4,
+        SeverityMask = P0 | P1 | P2 | P3,
 
         Success = 8,
         Failure = 16,
