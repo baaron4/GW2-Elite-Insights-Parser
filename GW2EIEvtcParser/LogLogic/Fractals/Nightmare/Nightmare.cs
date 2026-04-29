@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.SkillIDs;
 

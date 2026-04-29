@@ -26,7 +26,7 @@ internal class Siax : Nightmare
                     new EnemyCastStartMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase", "Phase Start","Phase", MechanicSeverity.P2, 0),
                     new EnemyCastEndMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Phase Fail", "Phase Fail (Failed to kill Echos in time)","Phase Fail", MechanicSeverity.P0, 0)
                         .UsingChecker((ce,log) => ce.ActualDuration >= 20649), //
-                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC.S", "Breakbar Start","Breakbar", MechanicSeverity.P20, 0),
+                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "CC.S", "Breakbar Start","Breakbar", MechanicSeverity.P2, 0),
                     new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "CC.S Fail", "Failed to CC in time","CC Fail", MechanicSeverity.P0, 0)
                         .UsingChecker( (ce,log) => ce.ActualDuration >= 15232),
                 ]

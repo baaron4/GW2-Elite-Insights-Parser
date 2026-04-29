@@ -25,8 +25,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstHealthDamageHitMechanic([ChorusOfThunderDamage, ChorusOfThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", MechanicSeverity.P1, 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.DecimaChorusOfThunderAoE, new MechanicPlotlySetting(Symbols.Circle, Colors.LightGrey), "ChorThun.T", "Targeted by Chorus of Thunder (Spreads)", "Chorus of Thunder Target", MechanicSeverity.P0, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", 0),
-            new PlayerDstHealthDamageHitMechanic(HarmoniousThunder, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "HarmThun.H", "Hit by Harmonious Thunder", "Harmonious Thunder Hit", 0),
+            new PlayerDstHealthDamageHitMechanic([DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic(HarmoniousThunder, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "HarmThun.H", "Hit by Harmonious Thunder", "Harmonious Thunder Hit", MechanicSeverity.P1, 0),
             // TODO: Seismic Crash needs to be fully verified again in both modes
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([SeismicCrashNM, SeismicCrashCM, SeismicCrashCM2, SeismicCrashCM3, SeismicCrashCM4, SeismicCrashCM5, SeismicCrashCM6], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", MechanicSeverity.P1, 0)

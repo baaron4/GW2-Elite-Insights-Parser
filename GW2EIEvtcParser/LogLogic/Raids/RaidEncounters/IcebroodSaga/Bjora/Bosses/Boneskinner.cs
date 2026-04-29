@@ -16,7 +16,7 @@ internal class Boneskinner : Bjora
     public Boneskinner(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(Grasp, new MechanicPlotlySetting(Symbols.Circle, Colors.Grey), "Grasp.H", "Grasp (Claw AoE)", "Grasp Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(Grasp, new MechanicPlotlySetting(Symbols.Circle, Colors.Grey), "Grasp.H", "Grasp (Claw AoE)", "Grasp Hit", MechanicSeverity.P1, 0),
             new PlayerDstHealthDamageHitMechanic(Cascade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Cascade.H", "Cascade (Rectangle AoEs from paws stomp)", "Cascade Hit", MechanicSeverity.P1, 0),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(BoneskinnerCharge, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "H.Charge", "Hit by Charge", "Charge hit", MechanicSeverity.P1, 0),
