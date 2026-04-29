@@ -35,13 +35,16 @@ const GraphType = {
 };
 
 const MechanicSeverity = {
-    Success: 1,
-    Failure: 2,
-    Neutral: 4,
+    P0: 0,
+    P1: 1,
+    P2: 2,
+    P3: 3,
 
-    P0: 8,
-    P1: 16,
-    P2: 32,
+    SeverityMask: 4,
+
+    Success: 8,
+    Failure: 16,
+    Neutral: 32,
 }
 
 const reactiveLogdata = {
