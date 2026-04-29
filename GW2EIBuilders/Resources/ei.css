@@ -112,7 +112,7 @@
 }
 
 .scale85 input {
-    transform: scale(0.85, 0.85);
+    transform: scale(0.85, 0.85) translate(0, 7%);
 }
 
 .scale75 {
@@ -120,7 +120,7 @@
 }
 
 .scale75 input {
-    transform: scale(0.75, 0.75);
+    transform: scale(0.75, 0.75) translate(0, 12%);
 }
 
 .scale65 {
@@ -128,7 +128,7 @@
 }
 
 .scale65 input {
-    transform: scale(0.65, 0.65);
+    transform: scale(0.65, 0.65) translate(0, 17%);
 }
 
 .player-status {
