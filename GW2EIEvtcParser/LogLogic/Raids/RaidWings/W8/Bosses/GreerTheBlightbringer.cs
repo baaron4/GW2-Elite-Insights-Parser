@@ -4,15 +4,16 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.AchievementEligibilityIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -26,26 +27,29 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0)
-                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
-                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0)
-                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Reeg)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
-                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0)
-                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Gree)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", MechanicSeverity.P0, 0)
+                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer))
+                    .WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", MechanicSeverity.P1, 0)
+                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Reeg))
+                    .WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+                new PlayerSrcHealthDamageHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", MechanicSeverity.P1, 0)
+                    .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Gree))
+                    .WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([RotTheWorld, RotTheWorldCM], new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([RakeTheRot, RakeTheRot2, RakeTheRot3], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "Rake.H", "Hit by Rake the Rot", "Rake the Rot Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([RotTheWorld, RotTheWorldCM], new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", MechanicSeverity.P1, 0),
+                new PlayerDstHealthDamageHitMechanic([RakeTheRot, RakeTheRot2, RakeTheRot3], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "Rake.H", "Hit by Rake the Rot", "Rake the Rot Hit", MechanicSeverity.P0, 0),
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic([EruptionOfRot, EruptionOfRot2, EruptionOfRot3, EruptionOfRot4, EruptionOfRot5, EruptionOfRot6], new MechanicPlotlySetting(Symbols.Hexagram, Colors.GreenishYellow), "ErupRot.H", "Hit by Eruption of Rot", "Eruption of Rot Hit", 0),
-                    new PlayerDstHealthDamageHitMechanic([RotEruption, RotEruptionCM], new MechanicPlotlySetting(Symbols.TriangleSEOpen, Colors.DarkBlue), "RotErup", "Hit by Rot Eruption", "Rot Eruption Hit", 0),
-                    new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightBrown), "ErupRot.S", "Stood in Eruption of Rot (Green)", "Stood in Eruption of Rot", 0),
-                    new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.LightBrown), "ErupRot.Dwn", "Downed by stacking Eruption of Rot (Green)", "Downed by Eruption of Rot", 0)
+                    new PlayerDstHealthDamageHitMechanic([EruptionOfRot, EruptionOfRot2, EruptionOfRot3, EruptionOfRot4, EruptionOfRot5, EruptionOfRot6], new MechanicPlotlySetting(Symbols.Hexagram, Colors.GreenishYellow), "ErupRot.H", "Hit by Eruption of Rot", "Eruption of Rot Hit", MechanicSeverity.P1, 0),
+                    new PlayerDstHealthDamageHitMechanic([RotEruption, RotEruptionCM], new MechanicPlotlySetting(Symbols.TriangleSEOpen, Colors.DarkBlue), "RotErup", "Hit by Rot Eruption", "Rot Eruption Hit", MechanicSeverity.P1, 0),
+                    new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightBrown), "ErupRot.S", "Stood in Eruption of Rot (Green)", "Stood in Eruption of Rot", MechanicSeverity.P1, 0),
+                    new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.LightBrown), "ErupRot.Dwn", "Downed by stacking Eruption of Rot (Green)", "Downed by Eruption of Rot", MechanicSeverity.P0, 0)
                         .UsingChecker((bae, log) => bae.To.IsDowned(log, bae.Time)),
-                    new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
+                    new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", MechanicSeverity.P0, 0),
                 ]),
-                new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
-                new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
+                new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", MechanicSeverity.P1, 0),
+                new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", MechanicSeverity.P0, 0),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_Unplagued, new MechanicPlotlySetting(Symbols.YDown, Colors.DarkYellow), "Unplagued.Achiv.L", "Achievement Eligibility: Guaranteed Plague Free Lost", "Achiv Unplagued Lost", 0)
                         .UsingChecker((evt, log) => evt.Lost),
@@ -53,31 +57,33 @@ internal class GreerTheBlightbringer : MountBalrior
                         .UsingChecker((evt, log) => !evt.Lost)
                 ]),
             ]),
-            new PlayerDstHealthDamageHitMechanic(WaveOfCorruption, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SeedsOfDecay, SeedsOfDecay2, SeedsOfDecay3], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Sand), "SeedsDec.H", "Hit by Seeds of Decay (Greer's Armor Falling)", "Seeds of Decay Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([CageOfDecay, CageOfDecay2, CageOfDecay3, CageOfDecay4, CageOfDecay5], new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightPurple), "Cage.H", "Hit by Cage of Decay", "Cage of Decay Hit", 0),
-            ]),
-            new EnemyCastStartMechanic(TheWorldEndsInDecay, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "Enrage", "The World Ends in Decay (Enrage)", "The World Ends in Decay (Enrage)", 0),
-            new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([RainOfSpores, RainOfSpores2], new MechanicPlotlySetting(Symbols.Hexagon, Colors.Green), "RainSpore.H", "Hit by Rain of Spores", "Rain of Spores Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([ScatteringSporeblast, ScatteringSporeblast2], new MechanicPlotlySetting(Symbols.SquareOpen, Colors.GreenishYellow), "ScatSpore.H", "Hit by Scattering Sporeblast", "Scattering Sporeblast Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([StompTheGrowth, StompTheGrowth2, StompTheGrowth3], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "Stomp.H", "Hit by Stomp the Growth", "Stomp the Growth Hit", MechanicSeverity.P1, 0),
+                new PlayerDstHealthDamageHitMechanic(WaveOfCorruption, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", MechanicSeverity.P1, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(InfectiousRotBuff, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Hit by Noxious Blight)", "Infectious Rot Target", 0),
-                new PlayerDstHealthDamageHitMechanic([NoxiousBlight, NoxiousBlight2, NoxiousBlightCM, NoxiousBlightCM2], new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.DarkPink), "NoxBlight.H", "Hit by Noxious Blight", "Noxious Blight Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([SeedsOfDecay, SeedsOfDecay2, SeedsOfDecay3], new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Sand), "SeedsDec.H", "Hit by Seeds of Decay (Greer's Armor Falling)", "Seeds of Decay Hit", MechanicSeverity.P2, 0),
+                new PlayerDstHealthDamageHitMechanic([CageOfDecay, CageOfDecay2, CageOfDecay3, CageOfDecay4, CageOfDecay5], new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightPurple), "Cage.H", "Hit by Cage of Decay", "Cage of Decay Hit", MechanicSeverity.P1, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightPurple), "EnfMiasma.H", "Hit by Enfeebling Miasma", "Enfeebling Miasma Hit", 0),
-            new PlayerDstHealthDamageHitMechanic([AuraOfCorruptionDamage_ReegGreeEreg, AuraOfCorruptionDamage_Greer], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", 0),
-            new PlayerDstHealthDamageHitMechanic([SweepTheMold, SweepTheMold2, SweepTheMold3], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "Sweep.H", "Hit by Sweep the Mold", "Sweep the Mold Hit", 0),
+            new EnemyCastStartMechanic(TheWorldEndsInDecay, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "Enrage", "The World Ends in Decay (Enrage)", "The World Ends in Decay (Enrage)", MechanicSeverity.P0, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([BlobOfBlight, BlobOfBlight2, BlobOfBlight3], new MechanicPlotlySetting(Symbols.Star, Colors.CobaltBlue), "BlobBlight.H", "Hit by Blob of Blight", "Blob of Blight Hit", 0),
-                new PlayerDstBuffApplyMechanic(TargetBuff, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightBlue), "BlobBlight.T", "Targeted by Blob of Blight", "Blob of Blight Target", 0),
+                new PlayerDstHealthDamageHitMechanic([RainOfSpores, RainOfSpores2], new MechanicPlotlySetting(Symbols.Hexagon, Colors.Green), "RainSpore.H", "Hit by Rain of Spores", "Rain of Spores Hit", MechanicSeverity.P0, 0),
+                new PlayerDstHealthDamageHitMechanic([ScatteringSporeblast, ScatteringSporeblast2], new MechanicPlotlySetting(Symbols.SquareOpen, Colors.GreenishYellow), "ScatSpore.H", "Hit by Scattering Sporeblast", "Scattering Sporeblast Hit", MechanicSeverity.P1, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([StompTheGrowth, StompTheGrowth2, StompTheGrowth3], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "Stomp.H", "Hit by Stomp the Growth", "Stomp the Growth Hit", 0),
-            new PlayerDstBuffRemoveMechanic(Boons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted", 100)
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(InfectiousRotBuff, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Hit by Noxious Blight)", "Infectious Rot Target", MechanicSeverity.P0, 0),
+                new PlayerDstHealthDamageHitMechanic([NoxiousBlight, NoxiousBlight2, NoxiousBlightCM, NoxiousBlightCM2], new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.DarkPink), "NoxBlight.H", "Hit by Noxious Blight", "Noxious Blight Hit", MechanicSeverity.P1, 0),
+            ]),
+            new PlayerDstHealthDamageHitMechanic([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightPurple), "EnfMiasma.H", "Hit by Enfeebling Miasma", "Enfeebling Miasma Hit", MechanicSeverity.P0, 0),
+            new PlayerDstHealthDamageHitMechanic([AuraOfCorruptionDamage_ReegGreeEreg, AuraOfCorruptionDamage_Greer], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", MechanicSeverity.P1, 0),
+            new PlayerDstHealthDamageHitMechanic([SweepTheMold, SweepTheMold2, SweepTheMold3], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "Sweep.H", "Hit by Sweep the Mold", "Sweep the Mold Hit", MechanicSeverity.P0, 0),
+            new MechanicGroup([
+                new PlayerDstHealthDamageHitMechanic([BlobOfBlight, BlobOfBlight2, BlobOfBlight3], new MechanicPlotlySetting(Symbols.Star, Colors.CobaltBlue), "BlobBlight.H", "Hit by Blob of Blight", "Blob of Blight Hit", MechanicSeverity.P0, 0),
+                new PlayerDstBuffApplyMechanic(TargetBuff, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightBlue), "BlobBlight.T", "Targeted by Blob of Blight", "Blob of Blight Target", MechanicSeverity.P1, 0),
+            ]),
+            new PlayerDstBuffRemoveMechanic(Boons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted", MechanicSeverity.P0, 100)
                 .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg, (int)TargetID.Ereg])),
-            new EnemyDstBuffApplyMechanic(EmpoweredGreer, new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", 0),
+            new EnemyDstBuffApplyMechanic(EmpoweredGreer, new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", MechanicSeverity.P0, 0),
         ]);
 
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
