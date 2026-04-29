@@ -57,7 +57,7 @@ const reactiveLogdata = {
 
 let IsMultiEncounterLog = false;
 const mainComponentWidth =  Math.max(Math.min(0.9 * window.screen.width, 1600), 1450);
-const maxMechColumns = Math.floor((mainComponentWidth - 150) / 120);
+const maxMechColumns = Math.floor((mainComponentWidth - 150) / 210);
 const maxBuffColumns = Math.floor((mainComponentWidth - 150) / 80);
 
 

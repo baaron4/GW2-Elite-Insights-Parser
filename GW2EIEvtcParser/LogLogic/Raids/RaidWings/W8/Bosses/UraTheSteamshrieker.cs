@@ -64,8 +64,8 @@ internal class UraTheSteamshrieker : MountBalrior
             // Ura
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(ScaldingAura, new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightPink), "ScalAura.H", "Hit by Scalding Aura (Ura's Hitbox)", "Scalding Aura Hit", MechanicSeverity.P2, 0),
-                new PlayerDstBuffApplyMechanic(SulfuricAcid, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Purple), "SulfAcid.A", "Received Sulfuric Acid", "Sulfuric Acid Application", MechanicSeverity.P0, 0),
-                new PlayerDstHealthDamageHitMechanic(SulfuricFroth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "SulfFroth.H", "Hit by Sulfuric Froth (Acid Projectile from Ura)", "Sulfuric Froth Hit", MechanicSeverity.P1, 0),
+                new PlayerDstBuffApplyMechanic(SulfuricAcid, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Purple), "SulfAcid.A", "Received Sulfuric Acid", "Sulfuric Acid Application", MechanicSeverity.P2, 0),
+                new PlayerDstHealthDamageHitMechanic(SulfuricFroth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "SulfFroth.H", "Hit by Sulfuric Froth (Acid Projectile from Ura)", "Sulfuric Froth Hit", MechanicSeverity.P2, 0),
             ]),
             // Steam Prison
             new MechanicGroup([
@@ -88,7 +88,7 @@ internal class UraTheSteamshrieker : MountBalrior
             // Fumaroller
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(BreakingGround, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "BreGround.H", "Hit by Breaking Ground (Fumaroller 8 pointed star)", "Breaking Ground Hit", MechanicSeverity.P0, 0),
-                new PlayerDstHealthDamageHitMechanic(MantleGrinder, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkPurple), "MantGrind.H", "Hit by Mantle Grinder (Fumaroller Roll)", "Mantle Grinder Hit", MechanicSeverity.P1, 0),
+                new PlayerDstHealthDamageHitMechanic(MantleGrinder, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkPurple), "MantGrind.H", "Hit by Mantle Grinder (Fumaroller Roll)", "Mantle Grinder Hit", MechanicSeverity.P2, 0),
                 new PlayerDstHealthDamageHitMechanic(FullSteam, new MechanicPlotlySetting(Symbols.Octagon, Colors.GreyishGreen), "FullSteam.H", "Hit by Full Steam (Fumaroller Dash)", "Full Steam Hit", MechanicSeverity.P1, 0),
             ]),
             // Ventshot
@@ -99,7 +99,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerDstHealthDamageHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", MechanicSeverity.P0, 0)
                     .UsingBuffChecker(Stability, false),
             ]),
-            new EnemySrcHealthDamageMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", MechanicSeverity.P1, 100),
+            new EnemyCastStartMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", MechanicSeverity.P1, 100),
             new EnemyDstBuffApplyMechanic(RisingPressure, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "Rising Pressure", "Applied Rising Pressure", "Rising Pressure", MechanicSeverity.P1, 0),
             new EnemyDstBuffApplyMechanic(TitanicResistance, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "Titanic Resistance", "Applied Titanic Resistance", "Titanic Resistance", MechanicSeverity.P1, 0),
         ]);

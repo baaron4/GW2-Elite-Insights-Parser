@@ -1,9 +1,15 @@
 <template>
     <div>          
+        <ul v-if="showNavBar" class="nav nav-tabs">
+            <li v-for="navBar in navBars">
+                <a class="nav-link" :class="{active: activeSeverityTab === navBar.index}" @click="activeSeverityTab = navBar.index">{{navBar.name}}</a>
+            </li>
+        </ul>
         <keep-alive>
-            <mechanics-table-component v-for="(phase, id) in phases" :key="'mechanics' + id" v-if="id === phaseindex"
-                :phaseindex="id" :playerindex="playerindex">
-            </mechanics-table-component>      
+            <mechanics-table-component v-for="table in allTables" 
+                :key="'mechanics' + table.phaseIndex + '-' + table.severity" v-if="table.phaseIndex === phaseindex && table.tabIndex === activeSeverityTab"
+                :phaseindex="table.phaseIndex" :playerindex="playerindex" :severity="table.severity">
+            </mechanics-table-component> 
         </keep-alive>
     </div>
 </template>
@@ -14,9 +20,57 @@
         template: `${template}`,
         data: function () {
             return {
+                activeSeverityTab: 0,
             };
         },
         computed: {       
+            allTables: function() {
+                let tables = [];
+                for (let i = 0; i < this.phases.length; i++) {
+                    for (let j = 0; j < this.navBars.length; j++) {
+                        tables.push({
+                            phaseIndex: i,
+                            severity: this.navBars[j].severity,
+                            tabIndex: j
+                        });
+                    }
+                }
+                return tables;
+            },
+            mechanicsBySeverity: function() {
+                let toTest = [this.p0Mechanics, this.p1Mechanics, this.p2Mechanics, this.p3Mechanics];
+                return toTest.filter(x => x.length > 0);
+            },
+            showNavBar: function() {
+                return this.mechanicsBySeverity.length > 1;
+            },
+            navBars: function() {
+                let bars = [];
+                let names = ["High Priority", "Medium Priority", "Low Priority", "Very Low Priority"];
+                for (let i = 0; i < this.mechanicsBySeverity.length; i++) {
+                    let mechanicBySeverity = this.mechanicsBySeverity[i];
+                    let severity = mechanicBySeverity[0].severity & MechanicSeverity.SeverityMask;
+                    let name = names[severity];
+                    bars.push({
+                        index: i,
+                        name: name,
+                        severity: severity,
+                    });
+                }
+                return bars;
+            },
+            p0Mechanics: function() {
+                return mechanicsForSeverity(MechanicSeverity.P0);
+            },  
+            p1Mechanics: function() {
+                return mechanicsForSeverity(MechanicSeverity.P1);
+            },  
+            p2Mechanics: function() {
+                return mechanicsForSeverity(MechanicSeverity.P2);
+            },  
+            p3Mechanics: function() {
+                return mechanicsForSeverity(MechanicSeverity.P3);
+            },
             phases: function() {
                 return logData.phases;
             }

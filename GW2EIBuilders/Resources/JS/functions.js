@@ -963,6 +963,14 @@ function hasDamageMods() {
     return hasOutgoingDamageMods() || hasIncomingDamageMods();
 }
 
+function mechanics() {
+    return logData.mechanicMap;
+}
+
+function mechanicsForSeverity(severity) {
+    return mechanics().filter(x => (x.severity & MechanicSeverity.SeverityMask) === severity);
+}
+
 function playerMechanics() {
     var playerMechanics = [];
     for (var i = 0; i < logData.mechanicMap.length; i++) {

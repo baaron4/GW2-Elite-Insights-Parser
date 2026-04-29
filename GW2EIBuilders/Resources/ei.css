@@ -592,6 +592,18 @@ th:hover img.icon-hover,
     width: 120px;
 }
 
+.mech-cell {
+    width: 200px;
+}
+
+.mech-cell span {
+    width: 178px;  
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .damage-dist-cell {
     width: 100px;
 }
