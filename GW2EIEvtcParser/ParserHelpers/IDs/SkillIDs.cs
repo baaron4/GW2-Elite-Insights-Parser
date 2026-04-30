@@ -106,6 +106,10 @@ public static class SkillIDs
     internal const long ArcDPSGenericInvalid = 23301;
     internal const long ArcDPSGenericGadgetInteract = 23302;
     internal const long ArcDPSGenericEmote = 23303;
+    internal const long ArcDPSGenericFloatWater = 23304;
+    internal const long ArcDPSGenericSink = 23305;
+    internal const long ArcDPSGenericLockOut = 23306;
+    internal const long ArcDPSGenericFear = 23307;
     #endregion
     #region Core
     public const long Protection = 717;

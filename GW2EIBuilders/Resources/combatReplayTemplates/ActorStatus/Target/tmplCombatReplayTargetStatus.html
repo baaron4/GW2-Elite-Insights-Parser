@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 202px;">
+    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 208px;">
         <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select" :title="target.name + ' - ' + target.health + ' health'">
             <h6 class="target-shorten-cr text-center">
                 <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">

@@ -133,19 +133,19 @@
 
 .player-status {
     color: #DDDDDD;
-    width: 202px;
+    width: 208px;
     height: 27px;
     cursor: pointer;
     user-select: none;
 }
 
 .actor-rotation {
-    width: 202px;
+    width: 208px;
 }
 
 .target-status {
     color: #DDDDDD;
-    width: 202px;
+    width: 208px;
     height: 35px;
     cursor: pointer;
     user-select: none;
@@ -202,11 +202,11 @@
 }
 
 .cr-barrier-display-player {
-    left: 71%;
+    left: 75%;
 }
 
 .cr-barrier-display-target {
-    left: 71%;
+    left: 75%;
 }
 
 h6.player-shorten-cr {
@@ -831,6 +831,19 @@ canvas {
     text-decoration: none;
 }
 
+.theme-slate .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: #272B30;
+}
+
+.theme-yeti .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: #FFFFFF;
+}
 
 .slidercontainer {
     width: 100%;

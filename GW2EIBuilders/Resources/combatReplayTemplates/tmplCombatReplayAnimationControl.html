@@ -23,7 +23,7 @@
             <div class="animation-control">        
                 <div class="d-flex align-items-center justify-content-center mb-1">
                     <img class="icon mr-2" :src="UIIcons.QuestionMark"
-                        data-original-title="Actors can be selected via picking on the animation" />
+                        data-original-title="You can click on the canvas to select agents" />
                     <div @click="toggleAnimate();" class="btn btn-small"
                         :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" :
                         "Play"}}</div>
@@ -54,7 +54,6 @@
                         {{speed}}x
                     </label>
                 </div>
-                <p class="text-justify text-center">You can click on the canvas to select agents</p>
             </div>
         </div>
     </div>

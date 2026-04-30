@@ -20,11 +20,11 @@
         </div>
         <div class="d-flex flex-column combat-actor-status-container scrollable-y ml-1" :style="!singleGroup ? {'transform': 'translate(-24px,0);'} : null">
             <div v-for="(group,id) in groups" v-if="group" class="d-flex flex-row align-items-center" style="width:220px;">
-                <fieldset class="d-flex flex-row flex-wrap align-items-left" style="width:215px; border: 2px solid #888; margin: 0;">
+                <fieldset class="d-flex flex-row flex-wrap align-items-left" style="width:220px; border: 2px solid #888; margin: 0;">
                     <legend v-if="!singleGroup" style="font-size: 0.80rem; width: auto; padding: 0 5px; margin-left: 5px;">Group {{id}}</legend>
                     <div class="d-flex flex-row flex-wrap align-items-center">
                         <div v-for="(playerData, index) in group" :style="getPlayerDataStyle(index, group)"
-                            class="player-data ml-1" :class="{active: selectedactorid === playerData.player.uniqueID}">
+                            class="player-data ml-1 mr-1" :class="{active: selectedactorid === playerData.player.uniqueID}">
                             <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="playerData.player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
                         </div>
                     </div>
