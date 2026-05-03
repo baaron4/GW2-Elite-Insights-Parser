@@ -56,9 +56,11 @@ public class CombatItem
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart 
         || IsStateChange == StateChange.TickRate;
 
+    private readonly EvtcVersionEvent _version;
+
 #if DEBUG
     // For debugging, to get rid of statechanges seen generally on all agents
-    public bool IsSpecial => IsStateChange != StateChange.None && IsStateChange != StateChange.Position && IsStateChange != StateChange.Rotation && IsStateChange != StateChange.Velocity && IsStateChange != StateChange.HealthUpdate && IsStateChange != StateChange.BarrierUpdate && IsStateChange != StateChange.EnterCombat && IsStateChange != StateChange.ExitCombat && IsStateChange != StateChange.BreakbarPercent && IsStateChange != StateChange.BreakbarState && IsStateChange != StateChange.Spawn && IsStateChange != StateChange.Despawn && IsStateChange != StateChange.TeamChange && IsStateChange != StateChange.StackActive;
+    public bool IsSpecial => IsStateChange != StateChange.Combat && IsStateChange != StateChange.Position && IsStateChange != StateChange.Rotation && IsStateChange != StateChange.Velocity && IsStateChange != StateChange.HealthUpdate && IsStateChange != StateChange.BarrierUpdate && IsStateChange != StateChange.EnterCombat && IsStateChange != StateChange.ExitCombat && IsStateChange != StateChange.BreakbarPercent && IsStateChange != StateChange.BreakbarState && IsStateChange != StateChange.Spawn && IsStateChange != StateChange.Despawn && IsStateChange != StateChange.TeamChange && IsStateChange != StateChange.StackActive;
 #endif
 
     // Constructor
@@ -67,7 +69,8 @@ public class CombatItem
            ushort dstMasterInstid, byte iff, byte isBuff,
            byte result, byte isActivation,
            byte isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-           byte isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
+           byte isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad,
+           EvtcVersionEvent version)
     {
         Time = time;
         SrcAgent = srcAgent;
@@ -104,6 +107,7 @@ public class CombatItem
             Pad3 = *((byte*)&pad + 2);
             Pad4 = *((byte*)&pad + 3);
         }
+        _version = version;
     }
 
     internal CombatItem(CombatItem c)
@@ -139,6 +143,7 @@ public class CombatItem
         Pad2 = c.Pad2;
         Pad3 = c.Pad3;
         Pad4 = c.Pad4;
+        _version = c._version;
     }
 
     internal bool HasTime()
@@ -166,54 +171,64 @@ public class CombatItem
         return HasTime();
     }
 
-    internal bool IsDamage()
+    internal bool IsDamageEvent()
     {
-        return IsStateChange == StateChange.None &&
-                    IsActivation == Activation.None &&
-                    IsBuffRemove == BuffRemove.None &&
-                    ((IsBuff != 0 && Value == 0) || (IsBuff == 0))
-                    ;
+        return IsDirectDamageEvent() || IsBuffDamageEvent();
     }
 
-    internal bool IsDamagingDamage()
+    internal bool IsNonZeroDamageEvent()
     {
-        return IsStateChange == StateChange.None &&
-                    IsActivation == Activation.None &&
-                    IsBuffRemove == BuffRemove.None &&
-                    ((IsBuff != 0 && Value == 0 && BuffDmg > 0) || (IsBuff == 0 && Value > 0))
-                    ;
+        if (IsDirectDamageEvent())
+        {
+            return Value > 0;
+        }
+        if (IsBuffDamageEvent())
+        {
+            return BuffDmg > 0;
+        }
+        return false;
     }
 
-    internal bool IsDamage(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal bool IsDamageEvent(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
-            return handler.IsDamage(this);
+            return handler.IsDamageEvent(this);
         }
-        return IsDamage();
+        return IsDamageEvent();
     }
 
-    internal bool IsDamagingDamage(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal bool IsNonZeroDamageEvent(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
-            return handler.IsDamagingDamage(this);
+            return handler.IsNonZeroDamageEvent(this);
         }
-        return IsDamagingDamage();
+        return IsNonZeroDamageEvent();
     }
 
-    internal bool IsPhysicalDamage()
+    internal bool IsDirectDamageEvent()
     {
-        return IsStateChange == StateChange.None &&
+        if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
+        {
+            return IsStateChange == StateChange.Combat &&
+                    IsBuff == 0;
+        }
+        return IsStateChange == StateChange.Combat &&
                     IsActivation == Activation.None &&
                     IsBuffRemove == BuffRemove.None &&
                     IsBuff == 0
                     ;
     }
 
-    internal bool IsBuffDamage()
+    internal bool IsBuffDamageEvent()
     {
-        return IsStateChange == StateChange.None &&
+        if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
+        {
+            return IsStateChange == StateChange.Combat &&
+                    IsBuff != 0;
+        }
+        return IsStateChange == StateChange.Combat &&
                     IsActivation == Activation.None &&
                     IsBuffRemove == BuffRemove.None &&
                     IsBuff != 0 && Value == 0
@@ -222,7 +237,7 @@ public class CombatItem
 
     internal bool SrcIsAgent()
     {
-        return IsStateChange == StateChange.None
+        return IsStateChange == StateChange.Combat
             || IsStateChange == StateChange.EnterCombat
             || IsStateChange == StateChange.ExitCombat
             || IsStateChange == StateChange.ChangeUp
@@ -240,7 +255,7 @@ public class CombatItem
             || IsStateChange == StateChange.AttackTarget
             || IsStateChange == StateChange.Targetable
             || IsStateChange == StateChange.StackActive
-            || IsStateChange == StateChange.StackReset
+            || IsStateChange == StateChange.StackDeactive
             || IsStateChange == StateChange.Guild
             || IsStateChange == StateChange.BreakbarState
             || IsStateChange == StateChange.BreakbarPercent
@@ -256,6 +271,11 @@ public class CombatItem
             || IsStateChange == StateChange.MissileCreate
             || IsStateChange == StateChange.MissileLaunch
             || IsStateChange == StateChange.MissileRemove
+            || IsStateChange == StateChange.AnimationStart
+            || IsStateChange == StateChange.AnimationStop
+            || IsStateChange == StateChange.BuffRemoveAll
+            || IsStateChange == StateChange.BuffRemoveSingle
+            || IsStateChange == StateChange.BuffApply
             ;
     }
 
@@ -270,7 +290,7 @@ public class CombatItem
 
     internal bool DstIsAgent()
     {
-        return IsStateChange == StateChange.None
+        return IsStateChange == StateChange.Combat
             || IsStateChange == StateChange.AttackTarget
             || IsStateChange == StateChange.BuffInitial
             || IsStateChange == StateChange.Effect_45
@@ -278,6 +298,11 @@ public class CombatItem
             || IsStateChange == StateChange.Effect_51
             || IsStateChange == StateChange.EffectAgentCreate
             || IsStateChange == StateChange.MissileLaunch
+            || IsStateChange == StateChange.AnimationStart
+            || IsStateChange == StateChange.BuffRemoveAll
+            || IsStateChange == StateChange.BuffRemoveSingle
+            || IsStateChange == StateChange.BuffApply
+            || IsStateChange == StateChange.BuffChange
         ;
     }
 
@@ -290,14 +315,38 @@ public class CombatItem
         return DstIsAgent();
     }
 
-    internal bool IsBuffApply()
+    internal bool IsBuffApplyOrRemoveEvent()
     {
-        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == Activation.None && IsBuffRemove == BuffRemove.None && IsStateChange == StateChange.None) || IsStateChange == StateChange.BuffInitial;
+        return IsBuffApplyEvent() || IsBuffRemoveEvent();
     }
 
-    internal bool IsBuffRemoval()
+    internal bool IsBuffApplyEvent()
     {
-        return IsStateChange == StateChange.None && IsActivation == Activation.None && IsBuffRemove != BuffRemove.None;
+        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        {
+            return IsStateChange == StateChange.BuffApply || IsStateChange == StateChange.BuffChange || IsStateChange == StateChange.BuffInitial;
+        }
+        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == Activation.None && 
+            IsBuffRemove == BuffRemove.None && IsStateChange == StateChange.Combat) || 
+            IsStateChange == StateChange.BuffInitial;
+    }
+
+    internal bool IsBuffRemoveEvent()
+    {
+        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        {
+            return IsStateChange == StateChange.BuffRemoveAll || IsStateChange == StateChange.BuffRemoveSingle;
+        }
+        return IsStateChange == StateChange.Combat && IsActivation == Activation.None && IsBuffRemove != BuffRemove.None;
+    }
+
+    internal bool IsBuffRemoveAllEvent()
+    {
+        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        {
+            return IsStateChange == StateChange.BuffRemoveAll;
+        }
+        return IsBuffRemoveEvent() && IsBuffRemove == BuffRemove.All;
     }
 
     internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -336,22 +385,35 @@ public class CombatItem
         return false;
     }
 
-    internal bool StartCasting()
+    internal bool IsCastEvent()
     {
-        if (IsStateChange != StateChange.None)
+        return IsStartCastEvent() || IsEndCastEvent();
+    }
+
+    internal bool IsStartCastEvent()
+    {
+        if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
+        {
+            return IsStateChange == StateChange.AnimationStart;
+        }
+        if (IsStateChange != StateChange.Combat)
         {
             return false;
         }
         return IsActivation == Activation.Normal || IsActivation == Activation.Quickness;
     }
 
-    internal bool EndCasting()
+    internal bool IsEndCastEvent()
     {
-        if (IsStateChange != StateChange.None)
+        if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
+        {
+            return IsStateChange == StateChange.AnimationStop;
+        }
+        if (IsStateChange != StateChange.Combat)
         {
             return false;
         }
-        return IsActivation == Activation.CancelFire || IsActivation == Activation.Reset || IsActivation == Activation.CancelCancel || IsActivation == Activation.NoData;
+        return IsActivation == Activation.Minimum || IsActivation == Activation.Reset || IsActivation == Activation.Cancel || IsActivation == Activation.NoData;
     }
 
     ///

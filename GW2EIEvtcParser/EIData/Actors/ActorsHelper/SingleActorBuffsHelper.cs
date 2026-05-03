@@ -903,7 +903,7 @@ partial class SingleActor
                 continue;
             }
 
-            if (buffEvent.BuffID != SkillIDs.Regeneration)
+            if (buff.StackType != ArcDPSEnums.BuffStackType.Regeneration)
             {
                 _buffMap.Add(log, buff, buffEvent);
             }

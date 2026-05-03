@@ -121,7 +121,7 @@
     Vue.component("gameplay-stats-component", {
         props: ["playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent, UIIconsComponent],
         data: function () {
             return {
                 hasCommander: logData.hasCommander,
@@ -230,9 +230,6 @@
                 this.cache.set(cacheID, res);
                 return res;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

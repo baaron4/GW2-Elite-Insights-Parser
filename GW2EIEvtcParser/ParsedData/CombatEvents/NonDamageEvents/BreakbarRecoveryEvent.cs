@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class BreakbarRecoveryEvent : SkillEvent
+public class BreakbarRecoveryEvent : NonDamageEvent
 {
     /// <summary>
     /// Will be negative when soft CC overwhelms natural breakbar regeneration

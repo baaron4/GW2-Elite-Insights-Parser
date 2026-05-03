@@ -201,7 +201,7 @@ internal class Arkk : ShatteredObservatory
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         var arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault() ?? throw new MissingKeyActorsException("Arkk not found");
-        CombatItem? startBuffApply = combatData.FirstOrDefault(x => x.SkillID == ArkkStartBuff && x.SrcMatchesAgent(arkk) && x.IsBuffApply());
+        CombatItem? startBuffApply = combatData.FirstOrDefault(x => x.SkillID == ArkkStartBuff && x.SrcMatchesAgent(arkk) && x.IsBuffApplyEvent());
         return startBuffApply?.Time ?? GetLogOffsetBySpawn(logData, combatData, arkk);
     }
 

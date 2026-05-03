@@ -102,7 +102,7 @@ internal class Eparch : LonelyTower
     {
         var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
-            return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
+            return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.IsStartCastEvent() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
         });
         foreach (var dummyEparch in dummyEparchs)
         {

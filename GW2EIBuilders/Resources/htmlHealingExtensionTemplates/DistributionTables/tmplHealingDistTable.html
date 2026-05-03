@@ -222,7 +222,7 @@
                 },
             };
         },
-        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent],
+        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent, UIIconsComponent],
         methods: {        
             getSkillID: function (data) {
                 return data[1];
@@ -298,9 +298,6 @@
                     return master.minions[this.minionindex];
                 }
                 return master;
-            },
-            UIIcons: function() {
-                return UIIcons;
             },
             totalHits() {
                 var total = 0;

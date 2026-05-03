@@ -268,7 +268,7 @@
     Vue.component("offensive-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent, UIIconsComponent],
         data: function () {
             return {
                 targetless: logData.targetless,
@@ -451,9 +451,6 @@
                 this.cacheTarget.set(cacheID, res);
                 return res;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

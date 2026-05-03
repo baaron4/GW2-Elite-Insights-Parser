@@ -6,14 +6,24 @@ namespace GW2EIEvtcParser.ParsedData;
 public class GadgetInteractEvent : AnimatedCastEvent
 {
 
-    public readonly AgentItem Gadget;
+    public AgentItem Gadget => EffectTarget;
 
-    internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
+    internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
+        CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
-        var item = (startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"));
-        Gadget = agentData.GetAgentByInstID((ushort)item.Pad, item.Time);
+        if (startItem != null)
+        {
+            if (startItem.IsStateChange != StateChange.AnimationStart)
+            {
+                EffectTarget = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
+            }
+        }
+        else
+        {
+            EffectTarget = ParserHelper._unknownAgent;
+        }
         // Bandaid, may not be perfect
-        if (AnimStop != AnimationStop.AnyViaReset && AnimStop != AnimationStop.Ended && Status != AnimationStatus.Interrupted)
+        if (AnimStop != AnimationStop.GadgetViaReset && AnimStop != AnimationStop.Ended && Status != AnimationStatus.Interrupted)
         {
             Status = AnimationStatus.Interrupted;
             SavedDuration = -ActualDuration;

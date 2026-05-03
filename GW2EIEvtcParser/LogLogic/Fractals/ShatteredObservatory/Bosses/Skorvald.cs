@@ -119,7 +119,7 @@ internal class Skorvald : ShatteredObservatory
         }
         foreach (AgentItem fluxAnomaly in fluxAnomalies)
         {
-            if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApply() && x.DstMatchesAgent(fluxAnomaly)))
+            if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApplyEvent() && x.DstMatchesAgent(fluxAnomaly)))
             {
                 fluxAnomaly.OverrideID(TargetID.UnknownAnomaly, agentData);
             }

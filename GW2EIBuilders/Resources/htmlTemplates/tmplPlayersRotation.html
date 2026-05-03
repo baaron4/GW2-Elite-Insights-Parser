@@ -94,7 +94,7 @@
     Vue.component("player-rotations-component", {
         props: ["phaseindex", "light", "playerindex"],
         template: `${template}`,
-        mixins: [graphComponent, encounterPhaseComponent],
+        mixins: [graphComponent, encounterPhaseComponent, UIIconsComponent],
         data: function () {
             var selectedPlayers = [];
             for (var i = 0; i < logData.players.length; i++) {

@@ -54,7 +54,7 @@
 <script>
     Vue.component("player-target-component", {
         props: ["players", "phaseindex"],
-        mixins: [encounterPhaseComponent, playerHeaderComponent],
+        mixins: [encounterPhaseComponent, playerHeaderComponent, UIIconsComponent],
         template: `${template}`,
         methods: {
             select: function (id) {

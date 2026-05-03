@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-internal class BreakbarChangeEvent : SkillEvent
+internal class BreakbarChangeEvent : NonDamageEvent
 {
     public double BreakbarChanged { get; protected set; }
     internal BreakbarChangeEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

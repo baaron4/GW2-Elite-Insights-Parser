@@ -393,6 +393,15 @@ partial class CombatData
         return GetTimeValueOrEmpty(_buffRemoveAllDataByDst, dst);
     }
 
+    public IReadOnlyList<BuffRemoveSingleEvent> GetBuffRemoveSingleDataByIDByDst(long buffID, AgentItem dst)
+    {
+        if (_buffRemoveSingleDataByIDByDst.TryGetValue(buffID, out var byDst))
+        {
+            return GetTimeValueOrEmpty(byDst, dst);
+        }
+        return [];
+    }
+
     /// <summary>
     /// Returns list of buff events applied on agent
     /// </summary>
@@ -485,9 +494,13 @@ partial class CombatData
         return GetTimeValueOrEmpty(_crowControlTakenData, dst);
     }
 
-    public IReadOnlyList<StunBreakEvent> GetStunBreakEvents(AgentItem src)
+    public IReadOnlyList<StunBreakEvent> GetStunBreakReceivedData(AgentItem dst)
     {
-        return GetTimeValueOrEmpty(_statusEvents.StunBreakEventsBySrc, src);
+        return GetTimeValueOrEmpty(_stunBreakReceivedData, dst);
+    }
+    public IReadOnlyList<StunBreakEvent> GetStunBreakData(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_stunBreakData, src);
     }
     #endregion CROWDCONTROL
     #region CAST

@@ -223,14 +223,14 @@ public class HealingStatsExtensionHandler : ExtensionHandler
         return SrcIsAgent(c);
     }
 
-    internal override bool IsDamage(CombatItem c)
+    internal override bool IsDamageEvent(CombatItem c)
     {
         return SrcIsAgent(c);
     }
 
-    internal override bool IsDamagingDamage(CombatItem c)
+    internal override bool IsNonZeroDamageEvent(CombatItem c)
     {
-        return IsDamage(c);
+        return IsDamageEvent(c);
     }
 
     internal override void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData)

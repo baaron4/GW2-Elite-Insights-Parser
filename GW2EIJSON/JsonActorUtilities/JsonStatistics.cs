@@ -152,6 +152,14 @@ public static class JsonStatistics
         /// Total crowd control duration received in ms
         /// </summary>
         public double ReceivedCrowdControlDuration;
+        /// <summary>
+        /// Number of time stun was broken on self, by self or others
+        /// </summary>
+        public int StunBreak;
+        /// <summary>
+        /// Removed stun duration in s on self, by self or others.
+        /// </summary>
+        public double RemovedStunDuration;
     }
 
     /// <summary>
@@ -528,12 +536,20 @@ public static class JsonStatistics
         /// </summary>
         public double BoonStripDownContributionTime;
         /// <summary>
-        /// Number of time stun was broken, by self or others
+        /// Number of time stun was broken by self, on self or others
         /// </summary>
         public int StunBreak;
         /// <summary>
-        /// Removed stun duration in s.
+        /// Removed stun duration in s by self, on self or other.
         /// </summary>
         public double RemovedStunDuration;
+        /// <summary>
+        /// Number of time stun was broken by self, on self
+        /// </summary>
+        public int StunBreakSelf;
+        /// <summary>
+        /// Removed stun duration in s by self, on self.
+        /// </summary>
+        public double RemovedStunSelfDuration;
     }
 }

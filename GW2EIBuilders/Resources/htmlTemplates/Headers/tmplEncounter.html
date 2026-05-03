@@ -25,7 +25,7 @@
                     <div v-if="encounterData.instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
                         <span v-for="instanceBuff in encounterData.instanceBuffs">
                             {{instanceBuff.stack > 1 ? instanceBuff.stack + ' x' : ''}}
-                            <img :data-original-title="instanceBuff.buff.name + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
+                            <img :data-original-title="getBuffTooltip(instanceBuff)"
                                  :src="instanceBuff.buff.icon" class="icon icon-hover" />
                         </span>
                     </div>
@@ -85,6 +85,7 @@
 
     Vue.component("encounter-component", {
         props: ["light", "encounters"],
+        mixins: [numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -92,7 +93,7 @@
             };
         },
         methods: {
-            getMinWidth: function() {
+            getMinWidth: function () {
                 let width = 0;
                 for (let i = 0; i < this.encountersData.length; i++) {
                     width = Math.max(this.encountersData[i].nameNoMode.length * 13, width);
@@ -105,7 +106,7 @@
             stopClickEvent: function (event) {
                 event.stopPropagation();
             },
-            select: function(encounterIndex) {
+            select: function (encounterIndex) {
                 for (let i = 0; i < this.encounters.length; i++) {
                     this.encounters[i].active = false;
                 }
@@ -115,16 +116,16 @@
                 for (let i = 0; i < reactiveLogdata.phases.length; i++) {
                     reactiveLogdata.phases[i].active = false;
                 }
-                reactiveLogdata.phases[index].active = true;   
+                reactiveLogdata.phases[index].active = true;
                 // Select an appropriate player
                 const encounterPhase = logData.phases[this.encounters[encounterIndex].index];
-                const players = getActiveNonFakePlayersForPhase(encounterPhase);      
-                let selectedPlayerIndex = reactiveLogdata.activeEncounterPhaseData[encounterIndex].player; 
+                const players = getActiveNonFakePlayersForPhase(encounterPhase);
+                let selectedPlayerIndex = reactiveLogdata.activeEncounterPhaseData[encounterIndex].player;
                 for (let i = 0; i < reactiveLogdata.players.length; i++) {
                     reactiveLogdata.players[i].active = false;
                 }
                 if (players[selectedPlayerIndex]) {
-                    reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    reactiveLogdata.players[selectedPlayerIndex].active = true;
                 } else {
                     const originalPlayer = logData.players[selectedPlayerIndex];
                     selectedPlayerIndex = -1;
@@ -136,8 +137,8 @@
                             break;
                         }
                     }
-                    if (selectedPlayerIndex >= 0) {           
-                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    if (selectedPlayerIndex >= 0) {
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;
                     } else {
                         // Default to pov player active in that encounter
                         for (let i = 0; i < logData.players.length; i++) {
@@ -147,7 +148,7 @@
                                 break;
                             }
                         }
-                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;
                     }
                     reactiveLogdata.activeEncounterPhaseData[encounterIndex].player = selectedPlayerIndex;
                 }
@@ -175,15 +176,15 @@
                 const redStart = "red " + minPercent + "%";
                 const red = "red " + hpLeftPercent + "%";
                 const yellow = "yellow " + hpLeftPercent + "% " + healthAndBarrier + "%";
-                const green = "green " + healthAndBarrier + "%";      
-                const greenEnd = "green " + maxPercent + "%";  
-                const greyHighStart = "grey  " + maxPercent + "%"; 
+                const green = "green " + healthAndBarrier + "%";
+                const greenEnd = "green " + maxPercent + "%";
+                const greyHighStart = "grey  " + maxPercent + "%";
                 const greyHighEnd = "grey  " + 100 + "%";
-                const template = `linear-gradient(to right, 
-                        ${greyLowStart}, ${greyLowEnd}, 
-                        ${redStart}, ${red}, 
-                        ${yellow}, 
-                        ${green}, ${greenEnd}, 
+                const template = `linear-gradient(to right,
+                        ${greyLowStart}, ${greyLowEnd},
+                        ${redStart}, ${red},
+                        ${yellow},
+                        ${green}, ${greenEnd},
                         ${greyHighStart}, ${greyHighEnd}
                 )`;
                 return template;
@@ -257,6 +258,24 @@
                 }
                 return;
             },
+            getBuffTooltip: function (instanceBuff) {
+                let title = instanceBuff.buff.name;
+                let description = instanceBuff.buff.description;
+
+                if (description) {
+                    let stacks = "<br>Max Stack(s) 1";
+                    if (description.includes(stacks)) {
+                        description = description.replace(stacks, "");
+                    }
+                    title += '<br> ' + description;
+                }
+
+                if (instanceBuff.remainingDuration) {
+                    title += '<br> Remaining Duration: ' + this.round3(instanceBuff.remainingDuration / 1000) + ' seconds';
+                }
+
+                return title;
+            },
         },
         computed: {
             encountersData: function () {
@@ -312,7 +331,7 @@
                         for (let i = 0; i < logData.instanceBuffs.length; i++) {
                             const cur = logData.instanceBuffs[i];
                             if (cur[2] <= phase.start && cur[3] >= phase.end) {
-                                res.push({buff: findSkill(true, cur[0]), stack: cur[1]});
+                                res.push({ buff: findSkill(true, cur[0]), stack: cur[1], remainingDuration: cur[4] });
                             }
                         }
                         if (res.length > 0) {
@@ -323,7 +342,7 @@
                 }
                 return res;
             },
-            encounterData: function() {
+            encounterData: function () {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
                     if (encounter.active) {

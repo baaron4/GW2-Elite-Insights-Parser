@@ -81,6 +81,9 @@
                     </td>
                     <td :class="getBodyClass('Account')" class="text-left">
                         {{row.player.acc}}
+                        <img v-if="playerIsRunningHealingExtension(row.player)"
+                            :src="UIIcons.GreenFlag" alt="Complete"
+                            class="icon" data-original-title="Complete Healing Data">
                     </td>
                     <td v-if="!showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
@@ -116,7 +119,7 @@
     Vue.component("outgoing-healing-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent, extensionPresentComponent, UIIconsComponent],
         data: function () {
             return {
                 showHealing: logData.wvw,
@@ -289,9 +292,6 @@
                 this.cacheTarget.set(cacheID, res);
                 return res;
             },
-            UIIcons: function () {
-                return UIIcons;
-            }
         }
     });
 </script>

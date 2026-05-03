@@ -289,7 +289,7 @@ internal class WvWLogic : LogLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AgentItem dummyAgent = agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, TargetID.WorldVersusWorld, true);
-        CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
+        CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApplyEvent() || x.IsBuffRemoveEvent()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
         if (modeEvent != null)
         {
             _foundSkillMode = true;
@@ -326,7 +326,7 @@ internal class WvWLogic : LogLogic
             var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.AgentItem.Agent).ToDictionary(x => x.Key, x => x.ToList());
             foreach (CombatItem c in combatData)
             {
-                if (c.IsDamage(extensions))
+                if (c.IsDamageEvent(extensions))
                 {
                     if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out var srcs))
                     {

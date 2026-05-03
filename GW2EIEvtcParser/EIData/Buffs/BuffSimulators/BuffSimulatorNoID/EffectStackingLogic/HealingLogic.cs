@@ -40,10 +40,12 @@ internal class HealingLogic : QueueLogic
         {
             toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
         }
-        if (toRemove == null)
+        if (toRemove == null && overridenDuration > 0)
         {
             toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
         }
+        // Old school pre stack instance evtc file, stacks are sorted by old healing score
+        toRemove ??= stacks.Last();
         wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
         if (toRemove.Extensions.Count != 0)
         {

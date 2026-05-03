@@ -170,11 +170,11 @@ internal class UraTheSteamshrieker : MountBalrior
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var deterrences = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Deterrence);
+            var deterrences = combatData.Where(x => (x.IsBuffApplyEvent() || x.IsBuffRemoveEvent()) && x.SkillID == Deterrence);
             var activeDeterrences = new Dictionary<ulong, long>();
             foreach (var deterrence in deterrences)
             {
-                if (deterrence.IsBuffApply())
+                if (deterrence.IsBuffApplyEvent())
                 {
                     activeDeterrences[deterrence.DstAgent] = deterrence.Time;
                 }
@@ -240,7 +240,7 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         // Sulfuric geysers
         var sulfuricAgents = combatData
-            .Where(x => x.IsBuffApply() && x.SkillID == HardenedCrust)
+            .Where(x => x.IsBuffApplyEvent() && x.SkillID == HardenedCrust)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget)
             .Distinct();

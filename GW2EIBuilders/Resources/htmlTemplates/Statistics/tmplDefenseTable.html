@@ -40,6 +40,11 @@
                         <img :src="UIIcons.CC" alt="CC"
                             class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19)"
+                        data-original-title="Stun Break">
+                        <img :src="UIIcons.StunBreak" alt="Stun Break"
+                            class="icon icon-hover">
+                    </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)"
                         data-original-title="Number of times was invulnerable to damage">
                         <img :src="UIIcons.Invul" alt="Invuln"
@@ -121,6 +126,9 @@
                     <td :class="getBodyClass('Data', 17)" :data-original-title="round3(row.def[18]/1000) + ' seconds'">
                         {{row.def[17]}}
                     </td>
+                    <td :class="getBodyClass('Data', 19)" :data-original-title="round3(row.def[20]) + ' seconds'">
+                        {{row.def[19]}}
+                    </td>
                     <td :class="getBodyClass('Data', 4)">
                         {{row.def[4]}}
                     </td>
@@ -160,13 +168,14 @@
                     <td>{{sum.def[1]}}</td>
                     <td>{{sum.def[2]}}</td>
                     <td>{{sum.def[3]}}</td>
-                    <td>{{sum.def[17]}}</td>
+                    <td :data-original-title="round3(sum.def[18]/1000) + ' seconds'">{{sum.def[17]}}</td>
+                    <td :data-original-title="round3(sum.def[20]) + ' seconds'">{{sum.def[19]}}</td>
                     <td>{{sum.def[4]}}</td>
                     <td>{{sum.def[5]}}</td>
                     <td>{{sum.def[6]}}</td>
                     <td>{{sum.def[7]}}</td>
-                    <td>{{sum.def[8]}}</td>
-                    <td>{{sum.def[10]}}</td>
+                    <td :data-original-title="sum.def[9] + ' seconds'">{{sum.def[8]}}</td>
+                    <td :data-original-title="sum.def[11] + ' seconds'">{{sum.def[10]}}</td>
                     <td>{{sum.def[12]}}</td>
                     <td>{{sum.def[16]}}</td>
                     <td>{{sum.def[14]}}</td>
@@ -180,7 +189,7 @@
     Vue.component("defense-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent, UIIconsComponent],
         data: function () {
             return {
                 cache: new Map(),
@@ -286,9 +295,6 @@
                 this.cache.set(cacheID, res);
                 return res;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

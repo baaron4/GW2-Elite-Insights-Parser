@@ -2,10 +2,10 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BuffStackResetEvent : BuffStackEvent
+public class BuffStackDeactiveEvent : BuffStackEvent
 {
     public readonly int ResetToDuration;
-    internal BuffStackResetEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+    internal BuffStackDeactiveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
         BuffInstance = evtcItem.Pad;
         ResetToDuration = evtcItem.Value;
@@ -18,7 +18,7 @@ public class BuffStackResetEvent : BuffStackEvent
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
-        simulator.Reset(BuffInstance, ResetToDuration);
+        simulator.Deactivate(BuffInstance, ResetToDuration);
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using System.Reflection.Metadata;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -123,6 +124,11 @@ internal static class MesmerHelper
         {
             return false;
         }
+        // below 50 % HP
+        if (x.AgainstUnderFifty)
+        {
+            return true;
+        }
 
         bool isCC = false;
         bool hasCCBuffs = false;
@@ -139,9 +145,7 @@ internal static class MesmerHelper
             long[] buffs = [Stun, Daze, Fear, Taunt];
             hasCCBuffs = x.To.HasAnyBuff(log, buffs, x.Time);
         }
-
-        // Conditions are: Must be a crowd control event or below 50% HP.
-        return isCC || hasCCBuffs || x.AgainstUnderFifty;
+        return isCC || hasCCBuffs;
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
@@ -184,10 +188,10 @@ internal static class MesmerHelper
             .UsingApproximate(),
         new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% on crit", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
-        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% on crit against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
             .UsingApproximate(),
-        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% on crit against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         
         // Illusions

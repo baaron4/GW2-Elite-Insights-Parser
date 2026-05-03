@@ -15,13 +15,11 @@
     Vue.component('target-data-component', {
         props: ['targetid'],
         template: `${template}`,
+        mixins: [UIIconsComponent],
         computed: {
             target: function () {
                 return logData.targets[this.targetid];
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

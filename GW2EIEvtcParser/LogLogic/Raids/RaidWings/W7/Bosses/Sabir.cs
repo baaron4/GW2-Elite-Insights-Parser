@@ -87,7 +87,7 @@ internal class Sabir : TheKeyOfAhdashim
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+            if (agentData.GetNPCsByID(TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
             {
                 return new Adina((int)TargetID.Adina);
             }
@@ -367,7 +367,7 @@ internal class Sabir : TheKeyOfAhdashim
             }
             else
             {
-                CombatItem? firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
+                CombatItem? firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsNonZeroDamageEvent());
                 if (firstDamageEvent != null)
                 {
                     return firstDamageEvent.Time;

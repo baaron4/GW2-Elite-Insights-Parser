@@ -302,7 +302,7 @@ internal class Xera : StrongholdOfTheFaithful
         var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in chargedBloodStones)
         {
-            if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
+            if (!combatData.Any(x => x.IsDamageEvent() && x.DstMatchesAgent(gadget)))
             {
                 continue;
             }
@@ -343,12 +343,12 @@ internal class Xera : StrongholdOfTheFaithful
         ]);
     }
 
-    internal static void MergeSecondXeraToFirstXera(AgentItem firstXera, AgentItem secondXera, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void MergeSecondXeraToFirstXera(AgentItem firstXera, AgentItem secondXera, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
         firstXera.AddMergeFrom(firstXera, firstXera.FirstAware, firstXera.LastAware);
         // Add custom spawn and despawn event
-        combatData.Add(new CombatItem(firstXera.FirstAware, firstXera.Agent, 0, 0, 0, 0, 0, firstXera.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0));
-        combatData.Add(new CombatItem(firstXera.LastAware, firstXera.Agent, 0, 0, 0, 0, 0, firstXera.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Despawn, 0, 0, 0, 0));
+        combatData.Add(new CombatItem(firstXera.FirstAware, firstXera.Agent, 0, 0, 0, 0, 0, firstXera.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0, evtcVersion));
+        combatData.Add(new CombatItem(firstXera.LastAware, firstXera.Agent, 0, 0, 0, 0, 0, firstXera.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Despawn, 0, 0, 0, 0, evtcVersion));
         //
         firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
         AgentManipulationHelper.RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
@@ -369,7 +369,7 @@ internal class Xera : StrongholdOfTheFaithful
         // find split
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
         {
-            MergeSecondXeraToFirstXera(firstXera, secondXera, agentData, combatData, extensions);
+            MergeSecondXeraToFirstXera(firstXera, secondXera, agentData, combatData, extensions, evtcVersion);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameBloodStones(Targets);

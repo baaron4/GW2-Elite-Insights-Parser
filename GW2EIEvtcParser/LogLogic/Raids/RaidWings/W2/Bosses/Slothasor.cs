@@ -217,9 +217,9 @@ internal class Slothasor : SalvationPass
 
     internal static void FindSlublingTransformations(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var slubTransformList = combatData.Where(x => x.SkillID == MagicTransformation && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
-        var transformStart = slubTransformList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
-        var transformEnd = slubTransformList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
+        var slubTransformList = combatData.Where(x => x.SkillID == MagicTransformation && (x.IsBuffRemoveAllEvent() || x.IsBuffApplyEvent())).ToList();
+        var transformStart = slubTransformList.Where(x => !x.IsBuffRemoveAllEvent()).ToList();
+        var transformEnd = slubTransformList.Where(x => x.IsBuffRemoveAllEvent()).ToList();
         var copies = new List<CombatItem>();
         for (int i = 0; i < transformStart.Count; i++)
         {

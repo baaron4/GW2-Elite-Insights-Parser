@@ -387,7 +387,9 @@ internal class PhaseDto
                 support.ResurrectCount,
                 support.ResurrectTime,
                 support.StunBreakCount,
-                support.RemovedStunDuration
+                support.RemovedStunDuration,
+                support.StunBreakSelfCount,
+                support.RemovedStunSelfDuration
         ];
     }
 
@@ -428,7 +430,9 @@ internal class PhaseDto
                 deadTooltip,
                 defenses.DownedDamageTaken, 
                 defenses.ReceivedCrowdControl,
-                defenses.ReceivedCrowdControlDuration
+                defenses.ReceivedCrowdControlDuration,
+                defenses.StunBreakCount,
+                defenses.RemovedStunDuration,
             ];
     }
     public static List<DPSStatDataItem> BuildDPSData(ParsedEvtcLog log, PhaseData phase)

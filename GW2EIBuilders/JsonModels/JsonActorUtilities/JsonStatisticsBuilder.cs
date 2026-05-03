@@ -49,7 +49,9 @@ internal static class JsonStatisticsBuilder
             ConditionCleansesTime = defStats.ConditionCleansesTime,
 
             ReceivedCrowdControl = defStats.ReceivedCrowdControl,
-            ReceivedCrowdControlDuration = defStats.ReceivedCrowdControlDuration
+            ReceivedCrowdControlDuration = defStats.ReceivedCrowdControlDuration,
+            StunBreak = defStats.StunBreakCount,
+            RemovedStunDuration = defStats.RemovedStunDuration
         };
         return jsonDefensesAll;
     }
@@ -178,7 +180,9 @@ internal static class JsonStatisticsBuilder
             BoonStripDownContribution = playerToPlayerStats.BoonStripDownContribution,
             BoonStripDownContributionTime = playerToPlayerStats.BoonStripDownContributionTime,
             StunBreak = playerToPlayerStats.StunBreakCount,
-            RemovedStunDuration = playerToPlayerStats.RemovedStunDuration
+            RemovedStunDuration = playerToPlayerStats.RemovedStunDuration,
+            StunBreakSelf = playerToPlayerStats.StunBreakSelfCount,
+            RemovedStunSelfDuration = playerToPlayerStats.RemovedStunSelfDuration,
         };
         return jsonPlayerSupport;
     }

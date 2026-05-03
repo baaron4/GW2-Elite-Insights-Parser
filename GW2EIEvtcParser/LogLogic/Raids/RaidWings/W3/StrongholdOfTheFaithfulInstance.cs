@@ -303,7 +303,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return friendlies.Distinct().ToList();
     }
 
-    private static void MergeXeraAgents(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private static void MergeXeraAgents(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
         var xeras = agentData.GetNPCsByID(TargetID.Xera);
         var xeras2 = agentData.GetNPCsByID(TargetID.Xera2);
@@ -313,7 +313,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             var attachedXera = xeras.LastOrDefault(x => x.FirstAware < xera2.FirstAware && x.FirstAware >= start);
             if (attachedXera != null)
             {
-                Xera.MergeSecondXeraToFirstXera(attachedXera, xera2, agentData, combatData, extensions);
+                Xera.MergeSecondXeraToFirstXera(attachedXera, xera2, agentData, combatData, extensions, evtcVersion);
             }
             start = xera2.LastAware;
         }
@@ -328,7 +328,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         // For encounters before reaching Xera
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         Xera.FindBloodstones(agentData, combatData);
-        MergeXeraAgents(agentData, combatData, extensions);
+        MergeXeraAgents(agentData, combatData, extensions, evtcVersion);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Escort.RenameSubMcLeods(Targets);
         Xera.RenameBloodStones(Targets);

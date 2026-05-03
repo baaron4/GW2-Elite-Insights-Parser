@@ -301,8 +301,8 @@ internal class Qadim : MythwrightGambit
         {
             throw new MissingKeyActorsException("Qadim not found");
         }
-        CombatItem? startCast = combatData.FirstOrDefault(x => x.SkillID == QadimInitialCast && x.StartCasting());
-        CombatItem? sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == FlameSlash3 || x.SkillID == FlameSlash || x.SkillID == FlameWave) && x.StartCasting());
+        CombatItem? startCast = combatData.FirstOrDefault(x => x.SkillID == QadimInitialCast && x.IsStartCastEvent());
+        CombatItem? sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == FlameSlash3 || x.SkillID == FlameSlash || x.SkillID == FlameWave) && x.IsStartCastEvent());
         if (startCast == null || sanityCheckCast == null)
         {
             return logData.EvtcLogStart;

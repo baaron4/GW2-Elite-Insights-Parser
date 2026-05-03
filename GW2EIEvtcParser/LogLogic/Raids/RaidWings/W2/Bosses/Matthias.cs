@@ -204,9 +204,9 @@ internal class Matthias : SalvationPass
 
     internal static void FindSacrifices(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
-        var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
-        var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
+        var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && (x.IsBuffRemoveAllEvent() || x.IsBuffApplyEvent())).ToList();
+        var sacrificeStartList = sacrificeList.Where(x => !x.IsBuffRemoveAllEvent()).ToList();
+        var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemoveAllEvent()).ToList();
         var copies = new List<CombatItem>();
         for (int i = 0; i < sacrificeStartList.Count; i++)
         {

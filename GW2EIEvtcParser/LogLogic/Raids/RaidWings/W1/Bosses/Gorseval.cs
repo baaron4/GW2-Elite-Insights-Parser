@@ -75,7 +75,7 @@ internal class Gorseval : SpiritVale
         {
             int index = i + 1;
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
+            phase.AddParentPhase(encounterPhase);
             if (index % 2 == 1)
             {
                 phase.Name = "Phase " + (index + 1) / 2;

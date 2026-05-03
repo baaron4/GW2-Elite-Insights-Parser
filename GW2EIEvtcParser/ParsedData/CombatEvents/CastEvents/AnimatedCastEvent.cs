@@ -7,10 +7,7 @@ public class AnimatedCastEvent : CastEvent
 {
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;
-
-    public readonly Vector3? EffectPosition;
-
-    public bool HasEffectPosition => EffectPosition != null;
+    public AgentItem EffectTarget { get; protected set; } = ParserHelper._unknownAgent;
 
     public readonly AnimationStart AnimStart;
     public readonly AnimationStop AnimStop;
@@ -36,14 +33,14 @@ public class AnimatedCastEvent : CastEvent
         {
             switch (endItem.IsActivation)
             {
-                case Activation.CancelCancel:
+                case Activation.Cancel:
                     Status = AnimationStatus.Interrupted;
                     SavedDuration = -ActualDuration;
                     break;
                 case Activation.Reset:
                     Status = AnimationStatus.Full;
                     break;
-                case Activation.CancelFire:
+                case Activation.Minimum:
                 case Activation.NoData:
                     int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
                     SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
@@ -55,26 +52,26 @@ public class AnimatedCastEvent : CastEvent
         Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
     }
 
+    protected const float PositionConvertConstant = 10.0f;
     internal AnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"), agentData, skillData)
     {
         // Start is present
         if (startItem != null)
         {
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
-            if (startItem.IsActivation == Activation.Quickness)
+            if (startItem.IsStateChange == StateChange.AnimationStart)
             {
-                Acceleration = 1;
-            }
-            if (startItem.DstAgent != 0 || startItem.OverstackValue != 0)
-            {
-                unsafe
+
+                if (startItem.DstAgent != 0)
                 {
-                    //NOTE(Rennorb): Cannot directly take the address of the field, because its a property.
-                    var xyBits = startItem.DstAgent;
-                    var x = *(float*)&xyBits;
-                    var y = *((float*)&xyBits + 1);
-                    var z = BitConverter.Int32BitsToSingle(unchecked((int)startItem.OverstackValue));
-                    EffectPosition = new(x, y, z);
+                    EffectTarget = agentData.GetAgent(startItem.DstAgent, startItem.Time);
+                }
+            } 
+            else
+            {
+                if (startItem.IsActivation == Activation.Quickness)
+                {
+                    Acceleration = 1;
                 }
             }
             //_effectHappenedDuration = startItem.Value;
@@ -147,6 +144,11 @@ public class AnimatedCastEvent : CastEvent
         Acceleration = 0;
         Status = AnimationStatus.Full;
         SavedDuration = 0;
+    }
+
+    internal AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    {
+        EffectTarget = effectTarget;
     }
 
     public override long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)

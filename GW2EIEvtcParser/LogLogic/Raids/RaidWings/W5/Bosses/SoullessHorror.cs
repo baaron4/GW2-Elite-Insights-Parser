@@ -125,7 +125,7 @@ internal class SoullessHorror : HallOfChains
     internal static void HandleSoullessHorrorFinalHPUpdate(List<CombatItem> combatData, SingleActor soullessHorror)
     {
         // discard hp update events after determined apply
-        CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
+        CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApplyEvent() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
             foreach (var combatEvent in combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time))

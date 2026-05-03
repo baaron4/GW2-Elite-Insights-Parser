@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class CrowdControlEvent : SkillEvent
+public class CrowdControlEvent : NonDamageEvent
 {
     //
 

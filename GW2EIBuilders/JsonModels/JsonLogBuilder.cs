@@ -234,7 +234,14 @@ internal static class JsonLogBuilder
                 {
                     presentFractalInstabilities.Add(buff.ID);
                 }
-                presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase)]);
+                if (instanceBuff.RemainingDuration > 0)
+                {
+                    presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase), instanceBuff.RemainingDuration]);
+                } 
+                else
+                {
+                    presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase)]);
+                }
             }
             jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
             jsonLog.PresentInstanceBuffs = presentInstanceBuffs;

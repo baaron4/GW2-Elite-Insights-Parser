@@ -306,7 +306,7 @@
                 }
             };
         },
-        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent],
+        mixins: [numberComponent, sortedTableComponent, sortedDistributionComponent, UIIconsComponent],
         methods: {      
             getSkillID: function (data) {
                 return data[1];
@@ -409,9 +409,6 @@
             },
             hasBreakbarDamage: function() {
                 return logData.hasBreakbarDamage;
-            },
-            UIIcons: function() {
-                return UIIcons;
             },
             totalHits() {
                 var totals = {

@@ -8,7 +8,13 @@ namespace GW2EIEvtcParser.ParsedData;
 internal static class CombatEventFactory
 {
 
-    public static void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion, EvtcParserSettings settings, GW2APIController apiController)
+    public static void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, 
+        SkillData skillData, MetaEventsContainer metaDataEvents, 
+        StatusEventsContainer statusEvents, 
+        List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps,
+        List<BuffEvent> buffEvents, List<StunBreakEvent> stunBreakEvents,
+        EvtcVersionEvent evtcVersion, EvtcParserSettings settings,
+        GW2APIController apiController)
     {
         switch (stateChangeEvent.IsStateChange)
         {
@@ -268,11 +274,8 @@ internal static class CombatEventFactory
             case StateChange.StackActive:
                 buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
                 break;
-            case StateChange.StackReset:
-                buffEvents.Add(new BuffStackResetEvent(stateChangeEvent, agentData, skillData));
-                break;
-            case StateChange.BuffInitial:
-                buffEvents.Add(new BuffApplyEvent(stateChangeEvent, agentData, skillData, evtcVersion));
+            case StateChange.StackDeactive:
+                buffEvents.Add(new BuffStackDeactiveEvent(stateChangeEvent, agentData, skillData));
                 break;
             case StateChange.TickRate:
                 metaDataEvents.TickRateEvents.Add(new TickRateEvent(stateChangeEvent));
@@ -407,8 +410,7 @@ internal static class CombatEventFactory
                 Add(statusEvents.GliderEventsBySrc, gliderEvent.Src, gliderEvent);
                 break;
             case StateChange.StunBreak:
-                var stunbreakEvent = new StunBreakEvent(stateChangeEvent, agentData);
-                Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
+                stunBreakEvents.Add(new StunBreakEvent(stateChangeEvent, agentData, skillData));
                 break;
             case StateChange.MissileCreate:
                 var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData);
@@ -488,33 +490,73 @@ internal static class CombatEventFactory
 
     public static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
-        if (buffEvent.IsOffcycle > 0)
+        if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
-            var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
-            if (evtcVersion.Build > ArcDPSBuilds.BuffExtensionBroken || extensionEvent.ExtendedDuration > 0)
+            if (buffEvent.IsStateChange == StateChange.BuffChange)
             {
-                buffEvents.Add(extensionEvent);
+                var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
+                if (extensionEvent.ExtendedDuration > 0)
+                {
+                    buffEvents.Add(extensionEvent);
+                }
+            } 
+            else
+            {
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
+            }
+        } 
+        else
+        {
+            if (buffEvent.IsOffcycle > 0)
+            {
+                var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
+                if (evtcVersion.Build > ArcDPSBuilds.BuffExtensionBroken || extensionEvent.ExtendedDuration > 0)
+                {
+                    buffEvents.Add(extensionEvent);
+                }
+            }
+            else
+            {
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
+            }
+        }
+    }
+
+    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    {
+        if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        {
+            if (buffEvent.IsStateChange == StateChange.BuffRemoveAll)
+            {
+                buffEvents.Add(new BuffRemoveAllEvent(buffEvent, agentData, skillData));
+            }
+            else
+            {
+                switch (buffEvent.IsBuffRemove)
+                {
+                    case BuffRemove.Single:
+                        buffEvents.Add(new BuffRemoveSingleEvent(buffEvent, agentData, skillData));
+                        break;
+                    case BuffRemove.Manual:
+                        buffEvents.Add(new BuffRemoveManualEvent(buffEvent, agentData, skillData));
+                        break;
+                }
             }
         }
         else
         {
-            buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
-        }
-    }
-
-    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData)
-    {
-        switch (buffEvent.IsBuffRemove)
-        {
-            case BuffRemove.Single:
-                buffEvents.Add(new BuffRemoveSingleEvent(buffEvent, agentData, skillData));
-                break;
-            case BuffRemove.All:
-                buffEvents.Add(new BuffRemoveAllEvent(buffEvent, agentData, skillData));
-                break;
-            case BuffRemove.Manual:
-                buffEvents.Add(new BuffRemoveManualEvent(buffEvent, agentData, skillData));
-                break;
+            switch (buffEvent.IsBuffRemove)
+            {
+                case BuffRemove.Single:
+                    buffEvents.Add(new BuffRemoveSingleEvent(buffEvent, agentData, skillData));
+                    break;
+                case BuffRemove.All:
+                    buffEvents.Add(new BuffRemoveAllEvent(buffEvent, agentData, skillData));
+                    break;
+                case BuffRemove.Manual:
+                    buffEvents.Add(new BuffRemoveManualEvent(buffEvent, agentData, skillData));
+                    break;
+            }
         }
     }
 
@@ -547,7 +589,7 @@ internal static class CombatEventFactory
                 var skillID = castEventsBySkillID.Key;
                 foreach (CombatItem c in castEventsBySkillID)
                 {
-                    if (c.StartCasting())
+                    if (c.IsStartCastEvent())
                     {
                         // missing end
                         if (startItem != null)
@@ -556,7 +598,7 @@ internal static class CombatEventFactory
                         }
                         startItem = c;
                     }
-                    else if (c.EndCasting())
+                    else if (c.IsEndCastEvent())
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
@@ -597,50 +639,108 @@ internal static class CombatEventFactory
         return res;
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
+    private static void AddNonDamageDamageEvent(CombatItem damageEvent, DamageResult result, 
+        List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage,
+        List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
+        List<StunBreakEvent> stunBreakEvents,
+        AgentData agentData, SkillData skillData)
     {
-        PhysicalResult result = GetPhysicalResult(damageEvent.Result);
         switch (result)
         {
-            case PhysicalResult.BreakbarDamage:
+            case DamageResult.BreakbarDamage:
                 var brkChange = new BreakbarChangeEvent(damageEvent, agentData, skillData);
                 // Change from unknown with generic id is recovery when positive, soft cc will cause negative values to appear
                 if (brkChange.SkillID == skillData.GenericBreakbarID && brkChange.From.IsUnknown)
                 {
                     brkBarRecovered.Add(new BreakbarRecoveryEvent(damageEvent, agentData, skillData));
-                } 
+                }
                 else
                 {
                     brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
                 }
                 break;
-            case PhysicalResult.CrowdControl:
+            case DamageResult.CrowdControl:
                 crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
                 break;
-            case PhysicalResult.Interrupt:
-            case PhysicalResult.KillingBlow:
-            case PhysicalResult.Downed:
+            case DamageResult.Interrupt:
+            case DamageResult.KillingBlow:
+            case DamageResult.Downed:
                 hpDamage.Add(new NoDamageHealthDamageEvent(damageEvent, agentData, skillData, result));
-                break;
-            case PhysicalResult.Activation:
-            case PhysicalResult.Unknown:
-                break;
-            default:
-                hpDamage.Add(new DirectHealthDamageEvent(damageEvent, agentData, skillData, result));
                 break;
         }
     }
 
-    public static void AddIndirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
+    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+        List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
+        List<StunBreakEvent> stunBreakEvents,
+        AgentData agentData, SkillData skillData)
     {
-        ConditionResult result = GetConditionResult(damageEvent.Result);
+        DamageResult result = GetDamageResult(damageEvent.Result);
         switch (result)
         {
-            case ConditionResult.Unknown:
+            case DamageResult.BreakbarDamage:
+            case DamageResult.CrowdControl:
+            case DamageResult.Interrupt:
+            case DamageResult.KillingBlow:
+            case DamageResult.Downed:
+                AddNonDamageDamageEvent(damageEvent, result, hpDamage, brkBarDamage, brkBarRecovered, crowdControlEvents, stunBreakEvents, agentData, skillData);
+                break;
+            case DamageResult.DirectNormal:
+            case DamageResult.DirectCrit:
+            case DamageResult.DirectGlance:
+            case DamageResult.DirectBlock:
+            case DamageResult.DirectEvade:
+            case DamageResult.DirectOrBuffAbsorb:
+            case DamageResult.DirectBlind:
+            case DamageResult.DirectOrBuffInvert:
+                hpDamage.Add(new DirectHealthDamageEvent(damageEvent, agentData, skillData, result));
                 break;
             default:
-                hpDamage.Add(new NonDirectHealthDamageEvent(damageEvent, agentData, skillData, result));
                 break;
+        }
+    }
+
+    public static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+        List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
+        List<StunBreakEvent> stunBreakEvents,
+        AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    {
+        if (evtcVersion.Build >= ArcDPSBuilds.ResultEnumRework)
+        {
+            DamageResult result = GetDamageResult(damageEvent.Result);
+            switch (result)
+            {
+                case DamageResult.BreakbarDamage:
+                case DamageResult.CrowdControl:
+                case DamageResult.Interrupt:
+                case DamageResult.KillingBlow:
+                case DamageResult.Downed:
+                    AddNonDamageDamageEvent(damageEvent, result, hpDamage, brkBarDamage, brkBarRecovered, crowdControlEvents, stunBreakEvents, agentData, skillData);
+                    break;
+                case DamageResult.BuffNotCycle:
+                case DamageResult.BuffCycle:
+                case DamageResult.BuffNotCycle_DamageToSourceOnHit:
+                case DamageResult.BuffNotCycle_DamageToTargetOnHit:
+                case DamageResult.BuffNotCycle_DamageToTargetOnStackRemove:
+                case DamageResult.DirectOrBuffAbsorb:
+                case DamageResult.DirectOrBuffInvert:
+                    hpDamage.Add(new NonDirectHealthDamageEvent(damageEvent, agentData, skillData, result));
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            ConditionResult result = GetConditionResult(damageEvent.Result);
+            switch (result)
+            {
+                case ConditionResult.Unknown:
+                    break;
+                default:
+                    hpDamage.Add(new NonDirectHealthDamageEvent(damageEvent, agentData, skillData, result));
+                    break;
+            }
         }
     }
 

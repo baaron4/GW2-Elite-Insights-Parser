@@ -110,6 +110,7 @@
     Vue.component("simplerotation-component", {
         props: ["actorindex", "phaseindex", "target"],
         template: `${template}`,
+        mixins: [UIIconsComponent],
         data: function () {
             const selectedSkills = {};
             const phaseData = [];

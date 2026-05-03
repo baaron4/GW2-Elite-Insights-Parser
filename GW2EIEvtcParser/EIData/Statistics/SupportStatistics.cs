@@ -18,6 +18,8 @@ public class SupportStatistics
     public readonly double BoonStripDownContributionTime;
     public readonly int StunBreakCount;
     public readonly double RemovedStunDuration;
+    public readonly int StunBreakSelfCount;
+    public readonly double RemovedStunSelfDuration;
 
     internal SupportStatistics(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
@@ -26,6 +28,8 @@ public class SupportStatistics
         ResurrectTime = totals.ResurrectTime;
         StunBreakCount = totals.StunBreakCount;
         RemovedStunDuration = totals.RemovedStunDuration;
+        StunBreakSelfCount = totals.StunBreakSelfCount;
+        RemovedStunSelfDuration = totals.RemovedStunSelfDuration;
         SupportPerAllyStatistics self = actor.GetSupportStats(actor, log, start, end);
         foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
         {

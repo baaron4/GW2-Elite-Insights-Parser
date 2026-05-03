@@ -4,11 +4,11 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class NoDamageHealthDamageEvent : HealthDamageEvent
 {
-    internal NoDamageHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, PhysicalResult result) : base(evtcItem, agentData, skillData)
+    internal NoDamageHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, DamageResult result) : base(evtcItem, agentData, skillData)
     {
-        HasDowned = result == PhysicalResult.Downed;
-        HasKilled = result == PhysicalResult.KillingBlow;
-        HasInterrupted = result == PhysicalResult.Interrupt;
+        HasDowned = result == DamageResult.Downed;
+        HasKilled = result == DamageResult.KillingBlow;
+        HasInterrupted = result == DamageResult.Interrupt;
         IsNotADamageEvent = true;
     }
 

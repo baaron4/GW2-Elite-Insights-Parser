@@ -48,7 +48,7 @@ sealed class Sorting
 
 
     sealed class TestCombatItem(long t, int v) : CombatItem(t, default, default, v, default, default, default, default, default, default, default, 
-            default, default, default, default, default, default, default, default, default, default, default, default, default)
+            default, default, default, default, default, default, default, default, default, default, default, default, default, null!)
     {
         public override string ToString()
         {

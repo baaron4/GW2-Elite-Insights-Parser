@@ -23,8 +23,8 @@ public abstract class ExtensionHandler
     internal abstract bool SrcIsAgent(CombatItem c);
     internal abstract bool DstIsAgent(CombatItem c);
 
-    internal abstract bool IsDamage(CombatItem c);
-    internal abstract bool IsDamagingDamage(CombatItem c);
+    internal abstract bool IsDamageEvent(CombatItem c);
+    internal abstract bool IsNonZeroDamageEvent(CombatItem c);
     internal abstract bool IsSkillID(CombatItem c);
 
     internal abstract void InsertEIExtensionEvent(CombatItem c, AgentData agentData, SkillData skillData);

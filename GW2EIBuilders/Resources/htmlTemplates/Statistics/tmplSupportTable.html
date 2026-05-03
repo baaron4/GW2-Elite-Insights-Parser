@@ -30,11 +30,6 @@
                         <img :src="UIIcons.Strip" alt="Boon Strips"
                             class="icon icon-hover">
                     </th>
-                    <th class="stat-cell" :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)"
-                        data-original-title="Stun Break">
-                        <img :src="UIIcons.StunBreak" alt="Stun Break"
-                            class="icon icon-hover">
-                    </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6)"
                         data-original-title="Resurrects">
                         <img :src="UIIcons.DownedAlly" alt="Resurrects"
@@ -66,9 +61,6 @@
                     <td :class="getBodyClass('Data', 4)" :data-original-title="row.sup[5] + ' seconds'">
                         {{row.sup[4]}}
                     </td>
-                    <td :class="getBodyClass('Data', 8)" :data-original-title="row.sup[9] + ' seconds'">
-                        {{row.sup[8]}}
-                    </td>
                     <td :class="getBodyClass('Data', 6)" :data-original-title="row.sup[7] + ' seconds'">
                         {{row.sup[6]}}
                     </td>
@@ -83,7 +75,6 @@
                     <td :data-original-title="round3(sum.sup[1]) + ' seconds'">{{sum.sup[0]}}</td>
                     <td :data-original-title="round3(sum.sup[3])  + ' seconds'">{{sum.sup[2]}}</td>
                     <td :data-original-title="round3(sum.sup[5])  + ' seconds'">{{sum.sup[4]}}</td>
-                    <td :data-original-title="round3(sum.sup[9])  + ' seconds'">{{sum.sup[8]}}</td>
                     <td :data-original-title="round3(sum.sup[7])  + ' seconds'">{{sum.sup[6]}}</td>
                 </tr>
             </tfoot>
@@ -95,7 +86,7 @@
     Vue.component("support-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent, UIIconsComponent],
         data: function () {
             return {
                 cache: new Map(),
@@ -198,9 +189,6 @@
                 this.cache.set(cacheID, res);
                 return res;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

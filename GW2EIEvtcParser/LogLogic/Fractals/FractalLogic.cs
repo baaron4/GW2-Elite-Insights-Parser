@@ -145,7 +145,7 @@ internal abstract class FractalLogic : LogLogic
         }
     }
 
-    protected static void AddFractalScaleEvent(ulong gw2Build, List<CombatItem> combatData, IReadOnlyList<(ulong build, byte scale)> scales)
+    protected static void AddFractalScaleEvent(ulong gw2Build, EvtcVersionEvent evtcVersion, List<CombatItem> combatData, IReadOnlyList<(ulong build, byte scale)> scales)
     {
         if (combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
         {
@@ -156,7 +156,7 @@ internal abstract class FractalLogic : LogLogic
         {
             if (gw2Build >= build)
             {
-                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.FractalScale, 0, 0, 0, 0));
+                combatData.Add(new CombatItem(0, scale, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.FractalScale, 0, 0, 0, 0, evtcVersion));
                 break;
             }
         }

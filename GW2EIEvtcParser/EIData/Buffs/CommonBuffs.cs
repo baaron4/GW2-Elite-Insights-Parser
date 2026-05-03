@@ -16,7 +16,10 @@ internal static class CommonBuffs
         new Buff("Quickness", Quickness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Quickness),
         new Buff("Alacrity", Alacrity, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Alacrity),
         new Buff("Protection", Protection, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Protection),
-        new Buff("Regeneration", Regeneration, Source.Common, BuffStackType.Regeneration, 5, BuffClassification.Boon, BuffImages.Regeneration),
+        new Buff("Regeneration", Regeneration, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Regeneration)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2018Balance),
+        new Buff("Regeneration", Regeneration, Source.Common, BuffStackType.Regeneration, 5, BuffClassification.Boon, BuffImages.Regeneration)
+            .WithBuilds(GW2Builds.February2018Balance),
         new Buff("Vigor", Vigor, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Vigor),
         new Buff("Aegis", Aegis, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Aegis),
         new Buff("Stability", Stability, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Boon, BuffImages.Stability),

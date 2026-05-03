@@ -345,7 +345,7 @@ internal class LogDataDto
         InstanceBuffs = new(instanceBuffs.Count);
         foreach (var instanceBuff in instanceBuffs)
         {
-            InstanceBuffs.Add([instanceBuff.Buff.ID, instanceBuff.Stack, instanceBuff.AttachedPhase.Start, instanceBuff.AttachedPhase.End]);
+            InstanceBuffs.Add([instanceBuff.Buff.ID, instanceBuff.Stack, instanceBuff.AttachedPhase.Start, instanceBuff.AttachedPhase.End, instanceBuff.RemainingDuration]);
             usedBuffs[instanceBuff.Buff.ID] = instanceBuff.Buff;
         }
     }

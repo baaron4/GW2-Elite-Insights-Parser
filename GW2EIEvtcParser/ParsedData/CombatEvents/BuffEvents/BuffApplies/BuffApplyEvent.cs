@@ -9,9 +9,9 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
     public readonly int OriginalAppliedDuration;
     public readonly int AppliedDuration;
 
-    public readonly uint OverridenDuration;
-    internal uint OverridenDurationInternal;
-    internal uint OverridenInstance;
+    // Only relevant for Healing logic (aka regen) to simplify overstack fetch
+    internal uint OverridenRegenDuration;
+    internal uint OverridenRegenInstance;
     private readonly bool _addedActive;
 
     internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, skillData)
@@ -27,7 +27,6 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
             OriginalAppliedDuration = AppliedDuration;
         }
         _addedActive = evtcItem.IsShields > 0;
-        OverridenDuration = evtcItem.OverstackValue;
     }
 
     internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, IFF iff, uint id, bool addedActive) : base(by, to, time, buffSkill, iff, id)
@@ -39,7 +38,9 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
-        simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
+        simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, 
+            _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), 
+            OverridenRegenDuration, OverridenRegenInstance);
     }
 
     /*internal override int CompareTo(AbstractBuffEvent abe)

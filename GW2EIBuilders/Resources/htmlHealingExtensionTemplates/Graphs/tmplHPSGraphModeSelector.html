@@ -72,6 +72,7 @@
 <script>
     Vue.component("hps-graph-mode-selector-component", {
         props: ['data', 'phaseduration', 'phasehassubphases', "column"],
+        mixins: [UIIconsComponent],
         template: `${template}`,
         mounted() {
             const _this = this;
@@ -92,9 +93,6 @@
             hasBarrier: function() {
                 return !!barrierStatsExtension;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

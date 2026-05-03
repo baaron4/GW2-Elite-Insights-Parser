@@ -322,42 +322,42 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             switch (target.ID)
             {
                 case (int)TargetID.EmbodimentOfDespair:
-                    CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
                 case (int)TargetID.EmbodimentOfEnvy:
-                    CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
                 case (int)TargetID.EmbodimentOfGluttony:
-                    CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
                 case (int)TargetID.EmbodimentOfMalice:
-                    CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
                 case (int)TargetID.EmbodimentOfRage:
-                    CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
                 case (int)TargetID.EmbodimentOfRegret:
-                    CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApplyEvent());
                     if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);

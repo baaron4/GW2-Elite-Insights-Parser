@@ -223,7 +223,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         foreach (CombatItem c in combatData)
         {
-            if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
+            if (c.IsDamageEvent(extensions) && c.SkillID == ConjuredSlashPlayer)
             {
                 c.OverrideSrcAgent(sword);
                 if (sword.FirstAware == long.MinValue)

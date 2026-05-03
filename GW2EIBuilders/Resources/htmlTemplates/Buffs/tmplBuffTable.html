@@ -60,7 +60,7 @@
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns), UIIconsComponent],
         data: function () {
             return {             
                 sortdata: {
@@ -180,9 +180,6 @@
             },
             tableid: function() {
                 return this.id;
-            },
-            UIIcons: function() {
-                return UIIcons;
             },
             tooltipExpl: function () {
                 return `<ul style='text-align:left;margin-block-end: 0.3em;'>

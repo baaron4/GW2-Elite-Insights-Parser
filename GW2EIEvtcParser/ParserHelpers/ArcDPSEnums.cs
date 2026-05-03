@@ -35,6 +35,9 @@ public static class ArcDPSEnums
         public const int MissilesIntroduced = 20250525;
         public const int BuffFormulaOriginalAttribute = 20250913;
         public const int EmoteAndGadgetInteractionAdded = 20260318;
+        public const int AnimationAsStateChanges = 20260430;
+        public const int BuffAppliesAndRemovesAsStateChanges = 20260501;
+        public const int ResultEnumRework = 20260501;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -101,8 +104,8 @@ public static class ArcDPSEnums
         None = 0, // not used - not this kind of event
         Normal = 1, // started skill/animation activation
         Quickness = 2, // unused as of nov 5 2019
-        CancelFire = 3,  // stopped skill activation with reaching tooltip time
-        CancelCancel = 4, // stopped skill activation without reaching tooltip time
+        Minimum = 3,  // stopped skill activation with reaching tooltip time
+        Cancel = 4, // stopped skill activation without reaching tooltip time
         Reset = 5, // animation completed fully
         NoData = 6, // Treat it as CancelFire
 
@@ -152,9 +155,11 @@ public static class ArcDPSEnums
         MoveSkill = 16,
         MovePos = 17,
         Any = 18,
-        AnyViaReset = 19,
+        GadgetViaReset = 19,
         ManualExpiry = 20,
         Despawn = 21,
+        ReturnControl = 22,
+        Ready = 23,
 
         Unknown
     };
@@ -180,6 +185,7 @@ public static class ArcDPSEnums
     }
 
     // Buff cycle
+    // Retired as of 20260501
     public enum BuffCycle : byte
     {
         Cycle, // damage happened on tick timer
@@ -198,30 +204,37 @@ public static class ArcDPSEnums
 
     // Result
 
-    public enum PhysicalResult : byte
+    public enum DamageResult : byte
     {
-        Normal = 0,
-        Crit = 1,
-        Glance = 2,
-        Block = 3,
-        Evade = 4,
+        DirectNormal = 0,
+        DirectCrit = 1,
+        DirectGlance = 2,
+        DirectBlock = 3,
+        DirectEvade = 4,
         Interrupt = 5,
-        Absorb = 6,
-        Blind = 7,
+        DirectOrBuffAbsorb = 6,
+        DirectBlind = 7,
         KillingBlow = 8,
         Downed = 9,
         BreakbarDamage = 10,
         Activation = 11,
         CrowdControl = 12,
+        DirectOrBuffInvert = 13,
+        BuffCycle = 14, // damage happened on tick timer
+        BuffNotCycle = 15, // damage happened outside tick timer (resistable)
+        BuffNotCycle_DamageToTargetOnHit = 16, // damage happened to target on hiting target
+        BuffNotCycle_DamageToSourceOnHit = 17, // damage happened to source on hiting target
+        BuffNotCycle_DamageToTargetOnStackRemove = 18, // damage happened to target on source losing a stack
 
         Unknown
     };
 
-    public static PhysicalResult GetPhysicalResult(byte bt)
+    public static DamageResult GetDamageResult(byte bt)
     {
-        return bt < (byte)PhysicalResult.Unknown ? (PhysicalResult)bt : PhysicalResult.Unknown;
+        return bt < (byte)DamageResult.Unknown ? (DamageResult)bt : DamageResult.Unknown;
     }
 
+    // Retired as of 20260501
     public enum ConditionResult : byte
     {
         ExpectedToHit = 0,
@@ -229,7 +242,6 @@ public static class ArcDPSEnums
         InvulByPlayerSkill1 = 2,
         InvulByPlayerSkill2 = 3,
         InvulByPlayerSkill3 = 4,
-        //BreakbarDamage = 5,
 
         Unknown
     };
@@ -241,7 +253,7 @@ public static class ArcDPSEnums
     // State Change    
     public enum StateChange : byte
     {
-        None = 0,
+        Combat = 0,
         EnterCombat = 1,
         ExitCombat = 2,
         ChangeUp = 3,
@@ -269,7 +281,7 @@ public static class ArcDPSEnums
         MapID = 25,
         ReplInfo = 26,
         StackActive = 27,
-        StackReset = 28,
+        StackDeactive = 28, // Formerly as StackReset
         Guild = 29,
         BuffInfo = 30,
         BuffFormula = 31,
@@ -307,6 +319,13 @@ public static class ArcDPSEnums
         EffectAgentRemove = 63,
         AgentChange = 64,
         MapChange = 65,
+        EarlyExit = 66,
+        AnimationStart = 67,
+        AnimationStop = 68, 
+        BuffApply = 69,
+        BuffChange = 70, // Extension
+        BuffRemoveSingle = 71, // Single or Manual
+        BuffRemoveAll = 72,
         Unknown
     };
 

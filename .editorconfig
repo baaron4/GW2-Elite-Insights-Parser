@@ -72,6 +72,8 @@ dotnet_diagnostic.CA2201.severity = suggestion
 dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.CA1056.severity = none
 dotnet_diagnostic.CA1823.severity = warning
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
 ############################### 
 # C# Coding Conventions       # 
 ############################### 

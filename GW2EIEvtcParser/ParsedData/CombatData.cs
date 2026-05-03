@@ -38,6 +38,8 @@ public partial class CombatData
     private Dictionary<AgentItem, List<BuffRemoveAllEvent>> _buffRemoveAllDataBySrc;
     private Dictionary<AgentItem, List<BuffRemoveAllEvent>> _buffRemoveAllDataByDst;
 
+    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveSingleEvent>>> _buffRemoveSingleDataByIDByDst;
+
 
     private Dictionary<long, List<BuffExtensionEvent>> _buffExtensionData;
 
@@ -55,6 +57,9 @@ public partial class CombatData
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
     private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
+
+    public readonly Dictionary<AgentItem, List<StunBreakEvent>> _stunBreakReceivedData = [];
+    public readonly Dictionary<AgentItem, List<StunBreakEvent>> _stunBreakData = [];
 
     private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
     private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataByID;
@@ -516,13 +521,14 @@ public partial class CombatData
         combatEvents.SortByTime();
 
         //TODO_PERF(Rennorb): find average complexity
-        var castCombatEvents = new Dictionary<ulong, List<CombatItem>>(combatEvents.Count / 5);
-        var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
-        var wepSwaps = new List<WeaponSwapEvent>(combatEvents.Count / 50);
-        var brkDamageData = new List<BreakbarDamageEvent>(combatEvents.Count / 25);
-        var brkRecoveredData = new List<BreakbarRecoveryEvent>(combatEvents.Count / 25);
-        var crowdControlData = new List<CrowdControlEvent>(combatEvents.Count / 10);
-        var damageData = new List<HealthDamageEvent>(combatEvents.Count / 2);
+        var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
+        var buffEvents = new List<BuffEvent>();
+        var wepSwaps = new List<WeaponSwapEvent>();
+        var brkDamageData = new List<BreakbarDamageEvent>();
+        var brkRecoveredData = new List<BreakbarRecoveryEvent>();
+        var crowdControlData = new List<CrowdControlEvent>();
+        var stunBreakData = new List<StunBreakEvent>();
+        var damageData = new List<HealthDamageEvent>();
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
         // First iteration to create necessary metadata events first
@@ -530,12 +536,41 @@ public partial class CombatData
         {
             if (combatItem.IsEssentialMetadata)
             {
-                CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings, apiController);
+                CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, 
+                    skillData, _metaDataEvents, _statusEvents, 
+                    _rewardEvents, wepSwaps, buffEvents, stunBreakData,
+                    evtcVersion, settings, apiController);
             }
         }
         foreach (CombatItem combatItem in combatEvents)
         {
-            if (combatItem.IsStateChange != StateChange.None)
+            if (combatItem.IsCastEvent())
+            {
+                castCombatEvents.AddToList(combatItem.SrcAgent, combatItem);
+            }
+            else if (combatItem.IsBuffApplyOrRemoveEvent())
+            {
+                if (combatItem.IsBuffApplyEvent())
+                {
+                    CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                }
+                else
+                {
+                    CombatEventFactory.AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                }
+            }
+            else if (combatItem.IsDamageEvent())
+            {
+                if (combatItem.IsDirectDamageEvent())
+                {
+                    CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData);
+                }
+                else if (combatItem.IsBuffDamageEvent())
+                {
+                    CombatEventFactory.AddBuffDamageDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData, evtcVersion);
+                }
+            }
+            else if (combatItem.IsStateChange != StateChange.Combat)
             {
                 if (combatItem.IsEssentialMetadata)
                 {
@@ -550,36 +585,15 @@ public partial class CombatData
                 }
                 else
                 {
-                    CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings, apiController);
-                }
-
-            }
-            else if (combatItem.IsActivation != Activation.None)
-            {
-                castCombatEvents.AddToList(combatItem.SrcAgent, combatItem);
-            }
-            else if (combatItem.IsBuffRemove != BuffRemove.None)
-            {
-                CombatEventFactory.AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData);
-            }
-            else
-            {
-                if (combatItem.IsBuff != 0 && combatItem.BuffDmg == 0 && combatItem.Value > 0)
-                {
-                    CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
-                }
-                else if (combatItem.IsBuff == 0)
-                {
-                    CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, agentData, skillData);
-                }
-                else if (combatItem.IsBuff != 0 && combatItem.Value == 0)
-                {
-                    CombatEventFactory.AddIndirectDamageEvent(combatItem, damageData, agentData, skillData);
+                    CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, 
+                        _metaDataEvents, _statusEvents, _rewardEvents, 
+                        wepSwaps, buffEvents, stunBreakData,
+                        evtcVersion, settings, apiController);
                 }
             }
         }
 
-        HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
+        HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackDeactiveEvent);
         UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0 || brkRecoveredData.Count != 0;
@@ -646,6 +660,8 @@ public partial class CombatData
         _crowControlData = crowdControlData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         _crowControlDataByID = crowdControlData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _crowControlTakenData = crowdControlData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+        _stunBreakReceivedData = stunBreakData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+        _stunBreakData = stunBreakData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         // buff depend events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Dependent Events");
         BuildBuffDependentContainers();
@@ -692,6 +708,12 @@ public partial class CombatData
         _buffRemoveAllDataByIDByDst = _buffData.ToDictionary(
             x => x.Key,
             x => x.Value.OfType<BuffRemoveAllEvent>()
+                .GroupBy(y => y.To)
+                .ToDictionary(y => y.Key, y => y.ToList())
+        );
+        _buffRemoveSingleDataByIDByDst = _buffData.ToDictionary(
+            x => x.Key,
+            x => x.Value.OfType<BuffRemoveSingleEvent>()
                 .GroupBy(y => y.To)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );

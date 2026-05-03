@@ -1199,3 +1199,20 @@ function getPhasesForSelectedEncounter(phases, encounters) {
     }
     return phases;
 }
+
+function playerIsRunningHealingExtension(playerData) {
+    if (!logData.usedExtensions) {
+        return false;
+    }
+    for (var j = 0; j < logData.usedExtensions.length; j++) {
+        var usedExtension = logData.usedExtensions[j];
+        if (!usedExtension.includes("Healing Stats")) {
+            continue;
+        }
+        var playersRunning = logData.playersRunningExtensions[j];
+        if (playersRunning.includes(playerData.name)) {
+            return true;
+        }
+    }
+    return false;
+}

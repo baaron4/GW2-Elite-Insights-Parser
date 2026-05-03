@@ -126,23 +126,23 @@ internal class River : HallOfChains
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(brokenKing))))
+            if (agentData.GetNPCsByID(TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(brokenKing))))
             {
                 return new StatueOfIce((int)TargetID.BrokenKing);
             }
-            if (agentData.GetNPCsByID(TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(soulEater))))
+            if (agentData.GetNPCsByID(TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(soulEater))))
             {
                 return new StatueOfDeath((int)TargetID.EaterOfSouls);
             }
-            if (agentData.GetNPCsByID(TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfFate))))
+            if (agentData.GetNPCsByID(TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfFate))))
             {
                 return new StatueOfDarkness((int)TargetID.EyeOfFate);
             }
-            if (agentData.GetNPCsByID(TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfJudgement))))
+            if (agentData.GetNPCsByID(TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfJudgement))))
             {
                 return new StatueOfDarkness((int)TargetID.EyeOfJudgement);
             }
-            if (agentData.GetNPCsByID(TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsDamagingDamage() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
+            if (agentData.GetNPCsByID(TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsNonZeroDamageEvent() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
             {
                 return new Dhuum((int)TargetID.Dhuum);
             }

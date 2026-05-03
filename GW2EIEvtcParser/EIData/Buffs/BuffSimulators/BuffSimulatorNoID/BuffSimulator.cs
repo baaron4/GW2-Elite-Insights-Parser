@@ -137,7 +137,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
     {
         _logic.Activate(BuffStack, id);
     }
-    public override void Reset(uint id, long toDuration)
+    public override void Deactivate(uint id, long toDuration)
     {
         _logic.Reset(BuffStack, id, toDuration);
     }

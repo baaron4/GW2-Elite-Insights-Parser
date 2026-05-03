@@ -67,7 +67,7 @@ internal class SuperKodanBrothers : Bjora
         if (logStartNPCUpdate != null)
         {
             AgentItem mainTarget = (agentData.GetNPCsByID(TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
-            CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
+            CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsCastEvent() && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
             if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
             {
                 startToUse = firstCast.Time;

@@ -1,8 +1,8 @@
 <template>
     <div v-if="buffs.length > 0">
-        <img v-if="outgoing" class="mb-1 icon" :src="UIIcons.QuestionMark"
+        <img v-if="outgoing" class="mb-1 icon" :src="UIIcons.QuestionMark" style="position: absolute; transform: translate(0px, -20px);"
             :data-original-title="tooltipExplOut" />
-        <img v-if="!outgoing" class="mb-1 icon" :src="UIIcons.QuestionMark"
+        <img v-if="!outgoing" class="mb-1 icon" :src="UIIcons.QuestionMark" style="position: absolute; transform: translate(0px, -20px);"
             :data-original-title="tooltipExplInc" />
         <div v-if="colPageCount > 0">
             <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="colStructure"></table-scroll-component>
@@ -62,7 +62,7 @@
     Vue.component("buff-volume-table-component", {
         props: ["buffs", "playerdata", "outgoing", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns), UIIconsComponent],
         data: function () {
             return {             
                 sortdata: {
@@ -163,9 +163,6 @@
             },
             tableid: function() {
                 return this.id;
-            },
-            UIIcons: function() {
-                return UIIcons;
             },
             tooltipExplInc: function () {
                 return `<ul style='text-align:left;margin-block-end: 0.3em;'>

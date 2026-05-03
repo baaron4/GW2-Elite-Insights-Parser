@@ -40,10 +40,14 @@ internal class BuffDto : IDItemDto
                 }
             }
             Description = "";
-            foreach (string desc in descriptions)
+            for (var i = 0; i < descriptions.Count; i ++)
             {
-                Description += desc + "<br>";
+                Description += descriptions[i] + (i < descriptions.Count - 1 ? "<br>" : "");
             }
+        } 
+        else
+        {
+            Description = "ID: " + buff.ID;
         }
     }
 

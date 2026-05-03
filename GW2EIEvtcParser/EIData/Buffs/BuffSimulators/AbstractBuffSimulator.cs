@@ -77,6 +77,6 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
     public abstract void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID);
 
     public abstract void Activate(uint stackID);
-    public abstract void Reset(uint stackID, long toDuration);
+    public abstract void Deactivate(uint stackID, long toDuration);
 }
 

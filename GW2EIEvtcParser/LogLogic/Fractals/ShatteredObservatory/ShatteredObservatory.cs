@@ -28,7 +28,7 @@ internal abstract class ShatteredObservatory : FractalLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
-        AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
+        AddFractalScaleEvent(gw2Build, evtcVersion, combatData, new List<(ulong, byte)>
         {
             ( GW2Builds.July2017ShatteredObservatoryRelease, 100),
             ( GW2Builds.September2020SunquaPeakRelease, 99),

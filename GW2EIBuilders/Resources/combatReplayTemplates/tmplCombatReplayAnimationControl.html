@@ -63,7 +63,7 @@
     Vue.component("combat-replay-animation-control-component", {
         props: ["light", "animated", "range"],
         template: `${template}`,
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, UIIconsComponent],
         data: function () {
             return {
                 selectedSpeed: 1,

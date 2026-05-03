@@ -341,7 +341,7 @@ internal class Dhuum : HallOfChains
         var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100);
-        var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApply() && x.SkillID == DhuumPlayerToSoulTrackBuff)
+        var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == DhuumPlayerToSoulTrackBuff)
             .Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), agentData.GetAgent(x.DstAgent, x.Time)))
             .Where(x => x.Item1.IsPlayer)
             .GroupBy(x => x.Item2)

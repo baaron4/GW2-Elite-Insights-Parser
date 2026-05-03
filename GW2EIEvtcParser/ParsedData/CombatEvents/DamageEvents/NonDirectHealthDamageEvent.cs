@@ -18,10 +18,27 @@ public class NonDirectHealthDamageEvent : HealthDamageEvent
         AgainstDowned = evtcItem.Pad1 == 1;
     }
 
+    internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, DamageResult result) : base(evtcItem, agentData, skillData)
+    {
+        HealthDamage = evtcItem.BuffDmg;
+
+        IsLifeLeech = result == DamageResult.BuffNotCycle_DamageToTargetOnHit || result == DamageResult.BuffNotCycle_DamageToTargetOnStackRemove;
+        AgainstDowned = evtcItem.IsOffcycle == 1;
+        IsAbsorbed = result == DamageResult.DirectOrBuffAbsorb || result == DamageResult.DirectOrBuffInvert;
+        ShieldDamage = evtcItem.IsShields > 0 ?
+            evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : HealthDamage
+            : 
+            0;
+        HasHit = result == DamageResult.BuffCycle || result == DamageResult.BuffNotCycle || 
+            result == DamageResult.BuffNotCycle_DamageToSourceOnHit || IsLifeLeech;
+    }
+
     internal override void MakeIntoAbsorbed()
     {
         HasHit = false;
+        IsLifeLeech = false;
         IsAbsorbed = true;
+
         HealthDamage = 0;
         ShieldDamage = 0;
     }

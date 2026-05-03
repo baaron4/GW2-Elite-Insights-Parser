@@ -64,6 +64,7 @@
     Vue.component("dps-graph-mode-selector-component", {
         props: ['data', 'phaseduration', 'phasehassubphases', 'ignorebreakbar', "column"],
         template: `${template}`,
+        mixins: [UIIconsComponent],
         mounted() {
             var _this = this;
             $('#customDPS').on("input ", function () {
@@ -83,9 +84,6 @@
             hasBreakbarDamage: function() {
                 return !this.ignorebreakbar && logData.hasBreakbarDamage;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>

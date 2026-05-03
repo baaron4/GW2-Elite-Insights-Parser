@@ -970,7 +970,7 @@ public static class EffectGUIDs
     public static readonly GUID HarvestTemplePurificationWaterProjectiles = new("F8F9628F58DA09438574D66424399151");
     public static readonly GUID HarvestTempleJormagFrostMeteorIceField = new("40C38381C43B184A885960714F9388D5");
     public static readonly GUID HarvestTempleJormagGraspOfJormagIndicator = new("3A39297503D1C542AFC16CB5C1D2D3F7"); // duration 2000
-    public static readonly GUID HarvestTemplePrimordusLavaSlamIndicator = new("EDA1C033B296404BA403E106F6F258C0");
+    public static readonly GUID HarvestTemplePrimordusLavaSlamHitIndicator = new("EDA1C033B296404BA403E106F6F258C0"); // duration 3333, effect when he hits the ground
     public static readonly GUID HarvestTemplePrimordusGeneralJawAttack = new("160CBAE34F4A2941885EB3F3CD6BB0C3");
     public static readonly GUID HarvestTemplePrimordusJawsOfDestructionIndicator = new("4D8CA1836969BD4BBF345719576ACAAF");
     public static readonly GUID HarvestTemplePrimordusJawsOfDestructionDamage = new("363F831AD54DB7489DFDC31F659B222E");

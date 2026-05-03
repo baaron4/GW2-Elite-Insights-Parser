@@ -62,7 +62,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
                     // means stack was not active between previous and cur
                     activeTime = 0;
                 }
-                else if (cur is BuffStackResetEvent bsre)
+                else if (cur is BuffStackDeactiveEvent bsre)
                 {
                     // means stack was active between previous and cur
                     activeTime += cur.Time - previousTime;

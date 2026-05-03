@@ -1,7 +1,13 @@
 <template>
     <div>
         <h3 v-for="player in players" :key="player.id" v-show="player.id === activeplayer"
-            class="text-center mt-2"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
+            class="text-center mt-2">
+            <img :alt="player.profession" class="icon" :src="player.icon">
+            {{player.name}}       
+            <img v-if="playerIsRunningHealingExtension(player)"
+                            :src="UIIcons.GreenFlag" alt="Complete"
+                            class="icon" data-original-title="Complete Healing Data">
+        </h3> 
         <ul class="nav nav-tabs" v-show="activeplayer > -1">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
@@ -91,6 +97,7 @@
     }
     Vue.component("player-healing-stats-component", {
         props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
+        mixins: [extensionPresentComponent, UIIconsComponent],
         template: `${template}`,
         data: function () {
             return {

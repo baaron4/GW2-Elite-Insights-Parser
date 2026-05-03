@@ -638,7 +638,7 @@ public class EvtcParser
     /// </summary>
     /// <param name="reader">Reads binary values from the evtc.</param>
     /// <returns><see cref="CombatItem"/></returns>
-    private static CombatItem ReadCombatItem(BinaryReader reader)
+    private CombatItem ReadCombatItem(BinaryReader reader)
     {
         // 8 bytes: time
         long time = reader.ReadInt64();
@@ -716,7 +716,7 @@ public class EvtcParser
         // Add combat
         return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillID,
             srcInstid, dstInstid, srcMasterInstid, 0, iff, buff, result, isActivation, isBuffRemove,
-            isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, 0);
+            isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, 0, _evtcVersion);
     }
 
     /// <summary>
@@ -725,7 +725,7 @@ public class EvtcParser
     /// </summary>
     /// <param name="reader">Reads binary values from the evtc.</param>
     /// <returns><see cref="CombatItem"/></returns>
-    private static CombatItem ReadCombatItemRev1(BinaryReader reader)
+    private CombatItem ReadCombatItemRev1(BinaryReader reader)
     {
         // 8 bytes: time
         long time = reader.ReadInt64();
@@ -800,7 +800,7 @@ public class EvtcParser
         // Add combat
         return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillID,
             srcInstid, dstInstid, srcMasterInstid, dstmasterInstid, iff, buff, result, isActivation, isBuffRemove,
-            isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, pad);
+            isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, pad, _evtcVersion);
     }
 
     /// <summary>
@@ -861,16 +861,7 @@ public class EvtcParser
 
             if (combatItem.IsStateChange == StateChange.ArcBuild)
             {
-                EvtcVersionEvent oldEvent = _evtcVersion;
-                try
-                {
-                    _evtcVersion = new EvtcVersionEvent(combatItem);
-                }
-                catch
-                {
-                    _evtcVersion = oldEvent;
-                }
-
+                _evtcVersion.SetFromCombatItem(combatItem);
                 continue;
             }
 

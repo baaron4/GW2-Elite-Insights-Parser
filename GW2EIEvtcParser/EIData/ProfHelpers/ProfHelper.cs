@@ -149,7 +149,9 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
-            .UsingOverridenDurationChecker(0)
+            .UsingChecker((ba, combatData, agentData, skillData) => {
+                return !combatData.GetBuffRemoveSingleDataByIDByDst(RelicOfTheClaw, ba.To).Any(x => Math.Abs(x.Time - ba.Time) < ServerDelayConstant);
+            })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
             .UsingDisableWithMissileData()

@@ -180,7 +180,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         if (logStartNPCUpdate != null)
         {
             long enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
-            var firstFixation = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == FixatedKela);
+            var firstFixation = combatData.FirstOrDefault(x => x.IsBuffApplyEvent() && x.SkillID == FixatedKela);
             // If fixation is missing or first seen fixation is after boss enters combat, fallback to enterCombatTime, log will be seen as late start
             if (firstFixation == null || firstFixation.Time > enterCombatTime)
             {
@@ -716,7 +716,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             var kela = kelas.FirstOrDefault(x => x.InAwareTimes(croc));
             if (kela != null)
             {
-                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
+                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamageEvent() && x.DstMatchesAgent(croc) && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill);
                 foreach (CombatItem item in items)
                 {
                     item.OverrideSrcAgent(kela);
@@ -733,7 +733,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
             var kela = kelas.FirstOrDefault(x => x.InAwareTimes(eatableAgent));
             if (kela != null)
             {
-                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamage() && x.DstMatchesAgent(eatableAgent)
+                IEnumerable<CombatItem> items = combatData.Where(x => x.IsDamageEvent() && x.DstMatchesAgent(eatableAgent)
                     && x.SrcInstid == 0 && x.SkillID == ArcDPSGenericKill
                     && x.IFF == IFF.Foe);
                 foreach (CombatItem item in items)

@@ -99,7 +99,7 @@ internal class Golem : LogLogic
         foreach (CombatItem c in combatData)
         {
             // redirect all attacks to the main golem
-            if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamage(extensions))
+            if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamageEvent(extensions))
             {
                 c.OverrideDstAgent(target);
             }

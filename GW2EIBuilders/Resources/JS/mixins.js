@@ -87,9 +87,6 @@ const playerHeaderComponent = {
         phase: function () {
             return logData.phases[this.phaseindex];
         },
-        UIIcons: function () {
-            return UIIcons;
-        }
     }
 };
 
@@ -316,6 +313,22 @@ var buffComponent = {
         },
     }
 };
+
+var extensionPresentComponent = {
+    methods: {
+        playerIsRunningHealingExtension: function (playerData) {
+            return playerIsRunningHealingExtension(playerData);
+        }
+    }
+}
+
+var UIIconsComponent = {
+    computed: {
+        UIIcons: function () {
+            return UIIcons;
+        },
+    },
+}
 
 var sortedTableComponent = {
     methods:  {       

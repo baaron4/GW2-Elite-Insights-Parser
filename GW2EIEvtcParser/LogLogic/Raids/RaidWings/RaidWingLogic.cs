@@ -69,7 +69,13 @@ internal abstract class RaidWingLogic : RaidLogic
                 {
                     if (encounterPhase.IntersectsWindow(player.FirstAware, player.LastAware) && player.HasBuff(log, downAndOutID, encounterPhase.End, ParserHelper.ServerDelayConstant))
                     {
-                        instanceBuffs.Add(new InstanceBuff(log.Buffs.BuffsByIDs[downAndOutID], 1, mainPhase));
+                        // Loss is delayed and thus does not match success time of the encounter
+                        var apply = log.CombatData.GetBuffApplyDataByIDByDst(downAndOutID, player.EnglobingAgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
+                        instanceBuffs.Add(new InstanceBuff(log.Buffs.BuffsByIDs[downAndOutID], 1, mainPhase, apply != null ? 
+                            apply.AppliedDuration - (encounterPhase.End - apply.Time) 
+                            :  
+                            0
+                         ));
                         break;
                     }
                 }

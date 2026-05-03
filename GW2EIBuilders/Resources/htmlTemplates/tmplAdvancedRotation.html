@@ -199,7 +199,7 @@
     Vue.component("advancedrotation-component", {
         props: ["phaseindex", "light", "actorindex", "target"],
         template: `${template}`,
-        mixins: [graphComponent],
+        mixins: [graphComponent, UIIconsComponent],
         watch: {
             light: {
                 handler: function () {

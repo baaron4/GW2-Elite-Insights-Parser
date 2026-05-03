@@ -60,7 +60,7 @@
 
     Vue.component("player-component", {
         props: ["players", "phaseindex"],
-        mixins: [encounterPhaseComponent, playerHeaderComponent],
+        mixins: [encounterPhaseComponent, playerHeaderComponent, UIIconsComponent],
         template: `${template}`,
         methods: {
             select: function (id) {

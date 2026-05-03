@@ -32,6 +32,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all =
     [ "PowerDamageTakenCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a72b45873f4ccca70901d327d758f6672", null ],
     [ "ReceivedCrowdControl", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a6845d734cd8eb77c11c3d865bd377fc2", null ],
     [ "ReceivedCrowdControlDuration", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aacd1c53fd8ca69668af2e220cd2d8b2d", null ],
+    [ "RemovedStunDuration", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#abc902e88f0d8b10a29932ed60af383a4", null ],
     [ "StrikeDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a4b6d48a8edc223bf76599cbdef13aebf", null ],
-    [ "StrikeDamageTakenCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a184a31c7c99ccd522aad6c3ed4d11f81", null ]
+    [ "StrikeDamageTakenCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a184a31c7c99ccd522aad6c3ed4d11f81", null ],
+    [ "StunBreak", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a1835626d31e923857b76e1239bf95557", null ]
 ];

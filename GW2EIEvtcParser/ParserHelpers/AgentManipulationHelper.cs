@@ -22,7 +22,7 @@ public static class AgentManipulationHelper
                 continue;
             }
             // redirect damage events
-            if (cbt.IsDamage(extensions))
+            if (cbt.IsDamageEvent(extensions))
             {
                 // only redirect incoming damage
                 if (cbt.DstMatchesAgent(src, extensions))

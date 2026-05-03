@@ -335,7 +335,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return friendlies.Distinct().ToList();
     }
 
-    private void HandleDeimosAndItsGadgets(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private void HandleDeimosAndItsGadgets(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
         var targetableEvents = new List<TargetableEvent>();
@@ -347,7 +347,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         foreach (var deimos in Targets.Where(x => x.IsSpecies(TargetID.Deimos)))
         {
             (AgentItem? deimosStructBody, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) = Deimos.FindDeimos10PercentBodyStructWithAttackTargets(deimos, logData, agentData, combatData, attackTargetEvents, targetableEvents);
-            Deimos.HandleDeimosAndItsGadgets(deimos, deimosStructBody, gadgetAgents, agentData, combatData, extensions, deimos10PercentTargetable, notTargetable + 1000);
+            Deimos.HandleDeimosAndItsGadgets(deimos, deimosStructBody, gadgetAgents, agentData, combatData, extensions, evtcVersion, deimos10PercentTargetable, notTargetable + 1000);
         }
     }
 
@@ -359,7 +359,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Deimos.RenameTargetSauls(Targets);
-        HandleDeimosAndItsGadgets(logData, agentData, combatData, extensions);
+        HandleDeimosAndItsGadgets(logData, agentData, combatData, extensions, evtcVersion);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)

@@ -110,7 +110,7 @@ internal class Deimos : BastionOfThePenitent
                 (evt, from, to) =>
                 {
                     // Only keep damage events from arms
-                    if (from != mainBody && !evt.IsDamage())
+                    if (from != mainBody && !evt.IsDamageEvent())
                     {
                         return false;
                     }
@@ -236,7 +236,7 @@ internal class Deimos : BastionOfThePenitent
         long start = long.MinValue;
         long genericStart = GetGenericLogOffset(logData);
         // enter combat
-        CombatItem? spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == BuffRemove.All && x.SkillID == SpawnProtection);
+        CombatItem? spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemoveAllEvent() && x.SkillID == SpawnProtection);
         if (spawnProtectionRemove != null)
         {
             start = Math.Max(start, spawnProtectionRemove.Time);
@@ -245,7 +245,7 @@ internal class Deimos : BastionOfThePenitent
                 AgentItem? shackledPrisoner = GetShackledPrisonerFirstOrDefault(agentData, combatData);
                 if (shackledPrisoner != null)
                 {
-                    CombatItem? firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
+                    CombatItem? firstGreen = combatData.FirstOrDefault(x => x.IsBuffApplyEvent() && x.SkillID == DeimosSelectedByGreen);
                     CombatItem? firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
                     if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                     {
@@ -334,7 +334,7 @@ internal class Deimos : BastionOfThePenitent
 
                 var notTargetable = targetableEvents.FirstOrDefault(x => x.Time >= firstTargetable.Time && x.Src.Is(firstTargetable.Src) && !x.Targetable);
                 long upperThreshold = notTargetable != null ? notTargetable.Time : logData.EvtcLogEnd;
-                var armStructs = combatData.Where(x => x.Time >= targetableTime && x.Time <= upperThreshold && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0).Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
+                var armStructs = combatData.Where(x => x.Time >= targetableTime && x.Time <= upperThreshold && x.IsDamageEvent() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0).Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
                 gadgetsAgents.UnionWith(armStructs);
                 foreach (var armStruct in gadgetsAgents)
                 {
@@ -349,10 +349,10 @@ internal class Deimos : BastionOfThePenitent
         return (null, gadgetsAgents, long.MaxValue, deimos.LastAware);
     }
 
-    internal static void HandleDeimosAndItsGadgets(SingleActor deimos, AgentItem? deimosStructBody, HashSet<AgentItem> gadgetAgents, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, long structStartTime, long lastAware)
+    internal static void HandleDeimosAndItsGadgets(SingleActor deimos, AgentItem? deimosStructBody, HashSet<AgentItem> gadgetAgents, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion, long structStartTime, long lastAware)
     {
         // invul correction
-        CombatItem? invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == Determined762);
+        CombatItem? invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApplyEvent() && x.SkillID == Determined762);
         invulApp?.OverrideValue((int)(deimos.LastAware - invulApp.Time));
         deimos.OverrideName("Deimos");
         var originalLastAware = deimos.AgentItem.LastAware;
@@ -365,13 +365,13 @@ internal class Deimos : BastionOfThePenitent
             // Add custom spawn event
             if (!originalDeimosSpawnRelatedEvents.Any(x => x.IsStateChange == StateChange.Spawn))
             {
-                combatData.Add(new CombatItem(deimos.FirstAware, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0));
+                combatData.Add(new CombatItem(deimos.FirstAware, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0, evtcVersion));
             }
             if (!originalDeimosSpawnRelatedEvents.Any(x => x.IsStateChange == StateChange.Despawn))
             {
-                combatData.Add(new CombatItem(originalLastAware, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Despawn, 0, 0, 0, 0));
+                combatData.Add(new CombatItem(originalLastAware, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Despawn, 0, 0, 0, 0, evtcVersion));
             }
-            combatData.Add(new CombatItem(structStartTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0));
+            combatData.Add(new CombatItem(structStartTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)StateChange.Spawn, 0, 0, 0, 0, evtcVersion));
             combatData.SortByTime();
         }
     }
@@ -404,7 +404,7 @@ internal class Deimos : BastionOfThePenitent
         else
         {
             // Deimos gadgets via legacy, when attack targets fail
-            CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamage());
+            CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamageEvent());
             if (armDeimosDamageEvent != null)
             {
                 var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
@@ -412,13 +412,13 @@ internal class Deimos : BastionOfThePenitent
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
                     gadgetAgents = [.. deimosGadgets];
-                    deimosStructBody = gadgetAgents.FirstOrDefault(agent => !combatData.Any(evt => (evt.SkillID == DemonicShockWaveRight || evt.SkillID == DemonicShockWaveCenter || evt.SkillID == DemonicShockWaveLeft) && evt.IsDamage() && evt.SrcMatchesAgent(agent)));
+                    deimosStructBody = gadgetAgents.FirstOrDefault(agent => !combatData.Any(evt => (evt.SkillID == DemonicShockWaveRight || evt.SkillID == DemonicShockWaveCenter || evt.SkillID == DemonicShockWaveLeft) && evt.IsDamageEvent() && evt.SrcMatchesAgent(agent)));
                     deimos10PercentTime = (deimos10PercentTargetable >= deimos.LastAware ? deimos10PercentTargetable : deimos.LastAware);
                 }
             }
         }
         //
-        HandleDeimosAndItsGadgets(deimos, deimosStructBody, gadgetAgents, agentData, combatData, extensions, deimos10PercentTime, logData.LogEnd);
+        HandleDeimosAndItsGadgets(deimos, deimosStructBody, gadgetAgents, agentData, combatData, extensions, evtcVersion, deimos10PercentTime, logData.LogEnd);
         RenameTargetSauls(Targets);
     }
 

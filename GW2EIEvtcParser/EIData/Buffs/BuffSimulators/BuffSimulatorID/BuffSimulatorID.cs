@@ -120,7 +120,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
         }
     }
 
-    public override void Reset(uint stackID, long toDuration)
+    public override void Deactivate(uint stackID, long toDuration)
     {
         BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Reset has failed");
         toDisable.Disable();
