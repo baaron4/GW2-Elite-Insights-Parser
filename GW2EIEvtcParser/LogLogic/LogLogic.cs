@@ -117,10 +117,10 @@ public abstract class LogLogic
                 ),
                 new MechanicGroup(
                     [
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", MechanicSeverity.P0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", MechanicSeverity.P0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", MechanicSeverity.P0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", MechanicSeverity.P0, 0),
                         new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), "Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...) ", MechanicSeverity.P0, 0),
                         new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), "Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked", MechanicSeverity.P0, 0),
                     ]
