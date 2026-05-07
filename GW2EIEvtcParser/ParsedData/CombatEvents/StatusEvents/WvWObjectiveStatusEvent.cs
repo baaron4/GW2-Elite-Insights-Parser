@@ -1,4 +1,5 @@
-﻿using static GW2EIEvtcParser.WvWHelper;
+﻿using System.Numerics;
+using static GW2EIEvtcParser.WvWHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -51,6 +52,15 @@ public class WvWObjectiveStatusEvent
             ownership = ObjectiveOwnership.Green;
         }
         return _objectiveData.GetIcon(ownership);
+    }
+
+    public Vector3 GetPosition()
+    {
+        if (_objectiveData == null)
+        {
+            return new Vector3();
+        }
+        return new (_objectiveData.Position.X, _objectiveData.Position.Y, _objectiveData.Position.Z);
     }
 
 }

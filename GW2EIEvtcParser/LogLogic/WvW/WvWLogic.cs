@@ -363,4 +363,25 @@ internal class WvWLogic : LogLogic
     {
         return new[] { TargetID.WorldVersusWorld };
     }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
+        foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
+        {
+            var position = objectiveStatusEvent.GetPosition();
+            var positionConnector = new PositionConnector(position);
+            for (var i = 0; i < objectiveStatusEvent.Owners.Count - 1; i++)
+            {
+                var (TeamID, Time) = objectiveStatusEvent.Owners[i];
+                var nextOwner = objectiveStatusEvent.Owners[i + 1];
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, nextOwner.Time), positionConnector));
+            }
+            {
+                var (TeamID, Time) = objectiveStatusEvent.Owners[^1];
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, log.LogData.LogEnd), positionConnector));
+            }
+        }
+    }
 }
