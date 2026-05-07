@@ -66,6 +66,31 @@ namespace GW2EIJSON;
 /// </summary>
 public class JsonWvWMapData
 {
+    public class JsonWvWObjectiveData
+    {
+        /// <summary>
+        /// ID of the map the objective is attached to
+        /// </summary>
+        public int MapID;
+        /// <summary>
+        /// ID of the objective
+        /// </summary>
+        public int ObjectiveID;
+        /// <summary>
+        /// Type of the objective in: \n
+        /// "Camp" \n
+        /// "Tower" \n
+        /// "Keep" \n
+        /// "Stonemist Castle"
+        /// </summary>
+        public string ObjectiveType = "";
+        /// <summary>
+        /// Array of [TeamID, Time] representing the current ownership of the objective between current and next. \n
+        /// If last element, ownership did not change until the end of the log.
+        /// </summary>
+        public List<long[]> Owners = [];
+    }
+
     /// <summary>
     /// Red Team's shard ID
     /// </summary>
@@ -91,4 +116,6 @@ public class JsonWvWMapData
     /// Green Team's team ID, can be 0 if green team is not present in the log
     /// </summary>
     public uint GreenTeamID;
+
+    public List<JsonWvWObjectiveData> ObjectiveData = [];
 }

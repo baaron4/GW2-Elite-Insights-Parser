@@ -21,6 +21,22 @@ public static class WvWHelper
         StonemistCastle
     }
 
+    public static string GetObjectiveTypeName(this ObjectiveType value)
+    {
+        switch (value)
+        {
+            case ObjectiveType.Camp:
+                return "Camp";
+            case ObjectiveType.Tower:
+                return "Tower";
+            case ObjectiveType.Keep:
+                return "Camp";
+            case ObjectiveType.StonemistCastle:
+                return "Stonemist Castle";
+        }
+        return "None";
+    }
+
     // To be filled with neutral, red, green, blue icon versions for each type
     private static readonly Dictionary<ObjectiveType, Dictionary<ObjectiveOwnership, string>> TypeIconsPerOwner = [];
 

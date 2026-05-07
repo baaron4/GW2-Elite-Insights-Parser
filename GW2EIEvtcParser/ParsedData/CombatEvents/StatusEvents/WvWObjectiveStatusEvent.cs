@@ -8,6 +8,8 @@ public class WvWObjectiveStatusEvent
     public readonly int MapID;
     public readonly int ObjectiveID;
 
+    public ObjectiveType ObjectiveType => _objectiveData != null ? _objectiveData.Type : ObjectiveType.Unknown;
+
     public readonly List<(uint TeamID, long Time)> Owners = [];
 
     private readonly WvWObjectiveData? _objectiveData;
