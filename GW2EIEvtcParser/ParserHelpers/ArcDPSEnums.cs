@@ -328,6 +328,7 @@ public static class ArcDPSEnums
         BuffRemoveAll = 72,
         Transformation = 73,
         WvWTeams = 74,
+        WvWObjectiveStatus = 75,
         Unknown
     };
 

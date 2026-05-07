@@ -518,6 +518,23 @@ internal static class CombatEventFactory
             case StateChange.WvWTeams:
                 metaDataEvents.WvWTeamsEvent = new WvWTeamsEvent(stateChangeEvent);
                 break;
+            case StateChange.WvWObjectiveStatus:
+                var wvwObjectiveStatus = new WvWObjectiveStatusEvent(stateChangeEvent);
+                if (wvwObjectiveStatus.IsUnknown)
+                {
+                    break;
+                }
+                long key = (wvwObjectiveStatus.MapID << 16) + wvwObjectiveStatus.ObjectiveID;
+                if (statusEvents.WvWObjectiveStatusEventsByKey.TryGetValue(key, out var existingStatus))
+                {
+                    existingStatus.AddOwners(wvwObjectiveStatus);
+                } 
+                else
+                {
+                    statusEvents.WvWObjectiveStatusEventsByKey[key] = wvwObjectiveStatus;
+                    statusEvents.WvWObjectiveStatusEvents.Add(wvwObjectiveStatus);
+                }
+                break;
             default:
                 break;
         }

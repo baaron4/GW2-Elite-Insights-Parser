@@ -22,6 +22,9 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents = [];
 
+    public readonly Dictionary<long, WvWObjectiveStatusEvent> WvWObjectiveStatusEventsByKey = [];
+    public readonly List<WvWObjectiveStatusEvent> WvWObjectiveStatusEvents = [];
+
     public readonly Dictionary<AgentItem, List<BreakbarStateEvent>> BreakbarStateEvents = [];
     public readonly Dictionary<AgentItem, List<BreakbarPercentEvent>> BreakbarPercentEvents = [];
 
