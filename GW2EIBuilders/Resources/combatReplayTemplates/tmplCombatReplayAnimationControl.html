@@ -78,6 +78,7 @@
                     if (animator.mainCanvas) {
                         const encounterPhase = this.encounterPhase;
                         this.updateAnimatorTimes(encounterPhase);
+                        this.resetViewpoint();
                     }
                 },
                 deep: true
@@ -177,7 +178,7 @@
                 this.backwards = animator.toggleBackwards();
             },
             resetViewpoint: function () {
-                animator.resetViewpoint();
+                animator.resetViewpoint(this.phases[0].eiid);
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();

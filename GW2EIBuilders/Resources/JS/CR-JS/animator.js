@@ -269,6 +269,7 @@ class Animator {
         // time
         this.prevTime = 0;
         this.times = [];
+        this.defaultViewpoints = [];
         // simulation params
         this.speed = 1;
         this.backwards = false;
@@ -325,6 +326,16 @@ class Animator {
             }
             if (options.actors) {
                 this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
+            }
+            if (options.defaultViewpoints) {
+                for (let i = 0; i < options.defaultViewpoints.length; i++) {
+                    this.defaultViewpoints.push({
+                        tx: options.defaultViewpoints[i][0],
+                        ty: options.defaultViewpoints[i][1],
+                        s: options.defaultViewpoints[i][2],
+                        eiid: options.defaultViewpoints[i][3]
+                    });
+                }
             }
             if (!replaceImgur) {
                 downEnemyIcon.crossOrigin = "Anonymous";
@@ -863,31 +874,63 @@ class Animator {
         animateCanvas(noUpdateTime);
     }
 
-    resetViewpoint() {
+    resetViewpoint(eiid = 0) {
         var canvas = this.mainCanvas;
         var ctx = this.mainContext;
         var bgCtx = this.bgContext;
 
-        this.lastX = canvas.width / 2;
-        this.lastY = canvas.height / 2;
         this.mouseDown = null;
         this.dragged = false;
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        let defaultViewpoint = this.defaultViewpoints.filter(x => x.eiid === eiid)[0];
+        this.lastX = canvas.width / 2;
+        this.lastY = canvas.height / 2;
+        if (defaultViewpoint) {
+            var x = -canvas.width * defaultViewpoint.tx / 100;
+            var y = -canvas.height * defaultViewpoint.ty / 100;
+            
+            ctx.setTransform(1, 0, 0, 1, x, y);
+            bgCtx.setTransform(1, 0, 0, 1, x, y);
+        } else {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+        }
         ctx.scale(resolutionMultiplier, resolutionMultiplier);
-        bgCtx.setTransform(1, 0, 0, 1, 0, 0);
         bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
+        if (defaultViewpoint) {
+            this._setScaleOnPoint(defaultViewpoint.s, 0, 0);
+        }
         this.needBGUpdate = true;
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
         }
     }
+    _setScaleOnPoint(factor, ptX, ptY) {
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
 
+        const pt = ctx.transformedPoint(ptX, ptY);
+        ctx.translate(pt.x, pt.y);
+        bgCtx.translate(pt.x, pt.y);
+        ctx.scale(factor, factor);
+        if ((50 / (InchToPixel * this.scale) < 10)) {
+            ctx.scale(1.0 / factor, 1.0 / factor);
+            factor = 1.0;
+        }
+        ctx.translate(-pt.x, -pt.y);
+        bgCtx.scale(factor, factor);
+        bgCtx.translate(-pt.x, -pt.y);
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
     _initMouseEvents() {
-        var _this = this;
-        var canvas = this.mainCanvas;
-        var ctx = this.mainContext;
-        var bgCtx = this.bgContext;
-        var pickCtx = this.pickContext;
+        const _this = this;
+        const canvas = this.mainCanvas;
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
+        const pickCtx = this.pickContext;
 
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
@@ -906,8 +949,8 @@ class Animator {
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
             if (_this.mouseDown) {
-                var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
-                var downPt = _this.mouseDown.pt;
+                const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
+                const downPt = _this.mouseDown.pt;
                 ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
                 bgCtx.translate(pt.x - downPt.x, pt.y - downPt.y);
                 _this.needBGUpdate = true;
@@ -920,16 +963,16 @@ class Animator {
         document.body.addEventListener('mouseup', function (evt) {
             if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
                 _this._drawPickCanvas();
-                var downPt = {
+                const downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
                     y: Math.round(_this.lastY * resolutionMultiplier)
                 };
-                var pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
+                const pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
                 uint32ToUint8[0] = pickedColor[0];
                 uint32ToUint8[1] = pickedColor[1];
                 uint32ToUint8[2] = pickedColor[2];
                 uint32ToUint8[3] = 0;
-                var actorID = uint32[0];
+                const actorID = uint32[0];
                 _this.selectActor(actorID, true);
             }
             _this.mouseDown = null;
@@ -937,24 +980,10 @@ class Animator {
 
         var zoom = function (evt) {
             evt.preventDefault();
-            var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
+            const delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
             if (delta) {
-                var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
-                ctx.translate(pt.x, pt.y);
-                bgCtx.translate(pt.x, pt.y);
-                var factor = Math.pow(1.1, delta);
-                ctx.scale(factor, factor);
-                if ((50 / (InchToPixel * _this.scale) < 10)) {            
-                    ctx.scale( 1.0 / factor, 1.0 / factor);
-                    factor = 1.0;
-                }
-                ctx.translate(-pt.x, -pt.y);
-                bgCtx.scale(factor, factor);
-                bgCtx.translate(-pt.x, -pt.y);
-                _this.needBGUpdate = true;
-                if (_this.animation === null) {
-                    animateCanvas(noUpdateTime);
-                }
+                const factor = Math.pow(1.1, delta);
+                _this._setScaleOnPoint(factor, _this.lastX, _this.lastY);
             }
         };
 
