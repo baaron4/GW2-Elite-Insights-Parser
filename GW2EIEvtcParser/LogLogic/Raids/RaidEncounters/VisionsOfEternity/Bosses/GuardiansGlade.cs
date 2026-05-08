@@ -129,7 +129,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         LogID |= 0x000001;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
             (1149, 1149),

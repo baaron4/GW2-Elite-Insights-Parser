@@ -54,7 +54,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         return name;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((1280, 1280),
             (-15454, -22004, 20326, 20076));

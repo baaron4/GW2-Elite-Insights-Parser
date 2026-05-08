@@ -51,7 +51,7 @@ internal class Ensolyss : Nightmare
         LogID |= 0x000003;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((366, 366),
                         (132, 1, 3012, 2881));

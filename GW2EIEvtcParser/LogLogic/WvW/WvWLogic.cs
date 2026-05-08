@@ -97,7 +97,7 @@ internal class WvWLogic : LogLogic
         return LogData.Mode.NotApplicable;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)

@@ -38,7 +38,7 @@ internal class River : HallOfChains
         LogID |= 0x000002;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1000, 387),

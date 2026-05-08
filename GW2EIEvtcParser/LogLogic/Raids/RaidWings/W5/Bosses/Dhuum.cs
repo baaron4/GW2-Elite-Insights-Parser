@@ -108,7 +108,7 @@ internal class Dhuum : HallOfChains
         LogID |= 0x000006;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1000, 899),

@@ -90,7 +90,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         LogID |= 0x000005;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1008, 1008),

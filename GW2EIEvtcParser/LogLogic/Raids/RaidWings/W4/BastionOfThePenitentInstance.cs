@@ -46,7 +46,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     {
         return "Bastion Of The Penitent";
     }
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((1920, 1080), (-15414, -9216, 22648, 12288));
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayBastionOfThePenitent, crMap));

@@ -33,7 +33,7 @@ internal class SunquaPeakInstance : SunquaPeak
         return "Sunqua Peak Fractal";
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((800, 800), (-12288, -12288, 12288, 12288));
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplaySunquaPeak, crMap));
