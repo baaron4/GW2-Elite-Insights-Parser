@@ -85,7 +85,7 @@ internal class Deimos : BastionOfThePenitent
         var crMap = new CombatReplayMap(
                         (765, 1000),
                         (-9542, 1932, -7004, 5250));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDeimos, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDeimos, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

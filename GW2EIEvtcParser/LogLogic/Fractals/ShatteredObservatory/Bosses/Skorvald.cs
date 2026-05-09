@@ -50,7 +50,7 @@ internal class Skorvald : ShatteredObservatory
         var crMap = new CombatReplayMap(
                         (987, 1000),
                         (-22267, 15295, -17227, 20275));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySkorvald, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySkorvald, crMap, parentMap);
         return crMap;
     }
 

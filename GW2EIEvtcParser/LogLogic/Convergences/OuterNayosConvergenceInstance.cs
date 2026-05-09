@@ -73,7 +73,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
     {
         var crMap = new CombatReplayMap((1800, 2000),
              (-15360, -15360, 15360, 15360)); // TODO Fix values
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOuterNayos, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOuterNayos, crMap, parentMap);
         return crMap;
     }
 

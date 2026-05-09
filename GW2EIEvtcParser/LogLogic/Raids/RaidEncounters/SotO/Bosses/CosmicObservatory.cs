@@ -83,7 +83,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         var crMap = new CombatReplayMap(
                         (1169, 1169),
                         (-1388, -779, 1991, 2610));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCosmicObservatory, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCosmicObservatory, crMap, parentMap);
         return crMap;
     }
 

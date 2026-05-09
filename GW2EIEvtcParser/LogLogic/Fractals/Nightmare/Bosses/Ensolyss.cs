@@ -55,7 +55,7 @@ internal class Ensolyss : Nightmare
     {
         var crMap = new CombatReplayMap((366, 366),
                         (132, 1, 3012, 2881));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap, parentMap);
         return crMap;
     }
 

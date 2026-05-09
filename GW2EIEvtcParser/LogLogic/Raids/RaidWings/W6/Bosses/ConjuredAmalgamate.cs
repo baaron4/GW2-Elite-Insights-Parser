@@ -62,7 +62,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         var crMap = new CombatReplayMap(
                         (544, 1000),
                         (-5064, -15030, -2864, -10830));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayConjuredAmalgamate, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayConjuredAmalgamate, crMap, parentMap);
         return crMap;
     }
 

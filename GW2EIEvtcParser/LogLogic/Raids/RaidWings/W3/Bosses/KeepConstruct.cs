@@ -61,7 +61,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var crMap = new CombatReplayMap(
                         (987, 1000),
                         (-5467, 8069, -2282, 11297));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKeepConstruct, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKeepConstruct, crMap, parentMap);
         return crMap;
     }
 

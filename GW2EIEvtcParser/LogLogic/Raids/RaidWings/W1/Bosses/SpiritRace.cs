@@ -39,23 +39,7 @@ internal class SpiritRace : SpiritVale
         var crMap = new CombatReplayMap(
                         (581, 1193),
                         (-11188, -13757, -4700, -436));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySpiritRun, crMap);
-
-        if (parentMap != null)
-        {
-            var xStart = crMap.TopX;
-            var parentXStart = parentMap.TopX;
-            var parentXEnd = parentMap.BottomX;
-            var percentX = (xStart - parentXStart) / (parentXEnd - parentXStart) * 100;
-            var yStart = crMap.BottomY;
-            var parentYStart = parentMap.BottomY;
-            var parentYEnd = parentMap.TopY;
-            var percentY = (yStart - parentYStart) / (parentYEnd - parentYStart) * 100;
-            var scaleX = 1 / ((crMap.TopX - crMap.BottomX) / (parentMap.TopX - parentMap.BottomX));
-            var scaleY = 1 / ((crMap.TopY - crMap.BottomY) / (parentMap.TopY - parentMap.BottomY));
-            // TODO put all this in a utility + handle situations where desired scale would be non uniform aka add padding
-            parentMap.AddDefaultViewpoint(percentX, percentY, Math.Min(scaleX, scaleY), LogID);
-        }
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySpiritRun, crMap, parentMap);
         return crMap;
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

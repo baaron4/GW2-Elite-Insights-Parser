@@ -112,7 +112,7 @@ internal class Qadim : MythwrightGambit
         var crMap = new CombatReplayMap(
                         (1000, 994),
                         (-11676, 8825, -3870, 16582));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayQadim, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayQadim, crMap, parentMap);
         return crMap;
     }
 

@@ -32,7 +32,7 @@ internal class Mordremoth : StoryInstance
         var crMap = new CombatReplayMap(
                         (899, 1172),
                         (-9059, 10171, -6183, 13149));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMordremoth, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMordremoth, crMap, parentMap);
         return crMap;
     }
 

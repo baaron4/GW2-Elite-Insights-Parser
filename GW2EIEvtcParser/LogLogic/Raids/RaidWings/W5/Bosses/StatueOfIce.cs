@@ -40,7 +40,7 @@ internal class StatueOfIce : HallOfChains
         var crMap = new CombatReplayMap(
                         (999, 890),
                         (2497, 5388, 7302, 9668));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfIce, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfIce, crMap, parentMap);
         return crMap;
     }
 

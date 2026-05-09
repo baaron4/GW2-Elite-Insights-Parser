@@ -82,7 +82,7 @@ internal class Matthias : SalvationPass
         var crMap = new CombatReplayMap(
                         (880, 880),
                         (-7248, 4585, -4625, 7207));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap, parentMap);
         return crMap;
     }
 

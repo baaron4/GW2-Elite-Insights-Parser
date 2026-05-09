@@ -136,7 +136,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         var crMap = new CombatReplayMap(
                         (1149, 1149),
                         (-2088, -6124, 2086, -1950));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap, parentMap);
         return crMap;
     }
 

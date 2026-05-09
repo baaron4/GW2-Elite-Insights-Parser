@@ -41,7 +41,7 @@ internal class StatueOfDeath : HallOfChains
         var crMap = new CombatReplayMap(
                         (710, 709),
                         (1306, -9381, 4720, -5968));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfDeath, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfDeath, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

@@ -172,7 +172,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         var crMap = new CombatReplayMap(
                         (1024, 1024),
                         (-844, -21845, 2055, -18946));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayHarvestTemple, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayHarvestTemple, crMap, parentMap);
         return crMap;
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

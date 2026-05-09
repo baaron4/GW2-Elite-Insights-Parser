@@ -237,7 +237,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
         var crMap = new CombatReplayMap(
                         (1000, 1000),
                         (-968, 7480, 4226, 12676));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayPeerlessQadim, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayPeerlessQadim, crMap, parentMap);
         return crMap;
     }
 

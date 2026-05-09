@@ -95,7 +95,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
         var crMap = new CombatReplayMap(
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOldLionsCourt, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOldLionsCourt, crMap, parentMap);
         return crMap;
     }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()

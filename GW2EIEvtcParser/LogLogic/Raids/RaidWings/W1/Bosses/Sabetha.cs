@@ -59,7 +59,7 @@ internal class Sabetha : SpiritVale
         var crMap = new CombatReplayMap(
                         (1000, 990),
                         (-8587, -162, -1601, 6753));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySabetha, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySabetha, crMap, parentMap);
         return crMap;
     }
 

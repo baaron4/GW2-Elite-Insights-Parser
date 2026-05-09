@@ -96,7 +96,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         var crMap = new CombatReplayMap(
                         (1803, 1918),
                         (-24798, -18014, -18164, -10932));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKainengOverlook, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKainengOverlook, crMap, parentMap);
         return crMap;
     }
 

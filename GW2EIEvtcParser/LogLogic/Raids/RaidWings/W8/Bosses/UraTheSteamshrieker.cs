@@ -117,7 +117,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var crMap = new CombatReplayMap(
                         (1746, 1860),
                         (2550, 6200, 9010, 13082));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayUraTheSteamshrieker, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayUraTheSteamshrieker, crMap, parentMap);
         return crMap;
     }
 

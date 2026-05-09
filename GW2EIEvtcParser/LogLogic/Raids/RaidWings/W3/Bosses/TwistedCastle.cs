@@ -42,7 +42,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         var crMap = new CombatReplayMap(
                         (774, 1000),
                         (-8058, -4321, 819, 7143));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap, parentMap);
         return crMap;
     }
 

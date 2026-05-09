@@ -38,7 +38,7 @@ internal class SuperKodanBrothers : Bjora
         var crMap = new CombatReplayMap(
                         (905, 789),
                         (-1013, -1600, 2221, 1416));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKodanBrothers, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKodanBrothers, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

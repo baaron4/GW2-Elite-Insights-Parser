@@ -47,7 +47,7 @@ internal class Gorseval : SpiritVale
         var crMap = new CombatReplayMap(
                         (957, 1000),
                         (-603, -6754, 3751, -2206));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGorseval, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGorseval, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

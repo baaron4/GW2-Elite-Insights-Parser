@@ -595,7 +595,10 @@ internal class Adina : TheKeyOfAhdashim
             {
                 arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
             }
-
+            if (parentMap != null)
+            {
+                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
+            }
         }
         catch (Exception)
         {

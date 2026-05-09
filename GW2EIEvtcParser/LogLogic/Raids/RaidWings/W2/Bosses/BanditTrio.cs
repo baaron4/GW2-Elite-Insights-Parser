@@ -89,7 +89,7 @@ internal class BanditTrio : SalvationPass
         var crMap = new CombatReplayMap(
                         (1000, 913),
                         (-2900, -12251, 2561, -7265));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayBanditTrio, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayBanditTrio, crMap, parentMap);
         return crMap;
     }
 

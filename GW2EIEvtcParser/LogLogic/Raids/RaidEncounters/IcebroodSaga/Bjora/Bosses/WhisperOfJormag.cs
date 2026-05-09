@@ -56,7 +56,7 @@ internal class WhisperOfJormag : Bjora
         var crMap = new CombatReplayMap(
                         (1682, 1682),
                         (-3287, -1772, 3313, 4828));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayWhisperOfJormag, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayWhisperOfJormag, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

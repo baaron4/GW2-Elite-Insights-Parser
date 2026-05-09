@@ -83,7 +83,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         var crMap = new CombatReplayMap(
                         (838, 639),
                         (1165, 540, 4194, 2850));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayAetherbladeHideout, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayAetherbladeHideout, crMap, parentMap);
         return crMap;
     }
 

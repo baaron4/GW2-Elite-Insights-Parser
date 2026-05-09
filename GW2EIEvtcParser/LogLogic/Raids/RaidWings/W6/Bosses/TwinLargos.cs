@@ -53,7 +53,7 @@ internal class TwinLargos : MythwrightGambit
         var crMap = new CombatReplayMap(
                         (765, 1000),
                         (10846, -3878, 18086, 5622));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwinLargos, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwinLargos, crMap, parentMap);
         return crMap;
     }
 

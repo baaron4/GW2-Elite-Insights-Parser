@@ -43,7 +43,7 @@ internal class MAMA : Nightmare
         var crMap = new CombatReplayMap(
                         (664, 407),
                         (1653, 4555, 5733, 7195));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMAMA, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMAMA, crMap, parentMap);
         return crMap;
     }
 

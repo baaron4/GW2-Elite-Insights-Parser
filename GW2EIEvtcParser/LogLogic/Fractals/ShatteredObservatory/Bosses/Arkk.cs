@@ -77,7 +77,7 @@ internal class Arkk : ShatteredObservatory
                         (-19231, -18137, -16591, -15677)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArkk, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArkk, crMap, parentMap);
         return crMap;
     }
 

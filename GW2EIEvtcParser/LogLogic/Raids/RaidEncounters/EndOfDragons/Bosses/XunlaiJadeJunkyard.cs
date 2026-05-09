@@ -99,7 +99,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         var crMap = new CombatReplayMap(
                         (1485, 1292),
                         (-7090, -2785, 3647, 6556));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap, parentMap);
         return crMap;
     }
 
