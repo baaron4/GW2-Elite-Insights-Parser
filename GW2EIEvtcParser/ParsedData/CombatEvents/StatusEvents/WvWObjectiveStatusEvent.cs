@@ -8,6 +8,8 @@ public class WvWObjectiveStatusEvent
     public readonly int MapID;
     public readonly int ObjectiveID;
 
+    public readonly uint AutoUpgradeProgress;
+
     public ObjectiveType ObjectiveType => _objectiveData != null ? _objectiveData.Type : ObjectiveType.Unknown;
 
     public readonly List<(uint TeamID, long Time)> Owners = [];
@@ -20,6 +22,7 @@ public class WvWObjectiveStatusEvent
     {
         MapID = evtcItem.Value;
         ObjectiveID = evtcItem.BuffDmg;
+        AutoUpgradeProgress = evtcItem.Pad;
         Owners.Add((evtcItem.SkillID, evtcItem.Time));
         _objectiveData = GetObjectiveData(MapID, ObjectiveID);
     }

@@ -40,6 +40,65 @@ public static class WvWHelper
         return "None";
     }
 
+    private static readonly Dictionary<ObjectiveType, IReadOnlyList<(uint Threshold, int Tier)>> TierThresholdPerType = new()
+    {
+        {
+            ObjectiveType.Camp, new List<(uint Threshold, int Tier)>()
+            {
+                (25, 3),
+                (20, 2),
+                (15, 1),
+            }
+        },
+        {
+            ObjectiveType.Tower, new List<(uint Threshold, int Tier)>()
+            {
+                (35, 3),
+                (20, 2),
+                (15, 1),
+            }
+        },
+        {
+            ObjectiveType.Keep, new List<(uint Threshold, int Tier)>()
+            {
+                (50, 3),
+                (30, 2),
+                (20, 1),
+            }
+        },
+        {
+            ObjectiveType.Castle, new List<(uint Threshold, int Tier)>()
+            {
+                (90, 3),
+                (60, 2),
+                (40, 1),
+            }
+        },
+    };
+
+    /// <summary>
+    /// Returns the tier of the objective for a given upgrade progress.
+    /// Will return -1 is not applicable.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="upgradeProgress"></param>
+    /// <returns></returns>
+    internal static int GetObjectiveTier(ObjectiveType type, uint upgradeProgress)
+    {
+        if (TierThresholdPerType.TryGetValue(type, out var thresholds))
+        {
+            foreach (var (Threshold, Tier) in thresholds)
+            {
+                if (Threshold >= upgradeProgress)
+                {
+                    return Tier;
+                }
+            }
+            return 0;
+        }
+        return -1;
+    }
+
     // To be filled with neutral, red, green, blue icon versions for each type
     private static readonly Dictionary<ObjectiveType, Dictionary<ObjectiveOwnership, string>> TypeIconsPerOwner = new() {
         {ObjectiveType.Camp, new() {
