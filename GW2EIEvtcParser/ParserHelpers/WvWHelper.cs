@@ -182,31 +182,31 @@ public static class WvWHelper
         {MapIDs.EternalBattleground, new()
         {
 
-            {6, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Speldan
-            {17, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Mendon
-            {18, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Anzalias
-            {1, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Red Overlook
-            {20, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Veloka
-            {19, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Ogrewatch
-            {5, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Pangloss
+            {6, new WvWObjectiveData(ObjectiveType.Camp, new(9841.05f, 13545.8f, -508.295f)) }, // Speldan
+            {17, new WvWObjectiveData(ObjectiveType.Tower, new(10256.6f, 13514.4f, -2015.34f)) }, // Mendon
+            {18, new WvWObjectiveData(ObjectiveType.Tower, new(10188.8f, 14082.3f, -1657.95f)) }, // Anzalias
+            {1, new WvWObjectiveData(ObjectiveType.Keep, new(10763.6f, 13655.8f, -2464.89f)) }, // Red Overlook
+            {20, new WvWObjectiveData(ObjectiveType.Tower, new(11090.4f, 13488.2f, -2569.23f)) }, // Veloka
+            {19, new WvWObjectiveData(ObjectiveType.Tower, new(10965.2f, 14054.6f, -1847.47f)) }, // Ogrewatch
+            {5, new WvWObjectiveData(ObjectiveType.Camp, new(11279.8f, 13736.8f, -835.691f)) }, // Pangloss
 
-            {8, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Umberglade
-            {22, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Bravost
-            {21, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Durios
-            {2, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Blue Valley
-            {15, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Langor
-            {16, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Quentin
-            {7, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Danelon
+            {8, new WvWObjectiveData(ObjectiveType.Camp, new(11565.5f, 14444.8f, -302.91f)) }, // Umberglade
+            {22, new WvWObjectiveData(ObjectiveType.Tower, new(11766.3f, 14793.5f, -2133.39f)) }, // Bravost
+            {21, new WvWObjectiveData(ObjectiveType.Tower, new(11156.4f, 14527.8f, -1622.95f)) }, // Durios
+            {2, new WvWObjectiveData(ObjectiveType.Keep, new(11496.5f, 15120.6f, -1786.97f)) }, // Blue Valley
+            {15, new WvWObjectiveData(ObjectiveType.Tower, new(11452.7f, 15490.7f, -2246.3f)) }, // Langor
+            {16, new WvWObjectiveData(ObjectiveType.Tower, new(10850.1f, 15224.4f, -1052.29f)) }, // Quentin
+            {7, new WvWObjectiveData(ObjectiveType.Camp, new(11037.9f, 15556.2f, -483.931f)) }, // Danelon
 
-            {4, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Golanta
-            {13, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Jerrifer
-            {14, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Klovan
-            {3, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Green Lowlands
-            {11, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Aldon
-            {12, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Wildcreek
-            {10, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Rogue
+            {4, new WvWObjectiveData(ObjectiveType.Camp, new(10202.6f, 15437.1f, -79.961f)) }, // Golanta
+            {13, new WvWObjectiveData(ObjectiveType.Tower, new(9805.96f, 15406.4f, -1659.98f)) }, // Jerrifer
+            {14, new WvWObjectiveData(ObjectiveType.Tower, new(10171.8f, 15081.8f, -495.673f)) }, // Klovan
+            {3, new WvWObjectiveData(ObjectiveType.Keep, new(9604.47f, 15129.9f, -906.09f)) }, // Green Lowlands
+            {11, new WvWObjectiveData(ObjectiveType.Tower, new(9413.84f, 14792.8f, -1313.37f)) }, // Aldon
+            {12, new WvWObjectiveData(ObjectiveType.Tower, new(9906.21f, 14624.6f, -1014.99f)) }, // Wildcreek
+            {10, new WvWObjectiveData(ObjectiveType.Camp, new(9570.97f, 14423.2f, -700f)) }, // Rogue
 
-            {9, new WvWObjectiveData(ObjectiveType.Castle, new()) }, // Stonemist Castle
+            {9, new WvWObjectiveData(ObjectiveType.Castle, new(10606.3f, 14580.3f, -1536.93f)) }, // Stonemist Castle
         } },
     };
 
