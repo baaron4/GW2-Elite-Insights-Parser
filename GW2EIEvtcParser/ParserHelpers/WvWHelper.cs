@@ -16,7 +16,7 @@ public static class WvWHelper
     {
         Unknown,
         Camp,
-        Ruin,
+        Ruins,
         Tower,
         Keep,
         Castle
@@ -30,8 +30,8 @@ public static class WvWHelper
                 return "Resource Camp";
             case ObjectiveType.Tower:
                 return "Tower";
-            case ObjectiveType.Ruin:
-                return "Ruin";
+            case ObjectiveType.Ruins:
+                return "Ruins";
             case ObjectiveType.Keep:
                 return "Camp";
             case ObjectiveType.Castle:
@@ -43,34 +43,34 @@ public static class WvWHelper
     // To be filled with neutral, red, green, blue icon versions for each type
     private static readonly Dictionary<ObjectiveType, Dictionary<ObjectiveOwnership, string>> TypeIconsPerOwner = new() {
         {ObjectiveType.Camp, new() {
-            {ObjectiveOwnership.Red, "" },
-            {ObjectiveOwnership.Green, "" },
-            {ObjectiveOwnership.Blue, "" },
-            {ObjectiveOwnership.None, "" },
+            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
+            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
+            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
+            {ObjectiveOwnership.None, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
         }},
-        {ObjectiveType.Ruin, new() {
-            {ObjectiveOwnership.Red, "" },
-            {ObjectiveOwnership.Green, "" },
-            {ObjectiveOwnership.Blue, "" },
-            {ObjectiveOwnership.None, "" },
+        {ObjectiveType.Ruins, new() {
+            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/52B43242E55961770D78B80ED77BC764F0E57BF2/1635237.png" },
+            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/52B43242E55961770D78B80ED77BC764F0E57BF2/1635237.png" },
+            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/52B43242E55961770D78B80ED77BC764F0E57BF2/1635237.png" },
+            {ObjectiveOwnership.None, "https://render.guildwars2.com/file/52B43242E55961770D78B80ED77BC764F0E57BF2/1635237.png" },
         }},
         {ObjectiveType.Tower, new() {
-            {ObjectiveOwnership.Red, "" },
-            {ObjectiveOwnership.Green, "" },
-            {ObjectiveOwnership.Blue, "" },
-            {ObjectiveOwnership.None, "" },
+            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
+            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
+            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
+            {ObjectiveOwnership.None, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
         }},
         {ObjectiveType.Keep, new() {
-            {ObjectiveOwnership.Red, "" },
-            {ObjectiveOwnership.Green, "" },
-            {ObjectiveOwnership.Blue, "" },
-            {ObjectiveOwnership.None, "" },
+            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
+            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
+            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
+            {ObjectiveOwnership.None, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
         }},
         {ObjectiveType.Castle, new() {
-            {ObjectiveOwnership.Red, "" },
-            {ObjectiveOwnership.Green, "" },
-            {ObjectiveOwnership.Blue, "" },
-            {ObjectiveOwnership.None, "" },
+            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
+            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
+            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
+            {ObjectiveOwnership.None, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
         }},
     };
 
@@ -112,11 +112,11 @@ public static class WvWHelper
             {52, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Godslore 
             {51, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Stargrove 
 
-            {64, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Baeur 
-            {65, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Orchard 
-            {63, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Battle 
-            {66, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Carver 
-            {62, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Lost Prayers 
+            {64, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Baeur 
+            {65, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Orchard 
+            {63, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Battle 
+            {66, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Carver 
+            {62, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Lost Prayers 
 
             {33, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Ascension
             {35, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Redbriar
@@ -138,11 +138,11 @@ public static class WvWHelper
             {52, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Faithleap 
             {51, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Foghaven 
 
-            {64, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Gzertzz 
-            {65, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Cohen 
-            {63, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Norfolk 
-            {66, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Patrick 
-            {62, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Fallen
+            {64, new WvWObjectiveData(ObjectiveType.Ruins, new(6691.21f, 13343.1f, -393f)) }, // Gzertzz 
+            {65, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Cohen 
+            {63, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Norfolk 
+            {66, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Patrick 
+            {62, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Fallen
 
             {33, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Dradfall Bay
             {35, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Bluebriar
@@ -163,11 +163,11 @@ public static class WvWHelper
             {115, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Boettiger 
             {109, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Roy's 
 
-            {122, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Tilly 
-            {119, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Bearce 
-            {120, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Zak 
-            {121, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Darra 
-            {118, new WvWObjectiveData(ObjectiveType.Ruin, new()) }, // Higgins' 
+            {122, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Tilly 
+            {119, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Bearce 
+            {120, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Zak 
+            {121, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Darra 
+            {118, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Higgins' 
 
             {106, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Blistering
             {110, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Parched
