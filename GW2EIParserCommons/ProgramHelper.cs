@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
 using Discord;
@@ -7,6 +7,8 @@ using GW2EIDiscord;
 using GW2EIWingman;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
+using GW2EIMistWarrior;
+using GW2EIMistWarrior.MistWarriorUploadJsons;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -318,6 +320,13 @@ public sealed class ProgramHelper : IDisposable
             }
             originalController.UpdateProgressWithCancellationCheck("Wingman: Operation completed");
 
+        }
+        if (Settings.UploadToMistWarrior)
+        {
+            originalController.UpdateProgressWithCancellationCheck("MistWarrior: Uploading");
+            MistWarriorUploadObject? mwResponse = MistWarriorController.Upload(fInfo, str => originalController.UpdateProgress("MistWarrior: " + str), Settings.MistWarriorUserToken);
+            string mwMessage = mwResponse?.Id ?? "Upload process failed";
+            originalController.UpdateProgressWithCancellationCheck("MistWarrior: " + mwMessage);
         }
         return uploadresult;
     }

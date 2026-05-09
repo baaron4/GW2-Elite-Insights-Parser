@@ -1,4 +1,4 @@
-﻿namespace GW2EIParserCommons.Properties;
+namespace GW2EIParserCommons.Properties;
 
 public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
 {
@@ -176,6 +176,36 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
         set
         {
             this[nameof(DPSReportUserToken)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool UploadToMistWarrior
+    {
+        get
+        {
+            return (bool)this[nameof(UploadToMistWarrior)];
+        }
+        set
+        {
+            this[nameof(UploadToMistWarrior)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string MistWarriorUserToken
+    {
+        get
+        {
+            return (string)this[nameof(MistWarriorUserToken)];
+        }
+        set
+        {
+            this[nameof(MistWarriorUserToken)] = value;
         }
     }
 
