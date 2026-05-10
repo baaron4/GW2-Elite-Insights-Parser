@@ -182,7 +182,7 @@ public static class WvWHelper
             {53, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Redvale
 
             {32, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Askalion
-            {32, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Greenlake
+            {36, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Greenlake
             {50, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Greenwater
 
             {34, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Demesne
@@ -208,7 +208,7 @@ public static class WvWHelper
             {53, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Bluevale
 
             {32, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Shadaran Hills
-            {32, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Redlake
+            {36, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Redlake
             {50, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Redwater
 
             {34, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Hero's Lodge
