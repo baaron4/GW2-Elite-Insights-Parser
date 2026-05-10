@@ -136,14 +136,14 @@ public static class WvWHelper
     internal class WvWObjectiveData
     {
         public readonly ObjectiveType Type;
-        public readonly Vector3 Position;
+        public readonly Vector3 ContinentPosition;
 
         public bool IsUnknown => Type == ObjectiveType.Unknown;
 
-        public WvWObjectiveData(ObjectiveType type, Vector3 position)
+        public WvWObjectiveData(ObjectiveType type, Vector3 continentPosition)
         {
             Type = type;
-            Position = position;
+            ContinentPosition = continentPosition;
         }
 
         public string GetIcon(ObjectiveOwnership ownership)
