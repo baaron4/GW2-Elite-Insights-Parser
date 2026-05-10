@@ -27,7 +27,7 @@ public static class WvWHelper
         switch (value)
         {
             case ObjectiveType.Camp:
-                return "Resource Camp";
+                return "Camp";
             case ObjectiveType.Tower:
                 return "Tower";
             case ObjectiveType.Ruins:
@@ -35,7 +35,7 @@ public static class WvWHelper
             case ObjectiveType.Keep:
                 return "Camp";
             case ObjectiveType.Castle:
-                return "Stonemist Castle";
+                return "Castle";
         }
         return "None";
     }
