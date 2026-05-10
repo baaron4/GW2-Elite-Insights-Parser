@@ -164,54 +164,54 @@ public static class WvWHelper
     {
         {MapIDs.BlueAlpineBorderland, new()
         {
-            {39, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Spiritholm
-            {38, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Woodhaven
-            {37, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Blue Garrison
-            {40, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Dawn's Eyrie
-            {52, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Godslore 
-            {51, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Stargrove 
+            {39, new WvWObjectiveData(ObjectiveType.Camp, new(14082.8f, 11228.4f, -3676.89f)) }, // Spiritholm
+            {38, new WvWObjectiveData(ObjectiveType.Tower, new(13444.8f, 12078.2f, -3758.65f)) }, // Woodhaven
+            {37, new WvWObjectiveData(ObjectiveType.Keep, new(14056.6f, 12430.9f, -2800.76f)) }, // Blue Garrison
+            {40, new WvWObjectiveData(ObjectiveType.Tower, new(14683.4f, 12030.3f, -4839.9f)) }, // Dawn's Eyrie
+            {52, new WvWObjectiveData(ObjectiveType.Camp, new(  13211.9f, 12195.7f, -46.1562f)) }, // Godslore 
+            {51, new WvWObjectiveData(ObjectiveType.Camp, new(15025.5f, 12168.3f, -1533.33f)) }, // Stargrove 
 
-            {64, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Baeur 
-            {65, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Orchard 
-            {63, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Battle 
-            {66, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Carver 
-            {62, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Lost Prayers 
+            {64, new WvWObjectiveData(ObjectiveType.Ruins, new(13859.2f, 12703.1f, -393f)) }, // Baeur 
+            {65, new WvWObjectiveData(ObjectiveType.Ruins, new(14327.1f, 12757, -711)) }, // Orchard 
+            {63, new WvWObjectiveData(ObjectiveType.Ruins, new(13761f, 13074.7f, -0.649902f)) }, // Battle 
+            {66, new WvWObjectiveData(ObjectiveType.Ruins, new(14362.3f, 13112.1f, -2742f)) }, // Carver 
+            {62, new WvWObjectiveData(ObjectiveType.Ruins, new(14065.1f, 13339.5f, -1168f)) }, // Lost Prayers 
 
-            {33, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Ascension
-            {35, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Redbriar
-            {53, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Redvale
+            {33, new WvWObjectiveData(ObjectiveType.Keep, new(13035.1f, 12956.6f, -300.694f)) }, // Ascension
+            {35, new WvWObjectiveData(ObjectiveType.Tower, new(13688.9f, 13339f, -1892.9f)) }, // Redbriar
+            {53, new WvWObjectiveData(ObjectiveType.Camp, new(13262.3f, 13457.1f, -687.909f)) }, // Redvale
 
-            {32, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Askalion
-            {36, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Greenlake
-            {50, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Greenwater
+            {32, new WvWObjectiveData(ObjectiveType.Keep, new(15252.2f, 12880.7f, -3107.91f)) }, // Askalion
+            {36, new WvWObjectiveData(ObjectiveType.Tower, new(14581f, 13409.9f, -1821.91f)) }, // Greenlake
+            {50, new WvWObjectiveData(ObjectiveType.Camp, new(15015.7f, 13502.9f, -10.3619f)) }, // Greenwater
 
-            {34, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Demesne
+            {34, new WvWObjectiveData(ObjectiveType.Camp, new(14083.2f, 14033.2f, -307.1f)) }, // Demesne
         } },
         {MapIDs.GreenAlpineBorderland, new()
         {
 
-            {39, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Titanpaw
-            {38, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Sunnyhill
-            {37, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Green Garrison
-            {40, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Cragtop
-            {52, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Faithleap 
-            {51, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Foghaven 
+            {39, new WvWObjectiveData(ObjectiveType.Camp, new(6914.78f, 11868.4f, -3676.89f)) }, // Titanpaw
+            {38, new WvWObjectiveData(ObjectiveType.Tower, new(6276.77f, 12718.2f, -3758.65f)) }, // Sunnyhill
+            {37, new WvWObjectiveData(ObjectiveType.Keep, new(6888.59f, 13070.9f, -2800.76f)) }, // Green Garrison
+            {40, new WvWObjectiveData(ObjectiveType.Tower, new(7515.42f, 12670.3f, -4839.9f)) }, // Cragtop
+            {52, new WvWObjectiveData(ObjectiveType.Camp, new(6043.87f, 12835.7f, -46.1562f)) }, // Faithleap 
+            {51, new WvWObjectiveData(ObjectiveType.Camp, new(7857.45f, 12808.3f, -1533.33f)) }, // Foghaven 
 
             {64, new WvWObjectiveData(ObjectiveType.Ruins, new(6691.21f, 13343.1f, -393f)) }, // Gzertzz 
-            {65, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Cohen 
-            {63, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Norfolk 
-            {66, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Patrick 
-            {62, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Fallen
+            {65, new WvWObjectiveData(ObjectiveType.Ruins, new(7159.09f, 13397, -711)) }, // Cohen 
+            {63, new WvWObjectiveData(ObjectiveType.Ruins, new(6593, 13714.7f, -0.649902f)) }, // Norfolk 
+            {66, new WvWObjectiveData(ObjectiveType.Ruins, new(7194.27f, 13752.1f, -2742)) }, // Patrick 
+            {62, new WvWObjectiveData(ObjectiveType.Ruins, new(6897.13f, 13979.5f, -1168)) }, // Fallen
 
-            {33, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Dradfall Bay
-            {35, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Bluebriar
-            {53, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Bluevale
+            {33, new WvWObjectiveData(ObjectiveType.Keep, new(5867.06f, 13596.6f, -300.694f)) }, // Dradfall Bay
+            {35, new WvWObjectiveData(ObjectiveType.Tower, new(6520.89f, 13979, -1892.9f)) }, // Bluebriar
+            {53, new WvWObjectiveData(ObjectiveType.Camp, new(6094.29f, 14097.1f, -687.909f)) }, // Bluevale
 
-            {32, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Shadaran Hills
-            {36, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Redlake
-            {50, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Redwater
+            {32, new WvWObjectiveData(ObjectiveType.Keep, new(8084.25f, 13520.7f, -3107.91f)) }, // Shadaran Hills
+            {36, new WvWObjectiveData(ObjectiveType.Tower, new(7413.05f, 14049.9f, -1821.91f)) }, // Redlake
+            {50, new WvWObjectiveData(ObjectiveType.Camp, new(7847.75f, 14142.9f, -10.3619f)) }, // Redwater
 
-            {34, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Hero's Lodge
+            {34, new WvWObjectiveData(ObjectiveType.Camp, new(6915.25f, 14673.2f, -307.1f)) }, // Hero's Lodge
         } },
         {MapIDs.RedDesertBorderland, new()
         {
