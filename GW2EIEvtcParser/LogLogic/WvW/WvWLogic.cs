@@ -109,19 +109,31 @@ internal class WvWLogic : LogLogic
         switch (mapID.MapID)
         {
             case EternalBattleground:
-                crMap = new CombatReplayMap((954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250));
+                crMap = new CombatReplayMap((954, 1000), 
+                    (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250), 
+                    (-36864, -36864, 36864, 36864), 
+                    (8958, 12798, 12030, 15870));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayEternalBattlegrounds, crMap));
                 break;
             case GreenAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                crMap = new CombatReplayMap((697, 1000), 
+                    (-30720, -43008, 30720, 43008), 
+                    (-30720, -43008, 30720, 43008), 
+                    (5630, 11518, 8190, 15102));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case BlueAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                crMap = new CombatReplayMap((697, 1000), 
+                    (-30720, -43008, 30720, 43008), 
+                    (-30720, -43008, 30720, 43008), 
+                    (12798, 10878, 15358, 14462));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case RedDesertBorderland:
-                crMap = new CombatReplayMap((1000, 1000), (-36864, -36864, 36864, 36864));
+                crMap = new CombatReplayMap((1000, 1000), 
+                    (-36864, -36864, 36864, 36864), 
+                    (-36864, -36864, 36864, 36864), 
+                    (9214, 8958, 12286, 12030));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayDesertBorderlands, crMap));
                 break;
             case EdgeOfTheMists:
@@ -368,9 +380,10 @@ internal class WvWLogic : LogLogic
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
+        var map = log.LogData.Logic.GetCombatReplayMap(log);
         foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
         {
-            var position = objectiveStatusEvent.GetPosition();
+            var position = objectiveStatusEvent.GetPosition(map);
             var positionConnector = new PositionConnector(position);
             for (var i = 0; i < objectiveStatusEvent.Owners.Count - 1; i++)
             {
