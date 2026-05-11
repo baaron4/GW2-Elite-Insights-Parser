@@ -436,8 +436,6 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                // TODO: check if still necessary with visibility events
-                replay.AddHideByBuff(target, log, Determined762);
                 break;
             case (int)TargetID.ChargedBloodstone:
                 // TODO: check if still necessary with visibility events
