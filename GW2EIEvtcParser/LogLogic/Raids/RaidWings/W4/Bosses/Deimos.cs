@@ -290,7 +290,7 @@ internal class Deimos : BastionOfThePenitent
         return hasBonds;
     }
 
-    internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
+    internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData)
     {
         var deimosEncounterNPCs = agentData.GetNPCsByIDs([TargetID.Pride, TargetID.Greed, TargetID.Deimos]);
         if (deimosEncounterNPCs.Count == 0)
@@ -305,14 +305,6 @@ internal class Deimos : BastionOfThePenitent
             var encounterShackledPrisoner = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
             encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
             encounterShackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
-            if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
-            {
-                // Always invisible, force it to be visible
-                foreach (var shackledTargetable in combatData.Where(x => x.SrcMatchesAgent(shackledPrisoner) && x.IsStateChange == StateChange.Targetable))
-                {
-                    shackledTargetable.OverrideValue(1);
-                }
-            }
         }
     }
 
@@ -390,7 +382,7 @@ internal class Deimos : BastionOfThePenitent
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool needsDummy = _hasPreEvent && !HandleDemonicBonds(agentData, combatData);
-        HandleShackledPrisoners(agentData, combatData, evtcVersion);
+        HandleShackledPrisoners(agentData, combatData);
         if (_hasPreEvent && needsDummy)
         {
             agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
