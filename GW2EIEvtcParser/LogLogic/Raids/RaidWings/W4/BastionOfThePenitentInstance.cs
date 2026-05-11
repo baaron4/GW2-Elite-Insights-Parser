@@ -355,7 +355,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     {
         Samarog.HandleSpears(evtcVersion, agentData, combatData);
         Deimos.HandleDemonicBonds(agentData, combatData);
-        Deimos.HandleShackledPrisoners(agentData, combatData);
+        Deimos.HandleShackledPrisoners(agentData, combatData, evtcVersion);
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Deimos.RenameTargetSauls(Targets);
