@@ -153,10 +153,10 @@ public class AnimatedCastEvent : CastEvent
 
     public override long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)
     {
-        var buffStatus = log.FindActor(Caster).GetBuffStatus(log, buffID, Time, ExpectedEndTime).FirstOrNull((in Segment x) => x.Value > 0);
+        var buffStatus = log.FindActor(Caster).GetBuffStatus(log, buffID, Time, Math.Max(ExpectedEndTime, EndTime)).FirstOrNull((in Segment x) => x.Value > 0);
         if (buffStatus != null)
         {
-            return Math.Max(buffStatus.Value.Start, Time);
+            return Math.Min(Math.Max(buffStatus.Value.Start, Time), EndTime);
         }
         return EndTime;
     }
