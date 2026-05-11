@@ -268,7 +268,6 @@ internal class SpiritRace : SpiritVale
                 }
                 var spiritRaceEncounters = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(spiritRaceEncounters, log);
-                replay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
                 break;
             case (int)TargetID.WallOfGhosts:
                 (long, long) lifespan = (target.FirstAware, target.LastAware);

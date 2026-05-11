@@ -358,7 +358,6 @@ public abstract partial class SingleActor : Actor
         
         var visibilityEvents = log.CombatData.GetVisibilityEventsBySrc(AgentItem);
         var invisibleStart = FirstAware;
-        var visibilityAdded = false;
         for (var i = 0; i < visibilityEvents.Count; i++)
         {
             var visibilityEvent = visibilityEvents[i];
@@ -368,26 +367,18 @@ public abstract partial class SingleActor : Actor
                 // Agent spawned invisible
                 if (i == 0)
                 {
-                    visibilityAdded = true;
                     replay.Hidden.Add(new(FirstAware, invisibleStart));
                 }
                 // Agent remained invisible
                 if (i == visibilityEvents.Count - 1)
                 {
-                    visibilityAdded = true;
                     replay.Hidden.Add(new(invisibleStart, LastAware));
                 }
             } 
             else if (i > 0)
             {
-                visibilityAdded = true;
                 replay.Hidden.Add(new(invisibleStart, Math.Min(visibilityEvent.Time, LastAware)));
             }
-        }
-        if (visibilityAdded)
-        {
-            replay.Hidden.RemoveAll(x => x.IsEmpty());
-            replay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
         }
     }
     
@@ -435,6 +426,8 @@ public abstract partial class SingleActor : Actor
         {
             InitAdditionalCombatReplayData(log, CombatReplay);
         }
+        CombatReplay.Hidden.RemoveAll(x => x.IsEmpty());
+        CombatReplay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
         return CombatReplay;
     }
 
