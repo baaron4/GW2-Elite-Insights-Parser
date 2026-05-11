@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 internal class StatusEventsContainer
 {
     public readonly Dictionary<AgentItem, List<TargetableEvent>> TargetableEventsBySrc = [];
+    public readonly Dictionary<AgentItem, List<VisibilityEvent>> VisibilityEventsBySrc = [];
 
     public readonly Dictionary<AgentItem, List<AliveEvent>> AliveEvents = [];
     public readonly Dictionary<AgentItem, List<DeadEvent>> DeadEvents = [];

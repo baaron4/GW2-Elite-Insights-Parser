@@ -98,6 +98,11 @@ partial class CombatData
     {
         return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
     }
+
+    public IReadOnlyList<VisibilityEvent> GetVisibilityEventsBySrc(AgentItem attackTarget)
+    {
+        return _statusEvents.VisibilityEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
+    }
     #endregion ATTACKTARGETS
     #region DATE
     public InstanceStartEvent? GetInstanceStartEvent()
