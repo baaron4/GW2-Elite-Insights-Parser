@@ -427,8 +427,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                             break;
                     }
                 }
-
-                replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                if (log.CombatData.GetEvtcVersionEvent().Build < ArcDPSBuilds.VisibilityInTargetableStateChange)
+                {
+                    replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                }
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddInsatiableHungerDecoration(target, log, replay);

@@ -387,7 +387,7 @@ public abstract partial class SingleActor : Actor
         if (visibilityAdded)
         {
             replay.Hidden.RemoveAll(x => x.IsEmpty());
-            replay.Hidden.Sort((x, y) => (int)(x.Start - y.Start));
+            replay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
         }
     }
     

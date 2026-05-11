@@ -680,6 +680,7 @@ internal class Deimos : BastionOfThePenitent
                 }
                 break;
             case (int)TargetID.ShackledPrisoner:
+                // TODO: check if still necessary with visibility events
                 var Sauls = log.AgentData.GetNPCsByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
                 foreach (var Saul in Sauls)
                 {

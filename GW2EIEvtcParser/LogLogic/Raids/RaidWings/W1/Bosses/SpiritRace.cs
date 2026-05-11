@@ -260,6 +260,7 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:
+                // TODO: check if still necessary with visibility events
                 long encounterOffset = 0;
                 while(encounterOffset != long.MaxValue)
                 {

@@ -492,7 +492,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                         replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
-
+                // TODO: check if still necessary with visibility events
                 // Hide when inactive
                 replay.AddHideByBuff(target, log, Determined762);
                 break;
@@ -567,7 +567,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                         replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
-
+                // TODO: check if still necessary with visibility events
                 // Hide when inactive
                 replay.AddHideByBuff(target, log, Determined762);
                 break;
@@ -636,7 +636,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                         replay.Decorations.Add(doughnut);
                     }
                 }
-
+                // TODO: check if still necessary with visibility events
                 // Hide when inactive
                 replay.AddHideByBuff(target, log, Determined762);
                 break;
