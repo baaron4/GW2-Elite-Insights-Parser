@@ -96,7 +96,22 @@ partial class CombatData
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
     {
+        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        {
+            return [];
+        }
         return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
+    }
+
+    public IReadOnlyList<VisibilityEvent> GetVisibilityEventsBySrc(AgentItem attackTarget)
+    {
+        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        {
+            return [];
+        }
+        return _statusEvents.VisibilityEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
     }
     #endregion ATTACKTARGETS
     #region DATE
@@ -130,28 +145,18 @@ partial class CombatData
     }
     #endregion DATE
 
-    public IReadOnlyList<GuildEvent> GetGuildEvents(AgentItem src)
-    {
-        return GetValueOrEmpty(_metaDataEvents.GuildEvents, src);
-    }
-
-    public PointOfViewEvent? GetPointOfViewEvent()
-    {
-        return _metaDataEvents.PointOfViewEvent;
-    }
-
+    #region WvW
     public WvWTeamsEvent? GetWvWTeamsEvent()
     {
         return _metaDataEvents.WvWTeamsEvent;
     }
-    public FractalScaleEvent? GetFractalScaleEvent()
+    public IReadOnlyList<WvWObjectiveStatusEvent> GetWvWObjectStatusEvents()
     {
-        return _metaDataEvents.FractalScaleEvent;
+        return _statusEvents.WvWObjectiveStatusEvents;
     }
-    public LanguageEvent? GetLanguageEvent()
-    {
-        return _metaDataEvents.LanguageEvent;
-    }
+    #endregion WvW
+
+    #region MAP
     public IReadOnlyList<MapIDEvent> GetMapIDEvents()
     {
         return _metaDataEvents.MapIDEvents;
@@ -162,6 +167,31 @@ partial class CombatData
         return _metaDataEvents.MapChangeEvents;
     }
 
+    public IReadOnlyList<ShardEvent> GetShardEvents()
+    {
+        return _metaDataEvents.ShardEvents;
+    }
+    public FractalScaleEvent? GetFractalScaleEvent()
+    {
+        return _metaDataEvents.FractalScaleEvent;
+    }
+
+    #endregion MAP
+
+    public IReadOnlyList<GuildEvent> GetGuildEvents(AgentItem src)
+    {
+        return GetValueOrEmpty(_metaDataEvents.GuildEvents, src);
+    }
+
+    public PointOfViewEvent? GetPointOfViewEvent()
+    {
+        return _metaDataEvents.PointOfViewEvent;
+    }
+    public LanguageEvent? GetLanguageEvent()
+    {
+        return _metaDataEvents.LanguageEvent;
+    }
+
     public IReadOnlyList<RewardEvent> GetRewardEvents()
     {
         return _rewardEvents;
@@ -170,11 +200,6 @@ partial class CombatData
     public IReadOnlyList<ErrorEvent> GetErrorEvents()
     {
         return _metaDataEvents.ErrorEvents;
-    }
-
-    public IReadOnlyList<ShardEvent> GetShardEvents()
-    {
-        return _metaDataEvents.ShardEvents;
     }
 
     public IReadOnlyList<TickRateEvent> GetTickRateEvents()

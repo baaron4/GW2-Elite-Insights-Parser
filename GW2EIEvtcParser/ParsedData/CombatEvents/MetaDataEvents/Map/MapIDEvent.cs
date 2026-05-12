@@ -4,7 +4,7 @@ public class MapIDEvent : MetaDataEvent
 {
     public readonly long Time;
     public readonly int MapID;
-    public readonly int MapType;
+    public int MapType { get; protected set; }
 
     internal MapIDEvent(CombatItem evtcItem) : base(evtcItem)
     {

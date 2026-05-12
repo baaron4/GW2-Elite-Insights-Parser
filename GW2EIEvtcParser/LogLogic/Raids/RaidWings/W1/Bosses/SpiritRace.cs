@@ -260,6 +260,7 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:
+                // TODO: check if still necessary with visibility events
                 long encounterOffset = 0;
                 while(encounterOffset != long.MaxValue)
                 {
@@ -267,7 +268,6 @@ internal class SpiritRace : SpiritVale
                 }
                 var spiritRaceEncounters = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(spiritRaceEncounters, log);
-                replay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
                 break;
             case (int)TargetID.WallOfGhosts:
                 (long, long) lifespan = (target.FirstAware, target.LastAware);

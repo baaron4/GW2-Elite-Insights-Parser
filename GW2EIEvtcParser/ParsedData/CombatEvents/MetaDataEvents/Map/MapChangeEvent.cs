@@ -7,6 +7,7 @@ public class MapChangeEvent : MapIDEvent
     internal MapChangeEvent(CombatItem evtcItem) : base(evtcItem)
     {
         OldMapID = (int)evtcItem.DstAgent;
+        MapType = evtcItem.Value;
     }
 
 }

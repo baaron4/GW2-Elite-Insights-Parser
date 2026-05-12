@@ -22,7 +22,8 @@ public class AgentData
         SpeciesDirty = 1,
         TypesDirty = 2,
         AgentsDirty = 4,
-        AllDirty = SpeciesDirty | TypesDirty | AgentsDirty
+        TypesAndSpecies = SpeciesDirty | TypesDirty,
+        AllDirty = SpeciesDirty | TypesDirty | AgentsDirty,
     }
     private AgentDataDirtyStatus _dirty = AgentDataDirtyStatus.AllDirty;
 #if DEBUG
@@ -59,7 +60,7 @@ public class AgentData
         }
         var agent = new AgentItem(agentValue, name, spec, ID, AgentItem.AgentType.NPC, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
         _allAgentsList.Add(agent);
-        _dirty |= AgentDataDirtyStatus.AgentsDirty;
+        _dirty |= AgentDataDirtyStatus.AllDirty;
         return agent;
     }
 
@@ -83,7 +84,7 @@ public class AgentData
         }
         var agent = new AgentItem(agentValue, from.Name, spec, 0, from.Type, instID, from.Toughness, from.Healing, from.Condition, from.Concentration, from.HitboxWidth, from.HitboxHeight, start, end, from.IsFake);
         _allAgentsList.Add(agent);
-        _dirty |= AgentDataDirtyStatus.AgentsDirty;
+        _dirty |= AgentDataDirtyStatus.AllDirty;
         return agent;
     }
 
@@ -111,7 +112,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetNPCsByID(int id)
     {
-        if ((_dirty & AgentDataDirtyStatus.AllDirty) > 0)
+        if ((_dirty & AgentDataDirtyStatus.TypesAndSpecies) > 0)
         {
             Refresh();
         }
@@ -160,7 +161,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
     {
-        if ((_dirty & AgentDataDirtyStatus.AllDirty) > 0)
+        if ((_dirty & AgentDataDirtyStatus.TypesAndSpecies) > 0)
         {
             Refresh();
         }
@@ -225,7 +226,7 @@ public class AgentData
         {
             _allAgentsList.RemoveAll(toRemove.Contains);
             _allAgentsList.AddRange(toAdd);
-            _dirty |= AgentDataDirtyStatus.AgentsDirty;
+            _dirty |= AgentDataDirtyStatus.AllDirty;
         }
     }
 
@@ -249,7 +250,7 @@ public class AgentData
             return;
         }
         _allAgentsList.RemoveAll(x => agents.Contains(x));
-        _dirty |= AgentDataDirtyStatus.AgentsDirty;
+        _dirty |= AgentDataDirtyStatus.AllDirty;
     }
 
     private void Refresh()

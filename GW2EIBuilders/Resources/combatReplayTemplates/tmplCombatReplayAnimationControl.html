@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-column align-items-center" style="width: 750px;">
-        <div v-if="showNormalPhases" class="mb-1">
+        <div v-if="showNormalPhases && isTouchDevice" class="mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center max-wd-700px">
                 <li class="nav-item" v-for="(phase, id) in phases"
                     v-show="!phase.breakbarPhase"
@@ -10,33 +10,168 @@
             </ul>
         </div>
         <div class="d-flex flex-column justify-content-center flex-wrap mt-1"
-            :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
+             :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
             <div class="d-flex flex-column justify-content-center align-items-center"
-                :style="{'width': '100%', 'min-width': canvasSize.x + 'px', 'height': canvasSize.y + 'px', 'position': 'relative'}">
+                 :style="{'width': '100%', 'min-width': canvasSize.x + 'px', 'height': canvasSize.y + 'px', 'position': 'relative'}">
                 <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"
-                    class="replay"></canvas>
+                        class="replay"></canvas>
                 <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"
-                    class="replay"></canvas>
+                        class="replay"></canvas>
                 <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"
-                    class="replay"></canvas>
+                        class="replay"></canvas>
             </div>
-            <div class="animation-control">        
+            <div class="animation-control">
+                <div v-if="!isTouchDevice" class="d-flex justify-content-center slidercontainer mt-1">
+                    <div class="timeline mt-1 rounded" ref="timeline"
+                         :style="{
+                            backgroundColor: timelineColors.background,
+                            border: '1px solid ' + timelineColors.backgroundBorder,
+                            width: (timelineWidth + 20) + 'px'
+                        }">
+                        <svg ref="svg"
+                             :width="timelineWidth"
+                             :height="20 + 10 * maxDepth + 30"
+                             @mousemove="onTimelineMouseMove"
+                             @mouseleave="onTimelineMouseLeave">
+
+                            <!-- Invisible cursor scroll line -->
+                            <rect x="0"
+                                  y="0"
+                                  :width="timelineWidth"
+                                  :height="10 * maxDepth + 30"
+                                  fill="transparent"
+                                  style="cursor: pointer;"
+                                  @mousedown="onTimelineMouseDown" />
+
+                            <g v-for="phaseBloc in phasesByDepth">
+                                <!-- Invisible grab -->
+                                <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 + phaseBloc.depth * 10"
+                                      :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
+                                      stroke="transparent"
+                                      stroke-width="10"
+                                      stroke-linecap="butt"
+                                      @mouseenter="hoverPhase(phaseBloc.phase)"
+                                      @mouseleave="resetHoveredPhase"
+                                      @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                                      @click="onPhaseClick(phaseBloc.phase, $event)"
+                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />    
+
+                                <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 + phaseBloc.depth * 10"
+                                      :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
+                                      :stroke="phaseBloc.color"
+                                      stroke-width="4"
+                                      stroke-linecap="butt"
+                                      :opacity="getPhaseOpacity(phaseBloc.phase)"
+                                      style="pointer-events: none;"/>    
+
+                                <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 - 5 + phaseBloc.depth * 10"
+                                      :x2="timeOffsetedToX(phaseBloc.phase.start)" :y2="20 + 5 + phaseBloc.depth * 10"
+                                      :stroke="phaseBloc.color"
+                                      stroke-width="2"
+                                      :opacity="getPhaseOpacity(phaseBloc.phase)"
+                                      @mouseenter="hoverPhase(phaseBloc.phase)"
+                                      @mouseleave="resetHoveredPhase"
+                                      @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                                      @click="onPhaseClick(phaseBloc.phase, $event)"
+                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
+               
+                                <line :x1="timeOffsetedToX(phaseBloc.phase.end)" :y1="20 - 5 + phaseBloc.depth * 10"
+                                      :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + 5 + phaseBloc.depth * 10"
+                                      :stroke="phaseBloc.color"
+                                      stroke-width="2"
+                                      :opacity="getPhaseOpacity(phaseBloc.phase)"
+                                      @mouseenter="hoverPhase(phaseBloc.phase)"
+                                      @mouseleave="resetHoveredPhase"
+                                      @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                                      @click="onPhaseClick(phaseBloc.phase, $event)"
+                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)"  />
+                            </g>
+
+                            <!-- Drag cursor, larger for easier grab -->
+                            <line id="large-line-drag" 
+                                  :x1="timeOffsetedToX(time)" y1="0"
+                                  :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
+                                  stroke="transparent" stroke-width="10"
+                                  style="pointer-events: stroke; cursor: grab;"
+                                  @mousedown="startDragCursorFromLine" />
+                            <!-- The cursor visual -->
+                            <line :x1="timeOffsetedToX(time)" y1="0"
+                                  :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
+                                  :stroke="timelineColors.cursor" stroke-width="2" stroke-dasharray="4 2"
+                                  style="pointer-events: none;" />
+                            <!-- Cursor circle -->
+                            <circle :cx="timeOffsetedToX(time)"
+                                    :cy="10 * maxDepth + 25"
+                                    r="5"
+                                    :fill="timelineColors.cursor"
+                                    style="cursor: grab; pointer-events: all;"
+                                    @mousedown="startDragCursor" />
+
+                            <!-- Fixed time ticks -->
+                            <g v-for="tick in ticks">
+                                <line :x1="tick.x" y1="15" :x2="tick.x" y2="25"
+                                      :stroke="timelineColors.tick" />
+
+                                <text :x="getTickX(tick)" y="10"
+                                      font-size="10"
+                                      text-anchor="middle"
+                                      :fill="timelineColors.text">
+                                    {{ tick.label }}
+                                </text>
+                            </g>
+
+                            <!-- Moving time -->
+                            <g v-if="isHoveringTimeline">
+                                <rect :x="timeToX(hoverTime) - 18"
+                                      y="-3"
+                                      width="36"
+                                      height="16"
+                                      rx="3"
+                                      fill="black"
+                                      opacity="0.5"
+                                      pointer-events="none" />
+                                <text :x="timeToX(hoverTime)" y="10"
+                                      font-size="10"
+                                      text-anchor="middle"
+                                      :fill="timelineColors.text"
+                                      style="pointer-events: none; font-weight: 600;">
+                                    {{ formatTime(hoverTime) }}
+                                </text>
+                            </g>
+
+                            <text v-if="hoveredPhase || selectedPhase"
+                                  :x="timelineWidth / 2"
+                                  :y="10 * maxDepth + 45"
+                                  text-anchor="middle"
+                                  :fill="timelineColors.text"
+                                  font-size="12"
+                                  style="font-weight: 500; pointer-events: none;">
+                                {{ getFormattedPhaseText(hoveredPhase || selectedPhase) }}
+                            </text>
+                        </svg>
+                        <input type="range" :min="minTime" :max="maxTime" value="0" :id="htmlElementIDs.timeRangeID" style="display: none;">
+                    </div>
+                </div>
                 <div class="d-flex align-items-center justify-content-center mb-1">
                     <img class="icon mr-2" :src="UIIcons.QuestionMark"
-                        data-original-title="You can click on the canvas to select agents" />
+                         data-original-title="You can click on the canvas to select agents" />
                     <div @click="toggleAnimate();" class="btn btn-small"
-                        :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">{{animated ? "Pause" :
-                        "Play"}}</div>
+                         :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">
+                        {{ animated ? "Pause" : "Play "}}
+                    </div>
                     <div @click="restartAnimate();" class="btn btn-small"
-                        :class="{'btn-dark': !light, 'btn-light': light}">
+                         :class="{'btn-dark': !light, 'btn-light': light}">
                         Restart
                     </div>
                     <div @click="toggleBackwards();" class="btn btn-small"
-                        :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
+                         :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
                     <div @click="resetViewpoint();" class="btn btn-small"
-                        :class="{'btn-dark': !light, 'btn-light': light}">Reset Viewpoint</div>
+                         :class="{'btn-dark': !light, 'btn-light': light}">Reset Viewpoint</div>
+                    <input v-if="!isTouchDevice" style="width: 100px; text-align: right;" class="ml-3 mr-1" type="number" step="0.001"
+                           :id="htmlElementIDs.timeRangeDisplayID" value="0"
+                           @input="updateInputTime($event.target.value);">
                 </div>
-                <div class="d-flex justify-content-center slidercontainer mt-1">
+                <div v-if="isTouchDevice" class="d-flex justify-content-center slidercontainer mt-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
                         :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
@@ -49,8 +184,8 @@
                 </div>
                 <div class="d-flex justify-content-center">
                     <label v-for="speed in speeds" @click="setSpeed(speed)"
-                        :class="{'active': speed === selectedSpeed, 'btn-dark': !light, 'btn-light': light}"
-                        class="btn btn-ssmall">
+                           :class="{'active': speed === selectedSpeed, 'btn-dark': !light, 'btn-light': light}"
+                           class="btn btn-ssmall">
                         {{speed}}x
                     </label>
                 </div>
@@ -60,24 +195,65 @@
 </template>
 
 <script>
+
+    const MaxPhaseDepth = 2;
+
+    // Last one breakbar, previous is remainings
+    const PhaseDepthColors = ["#2d9400", "#fffb00", "#ffa800", "#ff2200", "#007bff"];
+
+    function traversePhasesWithDepth(result, parentPhase, depth, remainingPhases, addedPhases) {
+        if (depth > MaxPhaseDepth) {
+            return depth;
+        }
+        let returnDepth = depth;
+        if (parentPhase.subPhases) {
+            const subPhases = parentPhase.subPhases;
+            remainingPhases.forEach((phase) => {
+                if (subPhases.indexOf(phase.id) > -1) {
+                    result.push({
+                        phase: phase,
+                        depth: depth,
+                        color: PhaseDepthColors[depth]
+                    });
+                    remainingPhases.delete(phase);
+                    addedPhases.add(phase);
+                    let finalDepth = traversePhasesWithDepth(result, phase, depth + 1, remainingPhases, addedPhases);
+                    returnDepth = Math.max(finalDepth, returnDepth);
+                }
+            });
+        }
+        return returnDepth;
+    }
+
     Vue.component("combat-replay-animation-control-component", {
-        props: ["light", "animated", "range"],
+        props: ["time", "light", "animated", "range"],
         template: `${template}`,
-        mixins: [encounterPhaseComponent, UIIconsComponent],
+        mixins: [encounterPhaseComponent, numberComponent, UIIconsComponent],
         data: function () {
             return {
                 selectedSpeed: 1,
+                isTouchDevice: isTouchDevice,
                 backwards: false,
                 sliderDelimiter: sliderDelimiter,
+                selectedPhase: null,
+                hoveredPhase: null,
+                draggingCursor: false,
+                hoverTime: 0,
+                isHoveringTimeline: false,    
+                clickThroughDragCursor: false,    
+                blockDragCursor: false,
+                phaseDoubleClickTimeout: null, 
+                dragThroughPhaseBlockTimeout: null,
             };
         },
         watch: {
             encounters: {
                 handler: function () {
-                    // make sure DOM is attached              
+                    // make sure DOM is attached
                     if (animator.mainCanvas) {
                         const encounterPhase = this.encounterPhase;
                         this.updateAnimatorTimes(encounterPhase);
+                        this.selectedPhase = this.phases[0];
                     }
                 },
                 deep: true
@@ -87,28 +263,29 @@
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
             const encounterPhase = this.encounterPhase;
             this.updateAnimatorTimes(encounterPhase);
+            this.selectedPhase = this.phases[0];
         },
         computed: {
-            phases: function() {
+            phases: function () {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
                     if (encounter.active) {
                         const phase = logData.phases[encounter.index];
                         let phases = [];
                         if (phase.type === PhaseTypes.INSTANCE) {
-                            if (IsMultiEncounterLog) {                          
+                            if (IsMultiEncounterLog) {
                                 return logData.phases.filter(x => x.type === PhaseTypes.ENCOUNTER || x.type === PhaseTypes.INSTANCE);
                             } else {
                                 return logData.phases;
                             }
                         } else {
-                            if (IsMultiEncounterLog) {    
+                            if (IsMultiEncounterLog) {
                                 for (let j = 0; j < logData.phases.length; j++) {
                                     const subPhase = logData.phases[j];
                                     if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
                                         phases.push(subPhase);
                                     }
-                                }                      
+                                }
                             } else {
                                 return logData.phases;
                             }
@@ -126,6 +303,47 @@
             },
             hasBreakbarPhases: function () {
                 return this.phases.filter(phase => phase.breakbarPhase).length > 0;
+            },
+            phasesByDepth: function() {
+                const phase0 = this.phases[0];
+                const remainingPhases = new Set(this.phases.filter(phase => !phase.breakbarPhase));
+                remainingPhases.delete(phase0);
+                const addedPhases = new Set();
+                addedPhases.add(phase0);
+                let depth = 0;
+                let result = [{
+                    phase: phase0,
+                    depth: depth,
+                    color: PhaseDepthColors[depth]
+                }];
+                depth = traversePhasesWithDepth(result, phase0, depth + 1, remainingPhases, addedPhases);
+
+                const breakbarPhaseColor = PhaseDepthColors[PhaseDepthColors.length - 1];
+                const remainingPhaseColor = PhaseDepthColors[PhaseDepthColors.length - 2];
+
+                const breakbarPhases = this.phases.filter(phase => phase.breakbarPhase);
+                for (let i = 0; i < breakbarPhases.length; i++) {
+                    result.push({
+                        phase: breakbarPhases[i],
+                        depth: remainingPhases.size > 0 ? depth + 1 : depth,
+                        color: breakbarPhaseColor,
+                    });
+                }
+                remainingPhases.forEach(phase => {
+                    result.push({
+                        phase: phase,
+                        depth: depth,
+                        color: remainingPhaseColor,
+                    });
+                });
+                return result;
+            },
+            maxDepth: function() {
+                let maxDepth = -1;
+                for (let i = 0; i < this.phasesByDepth.length; i++) {
+                    maxDepth = Math.max(maxDepth, this.phasesByDepth[i].depth);
+                }
+                return Math.max(maxDepth + 1, 2);
             },
             speeds: function () {
                 return [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0];
@@ -150,7 +368,58 @@
                     timeRangeID: "timeRange",
                     timeRangeDisplayID: "timeRangeDisplay",
                 };
-            }
+            },
+            timelineWidth() {
+                return Math.max(this.canvasSize.x, this.canvasSize.y) - 20; // remove p-2 padding (0.5rem = 8px x 2)
+            },
+            fightDuration() {
+                return (this.maxTime - this.minTime) / 1000;
+            },
+            ticks() {
+                const interval = this.getTickInterval();
+                const ticks = [];
+
+                // Ticks every set time based on max fight length
+                let t;
+                for (t = 0; t <= this.fightDuration; t += interval) {
+                    ticks.push({
+                        time: t,
+                        x: this.timeToX(t),
+                        label: this.formatTime(t),
+                    });
+                }
+
+                // Always display the end tick
+                const end = this.fightDuration;
+                if (this.timeToX(end) - this.timeToX(t - interval) > 30) {
+                    ticks.push({
+                        time: end,
+                        x: this.timeToX(end),
+                        label: this.formatTime(end),
+                    });
+                }
+
+                return ticks;
+            },
+            timelineColors() {
+                if (this.light) {
+                    return {
+                        tick: "#343a40",
+                        text: "#343a40",
+                        cursor: "#ff6b6b",
+                        background: "#f8f9fa",
+                        backgroundBorder: "#dee2e6",
+                    };
+                } else {
+                    return {
+                        tick: "#e6e6e6",
+                        text: "#e6e6e6",
+                        cursor: "#ff6b6b",
+                        background: "#2C3035",
+                        backgroundBorder: "#3e444c",
+                    };
+                }
+            },
         },
         methods: {
             updateAnimatorTimes(phase) {
@@ -191,10 +460,15 @@
             },
             updateTime: function (value) {
                 const offset = this.range.min;
-                animator.updateTime(parseInt(value) + offset);
+                const t = parseInt(value) + offset;
+                animator.updateTime(t);
             },
-            getPhaseName: function(phase) {
+            getPhaseName: function (phase) {
                 return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
+            },
+            getFormattedPhaseText: function (phase) {              
+                const offset = (this.range.min / 1000);
+                return this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
             },
             updatePhaseTime: function (phase) {
                 var min = phase.start * 1000;
@@ -208,7 +482,155 @@
             },
             updateInputTime: function (value) {
                 animator.updateInputTime(value);
-            }
+            },
+            timeToX(time) {
+                time = time || this.minTime;
+                var t = Math.max(this.minTime, Math.min(this.fightDuration, time));
+                return (t / this.fightDuration) * this.timelineWidth;
+            },
+            timeOffsetedToX(time) {
+                return this.timeToX(time - (this.range.min / 1000));
+            },
+            xToTime(x) {
+                return (x / this.timelineWidth) * this.fightDuration;
+            },
+            getTickInterval() {
+                const numberOfTicks = 6;
+                const steps = [5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 14400]; // up to 24h, max evtc length accepted
+                let interval = this.fightDuration / numberOfTicks;
+
+                // pick smallest step >= interval
+                for (let i = 0; i < steps.length; i++) {
+                    if (interval <= steps[i]) {
+                        return steps[i];
+                    }
+                }
+            },
+            getTickX(tick) {
+                const pad = 10;
+
+                if (tick.x <= pad) return tick.x + pad;
+                if (tick.x >= this.timelineWidth - pad) return tick.x - pad;
+
+                return tick.x;
+            },
+            formatTime(t) {
+                const minutes = Math.floor(t / 60);
+                const seconds = Math.floor(t % 60);
+                return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+            },
+            getTimeFromEvent(e) {
+                const rect = this.$refs.svg.getBoundingClientRect();
+                const x = Math.max(0, Math.min(this.timelineWidth, e.clientX - rect.left));
+                return this.xToTime(x);
+            },
+            onTimelineMouseMove(e) {
+                this.hoverTime = this.getTimeFromEvent(e);
+                this.isHoveringTimeline = true;
+            },
+            onTimelineMouseLeave() {
+                this.isHoveringTimeline = false;
+                this.hoveredPhase = null;
+            },
+            onTimelineMouseDown(e) {
+                let time = this.getTimeFromEvent(e);
+                this.updateTime(time * 1000);
+                if (e.detail === 1) {
+                    this.startDragCursor(e);
+                }
+            },
+            getPhaseOpacity(phase) {
+                if (phase === this.hoveredPhase) {
+                    return 1.0;
+                }
+                return this.selectedPhase === phase ? 0.75 : 0.4;
+            },
+            hoverPhase(phase) {
+                this.hoveredPhase = phase;
+                if (this.clickThroughDragCursor) {
+                    this.clickThroughDragCursor = false;
+                    this.jumpToPhaseStart(phase);
+                }
+            },
+            resetHoveredPhase() {
+                this.hoveredPhase = null;
+            },    
+            clearPhaseMouseEvents() {
+                clearTimeout(this.dragThroughPhaseBlockTimeout);
+                this.dragThroughPhaseBlockTimeout = null;
+                clearTimeout(this.phaseDoubleClickTimeout);
+                this.phaseDoubleClickTimeout = null;
+            },
+            onPhaseMouseDown(phase, e) {
+                if (this.phaseDoubleClickTimeout) {
+                    return;
+                }
+                this.dragThroughPhaseBlockTimeout = setTimeout(() => {
+                    this.clearPhaseMouseEvents();
+                    let time = this.getTimeFromEvent(e);
+                    this.updateTime(time * 1000);
+                    this.startDragCursor(e);
+                }, 100);
+            },
+            onPhaseClick(phase, e) {
+                if (this.phaseDoubleClickTimeout) {
+                    this.clearPhaseMouseEvents();
+                    this.jumpToPhaseStart(phase);
+                } else {
+                    this.phaseDoubleClickTimeout = setTimeout(() => {
+                        this.clearPhaseMouseEvents();
+                        this.selectedPhase = phase;
+                        let time = this.getTimeFromEvent(e);
+                        this.updateTime(time * 1000);
+                        this.blockDragCursor = true;
+                        setTimeout(() => {
+                            this.blockDragCursor = false
+                        }, 150);
+                    }, 200);
+                }
+            },
+            onPhaseMouseUp(phase, e) {
+                clearTimeout(this.dragThroughPhaseBlockTimeout);
+                this.dragThroughPhaseBlockTimeout = null;
+            },
+            startDragCursorFromLine(e) {
+                // double click expected
+                if (this.blockDragCursor) {
+                    return;
+                }
+                if (e.detail > 1) {
+                    this.clickThroughDragCursor = true;
+                    let element = document.getElementById("large-line-drag")
+                    element.style.pointerEvents = 'none'; // this will cause an hover on phase bloc to appear, if phase under, we will jumpToPhaseStart it
+                    setTimeout(() => {
+                        element.style.pointerEvents = 'stroke';
+                        this.clickThroughDragCursor = false;
+                    }, 100);
+                } else {
+                    // classic use case
+                    this.startDragCursor(e);
+                }
+            },
+            startDragCursor(e) {
+                this.draggingCursor = true;
+                window.addEventListener("mousemove", this.onDragCursor);
+                window.addEventListener("mouseup", this.stopDragCursor);
+            },
+            onDragCursor(e) {
+                if (!this.draggingCursor) return;
+                let time = this.getTimeFromEvent(e);
+                time = Math.max(this.minTime, Math.min(this.maxTime, time));
+                this.updateTime(time * 1000);
+            },
+            stopDragCursor() {
+                this.draggingCursor = false;
+                window.removeEventListener("mousemove", this.onDragCursor);
+                window.removeEventListener("mouseup", this.stopDragCursor);
+            },
+            jumpToPhaseStart(phase) {
+                this.selectedPhase = phase;
+                this.updateTime(phase.start * 1000 - this.range.min);
+            },
         },
     });
 </script>

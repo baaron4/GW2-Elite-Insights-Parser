@@ -436,9 +436,9 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                replay.AddHideByBuff(target, log, Determined762);
                 break;
             case (int)TargetID.ChargedBloodstone:
+                // TODO: check if still necessary with visibility events
                 var activeXeras = log.AgentData.GetNPCsByID(TargetID.Xera).Where(x => target.AgentItem.InAwareTimes(x)).ToList();
                 long hiddenStart = target.FirstAware;
                 for (int i = 0; i < activeXeras.Count; i++)

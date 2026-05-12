@@ -427,8 +427,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                             break;
                     }
                 }
-
-                replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                if (log.CombatData.GetEvtcVersionEvent().Build < ArcDPSBuilds.VisibilityInTargetableStateChange)
+                {
+                    replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                }
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddInsatiableHungerDecoration(target, log, replay);
@@ -608,6 +610,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
     /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
+        if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+        {
+            return;
+        }
         var castEvents = target.GetCastEvents(log).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
         long invisibleStart = log.LogData.EvtcLogStart;
         bool startTrimmed = false;
