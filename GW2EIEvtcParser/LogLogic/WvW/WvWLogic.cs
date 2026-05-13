@@ -97,7 +97,7 @@ internal class WvWLogic : LogLogic
         return LogData.Mode.NotApplicable;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
@@ -144,6 +144,9 @@ internal class WvWLogic : LogLogic
                 crMap = base.GetCombatMapInternal(log, arenaDecorations);
                 break;
         }
+        var boundingCRMap = new CombatReplayMap((800, 800), (0, 0, 0, 0));
+        boundingCRMap.ComputeBoundingBox(log);
+        LogLogicUtils.AddDefaultViewpointOnParentFromChild(boundingCRMap, crMap, LogID);
         return crMap;
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)

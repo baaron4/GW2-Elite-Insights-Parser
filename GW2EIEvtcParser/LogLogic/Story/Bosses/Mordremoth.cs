@@ -27,12 +27,12 @@ internal class Mordremoth : StoryInstance
         ];
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (899, 1172),
                         (-9059, 10171, -6183, 13149));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMordremoth, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMordremoth, crMap, parentMap);
         return crMap;
     }
 

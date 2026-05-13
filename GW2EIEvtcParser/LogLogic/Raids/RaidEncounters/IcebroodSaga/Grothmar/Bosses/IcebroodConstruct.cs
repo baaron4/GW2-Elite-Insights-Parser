@@ -50,12 +50,12 @@ internal class IcebroodConstruct : Grothmar
         LogID |= 0x000001;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (729, 581),
                         (-32118, -11470, -28924, -8274));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayIcebroodConstruct, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayIcebroodConstruct, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

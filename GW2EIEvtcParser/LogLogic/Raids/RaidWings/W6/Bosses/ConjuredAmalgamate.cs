@@ -57,12 +57,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ChestID = ChestID.CAChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (544, 1000),
                         (-5064, -15030, -2864, -10830));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayConjuredAmalgamate, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayConjuredAmalgamate, crMap, parentMap);
         return crMap;
     }
 

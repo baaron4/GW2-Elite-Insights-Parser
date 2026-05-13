@@ -89,12 +89,12 @@ internal class GreerTheBlightbringer : MountBalrior
         LogCategoryInformation.InSubCategoryOrder = 0;
         LogID |= 0x000001;
     }
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1912, 1845),
                         (11300, -10621, 18374, -3794));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGreerTheBlightbringer, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGreerTheBlightbringer, crMap, parentMap);
         return crMap;
     }
 
