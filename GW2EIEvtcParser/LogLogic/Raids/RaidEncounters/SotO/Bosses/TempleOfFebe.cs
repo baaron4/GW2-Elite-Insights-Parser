@@ -781,6 +781,13 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                             continue;
                         }
                     }
+
+                    // At 10%, if you phase while the side wall is active, the embodiment can show another cast later but the wall won't spawn.
+                    // Even with a cast time of 98ms the indicator is still present, so just skip the damage walls animations.
+                    if (cast.ActualDuration < indicatorDuration)
+                    {
+                        continue;
+                    }
                 }
 
                 // Frontal Damage Beam

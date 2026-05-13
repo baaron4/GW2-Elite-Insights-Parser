@@ -390,6 +390,9 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddEnfeeblingMiasma(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
+                // Rare edge case, sometimes Ereg can cast these
+                AddSweepTheMoldRakeTheRot(target, log, replay);
+                AddStompTheGrowth(target, log, replay);
                 break;
             case (int)TargetID.ProtoGreerling:
                 AddSweepTheMoldRakeTheRot(target, log, replay);

@@ -135,6 +135,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileJanthiriBee,
         (int)MinionID.JuvenileRaptorSwiftwing,
+        (int)MinionID.JuvenileRiverOtter,
     }
     .Union(JuvenileFelinePetIDs)
     .Union(JuvenileBirdPetIDs)
@@ -310,6 +311,7 @@ internal static class RangerHelper
             .UsingDstBaseSpecChecker(Spec.Ranger),
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
             .UsingNotAccurate(),
+        new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, (int)MinionID.JuvenileRiverOtter),
     ];
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)

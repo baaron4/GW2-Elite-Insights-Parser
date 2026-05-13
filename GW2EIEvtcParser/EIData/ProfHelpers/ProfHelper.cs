@@ -229,6 +229,13 @@ internal static class ProfHelper
         new MissileCastFinder(RelicOfTheForestDwellerMissileDamage, RelicOfTheForestDwellerMissileDamage)
             .UsingICD(100)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new MissileCastFinder(RelicOfGaldraSkill, RelicOfGaldraSkill)
+            .UsingICD(100)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheCruelOverseer, KudasCrueltyModifierBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(RelicOfTheDirector, RelicOfTheDirector)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         #endregion Relics
         #region Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
