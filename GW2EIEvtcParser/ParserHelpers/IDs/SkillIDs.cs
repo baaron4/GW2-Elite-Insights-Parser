@@ -75,6 +75,7 @@ public static class SkillIDs
     public const long SymbolOfResolutionOrLesser = -56;
     public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
     public const long DhuumEtherealSealInteract = -58;
+    public const long RelicOfTheCruelOverseer = -59;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

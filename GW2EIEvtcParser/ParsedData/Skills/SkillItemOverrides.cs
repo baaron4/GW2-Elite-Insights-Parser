@@ -96,7 +96,7 @@ public static class SkillItemOverrides
         { RelicOfTheSteamshrieker, "Relic of the Steamshrieker" },
         { RelicOfShacklesDamageSkill, "Relic of Shackles (Damage)" },
         { RelicOfGaldraSkill, "Relic of Galdra" },
-        { KudasCrueltyModifierBuff, "Relic of the Cruel Overseer" },
+        { RelicOfTheCruelOverseer, "Relic of the Cruel Overseer" },
         #endregion Relics
         #region Elementalist
         { ShatteringIceDamage, "Shattering Ice (Hit)" },
@@ -955,7 +955,6 @@ public static class SkillItemOverrides
             { LeyLineVortexAetherHunterPet, SkillImages.LeylineVortexAetherHunter },
             { LungeAetherHunterPet, SkillImages.LungeVortexAetherHunter },
             { BumbleJanthiriBee, SkillImages.BumbleJanthiriBee },
-            { InnocentDisplayJuvenileRiverOtter, SkillImages.InnocentDisplayOtter },
             { JetJuvenileRiverOtter, SkillImages.JetOtter },
             { ScratchJuvenileRiverOtter, SkillImages.ScratchOtter },
             { TailWhipJuvenileRiverOtter, SkillImages.TailWhipOtter  },

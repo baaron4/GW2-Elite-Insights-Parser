@@ -232,7 +232,7 @@ internal static class ProfHelper
         new MissileCastFinder(RelicOfGaldraSkill, RelicOfGaldraSkill)
             .UsingICD(100)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffGainCastFinder(KudasCrueltyModifierBuff, KudasCrueltyModifierBuff)
+        new BuffGainCastFinder(RelicOfTheCruelOverseer, KudasCrueltyModifierBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheDirector, RelicOfTheDirector)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
