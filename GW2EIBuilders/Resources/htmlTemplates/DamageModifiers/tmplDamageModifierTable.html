@@ -283,7 +283,7 @@
                     res +=  "<br>" + percent;
                     let gain;
                     if (mod.nonMultiplier) {
-                        gain = "Damage Done: ";
+                        gain = "Damage: ";
                     } else {
                         gain = "Pure Damage: ";
                     }
@@ -292,8 +292,8 @@
                         gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
                     }
                     res += "<br>" + gain;
-                } else if (item[3] > 0) {
-                    res += "<br> Damage Done during: " + item[3];
+                } else if (item[2] > 0) {
+                    res += "<br> Damage During: " + item[2];
                 }
                 return res;
             },

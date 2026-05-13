@@ -23,7 +23,7 @@ public class JsonDamageModifierData
         /// <summary>
         /// Gained damage \n
         /// If the corresponding <see cref="JsonLog.DamageModDesc.NonMultiplier"/> is true then this value correspond to the damage done while under the effect. One will have to deduce the gain manualy depending on your gear. \n
-        /// If the corresponding <see cref="JsonLog.DamageModDesc.IsCounter"/> is true, this value will always be 0.
+        /// If the corresponding <see cref="JsonLog.DamageModDesc.IsCounter"/> is true, this value will be damage done under the conditions of the counter.
         /// </summary>
         public double DamageGain;
 

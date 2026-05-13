@@ -19,7 +19,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     private ulong _maxBuild = GW2Builds.EndOfLife;
     private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
     private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
-    public bool Multiplier => GainComputer.Multiplier;
+    public bool Multiplier => GainComputer.Multiplier || IsCounter;
     public bool SkillBased => GainComputer.SkillBased;
 
     public bool WithAbsorbedDamageEvents { get; private set; } = false;

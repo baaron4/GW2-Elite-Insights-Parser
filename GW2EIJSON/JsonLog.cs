@@ -196,7 +196,7 @@ public class JsonLog
         public bool NonMultiplier;
 
         /// <summary>
-        /// True if the modifier is just a counter, its <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> will be 0
+        /// True if the modifier is just a counter, its <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> will be damage done under the conditions of the counter
         /// </summary>
         public bool IsCounter;
 
