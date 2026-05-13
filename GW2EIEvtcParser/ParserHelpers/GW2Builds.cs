@@ -253,5 +253,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-04-14
     public const ulong April2026Balancepocalypse = 198816;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2026-05-12
+    public const long May2026NewRelicsAndOtter = 200514;
+
     public const ulong EndOfLife = ulong.MaxValue;
 }

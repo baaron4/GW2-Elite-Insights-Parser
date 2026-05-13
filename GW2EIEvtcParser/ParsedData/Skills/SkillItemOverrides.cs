@@ -579,6 +579,7 @@ public static class SkillItemOverrides
         { RelicOfShacklesDamageSkill, ItemImages.RelicOfShackles },
         { RelicOfTheForestDwellerMissileDamage, ItemImages.RelicOfTheForestDweller },
         { RelicOfGaldraSkill, ItemImages.RelicOfGaldra },
+        { RelicOfTheCruelOverseer, ItemImages.RelicOfTheCruelOverseer },
 #endregion RelicIcons
         #region ElementalistIcons
         { EarthenBlast, TraitImages.EarthenBlast },

@@ -104,8 +104,11 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheSorrow, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RelicOfTheFirstRevenant, Resistance, "Relic of the First Revenant", "-33% under resistance", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheFirstRevenant, DamageModifierMode.All)
             .WithBuilds(GW2Builds.OctoberVoERelease),
-        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-15% (not stacking with similar damage mods)", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-10% (not stacking with similar damage mods)", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.WvW),
-        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-7% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.sPvP),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-15% (not stacking with similar damage mods)", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-10% (not stacking with similar damage mods)", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-7% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
     ];
 }
