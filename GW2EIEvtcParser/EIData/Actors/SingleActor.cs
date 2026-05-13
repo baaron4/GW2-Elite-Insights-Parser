@@ -771,7 +771,7 @@ public abstract partial class SingleActor : Actor
             DamageTakenEventsBySrc[_nullAgent] = damageTakenEvents;
         }
     }
-    #region DMAGE MOD ACCELERATORS
+    #region DAMAGE MOD ACCELERATORS
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
     /// <summary>
     /// cached method for damage modifiers
@@ -806,8 +806,6 @@ public abstract partial class SingleActor : Actor
         }
         return dls;
     }
-    #endregion HIT ACCELERATORS
-    #region NON HIT ACCELERATORS
 
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitAndAbsorbedDamageEvents = [];
     /// <summary>
