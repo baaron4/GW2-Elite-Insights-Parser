@@ -35,8 +35,8 @@ public class CombatReplayMap
     private readonly List<CombatReplayMapViewpoint> _defaultViewpoints = [];
     public IReadOnlyList<CombatReplayMapViewpoint>? DefaultViewpoints => _defaultViewpoints.Count > 0 ? _defaultViewpoints : null;
 
-    //private (int topX, int topY, int bottomX, int bottomY) _fullRect;
-    //private (int bottomX, int bottomY, int topX, int topY) _worldRect;
+    private (int topX, int topY, int bottomX, int bottomY) _mapRect;
+    private (int topX, int topY, int bottomX, int bottomY) _continentRect;
 
     /// <summary>
     ///
@@ -54,19 +54,36 @@ public class CombatReplayMap
         _rectInMap = rectInMap;
     }
 
-    /*/internal CombatReplayMap(string link, (int width, int height) size, (int topX, int topY, int bottomX, int bottomY) rect, (int topX, int topY, int bottomX, int bottomY) fullRect, (int bottomX, int bottomY, int topX, int topY) worldRect)
+    /// <summary>
+    /// Constructor with continentRect and mapRect. Use this contructor if you need to convert continent coordinates to map coordinates
+    /// </summary>
+    /// <param name="link">Url to the image</param>
+    /// <param name="urlPixelSize">Width and Height of the image in pixel</param>
+    /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
+    /// <param name="mapRect">The full map rectangle region</param>
+    /// <param name="continentRect">The continent rectangle region corresponding to the image in map coordinates</param>
+    internal CombatReplayMap((int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap, (int topX, int topY, int bottomX, int bottomY) mapRect, (int topX, int topY, int bottomX, int bottomY) continentRect) : this(urlPixelSize, rectInMap)
     {
-        _maps.Add(new MapItem()
+        _mapRect = mapRect;
+        _continentRect = continentRect;
+    }
+
+    private int _mapWidth => (_mapRect.topX - _mapRect.bottomX);
+    private int _mapHeight => (_mapRect.topY - _mapRect.bottomY);
+    private int _continentWidth => (_continentRect.topX - _continentRect.bottomX);
+    private int _continentHeight => (_continentRect.topY - _continentRect.bottomY);
+
+    internal Vector3 ContinentCoordToMapCoord(Vector3 iPos)
+    {
+        if (_mapWidth == 0 || _continentWidth == 0 || _continentHeight == 0 || _mapHeight == 0)
         {
-            Link = link,
-            Start = -1,
-            End = -1
-        });
-        _size = size;
-        _rect = rect;
-        _fullRect = fullRect;
-        _worldRect = worldRect;
-    }*/
+            throw new InvalidOperationException("Missing continent data in CombatReplay map for conversion");
+        }
+        return new Vector3(
+            (iPos.X - _continentRect.bottomX) / _continentWidth * _mapWidth + _mapRect.bottomX,
+            (iPos.Y - _continentRect.bottomY) / _continentHeight * _mapHeight + _mapRect.bottomY, 
+            iPos.Z);
+    }
 
     public (int width, int height) GetPixelMapSize()
     {

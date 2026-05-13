@@ -123,8 +123,37 @@ internal static class CombatEventFactory
                 metaDataEvents.AttackTargetEventByAttackTarget[aTEvt.AttackTarget] = aTEvt;
                 break;
             case StateChange.Targetable:
-                var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
-                Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
+                {
+                    var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
+                    if (statusEvents.TargetableEventsBySrc.TryGetValue(tarEvt.Src, out var targetableEvents))
+                    {
+                        var lastTargetable = targetableEvents[^1];
+                        if (lastTargetable.Targetable != tarEvt.Targetable)
+                        {
+                            targetableEvents.Add(tarEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
+                    }
+                }
+                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+                {
+                    var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
+                    if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
+                    {
+                        var lastVisibility = visibilityEvents[^1];
+                        if (lastVisibility.Visible != visEvt.Visible)
+                        {
+                            visibilityEvents.Add(visEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.VisibilityEventsBySrc, visEvt.Src, visEvt);
+                    }
+                }
                 break;
             case StateChange.MapID:
                 metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));

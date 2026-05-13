@@ -211,13 +211,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    internal static AgentItem CreateCustomSwordAgent(LogData logData, AgentData agentData)
+    internal static void CreateCustomSwordAgent(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {    
-        return agentData.AddCustomNPCAgent(long.MinValue, long.MinValue, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
-    }
-
-    internal static void RedirectSwordDamageToSwordAgent(AgentItem sword, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
+        var sword = agentData.AddCustomNPCAgent(long.MinValue, long.MinValue, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
         foreach (CombatItem c in combatData)
         {
             if (c.IsDamageEvent(extensions) && c.SkillID == ConjuredSlashPlayer)
@@ -226,7 +222,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 if (sword.FirstAware == long.MinValue)
                 {
                     sword.OverrideAwareTimes(c.Time, c.Time);
-                } else
+                }
+                else
                 {
                     sword.OverrideAwareTimes(sword.FirstAware, c.Time);
                 }
@@ -236,9 +233,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sword = CreateCustomSwordAgent(logData, agentData);
+        CreateCustomSwordAgent(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

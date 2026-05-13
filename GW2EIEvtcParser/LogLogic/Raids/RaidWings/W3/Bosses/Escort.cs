@@ -322,6 +322,7 @@ internal class Escort : StrongholdOfTheFaithful
         switch (target.ID)
         {
             case (int)TargetID.McLeodTheSilent:
+                // TODO: check if still necessary with visibility events
                 replay.AddHideByBuff(target, log, Invulnerability757);
                 break;
         }

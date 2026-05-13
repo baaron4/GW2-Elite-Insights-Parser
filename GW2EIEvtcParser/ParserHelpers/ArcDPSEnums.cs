@@ -38,6 +38,7 @@ public static class ArcDPSEnums
         public const int AnimationAsStateChanges = 20260430;
         public const int BuffAppliesAndRemovesAsStateChanges = 20260501;
         public const int ResultEnumRework = 20260501;
+        public const int VisibilityInTargetableStateChange = 20260510;
         //
         public const int EndOfLife = int.MaxValue;
     }

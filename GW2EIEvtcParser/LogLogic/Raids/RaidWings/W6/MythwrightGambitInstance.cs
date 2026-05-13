@@ -282,7 +282,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ConjuredAmalgamate.HandleCAAgents(agentData, combatData);
-        var sword = ConjuredAmalgamate.CreateCustomSwordAgent(logData, agentData);
+        ConjuredAmalgamate.CreateCustomSwordAgent(logData, agentData, combatData, extensions);
         var maxHPUpdates = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -291,7 +291,6 @@ internal class MythwrightGambitInstance : MythwrightGambit
         Qadim.FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
         Qadim.FindPyres(gw2Build, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        ConjuredAmalgamate.RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
         Qadim.RenamePyres(Targets);
         foreach (SingleActor actor in Targets)
         {

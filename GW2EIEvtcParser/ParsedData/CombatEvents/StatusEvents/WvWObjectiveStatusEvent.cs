@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.WvWHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -7,6 +8,8 @@ public class WvWObjectiveStatusEvent
 {
     public readonly int MapID;
     public readonly int ObjectiveID;
+
+    public readonly uint AutoUpgradeProgress;
 
     public ObjectiveType ObjectiveType => _objectiveData != null ? _objectiveData.Type : ObjectiveType.Unknown;
 
@@ -20,6 +23,7 @@ public class WvWObjectiveStatusEvent
     {
         MapID = evtcItem.Value;
         ObjectiveID = evtcItem.BuffDmg;
+        AutoUpgradeProgress = evtcItem.Pad;
         Owners.Add((evtcItem.SkillID, evtcItem.Time));
         _objectiveData = GetObjectiveData(MapID, ObjectiveID);
     }
@@ -56,13 +60,13 @@ public class WvWObjectiveStatusEvent
         return _objectiveData.GetIcon(ownership);
     }
 
-    public Vector3 GetPosition()
+    public Vector3 GetPosition(CombatReplayMap crMap)
     {
         if (_objectiveData == null)
         {
             return new Vector3();
         }
-        return new (_objectiveData.Position.X, _objectiveData.Position.Y, _objectiveData.Position.Z);
+        return crMap.ContinentCoordToMapCoord(_objectiveData.ContinentPosition);
     }
 
 }

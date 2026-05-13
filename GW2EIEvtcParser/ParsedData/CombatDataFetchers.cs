@@ -96,7 +96,22 @@ partial class CombatData
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
     {
+        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        {
+            return [];
+        }
         return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
+    }
+
+    public IReadOnlyList<VisibilityEvent> GetVisibilityEventsBySrc(AgentItem attackTarget)
+    {
+        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        {
+            return [];
+        }
+        return _statusEvents.VisibilityEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
     }
     #endregion ATTACKTARGETS
     #region DATE
