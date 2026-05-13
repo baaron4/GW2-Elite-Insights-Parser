@@ -200,7 +200,7 @@ public partial class SettingsForm : Form
     {
         _programSettings.SaveOutHTML = ChkOutputHtml.Checked;
         Settings.Default.SaveOutHTML = _programSettings.SaveOutHTML;
-        PanelHtml.Enabled = _programSettings.SaveOutHTML;
+        SetUIEnable();
     }
 
     private void ChkOutputCsvCheckedChanged(object sender, EventArgs e)
@@ -282,11 +282,7 @@ public partial class SettingsForm : Form
     {
         _programSettings.HtmlExternalScripts = ChkHtmlExternalScripts.Checked;
         Settings.Default.HtmlExternalScripts = _programSettings.HtmlExternalScripts;
-        LblHtmlExternalScriptsPath.Enabled = ChkHtmlExternalScripts.Checked;
-        TxtHtmlExternalScriptsPath.Enabled = ChkHtmlExternalScripts.Checked;
-        LblHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
-        TxtHtmlExternalScriptsCdn.Enabled = ChkHtmlExternalScripts.Checked;
-        BtnHtmlExternalScriptPathSelect.Enabled = ChkHtmlExternalScripts.Checked;
+        SetUIEnable();
     }
 
     private void ChkHtmlCompressCheckedChanged(object sender, EventArgs e)
