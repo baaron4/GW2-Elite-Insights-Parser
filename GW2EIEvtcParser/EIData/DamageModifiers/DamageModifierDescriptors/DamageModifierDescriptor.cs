@@ -33,6 +33,8 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public bool FoeAlwaysMaster { get; private set; }
     public bool ActorAlwaysMaster { get; private set; }
 
+    public virtual bool IsCounter => false;
+
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private readonly List<DamageLogChecker> _dlCheckers;
     private readonly List<ActorChecker> _earlyExitCheckers;

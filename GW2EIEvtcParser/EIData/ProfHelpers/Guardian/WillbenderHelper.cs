@@ -105,7 +105,7 @@ internal static class WillbenderHelper
             .UsingApproximate()
             .WithBuilds(GW2Builds.March2022Balance2),
         // Rushing Justice
-        new CounterOnActorDamageModifier(Mod_RushingJustice, RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, SkillImages.RushingJustice, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_RushingJustice, RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, ByPresence, SkillImages.RushingJustice, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1)
     ];
 

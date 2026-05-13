@@ -14,6 +14,8 @@ public abstract class DamageModifier
     public bool Multiplier => DamageModDescriptor.Multiplier;
     public bool SkillBased => DamageModDescriptor.SkillBased;
 
+    public bool IsCounter => DamageModDescriptor.IsCounter;
+
     public bool Approximate => DamageModDescriptor.Approximate;
     public bool SpecSpecificShared => DamageModDescriptor.SpecSpecificShared;
     public IReadOnlyCollection<Source> Srcs => DamageModDescriptor.Srcs;
