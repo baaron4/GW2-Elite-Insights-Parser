@@ -13,6 +13,7 @@ public abstract class DamageModifier
     internal readonly DamageSource DmgSrc;
     public bool Multiplier => DamageModDescriptor.Multiplier;
     public bool SkillBased => DamageModDescriptor.SkillBased;
+    public bool HitDamageEvents => DamageModDescriptor.HitDamageEvents;
 
     public bool IsCounter => DamageModDescriptor.IsCounter;
 
@@ -52,6 +53,10 @@ public abstract class DamageModifier
         }
         Tooltip += "<br>Applied on " + SrcType.DamageTypeToString();
         Tooltip += "<br>Compared against " + CompareType.DamageTypeToString();
+        if (IsCounter)
+        {
+            Tooltip += "<br>Counter";
+        }
         if (!Multiplier)
         {
             Tooltip += "<br>Non multiplier";
@@ -72,10 +77,10 @@ public abstract class DamageModifier
 
     public abstract int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
 
-    public abstract IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
+    public abstract IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
 
-    public IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t)
+    public IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t)
     {
-        return GetHitDamageEvents(actor, log, t, log.LogData.LogStart, log.LogData.LogEnd);
+        return GetDamageEvents(actor, log, t, log.LogData.LogStart, log.LogData.LogEnd);
     }
 }

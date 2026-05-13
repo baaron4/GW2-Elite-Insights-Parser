@@ -36,7 +36,7 @@ internal class SkillDamageModifier : DamageModifierDescriptor
             return [];
         }
         var res = new List<DamageModifierEvent>();
-        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
+        var typeHits = damageModifier.GetDamageEvents(actor, log, null);
         foreach (HealthDamageEvent evt in typeHits)
         {
             if (ComputeGain(null, evt, log, out _) && CheckCondition(evt, log))

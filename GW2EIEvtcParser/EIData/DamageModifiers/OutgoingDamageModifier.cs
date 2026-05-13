@@ -134,16 +134,31 @@ public class OutgoingDamageModifier : DamageModifier
         throw new NotImplementedException("Not implemented damage source " + DmgSrc);
     }
 
-    public override IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
+    public override IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        switch (DmgSrc)
+        if (!HitDamageEvents)
         {
-            case DamageSource.All:
-                return actor.GetHitDamageEvents(t, log, start, end, SrcType);
-            case DamageSource.NoPets:
-                return actor.GetJustActorHitDamageEvents(t, log, start, end, SrcType);
-            case DamageSource.PetsOnly:
-                return actor.GetJustMinionsHitDamageEvents(t, log, start, end, SrcType);
+            switch (DmgSrc)
+            {
+                case DamageSource.All:
+                    return actor.GetNonHitDamageEvents(t, log, start, end, SrcType);
+                case DamageSource.NoPets:
+                    return actor.GetJustActorNonHitDamageEvents(t, log, start, end, SrcType);
+                case DamageSource.PetsOnly:
+                    return actor.GetJustMinionsNonHitDamageEvents(t, log, start, end, SrcType);
+            }
+        }
+        else
+        {
+            switch (DmgSrc)
+            {
+                case DamageSource.All:
+                    return actor.GetHitDamageEvents(t, log, start, end, SrcType);
+                case DamageSource.NoPets:
+                    return actor.GetJustActorHitDamageEvents(t, log, start, end, SrcType);
+                case DamageSource.PetsOnly:
+                    return actor.GetJustMinionsHitDamageEvents(t, log, start, end, SrcType);
+            }
         }
         throw new NotImplementedException("Not implemented damage source " + DmgSrc);
     }

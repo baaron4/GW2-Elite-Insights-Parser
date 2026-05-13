@@ -30,7 +30,7 @@ partial class SingleActor
                         count++;
                     }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                    var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                    var typeHits = damageMod.GetDamageEvents(this, log, target, start, end);
                     res[pair.Key] = new DamageModifierStat(count, typeHits.Count, sum, totalDamage);
                 }
             }
@@ -147,7 +147,7 @@ partial class SingleActor
                         count++;
                     }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                    var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                    var typeHits = damageMod.GetDamageEvents(this, log, target, start, end);
                     res[pair.Key] = new DamageModifierStat(count, typeHits.Count, sum, totalDamage);
                 }
             }

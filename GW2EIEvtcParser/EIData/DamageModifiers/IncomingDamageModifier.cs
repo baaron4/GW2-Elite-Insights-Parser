@@ -32,9 +32,9 @@ public class IncomingDamageModifier : DamageModifier
         };
     }
 
-    public override IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
+    public override IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        return actor.GetHitDamageTakenEvents(t, log, start, end, SrcType);
+        return HitDamageEvents ? actor.GetHitDamageTakenEvents(t, log, start, end, SrcType) : actor.GetNonHitDamageTakenEvents(t, log, start, end, SrcType);
     }
     internal override AgentItem GetFoe(HealthDamageEvent evt)
     {

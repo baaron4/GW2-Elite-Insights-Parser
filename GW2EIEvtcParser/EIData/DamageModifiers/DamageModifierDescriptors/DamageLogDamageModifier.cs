@@ -28,7 +28,7 @@ internal class DamageLogDamageModifier : DamageModifierDescriptor
         if (ComputeGain(null, null, log, out double gain))
         {
 
-            var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
+            var typeHits = damageModifier.GetDamageEvents(actor, log, null);
             foreach (HealthDamageEvent evt in typeHits)
             {
                 if (CheckCondition(evt, log))

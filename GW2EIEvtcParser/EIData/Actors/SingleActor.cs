@@ -771,7 +771,7 @@ public abstract partial class SingleActor : Actor
             DamageTakenEventsBySrc[_nullAgent] = damageTakenEvents;
         }
     }
-
+    #region HIT ACCELERATORS
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
     /// <summary>
     /// cached method for damage modifiers
@@ -806,7 +806,44 @@ public abstract partial class SingleActor : Actor
         }
         return dls;
     }
+    #endregion HIT ACCELERATORS
+    #region NON HIT ACCELERATORS
 
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfNonHitDamageEvents = [];
+    /// <summary>
+    /// cached method for damage modifiers
+    /// </summary>
+    internal IReadOnlyList<HealthDamageEvent> GetJustActorNonHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
+    {
+        if (!_typedSelfNonHitDamageEvents.TryGetValue(damageType, out var nonHitDamageEventsPerPhasePerTarget))
+        {
+            nonHitDamageEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedSelfNonHitDamageEvents[damageType] = nonHitDamageEventsPerPhasePerTarget;
+        }
+        if (!nonHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        {
+            dls = GetNonHitDamageEvents(target, log, start, end, damageType).Where(x => x.From.Is(AgentItem)).ToList();
+            nonHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsNonHitDamageEvents = [];
+    internal IReadOnlyList<HealthDamageEvent> GetJustMinionsNonHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
+    {
+        if (!_typedMinionsNonHitDamageEvents.TryGetValue(damageType, out var nonHitDamageEventsPerPhasePerTarget))
+        {
+            nonHitDamageEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedMinionsNonHitDamageEvents[damageType] = nonHitDamageEventsPerPhasePerTarget;
+        }
+        if (!nonHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        {
+            dls = GetNonHitDamageEvents(target, log, start, end, damageType).Where(x => !x.From.Is(AgentItem)).ToList();
+            nonHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+    #endregion NON HIT ACCELERATORS
     #endregion DAMAGE
 
     #region BREAKBAR DAMAGE

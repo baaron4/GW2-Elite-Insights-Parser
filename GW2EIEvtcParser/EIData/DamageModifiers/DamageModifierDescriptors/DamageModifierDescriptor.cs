@@ -22,6 +22,8 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public bool Multiplier => GainComputer.Multiplier;
     public bool SkillBased => GainComputer.SkillBased;
 
+    public bool HitDamageEvents { get; private set; } = true;
+
     public bool Approximate { get; protected set; } = false;
     public readonly HashSet<Source> Srcs;
     public readonly string Icon;
@@ -87,6 +89,12 @@ internal abstract class DamageModifierDescriptor : IVersionable
     internal virtual DamageModifierDescriptor UsingEarlyExit(ActorChecker actorChecker)
     {
         _earlyExitCheckers.Add(actorChecker);
+        return this;
+    }
+
+    internal virtual DamageModifierDescriptor UsingNonHitDamageEvents()
+    {
+        HitDamageEvents = false;
         return this;
     }
 

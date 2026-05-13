@@ -227,8 +227,10 @@ internal static class ElementalistHelper
 
         // Focus
         new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+            .UsingNonHitDamageEvents()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
         new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Elementalist, ByPresence, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+            .UsingNonHitDamageEvents()
             .WithBuilds(GW2Builds.July2018Balance),
     ];
 

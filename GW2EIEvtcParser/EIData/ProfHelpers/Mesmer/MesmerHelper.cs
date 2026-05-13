@@ -237,9 +237,11 @@ internal static class MesmerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Distortion
-        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)   
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
+            .UsingNonHitDamageEvents()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
         new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
+            .UsingNonHitDamageEvents()
             .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
