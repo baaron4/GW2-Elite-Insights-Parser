@@ -238,10 +238,10 @@ internal static class MesmerHelper
     [
         // Distortion
         new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
-            .UsingNonHitDamageEvents()
+            .UsingHitAndAbsorbedDamageEvents()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
         new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
-            .UsingNonHitDamageEvents()
+            .UsingHitAndAbsorbedDamageEvents()
             .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];

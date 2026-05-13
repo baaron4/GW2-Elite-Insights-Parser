@@ -22,7 +22,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public bool Multiplier => GainComputer.Multiplier;
     public bool SkillBased => GainComputer.SkillBased;
 
-    public bool HitDamageEvents { get; private set; } = true;
+    public bool WithAbsorbedDamageEvents { get; private set; } = false;
 
     public bool Approximate { get; protected set; } = false;
     public readonly HashSet<Source> Srcs;
@@ -92,9 +92,10 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return this;
     }
 
-    internal virtual DamageModifierDescriptor UsingNonHitDamageEvents()
+    internal virtual DamageModifierDescriptor UsingHitAndAbsorbedDamageEvents()
     {
-        HitDamageEvents = false;
+        WithAbsorbedDamageEvents = true;
+        UsingChecker((dl, log) => dl.IsAbsorbed);
         return this;
     }
 

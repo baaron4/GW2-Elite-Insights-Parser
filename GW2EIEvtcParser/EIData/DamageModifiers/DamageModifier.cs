@@ -13,7 +13,7 @@ public abstract class DamageModifier
     internal readonly DamageSource DmgSrc;
     public bool Multiplier => DamageModDescriptor.Multiplier;
     public bool SkillBased => DamageModDescriptor.SkillBased;
-    public bool HitDamageEvents => DamageModDescriptor.HitDamageEvents;
+    public bool WithAbsorbedDamageEvents => DamageModDescriptor.WithAbsorbedDamageEvents;
 
     public bool IsCounter => DamageModDescriptor.IsCounter;
 

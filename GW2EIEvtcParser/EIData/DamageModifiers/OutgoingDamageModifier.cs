@@ -17,6 +17,10 @@ public class OutgoingDamageModifier : DamageModifier
 
     public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
+        if (WithAbsorbedDamageEvents)
+        {
+            return 0;
+        }
         DamageStatistics damageData = actor.GetDamageStats(t, log, start, end);
         switch (CompareType)
         {
@@ -136,16 +140,16 @@ public class OutgoingDamageModifier : DamageModifier
 
     public override IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        if (!HitDamageEvents)
+        if (WithAbsorbedDamageEvents)
         {
             switch (DmgSrc)
             {
                 case DamageSource.All:
-                    return actor.GetNonHitDamageEvents(t, log, start, end, SrcType);
+                    return actor.GetHitAndAbsorbedDamageEvents(t, log, start, end, SrcType);
                 case DamageSource.NoPets:
-                    return actor.GetJustActorNonHitDamageEvents(t, log, start, end, SrcType);
+                    return actor.GetJustActorHitAndAbsorbedDamageEvents(t, log, start, end, SrcType);
                 case DamageSource.PetsOnly:
-                    return actor.GetJustMinionsNonHitDamageEvents(t, log, start, end, SrcType);
+                    return actor.GetJustMinionsHitAndAbsorbedDamageEvents(t, log, start, end, SrcType);
             }
         }
         else

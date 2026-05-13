@@ -186,7 +186,7 @@ public abstract class Actor
     {
         return GetDamageTakenEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
-    #region HIT ACCELERATORS
+    #region DAMAGE MOD ACCELERATORS
     private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageEvents = [];
     public IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
@@ -208,44 +208,40 @@ public abstract class Actor
     private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageTakenEvents = [];
     public IReadOnlyList<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
-        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
+        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var damageTakenEventsPerPhasePerTarget))
         {
-            hitDamageTakenEventsPerPhasePerTarget = new(AgentItem, log);
-            _typedHitDamageTakenEvents[damageType] = hitDamageTakenEventsPerPhasePerTarget;
+            damageTakenEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedHitDamageTakenEvents[damageType] = damageTakenEventsPerPhasePerTarget;
         }
-        if (!hitDamageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
+        if (!damageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
         {
             dls = GetDamageTakenEvents(target, log, start, end).Where(x => x.HasHit).ToList();
             FilterDamageEvents(log, dls, damageType);
-            hitDamageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
+            damageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
     }
-    #endregion HIT ACCELERATORS
 
-    #region NON HIT ACCELERATORS
-
-
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedNonHitDamageEvents = [];
-    public IReadOnlyList<HealthDamageEvent> GetNonHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitOrAbsorbedDamageEvents = [];
+    public IReadOnlyList<HealthDamageEvent> GetHitAndAbsorbedDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
-        if (!_typedNonHitDamageEvents.TryGetValue(damageType, out var nonHitDamageEventsPerPhasePerTarget))
+        if (!_typedHitOrAbsorbedDamageEvents.TryGetValue(damageType, out var damageEventsPerPhasePerTarget))
         {
-            nonHitDamageEventsPerPhasePerTarget = new(AgentItem, log);
-            _typedNonHitDamageEvents[damageType] = nonHitDamageEventsPerPhasePerTarget;
+            damageEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedHitOrAbsorbedDamageEvents[damageType] = damageEventsPerPhasePerTarget;
         }
 
-        if (!nonHitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
+        if (!damageEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
         {
-            dls = GetDamageEvents(target, log, start, end).Where(x => !x.HasHit).ToList();
+            dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit || x.IsAbsorbed).ToList();
             FilterDamageEvents(log, dls, damageType);
-            nonHitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            damageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
     }
 
     private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedNonHitDamageTakenEvents = [];
-    public IReadOnlyList<HealthDamageEvent> GetNonHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    public IReadOnlyList<HealthDamageEvent> GetHitAndAbsorbedDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
         if (!_typedNonHitDamageTakenEvents.TryGetValue(damageType, out var nonHitDamageTakenEventsPerPhasePerTarget))
         {
@@ -254,13 +250,13 @@ public abstract class Actor
         }
         if (!nonHitDamageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
         {
-            dls = GetDamageTakenEvents(target, log, start, end).Where(x => !x.HasHit).ToList();
+            dls = GetDamageTakenEvents(target, log, start, end).Where(x => x.HasHit || x.IsAbsorbed).ToList();
             FilterDamageEvents(log, dls, damageType);
             nonHitDamageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
     }
-    #endregion NON HIT ACCELERATORS
+    #endregion DAMAGE MOD ACCELERATORS
     #endregion Damage
     #region BreakbarDamage
 

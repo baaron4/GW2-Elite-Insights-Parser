@@ -191,7 +191,7 @@ internal static class GuardianHelper
         new BuffOnActorDamageModifier(Mod_SignetOfJudgmentPI, SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.Incoming, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, SkillImages.SignetOfJudgment, DamageModifierMode.All),
         // - Renewed Focus
         new CounterOnActorDamageModifier(Mod_RenewedFocus, RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Guardian, ByPresence, SkillImages.RenewedFocus, DamageModifierMode.All)
-            .UsingNonHitDamageEvents()
+            .UsingHitAndAbsorbedDamageEvents()
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
