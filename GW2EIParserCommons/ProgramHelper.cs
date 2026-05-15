@@ -8,7 +8,6 @@ using GW2EIWingman;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
 using GW2EIMistWarrior;
-using GW2EIMistWarrior.MistWarriorUploadJsons;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -323,9 +322,11 @@ public sealed class ProgramHelper : IDisposable
         }
         if (Settings.UploadToMistWarrior)
         {
+            originalController.MistWarriorUploadTentative = true;
             originalController.UpdateProgressWithCancellationCheck("MistWarrior: Uploading");
-            MistWarriorUploadObject? mwResponse = MistWarriorController.Upload(fInfo, str => originalController.UpdateProgress("MistWarrior: " + str), Settings.MistWarriorUserToken);
-            string mwMessage = mwResponse?.Id ?? "Upload process failed";
+            bool mwResponse = MistWarriorController.Upload(fInfo, str => originalController.UpdateProgress("MistWarrior: " + str), Settings.MistWarriorUserToken);
+            string mwMessage = mwResponse ? "Upload process success" : "Upload process failed";
+            originalController.MistWarriorUploadFailed = !mwResponse;
             originalController.UpdateProgressWithCancellationCheck("MistWarrior: " + mwMessage);
         }
         return uploadresult;

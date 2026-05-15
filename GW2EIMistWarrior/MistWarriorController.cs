@@ -1,6 +1,4 @@
 using System.Net;
-using System.Text.Json;
-using GW2EIMistWarrior.MistWarriorUploadJsons;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIMistWarrior;
@@ -18,12 +16,6 @@ public static class MistWarriorController
     private const string UploadUrl = "https://api.mistwarrior.com/api/v1/logs/upload/ei"; 
 #endif
 
-    private static readonly JsonSerializerOptions DeserializerSettings = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        IncludeFields = true,
-    };
-
     private static readonly HttpClient HTTPClient = new()
     {
         Timeout = Timeout.InfiniteTimeSpan
@@ -32,18 +24,18 @@ public static class MistWarriorController
     /// <summary>
     /// Uploads an EVTC archive to Mist Warrior. Sends <c>Authorization: Bearer {userToken}</c>.
     /// </summary>
-    public static MistWarriorUploadObject? Upload(FileInfo fi, TraceHandler traceHandler, string userToken)
+    public static bool Upload(FileInfo fi, TraceHandler traceHandler, string userToken)
     {
         if (string.IsNullOrWhiteSpace(userToken))
         {
             traceHandler("Upload token is missing");
-            return null;
+            return false;
         }
 
         if (!fi.Exists)
         {
             traceHandler("File does not exist");
-            return null;
+            return false;
         }
 
         string fileName = fi.Name;
@@ -61,7 +53,7 @@ public static class MistWarriorController
         return SendUploadRequest(contentCreator, traceHandler, userToken.Trim());
     }
 
-    private static MistWarriorUploadObject? SendUploadRequest(Func<HttpContent> contentFactory, TraceHandler traceHandler, string userToken)
+    private static bool SendUploadRequest(Func<HttpContent> contentFactory, TraceHandler traceHandler, string userToken)
     {
         const int tentatives = 2;
         for (int i = 0; i < tentatives; i++)
@@ -76,26 +68,15 @@ public static class MistWarriorController
             {
                 using HttpResponseMessage httpResponse = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead).GetAwaiter().GetResult();
                 HttpStatusCode statusCode = httpResponse.StatusCode;
+
+                if (statusCode is HttpStatusCode.OK or HttpStatusCode.Created)
+                {
+                    return true;
+                }
+                
                 string stringContents = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                if (statusCode != HttpStatusCode.OK && statusCode != HttpStatusCode.Created)
-                {
-                    traceHandler("Upload tentative failed");
-                    traceHandler("HTTP " + (int)statusCode + " " + statusCode + ": " + stringContents);
-                    continue;
-                }
-
-                try
-                {
-                    MistWarriorUploadObject? item = JsonSerializer.Deserialize<MistWarriorUploadObject>(stringContents, DeserializerSettings);
-                    traceHandler("Upload tentative successful");
-                    return item;
-                }
-                catch (JsonException ex)
-                {
-                    traceHandler("Upload tentative failed");
-                    traceHandler("Invalid JSON response: " + ex.Message);
-                }
+                traceHandler("Upload tentative failed");
+                traceHandler("HTTP " + (int)statusCode + " " + statusCode + ": " + stringContents);
             }
             catch (AggregateException agg)
             {
@@ -113,6 +94,6 @@ public static class MistWarriorController
             }
         }
 
-        return null;
+        return false;
     }
 }
