@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Properties;
 
@@ -37,7 +37,9 @@ public partial class SettingsForm : Form
         ChkMultiLogs.Enabled = !busy;
         ChkUploadDPSReports.Enabled = !busy;
         ChkUploadWingman.Enabled = !busy;
+        ChkUploadMistWarrior.Enabled = !busy;
         TxtDPSReportUserToken.Enabled = !busy;
+        TxtMistWarriorUserToken.Enabled = !busy;
         BtnResetMapList.Enabled = !busy;
         BtnResetSkillList.Enabled = !busy;
         BtnResetSpecList.Enabled = !busy;
@@ -84,7 +86,9 @@ public partial class SettingsForm : Form
         ChkIndentJSON.Checked = _programSettings.IndentJSON;
         ChkUploadDPSReports.Checked = _programSettings.UploadToDPSReports;
         ChkUploadWingman.Checked = _programSettings.UploadToWingman;
+        ChkUploadMistWarrior.Checked = _programSettings.UploadToMistWarrior;
         TxtDPSReportUserToken.Text = _programSettings.DPSReportUserToken;
+        TxtMistWarriorUserToken.Text = _programSettings.MistWarriorUserToken;
         ChkUploadWebhook.Checked = _programSettings.SendEmbedToWebhook;
         ChkUploadSimpleMessageWebhook.Checked = _programSettings.SendSimpleMessageToWebhook;
         TxtUploadWebhookUrl.Text = _programSettings.WebhookURL;
@@ -245,6 +249,19 @@ public partial class SettingsForm : Form
         _programSettings.UploadToWingman = ChkUploadWingman.Checked;
         Settings.Default.UploadToWingman = _programSettings.UploadToWingman;
         SetUIEnable();
+    }
+
+    private void ChkUploadMistWarriorCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.UploadToMistWarrior = ChkUploadMistWarrior.Checked;
+        Settings.Default.UploadToMistWarrior = _programSettings.UploadToMistWarrior;
+        SetUIEnable();
+    }
+
+    private void TxtMistWarriorUserTokenTextChanged(object sender, EventArgs e)
+    {
+        _programSettings.MistWarriorUserToken = TxtMistWarriorUserToken.Text;
+        Settings.Default.MistWarriorUserToken = _programSettings.MistWarriorUserToken;
     }
 
     private void ChkUploadWebhookCheckedChanged(object sender, EventArgs e)

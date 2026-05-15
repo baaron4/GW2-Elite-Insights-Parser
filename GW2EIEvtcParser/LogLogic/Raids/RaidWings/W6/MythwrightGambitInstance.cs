@@ -45,12 +45,13 @@ internal class MythwrightGambitInstance : MythwrightGambit
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
+        var parentCRMap = CombatReplayMap.CreateSquareMapFrom(crMap);
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayMythwrightGambit, crMap));
         foreach (var subLogic in _subLogics)
         {
-            subLogic.GetCombatMapInternal(log, arenaDecorations);
+            subLogic.GetCombatMapInternal(log, arenaDecorations, parentCRMap);
         }
-        return CombatReplayMap.CreateSquareMapFrom(crMap);
+        return parentCRMap;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)

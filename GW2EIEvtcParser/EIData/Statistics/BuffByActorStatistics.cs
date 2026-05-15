@@ -61,7 +61,7 @@ public class BuffByActorStatistics
             if (activePhaseDuration > 0)
             {
                 buffsActive._generatedBy[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
-                buffsActive._generatedPresenceBy[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
+                buffsActive._generatedPresenceBy[actor] = Math.Round(generatedPresence / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._overstackedBy[actor] = Math.Round(overstacked / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._wastedFrom[actor] = Math.Round(wasted / activePhaseDuration, ParserHelper.BuffDigit);
                 buffsActive._unknownExtensionFrom[actor] = Math.Round(unknownExtension / activePhaseDuration, ParserHelper.BuffDigit);

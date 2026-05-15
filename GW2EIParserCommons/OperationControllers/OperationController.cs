@@ -69,6 +69,9 @@ public abstract class OperationController : ParserController
     public bool WingmanUploadFailed { get; internal set; }
 
     public bool WingmanUploadRefused { get; internal set; }
+    
+    public bool MistWarriorUploadTentative { get; internal set; }
+    public bool MistWarriorUploadFailed { get; internal set; }
 
     public OperationBasicMetaData? BasicMetaData { get; set; }
 
@@ -99,6 +102,8 @@ public abstract class OperationController : ParserController
         WingmanUploadTentative = false;
         WingmanUploadFailed = false;
         WingmanUploadRefused = false;
+        MistWarriorUploadTentative = false;
+        MistWarriorUploadFailed = false;
         Elapsed = 0;
         _GeneratedFiles.Clear();
         _OpenableFiles.Clear();

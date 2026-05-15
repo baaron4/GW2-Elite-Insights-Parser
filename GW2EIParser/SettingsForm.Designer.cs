@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser;
+using GW2EIEvtcParser;
 
 namespace GW2EIParser;
 
@@ -54,7 +54,9 @@ partial class SettingsForm
         ChkCombatReplay = new CheckBox();
         ChkUploadDPSReports = new CheckBox();
         ChkUploadWingman = new CheckBox();
+        ChkUploadMistWarrior = new CheckBox();
         TxtDPSReportUserToken = new TextBox();
+        TxtMistWarriorUserToken = new TextBox();
         ChkUploadWebhook = new CheckBox();
         ChkUploadSimpleMessageWebhook = new CheckBox();
         TxtUploadWebhookUrl = new TextBox();
@@ -99,6 +101,7 @@ partial class SettingsForm
         ChkCompressRaw = new CheckBox();
         TabUpload = new TabPage();
         DPSReportUserTokenLabel = new Label();
+        MistWarriorUserTokenLabel = new Label();
         TabAPI = new TabPage();
         LblResetMap = new Label();
         LblResetSkill = new Label();
@@ -388,6 +391,18 @@ partial class SettingsForm
         ChkUploadWingman.UseVisualStyleBackColor = true;
         ChkUploadWingman.CheckedChanged += ChkUploadWingmanCheckedChanged;
         // 
+        // ChkUploadMistWarrior
+        // 
+        ChkUploadMistWarrior.AutoSize = true;
+        ChkUploadMistWarrior.Location = new Point(14, 101);
+        ChkUploadMistWarrior.Margin = new Padding(4, 3, 4, 3);
+        ChkUploadMistWarrior.Name = "ChkUploadMistWarrior";
+        ChkUploadMistWarrior.Size = new Size(148, 19);
+        ChkUploadMistWarrior.TabIndex = 47;
+        ChkUploadMistWarrior.Text = "Upload to Mist Warrior";
+        ChkUploadMistWarrior.UseVisualStyleBackColor = true;
+        ChkUploadMistWarrior.CheckedChanged += ChkUploadMistWarriorCheckedChanged;
+        // 
         // TxtDPSReportUserToken
         // 
         TxtDPSReportUserToken.Location = new Point(106, 44);
@@ -397,6 +412,16 @@ partial class SettingsForm
         TxtDPSReportUserToken.TabIndex = 15;
         TxtDPSReportUserToken.TextAlign = HorizontalAlignment.Right;
         TxtDPSReportUserToken.TextChanged += ChkDPSReportUserTokenTextChanged;
+        // 
+        // TxtMistWarriorUserToken
+        // 
+        TxtMistWarriorUserToken.Location = new Point(106, 125);
+        TxtMistWarriorUserToken.Margin = new Padding(4, 3, 4, 3);
+        TxtMistWarriorUserToken.Name = "TxtMistWarriorUserToken";
+        TxtMistWarriorUserToken.Size = new Size(262, 23);
+        TxtMistWarriorUserToken.TabIndex = 48;
+        TxtMistWarriorUserToken.TextAlign = HorizontalAlignment.Right;
+        TxtMistWarriorUserToken.TextChanged += TxtMistWarriorUserTokenTextChanged;
         // 
         // ChkUploadWebhook
         // 
@@ -466,7 +491,7 @@ partial class SettingsForm
         GroupWebhookSettings.Controls.Add(TxtUploadWebhookUrl);
         GroupWebhookSettings.Controls.Add(ChkUploadWebhook);
         GroupWebhookSettings.Controls.Add(ChkUploadSimpleMessageWebhook);
-        GroupWebhookSettings.Location = new Point(14, 119);
+        GroupWebhookSettings.Location = new Point(14, 156);
         GroupWebhookSettings.Margin = new Padding(4, 3, 4, 3);
         GroupWebhookSettings.Name = "GroupWebhookSettings";
         GroupWebhookSettings.Padding = new Padding(4, 3, 4, 3);
@@ -928,6 +953,9 @@ partial class SettingsForm
         TabUpload.Controls.Add(ChkUploadDPSReports);
         TabUpload.Controls.Add(TxtDPSReportUserToken);
         TabUpload.Controls.Add(ChkUploadWingman);
+        TabUpload.Controls.Add(MistWarriorUserTokenLabel);
+        TabUpload.Controls.Add(ChkUploadMistWarrior);
+        TabUpload.Controls.Add(TxtMistWarriorUserToken);
         TabUpload.Controls.Add(GroupWebhookSettings);
         TabUpload.Location = new Point(4, 24);
         TabUpload.Margin = new Padding(4, 3, 4, 3);
@@ -946,6 +974,16 @@ partial class SettingsForm
         DPSReportUserTokenLabel.Size = new Size(68, 15);
         DPSReportUserTokenLabel.TabIndex = 46;
         DPSReportUserTokenLabel.Text = "User Token:";
+        // 
+        // MistWarriorUserTokenLabel
+        // 
+        MistWarriorUserTokenLabel.AutoSize = true;
+        MistWarriorUserTokenLabel.Location = new Point(22, 128);
+        MistWarriorUserTokenLabel.Margin = new Padding(4, 0, 4, 0);
+        MistWarriorUserTokenLabel.Name = "MistWarriorUserTokenLabel";
+        MistWarriorUserTokenLabel.Size = new Size(68, 15);
+        MistWarriorUserTokenLabel.TabIndex = 49;
+        MistWarriorUserTokenLabel.Text = "User Token:";
         // 
         // TabAPI
         // 
@@ -1122,6 +1160,8 @@ partial class SettingsForm
     private System.Windows.Forms.CheckBox ChkUploadDPSReports;
     private System.Windows.Forms.TextBox TxtDPSReportUserToken;
     private System.Windows.Forms.CheckBox ChkUploadWingman;
+    private System.Windows.Forms.CheckBox ChkUploadMistWarrior;
+    private System.Windows.Forms.TextBox TxtMistWarriorUserToken;
     private System.Windows.Forms.GroupBox GroupWebhookSettings;
     private System.Windows.Forms.CheckBox ChkUploadWebhook;
     private System.Windows.Forms.CheckBox ChkUploadSimpleMessageWebhook;
@@ -1166,6 +1206,7 @@ partial class SettingsForm
     private System.Windows.Forms.CheckBox ChkMultiLogs;
     private System.Windows.Forms.CheckBox ChkRawTimelineArrays;
     private System.Windows.Forms.Label DPSReportUserTokenLabel;
+    private System.Windows.Forms.Label MistWarriorUserTokenLabel;
     private System.Windows.Forms.Label LblWebhookUrl;
     private System.Windows.Forms.CheckBox ChkDetailledWvW;
     private System.Windows.Forms.Label LblHtmlExternalScriptsPath;
