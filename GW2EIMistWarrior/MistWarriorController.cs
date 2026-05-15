@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIMistWarrior;
@@ -10,7 +10,7 @@ public static class MistWarriorController
 {
     public delegate void TraceHandler(string trace);
 
-#if DEBUG
+#if DEBUG_LOCAL
     private const string UploadUrl = "http://localhost:3000/api/v1/logs/upload/ei";
 #else
     private const string UploadUrl = "https://api.mistwarrior.com/api/v1/logs/upload/ei"; 
