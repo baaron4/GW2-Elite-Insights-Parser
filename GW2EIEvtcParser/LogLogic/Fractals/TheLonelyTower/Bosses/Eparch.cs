@@ -88,12 +88,12 @@ internal class Eparch : LonelyTower
         return "Eparch";
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1035, 934),
                         (-950, 1040, 2880, 4496));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEparch, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEparch, crMap, parentMap);
         return crMap;
 
     }

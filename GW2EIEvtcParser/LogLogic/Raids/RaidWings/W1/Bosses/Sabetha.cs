@@ -54,12 +54,12 @@ internal class Sabetha : SpiritVale
         ChestID = ChestID.SabethaChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1000, 990),
                         (-8587, -162, -1601, 6753));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySabetha, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySabetha, crMap, parentMap);
         return crMap;
     }
 

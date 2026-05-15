@@ -100,11 +100,19 @@ public partial class CombatData
     {
         //TODO_PERF(Rennorb) @find average complexity
         var toAdd = new List<BuffEvent>(players.Count * 10);
+        var cleanLethalTempo = false;
         foreach (AgentItem p in players)
         {
             if (p.Spec == Spec.Weaver)
             {
                 toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p), _buffData, p, skillData));
+            }
+            if (p.Spec == Spec.Willbender)
+            {
+                if(WillbenderHelper.CleanLethalTempos(GetGW2BuildEvent(), GetBuffDataByIDByDst(LethalTempo, p), GetBuffDataByIDByDst(TyrantsLethalTempo, p), p, skillData))
+                {
+                    cleanLethalTempo = true;
+                }
             }
             if (p.Spec == Spec.Virtuoso)
             {
@@ -118,6 +126,10 @@ public partial class CombatData
             {
                 ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p), _buffData, skillData);
             }
+        }
+        if (cleanLethalTempo)
+        {
+            _buffData[LethalTempo].RemoveAll(x => x.BuffID == NoBuff);
         }
         toAdd.AddRange(logData.Logic.SpecialBuffEventProcess(this, skillData));
 

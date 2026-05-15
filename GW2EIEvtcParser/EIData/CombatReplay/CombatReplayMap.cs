@@ -15,6 +15,26 @@ public class CombatReplayMap
     public float BottomX => (float)_rectInMap.bottomX;
 
     public float BottomY => (float)_rectInMap.bottomY;
+
+    public class CombatReplayMapViewpoint
+    {
+        public readonly double XTranslatePercent;
+        public readonly double YTranslatePercent;
+        public readonly double Scale;
+        public readonly long EncounterID;
+
+        internal CombatReplayMapViewpoint(double xTranslatePercent, double yTranslatePercent, double scale, long encounterID  )
+        {
+            XTranslatePercent = xTranslatePercent;
+            YTranslatePercent = yTranslatePercent;
+            Scale = scale;
+            EncounterID = encounterID;
+        }
+    }
+
+    private readonly List<CombatReplayMapViewpoint> _defaultViewpoints = [];
+    public IReadOnlyList<CombatReplayMapViewpoint>? DefaultViewpoints => _defaultViewpoints.Count > 0 ? _defaultViewpoints : null;
+
     private (int topX, int topY, int bottomX, int bottomY) _mapRect;
     private (int topX, int topY, int bottomX, int bottomY) _continentRect;
 
@@ -81,6 +101,10 @@ public class CombatReplayMap
         {
             return (pixelSize, pixelSize);
         }
+    }
+    internal void AddDefaultViewpoint(double xTranslatePercent, double yTranslatePercent, double scale, long encounterID)
+    {
+        _defaultViewpoints.Add(new CombatReplayMapViewpoint(xTranslatePercent, yTranslatePercent, scale, encounterID));
     }
 #if DEBUG
     internal void ComputeBoundingBox(ParsedEvtcLog log, long start, long end)

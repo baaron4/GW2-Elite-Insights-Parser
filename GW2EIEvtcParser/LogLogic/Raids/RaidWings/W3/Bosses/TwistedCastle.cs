@@ -37,12 +37,12 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         LogID |= 0x000003;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (774, 1000),
                         (-8058, -4321, 819, 7143));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap, parentMap);
         return crMap;
     }
 

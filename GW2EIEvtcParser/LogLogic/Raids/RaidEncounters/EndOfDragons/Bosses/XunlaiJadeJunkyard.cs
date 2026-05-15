@@ -94,12 +94,12 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         return "Xunlai Jade Junkyard";
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1485, 1292),
                         (-7090, -2785, 3647, 6556));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap, parentMap);
         return crMap;
     }
 

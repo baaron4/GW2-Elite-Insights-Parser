@@ -60,12 +60,12 @@ internal class Xera : StrongholdOfTheFaithful
         ChestID = ChestID.XeraChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1000, 897),
                         (-5992, -5992, 69, -522));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXera, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXera, crMap, parentMap);
         return crMap;
     }
 

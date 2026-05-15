@@ -33,13 +33,13 @@ internal class SunquaPeakInstance : SunquaPeak
         return "Sunqua Peak Fractal";
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((800, 800), (-12288, -12288, 12288, 12288));
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplaySunquaPeak, crMap));
         var subCrMap = _aiKeeperOfThePeak.GetCombatMapInternal(log, arenaDecorations);
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, _aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.ElementalAiMask, CombatReplayAi, subCrMap);
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, _aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.DarkAiMask, CombatReplayAi, subCrMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, _aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.ElementalAiMask, CombatReplayAi, subCrMap, parentMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, _aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.DarkAiMask, CombatReplayAi, subCrMap, parentMap);
         return CombatReplayMap.CreateSquareMapFrom(crMap);
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
