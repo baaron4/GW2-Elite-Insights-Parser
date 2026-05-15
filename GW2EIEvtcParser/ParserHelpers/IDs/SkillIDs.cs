@@ -5511,6 +5511,7 @@ public static class SkillIDs
     public const long POV_ElementalBalance = 79230; // Trait buff?
     public const long SummonSpiritsAnguishSkill2 = 79246;
     public const long RelicOfTheScoundrel = 79279;
+    public const long TyrantsLethalTempo = 79305;
     public const long FrostfireWardSecondaryAttack = 79332;
     public const long ElutriateSecondaryAttack = 79333;
     public const long LesserSymbolOfBlades = 79336;

@@ -103,33 +103,7 @@ internal static class LogLogicUtils
     }
     internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
-        bool needStart = beginWithApply;
-        var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
-        var filtered = new List<BuffEvent>();
-        for (int i = 0; i < main.Count; i++)
-        {
-            BuffEvent c = main[i];
-            if (needStart && c is BuffApplyEvent)
-            {
-                needStart = false;
-                filtered.Add(c);
-            }
-            else if (!needStart && c is BuffRemoveAllEvent)
-            {
-                // consider only last remove event before another application
-                if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1] is BuffApplyEvent))
-                {
-                    needStart = true;
-                    filtered.Add(c);
-                }
-            }
-        }
-        if (addDummyRemoveAllEventAtEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
-        {
-            BuffEvent last = filtered.Last();
-            filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-        }
-        return filtered;
+        return CombatData.GetBuffApplyRemoveSequence(combatData.GetBuffDataByIDByDst(buffID, target), target, beginWithApply, addDummyRemoveAllEventAtEnd);
     }
 
     internal static List<List<BuffEvent>> GetBuffApplyRemoveSequencePerInstanceID(CombatData combatData, long buffID, AgentItem target, bool addDummyRemoveAllEventAtEnd)
