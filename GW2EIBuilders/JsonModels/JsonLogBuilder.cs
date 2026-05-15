@@ -293,6 +293,15 @@ internal static class JsonLogBuilder
             }
             jsonLog.UsedExtensions = usedExtensions;
         }
+        if (log.CanCombatReplay)
+        {
+            jsonLog.CombatReplayMetaData = JsonCombatReplayMetaDataBuilder.BuildJsonCombatReplayMetaData(log, settings);
+        }
+        var wvwTeams = log.CombatData.GetWvWTeamsEvent();
+        if (wvwTeams != null)
+        {
+            jsonLog.WvWMapData = JsonWvWMapDataBuilder.BuildJsonWvWMapData(log, wvwTeams, teamMap);
+        }
         //
         jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
         jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
@@ -324,10 +333,6 @@ internal static class JsonLogBuilder
             jsonLog.TeamMap = teamDesc;
         }
         //
-        if (log.CanCombatReplay)
-        {
-            jsonLog.CombatReplayMetaData = JsonCombatReplayMetaDataBuilder.BuildJsonCombatReplayMetaData(log, settings);
-        }
         return jsonLog;
     }
 

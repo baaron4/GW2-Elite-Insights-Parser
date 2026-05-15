@@ -75,14 +75,14 @@ internal class Arkk : ShatteredObservatory
         LogID |= 0x000003;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (914, 914),
                         (-19231, -18137, -16591, -15677)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArkk, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArkk, crMap, parentMap);
         return crMap;
     }
 

@@ -1,10 +1,10 @@
 <template>
     <div class="d-flex flex-column justify-content-center">
-        <ul class="nav nav-pills d-flex flex-row justify-content-center mb-1">
+        <ul v-if="showTabs" class="nav nav-pills d-flex flex-row justify-content-center mb-1">
             <li class="nav-item">
                 <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Actors</a>
             </li>
-            <li class="nav-item">
+            <li v-if="hasMechanics" class="nav-item">
                 <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Mechanics</a>
             </li>
         </ul>
@@ -24,6 +24,8 @@
         data: function() {
             return {
                 mode: 0,
+                showTabs: graphData.mechanics.length > 0,
+                hasMechanics: graphData.mechanics.length > 0,
             };
         }
     });

@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 internal class StatusEventsContainer
 {
     public readonly Dictionary<AgentItem, List<TargetableEvent>> TargetableEventsBySrc = [];
+    public readonly Dictionary<AgentItem, List<VisibilityEvent>> VisibilityEventsBySrc = [];
 
     public readonly Dictionary<AgentItem, List<AliveEvent>> AliveEvents = [];
     public readonly Dictionary<AgentItem, List<DeadEvent>> DeadEvents = [];
@@ -22,6 +23,9 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents = [];
 
+    public readonly Dictionary<long, WvWObjectiveStatusEvent> WvWObjectiveStatusEventsByKey = [];
+    public readonly List<WvWObjectiveStatusEvent> WvWObjectiveStatusEvents = [];
+
     public readonly Dictionary<AgentItem, List<BreakbarStateEvent>> BreakbarStateEvents = [];
     public readonly Dictionary<AgentItem, List<BreakbarPercentEvent>> BreakbarPercentEvents = [];
 
@@ -38,6 +42,9 @@ internal class StatusEventsContainer
     public readonly List<MarkerEvent> MarkerEvents = [];
     public readonly Dictionary<AgentItem, List<MarkerEvent>> MarkerEventsBySrc = [];
     public readonly Dictionary<long, List<MarkerEvent>> MarkerEventsByID = [];
+
+    public readonly Dictionary<AgentItem, List<TransformationEvent>> TransformationEventsBySrc = [];
+    public readonly Dictionary<long, List<TransformationEvent>> TransformationEventsByTransformationID = [];
 
     public readonly Dictionary<SquadMarkerIndex, List<SquadMarkerEvent>> SquadMarkerEventsByIndex = [];
 

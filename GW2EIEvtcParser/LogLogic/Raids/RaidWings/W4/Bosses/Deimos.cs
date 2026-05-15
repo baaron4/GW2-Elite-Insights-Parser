@@ -77,12 +77,12 @@ internal class Deimos : BastionOfThePenitent
         ChestID = ChestID.SaulsTreasureChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (765, 1000),
                         (-9542, 1932, -7004, 5250));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDeimos, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDeimos, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

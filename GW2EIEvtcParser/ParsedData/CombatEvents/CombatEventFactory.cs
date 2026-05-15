@@ -123,8 +123,37 @@ internal static class CombatEventFactory
                 metaDataEvents.AttackTargetEventByAttackTarget[aTEvt.AttackTarget] = aTEvt;
                 break;
             case StateChange.Targetable:
-                var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
-                Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
+                {
+                    var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
+                    if (statusEvents.TargetableEventsBySrc.TryGetValue(tarEvt.Src, out var targetableEvents))
+                    {
+                        var lastTargetable = targetableEvents[^1];
+                        if (lastTargetable.Targetable != tarEvt.Targetable)
+                        {
+                            targetableEvents.Add(tarEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
+                    }
+                }
+                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+                {
+                    var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
+                    if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
+                    {
+                        var lastVisibility = visibilityEvents[^1];
+                        if (lastVisibility.Visible != visEvt.Visible)
+                        {
+                            visibilityEvents.Add(visEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.VisibilityEventsBySrc, visEvt.Src, visEvt);
+                    }
+                }
                 break;
             case StateChange.MapID:
                 metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
@@ -361,6 +390,11 @@ internal static class CombatEventFactory
                             metaDataEvents.EmoteGUIDEventsByEmoteID[emoteGUID.EmoteID] = emoteGUID;
                             metaDataEvents.EmoteGUIDEventsByGUID[emoteGUID.GUID] = emoteGUID;
                             break;
+                        case ContentLocal.Transformation:
+                            var transformationGUID = new TransformationGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.TransformationGUIDEventsByTransformationID[transformationGUID.TransformationID] = transformationGUID;
+                            metaDataEvents.TransformationGUIDEventsByGUID[transformationGUID.GUID] = transformationGUID;
+                            break;
                         default:
                             break;
                     }
@@ -482,6 +516,53 @@ internal static class CombatEventFactory
                 break;
             case StateChange.EffectAgentRemove:
                 _ = new EffectEventAgentRemove(stateChangeEvent, agentData, statusEvents.AgentEffectEventsByTrackingID);
+                break;
+            case StateChange.Transformation:
+                var transformationEvent = new TransformationEvent(stateChangeEvent, agentData, metaDataEvents.TransformationGUIDEventsByTransformationID);
+                if (transformationEvent.IsEnd)
+                {
+                    // Set end to transformation
+                    if (statusEvents.TransformationEventsBySrc.TryGetValue(transformationEvent.Src, out var srcTransformations))
+                    {
+                        var last = srcTransformations.LastOrDefault();
+                        last?.SetEndTime(transformationEvent.Time);
+                    }
+                } 
+                else
+                {
+                    if (statusEvents.TransformationEventsBySrc.TryGetValue(transformationEvent.Src, out var srcTransformations))
+                    {
+                        // sanity check
+                        // A new transformation but the previous one did not get an end event, set it to end at new transformation time
+                        var last = srcTransformations.LastOrDefault();
+                        if (last != null && last.EndNotSet)
+                        {
+                            last.SetEndTime(transformationEvent.Time);
+                        }
+                    }
+                    Add(statusEvents.TransformationEventsBySrc, transformationEvent.Src, transformationEvent);
+                    Add(statusEvents.TransformationEventsByTransformationID, transformationEvent.TransformationID, transformationEvent);
+                }
+                break;
+            case StateChange.WvWTeams:
+                metaDataEvents.WvWTeamsEvent = new WvWTeamsEvent(stateChangeEvent);
+                break;
+            case StateChange.WvWObjectiveStatus:
+                var wvwObjectiveStatus = new WvWObjectiveStatusEvent(stateChangeEvent);
+                if (wvwObjectiveStatus.IsUnknown)
+                {
+                    break;
+                }
+                long key = (wvwObjectiveStatus.MapID << 16) + wvwObjectiveStatus.ObjectiveID;
+                if (statusEvents.WvWObjectiveStatusEventsByKey.TryGetValue(key, out var existingStatus))
+                {
+                    existingStatus.AddOwners(wvwObjectiveStatus);
+                } 
+                else
+                {
+                    statusEvents.WvWObjectiveStatusEventsByKey[key] = wvwObjectiveStatus;
+                    statusEvents.WvWObjectiveStatusEvents.Add(wvwObjectiveStatus);
+                }
                 break;
             default:
                 break;

@@ -38,6 +38,7 @@ public static class ArcDPSEnums
         public const int AnimationAsStateChanges = 20260430;
         public const int BuffAppliesAndRemovesAsStateChanges = 20260501;
         public const int ResultEnumRework = 20260501;
+        public const int VisibilityInTargetableStateChange = 20260510;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -326,6 +327,9 @@ public static class ArcDPSEnums
         BuffChange = 70, // Extension
         BuffRemoveSingle = 71, // Single or Manual
         BuffRemoveAll = 72,
+        Transformation = 73,
+        WvWTeams = 74,
+        WvWObjectiveStatus = 75,
         Unknown
     };
 
@@ -589,6 +593,7 @@ public static class ArcDPSEnums
         Species = 3,
         Team = 4,
         Emote = 5,
+        Transformation = 6,
         Unknown
     }
     public static ContentLocal GetContentLocal(byte bt)

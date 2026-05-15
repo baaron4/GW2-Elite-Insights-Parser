@@ -54,7 +54,7 @@ public class CombatItem
         || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID 
         || IsStateChange == StateChange.RuleSet
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart 
-        || IsStateChange == StateChange.TickRate;
+        || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams;
 
     private readonly EvtcVersionEvent _version;
 
@@ -159,6 +159,7 @@ public class CombatItem
             || IsStateChange == StateChange.EffectGroundRemove
             || IsStateChange == StateChange.MapID
             || IsStateChange == StateChange.MapChange
+            || IsStateChange == StateChange.WvWObjectiveStatus
             ;
     }
 
@@ -276,6 +277,7 @@ public class CombatItem
             || IsStateChange == StateChange.BuffRemoveAll
             || IsStateChange == StateChange.BuffRemoveSingle
             || IsStateChange == StateChange.BuffApply
+            || IsStateChange == StateChange.Transformation
             ;
     }
 

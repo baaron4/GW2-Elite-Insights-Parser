@@ -52,12 +52,12 @@ internal class Slothasor : SalvationPass
         ChestID = ChestID.SlothasorChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (654, 1000),
                         (5822, -3491, 9549, 2205));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySlothasor, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySlothasor, crMap, parentMap);
         return crMap;
     }
 

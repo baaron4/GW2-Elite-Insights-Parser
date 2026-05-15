@@ -116,6 +116,7 @@ internal class PhaseDto
     public string? StartStatus;
     public bool? Success;
     public int EncounterPhase = -1;
+    public long EIID = -1;
 
     public List<int> Targets;
     public List<int> TargetPriorities;
@@ -168,6 +169,7 @@ internal class PhaseDto
             Icon = phaseWithMetaData.Icon;
             Success = phaseWithMetaData.Success;
             EncounterDuration = phaseWithMetaData.DurationString;
+            EIID = phaseWithMetaData.ID;
             switch (phaseWithMetaData.Mode)
             {
                 case LogData.Mode.Unknown:

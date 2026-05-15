@@ -115,6 +115,7 @@ public static class AgentManipulationHelper
             (x) => x.IsStateChange == StateChange.HealthUpdate,
             (x) => x.IsStateChange == StateChange.BreakbarPercent,
             (x) => x.IsStateChange == StateChange.BarrierUpdate,
+            (x) => x.IsStateChange == StateChange.Targetable,
             (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
             (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
         };
@@ -431,35 +432,35 @@ public static class AgentManipulationHelper
             {
                 var teamChangeDict = combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
                 IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                ulong greenTeam = ulong.MaxValue;
-                var greenTeams = new List<ulong>();
+                ulong squadTeam = ulong.MaxValue;
+                var squadTeams = new List<ulong>();
                 foreach (AgentItem a in squadPlayers)
                 {
                     if (teamChangeDict.TryGetValue(a.Agent, out var teamChangeList))
                     {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
+                        squadTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
                         if (evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
                         {
-                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
+                            squadTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
                         }
                     }
                 }
-                greenTeams.RemoveAll(x => x == 0);
-                if (greenTeams.Count != 0)
+                squadTeams.RemoveAll(x => x == 0);
+                if (squadTeams.Count != 0)
                 {
-                    greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
-                }
-                foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
-                {
-                    if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
+                    squadTeam = squadTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
+                    foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
                     {
-                        var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
-                        if (evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
+                        if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
                         {
-                            team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
+                            var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
+                            if (evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
+                            {
+                                team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
+                            }
+                            team.RemoveAll(x => x == 0);
+                            nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == squadTeam));
                         }
-                        team.RemoveAll(x => x == 0);
-                        nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == greenTeam));
                     }
                 }
                 var nonSquadPlayersByInstids = nonSquadPlayerAgents.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());

@@ -1,6 +1,10 @@
 /*jshint esversion: 6 */
 "use strict";
 
+
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+
 let apiRenderServiceOkay = true;
 let useDarthmaim = false;
 let replaceImgur = false;
@@ -20,7 +24,6 @@ const normalColor = {
     g: 125,
     b: 125
 };
-
 const DamageType = {
     All: 0,
     Power: 1,

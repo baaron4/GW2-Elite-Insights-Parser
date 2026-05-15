@@ -98,7 +98,7 @@ internal class WvWLogic : LogLogic
         return LogData.Mode.NotApplicable;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
@@ -110,19 +110,31 @@ internal class WvWLogic : LogLogic
         switch (mapID.MapID)
         {
             case EternalBattleground:
-                crMap = new CombatReplayMap((954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250));
+                crMap = new CombatReplayMap((954, 1000), 
+                    (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250), 
+                    (-36864, -36864, 36864, 36864), 
+                    (8958, 12798, 12030, 15870));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayEternalBattlegrounds, crMap));
                 break;
             case GreenAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                crMap = new CombatReplayMap((697, 1000), 
+                    (-30720, -43008, 30720, 43008), 
+                    (-30720, -43008, 30720, 43008), 
+                    (5630, 11518, 8190, 15102));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case BlueAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                crMap = new CombatReplayMap((697, 1000), 
+                    (-30720, -43008, 30720, 43008), 
+                    (-30720, -43008, 30720, 43008), 
+                    (12798, 10878, 15358, 14462));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case RedDesertBorderland:
-                crMap = new CombatReplayMap((1000, 1000), (-36864, -36864, 36864, 36864));
+                crMap = new CombatReplayMap((1000, 1000), 
+                    (-36864, -36864, 36864, 36864), 
+                    (-36864, -36864, 36864, 36864), 
+                    (9214, 8958, 12286, 12030));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayDesertBorderlands, crMap));
                 break;
             case EdgeOfTheMists:
@@ -133,6 +145,9 @@ internal class WvWLogic : LogLogic
                 crMap = base.GetCombatMapInternal(log, arenaDecorations);
                 break;
         }
+        var boundingCRMap = new CombatReplayMap((800, 800), (0, 0, 0, 0));
+        boundingCRMap.ComputeBoundingBox(log);
+        LogLogicUtils.AddDefaultViewpointOnParentFromChild(boundingCRMap, crMap, LogID);
         return crMap;
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -363,5 +378,27 @@ internal class WvWLogic : LogLogic
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { TargetID.WorldVersusWorld };
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
+        var map = log.LogData.Logic.GetCombatReplayMap(log);
+        foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
+        {
+            var position = objectiveStatusEvent.GetPosition(map);
+            var positionConnector = new PositionConnector(position);
+            for (var i = 0; i < objectiveStatusEvent.Owners.Count - 1; i++)
+            {
+                var (TeamID, Time) = objectiveStatusEvent.Owners[i];
+                var nextOwner = objectiveStatusEvent.Owners[i + 1];
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, nextOwner.Time), positionConnector));
+            }
+            {
+                var (TeamID, Time) = objectiveStatusEvent.Owners[^1];
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, log.LogData.LogEnd), positionConnector));
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ internal class MetaEventsContainer
     public PointOfViewEvent? PointOfViewEvent { get; set; }
     public FractalScaleEvent? FractalScaleEvent { get; set; }
     public EvtcVersionEvent? EvtcVersionEvent { get; set; }
+    public WvWTeamsEvent? WvWTeamsEvent { get; set; }
 
     public readonly Dictionary<AgentItem, List<GuildEvent>> GuildEvents = [];
 
@@ -44,6 +45,9 @@ internal class MetaEventsContainer
 
     public readonly Dictionary<ulong, TeamGUIDEvent> TeamGUIDEventsByTeamID = [];
     public readonly Dictionary<GUID, TeamGUIDEvent> TeamGUIDEventsByGUID = [];
+
+    public readonly Dictionary<long, TransformationGUIDEvent> TransformationGUIDEventsByTransformationID = [];
+    public readonly Dictionary<GUID, TransformationGUIDEvent> TransformationGUIDEventsByGUID = [];
 
     public readonly List<AttackTargetEvent> AttackTargetEvents = [];
     public readonly Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEventsBySrc = [];

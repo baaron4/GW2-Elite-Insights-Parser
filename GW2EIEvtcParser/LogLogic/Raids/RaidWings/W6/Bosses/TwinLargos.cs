@@ -49,12 +49,12 @@ internal class TwinLargos : MythwrightGambit
         LogID |= 0x000002;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (765, 1000),
                         (10846, -3878, 18086, 5622));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwinLargos, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwinLargos, crMap, parentMap);
         return crMap;
     }
 

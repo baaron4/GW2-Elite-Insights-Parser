@@ -79,12 +79,12 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         LogID |= 0x000001;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1169, 1169),
                         (-1388, -779, 1991, 2610));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCosmicObservatory, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCosmicObservatory, crMap, parentMap);
         return crMap;
     }
 

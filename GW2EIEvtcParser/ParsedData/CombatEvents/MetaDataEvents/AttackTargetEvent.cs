@@ -29,7 +29,18 @@ public class AttackTargetEvent : MetaDataEvent
 
     public IReadOnlyList<TargetableEvent> GetTargetableEvents(IReadOnlyList<CombatItem> combatData, AgentData agentData)
     {
-        return combatData.Where(x => x.SrcMatchesAgent(AttackTarget) && x.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).ToList();
+        var events = combatData.Where(x => x.SrcMatchesAgent(AttackTarget) && x.IsStateChange == ArcDPSEnums.StateChange.Targetable).ToList();
+        List<TargetableEvent> tarEvts = new(events.Count);
+        foreach (var e in events)
+        {
+            var tarEvt = new TargetableEvent(e, agentData);
+            if (tarEvts.Count > 0 && tarEvts[^1].Targetable == tarEvt.Targetable)
+            {
+                continue;
+            }
+            tarEvts.Add(tarEvt);
+        }
+        return tarEvts;
     }
 
 }

@@ -113,12 +113,12 @@ internal class UraTheSteamshrieker : MountBalrior
         LogID |= 0x000003;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1746, 1860),
                         (2550, 6200, 9010, 13082));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayUraTheSteamshrieker, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayUraTheSteamshrieker, crMap, parentMap);
         return crMap;
     }
 
