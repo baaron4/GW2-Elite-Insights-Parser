@@ -36,9 +36,10 @@ internal class KinfallInstance : Kinfall
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((800, 800), (-18432, -18432, 21504, 21504));
+        var parentCRMap = CombatReplayMap.CreateSquareMapFrom(crMap);
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayKinfall, crMap));
-        _whisperingShadow.GetCombatMapInternal(log, arenaDecorations);
-        return CombatReplayMap.CreateSquareMapFrom(crMap);
+        _whisperingShadow.GetCombatMapInternal(log, arenaDecorations, parentCRMap);
+        return parentCRMap;
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
