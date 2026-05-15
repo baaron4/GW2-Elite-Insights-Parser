@@ -25,7 +25,7 @@ internal class AetherbladeHideoutInstance : EndOfDragonsRaidEncounter
         MechanicList.Add(_aetherbladeHideout.Mechanics);
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         return _aetherbladeHideout.GetCombatReplayMap(log);
     }

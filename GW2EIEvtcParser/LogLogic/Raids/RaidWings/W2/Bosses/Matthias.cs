@@ -77,12 +77,12 @@ internal class Matthias : SalvationPass
         ChestID = ChestID.MatthiasChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (880, 880),
                         (-7248, 4585, -4625, 7207));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap, parentMap);
         return crMap;
     }
 

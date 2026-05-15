@@ -131,12 +131,12 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         LogID |= 0x000002;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1149, 1149),
                         (-2088, -6124, 2086, -1950));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap, parentMap);
         return crMap;
     }
 
@@ -780,6 +780,13 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                         {
                             continue;
                         }
+                    }
+
+                    // At 10%, if you phase while the side wall is active, the embodiment can show another cast later but the wall won't spawn.
+                    // Even with a cast time of 98ms the indicator is still present, so just skip the damage walls animations.
+                    if (cast.ActualDuration < indicatorDuration)
+                    {
+                        continue;
                     }
                 }
 

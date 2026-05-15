@@ -159,7 +159,7 @@ internal class Sabir : TheKeyOfAhdashim
         return phases;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
@@ -169,7 +169,7 @@ internal class Sabir : TheKeyOfAhdashim
         var crMap = new CombatReplayMap(
                         (1000, 910),
                         (-14122, 142, -9199, 4640));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, mapUrl, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, mapUrl, crMap, parentMap);
         return crMap;
     }
 

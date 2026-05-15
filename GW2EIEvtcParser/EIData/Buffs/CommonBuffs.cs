@@ -226,6 +226,9 @@ internal static class CommonBuffs
         new Buff("Relic of Fog", RelicOfFogBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, ItemImages.RelicOfFog),
         new Buff("Relic of the Forest Dweller (Float)", RelicOfTheForestDwellerFloatBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheForestDweller),
         new Buff("Relic of Shackles (Application)", RelicOfShacklesApplicationBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfShackles),
+        new Buff("Relic of the Director", RelicOfTheDirector, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheDirector),
+        new Buff("Kuda's Cruelty (Stacks)", KudasCrueltyStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfTheCruelOverseer),
+        new Buff("Kuda's Cruelty (Modifier)", KudasCrueltyModifierBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheCruelOverseer),
     ];
 
 }
