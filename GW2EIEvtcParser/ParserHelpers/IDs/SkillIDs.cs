@@ -75,6 +75,7 @@ public static class SkillIDs
     public const long SymbolOfResolutionOrLesser = -56;
     public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
     public const long DhuumEtherealSealInteract = -58;
+    public const long RelicOfTheCruelOverseer = -59;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
@@ -5590,6 +5591,22 @@ public static class SkillIDs
     public const long DefenderMoralBoost = 79544;
     public const long AchievementEligibilitySurefooted = 79546;
     public const long SuperSharpeningPolygon = 79575;
+    public const long RelicOfTheDirector = 79640;
+    public const long JetJuvenileRiverOtter = 79654;
+    public const long InnocentDisplayJuvenileRiverOtter = 79766;
+    public const long POV_RelicOfWatch = 79784;
+    public const long POV_RelicOfTheDoyen = 79919;
+    public const long KudasCrueltyModifierBuff = 79938;
+    public const long POV_RelicOfTheCruelOverseer = 79950;
+    public const long POV_RelicOfTheDirector = 79989;
+    public const long POV_RelicOfGaldra = 79996;
+    public const long TailWhipSoulbeastOtter = 80001;
+    public const long JetSoulbeastOtter = 80035;
+    public const long RelicOfGaldraSkill = 80072;
+    public const long POV_RelicOfTheSacredGrounds = 80125;
+    public const long KudasCrueltyStacksBuff = 80152;
+    public const long TailWhipJuvenileRiverOtter = 80164;
+    public const long ScratchJuvenileRiverOtter= 80186;
     #endregion
 
 }

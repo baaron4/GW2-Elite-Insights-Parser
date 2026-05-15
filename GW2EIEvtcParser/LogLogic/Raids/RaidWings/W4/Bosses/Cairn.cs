@@ -61,12 +61,12 @@ internal class Cairn : BastionOfThePenitent
         ChestID = ChestID.CairnChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (607, 607),
                         (12981, 642, 15725, 3386));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCairn, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCairn, crMap, parentMap);
         return crMap;
     }
 

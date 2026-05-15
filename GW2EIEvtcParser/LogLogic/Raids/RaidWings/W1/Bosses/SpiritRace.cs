@@ -34,12 +34,12 @@ internal class SpiritRace : SpiritVale
         LogID |= 0x000004;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (581, 1193),
                         (-11188, -13757, -4700, -436));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySpiritRun, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySpiritRun, crMap, parentMap);
         return crMap;
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -260,6 +260,7 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:
+                // TODO: check if still necessary with visibility events
                 long encounterOffset = 0;
                 while(encounterOffset != long.MaxValue)
                 {
@@ -267,7 +268,6 @@ internal class SpiritRace : SpiritVale
                 }
                 var spiritRaceEncounters = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(spiritRaceEncounters, log);
-                replay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
                 break;
             case (int)TargetID.WallOfGhosts:
                 (long, long) lifespan = (target.FirstAware, target.LastAware);

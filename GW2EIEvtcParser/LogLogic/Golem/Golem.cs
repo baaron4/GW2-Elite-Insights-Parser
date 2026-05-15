@@ -78,12 +78,12 @@ internal class Golem : LogLogic
         LogCategoryInformation.SubCategory = SubLogCategory.Golem;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (895, 629),
                         (18115.12, -13978.016, 22590.12, -10833.016));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGolem, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGolem, crMap, parentMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

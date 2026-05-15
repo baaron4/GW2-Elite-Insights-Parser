@@ -94,12 +94,12 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         return "Xunlai Jade Junkyard";
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1485, 1292),
                         (-7090, -2785, 3647, 6556));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap, parentMap);
         return crMap;
     }
 
@@ -485,6 +485,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 
             case (int)TargetID.SanctuaryPrism:
             {
+                // TODO: check if still necessary with visibility events
                 var xjjPhases = log.LogData.GetEncounterPhases(log, LogID).Where(x => x.IsCM).ToList();
                 var prismStart = log.LogData.EvtcLogStart;
                 foreach (var xjjPhase in xjjPhases)

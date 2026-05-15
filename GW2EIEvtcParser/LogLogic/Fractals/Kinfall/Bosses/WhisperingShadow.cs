@@ -59,12 +59,12 @@ internal class WhisperingShadow : Kinfall
         LogID |= 0x000001;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (800, 800),
                         (519, -9425.5, 4214, -5730.5));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNoImage, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNoImage, crMap, parentMap);
         return crMap;
     }
 

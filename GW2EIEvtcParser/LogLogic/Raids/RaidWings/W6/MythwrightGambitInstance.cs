@@ -42,7 +42,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         return "Mythwright Gambit";
     }
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayMythwrightGambit, crMap));
@@ -282,7 +282,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ConjuredAmalgamate.HandleCAAgents(agentData, combatData);
-        var sword = ConjuredAmalgamate.CreateCustomSwordAgent(logData, agentData);
+        ConjuredAmalgamate.CreateCustomSwordAgent(logData, agentData, combatData, extensions);
         var maxHPUpdates = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -291,7 +291,6 @@ internal class MythwrightGambitInstance : MythwrightGambit
         Qadim.FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
         Qadim.FindPyres(gw2Build, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        ConjuredAmalgamate.RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
         Qadim.RenamePyres(Targets);
         foreach (SingleActor actor in Targets)
         {

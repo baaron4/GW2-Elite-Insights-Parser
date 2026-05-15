@@ -60,12 +60,12 @@ internal class Xera : StrongholdOfTheFaithful
         ChestID = ChestID.XeraChest;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1000, 897),
                         (-5992, -5992, 69, -522));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXera, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXera, crMap, parentMap);
         return crMap;
     }
 
@@ -436,9 +436,9 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                replay.AddHideByBuff(target, log, Determined762);
                 break;
             case (int)TargetID.ChargedBloodstone:
+                // TODO: check if still necessary with visibility events
                 var activeXeras = log.AgentData.GetNPCsByID(TargetID.Xera).Where(x => target.AgentItem.InAwareTimes(x)).ToList();
                 long hiddenStart = target.FirstAware;
                 for (int i = 0; i < activeXeras.Count; i++)

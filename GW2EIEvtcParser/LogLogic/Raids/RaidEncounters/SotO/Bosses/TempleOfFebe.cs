@@ -131,12 +131,12 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         LogID |= 0x000002;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap(
                         (1149, 1149),
                         (-2088, -6124, 2086, -1950));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap, parentMap);
         return crMap;
     }
 
@@ -427,8 +427,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                             break;
                     }
                 }
-
-                replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                if (log.CombatData.GetEvtcVersionEvent().Build < ArcDPSBuilds.VisibilityInTargetableStateChange)
+                {
+                    replay.AddHideByBuff(target, log, InvulnerabilityCerus);
+                }
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddInsatiableHungerDecoration(target, log, replay);
@@ -608,6 +610,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
     /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
+        if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+        {
+            return;
+        }
         var castEvents = target.GetCastEvents(log).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
         long invisibleStart = log.LogData.EvtcLogStart;
         bool startTrimmed = false;
@@ -774,6 +780,13 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                         {
                             continue;
                         }
+                    }
+
+                    // At 10%, if you phase while the side wall is active, the embodiment can show another cast later but the wall won't spawn.
+                    // Even with a cast time of 98ms the indicator is still present, so just skip the damage walls animations.
+                    if (cast.ActualDuration < indicatorDuration)
+                    {
+                        continue;
                     }
                 }
 

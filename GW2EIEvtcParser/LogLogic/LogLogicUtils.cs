@@ -38,13 +38,33 @@ internal static class LogLogicUtils
         return TargetHPPercentUnderThreshold(target, time, combatData, expectedInitialPercent);
     }
 
-    internal static void AddArenaDecorationsPerEncounter(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, long logID, string image, CombatReplayMap crMap)
+    internal static void AddArenaDecorationsPerEncounter(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, long logID, string image, CombatReplayMap crMap, CombatReplayMap? parentMap)
     {
         var encounterPhases = log.LogData.GetEncounterPhases(log, logID);
         foreach (var encounterPhase in encounterPhases)
         {
             arenaDecorations.Add(new ArenaDecoration((encounterPhase.Start - 5000, encounterPhase.End + 5000), image, crMap));
         }
+        if (parentMap != null)
+        {
+            AddDefaultViewpointOnParentFromChild(crMap, parentMap, logID);
+        }
+    }
+
+    internal static void AddDefaultViewpointOnParentFromChild(CombatReplayMap crMap, CombatReplayMap parentMap, long logID)
+    {
+        var xStart = crMap.TopX;
+        var parentXStart = parentMap.TopX;
+        var parentXEnd = parentMap.BottomX;
+        var percentX = (xStart - parentXStart) / (parentXEnd - parentXStart) * 100;
+        var yStart = crMap.BottomY;
+        var parentYStart = parentMap.BottomY;
+        var parentYEnd = parentMap.TopY;
+        var percentY = (yStart - parentYStart) / (parentYEnd - parentYStart) * 100;
+        var scaleX = 1 / ((crMap.TopX - crMap.BottomX) / (parentMap.TopX - parentMap.BottomX));
+        var scaleY = 1 / ((crMap.TopY - crMap.BottomY) / (parentMap.TopY - parentMap.BottomY));
+        // TODO handle situations where desired scale would be non uniform aka add padding
+        parentMap.AddDefaultViewpoint(percentX, percentY, Math.Min(scaleX, scaleY), logID);
     }
 
     internal static bool TargetHPPercentUnderThreshold(TargetID targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)

@@ -515,7 +515,7 @@ internal class Adina : TheKeyOfAhdashim
         return phases;
     }
 
-    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         string mainPhase1;
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
@@ -595,7 +595,10 @@ internal class Adina : TheKeyOfAhdashim
             {
                 arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
             }
-
+            if (parentMap != null)
+            {
+                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
+            }
         }
         catch (Exception)
         {
