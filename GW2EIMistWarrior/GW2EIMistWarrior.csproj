@@ -22,8 +22,8 @@
 
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-        <Version>7.0.1</Version>
-        <Authors>EliphasNUIT</Authors>
+        <Version>1.0.0</Version>
+        <Authors>VirgilioNeto</Authors>
         <Company>GW2 Elite Insights</Company>
         <Product>GW2 Elite Insights</Product>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
