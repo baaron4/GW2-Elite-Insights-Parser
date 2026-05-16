@@ -215,28 +215,28 @@ public static class WvWHelper
         } },
         {MapIDs.RedDesertBorderland, new()
         {
-             {99, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Hamm
-            {102, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // O'del
-            {37, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Stoic Rampart
-            {104, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Eternal Necropolis
-            {115, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Boettiger 
-            {109, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Roy's 
+            {99, new WvWObjectiveData(ObjectiveType.Camp, new(10743.8f,  9492.51f, -2955)) }, // Hamm
+            {102, new WvWObjectiveData(ObjectiveType.Tower, new(9831.82f, 9507.67f, -2897.5f)) }, // O'del
+            {113, new WvWObjectiveData(ObjectiveType.Keep, new(10776.6f, 10120.4f, -4120.01f)) }, // Stoic Rampart
+            {104, new WvWObjectiveData(ObjectiveType.Tower, new(11739.2f, 9654.33f, -4452.81f)) }, // Eternal Necropolis
+            {115, new WvWObjectiveData(ObjectiveType.Camp, new(9310.12f, 10008, -1283.35f)) }, // Boettiger 
+            {109, new WvWObjectiveData(ObjectiveType.Camp, new(12097.5f, 10018.3f, -1025.05f)) }, // Roy's 
 
-            {122, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Tilly 
-            {119, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Bearce 
-            {120, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Zak 
-            {121, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Darra 
-            {118, new WvWObjectiveData(ObjectiveType.Ruins, new()) }, // Higgins' 
+            {122, new WvWObjectiveData(ObjectiveType.Ruins, new(10725.3f, 10453.5f, -235.954f)) }, // Tilly 
+            {119, new WvWObjectiveData(ObjectiveType.Ruins, new(10446.7f, 10761.6f, -620.871f)) }, // Bearce 
+            {120, new WvWObjectiveData(ObjectiveType.Ruins, new(10989.5f, 10778.3f, -941.543f)) }, // Zak 
+            {121, new WvWObjectiveData(ObjectiveType.Ruins, new(10399.4f, 11059.5f, -1255.37f)) }, // Darra 
+            {118, new WvWObjectiveData(ObjectiveType.Ruins, new(10913.3f, 11198.2f, -992.897f)) }, // Higgins' 
 
-            {106, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Blistering
-            {110, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Parched
-            {101, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Mclain
+            {106, new WvWObjectiveData(ObjectiveType.Keep, new(9327.72f, 10634.1f, -3714.37f)) }, // Blistering
+            {110, new WvWObjectiveData(ObjectiveType.Tower, new(10243.9f, 11331.3f, -5557.72f)) }, // Parched
+            {101, new WvWObjectiveData(ObjectiveType.Camp, new(9584.13f, 11316.1f, -3877.82f)) }, // Mclain
 
-            {114, new WvWObjectiveData(ObjectiveType.Keep, new()) }, // Osprey
-            {105, new WvWObjectiveData(ObjectiveType.Tower, new()) }, // Crankshaft
-            {100, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Bauer
+            {114, new WvWObjectiveData(ObjectiveType.Keep, new(12203, 10706.2f, -4254.64f)) }, // Osprey
+            {105, new WvWObjectiveData(ObjectiveType.Tower, new(11256.9f, 11551.1f, -5219.09f)) }, // Crankshaft
+            {100, new WvWObjectiveData(ObjectiveType.Camp, new(11891.4f, 11286.6f, -4736.73f)) }, // Bauer
 
-            {116, new WvWObjectiveData(ObjectiveType.Camp, new()) }, // Dustwhisper
+            {116, new WvWObjectiveData(ObjectiveType.Camp, new(10754.8f, 11854.4f, -2801.74f)) }, // Dustwhisper
         } },
         {MapIDs.EternalBattleground, new()
         {
