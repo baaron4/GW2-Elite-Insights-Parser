@@ -81,7 +81,8 @@ public class JsonWvWMapData
         /// "Camp" \n
         /// "Tower" \n
         /// "Keep" \n
-        /// "Stonemist Castle"
+        /// "Ruins" \n
+        /// "Castle"
         /// </summary>
         public string ObjectiveType = "";
         /// <summary>

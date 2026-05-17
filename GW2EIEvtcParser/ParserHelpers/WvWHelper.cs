@@ -33,7 +33,7 @@ public static class WvWHelper
             case ObjectiveType.Ruins:
                 return "Ruins";
             case ObjectiveType.Keep:
-                return "Camp";
+                return "Keep";
             case ObjectiveType.Castle:
                 return "Castle";
         }
