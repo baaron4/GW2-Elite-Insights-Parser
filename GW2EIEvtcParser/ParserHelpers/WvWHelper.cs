@@ -102,9 +102,9 @@ public static class WvWHelper
     // To be filled with neutral, red, green, blue icon versions for each type
     private static readonly Dictionary<ObjectiveType, Dictionary<ObjectiveOwnership, string>> TypeIconsPerOwner = new() {
         {ObjectiveType.Camp, new() {
-            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
-            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
-            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
+            {ObjectiveOwnership.Red, "https://i.imgur.com/tRclXR9.png" },
+            {ObjectiveOwnership.Green, "https://i.imgur.com/zTPNBd1.png" },
+            {ObjectiveOwnership.Blue, "https://i.imgur.com/rGd2Xc0.png" },
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/015D365A08AAE105287A100AAE04529FDAE14155/102532.png" },
         }},
         {ObjectiveType.Ruins, new() {
@@ -126,9 +126,9 @@ public static class WvWHelper
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
         }},
         {ObjectiveType.Castle, new() {
-            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
-            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
-            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
+            {ObjectiveOwnership.Red, "https://i.imgur.com/npSLcOM.png" },
+            {ObjectiveOwnership.Green, "https://i.imgur.com/M8BdXxX.png" },
+            {ObjectiveOwnership.Blue, "https://i.imgur.com/VI79WOY.png" },
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/F0F1DA1C807444F4DF53090343F43BED02E50523/102608.png" },
         }},
     };
