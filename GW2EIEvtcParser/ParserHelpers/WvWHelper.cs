@@ -114,15 +114,15 @@ public static class WvWHelper
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/52B43242E55961770D78B80ED77BC764F0E57BF2/1635237.png" },
         }},
         {ObjectiveType.Tower, new() {
-            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
-            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
-            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
+            {ObjectiveOwnership.Red, "https://i.imgur.com/0NyXDA3.png" },
+            {ObjectiveOwnership.Green, "https://i.imgur.com/Dyyk0zp.png" },
+            {ObjectiveOwnership.Blue, "https://i.imgur.com/DbuFMzA.png" },
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/ABEC80C79576A103EA33EC66FCB99B77291A2F0D/102531.png" },
         }},
         {ObjectiveType.Keep, new() {
-            {ObjectiveOwnership.Red, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
-            {ObjectiveOwnership.Green, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
-            {ObjectiveOwnership.Blue, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
+            {ObjectiveOwnership.Red, "https://i.imgur.com/IGcseHc.png" },
+            {ObjectiveOwnership.Green, "https://i.imgur.com/F68fA1t.png" },
+            {ObjectiveOwnership.Blue, "https://i.imgur.com/XMmTYn6.png" },
             {ObjectiveOwnership.None, "https://render.guildwars2.com/file/DB580419C8AD9449309A96C8E7C3D61631020EBB/102535.png" },
         }},
         {ObjectiveType.Castle, new() {
