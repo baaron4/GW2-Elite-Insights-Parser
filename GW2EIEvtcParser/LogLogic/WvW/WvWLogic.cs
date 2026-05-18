@@ -384,7 +384,6 @@ internal class WvWLogic : LogLogic
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
         var map = log.LogData.Logic.GetCombatReplayMap(log);
-        var iconSize = 30;
         foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
         {
             var position = objectiveStatusEvent.GetPosition(map);
