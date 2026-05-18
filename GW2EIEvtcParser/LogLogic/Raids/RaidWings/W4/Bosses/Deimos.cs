@@ -730,7 +730,7 @@ internal class Deimos : BastionOfThePenitent
                 {
                     var attackTarget = attackTargetEvent.AttackTarget;
                     var targetableEvents = attackTargetEvent.GetTargetableEvents(log.CombatData);
-                    long lineStart = 0;
+                    long lineStart = long.MaxValue;
                     foreach (var targetableEvent in targetableEvents)
                     {
                         if (targetableEvent.Targetable)
