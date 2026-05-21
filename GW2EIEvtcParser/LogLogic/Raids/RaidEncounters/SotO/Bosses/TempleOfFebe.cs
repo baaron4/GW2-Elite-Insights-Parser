@@ -729,7 +729,10 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
         var isCerus = target.IsSpecies(TargetID.Cerus);
         var isKillableEmbodiment = target.IsSpecies(TargetID.EmbodimentOfEnvy);
-        
+        if (!log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazeWall1, out var wallsDamage))
+        {
+            wallsDamage = []; 
+        }
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazeIndicator, out var wallsIndicators))
         {
             foreach (EffectEvent indicator in wallsIndicators)
@@ -764,7 +767,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                         replay.Decorations.AddWithGrowing(oppositeRectangle, growing);
                     }
 
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGaze1, out var wallsDamage))
+                    if (wallsDamage.Count > 0)
                     {
                         var wall = wallsDamage.FirstOrDefault(x => x.Time >= indicator.Time && x.Time <= indicator.Time + wallDuration);
                         if (wall != null)
@@ -779,10 +782,6 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                             var rotation2 = new SpinningConnector(facing.Value, (float)degreesRotated);
                             var rectangle2 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageCancelled, Colors.Red, 0.2, agentConnector).UsingRotationConnector(rotation2);
                             replay.Decorations.Add(rectangle2);
-
-                            // AoE underneath - Looks like the radius is Cerus' hitbox radius, the Embodiment has smaller hitbox but same model.
-                            var circle = new CircleDecoration(140, lifespanDamage, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false);
-                            replay.Decorations.Add(circle);
 
                             if (isEmpowered)
                             {
@@ -818,6 +817,28 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                         }
                     }
                 }
+            }
+        }
+        // AoE underneath - Looks like the radius is Cerus' hitbox radius event for the Embodiment which has a smaller hitbox but same model.
+        uint radius = 140;
+        (long start, long end) lifespan;
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazePuddleEffect, out var aoes))
+        {
+            foreach (EffectEvent effect in aoes)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 12500);
+                var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
+            }
+        }
+        // The red ring lingers when transitioning off a split phase, we don't know if it deals damage but we render it anyway.
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazePuddleRedRing, out var rings))
+        {
+            foreach (EffectEvent effect in rings)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 12500);
+                var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position)).UsingFilled(false);
+                replay.Decorations.Add(circle);
             }
         }
     }

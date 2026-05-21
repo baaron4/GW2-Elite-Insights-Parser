@@ -1086,10 +1086,10 @@ public static class EffectGUIDs
     public static readonly GUID TempleOfFebePoolOfDespair2 = new("4F982CD060507C44A25844BF0ADFCB54"); // No Owner Target Player Duration 0
     public static readonly GUID TempleOfFebePoolOfDespairEmpowered = new("24E40E1F15BE2142B61F3568D23AE799"); // Owner Cerus/Embodiment Duration 999000
     public static readonly GUID TempleOfFebeEnviousGazeIndicator = new("62B3766CDF54BD4EA964DAA462954A4A"); // Duration 1500 - Around Agent
-    public static readonly GUID TempleOfFebeEnviousGaze1 = new("246ECEBC28173B498B9A6886D7937D59"); // Duration 12500 - Around Agent
-    public static readonly GUID TempleOfFebeEnviousGaze2 = new("DA42718917F2304FBA10AF6898217788"); // Duration 12500 - Ground Effect
-    public static readonly GUID TempleOfFebeEnviousGaze3 = new("B77A06C842511949889877EDC1448D49"); // Duration 11000 - Ground Effect
-    public static readonly GUID TempleOfFebeEnviousGaze4 = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000 - Red circle AoE underneath Cerus - Conflics with other encounters
+    public static readonly GUID TempleOfFebeEnviousGazeWall1 = new("246ECEBC28173B498B9A6886D7937D59"); // Duration 12500 - Around Agent - Wall moving
+    public static readonly GUID TempleOfFebeEnviousGazeWall2 = new("DA42718917F2304FBA10AF6898217788"); // Duration 12500 - Ground Effect - Wall red rectangle
+    public static readonly GUID TempleOfFebeEnviousGazePuddleEffect = new("B77A06C842511949889877EDC1448D49"); // Duration 11000 - Ground Effect - Puddle AoE underneath Cerus
+    public static readonly GUID TempleOfFebeEnviousGazePuddleRedRing = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000 - Red ring AoE underneath Cerus - Conflics with other encounters
     public static readonly GUID TempleOfFebeMaliciousIntentTether = new("518369328A12B74EAC49702A785FBA19"); // Duration 0
     // Guardian's Glade
     public static readonly GUID GuardiansGaleClawSlamIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // owned by kela, duration 3000 - damage happens at around 2520
