@@ -432,6 +432,14 @@ public static class DamageModifierIDs
     public const int Mod_CompoundingPowerStrike = 419;
     public const int Mod_CompoundingPowerCondition = 420;
     public const int Mod_Chronophantasma = 421;
-    public const int Mod_RelicOfTheDirector = 422;
-    public const int Mod_RelicOfTheDoyen = 423;
+    public const int Mod_MightEqual25 = 422;
+    public const int Mod_MightAbove20 = 423;
+    public const int Mod_MightLess15 = 424;
+    public const int Mod_Stability0 = 425;
+    public const int Mod_StabilityAbove3 = 426;
+    public const int Mod_StabilityAbove5 = 427;
+    public const int Mod_StabilityAbove10 = 428;
+    public const int Mod_Fury = 429;
+    public const int Mod_RelicOfTheDirector = 430;
+    public const int Mod_RelicOfTheDoyen = 431;
 }

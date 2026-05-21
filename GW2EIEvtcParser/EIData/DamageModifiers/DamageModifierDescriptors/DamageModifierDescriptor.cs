@@ -19,8 +19,10 @@ internal abstract class DamageModifierDescriptor : IVersionable
     private ulong _maxBuild = GW2Builds.EndOfLife;
     private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
     private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
-    public bool Multiplier => GainComputer.Multiplier;
+    public bool Multiplier => GainComputer.Multiplier || IsCounter;
     public bool SkillBased => GainComputer.SkillBased;
+
+    public bool WithAbsorbedDamageEvents { get; private set; } = false;
 
     public bool Approximate { get; protected set; } = false;
     public readonly HashSet<Source> Srcs;
@@ -32,6 +34,8 @@ internal abstract class DamageModifierDescriptor : IVersionable
 
     public bool FoeAlwaysMaster { get; private set; }
     public bool ActorAlwaysMaster { get; private set; }
+
+    public virtual bool IsCounter => false;
 
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private readonly List<DamageLogChecker> _dlCheckers;
@@ -85,6 +89,13 @@ internal abstract class DamageModifierDescriptor : IVersionable
     internal virtual DamageModifierDescriptor UsingEarlyExit(ActorChecker actorChecker)
     {
         _earlyExitCheckers.Add(actorChecker);
+        return this;
+    }
+
+    internal virtual DamageModifierDescriptor UsingHitAndAbsorbedDamageEvents()
+    {
+        WithAbsorbedDamageEvents = true;
+        UsingChecker((dl, log) => dl.IsAbsorbed);
         return this;
     }
 

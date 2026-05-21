@@ -113,6 +113,7 @@ internal static class JsonLogBuilder
             Icon = damageModifier.Icon,
             Description = damageModifier.Tooltip,
             NonMultiplier = !damageModifier.Multiplier,
+            IsCounter = damageModifier.IsCounter,
             SkillBased = damageModifier.SkillBased,
             Approximate = damageModifier.Approximate,
             Incoming = damageModifier.Incoming,

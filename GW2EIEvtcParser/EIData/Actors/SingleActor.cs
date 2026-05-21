@@ -771,22 +771,22 @@ public abstract partial class SingleActor : Actor
             DamageTakenEventsBySrc[_nullAgent] = damageTakenEvents;
         }
     }
-
+    #region DAMAGE MOD ACCELERATORS
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
     /// <summary>
     /// cached method for damage modifiers
     /// </summary>
     internal IReadOnlyList<HealthDamageEvent> GetJustActorHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
     {
-        if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
+        if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out var damageEventsPerPhasePerTarget))
         {
-            hitDamageEventsPerPhasePerTarget = new (AgentItem, log);
-            _typedSelfHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+            damageEventsPerPhasePerTarget = new (AgentItem, log);
+            _typedSelfHitDamageEvents[damageType] = damageEventsPerPhasePerTarget;
         }
-        if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        if (!damageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
             dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From.Is(AgentItem)).ToList();
-            hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            damageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
     }
@@ -794,19 +794,54 @@ public abstract partial class SingleActor : Actor
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsHitDamageEvents = [];
     internal IReadOnlyList<HealthDamageEvent> GetJustMinionsHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
     {
-        if (!_typedMinionsHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
+        if (!_typedMinionsHitDamageEvents.TryGetValue(damageType, out var damageEventsPerPhasePerTarget))
         {
-            hitDamageEventsPerPhasePerTarget = new (AgentItem, log);
-            _typedMinionsHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+            damageEventsPerPhasePerTarget = new (AgentItem, log);
+            _typedMinionsHitDamageEvents[damageType] = damageEventsPerPhasePerTarget;
         }
-        if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        if (!damageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
             dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => !x.From.Is(AgentItem)).ToList();
-            hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+            damageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
     }
 
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitAndAbsorbedDamageEvents = [];
+    /// <summary>
+    /// cached method for damage modifiers
+    /// </summary>
+    internal IReadOnlyList<HealthDamageEvent> GetJustActorHitAndAbsorbedDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
+    {
+        if (!_typedSelfHitAndAbsorbedDamageEvents.TryGetValue(damageType, out var damageEventsPerPhasePerTarget))
+        {
+            damageEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedSelfHitAndAbsorbedDamageEvents[damageType] = damageEventsPerPhasePerTarget;
+        }
+        if (!damageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        {
+            dls = GetHitAndAbsorbedDamageEvents(target, log, start, end, damageType).Where(x => x.From.Is(AgentItem)).ToList();
+            damageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsHitAndAbsorbedDamageEvents = [];
+    internal IReadOnlyList<HealthDamageEvent> GetJustMinionsHitAndAbsorbedDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
+    {
+        if (!_typedMinionsHitAndAbsorbedDamageEvents.TryGetValue(damageType, out var damageEventsPerPhasePerTarget))
+        {
+            damageEventsPerPhasePerTarget = new(AgentItem, log);
+            _typedMinionsHitAndAbsorbedDamageEvents[damageType] = damageEventsPerPhasePerTarget;
+        }
+        if (!damageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        {
+            dls = GetHitAndAbsorbedDamageEvents(target, log, start, end, damageType).Where(x => !x.From.Is(AgentItem)).ToList();
+            damageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+    #endregion DAMAGE MOD ACCELERATORS
     #endregion DAMAGE
 
     #region BREAKBAR DAMAGE

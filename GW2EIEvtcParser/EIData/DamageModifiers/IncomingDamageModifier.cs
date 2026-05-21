@@ -16,6 +16,10 @@ public class IncomingDamageModifier : DamageModifier
 
     public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
+        if (WithAbsorbedDamageEvents)
+        {
+            return 0;
+        }
         DefensePerTargetStatistics defenseData = actor.GetDefenseStats(t, log, start, end);
         return (CompareType) switch
         {
@@ -32,9 +36,9 @@ public class IncomingDamageModifier : DamageModifier
         };
     }
 
-    public override IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
+    public override IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        return actor.GetHitDamageTakenEvents(t, log, start, end, SrcType);
+        return !WithAbsorbedDamageEvents ? actor.GetHitDamageTakenEvents(t, log, start, end, SrcType) : actor.GetHitAndAbsorbedDamageTakenEvents(t, log, start, end, SrcType);
     }
     internal override AgentItem GetFoe(HealthDamageEvent evt)
     {

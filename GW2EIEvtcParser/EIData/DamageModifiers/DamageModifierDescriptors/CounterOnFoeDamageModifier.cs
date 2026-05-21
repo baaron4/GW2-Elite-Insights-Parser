@@ -6,26 +6,12 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class CounterOnFoeDamageModifier : BuffOnFoeDamageModifier
 {
-    private class GainComputerCounter : GainComputer
-    {
-        public GainComputerCounter()
-        {
-            Multiplier = false;
-        }
-
-        public override double ComputeGain(double gainPerStack, int stack)
-        {
-            throw new InvalidOperationException("No Compute Gain on GainComputerCounter");
-        }
-    }
-
-    private static readonly GainComputerCounter counterGainComputer = new();
-
-    internal CounterOnFoeDamageModifier(int id, long buffID, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, buffID, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
+    public override bool IsCounter => true;
+    internal CounterOnFoeDamageModifier(int id, long buffID, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, buffID, name, tooltip, damageSource, 100.0, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
-    internal CounterOnFoeDamageModifier(int id, HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, buffIDs, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
+    internal CounterOnFoeDamageModifier(int id, HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, buffIDs, name, tooltip, damageSource, 100.0, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
     internal override DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
@@ -35,8 +21,8 @@ internal class CounterOnFoeDamageModifier : BuffOnFoeDamageModifier
 
     protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
-        gain = 0;
-        int stack = Tracker.GetStack(bgms, dl.Time);
-        return stack > 0.0;
+        var keep = base.ComputeGain(bgms, dl, log, out gain);
+        gain = 1;
+        return keep;
     }
 }

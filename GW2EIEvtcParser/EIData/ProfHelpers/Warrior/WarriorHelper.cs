@@ -166,7 +166,7 @@ internal static class WarriorHelper
     [
         // Skills
         // - Endure Pain
-        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, SkillImages.EndurePain, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.EndurePain, DamageModifierMode.All),
         // - Rampage
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
