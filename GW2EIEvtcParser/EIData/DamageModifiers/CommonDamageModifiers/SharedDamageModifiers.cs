@@ -63,10 +63,10 @@ internal static class SharedDamageModifiers
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Boons
-        new CounterOnActorDamageModifier(Mod_StabilityAbove10, Stability, "Stability >= 10", "With at least 10 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(10), BuffImages.Stability, DamageModifierMode.WvW),
+        new CounterOnActorDamageModifier(Mod_StabilityAbove10, Stability, "Stability >= 10", "With at least 10 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(10), BuffImages.Stability, DamageModifierMode.All),
         new CounterOnActorDamageModifier(Mod_StabilityAbove5, Stability, "Stability >= 5", "With at least 5 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(5), BuffImages.Stability, DamageModifierMode.All),
         new CounterOnActorDamageModifier(Mod_StabilityAbove3, Stability, "Stability >= 3", "With at least 3 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(3), BuffImages.Stability, DamageModifierMode.All),
-        new CounterOnActorDamageModifier(Mod_Stability0, Stability, "Stability 0", "With no stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, ByAbsence, BuffImages.Stability, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_StabilityAbove1, Stability, "Stability >= 1", "With at least 1 stack of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, ByPresence, BuffImages.Stability, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
         //
