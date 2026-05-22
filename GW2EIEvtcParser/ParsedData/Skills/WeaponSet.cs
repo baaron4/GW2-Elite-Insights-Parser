@@ -12,12 +12,11 @@ public class WeaponSet
     private string LandOH1 = Unknown;
     private string LandMH2 = Unknown;
     private string LandOH2 = Unknown;
-    public bool HasLandSwapped { get; internal set; } = false;
+
     private string WaterMH1 = Unknown;
     private string WaterOH1 = Unknown;
     private string WaterMH2 = Unknown;
     private string WaterOH2 = Unknown;
-    public bool HasWaterSwapped { get; internal set; } = false;
 
     public long Start { get; private set; }
     public long End { get; private set; }
