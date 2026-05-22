@@ -152,7 +152,7 @@ internal class Dhuum : HallOfChains
         if (etherealSealInteracts.Count > 0)
         {
             animatedCastDataByID[ArcDPSGenericGadgetInteract] = animatedCastDataByID[ArcDPSGenericGadgetInteract].Where(x => x.SkillID == ArcDPSGenericGadgetInteract).ToList();
-            animatedCastDataByID[DhuumEtherealSealInteract] = etherealSealInteracts.OfType<AnimatedCastEvent>().ToList();
+            animatedCastDataByID[DhuumEtherealSealInteract] = etherealSealInteracts.Cast<AnimatedCastEvent>().ToList();
         }
         return res;
     }
