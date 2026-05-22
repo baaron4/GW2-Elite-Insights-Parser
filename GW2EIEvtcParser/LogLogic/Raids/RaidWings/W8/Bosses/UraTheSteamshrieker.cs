@@ -345,6 +345,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var pickUpSkill = skillData.Get(UraBloodstoneShardPickUp);
         long pickUpDuration = 520; // roughly that value
         var shards = agentData.GetNPCsByID(TargetID.UraGadget_BloodstoneShard).ToList();
+        skillData.NotAccurate.Add(UraBloodstoneShardPickUp); // We can't detect failed pick ups with that method
         var pickedUpShards = new HashSet<AgentItem>(shards.Count);
         foreach (var deterrenceApply in deterrenceApplies)
         {
