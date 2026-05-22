@@ -399,7 +399,7 @@ partial class SettingsForm
         ChkUploadMistWarrior.Name = "ChkUploadMistWarrior";
         ChkUploadMistWarrior.Size = new Size(148, 19);
         ChkUploadMistWarrior.TabIndex = 47;
-        ChkUploadMistWarrior.Text = "Upload to Mist Warrior";
+        ChkUploadMistWarrior.Text = "Upload to MistWarrior.com";
         ChkUploadMistWarrior.UseVisualStyleBackColor = true;
         ChkUploadMistWarrior.CheckedChanged += ChkUploadMistWarriorCheckedChanged;
         // 
