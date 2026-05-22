@@ -51,7 +51,7 @@
 <script>
     Vue.component("buff-stats-component", {
         props: ['type', 'playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, encounterPhaseComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -126,29 +126,42 @@
                     groupBoonAvg[player.group] += playerWeight * uptimesStats[i].avg;
                     groupCount[player.group] += playerWeight;
                     for (let j = 0; j < uptimesStats[i].data.length; j++) {
-                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                        groupAvg[player.group][j] = (groupAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                        if (!totalAvg[j]) {
+                            totalAvg[j] = [];
+                        }
+                        if (!groupAvg[player.group][j]) {
+                            groupAvg[player.group][j] = [];
+                        }
+                        for (let k = 0; k < uptimesStats[i].data[j].length; k++) {
+                            totalAvg[j][k] = (totalAvg[j][k] || 0) + playerWeight * (uptimesStats[i].data[j][k] || 0);
+                            groupAvg[player.group][j][k] = (groupAvg[player.group][j][k] || 0) + 
+                                playerWeight * (uptimesStats[i].data[j][k] || 0);
+                        }
                     }
                 }
                 for (let i = 0; i < groupAvg.length; i++) {
                     if (groupAvg[i]) {
                         for (let k = 0; k < groupAvg[i].length; k++) {
-                            groupAvg[i][k] = Math.round(1000 * groupAvg[i][k] / groupCount[i]) / 1000;
+                            for (let j = 0; j < groupAvg[i][k].length; j++) {
+                                groupAvg[i][k][j] = this.round3(groupAvg[i][k][j] / groupCount[i]);
+                            }
                         }
                         avg.push({
                             name: "Group " + i,
                             data: groupAvg[i],
-                            avg: Math.round(1000 * groupBoonAvg[i] / groupCount[i]) / 1000
+                            avg: this.round3(groupBoonAvg[i] / groupCount[i])
                         });
                     }
                 }
                 for (let k = 0; k < totalAvg.length; k++) {
-                    totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                    for (let j = 0; j < totalAvg[k].length; j++) {
+                        totalAvg[k][j] = this.round3(totalAvg[k][j] / totalCount);
+                    }
                 }
                 avg.push({
                     name: "Total",
                     data: totalAvg,
-                    avg: Math.round(1000 * totalBoonAvg / totalCount) / 1000
+                    avg: this.round3(totalBoonAvg / totalCount)
                 });
                 return [uptimes, genSelf, genGroup, genOffGroup, genSquad, avg];
             }

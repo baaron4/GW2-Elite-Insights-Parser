@@ -32,7 +32,7 @@ public class StatisticsHelper
         // Important class specific boons
         foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
         {
-            if (combatData.GetBuffData(offensiveBuff.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(offensiveBuff.ID, p.AgentItem).Count > 0))
             {
                 _presentOffbuffs.Add(offensiveBuff);
             }
@@ -40,7 +40,7 @@ public class StatisticsHelper
 
         foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
         {
-            if (combatData.GetBuffData(supportBuff.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(supportBuff.ID, p.AgentItem).Count > 0))
             {
                 _presentSupbuffs.Add(supportBuff);
             }
@@ -48,7 +48,7 @@ public class StatisticsHelper
 
         foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
         {
-            if (combatData.GetBuffData(defensiveBuff.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(defensiveBuff.ID, p.AgentItem).Count > 0))
             {
                 _presentDefbuffs.Add(defensiveBuff);
             }
@@ -57,7 +57,7 @@ public class StatisticsHelper
 
         foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
         {
-            if (combatData.GetBuffData(gearBuff.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(gearBuff.ID, p.AgentItem).Count > 0))
             {
                 _presentGearbuffs.Add(gearBuff);
             }
@@ -66,7 +66,7 @@ public class StatisticsHelper
 
         foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
         {
-            if (combatData.GetBuffData(debuff.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(debuff.ID, p.AgentItem).Count > 0))
             {
                 _presentDebuffs.Add(debuff);
             }
@@ -75,7 +75,7 @@ public class StatisticsHelper
 
         foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
         {
-            if (combatData.GetBuffData(nourishment.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(nourishment.ID, p.AgentItem).Count > 0))
             {
                 _presentNourishments.Add(nourishment);
             }
@@ -84,7 +84,7 @@ public class StatisticsHelper
 
         foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
         {
-            if (combatData.GetBuffData(enhancement.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(enhancement.ID, p.AgentItem).Count > 0))
             {
                 _presentEnhancements.Add(enhancement);
             }
@@ -93,7 +93,7 @@ public class StatisticsHelper
 
         foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
         {
-            if (combatData.GetBuffData(otherConsumable.ID).Count > 0)
+            if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(otherConsumable.ID, p.AgentItem).Count > 0))
             {
                 _presentOtherConsumables.Add(otherConsumable);
             }
@@ -105,11 +105,11 @@ public class StatisticsHelper
         foreach (Player player in players)
         {
             _presentRemainingBuffsPerPlayer[player] = [];
-            foreach (BuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
+            foreach (var pair in remainingBuffsByIDs)
             {
-                if (item is BuffApplyEvent && item.To.Is(player.AgentItem) && remainingBuffsByIDs.TryGetValue(item.BuffID, out var boon))
+                if (combatData.GetBuffApplyDataByIDByDst(pair.Key, player.AgentItem).Count > 0)
                 {
-                    _presentRemainingBuffsPerPlayer[player].Add(boon);
+                    _presentRemainingBuffsPerPlayer[player].Add(pair.Value);
                 }
             }
         }
