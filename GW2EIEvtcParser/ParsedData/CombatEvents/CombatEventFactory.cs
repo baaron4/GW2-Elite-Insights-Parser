@@ -651,6 +651,7 @@ internal static class CombatEventFactory
         {
             SkillIDs.ArcDPSGenericEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGenericGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSGenericPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }

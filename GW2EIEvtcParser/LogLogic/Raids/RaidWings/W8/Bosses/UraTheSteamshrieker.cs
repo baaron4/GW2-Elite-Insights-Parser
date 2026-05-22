@@ -338,6 +338,24 @@ internal class UraTheSteamshrieker : MountBalrior
         return combatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(ura.AgentItem) && x.Time >= start && x.Time <= end);
     }
 
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData, Dictionary<long, List<AnimatedCastEvent>> animatedCastDataByID)
+    {
+        // TODO: add custom cast events based on pick up event
+        var res = base.SpecialCastEventProcess(combatData, agentData, skillData, animatedCastDataByID);
+        var shardPickUps = combatData.GetGadgetInteractCastDataByGadgetSpeciesID((int)TargetID.UraGadget_BloodstoneShard);
+        var pickUpSkill = skillData.Get(UraBloodstoneShardPickUp);
+        foreach (var shardPickUp in shardPickUps)
+        {
+            shardPickUp.OverrideSkill(pickUpSkill);
+        }
+        if (shardPickUps.Count > 0)
+        {
+            animatedCastDataByID[ArcDPSGenericGadgetInteract] = animatedCastDataByID[ArcDPSGenericGadgetInteract].Where(x => x.SkillID == ArcDPSGenericGadgetInteract).ToList();
+            animatedCastDataByID[UraBloodstoneShardPickUp] = shardPickUps.OfType<AnimatedCastEvent>().ToList();
+        }
+        return res;
+    }
+
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor ura, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)

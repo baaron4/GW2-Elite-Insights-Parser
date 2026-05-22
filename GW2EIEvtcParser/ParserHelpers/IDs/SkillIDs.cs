@@ -76,6 +76,7 @@ public static class SkillIDs
     public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
     public const long DhuumEtherealSealInteract = -58;
     public const long RelicOfTheCruelOverseer = -59;
+    public const long UraBloodstoneShardPickUp = -60;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
@@ -111,6 +112,7 @@ public static class SkillIDs
     internal const long ArcDPSGenericSink = 23305;
     internal const long ArcDPSGenericLockOut = 23306;
     internal const long ArcDPSGenericFear = 23307;
+    internal const long ArcDPSGenericPickUp = 23308;
     #endregion
     #region Core
     public const long Protection = 717;
