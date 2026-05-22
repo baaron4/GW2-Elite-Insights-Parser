@@ -340,18 +340,17 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData, Dictionary<long, List<AnimatedCastEvent>> animatedCastDataByID)
     {
-        // TODO: add custom cast events based on pick up event
         var res = base.SpecialCastEventProcess(combatData, agentData, skillData, animatedCastDataByID);
-        var shardPickUps = combatData.GetGadgetInteractCastDataByGadgetSpeciesID((int)TargetID.UraGadget_BloodstoneShard);
+        var deterrenceApplies = combatData.GetBuffApplyData(Deterrence).OfType<BuffApplyEvent>().Where(x => !x.Initial).ToList();
         var pickUpSkill = skillData.Get(UraBloodstoneShardPickUp);
-        foreach (var shardPickUp in shardPickUps)
+        long pickUpDuration = 520; // roughly that value
+        var shards = agentData.GetNPCsByID(TargetID.UraGadget_BloodstoneShard).ToList();
+        var pickedUpShards = new HashSet<AgentItem>(shards.Count);
+        foreach (var deterrenceApply in deterrenceApplies)
         {
-            shardPickUp.OverrideSkill(pickUpSkill);
-        }
-        if (shardPickUps.Count > 0)
-        {
-            animatedCastDataByID[ArcDPSGenericGadgetInteract] = animatedCastDataByID[ArcDPSGenericGadgetInteract].Where(x => x.SkillID == ArcDPSGenericGadgetInteract).ToList();
-            animatedCastDataByID[UraBloodstoneShardPickUp] = shardPickUps.OfType<AnimatedCastEvent>().ToList();
+            var pickedUpShard = shards.LastOrDefault(x => x.LastAware >= deterrenceApply.Time && x.LastAware <= deterrenceApply.Time + 100 && !pickedUpShards.Contains(x)) ?? _unknownAgent;
+            pickedUpShards.Add(pickedUpShard);
+            res.Add(new BundlePickUpEvent(deterrenceApply.To, pickUpSkill, deterrenceApply.Time - pickUpDuration, pickUpDuration, pickedUpShard));
         }
         return res;
     }

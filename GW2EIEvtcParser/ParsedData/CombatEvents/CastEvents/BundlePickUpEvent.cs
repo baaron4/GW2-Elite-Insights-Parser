@@ -9,11 +9,15 @@ public class BundlePickUpEvent : GadgetInteractEvent
     internal BundlePickUpEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
+        // Break the link
         Caster = ParserHelper._unknownAgent;
         if (startItem != null && startItem.IsStateChange == StateChange.AnimationStart)
         {
             BundleID = startItem.OverstackValue;
         }
+    }
+    internal BundlePickUpEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : base(caster, skill, start, dur, effectTarget)
+    {
     }
 
 }
