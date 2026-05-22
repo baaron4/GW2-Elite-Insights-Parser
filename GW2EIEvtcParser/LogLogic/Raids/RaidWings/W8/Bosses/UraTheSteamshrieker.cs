@@ -341,17 +341,32 @@ internal class UraTheSteamshrieker : MountBalrior
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData, Dictionary<long, List<AnimatedCastEvent>> animatedCastDataByID)
     {
         var res = base.SpecialCastEventProcess(combatData, agentData, skillData, animatedCastDataByID);
-        var deterrenceApplies = combatData.GetBuffApplyData(Deterrence).OfType<BuffApplyEvent>().Where(x => !x.Initial).ToList();
+        var deterrenceApplies = combatData.GetBuffApplyData(Deterrence).OfType<BuffApplyEvent>().Where(x => !x.Initial);
         var pickUpSkill = skillData.Get(UraBloodstoneShardPickUp);
         long pickUpDuration = 520; // roughly that value
         var shards = agentData.GetNPCsByID(TargetID.UraGadget_BloodstoneShard);
         skillData.NotAccurate.Add(UraBloodstoneShardPickUp); // We can't detect failed pick ups with that method
         var pickedUpShards = new HashSet<AgentItem>(shards.Count);
+        var shardPickers = new HashSet<AgentItem>();
         foreach (var deterrenceApply in deterrenceApplies)
         {
             var pickedUpShard = shards.FirstOrDefault(x => x.LastAware >= deterrenceApply.Time && x.LastAware <= deterrenceApply.Time + 100 && !pickedUpShards.Contains(x)) ?? _unknownAgent;
             pickedUpShards.Add(pickedUpShard);
+            shardPickers.Add(deterrenceApply.To);
             res.Add(new BundlePickUpEvent(deterrenceApply.To, pickUpSkill, deterrenceApply.Time - pickUpDuration, pickUpDuration, pickedUpShard));
+        }
+        foreach (var shardPicker in shardPickers)
+        {
+            var swapEvents = combatData.GetWeaponSwapData(shardPicker);
+            var deterrenceAppliesOnPicker = combatData.GetBuffApplyDataByIDByDst(Deterrence, shardPicker).OfType<BuffApplyEvent>().Where(x => !x.Initial).ToList();
+            foreach (var swapEvent in swapEvents)
+            {
+                if ((swapEvent.SwappedFrom == WeaponSetIDs.KitSet || swapEvent.SwappedTo == WeaponSetIDs.KitSet) &&
+                    deterrenceAppliesOnPicker.Any(x => Math.Abs(x.Time - swapEvent.Time) < ServerDelayConstant))
+                {
+                    swapEvent.FlagAsSpecialBundleSwap();
+                }
+            }
         }
         return res;
     }
