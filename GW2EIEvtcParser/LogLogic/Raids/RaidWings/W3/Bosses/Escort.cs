@@ -145,11 +145,10 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal static void FindMines(AgentData agentData, List<CombatItem> combatData)
     {
-        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100 && x.HitboxHeight == 300);
         foreach (AgentItem mine in mineAgents)
         {
             mine.OverrideID(TargetID.Mine, agentData);
-            mine.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
     }
 
@@ -177,7 +176,7 @@ internal class Escort : StrongholdOfTheFaithful
         //
         FindMines(agentData, combatData);
         var duplicateGlennaPosition = new Vector3(-4326.979f, 13687.298f, -5561.857f);
-        foreach (var glenna in agentData.GetNPCsByID(TargetID.Glenna))
+        foreach (var glenna in agentData.GetStableSpeciesByID(TargetID.Glenna))
         {
             var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(glenna)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
             if (positions.Any(x => (duplicateGlennaPosition.XY() - x.XYZ.XY()).LengthSquared() < 10))
@@ -186,9 +185,9 @@ internal class Escort : StrongholdOfTheFaithful
             }
         }
         // to keep the pre event as we need targets
-        if (!agentData.GetNPCsByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
+        if (!agentData.GetStableSpeciesByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
-            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.Gadget, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameSubMcLeods(Targets);

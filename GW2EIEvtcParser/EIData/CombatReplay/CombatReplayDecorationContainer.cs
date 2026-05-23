@@ -380,7 +380,7 @@ internal class CombatReplayDecorationContainer
         var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffID, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentID));
         var buffApplies = buffEvents.OfType<BuffApplyEvent>();
         var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>();
-        var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentID);
+        var agentsToTether = log.AgentData.GetStableSpeciesByID(toTetherAgentID);
 
         foreach (BuffApplyEvent buffApply in buffApplies)
         {

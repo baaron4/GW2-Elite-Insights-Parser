@@ -237,11 +237,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16);
+        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16);
         foreach (AgentItem sanctuary in sanctuaryPrism)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
-            sanctuary.OverrideType(AgentItem.AgentType.NPC, agentData);
+            IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
             sanctuary.OverrideID(TargetID.SanctuaryPrism, agentData);
             sanctuary.OverrideAwareTimes(logData.EvtcLogStart, items.Any() ? items.First().Time : logData.EvtcLogEnd);
         }
@@ -485,7 +484,6 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 
             case (int)TargetID.SanctuaryPrism:
             {
-                // TODO: check if still necessary with visibility events
                 var xjjPhases = log.LogData.GetEncounterPhases(log, LogID).Where(x => x.IsCM).ToList();
                 var prismStart = log.LogData.EvtcLogStart;
                 foreach (var xjjPhase in xjjPhases)

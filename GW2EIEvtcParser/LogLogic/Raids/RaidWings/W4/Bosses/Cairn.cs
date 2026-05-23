@@ -129,7 +129,7 @@ internal class Cairn : BastionOfThePenitent
             {
                 spatialManipulations.AddRange(log.CombatData.GetAnimatedCastData(castSkillID));
             }
-            var cairns = log.AgentData.GetNPCsByID(TargetID.Cairn);
+            var cairns = log.AgentData.GetStableSpeciesByID(TargetID.Cairn);
             spatialManipulations.SortByTime();
             foreach (EffectEvent greenEffect in greenEffects)
             {

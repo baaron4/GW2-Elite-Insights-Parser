@@ -43,7 +43,7 @@ internal class KinfallInstance : Kinfall
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastWhisperingShadow = agentData.GetNPCsByID(TargetID.WhisperingShadow).LastOrDefault();
+        var lastWhisperingShadow = agentData.GetStableSpeciesByID(TargetID.WhisperingShadow).LastOrDefault();
         if (lastWhisperingShadow != null)
         {
             var death = combatData.GetDeadEvents(lastWhisperingShadow).FirstOrDefault();

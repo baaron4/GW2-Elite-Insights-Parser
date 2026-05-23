@@ -48,7 +48,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastArkk = agentData.GetNPCsByID(TargetID.Arkk).LastOrDefault();
+        var lastArkk = agentData.GetStableSpeciesByID(TargetID.Arkk).LastOrDefault();
         if (lastArkk != null)
         {
             var death = combatData.GetDeadEvents(lastArkk).FirstOrDefault();

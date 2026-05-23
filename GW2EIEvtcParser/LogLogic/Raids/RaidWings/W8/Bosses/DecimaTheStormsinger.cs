@@ -158,14 +158,13 @@ internal class DecimaTheStormsinger : MountBalrior
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
         var conduitsGadgets = maxHPEventsAgents
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 200)
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100 && x.HitboxHeight == 200)
             .Distinct();
         var effects = combatData.Where(x => x.IsEffect && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM)).ToList();
         var effectSrcs = effects.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         foreach (var conduitGadget in conduitsGadgets)
         {
             conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
-            conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             var effectByConduitOnGadget = effects
                 .FirstOrDefault(x => x.DstMatchesAgent(conduitGadget));
             if (effectByConduitOnGadget != null)

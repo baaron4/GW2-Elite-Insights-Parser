@@ -511,7 +511,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         // Sand
         if (log.CombatData.GetGW2BuildEvent().Build >= GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance)
         {
-            foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
+            foreach (var agent in log.AgentData.GetStableSpeciesByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
             {
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSandBorder, out var borders))
                 {
@@ -521,7 +521,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         } 
         else
         {
-            foreach (var agent in log.AgentData.GetNPCsByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
+            foreach (var agent in log.AgentData.GetStableSpeciesByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))
             {
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.GuardiansGaleSand, out var sands))
                 {
@@ -707,9 +707,9 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     /// </summary>
     private static void OverrideGenericKillAmbushKillingBlows(AgentData agentData, List<CombatItem> combatData)
     {
-        var kelas = agentData.GetNPCsByID(TargetID.KelaSeneschalOfWaves);
+        var kelas = agentData.GetStableSpeciesByID(TargetID.KelaSeneschalOfWaves);
 
-        IReadOnlyList<AgentItem> downedCrocs = agentData.GetNPCsByID(TargetID.DownedEliteCrocodilianRazortooth);
+        IReadOnlyList<AgentItem> downedCrocs = agentData.GetStableSpeciesByID(TargetID.DownedEliteCrocodilianRazortooth);
         foreach (AgentItem croc in downedCrocs)
         {
             var kela = kelas.FirstOrDefault(x => x.InAwareTimes(croc));
@@ -724,7 +724,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
 
         List<AgentItem> eatableIFFFoeAgents = [
-            ..agentData.GetNPCsByID(TargetID.CursedArtifact_NPC),
+            ..agentData.GetStableSpeciesByID(TargetID.CursedArtifact_NPC),
             ..agentData.GetAgentByType(AgentItem.AgentType.Player)
         ];
         foreach (AgentItem eatableAgent in eatableIFFFoeAgents)

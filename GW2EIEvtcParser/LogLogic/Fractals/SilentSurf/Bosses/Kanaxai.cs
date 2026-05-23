@@ -131,7 +131,7 @@ internal class Kanaxai : SilentSurf
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // kanaxai spawns with invulnerability
-        var kanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
+        var kanaxai = agentData.GetStableSpeciesByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
         return GetLogOffsetByInvulnStart(logData, combatData, kanaxai, Determined762);
     }
 

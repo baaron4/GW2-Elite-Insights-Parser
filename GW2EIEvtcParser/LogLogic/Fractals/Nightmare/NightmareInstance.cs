@@ -50,7 +50,7 @@ internal class NightmareInstance : Nightmare
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastEnsolyss = agentData.GetNPCsByID(TargetID.Ensolyss).LastOrDefault();
+        var lastEnsolyss = agentData.GetStableSpeciesByID(TargetID.Ensolyss).LastOrDefault();
         if (lastEnsolyss != null)
         {
             var death = combatData.GetDeadEvents(lastEnsolyss).FirstOrDefault();

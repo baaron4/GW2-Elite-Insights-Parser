@@ -40,7 +40,7 @@ internal static class WarriorHelper
         [
             ..combatData.GetBuffData(id).Where(x =>
                 x is BuffApplyEvent &&
-                x.CreditedBy.Type == AgentItem.AgentType.Gadget &&
+                x.CreditedBy.Type == AgentItem.AgentType.VolatileSpecies &&
                 x.CreditedBy.Master == null &&
                 playerAgents.Any(x.To.IsMaster)
             ).Select(x => x.CreditedBy)

@@ -87,7 +87,7 @@ public class NPC : SingleActor
 
     public override string GetIcon(bool forceLowResolutionIfApplicable = false)
     {
-        return AgentItem.Type == AgentItem.AgentType.Gadget ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
+        return AgentItem.Type == AgentItem.AgentType.VolatileSpecies ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
     }
 
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)

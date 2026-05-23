@@ -11,6 +11,7 @@ public class GadgetInteractEvent : AnimatedCastEvent
     internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
+        Skill = skillData.Get(SkillIDs.ArcDPSGenericGadgetInteract);
         if (startItem != null)
         {
             if (startItem.IsStateChange != StateChange.AnimationStart)
@@ -23,17 +24,23 @@ public class GadgetInteractEvent : AnimatedCastEvent
             EffectTarget = ParserHelper._unknownAgent;
         }
         // Bandaid, may not be perfect
-        if (AnimStop != AnimationStop.GadgetViaReset && AnimStop != AnimationStop.Ended && Status != AnimationStatus.Interrupted)
+        if (AnimStart == AnimationStart.GadgetInteract) // Sanity check
         {
-            Status = AnimationStatus.Interrupted;
-            SavedDuration = -ActualDuration;
-        }
-        ExpectedDuration = (int)(ExpectedDuration / AcceleratedToNonAcceleratedRatio);
-        if (Status == AnimationStatus.Reduced)
-        {
-            int scaledExpectedDuration = (int)Math.Round(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
-            SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+            if (AnimStop != AnimationStop.GadgetViaReset && AnimStop != AnimationStop.Ended && Status != AnimationStatus.Interrupted)
+            {
+                Status = AnimationStatus.Interrupted;
+                SavedDuration = -ActualDuration;
+            }
+            ExpectedDuration = (int)(ExpectedDuration / AcceleratedToNonAcceleratedRatio);
+            if (Status == AnimationStatus.Reduced)
+            {
+                int scaledExpectedDuration = (int)Math.Round(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
+                SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+            }
         }
     }
 
+    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : base(caster, skill, start, dur, effectTarget)
+    {
+    }
 }

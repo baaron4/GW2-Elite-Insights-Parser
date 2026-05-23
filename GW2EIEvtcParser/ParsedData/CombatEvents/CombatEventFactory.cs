@@ -123,6 +123,7 @@ internal static class CombatEventFactory
                 metaDataEvents.AttackTargetEventByAttackTarget[aTEvt.AttackTarget] = aTEvt;
                 break;
             case StateChange.Targetable:
+                if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
                 {
                     var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
                     if (statusEvents.TargetableEventsBySrc.TryGetValue(tarEvt.Src, out var targetableEvents))
@@ -138,7 +139,7 @@ internal static class CombatEventFactory
                         Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
                     }
                 }
-                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
                     if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
@@ -651,6 +652,7 @@ internal static class CombatEventFactory
         {
             SkillIDs.ArcDPSGenericEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGenericGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSGenericPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }

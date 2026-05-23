@@ -86,7 +86,7 @@ internal class Ensolyss : Nightmare
     internal static void IgnoreFakeEnsolysses(AgentData agentData, List<CombatItem> combatData)
     {
         var validMaxHPUpdatesForEnsolyss = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToHashSet();
-        foreach (var ensolyss in agentData.GetNPCsByID(TargetID.Ensolyss))
+        foreach (var ensolyss in agentData.GetStableSpeciesByID(TargetID.Ensolyss))
         {
             if (!validMaxHPUpdatesForEnsolyss.Contains(ensolyss))
             {
@@ -103,7 +103,7 @@ internal class Ensolyss : Nightmare
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // ensolyss spawns with invulnerability
-        var ensolyss = agentData.GetNPCsByID(TargetID.Ensolyss).FirstOrDefault() ?? throw new MissingKeyActorsException("Ensolyss not found");
+        var ensolyss = agentData.GetStableSpeciesByID(TargetID.Ensolyss).FirstOrDefault() ?? throw new MissingKeyActorsException("Ensolyss not found");
         long start = GetLogOffsetByInvulnStart(logData, combatData, ensolyss, Determined762);
 
         // ensolyss exits combat during split phases and reenters after

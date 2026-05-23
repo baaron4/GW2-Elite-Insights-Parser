@@ -308,6 +308,7 @@ public static class SkillItemOverrides
         { BigMagmaDrop, "Big Magma Drop" },
         // Ura
         { UraDispelSAK, "Dispel" },
+        { UraBloodstoneShardPickUp, "Bloodstone Shard Pick Up" },
         // Kela
         { KelaBurrow, "Burrow" },
         { KelaAura, "Aura (Kela)" },

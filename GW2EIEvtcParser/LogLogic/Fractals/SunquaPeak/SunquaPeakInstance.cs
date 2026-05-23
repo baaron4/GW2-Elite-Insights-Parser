@@ -45,7 +45,7 @@ internal class SunquaPeakInstance : SunquaPeak
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastDarkAi = agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
+        var lastDarkAi = agentData.GetStableSpeciesByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
         if (lastDarkAi != null)
         {
             var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(Determined895, lastDarkAi);

@@ -182,8 +182,8 @@ public static class AgentManipulationHelper
         }
         // Redirect NPC and Gadget masters
         IReadOnlyList<AgentItem> masterRedirectionCandidates = [
-             .. agentData.GetAgentByType(AgentItem.AgentType.NPC),
-             .. agentData.GetAgentByType(AgentItem.AgentType.Gadget)
+             .. agentData.GetAgentByType(AgentItem.AgentType.StableSpecies),
+             .. agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies)
             ];
         foreach (AgentItem ag in masterRedirectionCandidates)
         {
@@ -334,7 +334,7 @@ public static class AgentManipulationHelper
         var dstCombatDataDict = combatDataDict.Where(x => x.DstIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.DstAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
         // NPCs
         {
-            var npcsByInstIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            var npcsByInstIDs = agentData.GetAgentByType(AgentItem.AgentType.StableSpecies).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             if (povAgent == null || povPositions.Count == 0)
             {
                 foreach (var npcsByInstdID in npcsByInstIDs)

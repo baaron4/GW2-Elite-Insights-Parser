@@ -137,7 +137,7 @@ internal class Qadim : MythwrightGambit
 
     private static bool HasPlateformAgents(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.QadimPlatform).GroupBy(x => x.Name).Count() == 12;
+        return agentData.GetStableSpeciesByID(TargetID.QadimPlatform).GroupBy(x => x.Name).Count() == 12;
     }
 
     internal static void RenamePyres(IReadOnlyList<SingleActor> targets)
@@ -169,10 +169,9 @@ internal class Qadim : MythwrightGambit
         {
             if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
             {
-                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
+                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
                 foreach (AgentItem platform in platformAgents)
                 {
-                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
                     platform.OverrideID(TargetID.QadimPlatform, agentData);
                     platform.OverrideAwareTimes(platform.FirstAware, int.MaxValue);
                 }
@@ -193,11 +192,10 @@ internal class Qadim : MythwrightGambit
             var lamps = combatData
                 .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
                 .Distinct();
             foreach (var lamp in lamps)
             {
-                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
                 lamp.OverrideID(TargetID.QadimLamp, agentData);
             }
         }
@@ -205,10 +203,9 @@ internal class Qadim : MythwrightGambit
         {
             if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
             {
-                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 202);
                 foreach (AgentItem lamp in lampAgents)
                 {
-                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
                     lamp.OverrideID(TargetID.QadimLamp, agentData);
                 }
             }
@@ -221,7 +218,7 @@ internal class Qadim : MythwrightGambit
 
     internal static void FindPyres(ulong gw2Build, AgentData agentData, List<CombatItem> combatData)
     {
-        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
+        IReadOnlyList<AgentItem> pyres = agentData.GetStableSpeciesByID(TargetID.PyreGuardian);
         foreach (AgentItem pyre in pyres)
         {
             CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
@@ -340,7 +337,7 @@ internal class Qadim : MythwrightGambit
                     };
                 foreach (var pyreID in pyres)
                 {
-                    pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreID).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
+                    pyresFirstAware.AddRange(log.AgentData.GetStableSpeciesByID(pyreID).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
                 }
                 if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                 {
@@ -1025,7 +1022,7 @@ internal class Qadim : MythwrightGambit
                     return;
                 }
                 var opacities = new List<ParametricPoint1D> { new(VisibleOpacity, target.FirstAware) };
-                foreach (var qadimAgent in log.AgentData.GetNPCsByID(TargetID.Qadim))
+                foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))
                 {
                     AnimatePlateforms(log, replay, target, opacities, qadimAgent);
                 }
@@ -1511,7 +1508,7 @@ internal class Qadim : MythwrightGambit
         // The death zone from falling off the platform is roughly at -2950
         // The main fight platform is at roughly at -4700
 
-        var lamps = log.AgentData.GetNPCsByID(TargetID.QadimLamp).Where(x => x.InAwareTimes(qadimEncounter.Start, qadimEncounter.End)).ToList();
+        var lamps = log.AgentData.GetStableSpeciesByID(TargetID.QadimLamp).Where(x => x.InAwareTimes(qadimEncounter.Start, qadimEncounter.End)).ToList();
         int lampLabyrinthZ = -250; // Height Threshold
 
         foreach (Player p in log.PlayerList)

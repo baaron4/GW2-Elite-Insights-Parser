@@ -435,7 +435,7 @@ public static class DamageModifierIDs
     public const int Mod_MightEqual25 = 422;
     public const int Mod_MightAbove20 = 423;
     public const int Mod_MightLess15 = 424;
-    public const int Mod_Stability0 = 425;
+    public const int Mod_StabilityAbove1 = 425;
     public const int Mod_StabilityAbove3 = 426;
     public const int Mod_StabilityAbove5 = 427;
     public const int Mod_StabilityAbove10 = 428;

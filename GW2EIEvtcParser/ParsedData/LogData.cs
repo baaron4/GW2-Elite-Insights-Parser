@@ -117,7 +117,7 @@ public class LogData
         switch (targetID)
         {
             case TargetID.WorldVersusWorld:
-                if (agentData.GetNPCsByID(TargetID.Desmina).Any())
+                if (agentData.GetStableSpeciesByID(TargetID.Desmina).Any())
                 {
                     return new River((int)TargetID.DummyTarget);
                 }
@@ -125,10 +125,10 @@ public class LogData
             case TargetID.Instance:
                 return new UnknownInstanceLogic(id);
         }
-        var target = agentData.GetNPCsByID(id).FirstOrDefault() ?? agentData.GetGadgetsByID(id).FirstOrDefault();
+        var target = agentData.GetStableSpeciesByID(id).FirstOrDefault() ?? agentData.GetVolatileSpeciesByID(id).FirstOrDefault();
         switch (target?.Type)
         {
-            case AgentType.NPC:
+            case AgentType.StableSpecies:
                 switch (targetID)
                 {
                     case TargetID.Mordremoth:
@@ -159,7 +159,7 @@ public class LogData
                         return new KeepConstruct(id);
                     case TargetID.Xera:
                         // some TC logs are registered as Xera
-                        if (agentData.GetNPCsByID(TargetID.HauntingStatue).Count > 0)
+                        if (agentData.GetStableSpeciesByID(TargetID.HauntingStatue).Count > 0)
                         {
                             return new TwistedCastle((int)TargetID.DummyTarget);
                         }
@@ -188,8 +188,8 @@ public class LogData
                         return new StatueOfDarkness(id);
                     case TargetID.Dhuum:
                         // some eyes logs are registered as Dhuum
-                        if (agentData.GetNPCsByID(TargetID.EyeOfFate).Count > 0 ||
-                            agentData.GetNPCsByID(TargetID.EyeOfJudgement).Count > 0)
+                        if (agentData.GetStableSpeciesByID(TargetID.EyeOfFate).Count > 0 ||
+                            agentData.GetStableSpeciesByID(TargetID.EyeOfJudgement).Count > 0)
                         {
                             return new StatueOfDarkness((int)TargetID.EyeOfFate);
                         }
@@ -297,7 +297,7 @@ public class LogData
                     case TargetID.AncientInvokedHydra:
                         return new Qadim((int)TargetID.Qadim);
                     case TargetID.VoidMelter:
-                        if (agentData.GetNPCsByID(TargetID.VoidAmalgamate).Any())
+                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Any())
                         {
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }
@@ -307,7 +307,7 @@ public class LogData
                 }
                 break;
 
-            case AgentType.Gadget:
+            case AgentType.VolatileSpecies:
                 switch (targetID)
                 {
                     // Raid Wings
@@ -321,7 +321,7 @@ public class LogData
                     case TargetID.GadgetTheDragonVoid1:
                     case TargetID.GadgetTheDragonVoid2:
                         // This will most likely require a chinese client version
-                        if (agentData.GetNPCsByID(TargetID.VoidAmalgamate).Any())
+                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Any())
                         {
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }

@@ -135,7 +135,7 @@ internal static class RitualistHelper
     }
     internal static bool IsSpiritMinion(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

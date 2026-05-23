@@ -398,7 +398,7 @@ internal static class MesmerHelper
 
     internal static bool IsClone(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -425,7 +425,7 @@ internal static class MesmerHelper
 
     internal static bool IsPhantasm(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -434,7 +434,7 @@ internal static class MesmerHelper
 
     internal static bool IsIllusion(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
