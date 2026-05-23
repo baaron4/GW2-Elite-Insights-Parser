@@ -11,17 +11,9 @@ public class GadgetInteractEvent : AnimatedCastEvent
     internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
-        Skill = skillData.Get(SkillIDs.ArcDPSGenericGadgetInteract);
-        if (startItem != null)
+        if (startItem != null && startItem.IsStateChange != StateChange.AnimationStart)
         {
-            if (startItem.IsStateChange != StateChange.AnimationStart)
-            {
-                EffectTarget = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
-            }
-        }
-        else
-        {
-            EffectTarget = ParserHelper._unknownAgent;
+            EffectTarget = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
         }
         // Bandaid, may not be perfect
         if (AnimStart == AnimationStart.GadgetInteract) // Sanity check

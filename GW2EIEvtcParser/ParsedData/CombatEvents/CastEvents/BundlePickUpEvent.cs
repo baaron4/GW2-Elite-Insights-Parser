@@ -3,15 +3,16 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BundlePickUpEvent : GadgetInteractEvent
+public class BundlePickUpEvent : AnimatedCastEvent
 {
     public readonly long BundleID;
+    public AgentItem BundleGadget => EffectTarget;
     internal BundlePickUpEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         // Break the link
         Caster = ParserHelper._unknownAgent;
-        if (startItem != null && startItem.IsStateChange == StateChange.AnimationStart)
+        if (startItem != null)
         {
             BundleID = startItem.OverstackValue;
         }
