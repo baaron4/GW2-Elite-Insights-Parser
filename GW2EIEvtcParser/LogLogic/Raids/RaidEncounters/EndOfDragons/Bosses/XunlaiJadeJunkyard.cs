@@ -485,7 +485,6 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 
             case (int)TargetID.SanctuaryPrism:
             {
-                // TODO: check if still necessary with visibility events
                 var xjjPhases = log.LogData.GetEncounterPhases(log, LogID).Where(x => x.IsCM).ToList();
                 var prismStart = log.LogData.EvtcLogStart;
                 foreach (var xjjPhase in xjjPhases)
