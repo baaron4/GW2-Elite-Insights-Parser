@@ -27,7 +27,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
     private void FindGenericTargetIDs(AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var allTargetIDs = Enum.GetValues(typeof(TargetID));
-        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.StableSpecies && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
         var blackList = new HashSet<TargetID>()
         {
             TargetID.Environment,
@@ -41,7 +41,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
         foreach (TargetID targetID in allTargetIDs)
         {
             //TODO_PERF(Rennorb): invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
-            if (agentData.GetNPCsByID(targetID).Any())
+            if (agentData.GetStableSpeciesByID(targetID).Any())
             {
                 if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 5e5))
                 {

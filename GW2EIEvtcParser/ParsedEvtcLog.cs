@@ -70,7 +70,7 @@ public class ParsedEvtcLog
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling active players");
         List<Player> activePlayers = [];
-        var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
+        var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.StableSpecies).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
         foreach (Player p in playerList)
         {
             if (p.LastAware <= LogData.LogStart)

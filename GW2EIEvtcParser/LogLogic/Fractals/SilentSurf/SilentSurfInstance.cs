@@ -43,7 +43,7 @@ internal class SilentSurfInstance : SilentSurf
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastKanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Any());
+        var lastKanaxai = agentData.GetStableSpeciesByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Any());
         if (lastKanaxai != null)
         {
             var determinedBuffs = combatData.GetBuffDataByIDByDst(SkillIDs.Determined762, lastKanaxai);

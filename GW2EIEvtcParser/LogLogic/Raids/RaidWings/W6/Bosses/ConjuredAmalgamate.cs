@@ -87,24 +87,24 @@ internal class ConjuredAmalgamate : MythwrightGambit
             var atAgent = attackTargetEvent.AttackTarget;
             var agent = attackTargetEvent.Src;
             var atPos = position.GetPoint3D();
-            if (agent.Type == AgentItem.AgentType.Gadget)
+            if (agent.Type == AgentItem.AgentType.VolatileSpecies)
             {
                 if ((atPos - BodyAttackTargetPos).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.ConjuredAmalgamate, agentData);
                     atAgent.OverrideID(TargetID.CABodyAttackTarget, agentData);
-                    atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
                 }
                 else if ((atPos - LeftArmAttackTargetPosNoDamage).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.CALeftArm, agentData);
                 }
                 else if ((atPos - RightArmAttackTargetPosNoDamage).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.CARightArm, agentData);
                 }
             }
@@ -119,13 +119,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
             if (agent.IsSpecies(TargetID.CALeftArm) && (atPos - LeftArmAttackTargetPosForDamage).Length() < 5)
             {
                 atAgent.OverrideID(TargetID.CALeftArmAttackTarget, agentData);
-                atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
             else if (agent.IsSpecies(TargetID.CARightArm) && (atPos - RightArmAttackTargetPosForDamage).Length() < 5)
             {
                 atAgent.OverrideID(TargetID.CARightArmAttackTarget, agentData);
-                atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
         }
@@ -152,7 +152,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     if (logStartNPCUpdate != null)
                     {
                         // we couldn't have hit CA before the initial smash
-                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(logData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetNPCsByID(TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(logData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetStableSpeciesByID(TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                     }
                     else
                     {
@@ -329,7 +329,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            AgentItem? zommoros = agentData.GetNPCsByID(TargetID.ChillZommoros).LastOrDefault();
+            AgentItem? zommoros = agentData.GetStableSpeciesByID(TargetID.ChillZommoros).LastOrDefault();
             if (zommoros == null)
             {
                 return;

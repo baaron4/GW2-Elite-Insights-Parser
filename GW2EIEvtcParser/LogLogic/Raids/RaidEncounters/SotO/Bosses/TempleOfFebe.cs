@@ -284,7 +284,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         AgentItem cerus = GetCerusItem(agentData);
         foreach (TargetID embodimentID in embodimentIDs)
         {
-            foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
+            foreach (AgentItem embodiment in agentData.GetStableSpeciesByID(embodimentID))
             {
                 if (Math.Abs(cerus.FirstAware - embodiment.FirstAware) < 50)
                 {
@@ -969,7 +969,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
     private static AgentItem GetCerusItem(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
+        return agentData.GetStableSpeciesByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
     }
 
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)

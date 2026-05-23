@@ -98,7 +98,7 @@ internal class MarkerCastFinder : CheckedCastFinder<MarkerEvent>
                     var caster = group.Key;
                     if (_speciesID > 0 && caster.IsUnamedSpecies())
                     {
-                        AgentItem? agent = agentData.GetNPCsByID(_speciesID).FirstOrDefault(x => x.LastAware >= markerEvent.Time && x.FirstAware <= markerEvent.Time);
+                        AgentItem? agent = agentData.GetStableSpeciesByID(_speciesID).FirstOrDefault(x => x.LastAware >= markerEvent.Time && x.FirstAware <= markerEvent.Time);
                         if (agent != null)
                         {
                             caster = agent;

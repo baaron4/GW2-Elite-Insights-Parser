@@ -183,17 +183,17 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     private static bool HasDarkMode(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).Count > 0;
+        return agentData.GetStableSpeciesByID(TargetID.DarkAiKeeperOfThePeak).Count > 0;
     }
 
     private static bool HasElementalMode(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).Count > 0;
+        return agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak).Count > 0;
     }
 
     internal static void DetectAis(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        foreach (var aiAgent in agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak))
+        foreach (var aiAgent in agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak))
         {
             var aiCastEvents = combatData.Where(x => x.IsStartCastEvent() && x.SrcMatchesAgent(aiAgent));
             var china = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && LanguageEvent.GetLanguage(x) == LanguageEnum.Chinese) != null;
@@ -242,7 +242,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // check invulnerability remove for new elemental ai
-        var ai = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
+        var ai = agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
         var invulnStart = GetLogOffsetByInvulnStart(logData, combatData, ai, Determined895);
         if (invulnStart > ai.FirstAware)
         {

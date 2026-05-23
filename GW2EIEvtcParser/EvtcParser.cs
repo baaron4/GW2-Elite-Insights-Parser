@@ -591,12 +591,12 @@ public class EvtcParser
             {
                 case Spec.NPC:
                     ID = (ushort)(prof > ushort.MaxValue ? 0 : prof);
-                    type = AgentItem.AgentType.NPC;
+                    type = AgentItem.AgentType.StableSpecies;
                     break;
 
                 case Spec.Gadget:
                     ID = (ushort)(prof & 0x0000ffff);
-                    type = AgentItem.AgentType.Gadget;
+                    type = AgentItem.AgentType.VolatileSpecies;
                     break;
 
                 default:
@@ -1136,7 +1136,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");
         foreach (ulong missingAgentValue in allAgentValues)
         {
-            _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
+            _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.StableSpecies, 0, 0, 0, 0, 0, 0));
         }
         var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x =>
         {
@@ -1256,7 +1256,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
-        _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
+        _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.Gadget, TargetID.Environment, true);
 
         // Adjust extension events if needed
         if (_enabledExtensions.Count != 0)
@@ -1297,7 +1297,7 @@ public class EvtcParser
         }
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting minion names");
-        foreach (AgentItem agent in _agentData.GetAgentByType(AgentItem.AgentType.NPC))
+        foreach (AgentItem agent in _agentData.GetAgentByType(AgentItem.AgentType.StableSpecies))
         {
             if (agent.Master != null)
             {

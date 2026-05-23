@@ -43,10 +43,10 @@ public class AgentItem
     public bool IsEnglobingAgent => _englobedAgentItems != null;
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
-    public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
+    public enum AgentType { StableSpecies, VolatileSpecies, Player, NonSquadPlayer }
 
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
-    public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
+    public bool IsNPC => Type == AgentType.StableSpecies || Type == AgentType.VolatileSpecies;
 
     public bool IsUnknown { get; private set; } = false;
 
@@ -57,7 +57,7 @@ public class AgentItem
     public readonly int UniqueID;
     public AgentItem? Master { get; protected set; }
     public ushort InstID { get; protected set; }
-    public AgentType Type { get; protected set; } = AgentType.NPC;
+    public AgentType Type { get; protected set; } = AgentType.StableSpecies;
     public long FirstAware { get; protected set; }
     public long LastAware { get; protected set; } = long.MaxValue;
 

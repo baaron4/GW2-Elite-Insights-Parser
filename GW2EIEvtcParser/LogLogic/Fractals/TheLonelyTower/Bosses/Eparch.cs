@@ -99,7 +99,7 @@ internal class Eparch : LonelyTower
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
+        var dummyEparchs = agentData.GetStableSpeciesByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
             return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.IsStartCastEvent() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
         });
@@ -108,11 +108,11 @@ internal class Eparch : LonelyTower
             dummyEparch.OverrideID(IgnoredSpecies, agentData);
         }
         //
-        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > logData.LogStart + 5000);
+        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.FirstAware > logData.LogStart + 5000);
         foreach (var riftAgent in riftAgents)
         {
             riftAgent.OverrideID(TargetID.KryptisRift, agentData);
-            riftAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            riftAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
         //
 
@@ -140,7 +140,7 @@ internal class Eparch : LonelyTower
 
     private static bool IsFakeCM(AgentData agentData)
     {
-        return agentData.GetNPCsByIDs([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement]).Count > 0;
+        return agentData.GetStableSpeciesByIDs([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement]).Count > 0;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -450,7 +450,7 @@ internal class Eparch : LonelyTower
             { EnragedSmashEparch, Colors.Red },
             { RegretSkillEparch, Colors.Yellow },
         };
-        foreach (AgentItem gadget in log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget))
+        foreach (AgentItem gadget in log.AgentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
             const int globuleHealth = 14_940;
             const uint globuleWidth = 16;

@@ -65,7 +65,7 @@ internal class HallOfChainsInstance : HallOfChains
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
+        var chest = agentData.GetVolatileSpeciesByID(_dhuum.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -84,8 +84,8 @@ internal class HallOfChainsInstance : HallOfChains
             var dummy = dummies.FirstOrDefault(x => x.Character == "River of Souls");
             if (dummy != null)
             {
-                var enervators = log.AgentData.GetNPCsByID(TargetID.Enervator);
-                var chest = log.AgentData.GetGadgetsByID(_river.ChestID).FirstOrDefault();
+                var enervators = log.AgentData.GetStableSpeciesByID(TargetID.Enervator);
+                var chest = log.AgentData.GetVolatileSpeciesByID(_river.ChestID).FirstOrDefault();
                 foreach (var desmina in desminas)
                 {
                     var currentEnervators = enervators.Where(x => x.InAwareTimes(desmina));
@@ -143,8 +143,8 @@ internal class HallOfChainsInstance : HallOfChains
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.EaterOfSouls, out var eaterOfSouls))
         {
-            var peasants = new List<AgentItem>(log.AgentData.GetNPCsByID(TargetID.AscalonianPeasant1));
-            peasants.AddRange(log.AgentData.GetNPCsByID(TargetID.AscalonianPeasant2));
+            var peasants = new List<AgentItem>(log.AgentData.GetStableSpeciesByID(TargetID.AscalonianPeasant1));
+            peasants.AddRange(log.AgentData.GetStableSpeciesByID(TargetID.AscalonianPeasant2));
             foreach (var eaterOfSoul in eaterOfSouls)
             {
                 if (!eaterOfSoul.GetDamageTakenEvents(null, log).Any(x => x.CreditedFrom.IsPlayer))
@@ -179,7 +179,7 @@ internal class HallOfChainsInstance : HallOfChains
         if (targetsByIDs.TryGetValue((int)TargetID.EyeOfFate, out var eyeOfFates) &&
             targetsByIDs.TryGetValue((int)TargetID.EyeOfJudgement, out var eyeOfJudgements))
         {
-            var lightThieves = log.AgentData.GetNPCsByID(TargetID.LightThief);
+            var lightThieves = log.AgentData.GetStableSpeciesByID(TargetID.LightThief);
             foreach (var eyeOfFate in eyeOfFates)
             {
                 var eyeOfJudgement = eyeOfJudgements.FirstOrDefault(x => x.InAwareTimes(eyeOfFate));
@@ -213,8 +213,8 @@ internal class HallOfChainsInstance : HallOfChains
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
-            var messengers = log.AgentData.GetNPCsByID(TargetID.DhuumsMessenger);
-            var chest = log.AgentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
+            var messengers = log.AgentData.GetStableSpeciesByID(TargetID.DhuumsMessenger);
+            var chest = log.AgentData.GetVolatileSpeciesByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
                 var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
@@ -334,7 +334,7 @@ internal class HallOfChainsInstance : HallOfChains
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.Gadget, TargetID.DummyTarget, true);
         Dhuum.HandleYourSouls(agentData, combatData);
         Dhuum.HandleEtherealSeals(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);

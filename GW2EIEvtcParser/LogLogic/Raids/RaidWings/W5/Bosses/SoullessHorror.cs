@@ -115,7 +115,7 @@ internal class SoullessHorror : HallOfChains
             BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).LastOrDefault(x => x is BuffApplyEvent);
             if (buffOnDeath != null)
             {
-                if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
+                if (agentData.GetStableSpeciesByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
                 {
                     successHandler.SetSuccess(true, buffOnDeath.Time);
                 }

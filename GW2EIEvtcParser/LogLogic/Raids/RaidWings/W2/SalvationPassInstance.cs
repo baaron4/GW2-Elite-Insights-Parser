@@ -56,7 +56,7 @@ internal class SalvationPassInstance : SalvationPass
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_matthias.ChestID).FirstOrDefault();
+        var chest = agentData.GetVolatileSpeciesByID(_matthias.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -121,7 +121,7 @@ internal class SalvationPassInstance : SalvationPass
                 TargetID.BanditBombardier,
                 TargetID.BanditSniper,
         ];
-        var bandits = log.AgentData.GetNPCsByIDs(trashMobsToCheck);
+        var bandits = log.AgentData.GetStableSpeciesByIDs(trashMobsToCheck);
         var banditPositions = new List<PositionEvent>();
         foreach (var bandit in bandits)
         {
@@ -129,7 +129,7 @@ internal class SalvationPassInstance : SalvationPass
         }
         //
         var lastPack = packedTrios.Last();
-        var chest = log.AgentData.GetGadgetsByID(_banditTrio.ChestID).FirstOrDefault();
+        var chest = log.AgentData.GetVolatileSpeciesByID(_banditTrio.ChestID).FirstOrDefault();
         var encounterPhases = new List<EncounterPhaseData>();
         foreach (var pack in packedTrios)
         {

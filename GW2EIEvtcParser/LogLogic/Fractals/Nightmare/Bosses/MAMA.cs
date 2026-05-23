@@ -58,7 +58,7 @@ internal class MAMA : Nightmare
         if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
         {
             // players may enter combat with knights or an invisible hitbox before
-            AgentItem? mama = agentData.GetNPCsByID(TargetID.MAMA).FirstOrDefault();
+            AgentItem? mama = agentData.GetStableSpeciesByID(TargetID.MAMA).FirstOrDefault();
             if (mama != null)
             {
                 // attempt to use mama combat enter to determine start

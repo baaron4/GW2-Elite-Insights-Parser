@@ -45,7 +45,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_xera.ChestID).FirstOrDefault();
+        var chest = agentData.GetVolatileSpeciesByID(_xera.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -70,7 +70,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 foreach (var surveilledApply in surveilledAppliesPerGlenna)
                 {
                     var glenna = surveilledApply.To;
-                    var chest = log.AgentData.GetGadgetsByID(_escort.ChestID).FirstOrDefault();
+                    var chest = log.AgentData.GetVolatileSpeciesByID(_escort.ChestID).FirstOrDefault();
                     if (surveilledApply != null)
                     {
                         long start = surveilledApply.Time;
@@ -170,9 +170,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        var fakeXeras = log.AgentData.GetNPCsByID(TargetID.FakeXera);
-        var xeras = log.AgentData.GetNPCsByID(TargetID.Xera);
-        var chest = log.AgentData.GetGadgetsByID(_xera.ChestID).FirstOrDefault();
+        var fakeXeras = log.AgentData.GetStableSpeciesByID(TargetID.FakeXera);
+        var xeras = log.AgentData.GetStableSpeciesByID(TargetID.Xera);
+        var chest = log.AgentData.GetVolatileSpeciesByID(_xera.ChestID).FirstOrDefault();
         for (int i = 0; i < fakeXeras.Count; i++) 
         {
             var fakeXera = fakeXeras[i];
@@ -305,8 +305,8 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
 
     private static void MergeXeraAgents(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
-        var xeras = agentData.GetNPCsByID(TargetID.Xera);
-        var xeras2 = agentData.GetNPCsByID(TargetID.Xera2);
+        var xeras = agentData.GetStableSpeciesByID(TargetID.Xera);
+        var xeras2 = agentData.GetStableSpeciesByID(TargetID.Xera2);
         long start = 0;
         foreach (var xera2 in xeras2)
         {
@@ -323,10 +323,10 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         Escort.FindMines(agentData, combatData);
         // For encounters before reaching McLeod
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.Gadget, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Twisted Castle", Spec.Gadget, TargetID.DummyTarget, true);
         // For encounters before reaching Xera
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.Gadget, TargetID.DummyTarget, true);
         Xera.FindBloodstones(agentData, combatData);
         MergeXeraAgents(agentData, combatData, extensions, evtcVersion);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);

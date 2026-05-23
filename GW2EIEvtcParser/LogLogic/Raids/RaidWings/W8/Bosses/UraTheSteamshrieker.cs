@@ -209,12 +209,12 @@ internal class UraTheSteamshrieker : MountBalrior
             var titanAgents = combatData
                 .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
                 .Distinct();
             foreach (var titanAgent in titanAgents)
             {
                 titanAgent.OverrideID(TargetID.TitanspawnGeyserGadget, agentData);
-                titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                titanAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
         // Toxic geysers
@@ -229,35 +229,35 @@ internal class UraTheSteamshrieker : MountBalrior
             var toxicAgents = combatData
                 .Where(x => x.IsEffect && x.SkillID == toxicEffectGUID.EffectID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
                 .Distinct();
             foreach (var toxicAgent in toxicAgents)
             {
                 toxicAgent.OverrideID(TargetID.ToxicGeyser, agentData);
-                toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                toxicAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
         // Sulfuric geysers
         var sulfuricAgents = combatData
             .Where(x => x.IsBuffApplyEvent() && x.SkillID == HardenedCrust)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget)
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
             .Distinct();
         foreach (var sulfuricAgent in sulfuricAgents)
         {
             sulfuricAgent.OverrideID(TargetID.SulfuricGeyser, agentData);
-            sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sulfuricAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
         // Those can only be toxic ones
         var remainingGeysers = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 448200)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth > 100)
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth > 100)
             .Distinct();
         foreach (var remainingGeyser in remainingGeysers)
         {
             remainingGeyser.OverrideID(TargetID.ToxicGeyser, agentData);
-            remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
+            remainingGeyser.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
     }
 
@@ -275,12 +275,12 @@ internal class UraTheSteamshrieker : MountBalrior
             var bloodstoneShardAgents = combatData
                 .Where(x => x.IsStateChange == StateChange.Marker && x.Value == bloodstoneShardMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
                 .Distinct();
             foreach (var toxicAgent in bloodstoneShardAgents)
             {
                 toxicAgent.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
-                toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                toxicAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
     }
@@ -344,7 +344,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var deterrenceApplies = combatData.GetBuffApplyData(Deterrence).OfType<BuffApplyEvent>().Where(x => !x.Initial);
         var pickUpSkill = skillData.Get(UraBloodstoneShardPickUp);
         long pickUpDuration = 520; // roughly that value
-        var shards = agentData.GetNPCsByID(TargetID.UraGadget_BloodstoneShard);
+        var shards = agentData.GetStableSpeciesByID(TargetID.UraGadget_BloodstoneShard);
         skillData.NotAccurate.Add(UraBloodstoneShardPickUp); // We can't detect failed pick ups with that method
         var pickedUpShards = new HashSet<AgentItem>(shards.Count);
         var shardPickers = new HashSet<AgentItem>();
@@ -798,7 +798,7 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
+        var toxicGeysers = log.AgentData.GetStableSpeciesByID(TargetID.ToxicGeyser);
         var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
         foreach (var encounterPhase in encounterPhases)
         {

@@ -235,7 +235,7 @@ internal class Deimos : BastionOfThePenitent
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        var deimos = agentData.GetNPCsByID(TargetID.Deimos).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
+        var deimos = agentData.GetStableSpeciesByID(TargetID.Deimos).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
         long start = long.MinValue;
         long genericStart = GetGenericLogOffset(logData);
         // enter combat
@@ -274,14 +274,14 @@ internal class Deimos : BastionOfThePenitent
     internal static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
-        var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         bool hasBonds = false;
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget);
         foreach (AgentItem demonicBond in demonicBonds)
         {
             hasBonds = true;
             demonicBond.OverrideID(TargetID.DemonicBond, agentData);
-            demonicBond.OverrideType(AgentItem.AgentType.NPC, agentData);
+            demonicBond.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             foreach (var atAgent in attackTargetEvents.Where(x => x.DstMatchesAgent(demonicBond)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)))
             {
                 atAgent.OverrideID(TargetID.DemonicBondAttackTarget, agentData);
@@ -292,7 +292,7 @@ internal class Deimos : BastionOfThePenitent
 
     internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData)
     {
-        var deimosEncounterNPCs = agentData.GetNPCsByIDs([TargetID.Pride, TargetID.Greed, TargetID.Deimos]);
+        var deimosEncounterNPCs = agentData.GetStableSpeciesByIDs([TargetID.Pride, TargetID.Greed, TargetID.Deimos]);
         if (deimosEncounterNPCs.Count == 0)
         {
             return;
@@ -304,7 +304,7 @@ internal class Deimos : BastionOfThePenitent
             long expectedStart = Math.Max(shackledPrisoner.FirstAware, minFirstAware);
             var encounterShackledPrisoner = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
             encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
-            encounterShackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
+            encounterShackledPrisoner.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
     }
 
@@ -327,7 +327,7 @@ internal class Deimos : BastionOfThePenitent
         if (firstTargetable != null)
         {
             var attackTarget = attackTargetEvents.FirstOrDefault(x => x.AttackTarget.Is(firstTargetable.Src));
-            if (attackTarget != null && attackTarget.Src.Type == AgentItem.AgentType.Gadget)
+            if (attackTarget != null && attackTarget.Src.Type == AgentItem.AgentType.VolatileSpecies)
             {
                 attackTarget.AttackTarget.OverrideID(TargetID.DeimosAttackTarget, agentData);
                 var bodyStruct = attackTarget.Src;
@@ -385,7 +385,7 @@ internal class Deimos : BastionOfThePenitent
         HandleShackledPrisoners(agentData, combatData);
         if (_hasPreEvent && needsDummy)
         {
-            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.Gadget, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         // Find target
@@ -410,7 +410,7 @@ internal class Deimos : BastionOfThePenitent
             CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamageEvent());
             if (armDeimosDamageEvent != null)
             {
-                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
+                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
                 if (deimosGadgets.Any())
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
@@ -606,7 +606,7 @@ internal class Deimos : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Deimos:
-                var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => x.InAwareTimes(target.FirstAware, target.FirstAware + 20000));
+                var hasSaul = log.AgentData.GetStableSpeciesByID(TargetID.Saul).Any(x => x.InAwareTimes(target.FirstAware, target.FirstAware + 20000));
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
@@ -680,7 +680,7 @@ internal class Deimos : BastionOfThePenitent
                 }
                 break;
             case (int)TargetID.ShackledPrisoner:
-                var Sauls = log.AgentData.GetNPCsByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
+                var Sauls = log.AgentData.GetStableSpeciesByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
                 foreach (var Saul in Sauls)
                 {
                     replay.Hidden.Add(new Segment(Saul.FirstAware, Saul.LastAware));

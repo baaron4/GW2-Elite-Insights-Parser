@@ -91,7 +91,7 @@ internal static class LogLogicUtils
         var agentItems = new List<AgentItem>();
         foreach (var targetID in targetIDs)
         {
-            agentItems.AddRange(agentData.GetNPCsByID(targetID));
+            agentItems.AddRange(agentData.GetStableSpeciesByID(targetID));
         }
         var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
@@ -261,7 +261,7 @@ internal static class LogLogicUtils
                     return false;
                 }
                 AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-                if (agent.Type != AgentItem.AgentType.Gadget)
+                if (agent.Type != AgentItem.AgentType.VolatileSpecies)
                 {
                     return false;
                 }
@@ -275,7 +275,7 @@ internal static class LogLogicUtils
         var positionDict = movementData
             .Where(x => x.IsStateChange == StateChange.Position)
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Key.Type == AgentItem.AgentType.Gadget && x.Key.Master == null)
+            .Where(x => x.Key.Type == AgentItem.AgentType.VolatileSpecies && x.Key.Master == null)
             .ToDictionary(x => x.Key, x => x.ToList());
         var gadgetPositions = positionDict.Where(entry => {
 

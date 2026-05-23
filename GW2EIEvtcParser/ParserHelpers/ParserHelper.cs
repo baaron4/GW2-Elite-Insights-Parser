@@ -614,7 +614,7 @@ public static class ParserHelper
 
     public static bool IsKnownMinionID(AgentItem minion, Spec spec)
     {
-        if (minion.Type == AgentItem.AgentType.Gadget)
+        if (minion.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

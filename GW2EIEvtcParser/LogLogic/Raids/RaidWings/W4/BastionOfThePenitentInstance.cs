@@ -59,7 +59,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
+        var chest = agentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -74,7 +74,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            var chest = log.AgentData.GetGadgetsByID(_cairn.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetVolatileSpeciesByID(_cairn.ChestID).FirstOrDefault();
             foreach (var cairn in cairns)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(cairn.AgentItem).FirstOrDefault();
@@ -125,7 +125,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
             if (deimosDummy != null)
             {
-                var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
+                var chest = log.AgentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
                 var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
                 var greenApplies = log.CombatData.GetBuffApplyData(DeimosSelectedByGreen);
@@ -190,12 +190,12 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         // Wiped during pre event
                         if (!target.IsSpecies(TargetID.Deimos))
                         {
-                            var prides = log.AgentData.GetNPCsByID(TargetID.Pride);
+                            var prides = log.AgentData.GetStableSpeciesByID(TargetID.Pride);
                             if (prides.Any())
                             {
                                 end = Math.Max(prides.Max(x => x.LastAware), end);
                             }
-                            var greeds = log.AgentData.GetNPCsByID(TargetID.Greed);
+                            var greeds = log.AgentData.GetStableSpeciesByID(TargetID.Greed);
                             if (greeds.Any())
                             {
                                 end = Math.Max(greeds.Max(x => x.LastAware), end);
@@ -226,7 +226,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             {
                 if (handledDeimoss == null || handledDeimoss.Count != deimoss.Count)
                 {
-                    var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
+                    var chest = log.AgentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
                     var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                     foreach (var deimos in deimoss)
                     {
@@ -357,7 +357,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         Samarog.HandleSpears(evtcVersion, agentData, combatData);
         Deimos.HandleDemonicBonds(agentData, combatData);
         Deimos.HandleShackledPrisoners(agentData, combatData);
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Deimos Pre Event", Spec.Gadget, TargetID.DummyTarget, true);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Deimos.RenameTargetSauls(Targets);
         HandleDeimosAndItsGadgets(logData, agentData, combatData, extensions, evtcVersion);
@@ -459,7 +459,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
-        if (agentData.GetNPCsByID(TargetID.Deimos).Any(deimos =>
+        if (agentData.GetStableSpeciesByID(TargetID.Deimos).Any(deimos =>
         {
             var lastMaxHPUpdate = combatData.GetMaxHealthUpdateEventsBySrc(deimos).LastOrDefault(x => x.Time < deimos.HalfAware);
             if (lastMaxHPUpdate != null)

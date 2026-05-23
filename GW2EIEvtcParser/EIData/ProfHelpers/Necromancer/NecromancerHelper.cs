@@ -222,7 +222,7 @@ internal static class NecromancerHelper
     /// </summary>
     internal static bool IsUndeadMinion(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

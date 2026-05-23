@@ -16,6 +16,6 @@ internal class MinionCommandCastFinder : BuffGainCastFinder
     {
         SpeciesID = speciesID;
         Minions = true;
-        UsingChecker((evt, combatData, agentData, skillData) => evt.To.Type != AgentItem.AgentType.Gadget && evt.To.IsSpecies(speciesID) && evt.To.Master != null);
+        UsingChecker((evt, combatData, agentData, skillData) => evt.To.Type != AgentItem.AgentType.VolatileSpecies && evt.To.IsSpecies(speciesID) && evt.To.Master != null);
     }
 }

@@ -21,7 +21,7 @@ internal class UnknownBossLogic : UnknownEncounterLogic
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem? target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
+            AgentItem? target = agentData.GetStableSpeciesByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetVolatileSpeciesByID(GenericTriggerID).FirstOrDefault();
             return GetFirstDamageEventTime(logData, agentData, combatData, target);
         }
         return GetGenericLogOffset(logData);
@@ -35,11 +35,11 @@ internal class UnknownBossLogic : UnknownEncounterLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;
-        AgentItem? agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
+        AgentItem? agentItem = agentData.GetStableSpeciesByID(id).FirstOrDefault();
         // Trigger ID is not NPC
         if (agentItem == null)
         {
-            agentItem = agentData.GetGadgetsByID(id).FirstOrDefault();
+            agentItem = agentData.GetVolatileSpeciesByID(id).FirstOrDefault();
             if (agentItem != null)
             {
                 _targets.Add(new NPC(agentItem));

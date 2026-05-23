@@ -57,7 +57,7 @@ internal class SooWon : OpenWorldLogic
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            return GetFirstDamageEventTime(logData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new MissingKeyActorsException("SooWon not found"));
+            return GetFirstDamageEventTime(logData, agentData, combatData, agentData.GetVolatileSpeciesByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new MissingKeyActorsException("SooWon not found"));
         }
         return startToUse;
     }
@@ -216,7 +216,7 @@ internal class SooWon : OpenWorldLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData,
         AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(TargetID.SooWonOW);
+        IReadOnlyList<AgentItem> sooWons = agentData.GetVolatileSpeciesByID(TargetID.SooWonOW);
         if (!sooWons.Any())
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -224,14 +224,14 @@ internal class SooWon : OpenWorldLogic
 
         foreach (AgentItem sooWon in sooWons)
         {
-            sooWon.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sooWon.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             sooWon.OverrideID(TargetID.SooWonOW, agentData);
         }
 
-        IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(TargetID.SooWonTailOW);
+        IReadOnlyList<AgentItem> sooWonTails = agentData.GetVolatileSpeciesByID(TargetID.SooWonTailOW);
         foreach (AgentItem sooWonTail in sooWonTails)
         {
-            sooWonTail.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sooWonTail.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             sooWonTail.OverrideID(TargetID.SooWonTailOW, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);

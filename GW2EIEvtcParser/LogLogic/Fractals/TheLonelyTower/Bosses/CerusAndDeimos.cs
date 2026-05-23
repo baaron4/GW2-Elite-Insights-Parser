@@ -47,8 +47,8 @@ internal class CerusAndDeimos : LonelyTower
         long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
         {
-            AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
-            AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
+            AgentItem cerus = agentData.GetStableSpeciesByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
+            AgentItem deimos = agentData.GetStableSpeciesByID(TargetID.DeimosLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
             CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
