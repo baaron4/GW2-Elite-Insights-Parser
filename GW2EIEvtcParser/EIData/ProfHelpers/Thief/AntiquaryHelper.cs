@@ -120,7 +120,6 @@ internal static class AntiquaryHelper
         {
             if (kryptisTurret.Type == AgentItem.AgentType.VolatileSpecies)
             {
-                kryptisTurret.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 kryptisTurret.OverrideID(MinionID.KryptisTurret, agentData);
                 kryptisTurret.OverrideName("Kryptis Turret");
             }
@@ -136,7 +135,6 @@ internal static class AntiquaryHelper
                     if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
                     {
                         // The Holo-Dancer is correctly named
-                        gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                         gadget.OverrideID(MinionID.HoloDancer, agentData);
                     }
                 }

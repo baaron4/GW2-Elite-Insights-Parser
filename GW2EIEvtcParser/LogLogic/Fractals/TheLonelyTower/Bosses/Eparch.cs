@@ -112,7 +112,6 @@ internal class Eparch : LonelyTower
         foreach (var riftAgent in riftAgents)
         {
             riftAgent.OverrideID(TargetID.KryptisRift, agentData);
-            riftAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
         //
 

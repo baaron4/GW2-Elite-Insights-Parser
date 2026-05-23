@@ -273,28 +273,24 @@ internal class Xera : StrongholdOfTheFaithful
         var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneFragments)
         {
-            gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             gadget.OverrideID(TargetID.BloodstoneFragment, agentData);
         }
         //
         var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
-            gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardMainFight, agentData);
         }
         //
         var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
-            gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardButton, agentData);
         }
         //
         var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
-            gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardRift, agentData);
         }
         //
@@ -305,7 +301,6 @@ internal class Xera : StrongholdOfTheFaithful
             {
                 continue;
             }
-            gadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             gadget.OverrideID(TargetID.ChargedBloodstone, agentData);
         }
     }

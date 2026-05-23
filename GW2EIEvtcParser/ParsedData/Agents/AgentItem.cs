@@ -174,12 +174,6 @@ public class AgentItem
         IsNotInSquadFriendlyPlayer = status;
     }
 
-    internal void OverrideType(AgentType type, AgentData agentData)
-    {
-        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
-        Type = type;
-    }
-
     internal void OverrideHitbox(uint hitboxWidth, uint hitboxHeight)
     {
         HitboxWidth = hitboxWidth;
@@ -199,6 +193,11 @@ public class AgentItem
         }
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.SpeciesDirty);
         ID = id;
+        if (Type != AgentType.StableSpecies)
+        {
+            Type = AgentType.StableSpecies;
+            agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
+        }
     }
 
     internal void OverrideID(TargetID id, AgentData agentData)

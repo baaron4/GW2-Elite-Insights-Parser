@@ -214,7 +214,6 @@ internal class UraTheSteamshrieker : MountBalrior
             foreach (var titanAgent in titanAgents)
             {
                 titanAgent.OverrideID(TargetID.TitanspawnGeyserGadget, agentData);
-                titanAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
         // Toxic geysers
@@ -234,7 +233,6 @@ internal class UraTheSteamshrieker : MountBalrior
             foreach (var toxicAgent in toxicAgents)
             {
                 toxicAgent.OverrideID(TargetID.ToxicGeyser, agentData);
-                toxicAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
         // Sulfuric geysers
@@ -246,7 +244,6 @@ internal class UraTheSteamshrieker : MountBalrior
         foreach (var sulfuricAgent in sulfuricAgents)
         {
             sulfuricAgent.OverrideID(TargetID.SulfuricGeyser, agentData);
-            sulfuricAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
         // Those can only be toxic ones
         var remainingGeysers = combatData
@@ -257,7 +254,6 @@ internal class UraTheSteamshrieker : MountBalrior
         foreach (var remainingGeyser in remainingGeysers)
         {
             remainingGeyser.OverrideID(TargetID.ToxicGeyser, agentData);
-            remainingGeyser.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
     }
 
@@ -280,7 +276,6 @@ internal class UraTheSteamshrieker : MountBalrior
             foreach (var toxicAgent in bloodstoneShardAgents)
             {
                 toxicAgent.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
-                toxicAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
     }

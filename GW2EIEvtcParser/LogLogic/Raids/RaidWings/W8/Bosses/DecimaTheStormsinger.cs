@@ -165,7 +165,6 @@ internal class DecimaTheStormsinger : MountBalrior
         foreach (var conduitGadget in conduitsGadgets)
         {
             conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
-            conduitGadget.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             var effectByConduitOnGadget = effects
                 .FirstOrDefault(x => x.DstMatchesAgent(conduitGadget));
             if (effectByConduitOnGadget != null)

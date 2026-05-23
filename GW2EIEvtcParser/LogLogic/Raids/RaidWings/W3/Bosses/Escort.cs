@@ -149,7 +149,6 @@ internal class Escort : StrongholdOfTheFaithful
         foreach (AgentItem mine in mineAgents)
         {
             mine.OverrideID(TargetID.Mine, agentData);
-            mine.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
     }
 

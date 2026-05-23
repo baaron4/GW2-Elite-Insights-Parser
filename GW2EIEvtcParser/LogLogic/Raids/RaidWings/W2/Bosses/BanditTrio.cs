@@ -167,7 +167,6 @@ internal class BanditTrio : SalvationPass
             long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
             long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
             AgentItem encounterCage = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(cage, agentData, expectedStart, expectedEnd);
-            encounterCage.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             encounterCage.OverrideID(TargetID.Cage, agentData);
         }
         // Bombs
@@ -177,7 +176,6 @@ internal class BanditTrio : SalvationPass
             long expectedStart = Math.Max(minFirstAware, bomb.FirstAware);
             long expectedEnd = Math.Min(maxLastAware, bomb.LastAware);
             AgentItem encounterBomb = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(bomb, agentData, expectedStart, expectedEnd);
-            encounterBomb.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             encounterBomb.OverrideID(TargetID.Bombs, agentData);
         }
     }

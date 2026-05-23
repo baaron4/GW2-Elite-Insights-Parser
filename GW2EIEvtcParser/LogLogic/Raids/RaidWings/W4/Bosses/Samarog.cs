@@ -162,7 +162,6 @@ internal class Samarog : BastionOfThePenitent
             var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100 && x.HitboxHeight == 300);
             foreach (AgentItem spear in spearAgents)
             {
-                spear.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
             }
         }

@@ -170,7 +170,6 @@ internal class FraenirOfJormag : Bjora
         foreach (AgentItem boundElemental in boundElementals)
         {
             IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
-            boundElemental.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             boundElemental.OverrideID(TargetID.BoundIcebroodElemental, agentData);
 
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0

@@ -172,7 +172,6 @@ internal class Qadim : MythwrightGambit
                 var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
                 foreach (AgentItem platform in platformAgents)
                 {
-                    platform.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     platform.OverrideID(TargetID.QadimPlatform, agentData);
                     platform.OverrideAwareTimes(platform.FirstAware, int.MaxValue);
                 }
@@ -197,7 +196,6 @@ internal class Qadim : MythwrightGambit
                 .Distinct();
             foreach (var lamp in lamps)
             {
-                lamp.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 lamp.OverrideID(TargetID.QadimLamp, agentData);
             }
         }
@@ -208,7 +206,6 @@ internal class Qadim : MythwrightGambit
                 var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 202);
                 foreach (AgentItem lamp in lampAgents)
                 {
-                    lamp.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     lamp.OverrideID(TargetID.QadimLamp, agentData);
                 }
             }

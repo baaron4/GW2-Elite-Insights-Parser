@@ -91,20 +91,16 @@ internal class ConjuredAmalgamate : MythwrightGambit
             {
                 if ((atPos - BodyAttackTargetPos).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.ConjuredAmalgamate, agentData);
                     atAgent.OverrideID(TargetID.CABodyAttackTarget, agentData);
-                    atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
                 }
                 else if ((atPos - LeftArmAttackTargetPosNoDamage).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.CALeftArm, agentData);
                 }
                 else if ((atPos - RightArmAttackTargetPosNoDamage).Length() < 5)
                 {
-                    agent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     agent.OverrideID(TargetID.CARightArm, agentData);
                 }
             }
@@ -119,13 +115,11 @@ internal class ConjuredAmalgamate : MythwrightGambit
             if (agent.IsSpecies(TargetID.CALeftArm) && (atPos - LeftArmAttackTargetPosForDamage).Length() < 5)
             {
                 atAgent.OverrideID(TargetID.CALeftArmAttackTarget, agentData);
-                atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
             else if (agent.IsSpecies(TargetID.CARightArm) && (atPos - RightArmAttackTargetPosForDamage).Length() < 5)
             {
                 atAgent.OverrideID(TargetID.CARightArmAttackTarget, agentData);
-                atAgent.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
         }

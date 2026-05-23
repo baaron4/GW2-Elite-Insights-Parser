@@ -349,7 +349,6 @@ internal class Dhuum : HallOfChains
         {
             if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
             {
-                soul.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                 soul.OverrideID(TargetID.YourSoul, agentData);
                 if (!firstApplier.IsMasterOf(soul))
                 {
@@ -374,7 +373,6 @@ internal class Dhuum : HallOfChains
                 {
                     if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
                     {
-                        candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                         candidate.OverrideID(TargetID.EtherealSeal, agentData);
                         candidate.OverrideName("Ethereal Seal " + position.Key);
                     }

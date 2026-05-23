@@ -327,19 +327,15 @@ internal class Sabir : TheKeyOfAhdashim
             {
                 case 2350:
                     candidate.OverrideID(TargetID.SabirMainPlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     break;
                 case 806:
                     candidate.OverrideID(TargetID.SabirSquarePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     break;
                 case 950:
                     candidate.OverrideID(TargetID.SabirRectanglePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     break;
                 case 1752:
                     candidate.OverrideID(TargetID.SabirBigRectanglePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     break;
             }
         }

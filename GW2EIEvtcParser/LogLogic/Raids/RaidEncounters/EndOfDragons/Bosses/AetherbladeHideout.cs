@@ -746,7 +746,6 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem bomb in bombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             bomb.OverrideID(TargetID.FerrousBomb, agentData);
         }
         // We remove useless Mai trins if present

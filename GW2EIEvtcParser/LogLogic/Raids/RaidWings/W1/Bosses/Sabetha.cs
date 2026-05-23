@@ -70,7 +70,6 @@ internal class Sabetha : SpiritVale
         var cannons = maxHPUpdateEvents.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem cannon in cannons)
         {
-            cannon.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             cannon.OverrideID(TargetID.Cannon, agentData);
         }
         var genericGadgetMaxHPUpdates = maxHPUpdateEvents.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940);
@@ -79,14 +78,12 @@ internal class Sabetha : SpiritVale
         var heavyBombs = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 300 && x.HitboxWidth == 2);
         foreach (AgentItem bomb in heavyBombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             bomb.OverrideID(TargetID.HeavyBomb, agentData);
         }
         // Plateforms
         var platforms = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 300 && x.HitboxWidth == 3556);
         foreach (AgentItem platform in platforms)
         {
-            platform.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             platform.OverrideID(TargetID.SabethaPlatform, agentData);
         }
     }

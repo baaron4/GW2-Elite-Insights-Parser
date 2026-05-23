@@ -1372,7 +1372,6 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 var gravityBalls = gravityBallCandidates.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
                 foreach (AgentItem gravityBall in gravityBalls)
                 {
-                    gravityBall.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     gravityBall.OverrideID(TargetID.GravityBall, agentData);
                     gravityBall.SetMaster(timecaster);
                 }
@@ -1388,7 +1387,6 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 foreach (AgentItem frostBeam in frostBeams)
                 {
                     frostBeam.OverrideID(TargetID.JormagMovingFrostBeam, agentData);
-                    frostBeam.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
                     frostBeam.SetMaster(jormagAgent);
                 }
                 var knownFrostBeams = agentData.GetStableSpeciesByID(TargetID.JormagMovingFrostBeamNorth).ToList();

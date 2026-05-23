@@ -159,7 +159,6 @@ internal class SpiritRace : SpiritVale
                 {
                     candidate.OverrideID(TargetID._EtherealBarrier4, agentData);
                 }
-                candidate.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             }
         }
         return !needsDummy;

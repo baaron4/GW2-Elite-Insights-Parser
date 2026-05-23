@@ -281,7 +281,6 @@ internal class Deimos : BastionOfThePenitent
         {
             hasBonds = true;
             demonicBond.OverrideID(TargetID.DemonicBond, agentData);
-            demonicBond.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             foreach (var atAgent in attackTargetEvents.Where(x => x.DstMatchesAgent(demonicBond)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)))
             {
                 atAgent.OverrideID(TargetID.DemonicBondAttackTarget, agentData);
@@ -304,7 +303,6 @@ internal class Deimos : BastionOfThePenitent
             long expectedStart = Math.Max(shackledPrisoner.FirstAware, minFirstAware);
             var encounterShackledPrisoner = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
             encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
-            encounterShackledPrisoner.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
         }
     }
 

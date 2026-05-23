@@ -224,14 +224,12 @@ internal class SooWon : OpenWorldLogic
 
         foreach (AgentItem sooWon in sooWons)
         {
-            sooWon.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             sooWon.OverrideID(TargetID.SooWonOW, agentData);
         }
 
         IReadOnlyList<AgentItem> sooWonTails = agentData.GetVolatileSpeciesByID(TargetID.SooWonTailOW);
         foreach (AgentItem sooWonTail in sooWonTails)
         {
-            sooWonTail.OverrideType(AgentItem.AgentType.StableSpecies, agentData);
             sooWonTail.OverrideID(TargetID.SooWonTailOW, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
