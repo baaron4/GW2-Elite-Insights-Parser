@@ -56,5 +56,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "TimeStartStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab830a47222f80e61c3c40ebc13ee8412", null ],
     [ "TriggerID", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4003a61ee80e3c7fef014bd904ec5206", null ],
     [ "UploadLinks", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a477ca161dd29f98670a4af16be926c96", null ],
-    [ "UsedExtensions", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#afb9e8015dcf0c93b4a1a4ca45566f025", null ]
+    [ "UsedExtensions", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#afb9e8015dcf0c93b4a1a4ca45566f025", null ],
+    [ "WvWMapData", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a42c70a4f0c61f98ce3cc44bb7a9ee145", null ]
 ];

@@ -27,5 +27,6 @@ var namespace_g_w2_e_i_j_s_o_n =
     [ "EXTJsonPlayerHealingStats", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html", "class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats" ],
     [ "JsonLog", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html", "class_g_w2_e_i_j_s_o_n_1_1_json_log" ],
     [ "JsonMechanics", "class_g_w2_e_i_j_s_o_n_1_1_json_mechanics.html", "class_g_w2_e_i_j_s_o_n_1_1_json_mechanics" ],
-    [ "JsonPhase", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html", "class_g_w2_e_i_j_s_o_n_1_1_json_phase" ]
+    [ "JsonPhase", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html", "class_g_w2_e_i_j_s_o_n_1_1_json_phase" ],
+    [ "JsonWvWMapData", "class_g_w2_e_i_j_s_o_n_1_1_json_wv_w_map_data.html", "class_g_w2_e_i_j_s_o_n_1_1_json_wv_w_map_data" ]
 ];
