@@ -133,7 +133,7 @@ public class ParsedEvtcLog
         MechanicData = LogData.Logic.GetMechanicData();
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
-        StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
+        StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, LogData.Logic.Targets, Buffs);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Find sources for buff extension events");
         CombatData.TryFindSrc(this);

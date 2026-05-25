@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData;
 /// </summary>
 public class StatisticsHelper
 {
-    internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer buffs)
+    internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, IReadOnlyList<SingleActor> targets, BuffsContainer buffs)
     {
         // Main boons
         foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
@@ -70,7 +70,10 @@ public class StatisticsHelper
             {
                 _presentDebuffs.Add(debuff);
             }
-
+            if (targets.Any(t => combatData.GetBuffApplyDataByIDByDst(debuff.ID, t.AgentItem).Count > 0))
+            {
+                _presentTargetDebuffs.Add(debuff);
+            }
         }
 
         foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
@@ -123,6 +126,7 @@ public class StatisticsHelper
     public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
     public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
     public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
+    public IReadOnlyList<Buff> PresentTargetDebuffs => _presentTargetDebuffs;//Used only for Target Debuff tables
     public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
     public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
     public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
@@ -145,6 +149,7 @@ public class StatisticsHelper
     private readonly List<Buff> _presentSupbuffs = [];//Used only for Off Buff tables
     private readonly List<Buff> _presentDefbuffs = [];//Used only for Def Buff tables
     private readonly List<Buff> _presentDebuffs = [];//Used only for Debuff tables
+    private readonly List<Buff> _presentTargetDebuffs = [];//Used only for Target Debuff tables
     private readonly List<Buff> _presentGearbuffs = [];//Used only for Gear Buff tables
     private readonly List<Buff> _presentNourishments = [];
     private readonly List<Buff> _presentEnhancements = [];
