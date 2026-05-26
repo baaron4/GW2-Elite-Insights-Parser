@@ -104,7 +104,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
 
     internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.OuterNayosPublicConvergence) ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
+        return combatData.GetMapIDEvent()?.MapID == MapIDs.OuterNayosPublicConvergence ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

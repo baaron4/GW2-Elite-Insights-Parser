@@ -122,7 +122,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
-        var mapIDEvent = combatData.GetMapIDEvents().FirstOrDefault();
+        var mapIDEvent = combatData.GetMapIDEvent();
         if (mapIDEvent != null)
         {
             var map = apiController.GetAPIMap(mapIDEvent.MapID);

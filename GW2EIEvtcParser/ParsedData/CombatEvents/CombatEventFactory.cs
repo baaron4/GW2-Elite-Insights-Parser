@@ -105,7 +105,7 @@ internal static class CombatEventFactory
                 metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                 break;
             case StateChange.ShardID:
-                metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent, metaDataEvents.MapIDEvents.FirstOrDefault(), apiController));
+                metaDataEvents.ShardEvent = new ShardEvent(stateChangeEvent, metaDataEvents.MapIDEvent, apiController);
                 break;
             case StateChange.Reward:
 #if !NO_REWARDS
@@ -157,7 +157,7 @@ internal static class CombatEventFactory
                 }
                 break;
             case StateChange.MapID:
-                metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
+                metaDataEvents.MapIDEvent = new MapIDEvent(stateChangeEvent);
                 break;
             case StateChange.MapChange:
                 metaDataEvents.MapChangeEvents.Add(new MapChangeEvent(stateChangeEvent));

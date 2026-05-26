@@ -139,7 +139,7 @@ internal static class JsonLogBuilder
         jsonLog.IsInstanceLog = log.LogData.IsInstance;
         jsonLog.EIEncounterID = log.LogData.Logic.LogID;
         jsonLog.EILogID = log.LogData.Logic.LogID;
-        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        var mapIDEvent = log.CombatData.GetMapIDEvent();
         if (mapIDEvent != null)
         {
             jsonLog.MapID = mapIDEvent.MapID;
@@ -193,7 +193,7 @@ internal static class JsonLogBuilder
         jsonLog.Language = log.LogMetadata.Language;
         jsonLog.LanguageID = (byte)log.LogMetadata.LanguageID;
         jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
-        var shardEvent = log.CombatData.GetShardEvents().FirstOrDefault();
+        var shardEvent = log.CombatData.GetShardEvent();
         if (shardEvent != null)
         {
             var region = shardEvent.RegionToString();

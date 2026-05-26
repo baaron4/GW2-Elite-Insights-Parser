@@ -157,9 +157,10 @@ partial class CombatData
     #endregion WvW
 
     #region MAP
-    public IReadOnlyList<MapIDEvent> GetMapIDEvents()
+
+    public MapIDEvent? GetMapIDEvent()
     {
-        return _metaDataEvents.MapIDEvents;
+        return _metaDataEvents.MapIDEvent;
     }
 
     public IReadOnlyList<MapChangeEvent> GetMapChangeEvents()
@@ -167,9 +168,15 @@ partial class CombatData
         return _metaDataEvents.MapChangeEvents;
     }
 
-    public IReadOnlyList<ShardEvent> GetShardEvents()
+    public ShardEvent? GetShardEvent()
     {
-        return _metaDataEvents.ShardEvents;
+        return _metaDataEvents.ShardEvent;
+    }
+
+    public RegionEnum GetRegion()
+    {
+        var shardEvent = GetShardEvent();
+        return shardEvent?.Region ?? RegionEnum.Unknown;
     }
     public FractalScaleEvent? GetFractalScaleEvent()
     {

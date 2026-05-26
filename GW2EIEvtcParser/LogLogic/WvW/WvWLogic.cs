@@ -99,7 +99,7 @@ internal class WvWLogic : LogLogic
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = log.CombatData.GetMapIDEvent();
         if (mapID == null)
         {
             return base.GetCombatMapInternal(log, arenaDecorations);
@@ -151,7 +151,7 @@ internal class WvWLogic : LogLogic
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
-        MapIDEvent? mapEvent = combatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapEvent = combatData.GetMapIDEvent();
         if (mapEvent == null)
         {
             return _defaultName;

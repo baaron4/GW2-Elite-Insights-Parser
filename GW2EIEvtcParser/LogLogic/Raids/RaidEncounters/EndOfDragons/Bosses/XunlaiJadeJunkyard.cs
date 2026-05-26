@@ -227,7 +227,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-        MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
+        MapIDEvent? map = combatData.GetMapIDEvent();
         if (map != null && map.MapID == MapIDs.XunlaijadeJunkyardStory)
         {
             return LogData.Mode.Story;

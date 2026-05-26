@@ -11,7 +11,7 @@ internal static class LogLogicTimeUtils
 {
     internal static long GetFinalMapChangeTime(LogData logData, CombatData combatData)
     {
-        var mapEvent = combatData.GetMapIDEvents().FirstOrDefault();
+        var mapEvent = combatData.GetMapIDEvent();
         if (mapEvent != null)
         {
             var mapID = mapEvent.MapID;

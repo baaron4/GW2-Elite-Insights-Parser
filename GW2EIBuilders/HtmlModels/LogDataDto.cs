@@ -97,7 +97,7 @@ internal class LogDataDto
             InstanceStart = log.LogMetadata.DateInstanceStartStd;
             InstanceIP = log.LogMetadata.LogInstanceIP;
         }
-        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        var mapIDEvent = log.CombatData.GetMapIDEvent();
         if (mapIDEvent != null)
         {
             MapID = mapIDEvent.MapID;
@@ -113,7 +113,7 @@ internal class LogDataDto
         RecordedAccountBy = log.LogMetadata.PoVAccount;
         var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
         FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
-        var shardEvent = log.CombatData.GetShardEvents().FirstOrDefault();
+        var shardEvent = log.CombatData.GetShardEvent();
         if (shardEvent != null)
         {
             var region = shardEvent.RegionToString();

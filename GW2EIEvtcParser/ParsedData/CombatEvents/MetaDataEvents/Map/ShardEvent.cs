@@ -49,6 +49,20 @@ public class ShardEvent : MetaDataEvent
         }
     }
 
+    /// <summary>
+    /// Can be used when it is certain that we are in an instance map
+    /// </summary>
+    /// <param name="evtcItem"></param>
+    /// <returns></returns>
+    internal static RegionEnum GetRegionFromInstanceMap(CombatItem evtcItem)
+    {
+        if (evtcItem.Value > 0)
+        {
+            return GetRegion((uint)evtcItem.Value);
+        }
+        return GetRegion(evtcItem.SrcAgent);
+    }
+
     public string? RegionToString()
     {
         return Region switch
