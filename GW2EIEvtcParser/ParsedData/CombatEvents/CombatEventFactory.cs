@@ -139,7 +139,7 @@ internal static class CombatEventFactory
                         Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
                     }
                 }
-                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
+                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && evtcVersion.Build < ArcDPSBuilds.VisibilityOnStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
                     if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
@@ -563,6 +563,23 @@ internal static class CombatEventFactory
                 {
                     statusEvents.WvWObjectiveStatusEventsByKey[key] = wvwObjectiveStatus;
                     statusEvents.WvWObjectiveStatusEvents.Add(wvwObjectiveStatus);
+                }
+                break;
+            case StateChange.StealthChange:
+                {
+                    var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
+                    if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
+                    {
+                        var lastVisibility = visibilityEvents[^1];
+                        if (lastVisibility.Visible != visEvt.Visible)
+                        {
+                            visibilityEvents.Add(visEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.VisibilityEventsBySrc, visEvt.Src, visEvt);
+                    }
                 }
                 break;
             default:

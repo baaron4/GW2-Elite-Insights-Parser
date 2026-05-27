@@ -39,6 +39,7 @@ public static class ArcDPSEnums
         public const int BuffAppliesAndRemovesAsStateChanges = 20260501;
         public const int ResultEnumRework = 20260501;
         public const int VisibilityInTargetableStateChange = 20260522;
+        public const int VisibilityOnStateChange = 20260527;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -331,6 +332,7 @@ public static class ArcDPSEnums
         Transformation = 73,
         WvWTeams = 74,
         WvWObjectiveStatus = 75,
+        StealthChange = 76,
         Unknown
     };
 

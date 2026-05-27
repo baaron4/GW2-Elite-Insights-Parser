@@ -6,7 +6,7 @@ public class VisibilityEvent : StatusEvent
 
     internal VisibilityEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
-        Visible = evtcItem.Value == 1;
+        Visible = evtcItem.IsStateChange == ArcDPSEnums.StateChange.StealthChange ? evtcItem.DstAgent == 1 : evtcItem.Value == 1;
     }
 
 }

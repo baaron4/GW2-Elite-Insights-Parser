@@ -278,6 +278,7 @@ public class CombatItem
             || IsStateChange == StateChange.BuffRemoveSingle
             || IsStateChange == StateChange.BuffApply
             || IsStateChange == StateChange.Transformation
+            || IsStateChange == StateChange.StealthChange
             ;
     }
 
