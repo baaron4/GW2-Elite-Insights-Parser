@@ -566,6 +566,7 @@ internal static class CombatEventFactory
                 }
                 break;
             case StateChange.StealthChange:
+                if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
                     if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
