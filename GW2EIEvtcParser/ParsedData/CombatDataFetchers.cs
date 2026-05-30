@@ -172,12 +172,6 @@ partial class CombatData
     {
         return _metaDataEvents.ShardEvent;
     }
-
-    public RegionEnum GetRegion()
-    {
-        var shardEvent = GetShardEvent();
-        return shardEvent?.Region ?? RegionEnum.Unknown;
-    }
     public FractalScaleEvent? GetFractalScaleEvent()
     {
         return _metaDataEvents.FractalScaleEvent;

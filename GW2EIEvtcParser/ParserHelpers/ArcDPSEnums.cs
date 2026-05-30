@@ -638,6 +638,21 @@ public static class ArcDPSEnums
             : LanguageEnum.Unknown;
     }
 
+
+    public static string LanguageToString(LanguageEnum language) 
+    {
+        return language switch
+        {
+            LanguageEnum.English => "English",
+            LanguageEnum.Missing => "Missing",
+            LanguageEnum.French => "French",
+            LanguageEnum.German => "German",
+            LanguageEnum.Spanish => "Spanish",
+            LanguageEnum.Chinese => "Chinese",
+            _ => "Unknown",
+        };
+    }
+
     // Region
 
     public enum RegionEnum : byte
@@ -647,6 +662,17 @@ public static class ArcDPSEnums
         CN = 2,
 
         Unknown,
+    }
+
+    public static string? RegionToString(RegionEnum region)
+    {
+        return region switch
+        {
+            RegionEnum.NA => "NA",
+            RegionEnum.EU => "EU",
+            RegionEnum.CN => "China",
+            _ => null,
+        };
     }
 
 }

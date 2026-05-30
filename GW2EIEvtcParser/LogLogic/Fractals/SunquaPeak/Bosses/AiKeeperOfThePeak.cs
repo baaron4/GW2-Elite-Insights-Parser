@@ -410,7 +410,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         if (darkAi != null)
         {
-            var china = log.CombatData.GetRegion() == RegionEnum.CN;
+            var china = log.LogMetadata.Region == RegionEnum.CN;
             PhaseData darkPhase = phases[0];
             if (elementalAi != null)
             {

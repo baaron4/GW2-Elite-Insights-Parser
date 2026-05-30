@@ -62,16 +62,4 @@ public class ShardEvent : MetaDataEvent
         }
         return GetRegion(evtcItem.SrcAgent);
     }
-
-    public string? RegionToString()
-    {
-        return Region switch
-        {
-            RegionEnum.NA => "NA",
-            RegionEnum.EU => "EU",
-            RegionEnum.CN => "China",
-            _ => null,
-        };
-    }
-
 }

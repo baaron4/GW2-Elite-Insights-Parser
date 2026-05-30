@@ -17,24 +17,4 @@ public class LanguageEvent : MetaDataEvent
         return ArcDPSEnums.GetLanguage((byte)evtcItem.SrcAgent);
     }
 
-    public override string ToString()
-    {
-        switch (Language)
-        {
-            case LanguageEnum.English:
-                return "English";
-            case LanguageEnum.Missing:
-                return "Missing";
-            case LanguageEnum.French:
-                return "French";
-            case LanguageEnum.German:
-                return "German";
-            case LanguageEnum.Spanish:
-                return "Spanish";
-            case LanguageEnum.Chinese:
-                return "Chinese";
-        }
-        return "Unknown";
-    }
-
 }

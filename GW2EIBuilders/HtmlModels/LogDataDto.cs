@@ -7,9 +7,10 @@ using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIJSON;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -113,14 +114,10 @@ internal class LogDataDto
         RecordedAccountBy = log.LogMetadata.PoVAccount;
         var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
         FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
-        var shardEvent = log.CombatData.GetShardEvent();
-        if (shardEvent != null)
+        var region = log.LogMetadata.Region;
+        if (region != ArcDPSEnums.RegionEnum.Unknown)
         {
-            var region = shardEvent.RegionToString();
-            if (region != null)
-            {
-                Region = region;
-            }
+            Region = ArcDPSEnums.RegionToString(region);
         }
         UploadLinks = [uploadLinks.DPSReportEILink];
         if (log.LogMetadata.UsedExtensions.Any())

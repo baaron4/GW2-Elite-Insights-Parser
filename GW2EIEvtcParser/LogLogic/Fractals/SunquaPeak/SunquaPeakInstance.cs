@@ -186,7 +186,7 @@ internal class SunquaPeakInstance : SunquaPeak
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        var china = log.CombatData.GetRegion() == RegionEnum.CN;
+        var china = log.LogMetadata.Region == RegionEnum.CN;
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
             var fullAiPhases = HandleFullAiPhases(targetsByIDs, log, phases);
