@@ -664,14 +664,14 @@ public static class ArcDPSEnums
         Unknown,
     }
 
-    public static string? RegionToString(RegionEnum region)
+    public static string RegionToString(RegionEnum region)
     {
         return region switch
         {
             RegionEnum.NA => "NA",
             RegionEnum.EU => "EU",
             RegionEnum.CN => "China",
-            _ => null,
+            _ => "Unknown",
         };
     }
 
