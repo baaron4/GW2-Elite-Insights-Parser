@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.SpeciesIDs;
 

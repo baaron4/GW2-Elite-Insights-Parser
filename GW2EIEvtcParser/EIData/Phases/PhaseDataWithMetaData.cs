@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.LogLogic;
+﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParsedData.LogData;
 

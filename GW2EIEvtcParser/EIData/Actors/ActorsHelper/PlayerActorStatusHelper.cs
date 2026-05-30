@@ -1,8 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParsedData.AgentItem;
-using static GW2EIEvtcParser.ParserHelper;
+﻿using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 

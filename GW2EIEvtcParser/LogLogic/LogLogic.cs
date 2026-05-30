@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Exceptions;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -11,7 +9,6 @@ using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;

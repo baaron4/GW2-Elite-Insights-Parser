@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.LogLogic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;

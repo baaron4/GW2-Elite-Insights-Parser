@@ -10,10 +10,8 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIJSON;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
 
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;

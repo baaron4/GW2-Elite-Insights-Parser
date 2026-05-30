@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 

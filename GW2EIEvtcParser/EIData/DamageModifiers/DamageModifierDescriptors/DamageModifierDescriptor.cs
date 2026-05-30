@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.LogLogic;
-using GW2EIEvtcParser.Interfaces;
+﻿using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;

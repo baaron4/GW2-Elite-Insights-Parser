@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
+﻿using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
 

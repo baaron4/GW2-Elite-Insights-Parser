@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;

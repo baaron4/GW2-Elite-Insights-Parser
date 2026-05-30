@@ -1,11 +1,8 @@
 ﻿using System.IO.Compression;
-using System.Linq;
-using System.Numerics;
 using System.Text;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;

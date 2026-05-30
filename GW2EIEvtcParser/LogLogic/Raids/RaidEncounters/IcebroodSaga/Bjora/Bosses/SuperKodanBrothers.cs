@@ -1,6 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;

@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;

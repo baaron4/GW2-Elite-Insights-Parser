@@ -1,6 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 

@@ -1,6 +1,4 @@
-﻿using GW2EIEvtcParser.ParsedData;
-
-namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
+﻿namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal class BuffSourceFinder20260113 : BuffSourceFinder20240319
 {

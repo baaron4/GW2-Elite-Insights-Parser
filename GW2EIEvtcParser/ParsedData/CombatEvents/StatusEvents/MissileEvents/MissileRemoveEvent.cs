@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using static GW2EIEvtcParser.EIData.Trigonometry;
-using static GW2EIEvtcParser.ParserHelper;
+﻿using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
