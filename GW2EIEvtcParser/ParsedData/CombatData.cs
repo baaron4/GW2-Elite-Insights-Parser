@@ -64,6 +64,9 @@ public partial class CombatData
     private readonly Dictionary<AgentItem, List<EmoteEvent>> _emoteCastData;
     private readonly Dictionary<long, List<EmoteEvent>> _emoteCastDataByEmoteID;
 
+    private readonly Dictionary<AgentItem, List<GadgetAnimationEvent>> _gadgetAnimationEventsByGadget = [];
+    private readonly Dictionary<ulong, List<GadgetAnimationEvent>> _gadgetAnimationEventsByToken = [];
+
     private readonly Dictionary<AgentItem, List<GadgetInteractEvent>> _gadgetInteractCastData;
     private readonly Dictionary<long, List<GadgetInteractEvent>> _gadgetInteractCastDataBySpeciesID;
     private readonly Dictionary<AgentItem, List<GadgetInteractEvent>> _gadgetInteractCastDataByGadget;
@@ -545,9 +548,8 @@ public partial class CombatData
         {
             if (combatItem.IsEssentialMetadata)
             {
-                CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, 
-                    skillData, _metaDataEvents, _statusEvents, 
-                    _rewardEvents, wepSwaps, buffEvents, stunBreakData,
+                AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, 
+                    skillData, wepSwaps, buffEvents, stunBreakData,
                     evtcVersion, settings, apiController);
             }
         }
@@ -561,22 +563,22 @@ public partial class CombatData
             {
                 if (combatItem.IsBuffApplyEvent())
                 {
-                    CombatEventFactory.AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                    AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
                 }
                 else
                 {
-                    CombatEventFactory.AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                    AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
                 }
             }
             else if (combatItem.IsDamageEvent())
             {
                 if (combatItem.IsDirectDamageEvent())
                 {
-                    CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData);
+                    AddDirectDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData);
                 }
                 else if (combatItem.IsBuffDamageEvent())
                 {
-                    CombatEventFactory.AddBuffDamageDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData, evtcVersion);
+                    AddBuffDamageDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData, evtcVersion);
                 }
             }
             else if (combatItem.IsStateChange != StateChange.Combat)
@@ -594,8 +596,7 @@ public partial class CombatData
                 }
                 else
                 {
-                    CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, 
-                        _metaDataEvents, _statusEvents, _rewardEvents, 
+                    AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, 
                         wepSwaps, buffEvents, stunBreakData,
                         evtcVersion, settings, apiController);
                 }
@@ -616,7 +617,7 @@ public partial class CombatData
         skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
-        List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(evtcVersion, castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
+        List<AnimatedCastEvent> animatedCastData = CreateCastEvents(evtcVersion, castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO_PERF(Rennorb)

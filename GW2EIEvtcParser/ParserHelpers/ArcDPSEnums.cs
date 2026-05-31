@@ -333,6 +333,7 @@ public static class ArcDPSEnums
         WvWTeams = 74,
         WvWObjectiveStatus = 75,
         StealthChange = 76,
+        GadgetAnimation = 77,
         GadgetNameVisible = 78,
         Unknown
     };

@@ -5,17 +5,17 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-internal static class CombatEventFactory
+partial class CombatData
 {
 
-    public static void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, 
-        SkillData skillData, MetaEventsContainer metaDataEvents, 
-        StatusEventsContainer statusEvents, 
-        List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps,
+    internal void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, 
+        SkillData skillData, List<WeaponSwapEvent> wepSwaps,
         List<BuffEvent> buffEvents, List<StunBreakEvent> stunBreakEvents,
         EvtcVersionEvent evtcVersion, EvtcParserSettings settings,
         GW2APIController apiController)
     {
+        var statusEvents = _statusEvents;
+        var metaDataEvents = _metaDataEvents;
         switch (stateChangeEvent.IsStateChange)
         {
             case StateChange.EnterCombat:
@@ -109,7 +109,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.Reward:
 #if !NO_REWARDS
-                rewardEvents.Add(new RewardEvent(stateChangeEvent));
+                _rewardEvents.Add(new RewardEvent(stateChangeEvent));
 #endif
                 break;
             case StateChange.TeamChange:
@@ -584,12 +584,17 @@ internal static class CombatEventFactory
                     }
                 }
                 break;
+            case StateChange.GadgetAnimation:
+                var gadgetAnimation = new GadgetAnimationEvent(stateChangeEvent, agentData);
+                Add(_gadgetAnimationEventsByToken, gadgetAnimation.AnimationToken, gadgetAnimation);
+                Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Gadget, gadgetAnimation);
+                break;
             default:
                 break;
         }
     }
 
-    public static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -623,7 +628,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -676,7 +681,7 @@ internal static class CombatEventFactory
         };
     }
 
-    public static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
+    internal static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
         using var _t = new AutoTrace("CreateCastEvents");
         //TODO_PERF(Rennorb)
@@ -772,7 +777,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+    internal static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
         List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
         List<StunBreakEvent> stunBreakEvents,
         AgentData agentData, SkillData skillData)
@@ -802,7 +807,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+    internal static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
         List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
         List<StunBreakEvent> stunBreakEvents,
         AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
