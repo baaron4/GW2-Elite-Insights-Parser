@@ -279,6 +279,7 @@ public class CombatItem
             || IsStateChange == StateChange.BuffApply
             || IsStateChange == StateChange.Transformation
             || IsStateChange == StateChange.StealthChange
+            || IsStateChange == StateChange.GadgetNameVisible
             ;
     }
 
