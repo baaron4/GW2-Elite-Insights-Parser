@@ -81,7 +81,7 @@ public class CombatReplayMap
         }
         return new Vector3(
             (iPos.X - _continentRect.bottomX) / _continentWidth * _mapWidth + _mapRect.bottomX,
-            (iPos.Y - _continentRect.bottomY) / _continentHeight * _mapHeight + _mapRect.bottomY, 
+            (-iPos.Y + _continentRect.bottomY) / _continentHeight * _mapHeight - _mapRect.bottomY, 
             iPos.Z);
     }
 
