@@ -442,4 +442,7 @@ public static class DamageModifierIDs
     public const int Mod_Fury = 429;
     public const int Mod_RelicOfTheDirector = 430;
     public const int Mod_RelicOfTheDoyen = 431;
+    public const int Mod_DraconicEchoFacetOfStrength = 433;
+    public const int Mod_DraconicEchoFacetOfElements = 434;
+    public const int Mod_DraconicEchoFacetOfChaos = 435;
 }
