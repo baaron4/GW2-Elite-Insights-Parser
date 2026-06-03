@@ -213,8 +213,7 @@ internal static class ElementalistHelper
     [
         // Skills
         // - Signet of Earth
-        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_SignetOfEarthWrittenInStone, SignetOfEarthBuff_WrittenInStone, "Signet of Earth (Written in Stone)", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SignetOfEarth, [SignetOfEarth, SignetOfEarthBuff_WrittenInStone], "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
 
         // Earth
         // - Stone Flesh
