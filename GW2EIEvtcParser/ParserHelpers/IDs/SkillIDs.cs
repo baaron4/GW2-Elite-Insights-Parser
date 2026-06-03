@@ -5610,6 +5610,7 @@ public static class SkillIDs
     public const long KudasCrueltyStacksBuff = 80152;
     public const long TailWhipJuvenileRiverOtter = 80164;
     public const long ScratchJuvenileRiverOtter= 80186;
+    public const long ElderDracoPop = 80194;
     #endregion
 
 }
