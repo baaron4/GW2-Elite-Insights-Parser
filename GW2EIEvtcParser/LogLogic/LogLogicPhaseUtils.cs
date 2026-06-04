@@ -153,7 +153,7 @@ internal static class LogLogicPhaseUtils
         for (var i = 0; i < invuls.Count; i++)
         {
             var c = invuls[i];
-            long startTime = c.Time;
+            long startTime = Math.Max(c.Time, start);
             if (mergeSuccessiveCasts)
             {
                 while (i < invuls.Count - 1)
@@ -176,6 +176,7 @@ internal static class LogLogicPhaseUtils
             {
                 endTime = end;
             }
+            endTime = Math.Min(endTime, end);
             if (mainBetweenCasts)
             {
                 phases.Add(new SubPhasePhaseData(last, startTime));
