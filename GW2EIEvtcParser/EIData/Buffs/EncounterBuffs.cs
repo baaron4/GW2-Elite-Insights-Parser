@@ -120,7 +120,7 @@ internal static class EncounterBuffs
             new Buff("Occipital Origin", OccipitalOrigin, Source.EncounterSpecific, BuffClassification.Other, BuffImages.OccipitalMastery),
             new Buff("Frontal Mastery", FrontalMastery, Source.EncounterSpecific, BuffClassification.Other, BuffImages.FrontalMastery),
             new Buff("Frontal Origin", FrontalOrigin, Source.EncounterSpecific, BuffClassification.Other, BuffImages.FrontalMastery),
-            new Buff("Exposed (Mordremoth)", ExposedMordremoth, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Exposed),
+            new Buff("Exposed (Mordremoth)", ExposedMordremoth, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Exposed),
             new Buff("Weakened (Buff 1)", WeakenedBuff1, Source.Common, BuffClassification.Other, BuffImages.Weakened),
             new Buff("Weakened (Buff 2)", WeakenedBuff2, Source.Common, BuffClassification.Other, BuffImages.Weakened),
             new Buff("Empowered (Hearts and Minds)", EmpoweredHeartsAndMinds, Source.Common, BuffClassification.Other, BuffImages.EmpoweredHeartAndMinds),
@@ -295,7 +295,7 @@ internal static class EncounterBuffs
             // Eyes
             new Buff("Last Grasp (Judgment)", LastGraspJudgment, Source.EncounterSpecific, BuffClassification.Other, BuffImages.LastGrasp),
             new Buff("Last Grasp (Fate)", LastGraspFate, Source.EncounterSpecific, BuffClassification.Other, BuffImages.LastGrasp),
-            new Buff("Exposed (Statue of Darkness)", ExposedStatueOfDarkness, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ExposedEyes),
+            new Buff("Exposed (Statue of Darkness)", ExposedStatueOfDarkness, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
             new Buff("Light Carrier", LightCarrier, Source.EncounterSpecific, BuffClassification.Other, BuffImages.TorchFielder),
             new Buff("Empowered (Light Thief)", EmpoweredLightThief, Source.EncounterSpecific, BuffClassification.Other, BuffImages.SoulDigestion),
             // Dhuum
@@ -396,8 +396,8 @@ internal static class EncounterBuffs
             new Buff("Nova Shield CM", NovaShieldCM, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.Tracked),
             new Buff("Galvanic Sensitivity", GalvanicSensitivityBuff, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
-            new Buff("Thrumming Presence", ThrummingPresenceBuff, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
-            new Buff("Thrumming Presence CM", ThrummingPresenceBuffCM, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
+            new Buff("Thrumming Presence", ThrummingPresenceBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ConjuredBarrier),
+            new Buff("Thrumming Presence CM", ThrummingPresenceBuffCM, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ConjuredBarrier),
             new Buff("Charge (Decima)", ChargeDecima, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
             new Buff("Decima Beam Targeting", DecimaBeamLoading, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Decima Beam Targeting CM 1", DecimaBeamLoadingCM1, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown),

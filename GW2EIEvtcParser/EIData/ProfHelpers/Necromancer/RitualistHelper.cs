@@ -91,7 +91,7 @@ internal static class RitualistHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Ritualist Shroud", RitualistsShroud, Source.Ritualist, BuffClassification.Other, SkillImages.RitualistShroud),
-        new Buff("Painful Bond", PainfulBond, Source.Ritualist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Anguish),
+        new Buff("Painful Bond", PainfulBond, Source.Ritualist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, SkillImages.Anguish),
         new Buff("Ritualist's Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Ritualist's Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Ritualist's Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
@@ -119,7 +119,7 @@ internal static class RitualistHelper
         new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Detonate Shelter", DetonateShelter, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Detonate Sorrow", DetonateSorrow, Source.Ritualist, BuffClassification.Hidden, BuffImages.Unknown),
-        new Buff("Dark Stalker (Ritualist)", RitualistDarkStalker, Source.Ritualist, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Dark Stalker (Ritualist)", RitualistDarkStalker, Source.Ritualist, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Unknown),
     ];
 
     private static readonly HashSet<int> Minions = 

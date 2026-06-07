@@ -120,7 +120,7 @@ internal static class LuminaryHelper
         new Buff("Effulgent Stance (Stack Gain)", EffulgentStanceStackGainBuff, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.EffulgentStance),
         new Buff("Effulgent Stance (Stack Damage)", EffulgentStanceStackDamageBuff, Source.Luminary, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, SkillImages.EffulgentStance),
         new Buff("Piercing Stance", PiercingStanceBuff, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.PiercingStance),
-        new Buff("Daring Stance", DaringAdvanceBuff, Source.Luminary, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.DaringAdvance),
+        new Buff("Daring Stance", DaringAdvanceBuff, Source.Luminary, BuffStackType.Stacking, 25, BuffClassification.Debuff, SkillImages.DaringAdvance),
         // Traits
         new Buff("Luminary's Blessing", LuminarysBlessing, Source.Luminary, BuffClassification.Defensive, TraitImages.LightsGift),
         new Buff("Empowered Armaments", EmpoweredArmaments, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.EmpoweredArmaments),

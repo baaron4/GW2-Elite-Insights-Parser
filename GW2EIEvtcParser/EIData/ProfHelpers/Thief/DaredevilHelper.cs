@@ -62,7 +62,7 @@ internal static class DaredevilHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Palm Strike", PalmStrike, Source.Daredevil, BuffClassification.Other, SkillImages.PalmStrike),
-        new Buff("Pulmonary Impact", PulmonaryImpactBuff, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PalmStrike),
+        new Buff("Pulmonary Impact", PulmonaryImpactBuff, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Debuff, SkillImages.PalmStrike),
         new Buff("Lotus Training", LotusTraining, Source.Daredevil, BuffClassification.Other, TraitImages.LotusTraining),
         new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, TraitImages.UnhinderedCombatant),
         new Buff("Bounding Dodger", BoundingDodger, Source.Daredevil, BuffClassification.Other, TraitImages.BoundingDodger),

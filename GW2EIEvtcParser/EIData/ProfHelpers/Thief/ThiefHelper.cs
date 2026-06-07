@@ -118,8 +118,8 @@ internal static class ThiefHelper
         new Buff("Spider Venom", SpiderVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Offensive, SkillImages.SpiderVenom),
         new Buff("Soul Stone Venom", SoulStoneVenomBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Offensive, SkillImages.SoulStoneVenom),
         new Buff("Basilisk Venom", BasiliskVenomBuff, Source.Thief, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Support, SkillImages.BasiliskVenom),
-        new Buff("Petrified 1", Petrified1, Source.Thief, BuffClassification.Other, BuffImages.Stun),
-        new Buff("Petrified 2", Petrified2, Source.Thief, BuffClassification.Other, BuffImages.Stun),
+        new Buff("Petrified 1", Petrified1, Source.Thief, BuffClassification.Debuff, BuffImages.Stun),
+        new Buff("Petrified 2", Petrified2, Source.Thief, BuffClassification.Debuff, BuffImages.Stun),
         new Buff("Infiltration", Infiltration, Source.Thief, BuffClassification.Other, SkillImages.Shadowstep),
         // Transforms
         new Buff("Dagger Storm", DaggerStorm, Source.Thief, BuffClassification.Other, SkillImages.DaggerStorm),

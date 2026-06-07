@@ -204,11 +204,11 @@ internal static class GuardianHelper
         new Buff("Renewed Focus", RenewedFocus, Source.Guardian, BuffClassification.Other, SkillImages.RenewedFocus),
         new Buff("Shield of Wrath", ShieldOfWrathBuff, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.ShieldOfWrath),
         new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.BindingBlade),
-        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, SkillImages.BindingBlade)
+        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Debuff, SkillImages.BindingBlade)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
-        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.BindingBlade)
+        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, SkillImages.BindingBlade)
             .WithBuilds(GW2Builds.June2025Balance),
-        new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Banish),
+        new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, SkillImages.Banish),
         new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfBuff, Source.Guardian, BuffClassification.Support, SkillImages.MercifulIntervention),
         new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, SkillImages.MercifulIntervention),
         // Signets

@@ -268,8 +268,8 @@ internal static class ElementalistHelper
         new Buff("Conjure Frost Bow", ConjureFrostBow, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFrostBow),
         new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureLightningHammer),
         new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFieryGreatsword),
-        new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
-        new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
+        new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Debuff, BuffImages.Stun),
+        new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Debuff, BuffImages.Stun),
         // Summons
         new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsAir),
         new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsAir),
