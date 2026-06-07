@@ -374,6 +374,8 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
+                // During main boss phases Reeg can use Sweep the Mold but he will not use Rake the Rot and Stomp the Growth
+                AddSweepTheMoldRakeTheRot(target, log, replay);
                 break;
             case (int)TargetID.Gree:
                 AddEmpoweringBlast(target, log, replay);
