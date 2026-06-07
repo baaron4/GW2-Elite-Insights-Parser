@@ -305,6 +305,20 @@ var buffComponent = {
             }
             return data;
         },
+        targetDebuffs: function () {
+            var data = [];
+            for (var i = 0; i < logData.targetDebuffs.length; i++) {
+                data[i] = findSkill(true, logData.targetDebuffs[i]);
+            }
+            return data;
+        },
+        targetOtherBuffs: function () {
+            var data = [];
+            for (var i = 0; i < logData.targetOtherBuffs.length; i++) {
+                data[i] = findSkill(true, logData.targetOtherBuffs[i]);
+            }
+            return data;
+        },
         buffsStatContainer: function() {
             return this.phase.buffsStatContainer;
         },

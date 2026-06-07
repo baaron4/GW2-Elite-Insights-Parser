@@ -31,6 +31,8 @@ internal class LogDataDto
     public List<long>? SupBuffs;
     public List<long>? DefBuffs;
     public List<long>? Debuffs;
+    public List<long>? TargetDebuffs;
+    public List<long>? TargetOtherBuffs;
     public List<long>? GearBuffs;
     public List<long>? Nourishments;
     public List<long>? Enhancements;
@@ -268,6 +270,7 @@ internal class LogDataDto
     [MemberNotNull(nameof(SupBuffs))]
     [MemberNotNull(nameof(DefBuffs))]
     [MemberNotNull(nameof(Debuffs))]
+    [MemberNotNull(nameof(TargetDebuffs))]
     [MemberNotNull(nameof(GearBuffs))]
     [MemberNotNull(nameof(Nourishments))]
     [MemberNotNull(nameof(Enhancements))]
@@ -311,6 +314,18 @@ internal class LogDataDto
         {
             Debuffs.Add(debuff.ID);
             usedBuffs[debuff.ID] = debuff;
+        }
+        TargetDebuffs = new(statistics.PresentTargetDebuffs.Count);
+        foreach (Buff debuff in statistics.PresentTargetDebuffs)
+        {
+            TargetDebuffs.Add(debuff.ID);
+            usedBuffs[debuff.ID] = debuff;
+        }
+        TargetOtherBuffs = new(statistics.PresentTargetOtherBuffs.Count);
+        foreach (Buff buff in statistics.PresentTargetOtherBuffs)
+        {
+            TargetOtherBuffs.Add(buff.ID);
+            usedBuffs[buff.ID] = buff;
         }
         GearBuffs = new(statistics.PresentGearbuffs.Count);
         foreach (Buff gearBuff in statistics.PresentGearbuffs)

@@ -104,16 +104,20 @@ public class StatisticsHelper
         }
 
         // All class specific boons
-        var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault()!);
-        foreach (Player player in players)
+        var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+        foreach (var pair in remainingBuffsByIDs)
         {
-            _presentRemainingBuffsPerPlayer[player] = [];
-            foreach (var pair in remainingBuffsByIDs)
+            foreach (Player player in players)
             {
+                _presentRemainingBuffsPerPlayer[player] = [];
                 if (combatData.GetBuffApplyDataByIDByDst(pair.Key, player.AgentItem).Count > 0)
                 {
                     _presentRemainingBuffsPerPlayer[player].Add(pair.Value);
                 }
+            }
+            if (targets.Any(t => combatData.GetBuffApplyDataByIDByDst(pair.Key, t.AgentItem).Count > 0))
+            {
+                _presentTargetOtherBuffs.Add(pair.Value);
             }
         }
     }
@@ -127,6 +131,7 @@ public class StatisticsHelper
     public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
     public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
     public IReadOnlyList<Buff> PresentTargetDebuffs => _presentTargetDebuffs;//Used only for Target Debuff tables
+    public IReadOnlyList<Buff> PresentTargetOtherBuffs => _presentTargetOtherBuffs;//Used only for Target other buff tables
     public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
     public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
     public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
@@ -150,6 +155,7 @@ public class StatisticsHelper
     private readonly List<Buff> _presentDefbuffs = [];//Used only for Def Buff tables
     private readonly List<Buff> _presentDebuffs = [];//Used only for Debuff tables
     private readonly List<Buff> _presentTargetDebuffs = [];//Used only for Target Debuff tables
+    private readonly List<Buff> _presentTargetOtherBuffs = [];//Used only for Target Other Buff tables
     private readonly List<Buff> _presentGearbuffs = [];//Used only for Gear Buff tables
     private readonly List<Buff> _presentNourishments = [];
     private readonly List<Buff> _presentEnhancements = [];
