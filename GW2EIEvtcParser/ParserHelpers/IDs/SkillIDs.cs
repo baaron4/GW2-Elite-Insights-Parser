@@ -1549,6 +1549,7 @@ public static class SkillIDs
     public const long FacetOfStrengthBuff = 27376;
     public const long ManifestToxinChain = 27425;
     public const long ImpossibleOddsBuff = 27581;
+    public const long ForcedEngagement = 27608;
     public const long Taunt = 27705;
     public const long LegendaryDragonStanceBuff = 27732;
     public const long InfuseLight = 27737;

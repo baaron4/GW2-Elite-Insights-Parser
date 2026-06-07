@@ -158,6 +158,12 @@ internal static class RevenantHelper
             .UsingSpecSpecificShared(),
         // - Vengeful Hammers
         new BuffOnActorDamageModifier(Mod_VengefulHammers, VengefulHammersBuff, "Vengeful Hammers", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_ForcedEngagement, Taunt, "Forced Engagement", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.ForcedEngagement, DamageModifierMode.All)
+            .UsingActorCheckerByPresence(ForcedEngagement)
+            .WithBuilds(GW2Builds.December2018Balance, GW2Builds.October2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ForcedEngagement, Taunt, "Forced Engagement", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.ForcedEngagement, DamageModifierMode.All)
+            .UsingActorCheckerByPresence(ForcedEngagement)
+            .WithBuilds(GW2Builds.October2019Balance),
         
         // Corruption
         // - Demonic Resistance
@@ -225,6 +231,8 @@ internal static class RevenantHelper
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Forced Engagement", ForcedEngagement, Source.Revenant, BuffClassification.Other, SkillImages.ForcedEngagement)
+            .WithBuilds(GW2Builds.December2018Balance),
         // Traits
         new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.ViciousLacerations)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),

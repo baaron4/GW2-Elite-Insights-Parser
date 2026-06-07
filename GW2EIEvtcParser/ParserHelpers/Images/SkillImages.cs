@@ -614,6 +614,7 @@ internal static class SkillImages
     // Dwarf
     public const string VengefulHammers = "https://render.guildwars2.com/file/04E220E8A8B4BD682B6A7D780D98B80FEDF5B410/961436.png";
     public const string RiteOfTheGreatDwarf = "https://render.guildwars2.com/file/D8AEB219F1A057F3F4E47E5E54A12BBABFC8474F/961437.png";
+    public const string ForcedEngagement = "https://render.guildwars2.com/file/B244F19EA9F09D96D175BC0C2BC402A23D0EEFA5/961439.png";
     // Kalla
     public const string SoulcleavesSummit = "https://render.guildwars2.com/file/CFD1582E6B180CA2DE6AD205981CBBAFC7480294/1770589.png";
     public const string RazorclawsRage = "https://render.guildwars2.com/file/2449F064B1D3427FF311D3B4C101009C52250A0C/1770606.png";
