@@ -49,7 +49,7 @@ internal class Boneskinner : Bjora
     {
         var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-1013, -1600, 2221, 1416));
+                        (-1013, -1550, 2221, 1266));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayBoneskinner, crMap, parentMap);
         return crMap;
     }

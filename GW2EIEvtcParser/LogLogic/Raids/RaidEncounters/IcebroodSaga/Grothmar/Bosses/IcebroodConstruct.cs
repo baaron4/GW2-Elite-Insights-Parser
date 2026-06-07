@@ -50,7 +50,7 @@ internal class IcebroodConstruct : Grothmar
     {
         var crMap = new CombatReplayMap(
                         (729, 581),
-                        (-32118, -11470, -28924, -8274));
+                        (-32118, -11470, -28924, -8924));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayIcebroodConstruct, crMap, parentMap);
         return crMap;
     }

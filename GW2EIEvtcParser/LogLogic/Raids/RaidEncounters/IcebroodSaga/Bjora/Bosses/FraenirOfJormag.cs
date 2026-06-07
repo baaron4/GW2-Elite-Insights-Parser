@@ -53,7 +53,7 @@ internal class FraenirOfJormag : Bjora
     {
         var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-833, -1780, 2401, 1606));
+                        (-833, -1530, 2401, 1306));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayFraenirOfJormag, crMap, parentMap);
         return crMap;
     }
