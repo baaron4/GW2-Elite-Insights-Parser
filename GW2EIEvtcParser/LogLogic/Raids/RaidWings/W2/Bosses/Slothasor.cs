@@ -108,6 +108,14 @@ internal class Slothasor : SalvationPass
             TargetID.Slubling2,
             TargetID.Slubling3,
             TargetID.Slubling4,
+            TargetID.EvolvedSlublingCave1,
+            TargetID.EvolvedSlublingCave2,
+            TargetID.EvolvedSlublingCave3,
+            TargetID.EvolvedSlublingCave4,
+            TargetID.SlublingCave1,
+            TargetID.SlublingCave2,
+            TargetID.SlublingCave3,
+            TargetID.SlublingCave4,
             TargetID.PoisonMushroom
         ];
     }
