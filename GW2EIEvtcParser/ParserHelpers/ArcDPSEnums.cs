@@ -335,6 +335,10 @@ public static class ArcDPSEnums
         StealthChange = 76,
         GadgetAnimation = 77,
         GadgetNameVisible = 78,
+        EffectMissileCreate = 79,
+        GadgetCaptureCreate = 80,
+        GadgetCaptureProgress = 81,
+        GadgetCaptureRemove = 82,
         Unknown
     };
 

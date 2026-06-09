@@ -589,6 +589,27 @@ partial class CombatData
                 Add(_gadgetAnimationEventsByToken, gadgetAnimation.AnimationToken, gadgetAnimation);
                 Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Gadget, gadgetAnimation);
                 break;
+            case StateChange.EffectMissileCreate:
+                break;
+            case StateChange.GadgetCaptureCreate:
+                var gadgetCaptureEvent = new GadgetCaptureEvent(stateChangeEvent, agentData);
+                statusEvents.GadgetCaptureEvents.Add(gadgetCaptureEvent);
+                Add(statusEvents.GadgetCaptureEventsBySrc, gadgetCaptureEvent.Src, gadgetCaptureEvent);
+                break;
+            case StateChange.GadgetCaptureProgress:
+                var progressingGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(progressingGadgetCapture, out var captureEventsToProgress))
+                {
+                    captureEventsToProgress.Last().AddProgress(stateChangeEvent);
+                }
+                break;
+            case StateChange.GadgetCaptureRemove:
+                var removedGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(removedGadgetCapture, out var captureEventsToRemove))
+                {
+                    captureEventsToRemove.Last().SetEnd(stateChangeEvent);
+                }
+                break;
             default:
                 break;
         }
