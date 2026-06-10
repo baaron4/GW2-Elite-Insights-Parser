@@ -282,9 +282,9 @@ public class CombatItem
             || IsStateChange == StateChange.GadgetAnimation
             || IsStateChange == StateChange.GadgetNameVisible
             || IsStateChange == StateChange.EffectMissileCreate
-            || IsStateChange == StateChange.GadgetCaptureCreate
-            || IsStateChange == StateChange.GadgetCaptureProgress
-            || IsStateChange == StateChange.GadgetCaptureRemove
+            || IsStateChange == StateChange.GadgetCaptureOutlineShow
+            || IsStateChange == StateChange.GadgetCaptureSplitPercent
+            || IsStateChange == StateChange.GadgetCaptureOutlineHide
             ;
     }
 

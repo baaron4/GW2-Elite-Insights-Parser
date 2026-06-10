@@ -336,9 +336,9 @@ public static class ArcDPSEnums
         GadgetAnimation = 77,
         GadgetNameVisible = 78,
         EffectMissileCreate = 79,
-        GadgetCaptureCreate = 80,
-        GadgetCaptureProgress = 81,
-        GadgetCaptureRemove = 82,
+        GadgetCaptureOutlineShow = 80,
+        GadgetCaptureSplitPercent = 81,
+        GadgetCaptureOutlineHide = 82,
         Unknown
     };
 

@@ -5,11 +5,13 @@ public class GadgetCaptureEvent : StatusEvent
     public long EndTime { get; private set; } = long.MinValue;
     public bool EndIsSet => EndTime != long.MinValue;
 
-    public IReadOnlyList<(long Time, double progress)> Progress => _progress;
-    private readonly List<(long Time, double progress)> _progress = [];
+    public readonly byte OriginalOwner;
+
+    public IReadOnlyList<(long Time, float Progress, byte From, byte By)> Progress => _progress;
+    private readonly List<(long Time, float Progress, byte From, byte By)> _progress = [];
     internal GadgetCaptureEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
-        EndTime = evtcItem.Time;
+        OriginalOwner = evtcItem.IsBuff;
     }
 
     internal void SetEnd(CombatItem evtcItem)
@@ -27,6 +29,7 @@ public class GadgetCaptureEvent : StatusEvent
         {
             return;
         }
+        _progress.Add((evtcItem.Time, BitConverter.Int32BitsToSingle(evtcItem.Value), evtcItem.Result, evtcItem.IsBuff));
     }
 
 }

@@ -566,7 +566,6 @@ partial class CombatData
                 }
                 break;
             case StateChange.StealthChange:
-            case StateChange.GadgetNameVisible:
                 if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
@@ -591,19 +590,19 @@ partial class CombatData
                 break;
             case StateChange.EffectMissileCreate:
                 break;
-            case StateChange.GadgetCaptureCreate:
+            case StateChange.GadgetCaptureOutlineShow:
                 var gadgetCaptureEvent = new GadgetCaptureEvent(stateChangeEvent, agentData);
                 statusEvents.GadgetCaptureEvents.Add(gadgetCaptureEvent);
                 Add(statusEvents.GadgetCaptureEventsBySrc, gadgetCaptureEvent.Src, gadgetCaptureEvent);
                 break;
-            case StateChange.GadgetCaptureProgress:
+            case StateChange.GadgetCaptureSplitPercent:
                 var progressingGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
                 if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(progressingGadgetCapture, out var captureEventsToProgress))
                 {
                     captureEventsToProgress.Last().AddProgress(stateChangeEvent);
                 }
                 break;
-            case StateChange.GadgetCaptureRemove:
+            case StateChange.GadgetCaptureOutlineHide:
                 var removedGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
                 if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(removedGadgetCapture, out var captureEventsToRemove))
                 {
