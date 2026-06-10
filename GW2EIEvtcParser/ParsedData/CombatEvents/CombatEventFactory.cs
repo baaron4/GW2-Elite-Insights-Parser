@@ -566,6 +566,7 @@ partial class CombatData
                 }
                 break;
             case StateChange.StealthChange:
+            case StateChange.GadgetNameVisible:
                 if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
