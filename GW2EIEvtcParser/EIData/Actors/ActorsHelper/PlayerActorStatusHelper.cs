@@ -71,6 +71,12 @@ partial class PlayerActor
                     addSanity = true;
                     nextTime = Math.Min(nextTime, cast.Time);
                 }
+                var buffApply = combatData.GetBuffApplyDataByDst(AgentItem).FirstOrDefault(x => x.Time > status[i].Time + 50 && x.Time < nextTime);
+                if (buffApply != null)
+                {
+                    addSanity = true;
+                    nextTime = Math.Min(nextTime, buffApply.Time);
+                }
                 if (addSanity)
                 {
                     sanityCheckAdd.Add((nextTime, new SpawnEvent(AgentItem, nextTime)));
