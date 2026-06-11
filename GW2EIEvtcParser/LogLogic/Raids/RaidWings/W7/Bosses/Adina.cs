@@ -161,11 +161,13 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    internal static void FindPlatforms(AgentData agentData)
+    internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
+        var positionsDict = combatData.Where(x => x.IsStateChange == StateChange.Position).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var center = new Vector2(14909.3f, -1470.64f);
         foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && agent.HitboxHeight == 2)
+            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).Length() < 1100))
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
             }
@@ -174,7 +176,7 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindPlatforms(agentData);
+        FindPlatforms(agentData, combatData);
         FindHands(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameHands(Targets, combatData);
