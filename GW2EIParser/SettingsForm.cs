@@ -101,6 +101,11 @@ public partial class SettingsForm : Form
         ChkAnonymous.Checked = _programSettings.Anonymous;
         ChkSaveOutTrace.Checked = _programSettings.SaveOutTrace;
         ChkDamageMods.Checked = _programSettings.ComputeDamageModifiers;
+        ChkCast.Checked = _programSettings.ComputeCast;
+        ChkDamage.Checked = _programSettings.ComputeDamage;
+        ChkBuff.Checked = _programSettings.ComputeBuff;
+        ChkExtensions.Checked = _programSettings.ParseExtensions;
+        ChkMechanics.Checked = _programSettings.ComputeMechanics;
         ChkMultiLogs.Checked = _programSettings.ParseMultipleLogs;
         ChkRawTimelineArrays.Checked = _programSettings.RawTimelineArrays;
         ChkDetailledWvW.Checked = _programSettings.DetailledWvW;
@@ -448,6 +453,36 @@ public partial class SettingsForm : Form
     {
         _programSettings.ComputeDamageModifiers = ChkDamageMods.Checked;
         Settings.Default.ComputeDamageModifiers = _programSettings.ComputeDamageModifiers;
+    }
+
+    private void ChkComputeDamageCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeDamage = ChkDamage.Checked;
+        Settings.Default.ComputeDamage = _programSettings.ComputeDamage;
+    }
+
+    private void ChkComputeCastCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeCast = ChkCast.Checked;
+        Settings.Default.ComputeCast = _programSettings.ComputeCast;
+    }
+
+    private void ChkComputeBuffCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeBuff = ChkBuff.Checked;
+        Settings.Default.ComputeBuff = _programSettings.ComputeBuff;
+    }
+
+    private void ChkComputeMechanicsCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeMechanics = ChkMechanics.Checked;
+        Settings.Default.ComputeMechanics = _programSettings.ComputeMechanics;
+    }
+
+    private void ChkParseExtensionsCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ParseExtensions = ChkExtensions.Checked;
+        Settings.Default.ParseExtensions = _programSettings.ParseExtensions;
     }
 
     private void ChkMultiLogsCheckedChanged(object sender, EventArgs e)

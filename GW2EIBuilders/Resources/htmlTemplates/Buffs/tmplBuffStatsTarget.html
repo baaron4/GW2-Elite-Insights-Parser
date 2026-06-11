@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div v-show="hasConditions">
             <h3 class="text-center">Conditions</h3>
             <buff-table-component :condition="true" :generation="true" :id="'condition-stats-target-table-' + target.id" :buffs="conditions"
                 :playerdata="condiData" :sums="condiSums" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
@@ -46,6 +46,9 @@
             },
             hasBoons: function () {
                 return this.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex].avg > 0;
+            },
+            hasConditions: function () {
+                return this.buffsStatContainer.targetsCondiUptimes[this.targetPhaseIndex].avg > 0;
             },
             hasDebuffs: function () {
                 return this.targetDebuffs.length > 0;

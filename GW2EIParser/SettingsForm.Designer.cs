@@ -76,6 +76,11 @@ partial class SettingsForm
         TxtHtmlExternalScriptsPath = new TextBox();
         ChkSaveOutTrace = new CheckBox();
         ChkDamageMods = new CheckBox();
+        ChkExtensions = new CheckBox();
+        ChkMechanics = new CheckBox();
+        ChkDamage = new CheckBox();
+        ChkCast = new CheckBox();
+        ChkBuff = new CheckBox();
         ChkRawTimelineArrays = new CheckBox();
         TabControl = new TabControl();
         TabGeneral = new TabPage();
@@ -135,7 +140,7 @@ partial class SettingsForm
         // 
         LblSettingsInfoMsg.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
         LblSettingsInfoMsg.AutoSize = true;
-        LblSettingsInfoMsg.Location = new Point(10, 472);
+        LblSettingsInfoMsg.Location = new Point(18, 512);
         LblSettingsInfoMsg.Margin = new Padding(4, 0, 4, 0);
         LblSettingsInfoMsg.Name = "LblSettingsInfoMsg";
         LblSettingsInfoMsg.Size = new Size(285, 15);
@@ -170,13 +175,13 @@ partial class SettingsForm
         // 
         NumericCustomTooShort.Location = new Point(170, 155);
         NumericCustomTooShort.Margin = new Padding(4, 3, 4, 3);
-        NumericCustomTooShort.Maximum = 86400000;
-        NumericCustomTooShort.Minimum = ParserHelper.MinimumInCombatDuration;
+        NumericCustomTooShort.Maximum = new decimal(new int[] { 86400000, 0, 0, 0 });
+        NumericCustomTooShort.Minimum = new decimal(new int[] { 2200, 0, 0, 0 });
         NumericCustomTooShort.Name = "NumericCustomTooShort";
         NumericCustomTooShort.Size = new Size(84, 23);
         NumericCustomTooShort.TabIndex = 15;
         NumericCustomTooShort.TextAlign = HorizontalAlignment.Right;
-        NumericCustomTooShort.Value = ParserHelper.MinimumInCombatDuration;
+        NumericCustomTooShort.Value = new decimal(new int[] { 2200, 0, 0, 0 });
         NumericCustomTooShort.ValueChanged += NumericCustomTooShortValueChanged;
         // 
         // LblCustomTooShort
@@ -193,13 +198,13 @@ partial class SettingsForm
         // 
         NumericCustomTooBig.Location = new Point(251, 183);
         NumericCustomTooBig.Margin = new Padding(4, 3, 4, 3);
-        NumericCustomTooBig.Maximum = 10000;
-        NumericCustomTooBig.Minimum = ParserHelper.MinimumFileSizeMB;
+        NumericCustomTooBig.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+        NumericCustomTooBig.Minimum = new decimal(new int[] { 100, 0, 0, 0 });
         NumericCustomTooBig.Name = "NumericCustomTooBig";
         NumericCustomTooBig.Size = new Size(61, 23);
         NumericCustomTooBig.TabIndex = 15;
         NumericCustomTooBig.TextAlign = HorizontalAlignment.Right;
-        NumericCustomTooBig.Value = 400;
+        NumericCustomTooBig.Value = new decimal(new int[] { 400, 0, 0, 0 });
         NumericCustomTooBig.ValueChanged += NumericCustomTooBigValueChanged;
         // 
         // LblCustomTooBig
@@ -214,10 +219,10 @@ partial class SettingsForm
         // 
         // NumericMemoryLimit
         // 
-        NumericMemoryLimit.Location = new Point(246, 395);
+        NumericMemoryLimit.Location = new Point(246, 437);
         NumericMemoryLimit.Margin = new Padding(4, 3, 4, 3);
-        NumericMemoryLimit.Maximum = int.MaxValue;
-        NumericMemoryLimit.Minimum = -1;
+        NumericMemoryLimit.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
+        NumericMemoryLimit.Minimum = new decimal(new int[] { 1, 0, 0, int.MinValue });
         NumericMemoryLimit.Name = "NumericMemoryLimit";
         NumericMemoryLimit.Size = new Size(105, 23);
         NumericMemoryLimit.TabIndex = 15;
@@ -227,7 +232,7 @@ partial class SettingsForm
         // LblMemoryLimit
         // 
         LblMemoryLimit.AutoSize = true;
-        LblMemoryLimit.Location = new Point(14, 397);
+        LblMemoryLimit.Location = new Point(14, 439);
         LblMemoryLimit.Margin = new Padding(4, 0, 4, 0);
         LblMemoryLimit.Name = "LblMemoryLimit";
         LblMemoryLimit.Size = new Size(232, 15);
@@ -326,7 +331,7 @@ partial class SettingsForm
         ChkOutputCsv.UseVisualStyleBackColor = true;
         ChkOutputCsv.CheckedChanged += ChkOutputCsvCheckedChanged;
         // 
-        // ChkPhaseParsing
+        // ChkComputeParsing
         // 
         ChkComputeParsing.AutoSize = true;
         ChkComputeParsing.Checked = true;
@@ -334,7 +339,7 @@ partial class SettingsForm
         ChkComputeParsing.Location = new Point(7, 22);
         ChkComputeParsing.Margin = new Padding(4, 3, 4, 3);
         ChkComputeParsing.Name = "ChkComputeParsing";
-        ChkComputeParsing.Size = new Size(93, 19);
+        ChkComputeParsing.Size = new Size(115, 19);
         ChkComputeParsing.TabIndex = 30;
         ChkComputeParsing.Text = "Compute Phases";
         ChkComputeParsing.UseVisualStyleBackColor = true;
@@ -358,7 +363,7 @@ partial class SettingsForm
         ChkCombatReplay.AutoSize = true;
         ChkCombatReplay.Checked = true;
         ChkCombatReplay.CheckState = CheckState.Checked;
-        ChkCombatReplay.Location = new Point(7, 48);
+        ChkCombatReplay.Location = new Point(7, 147);
         ChkCombatReplay.Margin = new Padding(4, 3, 4, 3);
         ChkCombatReplay.Name = "ChkCombatReplay";
         ChkCombatReplay.Size = new Size(160, 19);
@@ -397,7 +402,7 @@ partial class SettingsForm
         ChkUploadMistWarrior.Location = new Point(14, 101);
         ChkUploadMistWarrior.Margin = new Padding(4, 3, 4, 3);
         ChkUploadMistWarrior.Name = "ChkUploadMistWarrior";
-        ChkUploadMistWarrior.Size = new Size(148, 19);
+        ChkUploadMistWarrior.Size = new Size(170, 19);
         ChkUploadMistWarrior.TabIndex = 47;
         ChkUploadMistWarrior.Text = "Upload to MistWarrior.com";
         ChkUploadMistWarrior.UseVisualStyleBackColor = true;
@@ -514,7 +519,7 @@ partial class SettingsForm
         // ChkMultiLogs
         // 
         ChkMultiLogs.AutoSize = true;
-        ChkMultiLogs.Location = new Point(7, 48);
+        ChkMultiLogs.Location = new Point(7, 47);
         ChkMultiLogs.Margin = new Padding(4, 3, 4, 3);
         ChkMultiLogs.Name = "ChkMultiLogs";
         ChkMultiLogs.Size = new Size(217, 19);
@@ -566,7 +571,7 @@ partial class SettingsForm
         // ChkDetailledWvW
         // 
         ChkDetailledWvW.AutoSize = true;
-        ChkDetailledWvW.Location = new Point(7, 102);
+        ChkDetailledWvW.Location = new Point(7, 222);
         ChkDetailledWvW.Margin = new Padding(4, 3, 4, 3);
         ChkDetailledWvW.Name = "ChkDetailledWvW";
         ChkDetailledWvW.Size = new Size(142, 19);
@@ -633,7 +638,7 @@ partial class SettingsForm
         ChkDamageMods.AutoSize = true;
         ChkDamageMods.Checked = true;
         ChkDamageMods.CheckState = CheckState.Checked;
-        ChkDamageMods.Location = new Point(7, 75);
+        ChkDamageMods.Location = new Point(7, 122);
         ChkDamageMods.Margin = new Padding(4, 3, 4, 3);
         ChkDamageMods.Name = "ChkDamageMods";
         ChkDamageMods.Size = new Size(176, 19);
@@ -641,6 +646,76 @@ partial class SettingsForm
         ChkDamageMods.Text = "Compute Damage Modifiers";
         ChkDamageMods.UseVisualStyleBackColor = true;
         ChkDamageMods.CheckedChanged += ChkComputeDamageModsCheckedChanged;
+        // 
+        // ChkExtensions
+        // 
+        ChkExtensions.AutoSize = true;
+        ChkExtensions.Checked = true;
+        ChkExtensions.CheckState = CheckState.Checked;
+        ChkExtensions.Location = new Point(7, 197);
+        ChkExtensions.Margin = new Padding(4, 3, 4, 3);
+        ChkExtensions.Name = "ChkExtensions";
+        ChkExtensions.Size = new Size(112, 19);
+        ChkExtensions.TabIndex = 20;
+        ChkExtensions.Text = "Parse Extensions";
+        ChkExtensions.UseVisualStyleBackColor = true;
+        ChkExtensions.CheckedChanged += ChkParseExtensionsCheckedChanged;
+        // 
+        // ChkMechanics
+        // 
+        ChkMechanics.AutoSize = true;
+        ChkMechanics.Checked = true;
+        ChkMechanics.CheckState = CheckState.Checked;
+        ChkMechanics.Location = new Point(7, 172);
+        ChkMechanics.Margin = new Padding(4, 3, 4, 3);
+        ChkMechanics.Name = "ChkMechanics";
+        ChkMechanics.Size = new Size(136, 19);
+        ChkMechanics.TabIndex = 20;
+        ChkMechanics.Text = "Compute Mechanics";
+        ChkMechanics.UseVisualStyleBackColor = true;
+        ChkMechanics.CheckedChanged += ChkComputeMechanicsCheckedChanged;
+        // 
+        // ChkDamage
+        // 
+        ChkDamage.AutoSize = true;
+        ChkDamage.Checked = true;
+        ChkDamage.CheckState = CheckState.Checked;
+        ChkDamage.Location = new Point(7, 47);
+        ChkDamage.Margin = new Padding(4, 3, 4, 3);
+        ChkDamage.Name = "ChkDamage";
+        ChkDamage.Size = new Size(123, 19);
+        ChkDamage.TabIndex = 20;
+        ChkDamage.Text = "Compute Damage";
+        ChkDamage.UseVisualStyleBackColor = true;
+        ChkDamage.CheckedChanged += ChkComputeDamageCheckedChanged;
+        // 
+        // ChkCast
+        // 
+        ChkCast.AutoSize = true;
+        ChkCast.Checked = true;
+        ChkCast.CheckState = CheckState.Checked;
+        ChkCast.Location = new Point(7, 97);
+        ChkCast.Margin = new Padding(4, 3, 4, 3);
+        ChkCast.Name = "ChkCast";
+        ChkCast.Size = new Size(102, 19);
+        ChkCast.TabIndex = 20;
+        ChkCast.Text = "Compute Cast";
+        ChkCast.UseVisualStyleBackColor = true;
+        ChkCast.CheckedChanged += ChkComputeCastCheckedChanged;
+        // 
+        // ChkBuff
+        // 
+        ChkBuff.AutoSize = true;
+        ChkBuff.Checked = true;
+        ChkBuff.CheckState = CheckState.Checked;
+        ChkBuff.Location = new Point(7, 72);
+        ChkBuff.Margin = new Padding(4, 3, 4, 3);
+        ChkBuff.Name = "ChkBuff";
+        ChkBuff.Size = new Size(101, 19);
+        ChkBuff.TabIndex = 20;
+        ChkBuff.Text = "Compute Buff";
+        ChkBuff.UseVisualStyleBackColor = true;
+        ChkBuff.CheckedChanged += ChkComputeBuffCheckedChanged;
         // 
         // ChkRawTimelineArrays
         // 
@@ -669,7 +744,7 @@ partial class SettingsForm
         TabControl.Multiline = true;
         TabControl.Name = "TabControl";
         TabControl.SelectedIndex = 0;
-        TabControl.Size = new Size(559, 455);
+        TabControl.Size = new Size(559, 495);
         TabControl.TabIndex = 47;
         // 
         // TabGeneral
@@ -683,7 +758,7 @@ partial class SettingsForm
         TabGeneral.Margin = new Padding(4, 3, 4, 3);
         TabGeneral.Name = "TabGeneral";
         TabGeneral.Padding = new Padding(4, 3, 4, 3);
-        TabGeneral.Size = new Size(551, 427);
+        TabGeneral.Size = new Size(551, 467);
         TabGeneral.TabIndex = 0;
         TabGeneral.Text = "General";
         TabGeneral.UseVisualStyleBackColor = true;
@@ -703,7 +778,7 @@ partial class SettingsForm
         GroupParsing.Margin = new Padding(4, 3, 4, 3);
         GroupParsing.Name = "GroupParsing";
         GroupParsing.Padding = new Padding(4, 3, 4, 3);
-        GroupParsing.Size = new Size(320, 225);
+        GroupParsing.Size = new Size(320, 267);
         GroupParsing.TabIndex = 41;
         GroupParsing.TabStop = false;
         GroupParsing.Text = "Parsing";
@@ -711,7 +786,7 @@ partial class SettingsForm
         // ChkAutoParse
         // 
         ChkAutoParse.AutoSize = true;
-        ChkAutoParse.Location = new Point(7, 128);
+        ChkAutoParse.Location = new Point(7, 122);
         ChkAutoParse.Margin = new Padding(4, 3, 4, 3);
         ChkAutoParse.Name = "ChkAutoParse";
         ChkAutoParse.Size = new Size(191, 19);
@@ -723,7 +798,7 @@ partial class SettingsForm
         // ChkAutoAdd
         // 
         ChkAutoAdd.AutoSize = true;
-        ChkAutoAdd.Location = new Point(7, 102);
+        ChkAutoAdd.Location = new Point(7, 97);
         ChkAutoAdd.Margin = new Padding(4, 3, 4, 3);
         ChkAutoAdd.Name = "ChkAutoAdd";
         ChkAutoAdd.Size = new Size(173, 19);
@@ -735,7 +810,7 @@ partial class SettingsForm
         // ChkSkipFailedTries
         // 
         ChkSkipFailedTries.AutoSize = true;
-        ChkSkipFailedTries.Location = new Point(7, 75);
+        ChkSkipFailedTries.Location = new Point(7, 72);
         ChkSkipFailedTries.Margin = new Padding(4, 3, 4, 3);
         ChkSkipFailedTries.Name = "ChkSkipFailedTries";
         ChkSkipFailedTries.Size = new Size(170, 19);
@@ -754,7 +829,7 @@ partial class SettingsForm
         GroupOutput.Controls.Add(BtnCustomSaveLocSelect);
         GroupOutput.Controls.Add(TxtCustomSaveLocation);
         GroupOutput.Controls.Add(LblCustomSaveLoc);
-        GroupOutput.Location = new Point(14, 240);
+        GroupOutput.Location = new Point(14, 282);
         GroupOutput.Margin = new Padding(4, 3, 4, 3);
         GroupOutput.Name = "GroupOutput";
         GroupOutput.Padding = new Padding(4, 3, 4, 3);
@@ -793,11 +868,16 @@ partial class SettingsForm
         GroupLog.Controls.Add(ChkComputeParsing);
         GroupLog.Controls.Add(ChkCombatReplay);
         GroupLog.Controls.Add(ChkDamageMods);
+        GroupLog.Controls.Add(ChkDamage);
+        GroupLog.Controls.Add(ChkCast);
+        GroupLog.Controls.Add(ChkBuff);
+        GroupLog.Controls.Add(ChkMechanics);
+        GroupLog.Controls.Add(ChkExtensions);
         GroupLog.Location = new Point(14, 9);
         GroupLog.Margin = new Padding(4, 3, 4, 3);
         GroupLog.Name = "GroupLog";
         GroupLog.Padding = new Padding(4, 3, 4, 3);
-        GroupLog.Size = new Size(190, 225);
+        GroupLog.Size = new Size(190, 267);
         GroupLog.TabIndex = 36;
         GroupLog.TabStop = false;
         GroupLog.Text = "Log";
@@ -811,7 +891,7 @@ partial class SettingsForm
         TabHTML.Margin = new Padding(4, 3, 4, 3);
         TabHTML.Name = "TabHTML";
         TabHTML.Padding = new Padding(4, 3, 4, 3);
-        TabHTML.Size = new Size(551, 427);
+        TabHTML.Size = new Size(551, 434);
         TabHTML.TabIndex = 1;
         TabHTML.Text = "HTML";
         TabHTML.UseVisualStyleBackColor = true;
@@ -895,7 +975,7 @@ partial class SettingsForm
         TabCSV.Location = new Point(4, 24);
         TabCSV.Margin = new Padding(4, 3, 4, 3);
         TabCSV.Name = "TabCSV";
-        TabCSV.Size = new Size(551, 427);
+        TabCSV.Size = new Size(551, 434);
         TabCSV.TabIndex = 2;
         TabCSV.Text = "CSV";
         TabCSV.UseVisualStyleBackColor = true;
@@ -908,7 +988,7 @@ partial class SettingsForm
         TabRaw.Location = new Point(4, 24);
         TabRaw.Margin = new Padding(4, 3, 4, 3);
         TabRaw.Name = "TabRaw";
-        TabRaw.Size = new Size(551, 427);
+        TabRaw.Size = new Size(551, 434);
         TabRaw.TabIndex = 3;
         TabRaw.Text = "Raw formats";
         TabRaw.UseVisualStyleBackColor = true;
@@ -960,7 +1040,7 @@ partial class SettingsForm
         TabUpload.Location = new Point(4, 24);
         TabUpload.Margin = new Padding(4, 3, 4, 3);
         TabUpload.Name = "TabUpload";
-        TabUpload.Size = new Size(551, 427);
+        TabUpload.Size = new Size(551, 434);
         TabUpload.TabIndex = 4;
         TabUpload.Text = "Upload";
         TabUpload.UseVisualStyleBackColor = true;
@@ -998,7 +1078,7 @@ partial class SettingsForm
         TabAPI.Location = new Point(4, 24);
         TabAPI.Margin = new Padding(4, 3, 4, 3);
         TabAPI.Name = "TabAPI";
-        TabAPI.Size = new Size(551, 427);
+        TabAPI.Size = new Size(551, 434);
         TabAPI.TabIndex = 5;
         TabAPI.Text = "Maintenance";
         TabAPI.UseVisualStyleBackColor = true;
@@ -1046,7 +1126,7 @@ partial class SettingsForm
         // BtnClose
         // 
         BtnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnClose.Location = new Point(481, 495);
+        BtnClose.Location = new Point(483, 530);
         BtnClose.Margin = new Padding(4, 3, 4, 3);
         BtnClose.Name = "BtnClose";
         BtnClose.Size = new Size(98, 28);
@@ -1058,7 +1138,7 @@ partial class SettingsForm
         // BtnDumpSettings
         // 
         BtnDumpSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnDumpSettings.Location = new Point(376, 495);
+        BtnDumpSettings.Location = new Point(377, 530);
         BtnDumpSettings.Margin = new Padding(4, 3, 4, 3);
         BtnDumpSettings.Name = "BtnDumpSettings";
         BtnDumpSettings.Size = new Size(98, 28);
@@ -1070,7 +1150,7 @@ partial class SettingsForm
         // BtnLoadSettings
         // 
         BtnLoadSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        BtnLoadSettings.Location = new Point(271, 495);
+        BtnLoadSettings.Location = new Point(271, 530);
         BtnLoadSettings.Margin = new Padding(4, 3, 4, 3);
         BtnLoadSettings.Name = "BtnLoadSettings";
         BtnLoadSettings.Size = new Size(98, 28);
@@ -1084,7 +1164,7 @@ partial class SettingsForm
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         AutoScroll = true;
-        ClientSize = new Size(587, 537);
+        ClientSize = new Size(587, 570);
         Controls.Add(BtnLoadSettings);
         Controls.Add(BtnDumpSettings);
         Controls.Add(BtnClose);
@@ -1203,6 +1283,11 @@ partial class SettingsForm
     private System.Windows.Forms.CheckBox ChkAnonymous;
     private System.Windows.Forms.CheckBox ChkSaveOutTrace;
     private System.Windows.Forms.CheckBox ChkDamageMods;
+    private System.Windows.Forms.CheckBox ChkDamage;
+    private System.Windows.Forms.CheckBox ChkCast;
+    private System.Windows.Forms.CheckBox ChkBuff;
+    private System.Windows.Forms.CheckBox ChkMechanics;
+    private System.Windows.Forms.CheckBox ChkExtensions;
     private System.Windows.Forms.CheckBox ChkMultiLogs;
     private System.Windows.Forms.CheckBox ChkRawTimelineArrays;
     private System.Windows.Forms.Label DPSReportUserTokenLabel;
