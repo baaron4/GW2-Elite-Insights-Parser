@@ -12,7 +12,7 @@ public class EvtcParserSettings
     public bool ParseExtensions { get; init; } = true;
     public bool ComputeCast { get; init; } = true;
     public bool ComputeBuff { get; init; } = true;
-    public bool ComputeMechanic { get; init; } = true;
+    public bool ComputeMechanics { get; init; } = true;
     public readonly long TooShortLimit;
     public readonly long TooBigLimit;
     public bool DetailedWvWParse { get; init; } = false;
