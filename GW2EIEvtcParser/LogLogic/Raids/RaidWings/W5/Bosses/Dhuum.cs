@@ -337,22 +337,19 @@ internal class Dhuum : HallOfChains
     internal static void HandleYourSouls(AgentData agentData, List<CombatItem> combatData)
     {
         // Player Souls - Filter out souls without master
-        var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 120 && x.HitboxWidth == 100);
         var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == DhuumPlayerToSoulTrackBuff)
             .Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), agentData.GetAgent(x.DstAgent, x.Time)))
             .Where(x => x.Item1.IsPlayer)
             .GroupBy(x => x.Item2)
             .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).FirstOrDefault());
-        foreach (AgentItem soul in yourSoul)
+        foreach (var (soulCandidate, firstApplier) in dhuumPlayerToSoulTrackBuffApplications)
         {
-            if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
+            if (firstApplier != null)
             {
-                soul.OverrideID(TargetID.YourSoul, agentData);
-                if (!firstApplier.IsMasterOf(soul))
+                soulCandidate.OverrideID(TargetID.YourSoul, agentData);
+                if (!firstApplier.IsMasterOf(soulCandidate))
                 {
-                    soul.SetMaster(firstApplier);
+                    soulCandidate.SetMaster(firstApplier);
                 }
             }
         }
