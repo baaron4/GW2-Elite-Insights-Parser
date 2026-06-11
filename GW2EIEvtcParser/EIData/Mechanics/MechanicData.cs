@@ -101,7 +101,7 @@ public class MechanicData
 
     private void ComputeMechanics(ParsedEvtcLog log)
     {
-        if (!log.ParserSettings.ComputeMechanic)
+        if (!log.ParserSettings.ComputeMechanics)
         {
             return;
         }

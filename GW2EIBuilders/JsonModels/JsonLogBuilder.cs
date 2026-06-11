@@ -211,7 +211,7 @@ internal static class JsonLogBuilder
             ComputeCombatReplay = log.CanCombatReplay,
             ComputeDamage = log.ParserSettings.ComputeDamage,
             ComputeDamageModifiers = log.ParserSettings.ComputeDamageModifiers,
-            ComputeMechanic = log.ParserSettings.ComputeMechanic,
+            ComputeMechanics = log.ParserSettings.ComputeMechanics,
             ComputePhases = log.ParserSettings.ComputePhases,
             ParseExtensions = log.ParserSettings.ParseExtensions,
         };

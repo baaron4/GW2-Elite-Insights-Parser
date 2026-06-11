@@ -253,7 +253,7 @@ public class JsonLog
         /// <summary>
         /// If true, mechanics were computed
         /// </summary>
-        public bool ComputeMechanic;
+        public bool ComputeMechanics;
     }
     /// <summary>
     /// Settings used during the parsing. \n

@@ -352,6 +352,11 @@ public sealed class ProgramHelper : IDisposable
                 ComputePhases = Settings.ComputePhases,
                 ComputeCombatReplay = Settings.ComputeCombatReplay,
                 ComputeDamageModifiers = Settings.ComputeDamageModifiers,
+                ParseExtensions = Settings.ParseExtensions,
+                ComputeBuff = Settings.ComputeBuff,
+                ComputeDamage = Settings.ComputeDamage,
+                ComputeCast = Settings.ComputeCast,
+                ComputeMechanics = Settings.ComputeMechanics,
                 DetailedWvWParse = Settings.DetailledWvW,
             },
                                         APIController);

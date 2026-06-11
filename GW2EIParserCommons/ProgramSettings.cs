@@ -30,6 +30,11 @@ public class ProgramSettings
     public bool ComputePhases { get; set; } = true;
     public bool ComputeCombatReplay { get; set; } = true;
     public bool ComputeDamageModifiers { get; set; } = true;
+    public bool ParseExtensions { get; set; } = true;
+    public bool ComputeDamage { get; set; } = true;
+    public bool ComputeBuff { get; set; } = true;
+    public bool ComputeCast { get; set; } = true;
+    public bool ComputeMechanics { get; set; } = true;
     // Save Location
     public bool SaveAtOut { get; set; }
     public string OutLocation { get; set; }
