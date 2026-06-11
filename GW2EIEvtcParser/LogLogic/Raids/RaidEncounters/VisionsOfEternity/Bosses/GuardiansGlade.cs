@@ -193,7 +193,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.GrandRaidKelaChest, GrandRaidChestKelaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
+            (ChestID.GrandRaidKelaChest, GrandRaidChestKelaPosition, 1200, 100),
         ], agentData, combatData);
 
         OverrideGenericKillAmbushKillingBlows(agentData, combatData);

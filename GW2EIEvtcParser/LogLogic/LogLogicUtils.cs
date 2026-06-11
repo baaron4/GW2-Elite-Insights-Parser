@@ -228,10 +228,7 @@ internal static class LogLogicUtils
         }
     }
 
-
-    internal delegate bool ChestAgentChecker(AgentItem agent);
-
-    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, ChestAgentChecker? chestChecker)
+    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, int hitboxHeight, int hitboxWidth)
     {
         if (chestID == ChestID.None)
         {
@@ -244,13 +241,13 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => chestChecker == null || chestChecker(x.Key));
+        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => x.Key.HitboxHeight == 0 || (x.Key.HitboxWidth == hitboxWidth && x.Key.HitboxHeight == hitboxHeight));
         chest?.Key.OverrideID(chestID, agentData);
     }
 
-    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, ChestAgentChecker? chestChecker)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, int hitboxHeight, int hitboxWidth)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
-        var movementData = combatData.Where(x => x.IsGeographical);
+        var movementData = combatData.Where(x => x.IsGeographical).ToList();
 
         var nonZeroGadgetVelocities = movementData.Where(evt => {
             if (evt.IsStateChange == StateChange.Velocity)
@@ -290,7 +287,7 @@ internal static class LogLogicUtils
         }
         foreach (var chestID in chestIDs)
         {
-            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.chestChecker);
+            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.hitboxHeight, chestID.hitboxWidth);
         }
     }
 

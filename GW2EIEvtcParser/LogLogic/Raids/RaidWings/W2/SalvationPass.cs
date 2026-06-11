@@ -22,9 +22,9 @@ internal abstract class SalvationPass : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.SlothasorChest, SlothasorChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.ChestOfPrisonCamp, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.MatthiasChest, MatthiasChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
+            (ChestID.SlothasorChest, SlothasorChestPosition, 1200, 100),
+            (ChestID.ChestOfPrisonCamp, ChestOfPrisonCampPosition, 1200, 100),
+            (ChestID.MatthiasChest, MatthiasChestPosition, 1200, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

@@ -21,9 +21,9 @@ internal abstract class MythwrightGambit : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.CAChest, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.TwinLargosChest, TwinLargosChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.QadimsChest, QadimsChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
+            (ChestID.CAChest, CAChestPosition, 1200, 100),
+            (ChestID.TwinLargosChest, TwinLargosChestPosition, 1200, 100),
+            (ChestID.QadimsChest, QadimsChestPosition, 1200, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

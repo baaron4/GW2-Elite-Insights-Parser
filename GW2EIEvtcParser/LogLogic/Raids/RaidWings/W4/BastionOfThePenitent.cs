@@ -22,10 +22,10 @@ internal abstract class BastionOfThePenitent : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.CairnChest, CairnChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.RecreationRoomChest, RecreationRoomChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.SamarogChest, SamarogChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
-            (ChestID.SaulsTreasureChest, SaulsTreasureChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)),
+            (ChestID.CairnChest, CairnChestPosition, 1200, 100),
+            (ChestID.RecreationRoomChest, RecreationRoomChestPosition, 1200, 100),
+            (ChestID.SamarogChest, SamarogChestPosition, 1200, 100),
+            (ChestID.SaulsTreasureChest, SaulsTreasureChestPosition, 1200, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

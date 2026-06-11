@@ -1322,7 +1322,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2)),
+            (ChestID, GrandStrikeChestHarvestTemplePosition, 500, 2),
         ], agentData, combatData);
         IdentifyGreens(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         var maxHPEvents = combatData
