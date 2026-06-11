@@ -349,8 +349,8 @@ public sealed class ProgramHelper : IDisposable
             {
                 AnonymousPlayers = Settings.Anonymous,
                 SkipFailedTries = Settings.SkipFailedTries,
-                ComputePhases = Settings.ParsePhases,
-                ComputeCombatReplay = Settings.ParseCombatReplay,
+                ComputePhases = Settings.ComputePhases,
+                ComputeCombatReplay = Settings.ComputeCombatReplay,
                 ComputeDamageModifiers = Settings.ComputeDamageModifiers,
                 DetailedWvWParse = Settings.DetailledWvW,
             },

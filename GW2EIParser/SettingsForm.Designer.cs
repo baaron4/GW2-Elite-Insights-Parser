@@ -1,4 +1,4 @@
-using GW2EIEvtcParser;
+﻿using GW2EIEvtcParser;
 
 namespace GW2EIParser;
 
@@ -49,7 +49,7 @@ partial class SettingsForm
         BtnResetSpecList = new Button();
         ChkOutputHtml = new CheckBox();
         ChkOutputCsv = new CheckBox();
-        ChkPhaseParsing = new CheckBox();
+        ChkComputeParsing = new CheckBox();
         ChkSingleThreaded = new CheckBox();
         ChkCombatReplay = new CheckBox();
         ChkUploadDPSReports = new CheckBox();
@@ -328,17 +328,17 @@ partial class SettingsForm
         // 
         // ChkPhaseParsing
         // 
-        ChkPhaseParsing.AutoSize = true;
-        ChkPhaseParsing.Checked = true;
-        ChkPhaseParsing.CheckState = CheckState.Checked;
-        ChkPhaseParsing.Location = new Point(7, 22);
-        ChkPhaseParsing.Margin = new Padding(4, 3, 4, 3);
-        ChkPhaseParsing.Name = "ChkPhaseParsing";
-        ChkPhaseParsing.Size = new Size(93, 19);
-        ChkPhaseParsing.TabIndex = 30;
-        ChkPhaseParsing.Text = "Parse Phases";
-        ChkPhaseParsing.UseVisualStyleBackColor = true;
-        ChkPhaseParsing.CheckedChanged += ChkPhaseParsingCheckedChanged;
+        ChkComputeParsing.AutoSize = true;
+        ChkComputeParsing.Checked = true;
+        ChkComputeParsing.CheckState = CheckState.Checked;
+        ChkComputeParsing.Location = new Point(7, 22);
+        ChkComputeParsing.Margin = new Padding(4, 3, 4, 3);
+        ChkComputeParsing.Name = "ChkComputeParsing";
+        ChkComputeParsing.Size = new Size(93, 19);
+        ChkComputeParsing.TabIndex = 30;
+        ChkComputeParsing.Text = "Compute Phases";
+        ChkComputeParsing.UseVisualStyleBackColor = true;
+        ChkComputeParsing.CheckedChanged += ChkComputePhaseCheckedChanged;
         // 
         // ChkSingleThreaded
         // 
@@ -790,7 +790,7 @@ partial class SettingsForm
         // GroupLog
         // 
         GroupLog.Controls.Add(ChkDetailledWvW);
-        GroupLog.Controls.Add(ChkPhaseParsing);
+        GroupLog.Controls.Add(ChkComputeParsing);
         GroupLog.Controls.Add(ChkCombatReplay);
         GroupLog.Controls.Add(ChkDamageMods);
         GroupLog.Location = new Point(14, 9);
@@ -1148,7 +1148,7 @@ partial class SettingsForm
     private System.Windows.Forms.Button BtnResetSpecList;
     private System.Windows.Forms.CheckBox ChkOutputHtml;
     private System.Windows.Forms.CheckBox ChkOutputCsv;
-    private System.Windows.Forms.CheckBox ChkPhaseParsing;
+    private System.Windows.Forms.CheckBox ChkComputeParsing;
     private System.Windows.Forms.CheckBox ChkSingleThreaded;
     private System.Windows.Forms.Label LblCustomTooShort;
     private System.Windows.Forms.NumericUpDown NumericCustomTooShort;
