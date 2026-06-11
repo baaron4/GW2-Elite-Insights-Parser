@@ -1988,6 +1988,7 @@ public static class SkillIDs
     public const long AlwaysAngry = 34099;
     public const long ShellShocked = 34108;
     public const long SpawnProtection = 34113;
+    public const long HeavyBombMissile = 34125;
     public const long SoothingBastion = 34136;
     public const long TimeBombDamage2_Encounter = 34152; // Second Bomb, below 50% Sabetha HP
     public const long CallOfTheMists = 34164;
