@@ -135,7 +135,7 @@ public class GameplayStatistics
         AverageConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
         AverageActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
         //
-        if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.HasCombatReplayPositions(log))
+        if (log.CanCombatReplay && log.FriendlyAgents.Contains(actor.AgentItem) && actor.HasCombatReplayPositions(log))
         {
             DistanceToCenterOfSquad = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
             DistanceToCommander = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));

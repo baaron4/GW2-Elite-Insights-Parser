@@ -2,28 +2,24 @@
 
 public class EvtcParserSettings
 {
-    public readonly bool AnonymousPlayers;
-    public readonly bool SkipFailedTries;
-    public readonly bool ParsePhases;
-    public readonly bool ParseCombatReplay;
-    public readonly bool ComputeDamageModifiers;
+    public bool AnonymousPlayers = false;
+    public bool SkipFailedTries = false;
+    public bool ComputePhases = true;
+    public bool ComputeCombatReplay = true;
+    public bool ComputeDamageModifiers = true;
+    internal bool CanComputeDamageModifiers => ComputeDamageModifiers && ComputeDamage && ComputeBuff;
+    public bool ComputeDamage = true;
+    public bool ParseExtensions = true;
+    public bool ComputeCast = true;
+    public bool ComputeBuff = true;
+    public bool ComputeMechanic = true;
     public readonly long TooShortLimit;
     public readonly long TooBigLimit;
-    public readonly bool DetailedWvWParse;
+    public bool DetailedWvWParse;
 
-    public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, long tooBigLimit) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, tooShortLimit, tooBigLimit, false)
+    public EvtcParserSettings(long tooShortLimit, long tooBigLimit)
     {
-    }
-
-    public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit, long tooBigLimit, bool detailedWvW)
-    {
-        AnonymousPlayers = anonymousPlayer;
-        SkipFailedTries = skipFailedTries;
-        ParsePhases = parsePhases;
-        ParseCombatReplay = parseCombatReplay;
-        ComputeDamageModifiers = computeDamageModifiers;
         TooShortLimit = Math.Max(tooShortLimit, ParserHelper.MinimumInCombatDuration);
         TooBigLimit = Math.Max(tooBigLimit, ParserHelper.MinimumFileSizeMB);
-        DetailedWvWParse = detailedWvW;
     }
 }

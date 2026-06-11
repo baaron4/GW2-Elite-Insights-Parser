@@ -368,7 +368,7 @@ public class LogData
 
         if (_phases.Count == 0)
         {
-            _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
+            _phases = Logic.GetPhases(log, log.ParserSettings.ComputePhases);
             if (_phases.Count == 0)
             {
                 throw new InvalidDataException("At least one phase must be present");
@@ -390,7 +390,7 @@ public class LogData
                 }
             }
             var encounterPhases = _phases.OfType<EncounterPhaseData>().ToList();
-            var breakbarPhases = Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases);
+            var breakbarPhases = Logic.GetBreakbarPhases(log, log.ParserSettings.ComputePhases);
             _phases.AddRange(breakbarPhases);
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
             if (_phases.Count == 0 && removed > 0)

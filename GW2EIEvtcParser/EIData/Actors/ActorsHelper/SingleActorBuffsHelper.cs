@@ -29,6 +29,10 @@ partial class SingleActor
 
     private void InitBuffApplyByIDDict(ParsedEvtcLog log, long start, long end)
     {
+        if (!log.ParserSettings.ComputeBuff)
+        {
+            return;
+        }
         List<AbstractBuffApplyEvent> curBuffApplies;
         if (_buffApplyByIDAccelerator!.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
         {
@@ -111,6 +115,10 @@ partial class SingleActor
 
     private void InitBuffRemoveAllByByIDDict(ParsedEvtcLog log, long start, long end)
     {
+        if (!log.ParserSettings.ComputeBuff)
+        {
+            return;
+        }
         List<BuffRemoveAllEvent> curBuffRemoves;
         if (_buffRemoveAllByByIDAccelerator!.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
         {
@@ -201,6 +209,10 @@ partial class SingleActor
 
     private void InitBuffRemoveAllFromByIDDict(ParsedEvtcLog log, long start, long end)
     {
+        if (!log.ParserSettings.ComputeBuff)
+        {
+            return;
+        }
         List<BuffRemoveAllEvent> curBuffRemoves;
         if (_buffRemoveAllFromByIDAccelerator!.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
         {
@@ -877,15 +889,19 @@ partial class SingleActor
     [MemberNotNull(nameof(_trackedBuffs))]
     internal void ComputeBuffMap(ParsedEvtcLog log)
     {
+        _buffMap = new BuffDictionary(64, 256, 32, 1);
+        if (!log.ParserSettings.ComputeBuff)
+        {
+            _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
+            return;
+        }
         if (AgentItem.IsEnglobedAgent)
         {
             var actor = log.FindActor(EnglobingAgentItem);
             actor.ComputeBuffMap(log);
-            _buffMap = new BuffDictionary(64, 256, 32, 1);
             _trackedBuffs = actor._trackedBuffs;
             return;
         }
-        _buffMap = new BuffDictionary(64, 256, 32, 1);
         if (AgentItem.IsUnknown)
         {
             _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
@@ -1081,6 +1097,10 @@ partial class SingleActor
         consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.Enhancement]);
         consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.OtherConsumable]);
         _consumeList = [];
+        if (!log.ParserSettings.ComputeBuff)
+        {
+            return;
+        }
         foreach (Buff consumable in consumableList)
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(consumable.ID))

@@ -46,7 +46,7 @@ partial class SingleActor
 
     public IReadOnlyDictionary<int, DamageModifierStat> GetOutgoingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
+        if (!log.ParserSettings.CanComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<int, DamageModifierStat>();
         }
@@ -164,7 +164,7 @@ partial class SingleActor
 
     public IReadOnlyDictionary<int, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
+        if (!log.ParserSettings.CanComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<int, DamageModifierStat>();
         }

@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
 using Discord;
@@ -343,14 +343,17 @@ public sealed class ProgramHelper : IDisposable
             operation.Start();
             var fInfo = new FileInfo(operation.InputFile);
 
-            var parser = new EvtcParser(new EvtcParserSettings(Settings.Anonymous,
-                                            Settings.SkipFailedTries,
-                                            Settings.ParsePhases,
-                                            Settings.ParseCombatReplay,
-                                            Settings.ComputeDamageModifiers,
+            var parser = new EvtcParser(new EvtcParserSettings(
                                             Settings.CustomTooShort,
-                                            Settings.CustomTooBig,
-                                            Settings.DetailledWvW),
+                                            Settings.CustomTooBig)
+            {
+                AnonymousPlayers = Settings.Anonymous,
+                SkipFailedTries = Settings.SkipFailedTries,
+                ComputePhases = Settings.ParsePhases,
+                ComputeCombatReplay = Settings.ParseCombatReplay,
+                ComputeDamageModifiers = Settings.ComputeDamageModifiers,
+                DetailedWvWParse = Settings.DetailledWvW,
+            },
                                         APIController);
 
             //Process evtc here
