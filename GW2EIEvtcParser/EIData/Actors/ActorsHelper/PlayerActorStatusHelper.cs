@@ -42,6 +42,46 @@ partial class PlayerActor
         status.AddRange(spawnEvents.Select(x => (x.Time, (StatusEvent)x)));
         status.AddRange(despawnEvents.Select(x => (x.Time, (StatusEvent)x)));
 
+        List<(long Time, StatusEvent evt)> sanityCheckAdd = [];
+
+        status = status.OrderBy(x => x.Time).ToList();
+
+        for (var i = 0; i < status.Count; i++) 
+        {
+            var state = status[i].evt;
+            if (state is DespawnEvent)
+            {
+                long nextTime = i == status.Count - 1 ? LastAware : status[i + 1].Time;
+                var movement = combatData.GetMovementData(AgentItem).FirstOrDefault(x => x.Time > status[i].Time + 50 && x.Time < nextTime);
+                bool addSanity = false;
+                if (movement != null)
+                {
+                    addSanity = true;
+                    nextTime = Math.Min(nextTime, movement.Time);
+                }
+                var damage = combatData.GetDamageData(AgentItem).FirstOrDefault(x => x.Time > status[i].Time + 50 && x.Time < nextTime);
+                if (damage != null)
+                {
+                    addSanity = true;
+                    nextTime = Math.Min(nextTime, damage.Time);
+                }
+                var cast = combatData.GetAnimatedCastData(AgentItem).FirstOrDefault(x => x.Time > status[i].Time + 50 && x.Time < nextTime);
+                if (cast != null)
+                {
+                    addSanity = true;
+                    nextTime = Math.Min(nextTime, cast.Time);
+                }
+                if (addSanity)
+                {
+                    sanityCheckAdd.Add((nextTime, new SpawnEvent(AgentItem, nextTime)));
+                }
+            }
+        }
+
+        if (sanityCheckAdd.Count > 0)
+        {
+            status.AddRange(sanityCheckAdd);
+        }
 
         FillStatus(dead, down, dc, actives, status);
     }
