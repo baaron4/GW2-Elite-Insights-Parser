@@ -1,11 +1,12 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -184,10 +185,12 @@ internal class Slothasor : SalvationPass
 
     internal static void FindMushrooms(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        var positionsDict = combatData.Where(x => x.IsStateChange == StateChange.Position).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var center = new Vector2(7685.5f, -643f);
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && (x.HitboxWidth == 146 || x.HitboxWidth == 210))
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && positionsDict.TryGetValue(x, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).LengthSquared() < 6250000)) // 2500 squared
             .ToList();
         if (mushroomAgents.Count > 0)
         {

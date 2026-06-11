@@ -167,7 +167,7 @@ internal class Adina : TheKeyOfAhdashim
         var center = new Vector2(14909.3f, -1470.64f);
         foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).Length() < 1100))
+            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).LengthSquared() < 1210000)) // 1100 squared
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
             }
