@@ -659,6 +659,8 @@ public static class EffectGUIDs
     #region Raids
     // Vale Guardian
     public static readonly GUID ValeGuardianDistributedMagic = new("43FD739499BB6040BBF9EEF37781B2CE"); // 6000 duration
+    public static readonly GUID ValeGuardianDistributedMagicFailure = new("6CBE4306EBF349448184EC27FCD0B622"); // 1000 duration
+    public static readonly GUID ValeGuardianDistributedMagicSuccess = new("3611DE578F70B1439704D731663CDDF2"); // 1000 duration
     public static readonly GUID ValeGuardianMagicSpike = new("55364633145D264A934935C3F026B19F"); // 2000 duration
     // Gorseval
     public static readonly GUID GorsevalGhastlyPrison = new("16BBFDBEC55958419CC5564CB1FEED04"); // 2000 duration
