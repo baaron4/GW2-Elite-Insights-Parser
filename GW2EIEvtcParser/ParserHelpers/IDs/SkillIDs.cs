@@ -4836,6 +4836,7 @@ public static class SkillIDs
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
     public const long EnfeeblingMiasma = 74851;
+    public const long DecimaConduitBuffSomething = 74855;
     public const long UnstableAttunementJW = 74860;
     public const long BlastBack = 74863;
     public const long WaveOfCorruption = 74867;
@@ -5020,6 +5021,7 @@ public static class SkillIDs
     public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
     public const long DecimaBeamTargetingCM = 75726;
     public const long ForeshockCM2 = 75729;
+    public const long DecimaConduitBuffSomething2 = 75745;
     public const long RelicOfTheHolosmith = 75748;
     public const long EnfeeblingMiasma3 = 75749;
     public const long DamageImmunity3 = 75754;
@@ -5032,6 +5034,7 @@ public static class SkillIDs
     public const long ForeshockCM3 = 75821;
     public const long EarthrendInnerHitboxDamageCM = 75823; // Decima CM inner hitbox damage
     public const long FulgentFenceCM = 75850;
+    public const long DecimaConduitBuffSomething3 = 75852;
     public const long Earthfall = 75861;
     public const long SparkingAuraTier3CM = 75865;
     public const long RotEruptionCM = 75866;

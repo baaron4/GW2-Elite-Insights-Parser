@@ -153,12 +153,11 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal static void FindConduits(AgentData agentData, List<CombatItem> combatData)
     {
-        var maxHPEventsAgents = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
-        var conduitsGadgets = maxHPEventsAgents
-            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100 && x.HitboxHeight == 200)
-            .Distinct();
+        var conduitsGadgets = combatData
+            .Where(x => x.IsBuffApplyEvent() && (x.SkillID == DecimaConduitBuffSomething || x.SkillID == DecimaConduitBuffSomething2 || x.SkillID == DecimaConduitBuffSomething3))
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies)
+            .Distinct()
+            .ToList();
         var effects = combatData.Where(x => x.IsEffect && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM)).ToList();
         var effectSrcs = effects.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         foreach (var conduitGadget in conduitsGadgets)
