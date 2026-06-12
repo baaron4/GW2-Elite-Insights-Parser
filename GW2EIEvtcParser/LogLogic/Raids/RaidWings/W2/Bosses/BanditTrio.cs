@@ -150,7 +150,7 @@ internal class BanditTrio : SalvationPass
         return startToUse;
     }
 
-    internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData)
+    internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
     {
         var banditTrioBosses = agentData.GetStableSpeciesByIDs([TargetID.Berg, TargetID.Narella, TargetID.Zane]);
         if (banditTrioBosses.Count == 0)
@@ -161,13 +161,38 @@ internal class BanditTrio : SalvationPass
         long minFirstAware = banditTrioNPCs.Count > 0 ? banditTrioNPCs.Min(x => x.FirstAware - 2000) : long.MinValue;
         long maxLastAware = banditTrioBosses.Count > 0 ? banditTrioBosses.Max(x => x.LastAware + 2000) : long.MaxValue;
         // Cage
-        var cages = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 238 && x.HitboxHeight == 300).Distinct();
-        foreach (var cage in cages)
+        var cageMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.BanditTrioCageMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (cageMarkerGUID != null)
         {
-            long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
-            long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
-            AgentItem encounterCage = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(cage, agentData, expectedStart, expectedEnd);
-            encounterCage.OverrideID(TargetID.Cage, agentData);
+            var maxHealths = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
+            var cages = combatData
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == cageMarkerGUID.MarkerID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && maxHealths.Any(y=> y.SrcMatchesAgent(x)))
+                .Distinct();
+            foreach (var cage in cages)
+            {
+                long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
+                long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
+                AgentItem encounterCage = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(cage, agentData, expectedStart, expectedEnd);
+                encounterCage.OverrideID(TargetID.Cage, agentData);
+            }
+        } 
+        else
+        {
+            var cages = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 238).Distinct();
+            foreach (var cage in cages)
+            {
+                long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
+                long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
+                AgentItem encounterCage = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(cage, agentData, expectedStart, expectedEnd);
+                encounterCage.OverrideID(TargetID.Cage, agentData);
+            }
         }
         // Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 240);
@@ -200,7 +225,7 @@ internal class BanditTrio : SalvationPass
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindCageAndBombs(agentData, combatData);
+        FindCageAndBombs(agentData, combatData, evtcVersion);
         var insectSwarms = CreateCustomInsectSwarmMasterAgent(logData, agentData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RedirectInsectSwarmsToCustomMaster(insectSwarms, agentData);
