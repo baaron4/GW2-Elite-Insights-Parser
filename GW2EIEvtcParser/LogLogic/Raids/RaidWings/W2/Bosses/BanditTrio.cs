@@ -194,7 +194,7 @@ internal class BanditTrio : SalvationPass
                 encounterCage.OverrideID(TargetID.Cage, agentData);
             }
         }
-        // Bombs
+        // Bombs - this is the whateverest gadget stabilisation to ever whatever, if it is broken, it is broken
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
