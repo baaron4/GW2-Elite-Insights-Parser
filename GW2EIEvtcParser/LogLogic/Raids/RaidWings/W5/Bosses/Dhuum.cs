@@ -357,21 +357,31 @@ internal class Dhuum : HallOfChains
 
     internal static void HandleEtherealSeals(AgentData agentData, List<CombatItem> combatData)
     {
-        // There are other gadgets with MaxHP 0, Width 16 and Height 300.
-        var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0);
-        var positionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position).ToList();
-        foreach (CombatItem maxHP in maxHPs)
+        // There are other gadgets with MaxHP 0, Width 16.
+        var candidates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
+            .Distinct()
+            .ToHashSet();
+        var positionEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.Position)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => candidates.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Select(MovementEvent.GetPoint3D)
+            .ToList());
+        foreach (var candidate in candidates)
         {
-            AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
-            if (candidate.Type == AgentItem.AgentType.VolatileSpecies && candidate.HitboxWidth == 16 && candidate.HitboxHeight == 300)
+            if (positionEvents.TryGetValue(candidate, out var positions))
             {
-                var positions = positionEvents.Where(x => x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPoint3D).ToList();
                 foreach (KeyValuePair<int, Vector3> position in EtherealSealsPositions)
                 {
                     if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
                     {
+                        var tst = combatData.Where(x => x.SrcMatchesAgent(candidate) && x.IsSpecial).ToList();
                         candidate.OverrideID(TargetID.EtherealSeal, agentData);
                         candidate.OverrideName("Ethereal Seal " + position.Key);
+                        break;
                     }
                 }
             }
