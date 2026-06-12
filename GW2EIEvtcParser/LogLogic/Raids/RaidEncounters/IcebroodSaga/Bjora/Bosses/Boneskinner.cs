@@ -77,9 +77,14 @@ internal class Boneskinner : Bjora
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 500 && x.HitboxWidth >= 250);
+        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth >= 250);
+        var invulApplies = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == Invulnerability757).Select(x => agentData.GetAgent(x.DstAgent, x.Time)).ToHashSet();
         foreach (AgentItem torch in torches)
         {
+            if (!invulApplies.Contains(torch))
+            {
+                continue;
+            }
             torch.OverrideID(TargetID.Torch, agentData);
             torch.OverrideAwareTimes(logData.EvtcLogStart, logData.EvtcLogEnd);
         }
