@@ -59,6 +59,12 @@ class RegularPolygonMetadata extends FormMetadata {
     }
 }
 
+class CustomPolygonMetadata extends FormMetadata {
+    constructor(params) {
+        super(params);
+    }
+}
+
 class DoughnutMetadata extends FormMetadata {
     constructor(params) {
         super(params);
@@ -721,6 +727,56 @@ class RegularPolygonMechanicDrawable extends FormMechanicDrawable {
             ctx.lineTo(radius * Math.cos(i * 2 * Math.PI / nbPolygon), radius * Math.sin(i * 2 * Math.PI / nbPolygon));
         }
 
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = (2 / animator.scale).toString();
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+}
+
+class CustomPolygonMechanicDrawable extends FormMechanicDrawable {
+    constructor(params) {
+        super(params);
+        this.points = params.points;
+        for (let i = 0; i < this.points.length; i++) {
+            this.points[i][0] *= InchToPixel;
+            this.points[i][1] *= InchToPixel;
+        }
+    }
+
+    _percentedPoint(point, center, percent) {
+        return {
+            x: percent * (point[0] - center.x) + center.x,
+            y: percent * (point[1] - center.y) + center.y,
+        };
+    }
+
+    draw() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        const ctx = animator.mainContext;
+        ctx.save();
+        this.moveContext(ctx, pos, rot);
+        ctx.beginPath();
+        const percent = this.getPercent();
+        const firstPoint = this._percentedPoint(this.points[0], pos, percent);
+        ctx.moveTo(firstPoint.x, firstPoint.y);
+        for (let i = 1; i < this.points.length; i++) {
+            const curPoint = this._percentedPoint(this.points[i], pos, percent);
+            ctx.lineTo(curPoint.x, curPoint.y);
+        }
+        ctx.lineTo(firstPoint.x, firstPoint.y);
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();

@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonDerivedType(typeof(DoughnutDecorationRenderingDescription))]
 [JsonDerivedType(typeof(LineDecorationRenderingDescription))]
 [JsonDerivedType(typeof(RegularPolygonDecorationRenderingDescription))]
+[JsonDerivedType(typeof(CustomPolygonDecorationRenderingDescription))]
 [JsonDerivedType(typeof(PieDecorationRenderingDescription))]
 [JsonDerivedType(typeof(RectangleDecorationRenderingDescription))]
 [JsonDerivedType(typeof(CircleDecorationRenderingDescription))]
