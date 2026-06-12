@@ -389,7 +389,6 @@ internal class Dhuum : HallOfChains
                 {
                     if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
                     {
-                        var tst = combatData.Where(x => x.SrcMatchesAgent(candidate) && x.IsSpecial).ToList();
                         candidate.OverrideID(TargetID.EtherealSeal, agentData);
                         candidate.OverrideName("Ethereal Seal " + position.Key);
                         break;
