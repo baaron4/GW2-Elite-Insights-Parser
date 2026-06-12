@@ -1017,7 +1017,7 @@ internal class Dhuum : HallOfChains
     {
         (long, long) soulLifespan = (soul.FirstAware, hastenedDemise.End);
 
-        uint radius = (soul.HitboxWidth / 2);
+        uint radius = 50;
         var soulConnector = new PositionConnector(soulPosition);
         var playerConnector = new AgentConnector(p);
 
