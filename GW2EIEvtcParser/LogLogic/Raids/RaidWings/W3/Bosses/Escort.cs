@@ -148,9 +148,10 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal static void FindMines(AgentData agentData, List<CombatItem> combatData)
     {
-        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 100);
         foreach (AgentItem mine in mineAgents)
         {
+            var tst = combatData.Where(x => x.IsSpecial && x.SrcMatchesAgent(mine)).ToList();
             mine.OverrideID(TargetID.Mine, agentData);
         }
     }
