@@ -54,7 +54,7 @@ internal class SpiritValeInstance : SpiritVale
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetVolatileSpeciesByID(_sabetha.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_sabetha.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);

@@ -42,7 +42,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetVolatileSpeciesByID(_xera.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_xera.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -67,7 +67,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 foreach (var surveilledApply in surveilledAppliesPerGlenna)
                 {
                     var glenna = surveilledApply.To;
-                    var chest = log.AgentData.GetVolatileSpeciesByID(_escort.ChestID).FirstOrDefault();
+                    var chest = log.AgentData.GetStableSpeciesByID(_escort.ChestID).FirstOrDefault();
                     if (surveilledApply != null)
                     {
                         long start = surveilledApply.Time;
@@ -169,7 +169,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         var mainPhase = phases[0];
         var fakeXeras = log.AgentData.GetStableSpeciesByID(TargetID.FakeXera);
         var xeras = log.AgentData.GetStableSpeciesByID(TargetID.Xera);
-        var chest = log.AgentData.GetVolatileSpeciesByID(_xera.ChestID).FirstOrDefault();
+        var chest = log.AgentData.GetStableSpeciesByID(_xera.ChestID).FirstOrDefault();
         for (int i = 0; i < fakeXeras.Count; i++) 
         {
             var fakeXera = fakeXeras[i];

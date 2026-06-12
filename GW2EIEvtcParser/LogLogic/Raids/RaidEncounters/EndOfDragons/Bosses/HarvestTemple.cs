@@ -507,7 +507,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
-                        if (agentData.GetVolatileSpeciesByID(ChestID).Any())
+                        if (agentData.GetStableSpeciesByID(ChestID).Any())
                         {
                             isSuccess = true;
                         }

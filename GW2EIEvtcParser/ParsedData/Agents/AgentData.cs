@@ -148,6 +148,10 @@ public class AgentData
     {
         return GetStableSpeciesByIDAndAgent((int)id, agent);
     }
+    public IReadOnlyList<AgentItem> GetStableSpeciesByID(ChestID id)
+    {
+        return GetStableSpeciesByID((int)id);
+    }
 
     public IReadOnlyList<AgentItem> GetStableSpeciesByID(MinionID id)
     {
@@ -177,11 +181,6 @@ public class AgentData
         return GetVolatileSpeciesByID((int)id);
     }
     public IReadOnlyList<AgentItem> GetVolatileSpeciesByID(MinionID id)
-    {
-        return GetVolatileSpeciesByID((int)id);
-    }
-
-    public IReadOnlyList<AgentItem> GetVolatileSpeciesByID(ChestID id)
     {
         return GetVolatileSpeciesByID((int)id);
     }
@@ -358,7 +357,7 @@ public class AgentData
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
     public bool TryGetFirstAgentItem(ChestID chestID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
-        agentItem = GetVolatileSpeciesByID(chestID).FirstOrDefault();
+        agentItem = GetStableSpeciesByID(chestID).FirstOrDefault();
         return agentItem != null;
     }
 

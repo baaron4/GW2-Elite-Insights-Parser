@@ -89,6 +89,10 @@ internal class Escort : StrongholdOfTheFaithful
         //
         return phases;
     }
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [];
+    }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {

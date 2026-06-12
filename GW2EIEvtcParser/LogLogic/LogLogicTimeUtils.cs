@@ -204,7 +204,7 @@ internal static class LogLogicTimeUtils
 
     internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, LogData logData, LogData.LogSuccessHandler successHandler)
     {
-        AgentItem? chest = agentData.GetVolatileSpeciesByID(chestID).FirstOrDefault();
+        AgentItem? chest = agentData.GetStableSpeciesByID(chestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);

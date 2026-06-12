@@ -61,7 +61,7 @@ internal class HallOfChainsInstance : HallOfChains
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetVolatileSpeciesByID(_dhuum.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_dhuum.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -81,7 +81,7 @@ internal class HallOfChainsInstance : HallOfChains
             if (dummy != null)
             {
                 var enervators = log.AgentData.GetStableSpeciesByID(TargetID.Enervator);
-                var chest = log.AgentData.GetVolatileSpeciesByID(_river.ChestID).FirstOrDefault();
+                var chest = log.AgentData.GetStableSpeciesByID(_river.ChestID).FirstOrDefault();
                 foreach (var desmina in desminas)
                 {
                     var currentEnervators = enervators.Where(x => x.InAwareTimes(desmina));
@@ -210,7 +210,7 @@ internal class HallOfChainsInstance : HallOfChains
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
             var messengers = log.AgentData.GetStableSpeciesByID(TargetID.DhuumsMessenger);
-            var chest = log.AgentData.GetVolatileSpeciesByID(_dhuum.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
                 var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));

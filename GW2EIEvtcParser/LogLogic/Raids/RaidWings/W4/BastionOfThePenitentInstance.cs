@@ -55,7 +55,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_deimos.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -70,7 +70,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            var chest = log.AgentData.GetVolatileSpeciesByID(_cairn.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_cairn.ChestID).FirstOrDefault();
             foreach (var cairn in cairns)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(cairn.AgentItem).FirstOrDefault();
@@ -121,7 +121,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
             if (deimosDummy != null)
             {
-                var chest = log.AgentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
+                var chest = log.AgentData.GetStableSpeciesByID(_deimos.ChestID).FirstOrDefault();
                 var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
                 var greenApplies = log.CombatData.GetBuffApplyData(DeimosSelectedByGreen);
@@ -222,7 +222,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             {
                 if (handledDeimoss == null || handledDeimoss.Count != deimoss.Count)
                 {
-                    var chest = log.AgentData.GetVolatileSpeciesByID(_deimos.ChestID).FirstOrDefault();
+                    var chest = log.AgentData.GetStableSpeciesByID(_deimos.ChestID).FirstOrDefault();
                     var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                     foreach (var deimos in deimoss)
                     {
