@@ -364,16 +364,27 @@ internal class Dhuum : HallOfChains
             .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
             .Distinct()
             .ToHashSet();
-        var positionEvents = combatData
+        var velocityOrPositionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position || x.IsStateChange == StateChange.Velocity).ToList();
+        var positionEvents = velocityOrPositionEvents
             .Where(x => x.IsStateChange == StateChange.Position)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => candidates.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Select(MovementEvent.GetPoint3D)
+            .ToList());
+        var velocityEvents = velocityOrPositionEvents
+            .Where(x => x.IsStateChange == StateChange.Velocity)
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => candidates.Contains(x.Key))
             .ToDictionary(x => x.Key, x => x.Select(MovementEvent.GetPoint3D)
             .ToList());
         foreach (var candidate in candidates)
         {
-            if (positionEvents.TryGetValue(candidate, out var positions))
+            if (positionEvents.TryGetValue(candidate, out var positions) && velocityEvents.TryGetValue(candidate, out var velocities))
             {
+                if (velocities.Any(x => x.LengthSquared() > 0))
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<int, Vector3> position in EtherealSealsPositions)
                 {
                     if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
