@@ -3902,6 +3902,7 @@ public static class SkillIDs
     public const long VoidEnergy = 64867;
     public const long FissureOfTorment = 64895;
     public const long OrangefishSushi = 64896;
+    public const long HarvestTempleGravityBallSelfBuff = 64903;
     public const long ToxicBulletNMCM1 = 64914;
     public const long ExplosiveUppercutNM = 64920;
     public const long DragonsEndContributor4 = 64924;

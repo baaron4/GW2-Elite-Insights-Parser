@@ -1363,17 +1363,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         // Gravity Ball - Timecaster gadget
         if (agentData.TryGetFirstAgentItem(TargetID.VoidTimeCaster, out var timecaster))
         {
-            if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
+            var gravityBallsFromSelfBuffApply = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == HarvestTempleGravityBallSelfBuff).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
+            foreach (AgentItem gravityBall in gravityBallsFromSelfBuffApply)
             {
-                var gravityBallCandidates = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.VolatileSpecies && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src);
-                var candidateVelocities = combatData.Where(x => x.IsStateChange == StateChange.Velocity && gravityBallCandidates.Any(y => x.SrcMatchesAgent(y)));
-                const int referenceLength = 200;
-                var gravityBalls = gravityBallCandidates.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
-                foreach (AgentItem gravityBall in gravityBalls)
-                {
-                    gravityBall.OverrideID(TargetID.GravityBall, agentData);
-                    gravityBall.SetMaster(timecaster);
-                }
+                gravityBall.OverrideID(TargetID.GravityBall, agentData);
+                gravityBall.SetMaster(timecaster);
             }
         }
         {
