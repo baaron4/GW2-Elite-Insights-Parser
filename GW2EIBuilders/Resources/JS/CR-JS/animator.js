@@ -72,7 +72,7 @@ const Types = {
     Target: 18,
     TargetPlayer: 19,
     Text: 20,
-    Polygon: 21,
+    RegularPolygon: 21,
     TextOverhead: 22,
     Arena: 23,
 };
@@ -413,8 +413,8 @@ class Animator {
                 case Types.Circle:
                     MetadataClass = CircleMetadata;
                     break;
-                case Types.Polygon:
-                    MetadataClass = PolygonMetadata;
+                case Types.RegularPolygon:
+                    MetadataClass = RegularPolygonMetadata;
                     break;
                 case Types.Doughnut:
                     MetadataClass = DoughnutMetadata;
@@ -555,8 +555,8 @@ class Animator {
                     case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
                         break;
-                    case Types.Polygon:
-                        DecorationClass = PolygonMechanicDrawable;
+                    case Types.RegularPolygon:
+                        DecorationClass = RegularPolygonMechanicDrawable;
                         break;
                     case Types.Rectangle:
                         DecorationClass = RectangleMechanicDrawable;

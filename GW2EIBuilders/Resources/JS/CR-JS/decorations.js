@@ -51,7 +51,7 @@ class CircleMetadata extends FormMetadata {
     }
 }
 
-class PolygonMetadata extends FormMetadata {
+class RegularPolygonMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.radius = InchToPixel * params.radius;
@@ -688,7 +688,7 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
     }
 }
 
-class PolygonMechanicDrawable extends FormMechanicDrawable {
+class RegularPolygonMechanicDrawable extends FormMechanicDrawable {
     constructor(params) {
         super(params);
     }

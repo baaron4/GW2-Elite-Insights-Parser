@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonDerivedType(typeof(IconDecorationMetadataDescription))]
 [JsonDerivedType(typeof(IconOverheadDecorationMetadataDescription))]
 [JsonDerivedType(typeof(CircleDecorationMetadataDescription))]
-[JsonDerivedType(typeof(PolygonDecorationMetadataDescription))]
+[JsonDerivedType(typeof(RegularPolygonDecorationMetadataDescription))]
 [JsonDerivedType(typeof(DoughnutDecorationMetadataDescription))]
 [JsonDerivedType(typeof(LineDecorationMetadataDescription))]
 [JsonDerivedType(typeof(PieDecorationMetadataDescription))]
