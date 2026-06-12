@@ -1,4 +1,7 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
+
+namespace GW2EIEvtcParser.ParsedData;
 
 public class GadgetCaptureEvent : StatusEvent
 {
@@ -7,11 +10,31 @@ public class GadgetCaptureEvent : StatusEvent
 
     public readonly byte OriginalOwner;
 
+    public bool IsCircle => _points.Length == 1;
+
+    public float Radius => IsCircle ? _points[0].X : 0;
+
+    private Vector3[] _points = [];
+
     public IReadOnlyList<(long Time, float Progress, byte From, byte By)> Progress => _progress;
     private readonly List<(long Time, float Progress, byte From, byte By)> _progress = [];
     internal GadgetCaptureEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         OriginalOwner = evtcItem.IsBuff;
+    }
+
+    internal void AddPoint(CombatItem evtcItem)
+    {
+        if (_points.Length == 0)
+        {
+            _points = new Vector3[(int)evtcItem.OverstackValue];
+        }
+        int index = (int)evtcItem.DstAgent;
+        _points[index] = new Vector3(
+            BitConverter.Int32BitsToSingle(evtcItem.Value),
+            BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
+            0
+        );
     }
 
     internal void SetEnd(CombatItem evtcItem)
@@ -30,6 +53,23 @@ public class GadgetCaptureEvent : StatusEvent
             return;
         }
         _progress.Add((evtcItem.Time, BitConverter.Int32BitsToSingle(evtcItem.Value), evtcItem.Result, evtcItem.IsBuff));
+    }
+
+    public IReadOnlyList<Vector3> GetRelativePoints(Vector3 position)
+    {
+        if (IsCircle)
+        {
+            throw new InvalidOperationException("Capture area is a circle");
+        }
+        var relativePoints = new List<Vector3>(_points.Length);
+        foreach (var point in _points)
+        {
+            relativePoints.Add(new Vector3(
+                point.XY() - position.XY(),
+                position.Z
+            ));
+        }
+        return relativePoints;
     }
 
 }

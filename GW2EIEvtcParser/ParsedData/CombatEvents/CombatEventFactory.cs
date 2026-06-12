@@ -592,11 +592,20 @@ partial class CombatData
                 Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Gadget, gadgetAnimation);
                 break;
             case StateChange.EffectMissileCreate:
+                // Ignore for now
                 break;
             case StateChange.GadgetCaptureOutlineShow:
                 var gadgetCaptureEvent = new GadgetCaptureEvent(stateChangeEvent, agentData);
                 statusEvents.GadgetCaptureEvents.Add(gadgetCaptureEvent);
                 Add(statusEvents.GadgetCaptureEventsBySrc, gadgetCaptureEvent.Src, gadgetCaptureEvent);
+                if (statusEvents.GadgetCapturePointCombatItemsBySrc.TryGetValue(gadgetCaptureEvent.Src, out var gadgetCapturePoints))
+                {
+                    foreach (var gadgetCapturePoint in gadgetCapturePoints)
+                    {
+                        gadgetCaptureEvent.AddPoint(gadgetCapturePoint);
+                    }
+                    statusEvents.GadgetCapturePointCombatItemsBySrc.Remove(gadgetCaptureEvent.Src);
+                }
                 break;
             case StateChange.GadgetCaptureSplitPercent:
                 var progressingGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
@@ -611,6 +620,10 @@ partial class CombatData
                 {
                     captureEventsToRemove.Last().SetEnd(stateChangeEvent);
                 }
+                break;
+            case StateChange.GadgetCaptureOutlinePoint:
+                var pointGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                Add(statusEvents.GadgetCapturePointCombatItemsBySrc, pointGadgetCapture, stateChangeEvent);
                 break;
             default:
                 break;

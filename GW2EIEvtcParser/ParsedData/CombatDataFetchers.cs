@@ -1256,4 +1256,16 @@ partial class CombatData
         return GetTimeValueOrEmpty(_statusEvents.MissileDamagingEventsBySrc, src);
     }
     #endregion MISSILE
+
+    #region GADGET_CAPTURE
+    public IReadOnlyList<GadgetCaptureEvent> GetGadgetCaptureEvents()
+    {
+        return _statusEvents.GadgetCaptureEvents;
+    }
+    public IReadOnlyList<GadgetCaptureEvent> GetGadgetCaptureEventsBySrc(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.GadgetCaptureEventsBySrc, src);
+    }
+
+    #endregion GADGET_CAPTURE
 }

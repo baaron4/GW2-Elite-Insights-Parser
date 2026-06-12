@@ -285,6 +285,7 @@ public class CombatItem
             || IsStateChange == StateChange.GadgetCaptureOutlineShow
             || IsStateChange == StateChange.GadgetCaptureSplitPercent
             || IsStateChange == StateChange.GadgetCaptureOutlineHide
+            || IsStateChange == StateChange.GadgetCaptureOutlinePoint
             ;
     }
 

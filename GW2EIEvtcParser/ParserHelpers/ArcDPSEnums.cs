@@ -339,6 +339,7 @@ public static class ArcDPSEnums
         GadgetCaptureOutlineShow = 80,
         GadgetCaptureSplitPercent = 81,
         GadgetCaptureOutlineHide = 82,
+        GadgetCaptureOutlinePoint = 83,
         Unknown
     };
 
