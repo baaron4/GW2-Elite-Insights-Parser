@@ -22,9 +22,9 @@ internal abstract class StrongholdOfTheFaithful : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.SiegeChest, SiegeChestPosition, 1200, 100),
-            (ChestID.KeepConstructChest, KeepConstructChestPosition, 1200, 100),
-            (ChestID.XeraChest, XeraChestPosition, 1200, 100),
+            (ChestID.SiegeChest, SiegeChestPosition, 100),
+            (ChestID.KeepConstructChest, KeepConstructChestPosition, 100),
+            (ChestID.XeraChest, XeraChestPosition, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

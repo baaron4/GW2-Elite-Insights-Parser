@@ -132,7 +132,7 @@ internal static class AntiquaryHelper
                 var master = gadget.GetFinalMaster();
                 if (master.IsPlayer && master.Spec == Spec.Antiquary)
                 {
-                    if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
+                    if (gadget.HitboxWidth == 118)
                     {
                         // The Holo-Dancer is correctly named
                         gadget.OverrideID(MinionID.HoloDancer, agentData);

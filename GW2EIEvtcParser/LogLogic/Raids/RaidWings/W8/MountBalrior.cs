@@ -30,9 +30,9 @@ internal abstract class MountBalrior : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.GreersChest, GreersChestPosition, 1200, 100),
-            (ChestID.DecimasChest, DecimasChestPosition, 1200, 100),
-            (ChestID.UrasChest, UrasChestPosition, 1200, 100),
+            (ChestID.GreersChest, GreersChestPosition, 100),
+            (ChestID.DecimasChest, DecimasChestPosition, 100),
+            (ChestID.UrasChest, UrasChestPosition, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

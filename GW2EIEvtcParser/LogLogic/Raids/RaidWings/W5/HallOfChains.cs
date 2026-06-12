@@ -26,10 +26,10 @@ internal abstract class HallOfChains : RaidWingLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadgets([
-            (ChestID.ChestOfDesmina, ChestOfDesminaPosition, 1200, 100),
-            (ChestID.ChestOfSouls, ChestOfSoulsPosition, 1200, 100),
-            (ChestID.GrenthChest, GrenthChestPosition, 1200, 100),
-            (ChestID.DhuumChest, DhuumChestPosition, 1200, 100),
+            (ChestID.ChestOfDesmina, ChestOfDesminaPosition, 100),
+            (ChestID.ChestOfSouls, ChestOfSoulsPosition, 100),
+            (ChestID.GrenthChest, GrenthChestPosition, 100),
+            (ChestID.DhuumChest, DhuumChestPosition, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

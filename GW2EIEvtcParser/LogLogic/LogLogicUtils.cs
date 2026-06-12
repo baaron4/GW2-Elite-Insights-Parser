@@ -228,7 +228,7 @@ internal static class LogLogicUtils
         }
     }
 
-    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, int hitboxHeight, int hitboxWidth)
+    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, int hitboxWidth)
     {
         if (chestID == ChestID.None)
         {
@@ -241,11 +241,11 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => x.Key.HitboxHeight == 0 || (x.Key.HitboxWidth == hitboxWidth && x.Key.HitboxHeight == hitboxHeight));
+        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => x.Key.HitboxWidth == hitboxWidth);
         chest?.Key.OverrideID(chestID, agentData);
     }
 
-    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, int hitboxHeight, int hitboxWidth)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, int hitboxWidth)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var movementData = combatData.Where(x => x.IsGeographical).ToList();
 
@@ -287,7 +287,7 @@ internal static class LogLogicUtils
         }
         foreach (var chestID in chestIDs)
         {
-            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.hitboxHeight, chestID.hitboxWidth);
+            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.hitboxWidth);
         }
     }
 
