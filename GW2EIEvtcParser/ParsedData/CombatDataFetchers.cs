@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography;
+﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
@@ -94,24 +92,24 @@ partial class CombatData
         }
         return null;
     }
-    public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
+    public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem agent)
     {
-        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
-        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        // Ignore targetable events for agent that have attack targets, targetable should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(agent).Count > 0)
         {
             return [];
         }
-        return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
+        return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(agent.EnglobingAgentItem);
     }
 
-    public IReadOnlyList<VisibilityEvent> GetVisibilityEventsBySrc(AgentItem attackTarget)
+    public IReadOnlyList<VisibilityEvent> GetVisibilityEventsBySrc(AgentItem agent)
     {
-        // Ignore visibility events for agent that have attack targets, targetable and visibility should be checked on their attack targets.
-        if (GetAttackTargetEventsBySrc(attackTarget).Count > 0)
+        // Ignore visibility events for agent that have attack targets, visibility should be checked on their attack targets.
+        if (GetAttackTargetEventsBySrc(agent).Count > 0)
         {
             return [];
         }
-        return _statusEvents.VisibilityEventsBySrc.GetValueOrEmpty(attackTarget.EnglobingAgentItem);
+        return _statusEvents.VisibilityEventsBySrc.GetValueOrEmpty(agent.EnglobingAgentItem);
     }
     #endregion ATTACKTARGETS
     #region DATE
@@ -157,9 +155,10 @@ partial class CombatData
     #endregion WvW
 
     #region MAP
-    public IReadOnlyList<MapIDEvent> GetMapIDEvents()
+
+    public MapIDEvent? GetMapIDEvent()
     {
-        return _metaDataEvents.MapIDEvents;
+        return _metaDataEvents.MapIDEvent;
     }
 
     public IReadOnlyList<MapChangeEvent> GetMapChangeEvents()
@@ -167,9 +166,9 @@ partial class CombatData
         return _metaDataEvents.MapChangeEvents;
     }
 
-    public IReadOnlyList<ShardEvent> GetShardEvents()
+    public ShardEvent? GetShardEvent()
     {
-        return _metaDataEvents.ShardEvents;
+        return _metaDataEvents.ShardEvent;
     }
     public FractalScaleEvent? GetFractalScaleEvent()
     {
@@ -609,6 +608,13 @@ partial class CombatData
     {
         return GetTimeValueOrEmpty(_animatedCastData, caster);
     }
+    /// <summary>
+    /// Returns list of cast events from skill
+    /// </summary>
+    public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(long skillID)
+    {
+        return _animatedCastDataByID.GetValueOrEmpty(skillID);
+    }
 
     /// <summary>
     /// Returns list of instant cast events done by Agent
@@ -631,13 +637,6 @@ partial class CombatData
     public IReadOnlyList<WeaponSwapEvent> GetWeaponSwapData(AgentItem caster)
     {
         return GetTimeValueOrEmpty(_weaponSwapData, caster);
-    }
-    /// <summary>
-    /// Returns list of cast events from skill
-    /// </summary>
-    public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(long skillID)
-    {
-        return _animatedCastDataByID.GetValueOrEmpty(skillID);
     }
     #region GADGET INTERACT
     /// <summary>
@@ -792,6 +791,22 @@ partial class CombatData
         return emoteEvents.Count > 0;
     }
     #endregion EMOTES
+    #region GADGET ANIMATION
+    /// <summary>
+    /// Returns list of gadget animation events done by Agent
+    /// </summary>
+    public IReadOnlyList<GadgetAnimationEvent> GetGadgetAnimationData(AgentItem caster)
+    {
+        return GetTimeValueOrEmpty(_gadgetAnimationEventsByGadget, caster);
+    }
+    /// <summary>
+    /// Returns list of gadget animation events from token 
+    /// </summary>
+    public IReadOnlyList<GadgetAnimationEvent> GetGadgetAnimationData(ulong token)
+    {
+        return _gadgetAnimationEventsByToken.GetValueOrEmpty(token);
+    }
+    #endregion GADGET ANIMATION
     #endregion CAST
     #region MOVEMENTS
     public IReadOnlyList<MovementEvent> GetMovementData(AgentItem src)
@@ -1241,4 +1256,16 @@ partial class CombatData
         return GetTimeValueOrEmpty(_statusEvents.MissileDamagingEventsBySrc, src);
     }
     #endregion MISSILE
+
+    #region GADGET_CAPTURE
+    public IReadOnlyList<GadgetCaptureEvent> GetGadgetCaptureEvents()
+    {
+        return _statusEvents.GadgetCaptureEvents;
+    }
+    public IReadOnlyList<GadgetCaptureEvent> GetGadgetCaptureEventsBySrc(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.GadgetCaptureEventsBySrc, src);
+    }
+
+    #endregion GADGET_CAPTURE
 }

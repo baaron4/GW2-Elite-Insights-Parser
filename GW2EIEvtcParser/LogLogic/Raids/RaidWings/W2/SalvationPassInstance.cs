@@ -2,13 +2,9 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -56,7 +52,7 @@ internal class SalvationPassInstance : SalvationPass
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_matthias.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_matthias.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -121,7 +117,7 @@ internal class SalvationPassInstance : SalvationPass
                 TargetID.BanditBombardier,
                 TargetID.BanditSniper,
         ];
-        var bandits = log.AgentData.GetNPCsByIDs(trashMobsToCheck);
+        var bandits = log.AgentData.GetStableSpeciesByIDs(trashMobsToCheck);
         var banditPositions = new List<PositionEvent>();
         foreach (var bandit in bandits)
         {
@@ -129,7 +125,7 @@ internal class SalvationPassInstance : SalvationPass
         }
         //
         var lastPack = packedTrios.Last();
-        var chest = log.AgentData.GetGadgetsByID(_banditTrio.ChestID).FirstOrDefault();
+        var chest = log.AgentData.GetStableSpeciesByID(_banditTrio.ChestID).FirstOrDefault();
         var encounterPhases = new List<EncounterPhaseData>();
         foreach (var pack in packedTrios)
         {
@@ -246,7 +242,7 @@ internal class SalvationPassInstance : SalvationPass
         Slothasor.FindMushrooms(logData, agentData, combatData, extensions);
         Slothasor.FindSlublingTransformations(logData, agentData, combatData, extensions);
         var bees = BanditTrio.CreateCustomInsectSwarmMasterAgent(logData, agentData);
-        BanditTrio.FindCageAndBombs(agentData, combatData);
+        BanditTrio.FindCageAndBombs(agentData, combatData, evtcVersion);
         Matthias.FindSacrifices(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         BanditTrio.RedirectInsectSwarmsToCustomMaster(bees, agentData);

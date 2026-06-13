@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using GW2EIDPSReport.DPSReportJsons;
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
-using System.Text.Json.Serialization;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIDPSReport;

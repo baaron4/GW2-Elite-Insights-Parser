@@ -148,7 +148,7 @@ internal class Siax : Nightmare
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        var siax = agentData.GetNPCsByID(TargetID.Siax).FirstOrDefault() ?? throw new MissingKeyActorsException("Siax not found");
+        var siax = agentData.GetStableSpeciesByID(TargetID.Siax).FirstOrDefault() ?? throw new MissingKeyActorsException("Siax not found");
         return GetLogOffsetBySpawn(logData, combatData, siax);
     }
 

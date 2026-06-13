@@ -50,7 +50,7 @@ internal class Boneskinner : Bjora
     {
         var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-1013, -1600, 2221, 1416));
+                        (-1013, -1550, 2221, 1266));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayBoneskinner, crMap, parentMap);
         return crMap;
     }
@@ -78,10 +78,14 @@ internal class Boneskinner : Bjora
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250);
+        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth >= 250);
+        var invulApplies = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == Invulnerability757).Select(x => agentData.GetAgent(x.DstAgent, x.Time)).ToHashSet();
         foreach (AgentItem torch in torches)
         {
-            torch.OverrideType(AgentItem.AgentType.NPC, agentData);
+            if (!invulApplies.Contains(torch))
+            {
+                continue;
+            }
             torch.OverrideID(TargetID.Torch, agentData);
             torch.OverrideAwareTimes(logData.EvtcLogStart, logData.EvtcLogEnd);
         }

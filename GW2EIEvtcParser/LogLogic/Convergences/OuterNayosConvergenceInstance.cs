@@ -1,13 +1,8 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Exceptions;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -104,7 +99,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
 
     internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.OuterNayosPublicConvergence) ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
+        return combatData.GetMapIDEvent()?.MapID == MapIDs.OuterNayosPublicConvergence ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

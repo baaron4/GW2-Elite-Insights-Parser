@@ -76,6 +76,7 @@ public static class SkillIDs
     public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
     public const long DhuumEtherealSealInteract = -58;
     public const long RelicOfTheCruelOverseer = -59;
+    public const long UraBloodstoneShardPickUp = -60;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
@@ -111,6 +112,7 @@ public static class SkillIDs
     internal const long ArcDPSGenericSink = 23305;
     internal const long ArcDPSGenericLockOut = 23306;
     internal const long ArcDPSGenericFear = 23307;
+    internal const long ArcDPSGenericPickUp = 23308;
     #endregion
     #region Core
     public const long Protection = 717;
@@ -1547,6 +1549,7 @@ public static class SkillIDs
     public const long FacetOfStrengthBuff = 27376;
     public const long ManifestToxinChain = 27425;
     public const long ImpossibleOddsBuff = 27581;
+    public const long ForcedEngagement = 27608;
     public const long Taunt = 27705;
     public const long LegendaryDragonStanceBuff = 27732;
     public const long InfuseLight = 27737;
@@ -1985,6 +1988,7 @@ public static class SkillIDs
     public const long AlwaysAngry = 34099;
     public const long ShellShocked = 34108;
     public const long SpawnProtection = 34113;
+    public const long HeavyBombMissile = 34125;
     public const long SoothingBastion = 34136;
     public const long TimeBombDamage2_Encounter = 34152; // Second Bomb, below 50% Sabetha HP
     public const long CallOfTheMists = 34164;
@@ -3898,6 +3902,7 @@ public static class SkillIDs
     public const long VoidEnergy = 64867;
     public const long FissureOfTorment = 64895;
     public const long OrangefishSushi = 64896;
+    public const long HarvestTempleGravityBallSelfBuff = 64903;
     public const long ToxicBulletNMCM1 = 64914;
     public const long ExplosiveUppercutNM = 64920;
     public const long DragonsEndContributor4 = 64924;
@@ -4832,6 +4837,7 @@ public static class SkillIDs
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
     public const long EnfeeblingMiasma = 74851;
+    public const long DecimaConduitBuffSomething = 74855;
     public const long UnstableAttunementJW = 74860;
     public const long BlastBack = 74863;
     public const long WaveOfCorruption = 74867;
@@ -5016,6 +5022,7 @@ public static class SkillIDs
     public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
     public const long DecimaBeamTargetingCM = 75726;
     public const long ForeshockCM2 = 75729;
+    public const long DecimaConduitBuffSomething2 = 75745;
     public const long RelicOfTheHolosmith = 75748;
     public const long EnfeeblingMiasma3 = 75749;
     public const long DamageImmunity3 = 75754;
@@ -5028,6 +5035,7 @@ public static class SkillIDs
     public const long ForeshockCM3 = 75821;
     public const long EarthrendInnerHitboxDamageCM = 75823; // Decima CM inner hitbox damage
     public const long FulgentFenceCM = 75850;
+    public const long DecimaConduitBuffSomething3 = 75852;
     public const long Earthfall = 75861;
     public const long SparkingAuraTier3CM = 75865;
     public const long RotEruptionCM = 75866;
@@ -5608,6 +5616,7 @@ public static class SkillIDs
     public const long KudasCrueltyStacksBuff = 80152;
     public const long TailWhipJuvenileRiverOtter = 80164;
     public const long ScratchJuvenileRiverOtter= 80186;
+    public const long ElderDracoPop = 80194;
     #endregion
 
 }

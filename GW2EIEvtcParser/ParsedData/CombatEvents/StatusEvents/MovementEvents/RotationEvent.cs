@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
 

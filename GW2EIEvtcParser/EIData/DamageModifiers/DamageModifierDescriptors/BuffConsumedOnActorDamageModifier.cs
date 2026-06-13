@@ -58,7 +58,7 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
         {
             return res;
         }
-        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
+        var typeHits = damageModifier.GetDamageEvents(actor, log, null);
         var buffRemovesByDstWithCurrentIndex = new Dictionary<AgentItem, (IReadOnlyList<AbstractBuffRemoveEvent>, int currentIndex)>();
         if (damageModifier.NeedsMinions)
         {

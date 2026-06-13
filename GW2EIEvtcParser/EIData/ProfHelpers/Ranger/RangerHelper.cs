@@ -152,7 +152,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileFelinePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -161,7 +161,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileBirdPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -170,7 +170,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileDrakePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -178,7 +178,7 @@ internal static class RangerHelper
     }
     internal static bool IsJuvenileUrsinePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -187,7 +187,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenilePorcinePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -196,7 +196,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileMoaPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -204,7 +204,7 @@ internal static class RangerHelper
     }
     internal static bool IsJuvenileSpiderPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -212,7 +212,7 @@ internal static class RangerHelper
     }
     internal static bool IsJuvenileDevourerPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -220,7 +220,7 @@ internal static class RangerHelper
     }
     internal static bool IsJuvenileCaninePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -229,7 +229,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileJellyfishPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -238,7 +238,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenileWyvernPet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -252,7 +252,7 @@ internal static class RangerHelper
 
     internal static bool IsJuvenilePet(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

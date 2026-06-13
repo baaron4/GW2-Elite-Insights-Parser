@@ -68,26 +68,35 @@ internal class Sabetha : SpiritVale
     {
         var maxHPUpdateEvents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
         // Cannons
-        var cannons = maxHPUpdateEvents.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var cannons = maxHPUpdateEvents.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem cannon in cannons)
         {
-            cannon.OverrideType(AgentItem.AgentType.NPC, agentData);
             cannon.OverrideID(TargetID.Cannon, agentData);
         }
+        var missileEvents = combatData.Where(x => x.IsStateChange == StateChange.MissileCreate).ToList();
         var genericGadgetMaxHPUpdates = maxHPUpdateEvents.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940);
         var genericGadgetMaxHPUpdatesAgents = genericGadgetMaxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList();
         // Heavy Bombs
-        var heavyBombs = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2);
-        foreach (AgentItem bomb in heavyBombs)
+        var heavyBombCandidates = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
+        foreach (AgentItem heavyBombCandidate in heavyBombCandidates)
         {
-            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(TargetID.HeavyBomb, agentData);
+            if (missileEvents.Count > 0)
+            {
+                if (!missileEvents.Any(x => x.SrcMatchesAgent(heavyBombCandidate) && x.SkillID == HeavyBombMissile) )
+                {
+                    continue;
+                }
+            } 
+            else if (heavyBombCandidate.HitboxHeight != 300 && heavyBombCandidate.HitboxWidth != 2)
+            {
+                continue;
+            }
+            heavyBombCandidate.OverrideID(TargetID.HeavyBomb, agentData);
         }
         // Plateforms
-        var platforms = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 3556);
+        var platforms = genericGadgetMaxHPUpdatesAgents.Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 3556);
         foreach (AgentItem platform in platforms)
         {
-            platform.OverrideType(AgentItem.AgentType.NPC, agentData);
             platform.OverrideID(TargetID.SabethaPlatform, agentData);
         }
     }
@@ -198,7 +207,7 @@ internal class Sabetha : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.Sabetha:
-                var activePlateform = log.AgentData.GetNPCsByID(TargetID.SabethaPlatform).FirstOrDefault(x => target.InAwareTimes(x));
+                var activePlateform = log.AgentData.GetStableSpeciesByID(TargetID.SabethaPlatform).FirstOrDefault(x => target.InAwareTimes(x));
                 if (activePlateform != null)
                 {
                     var activeEncounter = log.LogData.GetEncounterPhases(log, LogID).FirstOrDefault(x => x.Targets.ContainsKey(target));

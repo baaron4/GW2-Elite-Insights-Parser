@@ -69,7 +69,7 @@ internal static class SpellbreakerHelper
         new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, SkillImages.FullCounter),
         new Buff("Disenchantment", Disenchantment, Source.Spellbreaker, BuffClassification.Other, SkillImages.WindsOfDisenchantment),
         new Buff("Attacker's Insight", AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.AttackersInsight),
-        new Buff("Magebane Tether", MagebaneTetherBuff, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.MagebaneTether),
+        new Buff("Magebane Tether", MagebaneTetherBuff, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Debuff, TraitImages.MagebaneTether),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

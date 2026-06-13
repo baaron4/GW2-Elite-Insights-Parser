@@ -7,12 +7,11 @@ using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
 
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
@@ -32,6 +31,8 @@ internal class LogDataDto
     public List<long>? SupBuffs;
     public List<long>? DefBuffs;
     public List<long>? Debuffs;
+    public List<long>? TargetDebuffs;
+    public List<long>? TargetOtherBuffs;
     public List<long>? GearBuffs;
     public List<long>? Nourishments;
     public List<long>? Enhancements;
@@ -97,7 +98,7 @@ internal class LogDataDto
             InstanceStart = log.LogMetadata.DateInstanceStartStd;
             InstanceIP = log.LogMetadata.LogInstanceIP;
         }
-        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        var mapIDEvent = log.CombatData.GetMapIDEvent();
         if (mapIDEvent != null)
         {
             MapID = mapIDEvent.MapID;
@@ -113,14 +114,10 @@ internal class LogDataDto
         RecordedAccountBy = log.LogMetadata.PoVAccount;
         var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
         FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
-        var shardEvent = log.CombatData.GetShardEvents().FirstOrDefault();
-        if (shardEvent != null)
+        var region = log.LogMetadata.Region;
+        if (region != ArcDPSEnums.RegionEnum.Unknown)
         {
-            var region = shardEvent.RegionToString();
-            if (region != null)
-            {
-                Region = region;
-            }
+            Region = ArcDPSEnums.RegionToString(region);
         }
         UploadLinks = [uploadLinks.DPSReportEILink];
         if (log.LogMetadata.UsedExtensions.Any())
@@ -273,6 +270,7 @@ internal class LogDataDto
     [MemberNotNull(nameof(SupBuffs))]
     [MemberNotNull(nameof(DefBuffs))]
     [MemberNotNull(nameof(Debuffs))]
+    [MemberNotNull(nameof(TargetDebuffs))]
     [MemberNotNull(nameof(GearBuffs))]
     [MemberNotNull(nameof(Nourishments))]
     [MemberNotNull(nameof(Enhancements))]
@@ -316,6 +314,18 @@ internal class LogDataDto
         {
             Debuffs.Add(debuff.ID);
             usedBuffs[debuff.ID] = debuff;
+        }
+        TargetDebuffs = new(statistics.PresentTargetDebuffs.Count);
+        foreach (Buff debuff in statistics.PresentTargetDebuffs)
+        {
+            TargetDebuffs.Add(debuff.ID);
+            usedBuffs[debuff.ID] = debuff;
+        }
+        TargetOtherBuffs = new(statistics.PresentTargetOtherBuffs.Count);
+        foreach (Buff buff in statistics.PresentTargetOtherBuffs)
+        {
+            TargetOtherBuffs.Add(buff.ID);
+            usedBuffs[buff.ID] = buff;
         }
         GearBuffs = new(statistics.PresentGearbuffs.Count);
         foreach (Buff gearBuff in statistics.PresentGearbuffs)

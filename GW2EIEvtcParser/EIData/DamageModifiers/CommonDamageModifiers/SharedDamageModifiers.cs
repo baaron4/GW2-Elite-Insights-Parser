@@ -32,6 +32,14 @@ internal static class SharedDamageModifiers
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Boons
+        new CounterOnActorDamageModifier(Mod_MightEqual25, Might, "Might 25", "With 25 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByExactNumberOfBuffsPresent(25), ParserIcons.Might25, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_MightAbove20, Might, "Might >= 20", "With at least 20 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByAtLeastNStacksPresent(20), ParserIcons.MightAbove20, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_MightLess15, Might, "Might <= 15", "With less than 15 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByAtMostNStacksPresent(15), ParserIcons.MightBelow15, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_Fury, Fury, "Fury", "Under Fury", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Common, ByPresence, BuffImages.Fury, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
+        //
         new BuffOnFoeDamageModifier(Mod_Exposed, Exposed31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.Exposed, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Mod_ExposedStrike, Exposed31589, "Exposed (Strike)", "30%", DamageSource.All, 30.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Exposed, DamageModifierMode.All)
@@ -48,18 +56,22 @@ internal static class SharedDamageModifiers
             .WithBuilds(GW2Builds.March2022Balance2),
         new BuffOnFoeDamageModifier(Mod_Vulnerability, Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
             .UsingChecker(VulnerabilityActiveCheck),
-        new BuffOnFoeDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
-        new BuffOnFoeDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_Emboldened, Emboldened, "Emboldened", "10% per stack", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Emboldened, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2022Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_Vulnerability, Vulnerability, "Vulnerability", "1% per Stack", DamageSource.Incoming, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
-            .UsingChecker(VulnerabilityActiveCheck),
+        // Boons
+        new CounterOnActorDamageModifier(Mod_StabilityAbove10, Stability, "Stability >= 10", "With at least 10 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(10), ParserIcons.StabilityAbove10, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_StabilityAbove5, Stability, "Stability >= 5", "With at least 5 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(5), ParserIcons.StabilityAbove5, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_StabilityAbove3, Stability, "Stability >= 3", "With at least 3 stacks of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, new GainComputerByAtLeastNStacksPresent(3), ParserIcons.StabilityAbove3, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_StabilityAbove1, Stability, "Stability >= 1", "With at least 1 stack of Stability", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Common, ByPresence, ParserIcons.StabilityAbove1, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
+        //
+        new BuffOnActorDamageModifier(Mod_Vulnerability, Vulnerability, "Vulnerability", "1% per Stack", DamageSource.Incoming, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
+            .UsingChecker(VulnerabilityActiveCheck),
         new BuffOnActorDamageModifier(Mod_FrostAura, FrostAura, "Frost Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostAura, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_LightAura, LightAura, "Light Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.LightAura, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_DarkAura, DarkAura, "Dark Aura", "-20%", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.DarkAura, DamageModifierMode.All),

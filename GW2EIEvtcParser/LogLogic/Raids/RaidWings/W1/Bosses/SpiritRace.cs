@@ -96,7 +96,7 @@ internal class SpiritRace : SpiritVale
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
 
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetStableSpeciesByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts == null)
         {
             return LogData.StartStatus.Late;
@@ -113,7 +113,7 @@ internal class SpiritRace : SpiritVale
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetStableSpeciesByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
             foreach(var velocityEvent in combatData.Where(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
@@ -140,7 +140,7 @@ internal class SpiritRace : SpiritVale
         foreach (CombatItem maxHP in maxHPs)
         {
             AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
-            if (candidate.Type == AgentItem.AgentType.Gadget)
+            if (candidate.Type == AgentItem.AgentType.VolatileSpecies)
             {
                 needsDummy = false;
                 var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPointXY).ToList();
@@ -160,7 +160,6 @@ internal class SpiritRace : SpiritVale
                 {
                     candidate.OverrideID(TargetID._EtherealBarrier4, agentData);
                 }
-                candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         return !needsDummy;
@@ -198,7 +197,7 @@ internal class SpiritRace : SpiritVale
     {
         if (!FindEtherealBarriers(agentData, combatData))
         {
-            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Dummy Spirit Race", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Dummy Spirit Race", Spec.Gadget, TargetID.DummyTarget, true);
             Targetless = true;
         }
     }
@@ -261,7 +260,6 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:
-                // TODO: check if still necessary with visibility events
                 long encounterOffset = 0;
                 while(encounterOffset != long.MaxValue)
                 {

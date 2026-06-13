@@ -285,7 +285,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         AgentItem cerus = GetCerusItem(agentData);
         foreach (TargetID embodimentID in embodimentIDs)
         {
-            foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
+            foreach (AgentItem embodiment in agentData.GetStableSpeciesByID(embodimentID))
             {
                 if (Math.Abs(cerus.FirstAware - embodiment.FirstAware) < 50)
                 {
@@ -723,114 +723,123 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
     private static void AddEnviousGazeDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<CastEvent> casts)
     {
         uint width = 2200;
+        long indicatorDuration = 1500;
+        long wallDuration = 12500;
 
         var enviousGaze = casts.Where(x => x.SkillID == EnviousGazeNM || x.SkillID == EnviousGazeEmpoweredNM || x.SkillID == EnviousGazeCM || x.SkillID == EnviousGazeEmpoweredCM);
 
         var isCerus = target.IsSpecies(TargetID.Cerus);
         var isKillableEmbodiment = target.IsSpecies(TargetID.EmbodimentOfEnvy);
-
-        foreach (CastEvent cast in enviousGaze)
+        if (!log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazeWall1, out var wallsDamage))
         {
-            bool isEmpowered = cast.SkillID == EnviousGazeEmpoweredNM || cast.SkillID == EnviousGazeEmpoweredCM;
-            long indicatorDuration = 1500;
-            (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
-            long growing = lifespanIndicator.end;
-            if (target.TryGetCurrentFacingDirection(log, lifespanIndicator.end, out var facing))
+            wallsDamage = []; 
+        }
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazeIndicator, out var wallsIndicators))
+        {
+            foreach (EffectEvent indicator in wallsIndicators)
             {
-                // Indicator
-                // Check if quickness is still applied from a previous steal
-                double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
-                if (computedDuration > 0)
+                (long start, long end) lifespanIndicator = (indicator.Time, indicator.Time + indicatorDuration);
+                long growing = lifespanIndicator.end;
+                var cast = enviousGaze.FirstOrDefault(x => x.Time <= indicator.Time && indicator.Time <= x.Time + indicatorDuration);
+                if (target.TryGetCurrentFacingDirection(log, lifespanIndicator.end, out var facing) && cast != null)
                 {
-                    lifespanIndicator.end = cast.Time + Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
-                }
-                // Check if the indicator is cancelled
-                lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
+                    bool isEmpowered = cast.SkillID == EnviousGazeEmpoweredNM || cast.SkillID == EnviousGazeEmpoweredCM;
 
-                // Frontal indicator
-                var rotation = new AngleConnector(facing.Value);
-                var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
-                replay.Decorations.AddWithGrowing(rectangle, growing);
-                if (isEmpowered)
-                {
-                    // Opposite Indicator
-                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
-                    var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
-                    replay.Decorations.AddWithGrowing(oppositeRectangle, growing);
-                }
-
-                // Check if Petrify is casted between the end of the indicator and the start of the damage beam
-                (long start, long end) = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, (lifespanIndicator.end, lifespanIndicator.end + 950));
-                if (end < lifespanIndicator.end + 950)
-                {
-                    continue;
-                }
-
-                // At 10%, if the embodiment is casting the indicator but the wall hasn't spawend yet and Cerus' bar is broken, the wall is interrupted and doesn't spawn.
-                if (!isCerus)
-                {
-                    IReadOnlyList<HealthUpdateEvent> health = log.CombatData.GetHealthUpdateEvents(GetCerusItem(log.AgentData));
-                    HealthUpdateEvent? hp11 = health.FirstOrDefault(x => x.HealthPercent < 11);
-                    var petrify = log.CombatData.GetAnimatedCastData(PetrifySkill);
-                    if (hp11 != null)
+                    // Indicator
+                    // Check if quickness is still applied from a previous steal
+                    double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
+                    if (computedDuration > 0)
                     {
-                        AnimatedCastEvent? pet = petrify.FirstOrDefault(x => x.Time > hp11.Time);
-                        // If petrify at 10% finishes casting before the end of the envy indicator, we don't show the rotating beams.
-                        if (pet != null && Math.Abs(lifespanIndicator.start - pet.Time) < 5000 && pet.EndTime < lifespanIndicator.end + 950)
+                        lifespanIndicator.end = cast.Time + Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
+                    }
+                    // Check if the indicator is cancelled
+                    lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
+
+                    // Frontal indicator
+                    var rotation = new AngleConnector(facing.Value);
+                    var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
+                    replay.Decorations.AddWithGrowing(rectangle, growing);
+                    if (isEmpowered)
+                    {
+                        // Opposite Indicator
+                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
+                        var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
+                        replay.Decorations.AddWithGrowing(oppositeRectangle, growing);
+                    }
+
+                    if (wallsDamage.Count > 0)
+                    {
+                        var wall = wallsDamage.FirstOrDefault(x => x.Time >= indicator.Time && x.Time <= indicator.Time + wallDuration);
+                        if (wall != null)
                         {
-                            continue;
+                            // Frontal Damage Beam
+                            (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
+                            (long start, long end) lifespanDamageCancelled = lifespanDamage;
+                            lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamage);
+                            double millisecondsPerDegree = (double)(lifespanDamage.end - lifespanDamage.start) / 360;
+                            double degreesRotated = (lifespanDamageCancelled.end - lifespanDamageCancelled.start) / millisecondsPerDegree;
+
+                            var rotation2 = new SpinningConnector(facing.Value, (float)degreesRotated);
+                            var rectangle2 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageCancelled, Colors.Red, 0.2, agentConnector).UsingRotationConnector(rotation2);
+                            replay.Decorations.Add(rectangle2);
+
+                            if (isEmpowered)
+                            {
+                                // Opposite Damage Beam
+                                (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
+                                (long start, long end) lifespanDamageOppositeCancelled = lifespanDamageOpposite;
+                                // In game bug, when ending the 80% and 50% split phases and transitioning back to Cerus, the back wall of the empowered envy does not despawn.
+                                // If this gets fixed in game, add a game build versioning check.
+                                if (!isKillableEmbodiment)
+                                {
+                                    lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
+                                }
+                                double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
+                                double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
+                                var rotation3 = new SpinningConnector(facing.Value, (float)degreedRotatedOpposite);
+
+                                // The bug makes the beam continue while the embodiment has despawned, so we use the agent position for a PositionConnector instead of AgentConnector.
+                                ParametricPoint3D? position = target.GetCombatReplayActivePolledPositions(log).FirstOrDefault(x => x != null && x.Value.Time > lifespanDamage.start && x.Value.Time <= lifespanDamage.end);
+                                if (position != null)
+                                {
+                                    var connector = new PositionConnector(position.Value.XYZ).WithOffset(new(-(width / 2), 0, 0), true);
+                                    var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, connector).UsingRotationConnector(rotation3);
+                                    replay.Decorations.Add(rectangle3);
+                                }
+                                else
+                                {
+                                    // Fallback for security
+                                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
+                                    var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
+                                    replay.Decorations.Add(rectangle3);
+                                }
+                            }
                         }
                     }
-
-                    // At 10%, if you phase while the side wall is active, the embodiment can show another cast later but the wall won't spawn.
-                    // Even with a cast time of 98ms the indicator is still present, so just skip the damage walls animations.
-                    if (cast.ActualDuration < indicatorDuration)
-                    {
-                        continue;
-                    }
                 }
-
-                // Frontal Damage Beam
-                (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
-                (long start, long end) lifespanDamageCancelled = lifespanDamage;
-                lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamage);
-                double millisecondsPerDegree = (double)(lifespanDamage.end - lifespanDamage.start) / 360;
-                double degreesRotated = (lifespanDamageCancelled.end - lifespanDamageCancelled.start) / millisecondsPerDegree;
-                var rotation2 = new SpinningConnector(facing.Value, (float)degreesRotated);
-                var rectangle2 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageCancelled, Colors.Red, 0.2, agentConnector).UsingRotationConnector(rotation2);
-                replay.Decorations.Add(rectangle2);
-                if (isEmpowered)
-                {
-                    // Opposite Damage Beam
-                    (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
-                    (long start, long end) lifespanDamageOppositeCancelled = lifespanDamageOpposite;
-                    // In game bug, when ending the 80% and 50% split phases and transitioning back to Cerus, the back wall of the empowered envy does not despawn.
-                    // If this gets fixed in game, add a game build versioning check.
-                    if (!isKillableEmbodiment)
-                    {
-                        lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
-                    }
-                    double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
-                    double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
-                    var rotation3 = new SpinningConnector(facing.Value, (float)degreedRotatedOpposite);
-                    
-                    // The bug makes the beam continue while the embodiment has despawned, so we use the agent position for a PositionConnector instead of AgentConnector.
-                    ParametricPoint3D? position = target.GetCombatReplayActivePolledPositions(log).FirstOrDefault(x => x!= null && x.Value.Time > lifespanDamage.start && x.Value.Time <= lifespanDamage.end);
-                    if (position != null)
-                    {
-                        var connector = new PositionConnector(position.Value.XYZ).WithOffset(new(-(width / 2), 0, 0), true);
-                        var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, connector).UsingRotationConnector(rotation3);
-                        replay.Decorations.Add(rectangle3);
-                    }
-                    else
-                    {
-                        // Fallback for security
-                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
-                        var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
-                        replay.Decorations.Add(rectangle3);
-                    }
-                }
+            }
+        }
+        // AoE underneath - Looks like the radius is Cerus' hitbox radius event for the Embodiment which has a smaller hitbox but same model.
+        uint radius = 140;
+        (long start, long end) lifespan;
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazePuddleEffect, out var aoes))
+        {
+            foreach (EffectEvent effect in aoes)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 12500);
+                var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
+            }
+        }
+        // The red ring lingers when transitioning off a split phase, we don't know if it deals damage but we render it anyway.
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.TempleOfFebeEnviousGazePuddleRedRing, out var rings))
+        {
+            foreach (EffectEvent effect in rings)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 12500);
+                var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position)).UsingFilled(false);
+                replay.Decorations.Add(circle);
             }
         }
     }
@@ -961,7 +970,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 
     private static AgentItem GetCerusItem(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
+        return agentData.GetStableSpeciesByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
     }
 
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)

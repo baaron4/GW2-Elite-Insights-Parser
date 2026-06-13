@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -237,9 +236,11 @@ internal static class MesmerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Distortion
-        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, SkillImages.Distortion, DamageModifierMode.All)   
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
+            .UsingHitAndAbsorbedDamageEvents()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.OctoberVoERelease),
-        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, SkillImages.Distortion, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, ByPresence, SkillImages.Distortion, DamageModifierMode.All)
+            .UsingHitAndAbsorbedDamageEvents()
             .UsingSpecSpecificShared()
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
@@ -396,7 +397,7 @@ internal static class MesmerHelper
 
     internal static bool IsClone(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -423,7 +424,7 @@ internal static class MesmerHelper
 
     internal static bool IsPhantasm(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
@@ -432,7 +433,7 @@ internal static class MesmerHelper
 
     internal static bool IsIllusion(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

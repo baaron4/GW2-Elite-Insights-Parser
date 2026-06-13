@@ -100,7 +100,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         IReadOnlyDictionary<long, BuffGraph> bgmsSource = actor.GetBuffGraphs(log);
         if (damageModifier.NeedsMinions)
         {
-            var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
+            var typeHits = damageModifier.GetDamageEvents(actor, log, null);
             var ignoredTargets = new HashSet<SingleActor>();
             var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
@@ -145,7 +145,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
                     return res;
                 }
             }
-            var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
+            var typeHits = damageModifier.GetDamageEvents(actor, log, null);
             var ignoredTargets = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {

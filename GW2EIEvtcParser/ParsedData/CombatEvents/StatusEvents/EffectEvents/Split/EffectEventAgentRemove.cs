@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using static GW2EIEvtcParser.ParserHelper;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 internal class EffectEventAgentRemove : EffectEndEvent
 {

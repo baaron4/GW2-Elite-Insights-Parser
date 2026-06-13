@@ -11,7 +11,7 @@ internal static class LogLogicTimeUtils
 {
     internal static long GetFinalMapChangeTime(LogData logData, CombatData combatData)
     {
-        var mapEvent = combatData.GetMapIDEvents().FirstOrDefault();
+        var mapEvent = combatData.GetMapIDEvent();
         if (mapEvent != null)
         {
             var mapID = mapEvent.MapID;
@@ -61,9 +61,9 @@ internal static class LogLogicTimeUtils
         long start = long.MaxValue;
         foreach (int id in ids)
         {
-            AgentItem target = agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? // check for targeted agent, on old logs agent will be 0, defaulting to a simple first or default on complete list of species id
-                                agentData.GetNPCsByID(id).FirstOrDefault(x => x.InAwareTimes(upperLimit)) ?? // check for aware species id
-                                agentData.GetNPCsByID(id).FirstOrDefault(x => x.FirstAware > upperLimit) ?? // check for species id aware after event
+            AgentItem target = agentData.GetStableSpeciesByIDAndAgent(id, agent).FirstOrDefault() ?? // check for targeted agent, on old logs agent will be 0, defaulting to a simple first or default on complete list of species id
+                                agentData.GetStableSpeciesByID(id).FirstOrDefault(x => x.InAwareTimes(upperLimit)) ?? // check for aware species id
+                                agentData.GetStableSpeciesByID(id).FirstOrDefault(x => x.FirstAware > upperLimit) ?? // check for species id aware after event
                                 throw new MissingKeyActorsException("Main target not found");
             upperLimit = GetPostLogStartNPCUpdateDamageEventTime(logData, agentData, combatData, upperLimit, target);
             CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(target) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
@@ -204,7 +204,7 @@ internal static class LogLogicTimeUtils
 
     internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, LogData logData, LogData.LogSuccessHandler successHandler)
     {
-        AgentItem? chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
+        AgentItem? chest = agentData.GetStableSpeciesByID(chestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);

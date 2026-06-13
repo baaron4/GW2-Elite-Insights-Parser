@@ -456,20 +456,20 @@ partial class SingleActor
     {
         var firstWeaponSet = new WeaponSet(log.LogData.EvtcLogStart, log.LogData.EvtcLogEnd);
         _weaponSets = [firstWeaponSet];
-        if (this is not PlayerActor)
+        if (this is not PlayerActor || !log.ParserSettings.ComputeCast)
         {
             return;
         }
         var currentWeaponSet = firstWeaponSet;
-        var casting = GetCastEvents(log);
         int swapped = WeaponSetIDs.NoSet;
         long swappedTime = log.LogData.LogStart;
+        var casting = GetAnimatedCastEvents(log);
         var swaps = log.CombatData.GetWeaponSwapData(AgentItem);
-        bool land1Swapped = false;
-        bool land2Swapped = false;
-        bool water1Swapped = false;
-        bool water2Swapped = false;
-        foreach (CastEvent cl in casting)
+        var allRelevantCasts = new List<CastEvent>(casting.Count + swaps.Count);
+        allRelevantCasts.AddRange(casting);
+        allRelevantCasts.AddRange(swaps);
+        allRelevantCasts.SortByTimeThenNegatedSwap();
+        foreach (CastEvent cl in allRelevantCasts)
         {
             if (cl.ActualDuration == 0 && cl.SkillID != SkillIDs.WeaponSwap)
             {
@@ -480,10 +480,6 @@ partial class SingleActor
             if (swapped == WeaponSetIDs.NoSet)
             {
                 swapped = skill.FindFirstWeaponSet(swaps);
-                land1Swapped = swapped == WeaponSetIDs.FirstLandSet;
-                land2Swapped = swapped == WeaponSetIDs.SecondLandSet;
-                water1Swapped = swapped == WeaponSetIDs.FirstWaterSet;
-                water2Swapped = swapped == WeaponSetIDs.SecondWaterSet;
             }
             var estimateResult = skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
             if (estimateResult != WeaponDescriptor.WeaponEstimateResult.NeedNewSet && cl is WeaponSwapEvent swe)
@@ -491,26 +487,15 @@ partial class SingleActor
                 //wepswap  
                 swapped = swe.SwappedTo;
                 swappedTime = swe.Time;
-                land1Swapped = land1Swapped || swapped == WeaponSetIDs.FirstLandSet;
-                land2Swapped = land2Swapped || swapped == WeaponSetIDs.SecondLandSet;
-                water1Swapped = water1Swapped || swapped == WeaponSetIDs.FirstWaterSet;
-                water2Swapped = water2Swapped || swapped == WeaponSetIDs.SecondWaterSet;
             } 
             else if (estimateResult == WeaponDescriptor.WeaponEstimateResult.NeedNewSet)
             {
-                currentWeaponSet.HasLandSwapped = land1Swapped && land2Swapped;
-                currentWeaponSet.HasWaterSwapped = water1Swapped && water2Swapped;
                 // We can't say exactly when weapon have been changed, use mid time
                 var midTime = (currentWeaponSet.End + 1 + cl.Time) / 2;
                 currentWeaponSet.SetEnd(midTime);
                 currentWeaponSet = new WeaponSet(midTime, log.LogData.EvtcLogEnd);
                 _weaponSets.Add(currentWeaponSet);
                 skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
-                // Reset count
-                land1Swapped = swapped == WeaponSetIDs.FirstLandSet;
-                land2Swapped = swapped == WeaponSetIDs.SecondLandSet;
-                water1Swapped = swapped == WeaponSetIDs.FirstWaterSet;
-                water2Swapped = swapped == WeaponSetIDs.SecondWaterSet;
             }
         }
         currentWeaponSet.SetEnd(log.LogData.EvtcLogEnd);
@@ -521,10 +506,16 @@ partial class SingleActor
         {
             SetDeathRecaps(log);
         }
-        return _deathRecaps!;
+        return _deathRecaps;
     }
+    [MemberNotNull(nameof(_deathRecaps))]
     private void SetDeathRecaps(ParsedEvtcLog log)
     {
+        if (!log.ParserSettings.ComputeDamage)
+        {
+            _deathRecaps = [];
+            return;
+        }
         IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
         IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
         IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);

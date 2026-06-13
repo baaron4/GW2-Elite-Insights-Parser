@@ -73,7 +73,7 @@ internal static class UntamedHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Perilous Gift
-        new CounterOnActorDamageModifier(Mod_PerilousGift, PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.Incoming, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, SkillImages.PerilousGift, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_PerilousGift, PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.Incoming, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, ByPresence, SkillImages.PerilousGift, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4),
         // Forest's Fortification
         new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.All)

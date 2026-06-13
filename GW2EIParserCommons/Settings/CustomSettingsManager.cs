@@ -1,4 +1,4 @@
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace GW2EIParserCommons;
 
@@ -152,9 +152,14 @@ public static class CustomSettingsManager
             CustomTooShort = Properties.Settings.Default.CustomTooShort,
             CustomTooBig = Properties.Settings.Default.CustomTooBig,
             DetailledWvW = Properties.Settings.Default.DetailledWvW,
-            ParsePhases = Properties.Settings.Default.ParsePhases,
-            ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay,
+            ComputePhases = Properties.Settings.Default.ParsePhases,
+            ComputeCombatReplay = Properties.Settings.Default.ParseCombatReplay,
             ComputeDamageModifiers = Properties.Settings.Default.ComputeDamageModifiers,
+            ParseExtensions = Properties.Settings.Default.ParseExtensions,
+            ComputeBuff = Properties.Settings.Default.ComputeBuff,
+            ComputeCast = Properties.Settings.Default.ComputeCast,
+            ComputeDamage = Properties.Settings.Default.ComputeDamage,
+            ComputeMechanics = Properties.Settings.Default.ComputeMechanics,
             SaveAtOut = Properties.Settings.Default.SaveAtOut,
             OutLocation = Properties.Settings.Default.OutLocation,
             AddDuration = Properties.Settings.Default.AddDuration,

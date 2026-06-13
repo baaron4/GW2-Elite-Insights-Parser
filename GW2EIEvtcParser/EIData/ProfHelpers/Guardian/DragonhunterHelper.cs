@@ -112,12 +112,12 @@ internal static class DragonhunterHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Justice (Dragonhunter)", JusticeDragonhunter, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SpearOfLight),
+        new Buff("Justice (Dragonhunter)", JusticeDragonhunter, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Debuff, SkillImages.SpearOfLight),
         new Buff("Shield of Courage (Active)", ShieldOfCourageActive, Source.Dragonhunter, BuffClassification.Defensive, SkillImages.ShieldOfCourage),
         new Buff("Spear of Justice", SpearOfJustice, Source.Dragonhunter, BuffClassification.Other, SkillImages.SpearOfJustice),
         new Buff("Shield of Courage", ShieldOfCourage, Source.Dragonhunter, BuffClassification.Other, SkillImages.ShieldOfCourage),
         new Buff("Wings of Resolve", WingsOfResolveBuff, Source.Dragonhunter, BuffClassification.Other, SkillImages.WingsOfResolve),
-        new Buff("Hunter's Mark", HuntersMark, Source.Dragonhunter, BuffClassification.Other, SkillImages.HuntersWard),
+        new Buff("Hunter's Mark", HuntersMark, Source.Dragonhunter, BuffClassification.Debuff, SkillImages.HuntersWard),
     ];
 
 }

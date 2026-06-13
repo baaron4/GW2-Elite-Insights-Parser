@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 
@@ -25,7 +23,7 @@ public class ParsedEvtcLog
     public readonly DamageModifiersContainer DamageModifiers;
     public readonly BuffsContainer Buffs;
     public readonly EvtcParserSettings ParserSettings;
-    public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
+    public bool CanCombatReplay => ParserSettings.ComputeCombatReplay && CombatData.HasMovementData;
 
     public readonly MechanicData MechanicData;
     public readonly StatisticsHelper StatisticsHelper;
@@ -70,7 +68,7 @@ public class ParsedEvtcLog
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling active players");
         List<Player> activePlayers = [];
-        var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
+        var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.StableSpecies).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
         foreach (Player p in playerList)
         {
             if (p.LastAware <= LogData.LogStart)
@@ -133,7 +131,7 @@ public class ParsedEvtcLog
         MechanicData = LogData.Logic.GetMechanicData();
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
-        StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
+        StatisticsHelper = new StatisticsHelper(CombatData, ParserSettings, PlayerList, LogData.Logic.Targets, Buffs);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Find sources for buff extension events");
         CombatData.TryFindSrc(this);

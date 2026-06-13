@@ -1,13 +1,9 @@
-﻿using System.Drawing;
-using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Mechanic;
-using static GW2EIEvtcParser.EIData.Trigonometry;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -55,7 +51,7 @@ internal class IcebroodConstruct : Grothmar
     {
         var crMap = new CombatReplayMap(
                         (729, 581),
-                        (-32118, -11470, -28924, -8274));
+                        (-32118, -11470, -28924, -8924));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayIcebroodConstruct, crMap, parentMap);
         return crMap;
     }

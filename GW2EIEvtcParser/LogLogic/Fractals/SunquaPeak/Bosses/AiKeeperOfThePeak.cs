@@ -184,20 +184,20 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     private static bool HasDarkMode(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).Count > 0;
+        return agentData.GetStableSpeciesByID(TargetID.DarkAiKeeperOfThePeak).Count > 0;
     }
 
     private static bool HasElementalMode(AgentData agentData)
     {
-        return agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).Count > 0;
+        return agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak).Count > 0;
     }
 
     internal static void DetectAis(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        foreach (var aiAgent in agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak))
+        foreach (var aiAgent in agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak))
         {
-            var aiCastEvents = combatData.Where(x => x.IsStartCastEvent() && x.SrcMatchesAgent(aiAgent));
-            var china = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && LanguageEvent.GetLanguage(x) == LanguageEnum.Chinese) != null;
+            var aiCastEvents = combatData.Where(x => x.IsStartCastEvent() && x.SrcMatchesAgent(aiAgent)).ToList();
+            var china = combatData.Any(x => x.IsStateChange == StateChange.ShardID && ShardEvent.GetRegionFromInstanceMap(x) == RegionEnum.CN);
             CombatItem? darkModePhaseEvent = aiCastEvents.FirstOrDefault(x => x.SkillID == AiDarkPhaseEvent);
             var hasDarkMode = combatData.Exists(x => (china ? x.SkillID == AiHasDarkModeCN_SurgeOfDarkness : x.SkillID == AiHasDarkMode_SurgeOfDarkness) && x.SrcMatchesAgent(aiAgent));
             var hasElementalMode = !hasDarkMode || darkModePhaseEvent != null;
@@ -243,7 +243,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // check invulnerability remove for new elemental ai
-        var ai = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
+        var ai = agentData.GetStableSpeciesByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
         var invulnStart = GetLogOffsetByInvulnStart(logData, combatData, ai, Determined895);
         if (invulnStart > ai.FirstAware)
         {
@@ -411,7 +411,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         if (darkAi != null)
         {
-            var china = log.CombatData.GetLanguageEvent()?.Language == LanguageEnum.Chinese;
+            var china = log.LogMetadata.Region == RegionEnum.CN;
             PhaseData darkPhase = phases[0];
             if (elementalAi != null)
             {

@@ -196,6 +196,11 @@ public class JsonLog
         public bool NonMultiplier;
 
         /// <summary>
+        /// True if the modifier is just a counter, its <see cref="JsonDamageModifierData.JsonDamageModifierItem.DamageGain"/> will be damage done under the conditions of the counter
+        /// </summary>
+        public bool IsCounter;
+
+        /// <summary>
         /// True if the modifier is skill based
         /// </summary>
         public bool SkillBased;
@@ -214,6 +219,47 @@ public class JsonLog
         // Stable ID of the corresponding team ID in HEX format
         public string? GUID;
     }
+
+    public class EvtcParsingSettings
+    {
+        /// <summary>
+        /// If true, extension events were handled
+        /// </summary>
+        public bool ParseExtensions;
+        /// <summary>
+        /// If true, phases were computed
+        /// </summary>
+        public bool ComputePhases;
+        /// <summary>
+        /// If true, Combat Replay data was computed
+        /// </summary>
+        public bool ComputeCombatReplay;
+        /// <summary>
+        /// If true, damage modifiers were computed
+        /// </summary>
+        public bool ComputeDamageModifiers;
+        /// <summary>
+        /// If true, damage events were handled
+        /// </summary>
+        public bool ComputeDamage;
+        /// <summary>
+        /// If true, cast events were handled
+        /// </summary>
+        public bool ComputeCast;
+        /// <summary>
+        /// If true, buff events were handled
+        /// </summary>
+        public bool ComputeBuff;
+        /// <summary>
+        /// If true, mechanics were computed
+        /// </summary>
+        public bool ComputeMechanics;
+    }
+    /// <summary>
+    /// Settings used during the parsing. \n
+    /// <see cref="EvtcParsingSettings"/>
+    /// </summary>
+    public EvtcParsingSettings? ParsingSettings;
 
     /// <summary>
     /// The used EI version.

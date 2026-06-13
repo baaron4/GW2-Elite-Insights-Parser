@@ -3,11 +3,8 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -53,7 +50,7 @@ internal class MountBalriorInstance : MountBalrior
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_ura.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -68,7 +65,7 @@ internal class MountBalriorInstance : MountBalrior
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Greer, out var greers))
         {
-            var chest = log.AgentData.GetGadgetsByID(_greer.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_greer.ChestID).FirstOrDefault();
             var greeAndRegs = Targets.Where(x => x.IsAnySpecies([TargetID.Reeg, TargetID.Gree]));
             var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
             var eregs = Targets.Where(x => x.IsSpecies(TargetID.Ereg));
@@ -108,7 +105,7 @@ internal class MountBalriorInstance : MountBalrior
         if (targetsByIDs.TryGetValue((int)decimaID, out var decimas))
         {
             var arenaCenter = new Vector2(-10104.5f, 13263.5f);
-            var chest = log.AgentData.GetGadgetsByID(_decima.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_decima.ChestID).FirstOrDefault();
             var conduits = TrashMobs.Where(x => x.IsAnySpecies([TargetID.EnlightenedConduit, TargetID.EnlightenedConduitCM]) && x.GetCombatReplayNonPolledPositions(log).Any(pos => (pos.XYZ.XY() - arenaCenter).LengthSquared() < 10e6)).ToList();
             foreach (var decima in decimas)
             {
@@ -155,7 +152,7 @@ internal class MountBalriorInstance : MountBalrior
         {
             long encounterThreshold = log.LogData.EvtcLogStart;
             var deterrences = log.CombatData.GetBuffData(SkillIDs.Deterrence).Where(x => x is BuffApplyEvent || x is BuffRemoveAllEvent);
-            var chest = log.AgentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_ura.ChestID).FirstOrDefault();
             int offset = 0;
             foreach (var ura in uras)
             {

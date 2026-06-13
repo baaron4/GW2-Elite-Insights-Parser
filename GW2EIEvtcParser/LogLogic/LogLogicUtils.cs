@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
@@ -56,14 +55,28 @@ internal static class LogLogicUtils
         var xStart = crMap.TopX;
         var parentXStart = parentMap.TopX;
         var parentXEnd = parentMap.BottomX;
-        var percentX = (xStart - parentXStart) / (parentXEnd - parentXStart) * 100;
         var yStart = crMap.BottomY;
         var parentYStart = parentMap.BottomY;
         var parentYEnd = parentMap.TopY;
+
+        var xSize = crMap.BottomX - crMap.TopX;
+        var ySize = crMap.BottomY - crMap.TopY;
+        var delta = xSize - ySize;
+
+        if (delta > 0)
+        {
+            yStart -= delta * 0.5f;
+        } 
+        else if (delta < 0)
+        {
+            xStart += delta * 0.5f;
+        }
+
+        var percentX = (xStart - parentXStart) / (parentXEnd - parentXStart) * 100;
         var percentY = (yStart - parentYStart) / (parentYEnd - parentYStart) * 100;
+        // scale
         var scaleX = 1 / ((crMap.TopX - crMap.BottomX) / (parentMap.TopX - parentMap.BottomX));
         var scaleY = 1 / ((crMap.TopY - crMap.BottomY) / (parentMap.TopY - parentMap.BottomY));
-        // TODO handle situations where desired scale would be non uniform aka add padding
         parentMap.AddDefaultViewpoint(percentX, percentY, Math.Min(scaleX, scaleY), logID);
     }
 
@@ -77,7 +90,7 @@ internal static class LogLogicUtils
         var agentItems = new List<AgentItem>();
         foreach (var targetID in targetIDs)
         {
-            agentItems.AddRange(agentData.GetNPCsByID(targetID));
+            agentItems.AddRange(agentData.GetStableSpeciesByID(targetID));
         }
         var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
@@ -215,10 +228,7 @@ internal static class LogLogicUtils
         }
     }
 
-
-    internal delegate bool ChestAgentChecker(AgentItem agent);
-
-    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, ChestAgentChecker? chestChecker)
+    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, int hitboxWidth)
     {
         if (chestID == ChestID.None)
         {
@@ -231,13 +241,13 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => chestChecker == null || chestChecker(x.Key));
+        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => x.Key.HitboxWidth == hitboxWidth);
         chest?.Key.OverrideID(chestID, agentData);
     }
 
-    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, ChestAgentChecker? chestChecker)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, int hitboxWidth)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
-        var movementData = combatData.Where(x => x.IsGeographical);
+        var movementData = combatData.Where(x => x.IsGeographical).ToList();
 
         var nonZeroGadgetVelocities = movementData.Where(evt => {
             if (evt.IsStateChange == StateChange.Velocity)
@@ -247,7 +257,7 @@ internal static class LogLogicUtils
                     return false;
                 }
                 AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-                if (agent.Type != AgentItem.AgentType.Gadget)
+                if (agent.Type != AgentItem.AgentType.VolatileSpecies)
                 {
                     return false;
                 }
@@ -261,7 +271,7 @@ internal static class LogLogicUtils
         var positionDict = movementData
             .Where(x => x.IsStateChange == StateChange.Position)
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Key.Type == AgentItem.AgentType.Gadget && x.Key.Master == null)
+            .Where(x => x.Key.Type == AgentItem.AgentType.VolatileSpecies && x.Key.Master == null)
             .ToDictionary(x => x.Key, x => x.ToList());
         var gadgetPositions = positionDict.Where(entry => {
 
@@ -277,7 +287,7 @@ internal static class LogLogicUtils
         }
         foreach (var chestID in chestIDs)
         {
-            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.chestChecker);
+            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.hitboxWidth);
         }
     }
 

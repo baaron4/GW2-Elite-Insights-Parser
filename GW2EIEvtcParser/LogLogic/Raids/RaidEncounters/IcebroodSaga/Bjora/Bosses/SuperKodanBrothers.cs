@@ -1,6 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -38,7 +37,7 @@ internal class SuperKodanBrothers : Bjora
     {
         var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-1013, -1600, 2221, 1416));
+                        (-963, -1550, 2271, 1266));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKodanBrothers, crMap, parentMap);
         return crMap;
     }
@@ -66,7 +65,7 @@ internal class SuperKodanBrothers : Bjora
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem mainTarget = (agentData.GetNPCsByID(TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
+            AgentItem mainTarget = (agentData.GetStableSpeciesByID(TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetStableSpeciesByID(TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
             CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsCastEvent() && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
             if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
             {

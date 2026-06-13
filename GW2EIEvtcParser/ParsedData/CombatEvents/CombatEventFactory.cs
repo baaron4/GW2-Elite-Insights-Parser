@@ -5,17 +5,17 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-internal static class CombatEventFactory
+partial class CombatData
 {
 
-    public static void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, 
-        SkillData skillData, MetaEventsContainer metaDataEvents, 
-        StatusEventsContainer statusEvents, 
-        List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps,
+    internal void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, 
+        SkillData skillData, List<WeaponSwapEvent> wepSwaps,
         List<BuffEvent> buffEvents, List<StunBreakEvent> stunBreakEvents,
         EvtcVersionEvent evtcVersion, EvtcParserSettings settings,
         GW2APIController apiController)
     {
+        var statusEvents = _statusEvents;
+        var metaDataEvents = _metaDataEvents;
         switch (stateChangeEvent.IsStateChange)
         {
             case StateChange.EnterCombat:
@@ -105,11 +105,11 @@ internal static class CombatEventFactory
                 metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                 break;
             case StateChange.ShardID:
-                metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent, metaDataEvents.MapIDEvents.FirstOrDefault(), apiController));
+                metaDataEvents.ShardEvent = new ShardEvent(stateChangeEvent, metaDataEvents.MapIDEvent, apiController);
                 break;
             case StateChange.Reward:
 #if !NO_REWARDS
-                rewardEvents.Add(new RewardEvent(stateChangeEvent));
+                _rewardEvents.Add(new RewardEvent(stateChangeEvent));
 #endif
                 break;
             case StateChange.TeamChange:
@@ -123,6 +123,7 @@ internal static class CombatEventFactory
                 metaDataEvents.AttackTargetEventByAttackTarget[aTEvt.AttackTarget] = aTEvt;
                 break;
             case StateChange.Targetable:
+                if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
                 {
                     var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
                     if (statusEvents.TargetableEventsBySrc.TryGetValue(tarEvt.Src, out var targetableEvents))
@@ -138,7 +139,7 @@ internal static class CombatEventFactory
                         Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
                     }
                 }
-                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange)
+                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && evtcVersion.Build < ArcDPSBuilds.VisibilityOnStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
                     if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
@@ -156,7 +157,7 @@ internal static class CombatEventFactory
                 }
                 break;
             case StateChange.MapID:
-                metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
+                metaDataEvents.MapIDEvent = new MapIDEvent(stateChangeEvent);
                 break;
             case StateChange.MapChange:
                 metaDataEvents.MapChangeEvents.Add(new MapChangeEvent(stateChangeEvent));
@@ -564,12 +565,72 @@ internal static class CombatEventFactory
                     statusEvents.WvWObjectiveStatusEvents.Add(wvwObjectiveStatus);
                 }
                 break;
+            case StateChange.StealthChange:
+                if (stateChangeEvent.DstAgent < 2) // 2 means unsupported, we ignore those
+                {
+                    var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
+                    if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
+                    {
+                        var lastVisibility = visibilityEvents[^1];
+                        if (lastVisibility.Visible != visEvt.Visible)
+                        {
+                            visibilityEvents.Add(visEvt);
+                        }
+                    }
+                    else
+                    {
+                        Add(statusEvents.VisibilityEventsBySrc, visEvt.Src, visEvt);
+                    }
+                }
+                break;
+            case StateChange.GadgetNameVisible:
+                // Ignore for now
+                break;
+            case StateChange.GadgetAnimation:
+                var gadgetAnimation = new GadgetAnimationEvent(stateChangeEvent, agentData);
+                Add(_gadgetAnimationEventsByToken, gadgetAnimation.AnimationToken, gadgetAnimation);
+                Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Gadget, gadgetAnimation);
+                break;
+            case StateChange.EffectMissileCreate:
+                // Ignore for now
+                break;
+            case StateChange.GadgetCaptureOutlineShow:
+                var gadgetCaptureEvent = new GadgetCaptureEvent(stateChangeEvent, agentData);
+                statusEvents.GadgetCaptureEvents.Add(gadgetCaptureEvent);
+                Add(statusEvents.GadgetCaptureEventsBySrc, gadgetCaptureEvent.Src, gadgetCaptureEvent);
+                if (statusEvents.GadgetCapturePointCombatItemsBySrc.TryGetValue(gadgetCaptureEvent.Src, out var gadgetCapturePoints))
+                {
+                    foreach (var gadgetCapturePoint in gadgetCapturePoints)
+                    {
+                        gadgetCaptureEvent.AddPoint(gadgetCapturePoint);
+                    }
+                    statusEvents.GadgetCapturePointCombatItemsBySrc.Remove(gadgetCaptureEvent.Src);
+                }
+                break;
+            case StateChange.GadgetCaptureSplitPercent:
+                var progressingGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(progressingGadgetCapture, out var captureEventsToProgress))
+                {
+                    captureEventsToProgress.Last().AddProgress(stateChangeEvent);
+                }
+                break;
+            case StateChange.GadgetCaptureOutlineHide:
+                var removedGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                if (statusEvents.GadgetCaptureEventsBySrc.TryGetValue(removedGadgetCapture, out var captureEventsToRemove))
+                {
+                    captureEventsToRemove.Last().SetEnd(stateChangeEvent);
+                }
+                break;
+            case StateChange.GadgetCaptureOutlinePoint:
+                var pointGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                Add(statusEvents.GadgetCapturePointCombatItemsBySrc, pointGadgetCapture, stateChangeEvent);
+                break;
             default:
                 break;
         }
     }
 
-    public static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -603,7 +664,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -651,11 +712,12 @@ internal static class CombatEventFactory
         {
             SkillIDs.ArcDPSGenericEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGenericGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSGenericPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }
 
-    public static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
+    internal static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
         using var _t = new AutoTrace("CreateCastEvents");
         //TODO_PERF(Rennorb)
@@ -751,7 +813,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+    internal static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
         List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
         List<StunBreakEvent> stunBreakEvents,
         AgentData agentData, SkillData skillData)
@@ -781,7 +843,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
+    internal static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, 
         List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
         List<StunBreakEvent> stunBreakEvents,
         AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -61,7 +60,6 @@ public class AnimatedCastEvent : CastEvent
             ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
             if (startItem.IsStateChange == StateChange.AnimationStart)
             {
-
                 if (startItem.DstAgent != 0)
                 {
                     EffectTarget = agentData.GetAgent(startItem.DstAgent, startItem.Time);

@@ -100,7 +100,7 @@ internal class WvWLogic : LogLogic
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = log.CombatData.GetMapIDEvent();
         if (mapID == null)
         {
             return base.GetCombatMapInternal(log, arenaDecorations);
@@ -152,7 +152,7 @@ internal class WvWLogic : LogLogic
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
-        MapIDEvent? mapEvent = combatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapEvent = combatData.GetMapIDEvent();
         if (mapEvent == null)
         {
             return _defaultName;
@@ -393,11 +393,11 @@ internal class WvWLogic : LogLogic
             {
                 var (TeamID, Time) = objectiveStatusEvent.Owners[i];
                 var nextOwner = objectiveStatusEvent.Owners[i + 1];
-                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, nextOwner.Time), positionConnector));
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 30, 1.0f, (Time, nextOwner.Time), positionConnector));
             }
             {
                 var (TeamID, Time) = objectiveStatusEvent.Owners[^1];
-                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 20, 1.0f, (Time, log.LogData.LogEnd), positionConnector));
+                environmentDecorations.Add(new IconDecoration(objectiveStatusEvent.GetIcon(log, TeamID), 30, 1.0f, (Time, log.LogData.LogEnd), positionConnector));
             }
         }
     }

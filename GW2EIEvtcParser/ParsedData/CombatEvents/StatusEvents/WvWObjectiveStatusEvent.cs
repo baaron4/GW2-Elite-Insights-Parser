@@ -22,9 +22,9 @@ public class WvWObjectiveStatusEvent
     internal WvWObjectiveStatusEvent(CombatItem evtcItem)
     {
         MapID = evtcItem.Value;
-        ObjectiveID = evtcItem.BuffDmg;
+        ObjectiveID = (int)evtcItem.SkillID;
         AutoUpgradeProgress = evtcItem.Pad;
-        Owners.Add((evtcItem.SkillID, evtcItem.Time));
+        Owners.Add(((uint)evtcItem.BuffDmg, evtcItem.Time));
         _objectiveData = GetObjectiveData(MapID, ObjectiveID);
     }
 

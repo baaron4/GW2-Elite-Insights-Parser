@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -249,7 +248,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
-        AgentItem? vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
+        AgentItem? vermilion = agentData.GetStableSpeciesByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetStableSpeciesByID(TargetID.PrototypeVermilion).FirstOrDefault();
         if (vermilion != null)
         {
             CombatItem? breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && BreakbarStateEvent.GetBreakbarState(x) == BreakbarState.Active);

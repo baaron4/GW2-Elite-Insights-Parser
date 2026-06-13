@@ -160,10 +160,9 @@ internal class Samarog : BastionOfThePenitent
         // With lingering agents, last aware of the spears are properly set
         if (evtcVersion.Build >= ArcDPSBuilds.LingeringAgents)
         {
-            var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+            var spearAgents = combatData.Where(x => x.IsBuffApplyEvent() && (x.SkillID == SpearOfRevulsionBuff || x.SkillID == SpearOfAggressionBuff)).Select(x => agentData.GetAgent(x.DstAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
             foreach (AgentItem spear in spearAgents)
             {
-                spear.OverrideType(AgentItem.AgentType.NPC, agentData);
                 spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
             }
         }

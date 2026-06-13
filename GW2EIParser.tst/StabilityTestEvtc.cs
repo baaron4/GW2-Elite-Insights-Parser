@@ -6,7 +6,6 @@ using GW2EIParserCommons.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using static GW2EIParser.tst.StabilityTestEvtc;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser.tst;

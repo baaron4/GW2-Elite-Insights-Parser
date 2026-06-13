@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Metrics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
@@ -43,10 +42,10 @@ public class AgentItem
     public bool IsEnglobingAgent => _englobedAgentItems != null;
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
-    public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
+    public enum AgentType { StableSpecies, VolatileSpecies, Player, NonSquadPlayer }
 
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
-    public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
+    public bool IsNPC => Type == AgentType.StableSpecies || Type == AgentType.VolatileSpecies;
 
     public bool IsUnknown { get; private set; } = false;
 
@@ -57,7 +56,7 @@ public class AgentItem
     public readonly int UniqueID;
     public AgentItem? Master { get; protected set; }
     public ushort InstID { get; protected set; }
-    public AgentType Type { get; protected set; } = AgentType.NPC;
+    public AgentType Type { get; protected set; } = AgentType.StableSpecies;
     public long FirstAware { get; protected set; }
     public long LastAware { get; protected set; } = long.MaxValue;
 
@@ -174,12 +173,6 @@ public class AgentItem
         IsNotInSquadFriendlyPlayer = status;
     }
 
-    internal void OverrideType(AgentType type, AgentData agentData)
-    {
-        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
-        Type = type;
-    }
-
     internal void OverrideHitbox(uint hitboxWidth, uint hitboxHeight)
     {
         HitboxWidth = hitboxWidth;
@@ -199,6 +192,11 @@ public class AgentItem
         }
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.SpeciesDirty);
         ID = id;
+        if (Type != AgentType.StableSpecies)
+        {
+            Type = AgentType.StableSpecies;
+            agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
+        }
     }
 
     internal void OverrideID(TargetID id, AgentData agentData)

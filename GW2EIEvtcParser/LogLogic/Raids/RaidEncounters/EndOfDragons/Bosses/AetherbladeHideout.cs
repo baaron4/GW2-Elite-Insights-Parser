@@ -744,15 +744,14 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
     internal static void FindFerrousBombsAndCleanMaiTrins(AgentData agentData, List<CombatItem> combatData)
     {
         // Ferrous Bombs
-        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem bomb in bombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
             bomb.OverrideID(TargetID.FerrousBomb, agentData);
         }
         // We remove useless Mai trins if present
-        IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(TargetID.MaiTrinRaid);
-        IReadOnlyList<AgentItem> echoes = agentData.GetNPCsByIDs([TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM]);
+        IReadOnlyList<AgentItem> maiTrins = agentData.GetStableSpeciesByID(TargetID.MaiTrinRaid);
+        IReadOnlyList<AgentItem> echoes = agentData.GetStableSpeciesByIDs([TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM]);
         foreach (AgentItem maiTrin in maiTrins)
         {
             if (echoes.Any(x => x.FirstAware <= maiTrin.FirstAware && x.LastAware >= maiTrin.FirstAware))
@@ -793,8 +792,8 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
-        var maiTrin = agentData.GetNPCsByID(TargetID.MaiTrinRaid).FirstOrDefault() ?? throw new MissingKeyActorsException("Mai Trin not found");
-        if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
+        var maiTrin = agentData.GetStableSpeciesByID(TargetID.MaiTrinRaid).FirstOrDefault() ?? throw new MissingKeyActorsException("Mai Trin not found");
+        if (agentData.GetStableSpeciesByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetStableSpeciesByID(TargetID.EchoOfScarletBriarCM).Count == 0)
         {
             long time = maiTrin.LastAware - 1;
             agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);

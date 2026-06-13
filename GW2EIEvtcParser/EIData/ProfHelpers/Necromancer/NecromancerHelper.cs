@@ -161,7 +161,7 @@ internal static class NecromancerHelper
         new Buff("Spectral Armor", SpectralArmorBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralArmor),
         new Buff("Locust Swarm", LocustSwarm, Source.Necromancer, BuffClassification.Other, SkillImages.LocustSwarm),
         new Buff("Grim Specter", GrimSpecterBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
-        new Buff("Grim Specter (Target)", GrimSpecterTargetBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
+        new Buff("Grim Specter (Target)", GrimSpecterTargetBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Debuff, SkillImages.GrimSpecter),
         // Traits
         new Buff("Plague Sending", PlagueSending, Source.Necromancer, BuffClassification.Other, TraitImages.PlagueSending),
         new Buff("Corrupter's Defense", CorruptersDefense, Source.Necromancer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.CorruptersFervor)
@@ -178,10 +178,10 @@ internal static class NecromancerHelper
         new Buff("Taste For Blood", TasteForBlood, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Support, TraitImages.OverflowingThirst),
         new Buff("Dread", Dread, Source.Necromancer, BuffClassification.Other, TraitImages.UnholyFervor),
         // Spear
-        new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Extirpate),
+        new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Debuff, SkillImages.Extirpate),
         new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.SoulShards),
         new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, SkillImages.Distress),
-        new Buff("Dark Stalker (Spear)", DarkStalkerSpear, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Dark Stalker (Spear)", DarkStalkerSpear, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Debuff, SkillImages.MonsterSkill),
     ];
 
     private static readonly HashSet<long> _shroudTransform =
@@ -222,7 +222,7 @@ internal static class NecromancerHelper
     /// </summary>
     internal static bool IsUndeadMinion(AgentItem agentItem)
     {
-        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

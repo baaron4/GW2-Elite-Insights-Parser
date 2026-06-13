@@ -213,7 +213,7 @@ internal static class ElementalistHelper
     [
         // Skills
         // - Signet of Earth
-        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SignetOfEarth, [SignetOfEarth, SignetOfEarthBuff_WrittenInStone], "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
 
         // Earth
         // - Stone Flesh
@@ -226,9 +226,11 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.July2019Balance),
 
         // Focus
-        new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Elementalist, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+            .UsingHitAndAbsorbedDamageEvents()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-        new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Elementalist, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_ObsidianFlesh, ObsidianFlesh, "Obsidian Flesh", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Elementalist, ByPresence, SkillImages.ObsidianFlesh, DamageModifierMode.All)
+            .UsingHitAndAbsorbedDamageEvents()
             .WithBuilds(GW2Builds.July2018Balance),
     ];
 
@@ -266,8 +268,8 @@ internal static class ElementalistHelper
         new Buff("Conjure Frost Bow", ConjureFrostBow, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFrostBow),
         new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureLightningHammer),
         new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFieryGreatsword),
-        new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
-        new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
+        new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Debuff, BuffImages.Stun),
+        new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Debuff, BuffImages.Stun),
         // Summons
         new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsAir),
         new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsAir),

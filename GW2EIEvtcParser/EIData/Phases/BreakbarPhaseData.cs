@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.ParsedData;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 public class BreakbarPhaseData : SubPhasePhaseData
 {

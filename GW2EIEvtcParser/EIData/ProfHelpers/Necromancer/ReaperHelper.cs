@@ -69,8 +69,8 @@ internal static class ReaperHelper
         new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, SkillImages.ReapersShroud),
         new Buff("Infusing Terror", InfusingTerrorBuff, Source.Reaper, BuffClassification.Other, SkillImages.InfusingTerror),
         new Buff("Dark Bond", DarkBond, Source.Reaper, BuffClassification.Other, SkillImages.Rise),
-        new Buff("Reaper's Frost (Chilled to the Bone!)", ReapersFrostChilledToTheBone, Source.Reaper, BuffClassification.Other, SkillImages.ChilledToTheBone),
-        new Buff("Reaper's Frost (Executioner's Scythe)", ReapersFrostExecutionersScythe, Source.Reaper, BuffClassification.Other, SkillImages.ChilledToTheBone),
+        new Buff("Reaper's Frost (Chilled to the Bone!)", ReapersFrostChilledToTheBone, Source.Reaper, BuffClassification.Debuff, SkillImages.ChilledToTheBone),
+        new Buff("Reaper's Frost (Executioner's Scythe)", ReapersFrostExecutionersScythe, Source.Reaper, BuffClassification.Debuff, SkillImages.ChilledToTheBone),
     ];
 
     private static readonly HashSet<long> _reaperShroudTransform =

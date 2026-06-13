@@ -2,11 +2,10 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -130,7 +129,7 @@ internal class Cairn : BastionOfThePenitent
             {
                 spatialManipulations.AddRange(log.CombatData.GetAnimatedCastData(castSkillID));
             }
-            var cairns = log.AgentData.GetNPCsByID(TargetID.Cairn);
+            var cairns = log.AgentData.GetStableSpeciesByID(TargetID.Cairn);
             spatialManipulations.SortByTime();
             foreach (EffectEvent greenEffect in greenEffects)
             {

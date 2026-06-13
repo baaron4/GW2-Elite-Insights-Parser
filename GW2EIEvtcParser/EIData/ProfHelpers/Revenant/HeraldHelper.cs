@@ -68,7 +68,18 @@ internal static class HeraldHelper
             .WithBuilds(GW2Builds.November2023Balance, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_ForcefulPersistenceFacets, [FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff], "Forceful Persistence (Facets)", "10% per active Facet", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, TraitImages.ForcefulPersistence, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2025Balance),
+
         //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, BuffImages.ForcefulPersistence, GW2Builds.August2018Balance, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
+
+        // Draconic Echo
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfStrength, [FacetOfStrengthBuff, FacetOfStrengthTraited], "Draconic Echo (Facet of Strength)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfStrength, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfStrength, [FacetOfStrengthBuff, FacetOfStrengthTraited], "Draconic Echo (Facet of Strength)", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfStrength, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfElements, [FacetOfElementsBuff, FacetOfElementsTraited], "Draconic Echo (Facet of Elements)", "10%", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfElements, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2026HotFix),
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfElements, [FacetOfElementsBuff, FacetOfElementsTraited], "Draconic Echo (Facet of Elements)", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfElements, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2026HotFix),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -82,6 +93,11 @@ internal static class HeraldHelper
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.Incoming, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
+        // Draconic Echo
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfChaos, [FacetOfChaosBuff, FacetOfChaosTraited], "Draconic Echo (Facet of Chaos)", "-10%", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfChaos, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new BuffOnActorDamageModifier(Mod_DraconicEchoFacetOfChaos, [FacetOfChaosBuff, FacetOfChaosTraited], "Draconic Echo (Facet of Chaos)", "-5%", DamageSource.Incoming, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Herald, ByPresence, SkillImages.FacetOfChaos, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

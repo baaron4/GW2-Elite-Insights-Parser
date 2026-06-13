@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -111,6 +110,14 @@ internal class Slothasor : SalvationPass
             TargetID.Slubling2,
             TargetID.Slubling3,
             TargetID.Slubling4,
+            TargetID.EvolvedSlublingCave1,
+            TargetID.EvolvedSlublingCave2,
+            TargetID.EvolvedSlublingCave3,
+            TargetID.EvolvedSlublingCave4,
+            TargetID.SlublingCave1,
+            TargetID.SlublingCave2,
+            TargetID.SlublingCave3,
+            TargetID.SlublingCave4,
             TargetID.PoisonMushroom
         ];
     }
@@ -179,10 +186,12 @@ internal class Slothasor : SalvationPass
 
     internal static void FindMushrooms(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        var positionsDict = combatData.Where(x => x.IsStateChange == StateChange.Position).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var center = new Vector2(7685.5f, -643f);
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300)
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && positionsDict.TryGetValue(x, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).LengthSquared() < 6250000)) // 2500 squared
             .ToList();
         if (mushroomAgents.Count > 0)
         {
@@ -193,24 +202,7 @@ internal class Slothasor : SalvationPass
                 {
                     continue;
                 }
-                var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == StateChange.HealthUpdate);
-                var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100).ToList();
-                var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
-                long lastDeadTime = long.MinValue;
-                foreach (CombatItem aliveEvent in aliveUpdates)
-                {
-                    CombatItem? deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
-                    if (deadEvent == null)
-                    {
-                        lastDeadTime = Math.Min(logData.EvtcLogEnd, mushroom.LastAware);
-                    }
-                    else
-                    {
-                        lastDeadTime = deadEvent.Time;
-                    }
-                    AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TargetID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                    aliveMushroom.SetEnglobingAgentItem(mushroom, agentData);
-                }
+                mushroom.OverrideID(TargetID.PoisonMushroom, agentData);
             }
         }
     }
@@ -328,6 +320,26 @@ internal class Slothasor : SalvationPass
                 }
                 break;
             case (int)TargetID.PoisonMushroom:
+                var hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+                var aliveUpdates = hpUpdates.Where(x => x.HealthPercent == 100).ToList();
+                var deadUpdates = hpUpdates.Where(x => x.HealthPercent == 0).ToList();
+                long hideStart = target.FirstAware;
+                foreach (var aliveEvent in aliveUpdates)
+                {
+                    replay.Hidden.Add(new(hideStart, aliveEvent.Time));
+                    var deadEvent = deadUpdates.FirstOrDefault(x => x.Time > hideStart && x.Time > aliveEvent.Time);
+                    if (deadEvent == null)
+                    {
+                        hideStart = Math.Min(log.LogData.EvtcLogEnd, target.LastAware);
+                    }
+                    else
+                    {
+                        hideStart = deadEvent.Time;
+                    }
+                }
+                replay.Hidden.Add(new(hideStart, target.LastAware));
+                var slothasorPhases = log.LogData.GetEncounterPhases(log, LogID);
+                replay.AddHideByEncounterPhases(slothasorPhases, log);
                 break;
             default:
                 break;

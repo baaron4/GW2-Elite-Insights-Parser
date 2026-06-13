@@ -1,6 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -154,7 +153,7 @@ internal static class LogLogicPhaseUtils
         for (var i = 0; i < invuls.Count; i++)
         {
             var c = invuls[i];
-            long startTime = c.Time;
+            long startTime = Math.Max(c.Time, start);
             if (mergeSuccessiveCasts)
             {
                 while (i < invuls.Count - 1)
@@ -177,6 +176,7 @@ internal static class LogLogicPhaseUtils
             {
                 endTime = end;
             }
+            endTime = Math.Min(endTime, end);
             if (mainBetweenCasts)
             {
                 phases.Add(new SubPhasePhaseData(last, startTime));
@@ -317,7 +317,7 @@ internal static class LogLogicPhaseUtils
         var encounterPhases = new List<EncounterPhaseData>();
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
         {
-            var chest = log.AgentData.GetGadgetsByID(chestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(chestID).FirstOrDefault();
             foreach (var target in targets)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();

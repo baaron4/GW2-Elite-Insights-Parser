@@ -153,7 +153,7 @@ internal class Dhuum : HallOfChains
         if (etherealSealInteracts.Count > 0)
         {
             animatedCastDataByID[ArcDPSGenericGadgetInteract] = animatedCastDataByID[ArcDPSGenericGadgetInteract].Where(x => x.SkillID == ArcDPSGenericGadgetInteract).ToList();
-            animatedCastDataByID[DhuumEtherealSealInteract] = etherealSealInteracts.OfType<AnimatedCastEvent>().ToList();
+            animatedCastDataByID[DhuumEtherealSealInteract] = etherealSealInteracts.Cast<AnimatedCastEvent>().ToList();
         }
         return res;
     }
@@ -326,7 +326,7 @@ internal class Dhuum : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem messenger = agentData.GetNPCsByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
+            AgentItem messenger = agentData.GetStableSpeciesByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
             if (messenger != null)
             {
                 startToUse = messenger.FirstAware;
@@ -338,23 +338,19 @@ internal class Dhuum : HallOfChains
     internal static void HandleYourSouls(AgentData agentData, List<CombatItem> combatData)
     {
         // Player Souls - Filter out souls without master
-        var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100);
         var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApplyEvent() && x.SkillID == DhuumPlayerToSoulTrackBuff)
             .Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), agentData.GetAgent(x.DstAgent, x.Time)))
             .Where(x => x.Item1.IsPlayer)
             .GroupBy(x => x.Item2)
             .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).FirstOrDefault());
-        foreach (AgentItem soul in yourSoul)
+        foreach (var (soulCandidate, firstApplier) in dhuumPlayerToSoulTrackBuffApplications)
         {
-            if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
+            if (firstApplier != null)
             {
-                soul.OverrideType(AgentItem.AgentType.NPC, agentData);
-                soul.OverrideID(TargetID.YourSoul, agentData);
-                if (!firstApplier.IsMasterOf(soul))
+                soulCandidate.OverrideID(TargetID.YourSoul, agentData);
+                if (!firstApplier.IsMasterOf(soulCandidate))
                 {
-                    soul.SetMaster(firstApplier);
+                    soulCandidate.SetMaster(firstApplier);
                 }
             }
         }
@@ -362,22 +358,41 @@ internal class Dhuum : HallOfChains
 
     internal static void HandleEtherealSeals(AgentData agentData, List<CombatItem> combatData)
     {
-        // There are other gadgets with MaxHP 0, Width 16 and Height 300.
-        var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0);
-        var positionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position).ToList();
-        foreach (CombatItem maxHP in maxHPs)
+        // There are other gadgets with MaxHP 0, Width 16.
+        var candidates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
+            .Distinct()
+            .ToHashSet();
+        var velocityOrPositionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position || x.IsStateChange == StateChange.Velocity).ToList();
+        var positionEvents = velocityOrPositionEvents
+            .Where(x => x.IsStateChange == StateChange.Position)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => candidates.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Select(MovementEvent.GetPoint3D)
+            .ToList());
+        var velocityEvents = velocityOrPositionEvents
+            .Where(x => x.IsStateChange == StateChange.Velocity)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => candidates.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Select(MovementEvent.GetPoint3D)
+            .ToList());
+        foreach (var candidate in candidates)
         {
-            AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
-            if (candidate.Type == AgentItem.AgentType.Gadget && candidate.HitboxWidth == 16 && candidate.HitboxHeight == 300)
+            if (positionEvents.TryGetValue(candidate, out var positions) && velocityEvents.TryGetValue(candidate, out var velocities))
             {
-                var positions = positionEvents.Where(x => x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPoint3D).ToList();
+                if (velocities.Any(x => x.LengthSquared() > 0))
+                {
+                    continue;
+                }
                 foreach (KeyValuePair<int, Vector3> position in EtherealSealsPositions)
                 {
                     if (positions.Any(x => (x - position.Value).LengthSquared() < 1e-4))
                     {
-                        candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                         candidate.OverrideID(TargetID.EtherealSeal, agentData);
                         candidate.OverrideName("Ethereal Seal " + position.Key);
+                        break;
                     }
                 }
             }
@@ -813,7 +828,7 @@ internal class Dhuum : HallOfChains
 
         // Soul split
         var hastenedDemise = p.GetBuffStatus(log, HastenedDemise).Where(x => x.Value == 1);
-        var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => p.AgentItem.IsMasterOf(x));
+        var souls = log.AgentData.GetStableSpeciesByID(TargetID.YourSoul).Where(x => p.AgentItem.IsMasterOf(x));
         foreach (AgentItem soul in souls)
         {
             Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - 100);
@@ -1003,7 +1018,7 @@ internal class Dhuum : HallOfChains
     {
         (long, long) soulLifespan = (soul.FirstAware, hastenedDemise.End);
 
-        uint radius = (soul.HitboxWidth / 2);
+        uint radius = 50;
         var soulConnector = new PositionConnector(soulPosition);
         var playerConnector = new AgentConnector(p);
 

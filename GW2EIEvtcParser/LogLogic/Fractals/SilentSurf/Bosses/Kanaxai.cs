@@ -1,7 +1,5 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Mechanic;
@@ -132,7 +130,7 @@ internal class Kanaxai : SilentSurf
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // kanaxai spawns with invulnerability
-        var kanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
+        var kanaxai = agentData.GetStableSpeciesByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
         return GetLogOffsetByInvulnStart(logData, combatData, kanaxai, Determined762);
     }
 

@@ -2,11 +2,8 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -48,7 +45,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastArkk = agentData.GetNPCsByID(TargetID.Arkk).LastOrDefault();
+        var lastArkk = agentData.GetStableSpeciesByID(TargetID.Arkk).LastOrDefault();
         if (lastArkk != null)
         {
             var death = combatData.GetDeadEvents(lastArkk).FirstOrDefault();

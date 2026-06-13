@@ -9,6 +9,7 @@ internal class DamageModDto
     public string? Icon { get; set; }
     public string? Tooltip { get; set; }
     public bool NonMultiplier { get; set; }
+    public bool IsCounter { get; set; }
     public bool SkillBased { get; set; }
     public bool Approximate { get; set; }
 
@@ -24,6 +25,7 @@ internal class DamageModDto
                 Icon = mod.Icon,
                 Tooltip = mod.Tooltip,
                 NonMultiplier = !mod.Multiplier,
+                IsCounter = mod.IsCounter,
                 SkillBased = mod.SkillBased,
                 Approximate = mod.Approximate
             };

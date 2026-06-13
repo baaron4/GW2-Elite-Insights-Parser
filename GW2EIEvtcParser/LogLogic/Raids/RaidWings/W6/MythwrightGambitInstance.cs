@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -56,7 +51,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_qadim.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_qadim.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -73,7 +68,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
             targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) && 
             log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CAArmSmash, out var armSmashes))
         {
-            var chest = log.AgentData.GetGadgetsByID(_conjuredAmalgamate.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_conjuredAmalgamate.ChestID).FirstOrDefault();
             long lowerThreshold = 0;
             foreach (var armSmash in armSmashes)
             {
@@ -130,7 +125,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         }
         if (targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
         {
-            var chest = log.AgentData.GetGadgetsByID(_twinLargos.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_twinLargos.ChestID).FirstOrDefault();
             foreach (var nikare in nikares)
             {
                 var kenut = kenuts.FirstOrDefault(x => x.InAwareTimes(nikare));
@@ -173,7 +168,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {
-            var chest = log.AgentData.GetGadgetsByID(_qadim.ChestID).FirstOrDefault();
+            var chest = log.AgentData.GetStableSpeciesByID(_qadim.ChestID).FirstOrDefault();
             var subBosses = Targets.Where(x => x.IsAnySpecies([TargetID.AncientInvokedHydra, TargetID.ApocalypseBringer, TargetID.WyvernPatriarch, TargetID.WyvernMatriarch]));
             foreach (var qadim in qadims)
             {

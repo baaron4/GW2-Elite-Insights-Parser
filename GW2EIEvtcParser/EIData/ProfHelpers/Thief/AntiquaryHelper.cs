@@ -80,7 +80,7 @@ internal static class AntiquaryHelper
         new Buff("Mistburn Mortar", MistburnMortarBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 7, BuffClassification.Other, SkillImages.MistburnMortar),
         new Buff("Exalted Hammer", ExaltedHammerBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Other, SkillImages.ExaltedHammer),
         new Buff("Summon Kryptis Turret (Player)", SummonKryptisTurretPlayerBuff, Source.Antiquary, BuffClassification.Other, SkillImages.SummonKryptisTurret),
-        new Buff("Summon Kryptis Turret (Target)", SummonKryptisTurretTargetBuff, Source.Antiquary, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.SummonKryptisTurret),
+        new Buff("Summon Kryptis Turret (Target)", SummonKryptisTurretTargetBuff, Source.Antiquary, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, SkillImages.SummonKryptisTurret),
         new Buff("Kryptis Turret (1)", KryptisTurretBuff1, Source.Antiquary, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Kryptis Turret (2)", KryptisTurretBuff2, Source.Antiquary, BuffClassification.Hidden, BuffImages.Unknown),
         // Double Edge
@@ -118,9 +118,8 @@ internal static class AntiquaryHelper
         var kryptisTurrets = combatData.GetBuffApplyData(KryptisTurretBuff1).ToList().Concat(combatData.GetBuffApplyData(KryptisTurretBuff2)).Select(x => x.To).Distinct();
         foreach (var kryptisTurret in kryptisTurrets)
         {
-            if (kryptisTurret.Type == AgentItem.AgentType.Gadget)
+            if (kryptisTurret.Type == AgentItem.AgentType.VolatileSpecies)
             {
-                kryptisTurret.OverrideType(AgentItem.AgentType.NPC, agentData);
                 kryptisTurret.OverrideID(MinionID.KryptisTurret, agentData);
                 kryptisTurret.OverrideName("Kryptis Turret");
             }
@@ -128,15 +127,14 @@ internal static class AntiquaryHelper
         foreach (var maxHP in combatData.GetMaxHealthUpdateEventsByMaxHP(7470))
         {
             var gadget = maxHP.Src;
-            if (gadget.Type == AgentItem.AgentType.Gadget)
+            if (gadget.Type == AgentItem.AgentType.VolatileSpecies)
             {
                 var master = gadget.GetFinalMaster();
                 if (master.IsPlayer && master.Spec == Spec.Antiquary)
                 {
-                    if (gadget.HitboxWidth == 118 && gadget.HitboxHeight == 0)
+                    if (gadget.HitboxWidth == 118)
                     {
                         // The Holo-Dancer is correctly named
-                        gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
                         gadget.OverrideID(MinionID.HoloDancer, agentData);
                     }
                 }

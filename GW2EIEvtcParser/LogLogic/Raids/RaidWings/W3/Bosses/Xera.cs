@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -124,7 +123,7 @@ internal class Xera : StrongholdOfTheFaithful
 
     private static long GetMainXeraFightStart(ParsedEvtcLog log, AgentItem xera, long encounterStart)
     {
-        var fakeXera = log.AgentData.GetNPCsByID(TargetID.FakeXera).LastOrDefault(x => x.FirstAware <= xera.FirstAware);
+        var fakeXera = log.AgentData.GetStableSpeciesByID(TargetID.FakeXera).LastOrDefault(x => x.FirstAware <= xera.FirstAware);
         if (fakeXera != null)
         {
             var enterCombat = log.CombatData.GetEnterCombatEvents(xera).FirstOrDefault();
@@ -271,42 +270,37 @@ internal class Xera : StrongholdOfTheFaithful
         //
         var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
         //
-        var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneFragments)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneFragment, agentData);
         }
         //
-        var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardMainFight, agentData);
         }
         //
-        var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardButton, agentData);
         }
         //
-        var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardRift, agentData);
         }
         //
-        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies);
         foreach (AgentItem gadget in chargedBloodStones)
         {
             if (!combatData.Any(x => x.IsDamageEvent() && x.DstMatchesAgent(gadget)))
             {
                 continue;
             }
-            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.ChargedBloodstone, agentData);
         }
     }
@@ -364,7 +358,7 @@ internal class Xera : StrongholdOfTheFaithful
         FindBloodstones(agentData, combatData);
         if (agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _))
         {
-            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.Gadget, TargetID.DummyTarget, true);
         }
         // find split
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
@@ -439,8 +433,7 @@ internal class Xera : StrongholdOfTheFaithful
                 }
                 break;
             case (int)TargetID.ChargedBloodstone:
-                // TODO: check if still necessary with visibility events
-                var activeXeras = log.AgentData.GetNPCsByID(TargetID.Xera).Where(x => target.AgentItem.InAwareTimes(x)).ToList();
+                var activeXeras = log.AgentData.GetStableSpeciesByID(TargetID.Xera).Where(x => target.AgentItem.InAwareTimes(x)).ToList();
                 long hiddenStart = target.FirstAware;
                 for (int i = 0; i < activeXeras.Count; i++)
                 {
@@ -458,7 +451,7 @@ internal class Xera : StrongholdOfTheFaithful
                         } 
                         else
                         {
-                            var nextFakeXera = log.AgentData.GetNPCsByID(TargetID.FakeXera).FirstOrDefault(x => x.FirstAware > hiddenEnd);
+                            var nextFakeXera = log.AgentData.GetStableSpeciesByID(TargetID.FakeXera).FirstOrDefault(x => x.FirstAware > hiddenEnd);
                             long threshold = nextFakeXera != null ? nextFakeXera.FirstAware : target.LastAware;
                             var deadEvent = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault(x => x.HealthPercent < 1 && x.Time > activeXera.FirstAware && x.Time < threshold);
                             hiddenStart = deadEvent != null ? deadEvent.Time : threshold;
@@ -577,7 +570,7 @@ internal class Xera : StrongholdOfTheFaithful
                 (long start, long end) lifespan = (halfGravityWell.Time, halfGravityWell.Time + 7500);
                 (long start, long end) = (halfGravityWell.Time, halfGravityWell.Time + 7000);
                 bool hasFired = true;
-                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => x.FirstAware <= halfGravityWell.Time && x.LastAware >= halfGravityWell.Time);
+                var activeXera = log.AgentData.GetStableSpeciesByID(TargetID.Xera).FirstOrDefault(x => x.FirstAware <= halfGravityWell.Time && x.LastAware >= halfGravityWell.Time);
                 if (activeXera == null)
                 {
                     continue;

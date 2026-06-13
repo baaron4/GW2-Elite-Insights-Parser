@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -34,7 +33,7 @@ public static class ParserHelper
     internal const long WeaponSwapDelayConstant = 75;
     internal const long TimeThresholdConstant = 150;
 
-    internal const long InchDistanceThreshold = 10;
+    internal const float InchDistanceThreshold = 0.1f;
 
     public const long MinimumInCombatDuration = 2200;
     public const int MinimumFileSizeMB = 100;
@@ -614,7 +613,7 @@ public static class ParserHelper
 
     public static bool IsKnownMinionID(AgentItem minion, Spec spec)
     {
-        if (minion.Type == AgentItem.AgentType.Gadget)
+        if (minion.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }

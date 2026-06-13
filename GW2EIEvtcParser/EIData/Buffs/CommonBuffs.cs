@@ -80,9 +80,9 @@ internal static class CommonBuffs
         new Buff("Spawn Protection?", SpawnProtection, Source.Common, BuffClassification.Other, BuffImages.Determined),
         new Buff("Stun", Stun, Source.Common, BuffClassification.Other, BuffImages.Stun),
         new Buff("Daze", Daze, Source.Common, BuffClassification.Other, BuffImages.Daze),
-        new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other, BuffImages.Exposed),
-        new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
-        new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
+        new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Debuff, BuffImages.Exposed),
+        new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Debuff, BuffImages.Exposed),
+        new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Debuff, BuffImages.Exposed),
         new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, BuffImages.Unblockable)
             .WithBuilds(GW2Builds.February2020Balance),
         new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),

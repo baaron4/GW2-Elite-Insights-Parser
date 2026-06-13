@@ -12,9 +12,9 @@ internal static class ItemDamageModifiers
     [
         new DamageLogDamageModifier(Mod_MovingBonus, "Moving Bonus", "Seaweed Salad (and the likes) – 5% while moving", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Item, ItemImages.BowlOfSeaweedSalad, (x, log) => x.IsMoving, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_FractalOffensive, FractalOffensive, "Fractal Offensive", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, ItemImages.FractalOffensive, DamageModifierMode.PvE),
-        new CounterOnActorDamageModifier(Mod_WritOfMasterfulMalice, WritOfMasterfulMalice, "Writ of Masterful Malice", "200 condition damage if hp >=90%", DamageSource.NoPets, DamageType.Condition, DamageType.Condition, Source.Item,  ItemImages.WritOfMasterfulMalice, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_WritOfMasterfulMalice, WritOfMasterfulMalice, "Writ of Masterful Malice", "200 condition damage if hp >=90%", DamageSource.NoPets, DamageType.Condition, DamageType.Condition, Source.Item, ByPresence,  ItemImages.WritOfMasterfulMalice, DamageModifierMode.All)
             .UsingChecker((x, log) => x.IsOverNinety),
-        new CounterOnActorDamageModifier(Mod_WritOfMasterfufStrength, WritOfMasterfulStrength, "Writ of Masterful Strength", "200 power if hp >=90%", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Item, ItemImages.WritOfMasterfulStrength, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_WritOfMasterfufStrength, WritOfMasterfulStrength, "Writ of Masterful Strength", "200 power if hp >=90%", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Item, ByPresence, ItemImages.WritOfMasterfulStrength, DamageModifierMode.All)
             .UsingChecker((x, log) => x.IsOverNinety),
     ];
 

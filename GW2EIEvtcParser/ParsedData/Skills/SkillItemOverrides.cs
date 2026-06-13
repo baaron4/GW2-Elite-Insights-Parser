@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -308,6 +307,7 @@ public static class SkillItemOverrides
         { BigMagmaDrop, "Big Magma Drop" },
         // Ura
         { UraDispelSAK, "Dispel" },
+        { UraBloodstoneShardPickUp, "Bloodstone Shard Pick Up" },
         // Kela
         { KelaBurrow, "Burrow" },
         { KelaAura, "Aura (Kela)" },

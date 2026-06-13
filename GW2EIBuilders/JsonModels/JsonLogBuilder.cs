@@ -113,6 +113,7 @@ internal static class JsonLogBuilder
             Icon = damageModifier.Icon,
             Description = damageModifier.Tooltip,
             NonMultiplier = !damageModifier.Multiplier,
+            IsCounter = damageModifier.IsCounter,
             SkillBased = damageModifier.SkillBased,
             Approximate = damageModifier.Approximate,
             Incoming = damageModifier.Incoming,
@@ -138,7 +139,7 @@ internal static class JsonLogBuilder
         jsonLog.IsInstanceLog = log.LogData.IsInstance;
         jsonLog.EIEncounterID = log.LogData.Logic.LogID;
         jsonLog.EILogID = log.LogData.Logic.LogID;
-        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        var mapIDEvent = log.CombatData.GetMapIDEvent();
         if (mapIDEvent != null)
         {
             jsonLog.MapID = mapIDEvent.MapID;
@@ -189,17 +190,13 @@ internal static class JsonLogBuilder
         jsonLog.Targetless = log.LogData.Logic.Targetless;
         jsonLog.GW2Build = log.LogMetadata.GW2Build;
         jsonLog.UploadLinks = [uploadLinks.DPSReportEILink];
-        jsonLog.Language = log.LogMetadata.Language;
-        jsonLog.LanguageID = (byte)log.LogMetadata.LanguageID;
+        jsonLog.Language = ArcDPSEnums.LanguageToString(log.LogMetadata.Language);
+        jsonLog.LanguageID = (byte)log.LogMetadata.Language;
         jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
-        var shardEvent = log.CombatData.GetShardEvents().FirstOrDefault();
-        if (shardEvent != null)
+        var region = log.LogMetadata.Region;
+        if (region != ArcDPSEnums.RegionEnum.Unknown)
         {
-            var region = shardEvent.RegionToString();
-            if (region != null)
-            {
-                jsonLog.Region = region;
-            }
+            jsonLog.Region = ArcDPSEnums.RegionToString(region);
         }
         jsonLog.IsCM = mainPhase.IsCM || mainPhase.IsLegendaryCM;
         jsonLog.IsLegendaryCM = mainPhase.IsLegendaryCM;
@@ -207,6 +204,17 @@ internal static class JsonLogBuilder
         jsonLog.MissingPreEvent = mainPhase.MissingPreEvent;
         jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
         jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.LogData.Logic.ParseMode == LogLogic.ParseModeEnum.WvW;
+        jsonLog.ParsingSettings = new EvtcParsingSettings()
+        {
+            ComputeBuff = log.ParserSettings.ComputeBuff,
+            ComputeCast = log.ParserSettings.ComputeCast,
+            ComputeCombatReplay = log.CanCombatReplay,
+            ComputeDamage = log.ParserSettings.ComputeDamage,
+            ComputeDamageModifiers = log.ParserSettings.ComputeDamageModifiers,
+            ComputeMechanics = log.ParserSettings.ComputeMechanics,
+            ComputePhases = log.ParserSettings.ComputePhases,
+            ParseExtensions = log.ParserSettings.ParseExtensions,
+        };
         var personalBuffs = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
         var personalDamageMods = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
         var skillMap = new Dictionary<long, SkillItem>(200); //TODO_PERF(Rennorb)

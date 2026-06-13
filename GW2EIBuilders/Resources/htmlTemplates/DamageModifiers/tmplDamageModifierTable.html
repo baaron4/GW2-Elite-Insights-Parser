@@ -1,5 +1,7 @@
 <template>
     <div>
+        <img class="mb-1 icon" :src="UIIcons.QuestionMark" style="position: absolute; transform: translate(0px, -20px);"
+            :data-original-title="tooltipExpl" />
         <div v-if="colPageCount > 0">
             <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="colStructure"></table-scroll-component>
         </div>
@@ -79,15 +81,15 @@
                 return this.modifiers.length - this.colStructure.perpage;
             },
             indicesToUse: function () {
-                var res = [];
+                let res = [];
                 if (this.playerindices !== null) {
-                    for (var i = 0; i < this.playerindices.length; i++) {
+                    for (let i = 0; i < this.playerindices.length; i++) {
                         res.push(this.playerindices[i]);
                     }
                     return res;
                 }
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
-                for (var i = 0; i < players.length; i++) {
+                for (let i = 0; i < players.length; i++) {
                     if(!players[i]) {
                         continue;
                     }
@@ -100,25 +102,25 @@
                 if (this.cache.has(cacheID)) {
                     return this.cache.get(cacheID);
                 }
-                var rows = [];
-                var sums = [];
-                var groups = [];
-                var total = {
+                const rows = [];
+                const sums = [];
+                const groups = [];
+                const total = {
                     name: "Total",
                     data: []
                 };
-                var j;
-                for (var i = 0; i < this.indicesToUse.length; i++) {
-                    var index = this.indicesToUse[i];
-                    var player = logData.players[index];
+                let j;
+                for (let i = 0; i < this.indicesToUse.length; i++) {
+                    const index = this.indicesToUse[i];
+                    const player = logData.players[index];
                     if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
                         };
                     }
-                    var dmgModifier = this.modifiersdata[index].data;
-                    var data = [];
+                    const dmgModifier = this.modifiersdata[index].data;
+                    const data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = dmgModifier[j];
                         if (!player.notInSquad) {
@@ -128,7 +130,7 @@
                             if (!total.data[j]) {
                                 total.data[j] = [0, 0, 0, 0];
                             }
-                            for (var k = 0; k < data[j].length; k++) {
+                            for (let k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -140,13 +142,13 @@
                         data: data
                     });
                 }
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                var res = {
+                const res = {
                     rows: rows,
                     sums: sums
                 };
@@ -159,24 +161,24 @@
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var rows = [];
-                var sums = [];
-                var groups = [];
-                var total = {
+                const rows = [];
+                const sums = [];
+                const groups = [];
+                const total = {
                     name: "Total",
                     data: []
                 };
-                var j;
-                for (var i = 0; i < this.indicesToUse.length; i++) {
-                    var index = this.indicesToUse[i];
-                    var player = logData.players[index];
+                let j;
+                for (let i = 0; i < this.indicesToUse.length; i++) {
+                    const index = this.indicesToUse[i];
+                    const player = logData.players[index];
                     if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
                             data: []
                         };
                     }
-                    var data = [];
+                    const data = [];
                     for (j = 0; j < this.modifiers.length; j++) {
                         data[j] = [0, 0, 0, 0];
                         if (!player.notInSquad) {
@@ -188,20 +190,20 @@
                             }
                         }
                     }
-                    var dmgModifier = this.modifiersdata[index].dataTarget;
+                    const dmgModifier = this.modifiersdata[index].dataTarget;
                     for (j = 0; j < this.activetargets.length; j++) {
-                        var modifier = dmgModifier[this.activetargets[j]];
-                        for (var k = 0; k < this.modifiers.length; k++) {
-                            var targetData = modifier[k];
-                            var curData = data[k];
-                            for (var l = 0; l < targetData.length; l++) {
+                        const modifier = dmgModifier[this.activetargets[j]];
+                        for (let k = 0; k < this.modifiers.length; k++) {
+                            const targetData = modifier[k];
+                            const curData = data[k];
+                            for (let l = 0; l < targetData.length; l++) {
                                 curData[l] += targetData[l];
                             }
                         }
                     }
                     if (!player.notInSquad) {
                         for (j = 0; j < this.modifiers.length; j++) {
-                            for (var k = 0; k < data[j].length; k++) {
+                            for (let k = 0; k < data[j].length; k++) {
                                 groups[player.group].data[j][k] += data[j][k];
                                 total.data[j][k] += data[j][k];
                             }
@@ -213,18 +215,24 @@
                         data: data
                     });
                 }
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push(groups[i]);
                     }
                 }
                 sums.push(total);
-                var res = {
+                const res = {
                     rows: rows,
                     sums: sums
                 };
                 this.cacheTarget.set(cacheID, res);
                 return res;
+            },
+            tooltipExpl: function () {
+                return `<ul style='text-align:left;margin-block-end: 0.3em;'>
+                        <li>&#8776; means the modifier value is approximated as it is based on less accurate events, like health percents or distance to target</li>
+                        <li># means that the modifier's damage contribution can't be computed, instead we show its hit uptime</li>
+                        </ul>`
             }
         },
         methods: {
@@ -235,17 +243,17 @@
                 return this.getHeaderClassBase(this.sortdata, key, index);
             },
             getBodyClass: function(key, index, approximate, cellValue) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                const classes = this.getBodyClassBase(this.sortdata, key, index);
                 classes.approximate = cellValue !== "-" && cellValue !== "Tooltip" ? !!approximate : false;
                 return classes;
             },
             getSumClass: function( approximate, cellValue) {
-                var classes = {};
+                const classes = {};
                 classes.approximate = cellValue !== "-" && cellValue !== "Tooltip" ? !!approximate : false;
                 return classes;
             },
             sortData: function(rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
+                const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
                         rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
@@ -271,53 +279,61 @@
                 if (item[0] === 0) {
                     return null;
                 }
-                var hits = item[0] + " out of " + item[1] + " hits";
-                var percent;
-                if (mod.skillBased) {
-                    percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
-                } else {
-                    percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                const hits = item[0] + " out of " + item[1] + " hits";
+                let res = hits;
+                if (!mod.isCounter) {
+                    let percent;
+                    if (mod.skillBased) {
+                        percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
+                    } else {
+                        percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                    }
+                    res +=  "<br>" + percent;
+                    let gain;
+                    if (mod.nonMultiplier) {
+                        gain = "Damage: ";
+                    } else {
+                        gain = "Pure Damage: ";
+                    }
+                    gain += this.round(item[2]);
+                    if (mod.nonMultiplier) {
+                        gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
+                    }
+                    res += "<br>" + gain;
+                } else if (item[2] > 0) {
+                    res += "<br> Damage During: " + item[2];
                 }
-                var res = hits + "<br>" + percent;
-                if (item[2] === 0) {
-                    return res;
-                }
-                var gain;
-                if (mod.nonMultiplier) {
-                    gain = "Damage Done: ";
-                } else {
-                    gain = "Pure Damage: ";
-                }
-                gain += this.round(item[2]);
-                if (mod.nonMultiplier) {
-                    gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
-                }
-                return res + "<br>" + gain;
+                return res;
             },
             getNumericalCellValue: function (item, mod) {
-                var cellValue = this.getCellValue(item, mod);
+                const cellValue = this.getCellValue(item, mod);
                 if (cellValue === 'Tooltip') {
                     return Number.MAX_SAFE_INTEGER;
                 } else if (cellValue === '-') {
                     return 0;
                 }
+                if (cellValue.startsWith("#")) {
+                    cellValue = cellValue.replace("# ", "");
+                }
                 return parseFloat(cellValue);
             },
             getCellValue: function (item, mod) {
-                if (item[2] === 0) {
-                    if (item[0] > 0) {
-                        return 'Tooltip';
-                    }
-                    return '-';
-                }
                 if (mod.nonMultiplier) {
                     return 'Tooltip';
                 }
-                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
-                if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease) || !isFinite(damageIncrease)) {
+                let value;
+                if (!mod.isCounter) {
+                    value = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
+                } else {
+                    value = this.round3(100.0 * item[0] / item[1]);
+                }
+                if (Math.abs(value) < 1e-6 || isNaN(value) || !isFinite(value)) {
                     return "-";
                 }
-                return damageIncrease + '%';
+                if (mod.isCounter) {
+                    value = "# " + value;
+                }
+                return value + "%";
             }
         },
     });

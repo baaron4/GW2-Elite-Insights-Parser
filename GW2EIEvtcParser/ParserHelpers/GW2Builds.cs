@@ -256,5 +256,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-05-12
     public const long May2026NewRelicsAndOtter = 200514;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2026-06-02
+    public const long June2026HotFix = 201671;
+
     public const ulong EndOfLife = ulong.MaxValue;
 }

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -40,7 +39,7 @@ internal static class WarriorHelper
         [
             ..combatData.GetBuffData(id).Where(x =>
                 x is BuffApplyEvent &&
-                x.CreditedBy.Type == AgentItem.AgentType.Gadget &&
+                x.CreditedBy.Type == AgentItem.AgentType.VolatileSpecies &&
                 x.CreditedBy.Master == null &&
                 playerAgents.Any(x.To.IsMaster)
             ).Select(x => x.CreditedBy)
@@ -166,7 +165,7 @@ internal static class WarriorHelper
     [
         // Skills
         // - Endure Pain
-        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, SkillImages.EndurePain, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.EndurePain, DamageModifierMode.All),
         // - Rampage
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),

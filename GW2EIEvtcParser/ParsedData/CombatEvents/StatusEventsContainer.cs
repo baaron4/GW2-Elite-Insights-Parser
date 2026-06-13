@@ -53,6 +53,10 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<GliderEvent>> GliderEventsBySrc = [];
 
+    public readonly Dictionary<AgentItem, List<GadgetCaptureEvent>> GadgetCaptureEventsBySrc = [];
+    public readonly List<GadgetCaptureEvent> GadgetCaptureEvents = [];
+
+    public readonly Dictionary<AgentItem, List<CombatItem>> GadgetCapturePointCombatItemsBySrc = [];
 
     public readonly List<MissileEvent> MissileEvents = [];
     public readonly Dictionary<AgentItem, List<MissileEvent>> MissileEventsBySrc = [];
@@ -60,5 +64,11 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<MissileEvent>> MissileDamagingEventsBySrc = [];
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsBySkillID = [];
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsByTrackingID = [];
+
+
+    internal void CleanTemp()
+    {
+        GadgetCapturePointCombatItemsBySrc.Clear();
+    }
 
 }

@@ -6,7 +6,6 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -55,7 +54,7 @@ internal class FraenirOfJormag : Bjora
     {
         var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-833, -1780, 2401, 1606));
+                        (-833, -1530, 2401, 1306));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayFraenirOfJormag, crMap, parentMap);
         return crMap;
     }
@@ -166,37 +165,58 @@ internal class FraenirOfJormag : Bjora
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
-        IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(TargetID.IcebroodElemental);
+        var boundElementals = combatData
+            .Where(x => x.IsBuffApplyEvent() && x.SkillID == BoundIceElemental)
+            .Select(x => agentData.GetAgent(x.DstAgent, x.Time))
+            .ToHashSet();
+        var spawnedElementals = agentData.GetStableSpeciesByID(TargetID.IcebroodElemental).ToHashSet();
+
+        var positionEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.Position)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => boundElementals.Contains(x.Key) || x.Key.IsSpecies(TargetID.IcebroodElemental))
+            .ToDictionary(x => x.Key, x => x.ToList());
+        var healthUpdateEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.HealthUpdate)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => boundElementals.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.ToList());
+
         foreach (AgentItem boundElemental in boundElementals)
         {
-            IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
-            boundElemental.OverrideType(AgentItem.AgentType.NPC, agentData);
             boundElemental.OverrideID(TargetID.BoundIcebroodElemental, agentData);
-
+            var killed = false;
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
-            if (boundElementalKilled.Any())
+            if (healthUpdateEvents.TryGetValue(boundElemental, out var hpUpdates))
             {
-                long firstAware = boundElementalKilled.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).First().FirstAware;
-                boundElemental.OverrideAwareTimes(firstAware, boundElementalKilled.First().Time);
+                var boundElementalKilled = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).FirstOrDefault();
+                if (boundElementalKilled != null)
+                {
+                    killed = true;
+                    boundElemental.OverrideAwareTimes(boundElemental.FirstAware, boundElementalKilled.Time);
+                }
             }
-            else
+            if (!killed && positionEvents.TryGetValue(boundElemental, out var positions))
             {
                 // If the Bound Icebrood Elemental hatches, an Icebrood Elemental spawns
                 // Due to the randomness of the time to hatch, we check the Elemental spawn position to match the Bound one
                 // When they match, override the Bound's LastAware to the Elemental's FirstAware
                 foreach (AgentItem spawnedElemental in spawnedElementals)
                 {
-                    CombatItem? itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.Position);
-                    CombatItem? itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == StateChange.Position);
-                    if (itemBound != null && itemElem != null)
+                    CombatItem? itemBound = positions.FirstOrDefault();
+                    if (itemBound != null && positionEvents.TryGetValue(spawnedElemental, out var spawnedPositions))
                     {
-                        var bound3D = MovementEvent.GetPoint3D(itemBound);
-                        var elem3D = MovementEvent.GetPoint3D(itemElem);
-                        if ((bound3D - elem3D).XY().LengthSquared() < 1)
+                        CombatItem? itemElem = spawnedPositions.FirstOrDefault();
+                        if (itemElem != null)
                         {
-                            long firstAwareBound = boundElemental.FirstAware;
-                            boundElemental.OverrideAwareTimes(firstAwareBound, spawnedElemental.FirstAware);
+                            var bound3D = MovementEvent.GetPoint3D(itemBound);
+                            var elem3D = MovementEvent.GetPoint3D(itemElem);
+                            if ((bound3D - elem3D).XY().LengthSquared() < 1)
+                            {
+                                boundElemental.OverrideAwareTimes(boundElemental.FirstAware, spawnedElemental.FirstAware);
+                                spawnedElementals.Remove(spawnedElemental);
+                                break;
+                            }
                         }
                     }
                 }

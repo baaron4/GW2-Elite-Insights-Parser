@@ -76,6 +76,8 @@ internal class BuffsContainerDto
     public List<List<BuffData>> TargetsCondiStats;
     public List<BuffData> TargetsCondiUptimes;
     public List<BuffData> TargetsBoonUptimes;
+    public List<BuffData> TargetsDebuffUptimes;
+    public List<BuffData> TargetsOtherBuffUptimes;
 
     public BuffsContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
     {
@@ -140,11 +142,15 @@ internal class BuffsContainerDto
         TargetsCondiStats   = new (phase.Targets.Count);
         TargetsCondiUptimes = new(phase.Targets.Count);
         TargetsBoonUptimes  = new(phase.Targets.Count);
+        TargetsDebuffUptimes = new(phase.Targets.Count);
+        TargetsOtherBuffUptimes = new(phase.Targets.Count);
         foreach (SingleActor target in phase.Targets.Keys)
         {
             TargetsCondiStats.Add(BuffData.BuildTargetConditionData(log, phase, target));
             TargetsCondiUptimes.Add(BuffData.BuildTargetConditionUptimeData(log, phase, target));
             TargetsBoonUptimes.Add(BuffData.BuildTargetBoonUptimeData(log, phase, target));
+            TargetsDebuffUptimes.Add(BuffData.BuildTargetDebuffUptimeData(log, phase, target));
+            TargetsOtherBuffUptimes.Add(BuffData.BuildTargetOtherBuffUptimeData(log, phase, target));
         }
     }
 }

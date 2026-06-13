@@ -1,12 +1,9 @@
-﻿using System;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
@@ -45,7 +42,7 @@ internal class SunquaPeakInstance : SunquaPeak
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastDarkAi = agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
+        var lastDarkAi = agentData.GetStableSpeciesByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
         if (lastDarkAi != null)
         {
             var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(Determined895, lastDarkAi);
@@ -186,7 +183,7 @@ internal class SunquaPeakInstance : SunquaPeak
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        var china = log.CombatData.GetLanguageEvent()?.Language == LanguageEnum.Chinese;
+        var china = log.LogMetadata.Region == RegionEnum.CN;
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
             var fullAiPhases = HandleFullAiPhases(targetsByIDs, log, phases);

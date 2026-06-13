@@ -3,7 +3,6 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
@@ -133,7 +132,7 @@ internal class Artsariiv : ShatteredObservatory
         if (artsariivMarkerGUID != null)
         {
             var markedsArtsariivs = combatData.Where(x => x.IsStateChange == StateChange.Marker && x.Value == artsariivMarkerGUID.MarkerID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
-            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
+            foreach (AgentItem artsariiv in agentData.GetStableSpeciesByID(TargetID.Artsariiv))
             {
                 if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
                 {
@@ -191,7 +190,7 @@ internal class Artsariiv : ShatteredObservatory
         {
             // Legacy
             var targetArtsariiv = FindTargetArtsariiv(agentData);
-            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
+            foreach (AgentItem artsariiv in agentData.GetStableSpeciesByID(TargetID.Artsariiv))
             {
                 if (!artsariiv.Is(targetArtsariiv))
                 {
@@ -212,7 +211,7 @@ internal class Artsariiv : ShatteredObservatory
     private static AgentItem FindTargetArtsariiv(AgentData agentData)
     {
         // cc artsariiv clones have the same species id, find target with longest aware time
-        return agentData.GetNPCsByID(TargetID.Artsariiv).MaxBy(x => x.LastAware - x.FirstAware) ?? throw new MissingKeyActorsException("Artsariiv not found");
+        return agentData.GetStableSpeciesByID(TargetID.Artsariiv).MaxBy(x => x.LastAware - x.FirstAware) ?? throw new MissingKeyActorsException("Artsariiv not found");
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

@@ -74,7 +74,7 @@ internal class River : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(TargetID.Enervator);
+            IReadOnlyList<AgentItem> enervators = agentData.GetStableSpeciesByID(TargetID.Enervator);
             if (!enervators.Any())
             {
                 throw new MissingKeyActorsException("Enervators not found");
@@ -108,8 +108,8 @@ internal class River : HallOfChains
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
-        foreach (var desmina in agentData.GetNPCsByID(TargetID.Desmina))
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.Gadget, TargetID.DummyTarget, true);
+        foreach (var desmina in agentData.GetStableSpeciesByID(TargetID.Desmina))
         {
             var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(desmina)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
             if (positions.Any(x => x.XYZ.X >= 7500))
@@ -126,23 +126,23 @@ internal class River : HallOfChains
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(brokenKing))))
+            if (agentData.GetStableSpeciesByID(TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(brokenKing))))
             {
                 return new StatueOfIce((int)TargetID.BrokenKing);
             }
-            if (agentData.GetNPCsByID(TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(soulEater))))
+            if (agentData.GetStableSpeciesByID(TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(soulEater))))
             {
                 return new StatueOfDeath((int)TargetID.EaterOfSouls);
             }
-            if (agentData.GetNPCsByID(TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfFate))))
+            if (agentData.GetStableSpeciesByID(TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfFate))))
             {
                 return new StatueOfDarkness((int)TargetID.EyeOfFate);
             }
-            if (agentData.GetNPCsByID(TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfJudgement))))
+            if (agentData.GetStableSpeciesByID(TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(eyeOfJudgement))))
             {
                 return new StatueOfDarkness((int)TargetID.EyeOfJudgement);
             }
-            if (agentData.GetNPCsByID(TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsNonZeroDamageEvent() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
+            if (agentData.GetStableSpeciesByID(TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsNonZeroDamageEvent() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
             {
                 return new Dhuum((int)TargetID.Dhuum);
             }

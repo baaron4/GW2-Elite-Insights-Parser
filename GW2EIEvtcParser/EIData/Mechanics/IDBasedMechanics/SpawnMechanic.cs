@@ -18,7 +18,7 @@ internal class SpawnMechanic : IDBasedMechanic<SingleActor>
     {
         foreach (long mechanicID in MechanicIDs)
         {
-            foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
+            foreach (AgentItem a in log.AgentData.GetStableSpeciesByID((int)mechanicID))
             {
                 SingleActor? amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
                 if (amp != null && Keep(amp, log))

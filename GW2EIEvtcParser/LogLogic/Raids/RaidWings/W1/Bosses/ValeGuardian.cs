@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Mechanic;
@@ -156,18 +155,56 @@ internal class ValeGuardian : SpiritVale
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
 
+        // Distributed Magic - Green circle
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out var distributedMagicEvents))
         {
             foreach (EffectEvent distributedMagic in distributedMagicEvents)
             {
-                // Effect duration is 6000, added 700 for the damage.
-                (long start, long end) lifespan = distributedMagic.ComputeLifespan(log, 6000);
-                lifespan.end = Math.Min(lifespan.end + 700, distributedMagic.Src.LastAware);
+                long duration = 6000;
+                long extendedDuration = 700;
+                // Effect duration is 6000, added 700 for the trigger.
+                (long start, long end) lifespan = (distributedMagic.Time, distributedMagic.Time + duration + extendedDuration);
+                long growing = lifespan.end;
+                // Blue Guardian LastAware is delayed, we use the death event to cancel the green.
+                if (distributedMagic.Src.IsSpecies(TargetID.BlueGuardian))
+                {
+                    var deathEvent = log.CombatData.GetDeadEvents(distributedMagic.Src).FirstOrDefault();
+                    if (deathEvent != null)
+                    {
+                        lifespan.end = Math.Min(lifespan.end, deathEvent.Time);
+                    }
+                }
                 var circle = new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.2, new PositionConnector(distributedMagic.Position));
-                environmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, growing, true);
             }
         }
 
+        // Distributed Magic - Green circle successful
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagicSuccess, out var successes))
+        {
+            foreach (EffectEvent effect in successes)
+            {
+                (long, long) lifespan = effect.ComputeLifespan(log, 1000);
+                var circle = new CircleDecoration(180, lifespan, Colors.Green, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.Add(circle);
+            }
+        }
+
+        // Distributed Magic - Green circle failed
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagicFailure, out var failures))
+        {
+            foreach (EffectEvent effect in failures)
+            {
+                (long, long) lifespan = effect.ComputeLifespan(log, 1000);
+                var position = new PositionConnector(effect.Position);
+                var circle = new CircleDecoration(180, lifespan, Colors.DarkRed, 0.2, position);
+                environmentDecorations.Add(circle);
+                // Add a shockwave effect matching the in-game visual
+                environmentDecorations.AddShockwave(position, lifespan, Colors.LightGrey, 0.5, 1200);
+            }
+        }
+
+        // Unstable Magic Spike - Blue circle
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out var magicSpikeEvents))
         {
             foreach (EffectEvent magicSpike in magicSpikeEvents)

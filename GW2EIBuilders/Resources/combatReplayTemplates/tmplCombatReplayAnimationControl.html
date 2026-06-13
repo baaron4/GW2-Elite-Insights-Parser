@@ -567,12 +567,13 @@
                 if (this.phaseDoubleClickTimeout) {
                     return;
                 }
-                this.dragThroughPhaseBlockTimeout = setTimeout(() => {
+                this.selectedPhase = phase;
+                this.dragThroughPhaseBlockTimeout = this.dragThroughPhaseBlockTimeout ||  setTimeout(() => {
                     this.clearPhaseMouseEvents();
                     let time = this.getTimeFromEvent(e);
                     this.updateTime(time * 1000);
                     this.startDragCursor(e);
-                }, 100);
+                }, 150);
             },
             onPhaseClick(phase, e) {
                 if (this.phaseDoubleClickTimeout) {
@@ -581,7 +582,6 @@
                 } else {
                     this.phaseDoubleClickTimeout = setTimeout(() => {
                         this.clearPhaseMouseEvents();
-                        this.selectedPhase = phase;
                         let time = this.getTimeFromEvent(e);
                         this.updateTime(time * 1000);
                         this.blockDragCursor = true;

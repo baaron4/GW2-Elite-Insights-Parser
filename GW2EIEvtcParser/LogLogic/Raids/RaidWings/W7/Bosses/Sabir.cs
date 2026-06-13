@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -87,7 +86,7 @@ internal class Sabir : TheKeyOfAhdashim
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+            if (agentData.GetStableSpeciesByID(TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
             {
                 return new Adina((int)TargetID.Adina);
             }
@@ -162,10 +161,10 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
-            log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
-            log.AgentData.GetNPCsByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
-            log.AgentData.GetNPCsByID(TargetID.SabirRectanglePlateform).Count > 0 ?
+        string mapUrl = log.AgentData.GetStableSpeciesByID(TargetID.SabirMainPlateform).Count > 0 &&
+            log.AgentData.GetStableSpeciesByID(TargetID.SabirSquarePlateform).Count > 0 &&
+            log.AgentData.GetStableSpeciesByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
+            log.AgentData.GetStableSpeciesByID(TargetID.SabirRectanglePlateform).Count > 0 ?
                 CombatReplayNoImage : CombatReplaySabir;
         var crMap = new CombatReplayMap(
                         (1000, 910),
@@ -249,7 +248,7 @@ internal class Sabir : TheKeyOfAhdashim
             case (int)TargetID.SabirMainPlateform:
                 var mainPlateformOpacities = new List<ParametricPoint1D> { new(0, target.FirstAware) };
                 var plateformPosition = replay.Positions.Last();
-                foreach (var sabir in log.AgentData.GetNPCsByID(TargetID.Sabir))
+                foreach (var sabir in log.AgentData.GetStableSpeciesByID(TargetID.Sabir))
                 {
                     var positions = log.FindActor(sabir).GetCombatReplayNonPolledPositions(log);
                     foreach (var position in positions)
@@ -322,25 +321,21 @@ internal class Sabir : TheKeyOfAhdashim
     {
         // Disabled until we get nice looking assets for them
         //return;
-        foreach (var candidate in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+        foreach (var candidate in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
             switch (candidate.HitboxWidth)
             {
                 case 2350:
                     candidate.OverrideID(TargetID.SabirMainPlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                     break;
                 case 806:
                     candidate.OverrideID(TargetID.SabirSquarePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                     break;
                 case 950:
                     candidate.OverrideID(TargetID.SabirRectanglePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                     break;
                 case 1752:
                     candidate.OverrideID(TargetID.SabirBigRectanglePlateform, agentData);
-                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
                     break;
             }
         }

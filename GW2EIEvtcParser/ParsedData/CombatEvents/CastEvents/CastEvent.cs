@@ -10,7 +10,7 @@ public abstract class CastEvent : TimeCombatEvent
     // start item
     public SkillItem Skill { get; protected set; }
     public long SkillID => Skill.ID;
-    public readonly AgentItem Caster;
+    public AgentItem Caster { get; protected set; }
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public bool IsUnknown => Status == AnimationStatus.Unknown;

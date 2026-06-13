@@ -38,7 +38,8 @@ public static class ArcDPSEnums
         public const int AnimationAsStateChanges = 20260430;
         public const int BuffAppliesAndRemovesAsStateChanges = 20260501;
         public const int ResultEnumRework = 20260501;
-        public const int VisibilityInTargetableStateChange = 20260510;
+        public const int VisibilityInTargetableStateChange = 20260522;
+        public const int VisibilityOnStateChange = 20260527;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -127,6 +128,7 @@ public static class ArcDPSEnums
         MotionSkill = 5,
         GadgetInteract = 6,
         Emote = 7,
+        PickUp = 8,
 
         Unknown
     };
@@ -330,6 +332,14 @@ public static class ArcDPSEnums
         Transformation = 73,
         WvWTeams = 74,
         WvWObjectiveStatus = 75,
+        StealthChange = 76,
+        GadgetAnimation = 77,
+        GadgetNameVisible = 78,
+        EffectMissileCreate = 79,
+        GadgetCaptureOutlineShow = 80,
+        GadgetCaptureSplitPercent = 81,
+        GadgetCaptureOutlineHide = 82,
+        GadgetCaptureOutlinePoint = 83,
         Unknown
     };
 
@@ -635,6 +645,21 @@ public static class ArcDPSEnums
             : LanguageEnum.Unknown;
     }
 
+
+    public static string LanguageToString(LanguageEnum language) 
+    {
+        return language switch
+        {
+            LanguageEnum.English => "English",
+            LanguageEnum.Missing => "Missing",
+            LanguageEnum.French => "French",
+            LanguageEnum.German => "German",
+            LanguageEnum.Spanish => "Spanish",
+            LanguageEnum.Chinese => "Chinese",
+            _ => "Unknown",
+        };
+    }
+
     // Region
 
     public enum RegionEnum : byte
@@ -644,6 +669,17 @@ public static class ArcDPSEnums
         CN = 2,
 
         Unknown,
+    }
+
+    public static string RegionToString(RegionEnum region)
+    {
+        return region switch
+        {
+            RegionEnum.NA => "NA",
+            RegionEnum.EU => "EU",
+            RegionEnum.CN => "China",
+            _ => "Unknown",
+        };
     }
 
 }

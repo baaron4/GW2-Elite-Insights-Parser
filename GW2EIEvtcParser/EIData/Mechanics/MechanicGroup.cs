@@ -1,8 +1,4 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ArcDPSEnums;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 public class MechanicGroup : MechanicContainer
 {

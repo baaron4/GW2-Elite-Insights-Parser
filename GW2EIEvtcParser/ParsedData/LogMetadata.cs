@@ -13,8 +13,8 @@ public class LogMetadata
     public readonly string ArcVersionBuild = "";
     public readonly int EvtcBuild;
     public readonly int EvtcRevision;
-    public readonly string Language = "N/A";
-    public readonly LanguageEnum LanguageID;
+    public readonly LanguageEnum Language = LanguageEnum.Unknown;
+    public readonly RegionEnum Region = RegionEnum.Unknown;
     public ulong GW2Build { get; private set; } = 0;
     public AgentItem? PoV { get; private set; } = null;
     public string PoVAccount { get; private set; } = "N/A";
@@ -59,10 +59,16 @@ public class LogMetadata
         LanguageEvent? langEvt = combatData.GetLanguageEvent();
         if (langEvt != null)
         {
-            Language = langEvt.ToString();
-            LanguageID = langEvt.Language;
+            Language = langEvt.Language;
         }
-        operation.UpdateProgressWithCancellationCheck("Parsing: Language " + Language);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Language " + LanguageToString(Language));
+        //
+        ShardEvent? shardEvt = combatData.GetShardEvent();
+        if (shardEvt != null)
+        {
+            Region = shardEvt.Region;
+            operation.UpdateProgressWithCancellationCheck("Parsing: Region " + RegionToString(Region));
+        }
         //
         SquadCombatStartEvent? logStr = combatData.GetLogStartEvent();
         if (logStr != null)

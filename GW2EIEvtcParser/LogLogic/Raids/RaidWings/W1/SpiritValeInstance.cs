@@ -2,11 +2,8 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -57,7 +54,7 @@ internal class SpiritValeInstance : SpiritVale
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var chest = agentData.GetGadgetsByID(_sabetha.ChestID).FirstOrDefault();
+        var chest = agentData.GetStableSpeciesByID(_sabetha.ChestID).FirstOrDefault();
         if (chest != null)
         {
             successHandler.SetSuccess(true, chest.FirstAware);
@@ -71,7 +68,7 @@ internal class SpiritValeInstance : SpiritVale
         var encounterPhases = new List<EncounterPhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
         {
-            var wallOfGhosts = log.AgentData.GetNPCsByID(TargetID.WallOfGhosts);
+            var wallOfGhosts = log.AgentData.GetStableSpeciesByID(TargetID.WallOfGhosts);
             for (int i = 0; i < wallOfGhosts.Count; i++)
             {
                 var wallOfGhost = wallOfGhosts[i];
@@ -147,7 +144,7 @@ internal class SpiritValeInstance : SpiritVale
 
                 RewardEvent? reward = GetOldRaidReward2Event(log.CombatData, start, end + 5000);
 
-                AgentItem? wallOfGhosts = log.AgentData.GetNPCsByID(TargetID.WallOfGhosts).LastOrDefault(x => x.FirstAware <= minFirstAware + 2000 && x.FirstAware <= maxLastAware);
+                AgentItem? wallOfGhosts = log.AgentData.GetStableSpeciesByID(TargetID.WallOfGhosts).LastOrDefault(x => x.FirstAware <= minFirstAware + 2000 && x.FirstAware <= maxLastAware);
                 if (wallOfGhosts != null)
                 {
                     foreach (var velocityEvent in log.CombatData.GetMovementData(wallOfGhosts).OfType<VelocityEvent>())

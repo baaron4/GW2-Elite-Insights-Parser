@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -30,7 +29,7 @@ partial class SingleActor
                         count++;
                     }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                    var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                    var typeHits = damageMod.GetDamageEvents(this, log, target, start, end);
                     res[pair.Key] = new DamageModifierStat(count, typeHits.Count, sum, totalDamage);
                 }
             }
@@ -47,7 +46,7 @@ partial class SingleActor
 
     public IReadOnlyDictionary<int, DamageModifierStat> GetOutgoingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
+        if (!log.ParserSettings.CanComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<int, DamageModifierStat>();
         }
@@ -147,7 +146,7 @@ partial class SingleActor
                         count++;
                     }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                    var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                    var typeHits = damageMod.GetDamageEvents(this, log, target, start, end);
                     res[pair.Key] = new DamageModifierStat(count, typeHits.Count, sum, totalDamage);
                 }
             }
@@ -165,7 +164,7 @@ partial class SingleActor
 
     public IReadOnlyDictionary<int, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
+        if (!log.ParserSettings.CanComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<int, DamageModifierStat>();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -62,7 +61,7 @@ internal class Adina : TheKeyOfAhdashim
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(TargetID.Sabir).Any(sabir => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(sabir) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+            if (agentData.GetStableSpeciesByID(TargetID.Sabir).Any(sabir => combatData.Any(evt => evt.IsNonZeroDamageEvent() && evt.DstMatchesAgent(sabir) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
             {
                 return new Sabir((int)TargetID.Sabir);
             }
@@ -164,11 +163,13 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    internal static void FindPlatforms(AgentData agentData)
+    internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
-        foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+        var positionsDict = combatData.Where(x => x.IsStateChange == StateChange.Position).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var center = new Vector2(14909.3f, -1470.64f);
+        foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && agent.HitboxHeight == 2)
+            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).LengthSquared() < 1210000)) // 1100 squared
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
             }
@@ -177,7 +178,7 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindPlatforms(agentData);
+        FindPlatforms(agentData, combatData);
         FindHands(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameHands(Targets, combatData);
@@ -237,7 +238,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var pillarShockwave in pillarShockwaves)
             {
                 long start = pillarShockwave.Time;
-                var currentAdina = log.AgentData.GetNPCsByID(TargetID.Adina).FirstOrDefault(x => x.InAwareTimes(start));
+                var currentAdina = log.AgentData.GetStableSpeciesByID(TargetID.Adina).FirstOrDefault(x => x.InAwareTimes(start));
                 if (currentAdina == null)
                 {
                     continue;
@@ -249,7 +250,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     end = potentialEndEvent.Time;
                 }
-                environmentDecorations.Add(new PolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var explicitelyDestroyed))
@@ -257,7 +258,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach ( var destroyed in explicitelyDestroyed)
             {
                 long end = destroyed.Time;
-                var currentAdina = log.AgentData.GetNPCsByID(TargetID.Adina).FirstOrDefault(x => x.InAwareTimes(end));
+                var currentAdina = log.AgentData.GetStableSpeciesByID(TargetID.Adina).FirstOrDefault(x => x.InAwareTimes(end));
                 if (currentAdina == null)
                 {
                     continue;
@@ -270,7 +271,7 @@ internal class Adina : TheKeyOfAhdashim
                     // already while iterating shockwave
                     continue;
                 }
-                environmentDecorations.Add(new PolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
     }
@@ -305,7 +306,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetractedWarning in groundRetractedWarnings)
             {
                 var effectLifespan = groundRetractedWarning.ComputeLifespan(log, 4271);
-                environmentDecorations.AddWithFilledWithGrowing(new PolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaGroundRetracted, out var groundRetracteds))
@@ -313,7 +314,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetracted in groundRetracteds)
             {
                 var effectLifespan = groundRetracted.ComputeLifespan(log, 1000);
-                environmentDecorations.Add(new PolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineWarning2, out var mineWarnings))
@@ -321,7 +322,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineWarning in mineWarnings)
             {
                 var effectLifespan = mineWarning.ComputeLifespan(log, 3000);
-                environmentDecorations.AddWithFilledWithGrowing(new PolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMine, out var mines))
@@ -329,7 +330,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mine in mines)
             {
                 var effectLifespan = mine.ComputeDynamicLifespan(log, 0);
-                environmentDecorations.Add(new PolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineExplosion, out var mineExplosions))
@@ -337,7 +338,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineExplosion in mineExplosions)
             {
                 var effectLifespan = (mineExplosion.Time, mineExplosion.Time + 100);
-                environmentDecorations.Add(new PolygonDecoration(60, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
             }
         }
         /*if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out var pillarsDestroyed))
@@ -415,7 +416,7 @@ internal class Adina : TheKeyOfAhdashim
                     foreach (var sweep in sweeps)
                     {
                         var sweepLifespan = sweep.ComputeLifespan(log, 450);
-                        replay.Decorations.Add(new PolygonDecoration(60, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
+                        replay.Decorations.Add(new RegularPolygonDecoration(60, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
                     }
                 }
                 var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);

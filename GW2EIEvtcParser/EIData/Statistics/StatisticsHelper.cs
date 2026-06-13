@@ -10,109 +10,119 @@ namespace GW2EIEvtcParser.EIData;
 /// </summary>
 public class StatisticsHelper
 {
-    internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer buffs)
+    internal StatisticsHelper(CombatData combatData, EvtcParserSettings parserSettings, IReadOnlyList<Player> players, IReadOnlyList<SingleActor> targets, BuffsContainer buffs)
     {
-        // Main boons
-        foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
+        if (parserSettings.ComputeBuff)
         {
-            if (combatData.GetBuffData(boon.ID).Count > 0)
+            // Main boons
+            foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
             {
-                _presentBoons.Add(boon);
-            }
-        }
-        // Main Conditions
-        foreach (Buff condition in buffs.BuffsByClassification[BuffClassification.Condition])
-        {
-            if (combatData.GetBuffData(condition.ID).Count > 0)
-            {
-                _presentConditions.Add(condition);
-            }
-        }
-
-        // Important class specific boons
-        foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
-        {
-            if (combatData.GetBuffData(offensiveBuff.ID).Count > 0)
-            {
-                _presentOffbuffs.Add(offensiveBuff);
-            }
-        }
-
-        foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
-        {
-            if (combatData.GetBuffData(supportBuff.ID).Count > 0)
-            {
-                _presentSupbuffs.Add(supportBuff);
-            }
-        }
-
-        foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
-        {
-            if (combatData.GetBuffData(defensiveBuff.ID).Count > 0)
-            {
-                _presentDefbuffs.Add(defensiveBuff);
-            }
-
-        }
-
-        foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
-        {
-            if (combatData.GetBuffData(gearBuff.ID).Count > 0)
-            {
-                _presentGearbuffs.Add(gearBuff);
-            }
-
-        }
-
-        foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
-        {
-            if (combatData.GetBuffData(debuff.ID).Count > 0)
-            {
-                _presentDebuffs.Add(debuff);
-            }
-
-        }
-
-        foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
-        {
-            if (combatData.GetBuffData(nourishment.ID).Count > 0)
-            {
-                _presentNourishments.Add(nourishment);
-            }
-
-        }
-
-        foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
-        {
-            if (combatData.GetBuffData(enhancement.ID).Count > 0)
-            {
-                _presentEnhancements.Add(enhancement);
-            }
-
-        }
-
-        foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
-        {
-            if (combatData.GetBuffData(otherConsumable.ID).Count > 0)
-            {
-                _presentOtherConsumables.Add(otherConsumable);
-            }
-
-        }
-
-        // All class specific boons
-        var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault()!);
-        foreach (Player player in players)
-        {
-            _presentRemainingBuffsPerPlayer[player] = [];
-            foreach (BuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
-            {
-                if (item is BuffApplyEvent && item.To.Is(player.AgentItem) && remainingBuffsByIDs.TryGetValue(item.BuffID, out var boon))
+                if (combatData.GetBuffData(boon.ID).Count > 0)
                 {
-                    _presentRemainingBuffsPerPlayer[player].Add(boon);
+                    _presentBoons.Add(boon);
                 }
             }
-        }
+            // Main Conditions
+            foreach (Buff condition in buffs.BuffsByClassification[BuffClassification.Condition])
+            {
+                if (combatData.GetBuffData(condition.ID).Count > 0)
+                {
+                    _presentConditions.Add(condition);
+                }
+            }
+
+            // Important class specific boons
+            foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(offensiveBuff.ID, p.AgentItem).Count > 0))
+                {
+                    _presentOffbuffs.Add(offensiveBuff);
+                }
+            }
+
+            foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(supportBuff.ID, p.AgentItem).Count > 0))
+                {
+                    _presentSupbuffs.Add(supportBuff);
+                }
+            }
+
+            foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(defensiveBuff.ID, p.AgentItem).Count > 0))
+                {
+                    _presentDefbuffs.Add(defensiveBuff);
+                }
+
+            }
+
+            foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(gearBuff.ID, p.AgentItem).Count > 0))
+                {
+                    _presentGearbuffs.Add(gearBuff);
+                }
+
+            }
+
+            foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(debuff.ID, p.AgentItem).Count > 0))
+                {
+                    _presentDebuffs.Add(debuff);
+                }
+                if (targets.Any(t => combatData.GetBuffApplyDataByIDByDst(debuff.ID, t.AgentItem).Count > 0))
+                {
+                    _presentTargetDebuffs.Add(debuff);
+                }
+            }
+
+            foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(nourishment.ID, p.AgentItem).Count > 0))
+                {
+                    _presentNourishments.Add(nourishment);
+                }
+
+            }
+
+            foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(enhancement.ID, p.AgentItem).Count > 0))
+                {
+                    _presentEnhancements.Add(enhancement);
+                }
+
+            }
+
+            foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
+            {
+                if (players.Any(p => combatData.GetBuffApplyDataByIDByDst(otherConsumable.ID, p.AgentItem).Count > 0))
+                {
+                    _presentOtherConsumables.Add(otherConsumable);
+                }
+
+            }
+
+            // All class specific boons
+            var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            foreach (var pair in remainingBuffsByIDs)
+            {
+                foreach (Player player in players)
+                {
+                    _presentRemainingBuffsPerPlayer[player] = [];
+                    if (combatData.GetBuffApplyDataByIDByDst(pair.Key, player.AgentItem).Count > 0)
+                    {
+                        _presentRemainingBuffsPerPlayer[player].Add(pair.Value);
+                    }
+                }
+                if (targets.Any(t => combatData.GetBuffApplyDataByIDByDst(pair.Key, t.AgentItem).Count > 0))
+                {
+                    _presentTargetOtherBuffs.Add(pair.Value);
+                }
+            }
+        }    
     }
 
 
@@ -123,6 +133,8 @@ public class StatisticsHelper
     public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
     public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
     public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
+    public IReadOnlyList<Buff> PresentTargetDebuffs => _presentTargetDebuffs;//Used only for Target Debuff tables
+    public IReadOnlyList<Buff> PresentTargetOtherBuffs => _presentTargetOtherBuffs;//Used only for Target other buff tables
     public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
     public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
     public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
@@ -145,6 +157,8 @@ public class StatisticsHelper
     private readonly List<Buff> _presentSupbuffs = [];//Used only for Off Buff tables
     private readonly List<Buff> _presentDefbuffs = [];//Used only for Def Buff tables
     private readonly List<Buff> _presentDebuffs = [];//Used only for Debuff tables
+    private readonly List<Buff> _presentTargetDebuffs = [];//Used only for Target Debuff tables
+    private readonly List<Buff> _presentTargetOtherBuffs = [];//Used only for Target Other Buff tables
     private readonly List<Buff> _presentGearbuffs = [];//Used only for Gear Buff tables
     private readonly List<Buff> _presentNourishments = [];
     private readonly List<Buff> _presentEnhancements = [];
@@ -183,7 +197,7 @@ public class StatisticsHelper
     /// <summary> Calculates a list of center positions of the squad which are null in places where all players are dead or disconnected. </summary>
     private static List<ParametricPoint3D?> CalculateStackCenterPositions(ParsedEvtcLog log)
     {
-        if (!log.CombatData.HasMovementData)
+        if (!log.CanCombatReplay)
         {
             return [];
         }
@@ -243,7 +257,7 @@ public class StatisticsHelper
     /// <summary> Calculates a list of commander positions for the squad which are null in places where there is no commander. </summary>
     private static List<ParametricPoint3D?> CalculateStackCommanderPositions(ParsedEvtcLog log)
     {
-        if (!log.CombatData.HasMovementData)
+        if (!log.CanCombatReplay)
         {
             return [ ];
         }
