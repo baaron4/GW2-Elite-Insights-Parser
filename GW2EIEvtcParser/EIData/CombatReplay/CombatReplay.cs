@@ -1,4 +1,7 @@
 ﻿using System.Numerics;
+#if DEBUG
+using GW2EIEvtcParser.ParsedData;
+#endif
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData;
