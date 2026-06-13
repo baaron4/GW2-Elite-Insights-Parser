@@ -30,6 +30,10 @@ public class GadgetCaptureEvent : StatusEvent
             _points = new Vector3[(int)evtcItem.OverstackValue];
         }
         int index = (int)evtcItem.DstAgent;
+        if (index >= _points.Length)
+        {
+            return;
+        }
         _points[index] = new Vector3(
             BitConverter.Int32BitsToSingle(evtcItem.Value),
             BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
