@@ -288,7 +288,7 @@ public sealed class ProgramHelper : IDisposable
                         var uploadResult = new UploadResults();
                         {
                             var ms = new MemoryStream();
-                            var builder = new RawFormatBuilder(logToUse, new RawFormatSettings(true), ParserVersion, uploadResult);
+                            var builder = new RawFormatBuilder(logToUse, new RawFormatSettings(), ParserVersion, uploadResult);
 
                             builder.CreateJSON(ms, false);
 
@@ -299,7 +299,7 @@ public sealed class ProgramHelper : IDisposable
                         {
                             var ms = new MemoryStream();
                             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-                            var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false, true), htmlAssets, ParserVersion, uploadResult);
+                            var builder = new HTMLBuilder(logToUse, new HTMLSettings(), htmlAssets, ParserVersion, uploadResult);
 
                             builder.CreateHTML(sw, null);
                             sw.Close();
@@ -527,12 +527,14 @@ public sealed class ProgramHelper : IDisposable
             {
                 var builder = new HTMLBuilder(log,
                     new HTMLSettings(
-                        Settings.LightTheme,
-                        Settings.HtmlExternalScripts,
                         Settings.HtmlExternalScriptsPath,
-                        Settings.HtmlExternalScriptsCdn,
-                        Settings.HtmlCompressJson || log.LogData.IsInstance
-                    ), htmlAssets, ParserVersion, uploadResults);
+                        Settings.HtmlExternalScriptsCdn
+                    )
+                    {
+                        CompressJson = Settings.HtmlCompressJson || log.LogData.IsInstance,
+                        ExternalHTMLScripts = Settings.HtmlExternalScripts,
+                        HTMLLightTheme = Settings.LightTheme,
+                    }, htmlAssets, ParserVersion, uploadResults);
                 builder.CreateHTML(sw, saveDirectory.FullName);
             }
             operation.UpdateProgressWithCancellationCheck("Program: HTML created");
@@ -556,7 +558,7 @@ public sealed class ProgramHelper : IDisposable
         }
         if (Settings.SaveOutJSON)
         {
-            var builder = new RawFormatBuilder(log, new RawFormatSettings(Settings.RawTimelineArrays), ParserVersion, uploadResults);
+            var builder = new RawFormatBuilder(log, new RawFormatSettings() { RawFormatTimelineArrays = Settings.RawTimelineArrays }, ParserVersion, uploadResults);
             if (Settings.SaveOutJSON)
             {
                 using var _t1 = new AutoTrace("Generate JSON");

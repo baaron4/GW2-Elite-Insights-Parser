@@ -3,35 +3,22 @@
 public class HTMLSettings
 {
 
-    public readonly bool HTMLLightTheme;
+    public bool HTMLLightTheme { get; init; } = false;
 
-    public readonly bool ExternalHTMLScripts;
+    public bool ExternalHTMLScripts { get; init; } = false;
 
     public readonly string? ExternalHtmlScriptsPath;
 
     public readonly string? ExternalHtmlScriptsCdn;
-    public readonly bool CompressJson;
+    public bool CompressJson { get; init; } = true;
 
-    public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
-    {
-        HTMLLightTheme = htmlLightTheme;
-        ExternalHTMLScripts = externalHTMLScripts;
+    public HTMLSettings() 
+    { 
     }
 
-    public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn) : this(htmlLightTheme, externalHTMLScripts)
+    public HTMLSettings(string externalHTMLScriptsPath, string externalHTMLScriptsCdn)
     {
         ExternalHtmlScriptsPath = externalHTMLScriptsPath;
         ExternalHtmlScriptsCdn = externalHTMLScriptsCdn;
-    }
-
-
-    public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, bool compressJson) : this(htmlLightTheme, externalHTMLScripts)
-    {
-        CompressJson = compressJson;
-    }
-
-    public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn, bool compressJson) : this(htmlLightTheme, externalHTMLScripts, externalHTMLScriptsPath, externalHTMLScriptsCdn)
-    {
-        CompressJson = compressJson;
     }
 }
