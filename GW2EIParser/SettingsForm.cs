@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Properties;
 
@@ -76,12 +76,12 @@ public partial class SettingsForm : Form
         NumericMemoryLimit.Value = _programSettings.MemoryLimit;
         ChkOutputHtml.Checked = _programSettings.SaveOutHTML;
         ChkOutputCsv.Checked = _programSettings.SaveOutCSV;
-        ChkPhaseParsing.Checked = _programSettings.ParsePhases;
+        ChkComputeParsing.Checked = _programSettings.ComputePhases;
         ChkSingleThreaded.Checked = _programSettings.SingleThreaded;
         RadioThemeLight.Checked = _programSettings.LightTheme;
         RadioThemeDark.Checked = !_programSettings.LightTheme;
         PictureTheme.Image = _programSettings.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
-        ChkCombatReplay.Checked = _programSettings.ParseCombatReplay;
+        ChkCombatReplay.Checked = _programSettings.ComputeCombatReplay;
         ChkOutputJson.Checked = _programSettings.SaveOutJSON;
         ChkIndentJSON.Checked = _programSettings.IndentJSON;
         ChkUploadDPSReports.Checked = _programSettings.UploadToDPSReports;
@@ -101,6 +101,11 @@ public partial class SettingsForm : Form
         ChkAnonymous.Checked = _programSettings.Anonymous;
         ChkSaveOutTrace.Checked = _programSettings.SaveOutTrace;
         ChkDamageMods.Checked = _programSettings.ComputeDamageModifiers;
+        ChkCast.Checked = _programSettings.ComputeCast;
+        ChkDamage.Checked = _programSettings.ComputeDamage;
+        ChkBuff.Checked = _programSettings.ComputeBuff;
+        ChkExtensions.Checked = _programSettings.ParseExtensions;
+        ChkMechanics.Checked = _programSettings.ComputeMechanics;
         ChkMultiLogs.Checked = _programSettings.ParseMultipleLogs;
         ChkRawTimelineArrays.Checked = _programSettings.RawTimelineArrays;
         ChkDetailledWvW.Checked = _programSettings.DetailledWvW;
@@ -219,16 +224,16 @@ public partial class SettingsForm : Form
         Settings.Default.SingleThreaded = _programSettings.SingleThreaded;
     }
 
-    private void ChkPhaseParsingCheckedChanged(object sender, EventArgs e)
+    private void ChkComputePhaseCheckedChanged(object sender, EventArgs e)
     {
-        _programSettings.ParsePhases = ChkPhaseParsing.Checked;
-        Settings.Default.ParsePhases = _programSettings.ParsePhases;
+        _programSettings.ComputePhases = ChkComputeParsing.Checked;
+        Settings.Default.ParsePhases = _programSettings.ComputePhases;
     }
 
     private void ChkCombatReplayCheckedChanged(object sender, EventArgs e)
     {
-        _programSettings.ParseCombatReplay = ChkCombatReplay.Checked;
-        Settings.Default.ParseCombatReplay = _programSettings.ParseCombatReplay;
+        _programSettings.ComputeCombatReplay = ChkCombatReplay.Checked;
+        Settings.Default.ParseCombatReplay = _programSettings.ComputeCombatReplay;
     }
 
     private void ChkUploadDPSReportsCheckedChanged(object sender, EventArgs e)
@@ -448,6 +453,36 @@ public partial class SettingsForm : Form
     {
         _programSettings.ComputeDamageModifiers = ChkDamageMods.Checked;
         Settings.Default.ComputeDamageModifiers = _programSettings.ComputeDamageModifiers;
+    }
+
+    private void ChkComputeDamageCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeDamage = ChkDamage.Checked;
+        Settings.Default.ComputeDamage = _programSettings.ComputeDamage;
+    }
+
+    private void ChkComputeCastCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeCast = ChkCast.Checked;
+        Settings.Default.ComputeCast = _programSettings.ComputeCast;
+    }
+
+    private void ChkComputeBuffCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeBuff = ChkBuff.Checked;
+        Settings.Default.ComputeBuff = _programSettings.ComputeBuff;
+    }
+
+    private void ChkComputeMechanicsCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ComputeMechanics = ChkMechanics.Checked;
+        Settings.Default.ComputeMechanics = _programSettings.ComputeMechanics;
+    }
+
+    private void ChkParseExtensionsCheckedChanged(object sender, EventArgs e)
+    {
+        _programSettings.ParseExtensions = ChkExtensions.Checked;
+        Settings.Default.ParseExtensions = _programSettings.ParseExtensions;
     }
 
     private void ChkMultiLogsCheckedChanged(object sender, EventArgs e)

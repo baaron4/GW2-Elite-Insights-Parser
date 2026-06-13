@@ -204,6 +204,17 @@ internal static class JsonLogBuilder
         jsonLog.MissingPreEvent = mainPhase.MissingPreEvent;
         jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
         jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.LogData.Logic.ParseMode == LogLogic.ParseModeEnum.WvW;
+        jsonLog.ParsingSettings = new EvtcParsingSettings()
+        {
+            ComputeBuff = log.ParserSettings.ComputeBuff,
+            ComputeCast = log.ParserSettings.ComputeCast,
+            ComputeCombatReplay = log.CanCombatReplay,
+            ComputeDamage = log.ParserSettings.ComputeDamage,
+            ComputeDamageModifiers = log.ParserSettings.ComputeDamageModifiers,
+            ComputeMechanics = log.ParserSettings.ComputeMechanics,
+            ComputePhases = log.ParserSettings.ComputePhases,
+            ParseExtensions = log.ParserSettings.ParseExtensions,
+        };
         var personalBuffs = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
         var personalDamageMods = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
         var skillMap = new Dictionary<long, SkillItem>(200); //TODO_PERF(Rennorb)

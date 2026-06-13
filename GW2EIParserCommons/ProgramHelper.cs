@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
 using Discord;
@@ -252,18 +252,30 @@ public sealed class ProgramHelper : IDisposable
 #if !DEBUG
                     try
                     {
-                        var expectedSettings = new EvtcParserSettings(Settings.Anonymous,
-                                                        Settings.SkipFailedTries,
-                                                        true,
-                                                        true,
-                                                        true,
-                                                        Settings.CustomTooShort,
-                                                        Settings.CustomTooBig,
-                                                        Settings.DetailledWvW);
+                        var expectedSettings = new EvtcParserSettings(Settings.CustomTooShort, Settings.CustomTooBig)
+                        {
+                            AnonymousPlayers = Settings.Anonymous,
+                            SkipFailedTries = Settings.SkipFailedTries,
+                            ComputeCast = true,
+                            ComputeCombatReplay = true,
+                            ComputeMechanics = true,
+                            ComputePhases = true,
+                            DetailedWvWParse = Settings.DetailledWvW,
+                            ParseExtensions = true,
+                            ComputeDamageModifiers = true,
+                            ComputeBuff = true,
+                            ComputeDamage = true,
+                        };
                         ParsedEvtcLog logToUse = originalLog;
-                        if (originalLog.ParserSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
-                            originalLog.ParserSettings.ParsePhases != expectedSettings.ParsePhases ||
-                            originalLog.ParserSettings.ParseCombatReplay != expectedSettings.ParseCombatReplay)
+                        var originalSettings = originalLog.ParserSettings;
+                        if (originalSettings.ComputeDamageModifiers != expectedSettings.ComputeDamageModifiers ||
+                            originalSettings.ComputeCombatReplay != expectedSettings.ComputeCombatReplay ||
+                            originalSettings.ComputePhases != expectedSettings.ComputePhases ||
+                            originalSettings.ComputeDamage != expectedSettings.ComputeDamage ||
+                            originalSettings.ComputeBuff != expectedSettings.ComputeBuff ||
+                            originalSettings.ComputeCast != expectedSettings.ComputeCast ||
+                            originalSettings.ComputeMechanics != expectedSettings.ComputeMechanics ||
+                            originalSettings.ParseExtensions != expectedSettings.ParseExtensions)
                         {
                             // We need to create a parser that matches Wingman's expected settings
                             var parser = new EvtcParser(expectedSettings, APIController);
@@ -343,14 +355,22 @@ public sealed class ProgramHelper : IDisposable
             operation.Start();
             var fInfo = new FileInfo(operation.InputFile);
 
-            var parser = new EvtcParser(new EvtcParserSettings(Settings.Anonymous,
-                                            Settings.SkipFailedTries,
-                                            Settings.ParsePhases,
-                                            Settings.ParseCombatReplay,
-                                            Settings.ComputeDamageModifiers,
+            var parser = new EvtcParser(new EvtcParserSettings(
                                             Settings.CustomTooShort,
-                                            Settings.CustomTooBig,
-                                            Settings.DetailledWvW),
+                                            Settings.CustomTooBig)
+            {
+                AnonymousPlayers = Settings.Anonymous,
+                SkipFailedTries = Settings.SkipFailedTries,
+                ComputePhases = Settings.ComputePhases,
+                ComputeCombatReplay = Settings.ComputeCombatReplay,
+                ComputeDamageModifiers = Settings.ComputeDamageModifiers,
+                ParseExtensions = Settings.ParseExtensions,
+                ComputeBuff = Settings.ComputeBuff,
+                ComputeDamage = Settings.ComputeDamage,
+                ComputeCast = Settings.ComputeCast,
+                ComputeMechanics = Settings.ComputeMechanics,
+                DetailedWvWParse = Settings.DetailledWvW,
+            },
                                         APIController);
 
             //Process evtc here

@@ -101,6 +101,10 @@ public class MechanicData
 
     private void ComputeMechanics(ParsedEvtcLog log)
     {
+        if (!log.ParserSettings.ComputeMechanics)
+        {
+            return;
+        }
         //TODO_PERF(Rennorb) <regroupedMobs> = 0
         var regroupedMobs = new Dictionary<int, SingleActor>();
         foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) 

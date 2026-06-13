@@ -1,4 +1,4 @@
-namespace GW2EIParserCommons.Properties;
+﻿namespace GW2EIParserCommons.Properties;
 
 public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
 {
@@ -132,6 +132,82 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
             this[nameof(ParseCombatReplay)] = value;
         }
     }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ParseExtensions
+    {
+        get
+        {
+            return (bool)this[nameof(ParseExtensions)];
+        }
+        set
+        {
+            this[nameof(ParseExtensions)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ComputeDamage
+    {
+        get
+        {
+            return (bool)this[nameof(ComputeDamage)];
+        }
+        set
+        {
+            this[nameof(ComputeDamage)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ComputeBuff
+    {
+        get
+        {
+            return (bool)this[nameof(ComputeBuff)];
+        }
+        set
+        {
+            this[nameof(ComputeBuff)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ComputeCast
+    {
+        get
+        {
+            return (bool)this[nameof(ComputeCast)];
+        }
+        set
+        {
+            this[nameof(ComputeCast)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ComputeMechanics
+    {
+        get
+        {
+            return (bool)this[nameof(ComputeMechanics)];
+        }
+        set
+        {
+            this[nameof(ComputeMechanics)] = value;
+        }
+    }
+
 
     [global::System.Configuration.UserScopedSettingAttribute()]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

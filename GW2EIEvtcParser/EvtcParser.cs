@@ -940,6 +940,10 @@ public class EvtcParser
         }
         if (combatItem.IsExtension)
         {
+            if (!_parserSettings.ParseExtensions)
+            {
+                return false;
+            }
             // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
             // Can't be ExtensionCombat
             if (combatItem.Pad == 0 && combatItem.IsStateChange == StateChange.Extension)

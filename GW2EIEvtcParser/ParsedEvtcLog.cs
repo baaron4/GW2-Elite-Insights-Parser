@@ -23,7 +23,7 @@ public class ParsedEvtcLog
     public readonly DamageModifiersContainer DamageModifiers;
     public readonly BuffsContainer Buffs;
     public readonly EvtcParserSettings ParserSettings;
-    public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
+    public bool CanCombatReplay => ParserSettings.ComputeCombatReplay && CombatData.HasMovementData;
 
     public readonly MechanicData MechanicData;
     public readonly StatisticsHelper StatisticsHelper;
@@ -131,7 +131,7 @@ public class ParsedEvtcLog
         MechanicData = LogData.Logic.GetMechanicData();
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
-        StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, LogData.Logic.Targets, Buffs);
+        StatisticsHelper = new StatisticsHelper(CombatData, ParserSettings, PlayerList, LogData.Logic.Targets, Buffs);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Find sources for buff extension events");
         CombatData.TryFindSrc(this);

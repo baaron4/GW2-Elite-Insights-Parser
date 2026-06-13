@@ -456,7 +456,7 @@ partial class SingleActor
     {
         var firstWeaponSet = new WeaponSet(log.LogData.EvtcLogStart, log.LogData.EvtcLogEnd);
         _weaponSets = [firstWeaponSet];
-        if (this is not PlayerActor)
+        if (this is not PlayerActor || !log.ParserSettings.ComputeCast)
         {
             return;
         }
@@ -506,10 +506,16 @@ partial class SingleActor
         {
             SetDeathRecaps(log);
         }
-        return _deathRecaps!;
+        return _deathRecaps;
     }
+    [MemberNotNull(nameof(_deathRecaps))]
     private void SetDeathRecaps(ParsedEvtcLog log)
     {
+        if (!log.ParserSettings.ComputeDamage)
+        {
+            _deathRecaps = [];
+            return;
+        }
         IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
         IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
         IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
