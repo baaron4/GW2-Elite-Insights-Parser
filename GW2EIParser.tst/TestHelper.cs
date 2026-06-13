@@ -20,8 +20,8 @@ public static class TestHelper
     {
         DetailedWvWParse = true,
     };
-    private static readonly HTMLSettings htmlSettings = new(false, false);
-    private static readonly RawFormatSettings rawSettings = new(true);
+    private static readonly HTMLSettings htmlSettings = new();
+    private static readonly RawFormatSettings rawSettings = new();
     private static readonly CSVSettings csvSettings = new(",");
     private static readonly HTMLAssets htmlAssets = new();
 
