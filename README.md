@@ -134,7 +134,17 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__ParseCombatReplay__: if true, combat replay will be computed.
 
--__ComputeDamageModifiers__: if true, damage modifiers will be computed.
+-__ComputeBuff__: if true, buff related stats will be computed.
+
+-__ComputeDamage__: if true, damage related stats will be computed.
+
+-__ComputeCast__: if true, skill cast related stats will be computed.
+
+-__ComputeMechanics__: if true,mechanics will be computed.
+
+-__ComputeDamageModifiers__: if true, damage modifiers will be computed. This also requires all three ComputeBuff, ComputeDamage and ComputeCast to be true.
+
+-__ParseExtensions__: if true, extension events present in the evtc will be processed.
 
 -__DetailledWvW__: if true, enemy players will not be merged into one in WvW logs and they'll appear as standard targets. Warning: the generated files and the generation time will grow exponentially, use it only on organized sorties (Guild zergs, GvG, ...).
 
