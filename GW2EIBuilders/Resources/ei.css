@@ -365,6 +365,7 @@ body.theme-yeti {
     --footer-tag-bg: #e9ecef;
     --footer-border: #dee2e6;
     --dropdown-selection-bg: rgba(100, 200, 0, 0.5);
+    --dropdown-preselection-bg:rgba(120, 240, 0, 0.5);
     --dropdown-selection-text: #008cba;
 }
 
@@ -376,6 +377,7 @@ body.theme-slate {
     --footer-tag-bg: #3a3f44;
     --footer-border: #3e444c;
     --dropdown-selection-bg: rgba(50, 120, 0, 0.5);
+    --dropdown-preselection-bg: rgba(40, 75, 0, 0.5);
     --dropdown-selection-text: #fff
 }
 
@@ -1168,9 +1170,16 @@ td.approximate::before {
     cursor: pointer;
 }
 
-.phase-selector-item-active {
+.phase-selector-item.active {
     background-color: var(--dropdown-selection-bg);
     color: var(--dropdown-selection-text);
     font-weight: 600;
+    border-radius: 5px;
+}
+
+.phase-selector-item:hover:not(.active) {
+    background-color: var(--dropdown-preselection-bg);
+    color: var(--dropdown-selection-text);
+    font-weight: 500;
     border-radius: 5px;
 }

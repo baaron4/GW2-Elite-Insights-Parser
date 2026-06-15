@@ -15,11 +15,10 @@
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
-                <li v-for="(phase, index) in phases" :key="index" :class="{ 'phase-selector-item-active': selectedPhase === phase }">
-                    <label class="phase-selector-item" @click="updatePhaseTime(phase)"
-                           :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
+                <li v-for="(phase, index) in phases"  class="phase-selector-item" :key="index" :class="{ 'active': selectedPhase === phase }" 
+                            @click="updatePhaseTime(phase)"
+                           :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">          
                         {{ getPhaseName(phase) }}
-                    </label>
                 </li>
             </ul>
         </div>
@@ -566,7 +565,7 @@
                 this.hoveredPhase = phase;
                 if (this.clickThroughDragCursor) {
                     this.clickThroughDragCursor = false;
-                    this.jumpToPhaseStart(phase);
+                    this.updatePhaseTime(phase);
                 }
             },
             resetHoveredPhase() {
@@ -593,7 +592,7 @@
             onPhaseClick(phase, e) {
                 if (this.phaseDoubleClickTimeout) {
                     this.clearPhaseMouseEvents();
-                    this.jumpToPhaseStart(phase);
+                    this.updatePhaseTime(phase);
                 } else {
                     this.phaseDoubleClickTimeout = setTimeout(() => {
                         this.clearPhaseMouseEvents();
@@ -618,7 +617,7 @@
                 if (e.detail > 1) {
                     this.clickThroughDragCursor = true;
                     let element = document.getElementById("large-line-drag")
-                    element.style.pointerEvents = 'none'; // this will cause an hover on phase bloc to appear, if phase under, we will jumpToPhaseStart it
+                    element.style.pointerEvents = 'none'; // this will cause an hover on phase bloc to appear, if phase under, we will updatePhaseTime it
                     setTimeout(() => {
                         element.style.pointerEvents = 'stroke';
                         this.clickThroughDragCursor = false;
@@ -643,10 +642,6 @@
                 this.draggingCursor = false;
                 window.removeEventListener("mousemove", this.onDragCursor);
                 window.removeEventListener("mouseup", this.stopDragCursor);
-            },
-            jumpToPhaseStart(phase) {
-                this.selectedPhase = phase;
-                this.updateTime(phase.start * 1000 - this.range.min);
             },
         },
     });
