@@ -9,6 +9,20 @@
                 </li>
             </ul>
         </div>
+        <div v-if="!isTouchDevice" class="position-relative">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Phase Selector">
+                {{ selectedPhase ? getPhaseName(selectedPhase) : 'Phase Selector' }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
+                <li v-for="(phase, index) in phases" :key="index" :class="{ 'phase-selector-item-active': selectedPhase === phase }">
+                    <label class="phase-selector-item" @click="updatePhaseTime(phase)"
+                           :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
+                        {{ getPhaseName(phase) }}
+                    </label>
+                </li>
+            </ul>
+        </div>
         <div class="d-flex flex-column justify-content-center flex-wrap mt-1"
              :style="{'width': Math.max(canvasSize.x, canvasSize.y) + 'px'}">
             <div class="d-flex flex-column justify-content-center align-items-center"
@@ -54,7 +68,7 @@
                                       @mouseleave="resetHoveredPhase"
                                       @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
                                       @click="onPhaseClick(phaseBloc.phase, $event)"
-                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />    
+                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
 
                                 <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 + phaseBloc.depth * 10"
                                       :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
@@ -62,7 +76,7 @@
                                       stroke-width="4"
                                       stroke-linecap="butt"
                                       :opacity="getPhaseOpacity(phaseBloc.phase)"
-                                      style="pointer-events: none;"/>    
+                                      style="pointer-events: none;" />
 
                                 <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 - 5 + phaseBloc.depth * 10"
                                       :x2="timeOffsetedToX(phaseBloc.phase.start)" :y2="20 + 5 + phaseBloc.depth * 10"
@@ -74,7 +88,7 @@
                                       @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
                                       @click="onPhaseClick(phaseBloc.phase, $event)"
                                       @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
-               
+
                                 <line :x1="timeOffsetedToX(phaseBloc.phase.end)" :y1="20 - 5 + phaseBloc.depth * 10"
                                       :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + 5 + phaseBloc.depth * 10"
                                       :stroke="phaseBloc.color"
@@ -84,11 +98,11 @@
                                       @mouseleave="resetHoveredPhase"
                                       @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
                                       @click="onPhaseClick(phaseBloc.phase, $event)"
-                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)"  />
+                                      @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
                             </g>
 
                             <!-- Drag cursor, larger for easier grab -->
-                            <line id="large-line-drag" 
+                            <line id="large-line-drag"
                                   :x1="timeOffsetedToX(time)" y1="0"
                                   :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
                                   stroke="transparent" stroke-width="10"
@@ -173,14 +187,14 @@
                 </div>
                 <div v-if="isTouchDevice" class="d-flex justify-content-center slidercontainer mt-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
-                        :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
-                        :style="{'background': getSliderGradient()}">
+                           :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
+                           :style="{'background': getSliderGradient()}">
                     <p class="cr-slide-delimiter">
                         {{sliderDelimiter.name}}
                     </p>
                     <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text"
-                        :id="htmlElementIDs.timeRangeDisplayID" value="0"
-                        @input="updateInputTime($event.target.value);">
+                           :id="htmlElementIDs.timeRangeDisplayID" value="0"
+                           @input="updateInputTime($event.target.value);">
                 </div>
                 <div class="d-flex justify-content-center">
                     <label v-for="speed in speeds" @click="setSpeed(speed)"
@@ -473,6 +487,7 @@
                 return this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
             },
             updatePhaseTime: function (phase) {
+                this.selectedPhase = phase;
                 var min = phase.start * 1000;
                 var max = phase.end * 1000;
                 var name = this.getPhaseName(phase);
