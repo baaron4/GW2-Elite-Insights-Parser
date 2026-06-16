@@ -9,13 +9,13 @@
                 </li>
             </ul>
         </div>
-        <div v-if="!isTouchDevice" class="position-relative">
+        <div v-if="showNormalPhases && !isTouchDevice" class="position-relative">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Phase Selector">
-                {{ selectedPhase ? getPhaseName(selectedPhase) : 'Phase Selector' }}
+                {{ selectedPhase && !selectedPhase.breakbarPhase ? getPhaseName(selectedPhase) : 'Phase Selector' }}
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
-                <li v-for="(phase, index) in phases"  class="phase-selector-item" :key="index" :class="{ 'active': selectedPhase === phase }" 
+                <li v-for="(phase, index) in phases" v-show="!phase.breakbarPhase" class="phase-selector-item" :key="index" :class="{ 'active': selectedPhase === phase }" 
                             @click="updatePhaseTime(phase)"
                            :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">          
                         {{ getPhaseName(phase) }}
