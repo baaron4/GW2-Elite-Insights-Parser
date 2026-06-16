@@ -107,11 +107,14 @@ public class StatisticsHelper
 
             // All class specific boons
             var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+            foreach (var player in players)
+            {
+                _presentRemainingBuffsPerPlayer[player] = [];
+            }
             foreach (var pair in remainingBuffsByIDs)
             {
                 foreach (Player player in players)
                 {
-                    _presentRemainingBuffsPerPlayer[player] = [];
                     if (combatData.GetBuffApplyDataByIDByDst(pair.Key, player.AgentItem).Count > 0)
                     {
                         _presentRemainingBuffsPerPlayer[player].Add(pair.Value);
