@@ -214,6 +214,10 @@
                 animator.stopAnimate(true);
                 animator.updateTime(mechanic.time);
 
+                if (isTouchDevice) {
+                    return;
+                }
+
                 // Deselection
                 if (reactiveAnimationData.selectedMechanic.actorId == mechanic.actor.id &&
                     reactiveAnimationData.selectedMechanic.name == mechanic.mechanic.name) {
