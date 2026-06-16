@@ -86,7 +86,8 @@ function getDefaultCombatReplayTime() {
     return Math.max(parseFloat(time), 0.0) * 1000;
 }
 
-var animator = null;
+let animator = null;
+let animationControlComponent = null;
 // reactive structures
 const reactiveAnimationData = {
     time: getDefaultCombatReplayTime(),

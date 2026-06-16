@@ -8,7 +8,7 @@
         <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">
             <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
                 <li class="nav-item" v-for="(phase, id) in breakbarPhases"
-                    @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
+                    @click="updatePhaseTime(phase)"
                     :data-original-title="getTooltip(phase)">
                     <a class="nav-link">{{id + 1}} </a>
                 </li>
@@ -22,11 +22,8 @@
         props: ["targetindex", "time", "buffstoshow"],
         template: `${template}`,
         methods: {
-            updatePhaseTime: function (min, max, name) {
-                animator.updateTime(min);
-                sliderDelimiter.min = min;
-                sliderDelimiter.max = max;
-                sliderDelimiter.name = name;
+            updatePhaseTime: function (phase) {
+                animationControlComponent.updatePhaseTime(phase);
             },
             getTooltip: function(phase) {
                 var target = logData.targets[this.targetindex];
