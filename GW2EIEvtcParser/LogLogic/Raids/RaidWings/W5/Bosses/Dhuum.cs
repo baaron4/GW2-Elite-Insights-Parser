@@ -319,28 +319,21 @@ internal class Dhuum : HallOfChains
         ];
     }
 
+    internal static long[] MissileOrbIDs = [DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb];
+
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            if (combatData.Any(x => x.IsEffect))
+            if (combatData.Any(x => x.IsMissile))
             {
-                var dhuumStartWaveGUID = combatData
-                    .Where(x => x.IsStateChange == StateChange.IDToGUID &&
-                        GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
-                        EffectGUIDs.DhuumEncounterStartWaveEffect.Equals(x.SrcAgent, x.DstAgent))
-                    .Select(x => new EffectGUIDEvent(x, evtcVersion))
-                    .FirstOrDefault();
-                if (dhuumStartWaveGUID != null)
+                var dhuumOrbMissile = combatData
+                    .FirstOrDefault(x => x.IsStateChange == StateChange.MissileCreate && MissileOrbIDs.Contains(x.SkillID));
+                if (dhuumOrbMissile != null)
                 {
-                    var startEffect = combatData.Where(x => x.IsEffect && x.SkillID == dhuumStartWaveGUID.EffectID).FirstOrDefault();
-                    if (startEffect != null)
-                    {
-                        // ~900ms into the fight
-                        return Math.Max(startEffect.Time - 900, 0);
-                    }
+                    return dhuumOrbMissile.Time;
                 }
             } 
             else
@@ -883,7 +876,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Collection Orbs
-        var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
+        var orbs = log.CombatData.GetMissileEventsBySkillIDs(MissileOrbIDs);
         foreach (MissileEvent orb in orbs)
         {
             uint radius = 0;
