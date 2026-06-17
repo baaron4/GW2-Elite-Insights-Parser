@@ -207,18 +207,37 @@ internal class HallOfChainsInstance : HallOfChains
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
+        var hasEffects = log.CombatData.HasEffectData;
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
             var messengers = log.AgentData.GetStableSpeciesByID(TargetID.DhuumsMessenger);
+            if (!log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumEncounterStartWaveEffect, out var startWaveEffects))
+            {
+                startWaveEffects = new List<EffectEvent>();
+            }
             var chest = log.AgentData.GetStableSpeciesByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
-                var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
-                if (!currentMessengers.Any())
+                long start = 0;
+                if (hasEffects)
                 {
-                    continue;
+                    var currentStart = startWaveEffects.FirstOrDefault(x => dhuum.InAwareTimes(x.Time));
+                    if (currentStart == null)
+                    {
+                        continue;
+                    }
+                    // ~900 ms into the fight
+                    start = Math.Max(currentStart.Time - 900, 0);
+                } 
+                else
+                {
+                    var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
+                    if (!currentMessengers.Any())
+                    {
+                        continue;
+                    }
+                    start = currentMessengers.Min(x => x.FirstAware);
                 }
-                long start = currentMessengers.Min(x => x.FirstAware);
                 bool success = false;
                 long end = dhuum.LastAware;
                 if (chest != null && chest.InAwareTimes(end - 500, end + 500))

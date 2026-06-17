@@ -761,6 +761,7 @@ public static class EffectGUIDs
     public static readonly GUID DhuumSuperspeedOrb = new("8F89945581099142B598977188BAC8E1"); // max duration - has end effect
     public static readonly GUID DhuumConeSlash = new("21BA95CC014CC944A71E2A6FB28D9A86");
     public static readonly GUID DhuumReaperGreen = new("3901D25DC071A444AFDFF06787C13A3F");
+    public static readonly GUID DhuumEncounterStartWaveEffect = new ("E1EE365A62CB334B9BA897BC5EF99BDC"); // roughly 900ms into the fight
     // CA
     public static readonly GUID CAArmSmash = new("B1AAD873DB07E04E9D69627156CA8918");
     // Qadim

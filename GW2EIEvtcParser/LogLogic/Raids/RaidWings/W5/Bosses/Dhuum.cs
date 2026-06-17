@@ -325,10 +325,32 @@ internal class Dhuum : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem messenger = agentData.GetStableSpeciesByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
-            if (messenger != null)
+            if (combatData.Any(x => x.IsEffect))
             {
-                startToUse = messenger.FirstAware;
+                var dhuumStartWaveGUID = combatData
+                    .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                        GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
+                        EffectGUIDs.DhuumEncounterStartWaveEffect.Equals(x.SrcAgent, x.DstAgent))
+                    .Select(x => new EffectGUIDEvent(x, evtcVersion))
+                    .FirstOrDefault();
+                if (dhuumStartWaveGUID != null)
+                {
+                    var startEffect = combatData.Where(x => x.IsEffect && x.SkillID == dhuumStartWaveGUID.EffectID).FirstOrDefault();
+                    if (startEffect != null)
+                    {
+                        // ~900ms into the fight
+                        return Math.Max(startEffect.Time - 900, 0);
+                    }
+                }
+            } 
+            else
+            {
+
+                AgentItem messenger = agentData.GetStableSpeciesByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
+                if (messenger != null)
+                {
+                    startToUse = messenger.FirstAware;
+                }
             }
         }
         return startToUse;
