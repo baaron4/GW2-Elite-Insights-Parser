@@ -5,7 +5,9 @@
             <label for="followTimeline" class="mb-0 ml-1">Scroll with timeline</label>
             <div v-if="!isTouchDevice"
                  @click="resetMechanic()" class="ml-3 btn btn-small"
-                 :class="{'btn-dark': !light, 'btn-light': light}">Reset Mechanic Selection</div>
+                 :class="{'btn-dark': !light, 'btn-light': light}">
+                 Reset Mechanic Selection
+            </div>
         </div>
         <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
              style="max-width:450px; overflow-y:auto;">
@@ -75,10 +77,20 @@
                 </thead>
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
-                        :class="rowHighlight(event)" @click="selectMechanic(event)">
-                        <td :data-original-title="'Timestamp'">{{(event.time / 1000).toFixed(2)}}s</td>
-                        <td class="text-left" :data-original-title="event.mechanic.name">{{event.mechanic.shortName}}</td>
-                        <td class="text-left">
+                        :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
+                        <td :class="{'mech-player-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                    reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
+                                :data-original-title="'Timestamp'">
+                                {{(event.time / 1000).toFixed(2)}}s
+                        </td>
+                        <td class="text-left" 
+                            :class="{'mech-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name}" 
+                            :data-original-title="event.mechanic.name">
+                            {{event.mechanic.shortName}}
+                        </td>
+                        <td class="text-left"
+                            :class="{'mech-player-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                reactiveAnimationData.selectedMechanic.actorId === event.actor.id}">
                             <span class="cr-ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
                             </span>
@@ -195,6 +207,7 @@
                 scrollTop: 0,
                 div: null,
                 followTimeline: false,
+                reactiveAnimationData: reactiveAnimationData,
             };
         },
         activated() {
@@ -290,22 +303,6 @@
                     name: null,
                     times: [],
                 };
-            },
-            rowHighlight(event) {
-                if (event.actor.id === this.selectedplayerid &&
-                    reactiveAnimationData.selectedMechanic.actorId === null) {
-                    return 'active';
-                }
-                if (this.selectedplayerid == null &&
-                    reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
-                    reactiveAnimationData.selectedMechanic.actorId === event.actor.id) {
-                    return 'mechanicSelected';
-                }
-                if (event.actor.id === this.selectedplayerid &&
-                    this.selectedplayerid === reactiveAnimationData.selectedMechanic.actorId &&
-                    reactiveAnimationData.selectedMechanic.name !== null) {
-                    return 'agentAndMechanicSelected';
-                }
             },
         },
         computed: {
