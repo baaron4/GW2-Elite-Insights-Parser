@@ -77,8 +77,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
-                        :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
-                        <td :class="{'mech-player-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                        :class="{active: event.actor.id === selectedactorid}" @click="selectMechanic(event)">
+                        <td :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
                                     reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
                                 :data-original-title="'Timestamp'">
                                 {{(event.time / 1000).toFixed(2)}}s
@@ -89,7 +89,7 @@
                             {{event.mechanic.shortName}}
                         </td>
                         <td class="text-left"
-                            :class="{'mech-player-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                            :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
                                 reactiveAnimationData.selectedMechanic.actorId === event.actor.id}">
                             <span class="cr-ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
@@ -104,7 +104,7 @@
 
 <script>
     Vue.component("combat-replay-mechanics-list-component", {
-        props: ['time', 'light', 'selectedplayerid'],
+        props: ['time', 'light', 'selectedactorid'],
         template: `${template}`,
         data: function () {
             var mechanicEvents = [];
@@ -146,7 +146,7 @@
                                 var time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: target.name, enemy: true, id: -1 }, // target selection not supported
+                                    actor: { name: target.name, enemy: true, id: target.uniqueID }, // target selection not supported
                                     mechanic: mechData,
                                 });
                             }
@@ -156,7 +156,7 @@
                                 var time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: points[i][1], enemy: true, id: -1 },
+                                    actor: { name: points[i][1], enemy: true, id: points[i][2] },
                                     mechanic: mechData,
                                 });
                             }
