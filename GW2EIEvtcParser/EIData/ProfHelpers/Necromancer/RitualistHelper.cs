@@ -24,7 +24,7 @@ internal static class RitualistHelper
         // Weapon Spells
         new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingSharedBuff)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
-        new BuffGainCastFinder(WeaponOfWarding, WeaponOfRemedyPersonalBuff)
+        new BuffGainCastFinder(WeaponOfWarding, WeaponOfWardingPersonalBuff)
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffGiveCastFinder(WeaponOfRemedy, WeaponOfRemedySharedBuff)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
