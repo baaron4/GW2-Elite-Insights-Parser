@@ -75,7 +75,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
-                        :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
+                        :class="rowHighlight(event)" @click="selectMechanic(event)">
                         <td :data-original-title="'Timestamp'">{{(event.time / 1000).toFixed(2)}}s</td>
                         <td class="text-left" :data-original-title="event.mechanic.name">{{event.mechanic.shortName}}</td>
                         <td class="text-left">
@@ -214,10 +214,6 @@
                 animator.stopAnimate(true);
                 animator.updateTime(mechanic.time);
 
-                if (isTouchDevice) {
-                    return;
-                }
-
                 // Deselection
                 if (reactiveAnimationData.selectedMechanic.actorId == mechanic.actor.id &&
                     reactiveAnimationData.selectedMechanic.name == mechanic.mechanic.name) {
@@ -294,7 +290,23 @@
                     name: null,
                     times: [],
                 };
-            }
+            },
+            rowHighlight(event) {
+                if (event.actor.id === this.selectedplayerid &&
+                    reactiveAnimationData.selectedMechanic.actorId === null) {
+                    return 'active';
+                }
+                if (this.selectedplayerid == null &&
+                    reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                    reactiveAnimationData.selectedMechanic.actorId === event.actor.id) {
+                    return 'mechanicSelected';
+                }
+                if (event.actor.id === this.selectedplayerid &&
+                    this.selectedplayerid === reactiveAnimationData.selectedMechanic.actorId &&
+                    reactiveAnimationData.selectedMechanic.name !== null) {
+                    return 'agentAndMechanicSelected';
+                }
+            },
         },
         computed: {
             filteredMechanicEvents: function () {

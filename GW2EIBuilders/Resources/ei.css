@@ -759,6 +759,24 @@ th {
     background-color: rgba(50, 120, 0, 0.5);
 }
 
+.theme-yeti table tbody tr.mechanicSelected {
+    font-weight: bold;
+}
+
+.theme-slate table tbody tr.mechanicSelected {
+    font-weight: bold;
+}
+
+.theme-yeti table tbody tr.agentAndMechanicSelected {
+    font-weight: bold;
+    background-color: rgba(100, 200, 0, 0.5);
+}
+
+.theme-slate table tbody tr.agentAndMechanicSelected {
+    font-weight: bold;
+    background-color: rgba(50, 120, 0, 0.5);
+}
+
 .nav-item .nav-link {
     margin-left: -1px;
     border-radius: 0;
