@@ -200,7 +200,7 @@ public class BuffsContainer
             foreach (Buff buff in stackTypeBuffs)
             {
                 IReadOnlyList<BuffEvent> buffData = combatData.GetBuffData(buff.ID);
-                if (buffData.OfType<BuffRemoveSingleEvent>().Any(x => !x.OverstackOrNaturalEnd))
+                if (buffData.OfType<BuffRemoveSingleEvent>().Any(x => !x.OverstackOrNaturalEnd && (buff.StackType == BuffStackType.StackingConditionalLoss || x.RemovedDuration == int.MaxValue)))
                 {
                     foreach (var group in buffData.GroupBy(x => x.To))
                     {
