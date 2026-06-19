@@ -210,15 +210,30 @@ internal class HallOfChainsInstance : HallOfChains
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
             var messengers = log.AgentData.GetStableSpeciesByID(TargetID.DhuumsMessenger);
+            var missiles = log.CombatData.GetMissileEventsBySkillIDs(Dhuum.MissileOrbIDs).ToList();
+            missiles.SortByTime();
             var chest = log.AgentData.GetStableSpeciesByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
-                var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
-                if (!currentMessengers.Any())
+                long start = 0;
+                if (missiles.Count > 0)
                 {
-                    continue;
+                    var currentStart = missiles.FirstOrDefault(x => dhuum.InAwareTimes(x.Time));
+                    if (currentStart == null)
+                    {
+                        continue;
+                    }
+                    start = currentStart.Time;
+                } 
+                else
+                {
+                    var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum)).ToList();
+                    if (currentMessengers.Count == 0)
+                    {
+                        continue;
+                    }
+                    start = currentMessengers.Min(x => x.FirstAware);
                 }
-                long start = currentMessengers.Min(x => x.FirstAware);
                 bool success = false;
                 long end = dhuum.LastAware;
                 if (chest != null && chest.InAwareTimes(end - 500, end + 500))

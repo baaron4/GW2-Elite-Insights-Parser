@@ -36,6 +36,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "Mechanics", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6ab623fd0ba6959783cc845017c4998b", null ],
     [ "MissingPreEvent", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab8dbdb5f96fda513ad748bcb2df3d74c", null ],
     [ "Name", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a20a437760edcb25a85f78f77346ba8be", null ],
+    [ "ParsingSettings", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#abf310e5e8a98c250091886bfc43bec18", null ],
     [ "PersonalBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aa753e843e65b1612429894bf8280c2be", null ],
     [ "PersonalDamageMods", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a70ad201d4c58d2d8475d62766c081653", null ],
     [ "Phases", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aba1a656991c7a29e4b8a9f0c75482744", null ],

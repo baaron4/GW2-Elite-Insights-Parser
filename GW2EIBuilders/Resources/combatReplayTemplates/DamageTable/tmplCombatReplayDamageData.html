@@ -3,7 +3,7 @@
         <dps-graph-mode-selector-component :data="graphdata"
             :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="false" :ignorebreakbar="false" :style="{'width': selectorWidth + 'px'}" :column="selectorWidth < 280">
         </dps-graph-mode-selector-component>
-        <combat-replay-damage-stats-component :time="time" :playerid="selectedplayerid" :graphdata="graphdata">
+        <combat-replay-damage-stats-component :time="time" :playerid="selectedactorid" :graphdata="graphdata">
         </combat-replay-damage-stats-component>
     </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
     Vue.component("combat-replay-damage-data-component", {
         template: `${template}`,
-        props: ["time", "selectedplayerid"],
+        props: ["time", "selectedactorid"],
         data: function () {
             return {
                 graphdata: {

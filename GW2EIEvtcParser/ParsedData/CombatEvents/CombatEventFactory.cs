@@ -636,11 +636,7 @@ partial class CombatData
         {
             if (buffEvent.IsStateChange == StateChange.BuffChange)
             {
-                var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
-                if (extensionEvent.ExtendedDuration > 0)
-                {
-                    buffEvents.Add(extensionEvent);
-                }
+                buffEvents.Add(new BuffExtensionEvent(buffEvent, agentData, skillData));
             } 
             else
             {

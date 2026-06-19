@@ -320,16 +320,31 @@ internal class Dhuum : HallOfChains
         ];
     }
 
+    internal static long[] MissileOrbIDs = [DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb];
+
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem messenger = agentData.GetStableSpeciesByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
-            if (messenger != null)
+            if (combatData.Any(x => x.IsMissile))
             {
-                startToUse = messenger.FirstAware;
+                var dhuumOrbMissile = combatData
+                    .FirstOrDefault(x => x.IsStateChange == StateChange.MissileCreate && MissileOrbIDs.Contains(x.SkillID));
+                if (dhuumOrbMissile != null)
+                {
+                    return dhuumOrbMissile.Time;
+                }
+            } 
+            else
+            {
+
+                AgentItem messenger = agentData.GetStableSpeciesByID(TargetID.DhuumsMessenger).MinBy(x => x.FirstAware);
+                if (messenger != null)
+                {
+                    startToUse = messenger.FirstAware;
+                }
             }
         }
         return startToUse;
@@ -862,7 +877,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Collection Orbs
-        var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
+        var orbs = log.CombatData.GetMissileEventsBySkillIDs(MissileOrbIDs);
         foreach (MissileEvent orb in orbs)
         {
             uint radius = 0;

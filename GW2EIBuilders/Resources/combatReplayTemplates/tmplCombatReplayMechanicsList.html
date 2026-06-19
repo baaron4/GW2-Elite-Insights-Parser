@@ -1,8 +1,13 @@
 <template>
     <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
         <div class="d-flex align-items-center mb-2 scale85">
-            <input id="followTimeline" type="checkbox" v-model="followTimeline" class="mr-1"/>
+            <input id="followTimeline" type="checkbox" v-model="followTimeline" class="mr-1" />
             <label for="followTimeline" class="mb-0 ml-1">Scroll with timeline</label>
+            <div v-if="!isTouchDevice"
+                 @click="resetMechanic()" class="ml-3 btn btn-small"
+                 :class="{'btn-dark': !light, 'btn-light': light}">
+                 Reset Mechanic Selection
+            </div>
         </div>
         <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
              style="max-width:450px; overflow-y:auto;">
@@ -72,14 +77,20 @@
                 </thead>
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
-                        :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
-                        <td :data-original-title="'Timestamp'">{{(event.time / 1000).toFixed(2)}}s</td>
-                        <td class="text-left mech-cell" :data-original-title="event.mechanic.description">
-                            <span>
-                                {{event.mechanic.name}}
-                            </span>
+                        :class="{active: event.actor.id === selectedactorid}" @click="selectMechanic(event)">
+                        <td :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                    reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
+                                :data-original-title="'Timestamp'">
+                                {{(event.time / 1000).toFixed(2)}}s
                         </td>
-                        <td class="text-left">
+                        <td class="text-left mech-cell" 
+                            :class="{'mech-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name}" 
+                            :data-original-title="event.mechanic.description">
+                            {{event.mechanic.name}}
+                        </td>
+                        <td class="text-left"
+                            :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                reactiveAnimationData.selectedMechanic.actorId === event.actor.id}">
                             <span class="cr-ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
                             </span>
@@ -93,7 +104,7 @@
 
 <script>
     Vue.component("combat-replay-mechanics-list-component", {
-        props: ['time', 'selectedplayerid'],
+        props: ['time', 'light', 'selectedactorid'],
         template: `${template}`,
         data: function () {
             var mechanicEvents = [];
@@ -135,7 +146,7 @@
                                 var time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: target.name, enemy: true, id: -1 }, // target selection not supported
+                                    actor: { name: target.name, enemy: true, id: target.uniqueID }, // target selection not supported
                                     mechanic: mechData,
                                 });
                             }
@@ -145,7 +156,7 @@
                                 var time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: points[i][1], enemy: true, id: -1 },
+                                    actor: { name: points[i][1], enemy: true, id: points[i][2] },
                                     mechanic: mechData,
                                 });
                             }
@@ -187,6 +198,7 @@
             });
 
             return {
+                isTouchDevice: isTouchDevice,
                 mechanicEvents: mechanicEvents,
                 actors: actors,
                 actorsList: actorsList,
@@ -195,6 +207,7 @@
                 scrollTop: 0,
                 div: null,
                 followTimeline: false,
+                reactiveAnimationData: reactiveAnimationData,
             };
         },
         activated() {
@@ -213,6 +226,24 @@
                 this.followTimeline = false;
                 animator.stopAnimate(true);
                 animator.updateTime(mechanic.time);
+
+                // Deselection
+                if (reactiveAnimationData.selectedMechanic.actorId == mechanic.actor.id &&
+                    reactiveAnimationData.selectedMechanic.name == mechanic.mechanic.name) {
+                    this.resetMechanic();
+                    return;
+                }
+
+                // Selection
+                reactiveAnimationData.selectedMechanic.actorId = mechanic.actor.id;
+                reactiveAnimationData.selectedMechanic.name = mechanic.mechanic.name;
+                reactiveAnimationData.selectedMechanic.times =
+                    this.mechanicEvents
+                        .filter(event =>
+                            event.actor.id === mechanic.actor.id &&
+                            event.mechanic.name === mechanic.mechanic.name)
+                        .map(event => event.time);
+                reactiveAnimationData.selectedMechanic.actorName = mechanic.actor.name;
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();
@@ -264,6 +295,14 @@
                 const targetScroll = container.scrollTop + offset - container.clientHeight / 2;
 
                 container.scrollTop = targetScroll;
+            },
+            resetMechanic() {
+                reactiveAnimationData.selectedMechanic = {
+                    actorId: null,
+                    actorName: null,
+                    name: null,
+                    times: [],
+                };
             },
         },
         computed: {

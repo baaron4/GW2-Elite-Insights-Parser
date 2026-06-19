@@ -192,7 +192,7 @@
             healthRemaining: function (target, showTotalHP) {
                 const hpLeft = target.hpLeft;
                 const barrierLeft = target.barrierLeft;
-                let res = null;
+                let res = "";
                 let linebreak = "";
                 if (showTotalHP) {
                     res = "Total Health: " + target.health;
@@ -207,7 +207,7 @@
                 else if (barrierLeft > 0) {
                     res += linebreak + 'Remaining Barrier: ' + barrierLeft;
                 }
-                return res;
+                return res.length > 0 ? res : null;
             },
             targetHealthValues: function (target, hpBar) {
                 const minPercent = hpBar ? hpBar[0] : 0;
