@@ -207,32 +207,28 @@ internal class HallOfChainsInstance : HallOfChains
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        var hasEffects = log.CombatData.HasEffectData;
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
             var messengers = log.AgentData.GetStableSpeciesByID(TargetID.DhuumsMessenger);
-            if (!log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumEncounterStartWaveEffect, out var startWaveEffects))
-            {
-                startWaveEffects = new List<EffectEvent>();
-            }
+            var missiles = log.CombatData.GetMissileEventsBySkillIDs(Dhuum.MissileOrbIDs).ToList();
+            missiles.SortByTime();
             var chest = log.AgentData.GetStableSpeciesByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
                 long start = 0;
-                if (hasEffects)
+                if (missiles.Count > 0)
                 {
-                    var currentStart = startWaveEffects.FirstOrDefault(x => dhuum.InAwareTimes(x.Time));
+                    var currentStart = missiles.FirstOrDefault(x => dhuum.InAwareTimes(x.Time));
                     if (currentStart == null)
                     {
                         continue;
                     }
-                    // ~900 ms into the fight
-                    start = Math.Max(currentStart.Time - 900, 0);
+                    start = currentStart.Time;
                 } 
                 else
                 {
-                    var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
-                    if (!currentMessengers.Any())
+                    var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum)).ToList();
+                    if (currentMessengers.Count == 0)
                     {
                         continue;
                     }
