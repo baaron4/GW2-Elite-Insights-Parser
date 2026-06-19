@@ -150,7 +150,8 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
             .UsingChecker((ba, combatData, agentData, skillData) => {
-                return !combatData.GetBuffRemoveSingleDataByIDByDst(RelicOfTheClaw, ba.To).Any(x => Math.Abs(x.Time - ba.Time) < ServerDelayConstant);
+                return !combatData.GetBuffRemoveSingleDataByIDByDst(RelicOfTheClaw, ba.To)
+                    .Any(x => x.Time >= ba.Time && x.Time - ba.Time < ServerDelayConstant && x.BuffInstance != ba.BuffInstance);
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
