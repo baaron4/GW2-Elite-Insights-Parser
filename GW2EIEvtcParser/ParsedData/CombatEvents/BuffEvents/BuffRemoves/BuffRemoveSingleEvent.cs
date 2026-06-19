@@ -37,6 +37,10 @@ public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
         return !OverstackOrNaturalEnd;
     }
 
+    internal void OverrideRemovedDuration(int removedDuration)
+    {
+        RemovedDuration = Math.Max(removedDuration, 0);
+    }
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
         simulator.Remove(CreditedBy, RemovedDuration, 1, Time, BuffRemove.Single, BuffInstance);
