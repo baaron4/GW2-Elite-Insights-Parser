@@ -162,6 +162,7 @@ public class HTMLAssets
             Properties.Resources.tmplCombatReplayActorBuffStats,
             Properties.Resources.tmplCombatReplayPlayerStats,
             Properties.Resources.tmplCombatReplayPlayerStatus,
+            Properties.Resources.tmplCombatReplayActorStatus,
             Properties.Resources.tmplCombatReplayActorRotation,
             Properties.Resources.tmplCombatReplayTargetStats,
             Properties.Resources.tmplCombatReplayTargetStatus,

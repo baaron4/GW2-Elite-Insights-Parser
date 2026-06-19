@@ -220,6 +220,9 @@
   <data name="tmplCombatReplayUI" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\combatReplayTemplates\tmplCombatReplayUI.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+    <data name="tmplCombatReplayActorStatus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\combatReplayTemplates\ActorStatus\tmplCombatReplayActorStatus.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplDamageDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\DistributionTables\tmplDamageDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -322,9 +325,9 @@
   <data name="tmplMechanicsTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\Statistics\tmplMechanicsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-    <data name="tmplMechanicsStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\Resources\htmlTemplates\tmplMechanicsStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-    </data>
+  <data name="tmplMechanicsStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\tmplMechanicsStats.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplPersonalBuffTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\Buffs\tmplPersonalBuffTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -388,9 +391,9 @@
   <data name="tmplTargetBuffTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplTargetBuffTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-   <data name="tmplTargetTabPerPlayerGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-       <value>..\Resources\htmlTemplates\Graphs\tmplTargetTabPerPlayerGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-   </data>
+  <data name="tmplTargetTabPerPlayerGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\Graphs\tmplTargetTabPerPlayerGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplTargetPlayers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\Headers\tmplTargetPlayers.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

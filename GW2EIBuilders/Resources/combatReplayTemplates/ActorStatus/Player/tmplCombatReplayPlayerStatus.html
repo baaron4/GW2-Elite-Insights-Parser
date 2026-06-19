@@ -1,57 +1,12 @@
 <template>
-    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select" :data-original-title="player.name + ' - ' + player.acc">
-        <h6 class="player-shorten-cr text-center">     
-            <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
-            <img :src="player.icon" :alt="player.profession" height="16" width="16">
-            {{player.name}}
-        </h6>     
-        <p v-if="hasHealth" class="text-right cr-hp-display cr-hp-display-player">
-            {{(Math.round(100*getHPPercent(time))/100).toFixed(2)}} %
-        </p>
-        <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-player">
-            {{(Math.round(100*getBarrierPercent(time))/100).toFixed(2)}} %
-        </p>      
-        <div v-if="hasBarrier" class="cr-barrier cr-barrier-player" :style="{'background': getBarrierGradient(time)}">
-
-        </div>
-    </div>
+    <combat-replay-actor-status-component :time="time" :actor="player" :healths="healths" :barriers="barriers"></combat-replay-actor-status-component>
 </template>
 
 <script>
     Vue.component("combat-replay-player-status-component", {
         props: ["playerindex", "time"],
         template: `${template}`,
-        methods: {
-            getHPPercent: function (time) {
-                if (!this.hasHealth) {
-                    return 100;
-                }
-                return findState(this.healths, time/1000.0, 0, this.healths.length - 1);
-            },
-            getBarrierPercent: function (time) {
-                if (!this.hasBarrier) {
-                    return 0;
-                }
-                return findState(this.barriers, time/1000.0, 0, this.barriers.length - 1);
-            },
-            getHPGradient: function (time, status) {
-                var color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
-                return computeGradient(color, this.getHPPercent(time), 'black');
-            },
-            getBarrierGradient: function (time) {
-                return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
-            },
-            activeMarkers: function() {
-                return animator.getActiveActorMarkers(this.player.uniqueID);
-            },
-            select() {
-                animator.selectActor(this.player.uniqueID);
-            }
-        },
         computed: {
-            phase: function () {
-                return logData.phases[0];
-            },
             player: function () {
                 return logData.players[this.playerindex];
             },
@@ -61,17 +16,6 @@
             barriers: function () {
                 return graphData.phases[0].players[this.playerindex].barrierStates;
             },
-            status: function () {
-                var crPData = animator.getActorData(this.player.uniqueID);
-                var icon = crPData.getIcon(this.time);
-                return icon === deadIcon ? 0 : icon === downAllyIcon ||  icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
-            },
-            hasHealth: function () {
-                return !!this.healths;
-            },
-            hasBarrier: function () {
-                return !!this.barriers;
-            }
         }
     });
 </script>

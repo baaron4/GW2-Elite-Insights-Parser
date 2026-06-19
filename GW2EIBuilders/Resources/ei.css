@@ -131,10 +131,11 @@
     transform: scale(0.65, 0.65) translate(0, 17%) !important;
 }
 
-.player-status {
-    color: #DDDDDD;
-    width: 208px;
-    height: 27px;
+.actor-status {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end; 
+    gap: 8px;
     cursor: pointer;
     user-select: none;
 }
@@ -143,90 +144,9 @@
     width: 208px;
 }
 
-.target-status {
-    color: #DDDDDD;
-    width: 208px;
-    height: 35px;
-    cursor: pointer;
-    user-select: none;
-}
-
-.cr-hp-display {
-    font-size: 0.65rem;
-    position: relative;
-    width: 45px;
-    top: -12px;
-    left: 0%;
-    height: 16px;
-    pointer-events: none;
-}
-
-.cr-barrier-display {
-    font-size: 0.65rem;
-    position: relative;
-    width: 45px;
-    top: -44px;
-    height: 16px;
-    pointer-events: none;
-}
-
-.cr-barrier {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.cr-barrier-target {
-    top: -99px;
-}
-
-.cr-barrier-player {
-    top: -90px;
-}
-
-.cr-breakbar-display {
-    font-size: 0.65rem;
-    min-height: 16px;
-}
-
-.cr-breakbar-bar {
-    color: #DDDDDD;
-    width: 130px;
-    height: 16px;
-}
-
 .cr-breakbar-phase-display {
     font-size: 0.65rem;
     width: 180px;
-}
-
-.cr-barrier-display-player {
-    left: 75%;
-}
-
-.cr-barrier-display-target {
-    left: 75%;
-}
-
-h6.player-shorten-cr {
-    width: 100%;
-    margin-bottom: 7px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
-
-h6.target-shorten-cr {
-    width: 100%;
-    height: 21px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    vertical-align: middle;
 }
 
 .squad-details {
@@ -1182,4 +1102,10 @@ td.approximate::before {
     color: var(--dropdown-selection-text);
     font-weight: 500;
     border-radius: 5px;
+}
+
+.ellipis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
