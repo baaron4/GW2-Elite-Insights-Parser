@@ -59,7 +59,7 @@ internal class MechanicChartDataDto
                 }
                 else
                 {
-                    res[^1].Add([time, ml.Actor.Character ]);
+                    res[^1].Add([time, ml.Actor.Character, ml.Actor.UniqueID ]);
                 }
             }
         }
