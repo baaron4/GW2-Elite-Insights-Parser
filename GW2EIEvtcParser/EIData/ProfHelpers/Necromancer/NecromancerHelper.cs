@@ -51,9 +51,9 @@ internal static class NecromancerHelper
         new EXTHealingCastFinder(SpitefulRenewal, SpitefulRenewal)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Minions
-        new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
-        new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
-        new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
+        new MinionCommandCastFinder(RigorMortisSkill, MinionID.BoneFiend),
+        new MinionCommandCastFinder(HauntSkill, MinionID.ShadowFiend),
+        new MinionCommandCastFinder(NecroticTraversal, MinionID.FleshWurm),
         // Spear
         new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress)
             .UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff), effectEvent.Time).Any()),

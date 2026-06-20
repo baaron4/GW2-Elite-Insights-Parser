@@ -66,10 +66,10 @@ internal static class ElementalistHelper
         new EXTHealingCastFinder(FlowLikeWaterHealing, FlowLikeWaterHealing)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Elementals
-        new MinionCommandCastFinder(FireElementalFlameBarrage, (int) MinionID.FireElemental),
-        new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),
-        new MinionCommandCastFinder(AirElementalShockingBolt, (int) MinionID.AirElemental),
-        new MinionCommandCastFinder(EarthElementalStomp, (int) MinionID.EarthElemental),
+        new MinionCommandCastFinder(FireElementalFlameBarrage, MinionID.FireElemental),
+        new MinionCommandCastFinder(WaterElementalCrashingWaves, MinionID.IceElemental),
+        new MinionCommandCastFinder(AirElementalShockingBolt, MinionID.AirElemental),
+        new MinionCommandCastFinder(EarthElementalStomp, MinionID.EarthElemental),
         // Hammer
         new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
             .UsingToNotSpecChecker(Spec.Weaver)
