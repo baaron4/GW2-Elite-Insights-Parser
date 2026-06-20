@@ -40,11 +40,13 @@ internal static class RangerHelper
         (int)MinionID.JuvenileWarclaw,
     ];
 
-    private static readonly HashSet<int> JuvenileBirdPetIDs =
+    private static readonly HashSet<int> JuvenileAvianPetIDs =
     [
         (int)MinionID.JuvenileEagle,
         (int)MinionID.JuvenileHawk,
         (int)MinionID.JuvenileOwl,
+        (int)MinionID.JuvenileRaven,
+        (int)MinionID.JuvenileRaptorSwiftwing,
         (int)MinionID.JuvenileRaven,
         (int)MinionID.JuvenileWhiteRaven,
     ];
@@ -125,7 +127,6 @@ internal static class RangerHelper
         (int)MinionID.JuvenileBristleback,
         (int)MinionID.JuvenileFangedIboga,
         (int)MinionID.JuvenileJacaranda,
-        (int)MinionID.JuvenilePhoenix,
         (int)MinionID.JuvenileRockGazelle,
         (int)MinionID.JuvenileShark,
         (int)MinionID.JuvenileSiegeTurtle,
@@ -135,11 +136,10 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileJanthiriBee,
-        (int)MinionID.JuvenileRaptorSwiftwing,
         (int)MinionID.JuvenileRiverOtter,
     }
     .Union(JuvenileFelinePetIDs)
-    .Union(JuvenileBirdPetIDs)
+    .Union(JuvenileAvianPetIDs)
     .Union(JuvenileDrakePetIDs)
     .Union(JuvenileUrsinePetIDs)
     .Union(JuvenilePorcinePetIDs)
@@ -160,13 +160,13 @@ internal static class RangerHelper
         return JuvenileFelinePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvenileBirdPet(AgentItem agentItem)
+    internal static bool IsJuvenileAvianPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
-        return JuvenileBirdPetIDs.Contains(agentItem.ID);
+        return JuvenileAvianPetIDs.Contains(agentItem.ID);
     }
 
     internal static bool IsJuvenileDrakePet(AgentItem agentItem)
@@ -644,7 +644,7 @@ internal static class RangerHelper
         // Siege Turtle Hunker Down
         if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown, out var hunkerDowns))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDownPetTurtle, SkillModeCategory.ProjectileManagement);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDown_Turtle, SkillModeCategory.ProjectileManagement);
             foreach (EffectEvent effect in hunkerDowns)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
