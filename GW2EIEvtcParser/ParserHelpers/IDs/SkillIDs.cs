@@ -992,6 +992,8 @@ public static class SkillIDs
     public const long BrutalChargePorcine = 12738;
     public const long ChargingBiteShark = 12739;
     public const long StunningRush = 12744;
+    public const long ChillingWhirl = 12748;
+    public const long ImmobilizingWhirl = 12749;
     public const long PoisonLeapCombo = 12810;
     public const long PoisonBlastCombo = 12812;
     public const long LightningLeapCombo = 12815;
