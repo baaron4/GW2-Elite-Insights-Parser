@@ -390,6 +390,8 @@ internal static class RangerHelper
         new MinionCommandCastFinder(PoisonousMaul, MinionID.JuvenileMurellow),
         new MinionCommandCastFinder(IcyRoar, MinionID.JuvenilePolarBear),
         new MinionCommandCastFinder(IcyMaul, MinionID.JuvenilePolarBear),
+        new MinionCommandCastFinder(LightningAssault, MinionID.JuvenileEletricWywern),
+        new MinionCommandCastFinder(ConsumingFlame, MinionID.JuvenileFireWywern),
     ];
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)

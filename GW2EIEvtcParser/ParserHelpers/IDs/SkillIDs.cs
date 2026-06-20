@@ -950,6 +950,9 @@ public static class SkillIDs
     public const long CripplingLeap = 12661;
     public const long BrutalChargeCanine = 12662;
     public const long SlashBear = 12663;
+    public const long RendingMaul = 12664;
+    public const long ShakeItOff = 12666;
+    public const long IcyRoar = 12667;
     public const long BiteDrake = 12668;
     public const long FireBreath_SalamanderDrake = 12670;
     public const long TailSwipePet = 12671;
@@ -962,7 +965,13 @@ public static class SkillIDs
     public const long RendingPounce = 12680;
     public const long Stalk = 12681;
     public const long SlashBird = 12682;
+    public const long EnfeeblingRoar = 12685;
     public const long BiteBear = 12686;
+    public const long PoisonCloud_Murellow = 12687;
+    public const long EnfeeblingMaul = 12688;
+    public const long IcyMaul = 12689;
+    public const long PoisonousMaul = 12690;
+    public const long PurgeConditions = 12691;
     public const long IcyPounce = 12693;
     public const long BiteFeline = 12694;
     public const long Boil_SalamanderDrake = 12695;
@@ -1800,6 +1809,7 @@ public static class SkillIDs
     public const long BlackHoleMinion = 31436;
     public const long Determined31450 = 31450;
     public const long FuriousPounce = 31451;
+    public const long ConsumingFlame = 31459;
     public const long MagicAuraRedGuardian = 31462;
     public const long TemporalStasis = 31465;
     public const long GhastlyRampageBegin = 31466;
@@ -1832,6 +1842,7 @@ public static class SkillIDs
     public const long GhastlyPrison = 31623;
     public const long YouWillJoinUs = 31624;
     public const long CultivatedSynergyPet = 31629;
+    public const long LightningAssault = 31639;
     public const long GlyphOfUnitySomething = 31640;
     public const long CannonBarrage = 31643;
     public const long Enraged_200_strike = 31648;
