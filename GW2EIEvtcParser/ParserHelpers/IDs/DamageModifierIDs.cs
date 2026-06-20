@@ -446,4 +446,5 @@ public static class DamageModifierIDs
     public const int Mod_DraconicEchoFacetOfElements = 433;
     public const int Mod_DraconicEchoFacetOfChaos = 434;
     public const int Mod_ForcedEngagement = 435;
+    public const int Mod_FlockTogether_Pet = 436;
 }

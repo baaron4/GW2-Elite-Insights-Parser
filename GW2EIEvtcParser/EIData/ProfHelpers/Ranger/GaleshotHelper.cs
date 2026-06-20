@@ -38,6 +38,17 @@ internal static class GaleshotHelper
             .WithBuilds(GW2Builds.December2025Balance),
         new BuffOnActorDamageModifier(Mod_BirdOfPrey, [Swiftness, Superspeed], "Bird of Prey", "5% while under swiftness or superspeed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.December2025Balance),
+        // Flock Together    
+        new DamageLogDamageModifier(Mod_FlockTogether_Pet, "Flock Together (Pets)", "25% for feathered pets", DamageSource.PetsOnly, 25.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.FlockTogether, (x, log) => RangerHelper.IsJuvenileAvianPet(x.From) || RangerHelper.IsJuvenileMoaPet(x.From), DamageModifierMode.PvE)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => RangerHelper.IsJuvenileAvianPet(x.ReferenceAgentItem) || RangerHelper.IsJuvenileMoaPet(x.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.August2025VoEBeta),
+        new DamageLogDamageModifier(Mod_FlockTogether_Pet, "Flock Together (Pets)", "15% for feathered pets", DamageSource.PetsOnly, 15.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.FlockTogether, (x, log) => RangerHelper.IsJuvenileAvianPet(x.From) || RangerHelper.IsJuvenileMoaPet(x.From), DamageModifierMode.sPvPWvW)
+            .UsingEarlyExit((a, log) => {
+                return !a.GetMinions(log).Any(x => RangerHelper.IsJuvenileAvianPet(x.ReferenceAgentItem) || RangerHelper.IsJuvenileMoaPet(x.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.August2025VoEBeta),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
