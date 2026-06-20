@@ -309,9 +309,33 @@ internal static class RangerHelper
             .UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
             .UsingDstBaseSpecChecker(Spec.Ranger),
+        // Pets
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
             .UsingNotAccurate(),
-        new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, (int)MinionID.JuvenileRiverOtter),
+        new MinionCommandCastFinder(DimensionBreach, MinionID.JuvenileAetherHunter),
+        new MinionCommandCastFinder(StunningRush, MinionID.JuvenileArmorFish),
+        new MinionCommandCastFinder(BrashSlash, MinionID.JuvenileEagle),
+        new MinionCommandCastFinder(LaceratingSlash, MinionID.JuvenileHawk),
+        new MinionCommandCastFinder(ChillingSlash, MinionID.JuvenileOwl),
+        new MinionCommandCastFinder(BlindingSlash, MinionID.JuvenileRaven),
+        new MinionCommandCastFinder(BlindingSlash, MinionID.JuvenileWhiteRaven),
+        new MinionCommandCastFinder(GaleBreath, MinionID.JuvenilePhoenix),
+        new MinionCommandCastFinder(PiercingShriek, MinionID.JuvenileRaptorSwiftwing),
+        new MinionCommandCastFinder(SpikeBarrage, MinionID.JuvenileBristleback),
+        new MinionCommandCastFinder(ChillingHowl, MinionID.JuvenileAlpineWolf),
+        new MinionCommandCastFinder(Regenerate_FernHound, MinionID.JuvenileFernHound),
+        new MinionCommandCastFinder(HowlOfThePack, MinionID.JuvenileHyena),
+        new MinionCommandCastFinder(IntimidatingHowl, MinionID.JuvenileKrytanDrakehound),
+        new MinionCommandCastFinder(TerrifyingHowl, MinionID.JuvenileWolf),
+        new MinionCommandCastFinder(LeyEnergyPulse, MinionID.JuvenileSkyChakStriker),
+        new MinionCommandCastFinder(Panopticon, MinionID.JuvenileSpinegazer),
+        new MinionCommandCastFinder(PoisonousCloud, MinionID.JuvenileCarrionDevourer),
+        new MinionCommandCastFinder(Regenerate_CarrionDevourer, MinionID.JuvenileCarrionDevourer),
+        new MinionCommandCastFinder(RendingBarbs, MinionID.JuvenileLashtailDevourer),
+        new MinionCommandCastFinder(LashtailVenom, MinionID.JuvenileLashtailDevourer),
+        new MinionCommandCastFinder(PoisonBarbs, MinionID.JuvenileWhiptailDevourer),
+        new MinionCommandCastFinder(PoisonCloud_WhiptailDevourer, MinionID.JuvenileWhiptailDevourer),
+        new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
     ];
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)

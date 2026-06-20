@@ -66,6 +66,7 @@ internal static class CommonBuffs
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
         new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed)
             .WithBuilds(GW2Builds.June2021Balance),
+        new Buff("Minion Command", MinionCommandBuff, Source.Common, BuffClassification.Hidden, BuffImages.Unknown),
         new Buff("Determined (762)", Determined762, Source.Common, BuffClassification.Other, BuffImages.Determined),
         new Buff("Determined (785)", Determined785, Source.Common, BuffClassification.Other, BuffImages.Determined),
         new Buff("Determined (788)", Determined788, Source.Common, BuffClassification.Other, BuffImages.Determined),
