@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using System.Collections;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -345,6 +346,16 @@ internal static class RangerHelper
         new MinionCommandCastFinder(Electrocute_RiverDrake, MinionID.JuvenileRiverDrake),
         new MinionCommandCastFinder(FireBreath_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
         new MinionCommandCastFinder(Boil_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
+        new MinionCommandCastFinder(Stalk, MinionID.JuvenileJaguar),
+        new MinionCommandCastFinder(MightyRoar, MinionID.JuvenileJungleStalker),
+        new MinionCommandCastFinder(IcyPounce, MinionID.JuvenileSnowLeopard),
+        new MinionCommandCastFinder(IcyBite, MinionID.JuvenileSnowLeopard),
+        new MinionCommandCastFinder(FuriousPounce, MinionID.JuvenileTiger),
+        new MinionCommandCastFinder(GuardiansRoar, MinionID.JuvenileWhiteTiger),
+        new MinionCommandCastFinder(RendingPounce, MinionID.JuvenileLynx),
+        new MinionCommandCastFinder(SavannahStrike, MinionID.JuvenileCheetah),
+        new MinionCommandCastFinder(BlindingRoar, MinionID.JuvenileSandLion),
+        new MinionCommandCastFinder(RallyingRoar, MinionID.JuvenileWarclaw),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
     ];
 

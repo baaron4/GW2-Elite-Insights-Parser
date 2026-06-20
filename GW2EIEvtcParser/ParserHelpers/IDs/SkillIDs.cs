@@ -942,7 +942,9 @@ public static class SkillIDs
     public const long SicEmSkill = 12633;
     public const long SignetOfTheWildPet = 12636;
     public const long SlashFeline = 12655;
+    public const long IcyBite = 12656;
     public const long MaulFeline = 12657;
+    public const long MightyRoar = 12658;
     public const long Peck = 12659;
     public const long BiteCanine = 12660;
     public const long CripplingLeap = 12661;
@@ -957,8 +959,11 @@ public static class SkillIDs
     public const long TwinDartsDevourer = 12676;
     public const long RetreatDevourer = 12678;
     public const long RendingBarbs = 12679;
+    public const long RendingPounce = 12680;
+    public const long Stalk = 12681;
     public const long SlashBird = 12682;
     public const long BiteBear = 12686;
+    public const long IcyPounce = 12693;
     public const long BiteFeline = 12694;
     public const long Boil_SalamanderDrake = 12695;
     public const long FrostBreath = 12696;
@@ -1779,6 +1784,7 @@ public static class SkillIDs
     public const long KickHeavyBomb = 31435;
     public const long BlackHoleMinion = 31436;
     public const long Determined31450 = 31450;
+    public const long FuriousPounce = 31451;
     public const long MagicAuraRedGuardian = 31462;
     public const long TemporalStasis = 31465;
     public const long GhastlyRampageBegin = 31466;
@@ -2628,6 +2634,7 @@ public static class SkillIDs
     public const long RaptorTailSpin = 42133;
     public const long OneWolfPackDamage = 42145;
     public const long BladeBurst = 42163;
+    public const long BlindingRoar = 42180;
     public const long POV_StealPrecisionBuff = 42194;
     public const long Afterburner = 42210;
     public const long ManifestSandShadeSkill = 42297;
@@ -2667,6 +2674,7 @@ public static class SkillIDs
     public const long WeaveSelf = 42951;
     public const long SmokeAssaultMergeHit = 42955;
     public const long RejuvenatingRespite = 42960;
+    public const long SavannahStrike = 42963;
     public const long PotentHaste = 42983;
     public const long Chapter1UnflinchingCharge = 42986;
     public const long ExitBeastMode = 43014;
@@ -3956,6 +3964,7 @@ public static class SkillIDs
     public const long FlyingCutter = 65061;
     public const long JadeTechOffensiveOvercharge = 65070;
     public const long TargetOrder2 = 65088;
+    public const long GuardiansRoar = 65109;
     public const long ShareTheVoid4 = 65112;
     public const long ThrowIce = 65119;
     public const long PutridDeluge = 65132;
@@ -4812,6 +4821,7 @@ public static class SkillIDs
     public const long RelicOfTheClaw = 73955;
     public const long WarclawChainPullPvE = 73984;
     public const long SpearmarshalsSupportBombard = 74290;
+    public const long RallyingRoar = 74314;
     public const long WarclawLancePvE = 74331;
     public const long RelicOfSorrowBuff = 74410;
     public const long WarclawBattleMaulPvE2 = 74560;
