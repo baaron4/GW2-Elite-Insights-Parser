@@ -2,7 +2,7 @@
     <div>
         <combat-replay-actor-buffs-stats-component v-if="buffs && buffstoshow.length > 0" :time="time" :actorindex="playerindex" :enemy="false" :buffstoshow="buffstoshow"></combat-replay-actor-buffs-stats-component>
         <div class="d-flex flex-column mb-1 mt-1 align-items-left">
-            <combat-replay-actor-status-component :time="time" :actor="player" :healths="healths" :barriers="barriers" :isTarget="false"></combat-replay-actor-status-component>
+            <combat-replay-actor-status-component :time="time" :actorIndex="playerindex" :isTarget="false"></combat-replay-actor-status-component>
             <combat-replay-actor-rotation-component v-if="rotation" :time="time" :actorindex="playerindex" :enemy="false"></combat-replay-actor-rotation-component>
         </div>
     </div>
@@ -11,17 +11,6 @@
 <script>
     Vue.component("combat-replay-player-stats-component", {
         props: ["playerindex", "time", "buffs", "rotation", "buffstoshow"],
-        template: `${template}`,
-        computed: {
-            player: function () {
-                return logData.players[this.playerindex];
-            },
-            healths: function () {
-                return graphData.phases[0].players[this.playerindex].healthStates;
-            },
-            barriers: function () {
-                return graphData.phases[0].players[this.playerindex].barrierStates;
-            }
-        }
+        template: `${template}`
     });
 </script>
