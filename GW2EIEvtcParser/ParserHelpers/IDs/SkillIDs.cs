@@ -2587,6 +2587,7 @@ public static class SkillIDs
     public const long RazorclawsRageSkillMinion = 41115; // cast by created minion, does not hit
     public const long ExitPhotonForge = 41123;
     public const long SignetOfRenewalBuff = 41147;
+    public const long FangGrapple = 41156;
     public const long ShadowFlare = 41158;
     public const long DualWaterAttunement = 41166;
     public const long GriffonSwoopSkill = 41192;
@@ -5067,6 +5068,7 @@ public static class SkillIDs
     public const long ResolutionUnstrippable = 75755;
     public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long SeismicReposition_80_50 = 75764; // Decima CM jump from center to the side at 80% and 50%
+    public const long HoneyToss = 75783;
     public const long SeismicCrashCM2 = 75793;
     public const long SeismicReposition_40_TO_10 = 75795; // Decima CM jump side to side starting 40% until 10%
     public const long FulgentAuraTier1CM = 75812;

@@ -356,6 +356,9 @@ internal static class RangerHelper
         new MinionCommandCastFinder(SavannahStrike, MinionID.JuvenileCheetah),
         new MinionCommandCastFinder(BlindingRoar, MinionID.JuvenileSandLion),
         new MinionCommandCastFinder(RallyingRoar, MinionID.JuvenileWarclaw),
+        new MinionCommandCastFinder(FangGrapple, MinionID.JuvenileFangedIboga),
+        new MinionCommandCastFinder(JacarandasEmbraceSkill, MinionID.JuvenileJacaranda),
+        new MinionCommandCastFinder(HoneyToss, MinionID.JuvenileJanthiriBee),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
     ];
 
