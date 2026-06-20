@@ -992,13 +992,21 @@ public static class SkillIDs
     public const long ChillingSlash = 12721;
     public const long BrashSlash = 12722;
     public const long BlindingSlash = 12722;
+    public const long ForageSword = 12732;
     public const long MaulPorcine = 12734;
+    public const long ParalyzingVenom = 12729;
+    public const long WeakeningVenom = 12730;
+    public const long DeadlyVenom = 12731;
     public const long JabPorcine = 12735;
     public const long BrutalChargePorcine = 12738;
     public const long ChargingBiteShark = 12739;
     public const long StunningRush = 12744;
     public const long ChillingWhirl = 12748;
     public const long ImmobilizingWhirl = 12749;
+    public const long ForageRock = 12754;
+    public const long ForageScale = 12755;
+    public const long ForageFeathers = 12756;
+    public const long FeedingFrenzy = 12757;
     public const long PoisonLeapCombo = 12810;
     public const long PoisonBlastCombo = 12812;
     public const long LightningLeapCombo = 12815;
@@ -1814,6 +1822,7 @@ public static class SkillIDs
     public const long FlakShot = 31544;
     public const long GlyphOfUnityCABuff = 31556;
     public const long MagicAuraValeGuardian = 31557;
+    public const long SmokeCloud = 31568;
     public const long AncestralGraceBuff = 31584;
     public const long Exposed31589 = 31589;
     public const long BoundHit = 31600;
@@ -2722,6 +2731,7 @@ public static class SkillIDs
     public const long ImpairingDaggersDaredevilMinionHit3 = 43624;
     public const long SadisticSearing = 43626;
     public const long ThermalReleaseValve = 43630;
+    public const long HeadToss = 43636;
     public const long NoMountUse = 43702;
     public const long UnstableExplosion = 44703;
     public const long PhotonForge = 43708;
@@ -3996,7 +4006,7 @@ public static class SkillIDs
     public const long DragonsEndContributor1 = 65384;
     public const long HardenedShell = 65396;
     public const long NightmareDevastationOW1 = 65410;
-    public const long HunkerDownPetTurtle = 65418;
+    public const long HunkerDown_Turtle = 65418;
     public const long CosmicMeteorJormag = 65416;
     public const long EnhancedDestructiveAuraSkill1 = 65423;
     public const long LavaSlam = 65427;
@@ -4080,6 +4090,7 @@ public static class SkillIDs
     public const long InfluenceOfTheVoidSkill = 66566;
     public const long KaleidoscopicChaosNM = 66568;
     public const long DragonsEndContributor5 = 66589;
+    public const long BloodthirstyCharge = 66622;
     public const long HallucinatingShot3 = 66626;
     public const long VoidChaos = 66631;
     public const long FlamesOfPrimordus = 66646;

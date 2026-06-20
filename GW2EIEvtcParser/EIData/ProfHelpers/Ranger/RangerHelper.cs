@@ -375,6 +375,12 @@ internal static class RangerHelper
         new MinionCommandCastFinder(HeadToss, MinionID.JuvenileRockGazelle),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
         new MinionCommandCastFinder(FeedingFrenzy, MinionID.JuvenileShark),
+        new MinionCommandCastFinder(HunkerDown_Turtle, MinionID.JuvenileSiegeTurtle),
+        new MinionCommandCastFinder(SmokeCloud, MinionID.JuvenileSmokescale),
+        new MinionCommandCastFinder(WeakeningVenom, MinionID.JuvenileCaveSpider),
+        new MinionCommandCastFinder(DeadlyVenom, MinionID.JuvenileForestSpider),
+        new MinionCommandCastFinder(ParalyzingVenom, MinionID.JuvenileJungleSpider),
+        new MinionCommandCastFinder(ParalyzingVenom, MinionID.JuvenileBlackWidowSpider),
     ];
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
