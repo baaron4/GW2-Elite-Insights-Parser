@@ -706,14 +706,15 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;player-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot;&gt;
-        ///        &lt;h6 class=&quot;player-shorten-cr text-center&quot;&gt;
-        ///            &lt;img v-for=&quot;(marker, _) in activeMarkers()&quot; :src=&quot;marker.imageUrl&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
-        ///            &lt;img :src=&quot;actor.icon&quot; :alt=&quot;actor.profession&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
-        ///            {{actor.name}}
-        ///        &lt;/h6&gt;
-        ///        &lt;p v-if=&quot;hasHealth&quot; class=&quot;text-right cr-hp-display cr-hp-display-player&quot;&gt;
-        ///            {{percentageFormate [rest of string was truncated]&quot;;.
+        ///    &lt;div class=&quot;text-white&quot; @click=&quot;select&quot;&gt;
+        ///        &lt;div class=&quot;actor-status&quot; :style=&quot;{&apos;background&apos;: getActorGradient(time, status), &apos;height&apos;: getActorHeight()}&quot;&gt;
+        ///            &lt;p class=&quot;mb-0 scale65&quot;&gt;
+        ///                {{percentageFormater(healths, time)}} %
+        ///            &lt;/p&gt;
+        ///
+        ///            &lt;h6 class=&quot;text-center mb-0 ellipis align-self-center&quot;&gt;
+        ///                &lt;img v-for=&quot;(marker, _) in activeMarkers()&quot; :src=&quot;marker.imageUrl&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
+        ///                &lt;img :src=&quot;actor.icon&quot; :al [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorStatus {
             get {
@@ -804,34 +805,12 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;combat-replay-actor-buffs-stats-component v-if=&quot;buffs &amp;&amp; buffstoshow.length &gt; 0&quot; :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot; :buffstoshow=&quot;buffstoshow&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
         ///        &lt;div class=&quot;d-flex flex-column mb-1 mt-1 align-items-left&quot;&gt;
-        ///            &lt;combat-replay-player-status-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-player-status-component&gt;
-        ///            &lt;combat-replay-actor-rotation-component v-if=&quot;rotation&quot; :t [rest of string was truncated]&quot;;.
+        ///            &lt;combat-replay-actor-status-component :time=&quot;time&quot; :actor=&quot;player&quot; :healths=&quot;healths&quot; :barriers=&quot;barriers&quot; :isTarget=&quot;false&quot;&gt;&lt;/combat-replay-actor-status-component&gt;
+        ///            &lt;combat-repla [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerStats {
             get {
                 return ResourceManager.GetString("tmplCombatReplayPlayerStats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;combat-replay-actor-status-component :time=&quot;time&quot; :playerindex=&quot;playerindex&quot;&gt;&lt;/combat-replay-actor-status-component&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    Vue.component(&quot;combat-replay-player-status-component&quot;, {
-        ///        props: [&quot;playerindex&quot;, &quot;time&quot;],
-        ///        template: `${template}`,
-        ///        computed: {
-        ///            actor: function () {
-        ///                return logData.players[this.playerindex];
-        ///            },
-        ///            healths: function () {
-        ///                return graphData.phases[0].player [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayPlayerStatus {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayPlayerStatus", resourceCulture);
             }
         }
         
@@ -859,29 +838,12 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;combat-replay-actor-buffs-stats-component v-if=&quot;buffstoshow.length &gt; 0&quot; :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot; :buffstoshow=&quot;buffstoshow&quot;/&gt;
         ///        &lt;div class=&quot;d-flex flex-column mb-1 mt-1&quot;&gt;
-        ///            &lt;combat-replay-target-status-component :time=&quot;time&quot; :targetindex=&quot;targetindex&quot;/&gt;
-        ///            &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot;/&gt;
-        ///        &lt;/div&gt;
-        ///        &lt;div v-if=&quot;hasBreakbarPercent&quot; class=&quot;cr-breakb [rest of string was truncated]&quot;;.
+        ///            &lt;combat-replay-actor-status-component :time=&quot;time&quot; :actor=&quot;target&quot; :healths=&quot;healths&quot; :barriers=&quot;barriers&quot; :breakbar=&quot;breakbar&quot; :isTarget=&quot;true&quot;&gt;&lt;/combat-replay-actor-status-component&gt;
+        ///            &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorinde [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayTargetStats {
             get {
                 return ResourceManager.GetString("tmplCombatReplayTargetStats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot; style=&quot;width: 208px;&quot;&gt;
-        ///        &lt;div class=&quot;target-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot; :title=&quot;target.name + &apos; - &apos; + target.health + &apos; health&apos;&quot;&gt;
-        ///            &lt;h6 class=&quot;target-shorten-cr text-center&quot;&gt;
-        ///                &lt;img v-for=&quot;(marker, index) in activeMarkers()&quot; :src=&quot;marker.imageUrl&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
-        ///                &lt;img :src=&quot;target.icon&quot; height=&quot;18&quot; width=&quot;18&quot;/&gt;
-        ///  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayTargetStatus {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayTargetStatus", resourceCulture);
             }
         }
         
