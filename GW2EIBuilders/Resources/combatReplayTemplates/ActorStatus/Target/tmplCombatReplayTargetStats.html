@@ -44,7 +44,10 @@
             },
             hasBreakbarPercent: function () {
                 return !!this.breakbar;
-            }
+            },
+            breakbar: function () {
+                return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
+            },
         }
     });
 </script>
