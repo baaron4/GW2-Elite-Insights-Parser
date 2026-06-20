@@ -949,6 +949,7 @@ public static class SkillIDs
     public const long BrutalChargeCanine = 12662;
     public const long SlashBear = 12663;
     public const long BiteDrake = 12668;
+    public const long FireBreath_SalamanderDrake = 12670;
     public const long TailSwipePet = 12671;
     public const long TailLashDevourer = 12673;
     public const long PoisonBarbs = 12674;
@@ -959,6 +960,13 @@ public static class SkillIDs
     public const long SlashBird = 12682;
     public const long BiteBear = 12686;
     public const long BiteFeline = 12694;
+    public const long Boil_SalamanderDrake = 12695;
+    public const long FrostBreath = 12696;
+    public const long FrostNova = 12697;
+    public const long LightningBreath = 12698;
+    public const long Electrocute_RiverDrake = 12699;
+    public const long PoisonCloud_MarshDrake = 12700;
+    public const long InsectSwarm = 12701;
     public const long PoisonCloud_WhiptailDevourer = 12702;
     public const long Regenerate_CarrionDevourer = 12703;
     public const long LashtailVenom = 12704;
@@ -1205,6 +1213,8 @@ public static class SkillIDs
     public const long BowlOfTropicalMousse = 15843;
     public const long CommandersPresence = 15857;
     public const long MorphedPolymorphTuna = 15859;
+    public const long SonicShriek = 16426;
+    public const long SonicBarrier = 16427;
     public const long ShadowPortal = 16435;
     public const long ShadowPortalPreparedBuff = 16437;
     public const long ThrowGunkEttinGunk = 16460;
@@ -4508,7 +4518,7 @@ public static class SkillIDs
     public const long RelicOfNayosHealing = 71382;
     public const long NouryssHungerDamageBuff = 71431;
     public const long RideTheLeyLine = 71444;
-    public const long EletroctuteSkyChak = 71501;
+    public const long Electrocute_SkyChak = 71501;
     public const long UnleashEnergySkyChak = 71510;
     public const long SpitGoopSkyChak = 71532;
     public const long KryptisEssence = 71559;

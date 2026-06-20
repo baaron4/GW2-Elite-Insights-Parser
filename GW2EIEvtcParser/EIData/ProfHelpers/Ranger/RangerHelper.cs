@@ -335,6 +335,16 @@ internal static class RangerHelper
         new MinionCommandCastFinder(LashtailVenom, MinionID.JuvenileLashtailDevourer),
         new MinionCommandCastFinder(PoisonBarbs, MinionID.JuvenileWhiptailDevourer),
         new MinionCommandCastFinder(PoisonCloud_WhiptailDevourer, MinionID.JuvenileWhiptailDevourer),
+        new MinionCommandCastFinder(FrostBreath, MinionID.JuvenileIceDrake),
+        new MinionCommandCastFinder(FrostNova, MinionID.JuvenileIceDrake),
+        new MinionCommandCastFinder(InsectSwarm, MinionID.JuvenileMarshDrake),
+        new MinionCommandCastFinder(PoisonCloud_MarshDrake, MinionID.JuvenileMarshDrake),
+        new MinionCommandCastFinder(SonicShriek, MinionID.JuvenileReefDrake),
+        new MinionCommandCastFinder(SonicBarrier, MinionID.JuvenileReefDrake),
+        new MinionCommandCastFinder(LightningBreath, MinionID.JuvenileRiverDrake),
+        new MinionCommandCastFinder(Electrocute_RiverDrake, MinionID.JuvenileRiverDrake),
+        new MinionCommandCastFinder(FireBreath_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
+        new MinionCommandCastFinder(Boil_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
     ];
 
