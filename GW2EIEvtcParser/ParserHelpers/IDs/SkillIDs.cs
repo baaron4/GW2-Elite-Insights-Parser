@@ -977,6 +977,11 @@ public static class SkillIDs
     public const long LashtailVenom = 12704;
     public const long HarmonicCry = 12706;
     public const long FrenziedAttack = 12707;
+    public const long DazingScreech_PinkMoa = 12708;
+    public const long DazingScreech_BlackMoa = 12709;
+    public const long IcyScreech = 12711;
+    public const long FuriousScreech = 12712;
+    public const long ProtectingScreech = 12713;
     public const long TerrifyingHowl = 12714;
     public const long IntimidatingHowl = 12715;
     public const long ChillingHowl = 12716;

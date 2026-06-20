@@ -362,6 +362,11 @@ internal static class RangerHelper
         new MinionCommandCastFinder(ChillingWhirl, MinionID.JuvenileBlueJellyfish),
         new MinionCommandCastFinder(ImmobilizingWhirl, MinionID.JuvenileRedJellyfish),
         new MinionCommandCastFinder(ChillingWhirl, MinionID.JuvenileRainbowJellyfish),
+        new MinionCommandCastFinder(ProtectingScreech, MinionID.JuvenileBlueMoa),
+        new MinionCommandCastFinder(DazingScreech_PinkMoa, MinionID.JuvenilePinkMoa),
+        new MinionCommandCastFinder(FuriousScreech, MinionID.JuvenileRedMoa),
+        new MinionCommandCastFinder(IcyScreech, MinionID.JuvenileWhiteMoa),
+        new MinionCommandCastFinder(DazingScreech_BlackMoa, MinionID.JuvenileBlackMoa),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
     ];
 
