@@ -109,6 +109,8 @@
                 if (this.isTarget) {
                     return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
                 }
+
+                return null;
             },
             hasHealth: function () {
                 return !!this.healths;
