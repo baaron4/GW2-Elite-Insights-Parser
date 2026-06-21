@@ -207,12 +207,12 @@ internal static class NecromancerHelper
         (int)MinionID.FleshGolem,
         (int)MinionID.ShadowFiend,
         (int)MinionID.FleshWurm,
+        (int)MinionID.BoneFiend,
     ];
 
     private static readonly HashSet<int> Minions =
     [
         ..UniqueMinions,
-        (int)MinionID.BoneFiend,
         (int)MinionID.BoneMinion,
         (int)MinionID.UnstableHorror,
     ];
