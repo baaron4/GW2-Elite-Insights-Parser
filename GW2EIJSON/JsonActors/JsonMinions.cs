@@ -94,6 +94,11 @@ public class JsonMinions
     public IReadOnlyList<JsonRotation>? Rotation;
 
     /// <summary>
+    /// If true, indicates that, for a given master, only one instance of minion can exist on a given time.
+    /// </summary>
+    public bool IsUniquePerTimeFrame;
+
+    /// <summary>
     /// Healing stats data
     /// </summary>
     public EXTJsonMinionsHealingStats? EXTHealingStats;
