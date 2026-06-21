@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column justify-content-end" :style="{'height': height}">
+    <div v-if="buffstoshow.length > 0" class="d-flex flex-column justify-content-end" :style="{'height': height}">
         <div v-if="isPresent('Encounter Specifics')">
             <combat-replay-buff-display :buffarray="data.encounterSpecifics"></combat-replay-buff-display>
         </div>

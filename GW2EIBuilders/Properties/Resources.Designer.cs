@@ -178,8 +178,7 @@ namespace GW2EIBuilders.Properties {
         ///.scrollable-y {
         ///    overflow-y: auto;
         ///    scrollbar-width: thin;
-        ///}
-        /// [rest of string was truncated]&quot;;.
+        ///}        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string css {
             get {
@@ -271,8 +270,7 @@ namespace GW2EIBuilders.Properties {
         ///    Breakbar: 3
         ///};
         ///
-        ///const GraphType = {
-        /// [rest of string was truncated]&quot;;.
+        ///const GraphType = {        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
@@ -651,7 +649,29 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: height}&quot;&gt;
+        ///    &lt;div v-if=&quot;hasBreakbarPercent&quot; class=&quot;cr-breakbar-phase-display mb-1&quot;&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row flex-wrap justify-content-center&quot;&gt;
+        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in breakbarPhases&quot;
+        ///                @click=&quot;updatePhaseTime(phase)&quot;
+        ///                :data-original-title=&quot;getTooltip(phase)&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot;&gt;{{id + 1}} &lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;combat-replay-ac [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayActorBreakbars {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayActorBreakbars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div v-if=&quot;buffstoshow.length &gt; 0&quot; class=&quot;d-flex flex-column justify-content-end&quot; :style=&quot;{&apos;height&apos;: height}&quot;&gt;
         ///        &lt;div v-if=&quot;isPresent(&apos;Encounter Specifics&apos;)&quot;&gt;
         ///            &lt;combat-replay-buff-display :buffarray=&quot;data.encounterSpecifics&quot;&gt;&lt;/combat-replay-buff-display&gt;
         ///        &lt;/div&gt;
@@ -659,7 +679,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;combat-replay-buff-display :buffarray=&quot;data.others&quot;&gt;&lt;/combat-replay-buff-display&gt;
         ///        &lt;/div&gt;
         ///        &lt;div v-if=&quot;isPresent(&apos;Conditions&apos;)&quot;&gt;
-        ///            &lt;combat-replay-buff-dis [rest of string was truncated]&quot;;.
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorBuffStats {
             get {
@@ -701,6 +721,22 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplCombatReplayActorsStats {
             get {
                 return ResourceManager.GetString("tmplCombatReplayActorsStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;combat-replay-actor-buffs-stats-component v-if=&quot;buffs&quot; :time=&quot;time&quot; :actorindex=&quot;actorIndex&quot; :enemy=&quot;enemy&quot; :buffstoshow=&quot;buffstoshow&quot; /&gt;
+        ///        &lt;combat-replay-actor-status-component :time=&quot;time&quot; :actorIndex=&quot;actorIndex&quot; :enemy=&quot;enemy&quot; /&gt;
+        ///        &lt;combat-replay-actor-rotation-component v-if=&quot;rotation&quot; :time=&quot;time&quot; :actorindex=&quot;actorIndex&quot; :enemy=&quot;enemy&quot; /&gt;
+        ///        &lt;combat-replay-actor-breakbars-component :actorIndex=&quot;actorIndex&quot; :enemy=&quot;enemy&quot; /&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplCombatReplayActorStats {
+            get {
+                return ResourceManager.GetString("tmplCombatReplayActorStats", resourceCulture);
             }
         }
         
@@ -802,20 +838,6 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;combat-replay-actor-buffs-stats-component v-if=&quot;buffs &amp;&amp; buffstoshow.length &gt; 0&quot; :time=&quot;time&quot; :actorindex=&quot;playerindex&quot; :enemy=&quot;false&quot; :buffstoshow=&quot;buffstoshow&quot;&gt;&lt;/combat-replay-actor-buffs-stats-component&gt;
-        ///        &lt;div class=&quot;d-flex flex-column mb-1 mt-1 align-items-left&quot;&gt;
-        ///            &lt;combat-replay-actor-status-component :time=&quot;time&quot; :actor=&quot;player&quot; :healths=&quot;healths&quot; :barriers=&quot;barriers&quot; :isTarget=&quot;false&quot;&gt;&lt;/combat-replay-actor-status-component&gt;
-        ///            &lt;combat-repla [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayPlayerStats {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayPlayerStats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center&quot;&gt;
         ///        &lt;ul v-if=&quot;showTabs&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
@@ -830,20 +852,6 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplCombatReplayStatusData {
             get {
                 return ResourceManager.GetString("tmplCombatReplayStatusData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;combat-replay-actor-buffs-stats-component v-if=&quot;buffstoshow.length &gt; 0&quot; :time=&quot;time&quot; :actorindex=&quot;targetindex&quot; :enemy=&quot;true&quot; :buffstoshow=&quot;buffstoshow&quot;/&gt;
-        ///        &lt;div class=&quot;d-flex flex-column mb-1 mt-1&quot;&gt;
-        ///            &lt;combat-replay-actor-status-component :time=&quot;time&quot; :actor=&quot;target&quot; :healths=&quot;healths&quot; :barriers=&quot;barriers&quot; :breakbar=&quot;breakbar&quot; :isTarget=&quot;true&quot;&gt;&lt;/combat-replay-actor-status-component&gt;
-        ///            &lt;combat-replay-actor-rotation-component :time=&quot;time&quot; :actorinde [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string tmplCombatReplayTargetStats {
-            get {
-                return ResourceManager.GetString("tmplCombatReplayTargetStats", resourceCulture);
             }
         }
         
@@ -875,8 +883,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;conditions-table-component&quot;, {
         ///        props: [&apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        mixins: [buffComponent, encounterPhaseComponent],
-        /// [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent, encounterPhaseComponent],        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplConditionsTable {
             get {
@@ -1812,8 +1819,7 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
-        ///
-        /// [rest of string was truncated]&quot;;.
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingTabGraph {
             get {
