@@ -2,7 +2,7 @@
     <div>
         <combat-replay-actor-buffs-stats-component v-if="buffstoshow.length > 0" :time="time" :actorindex="targetindex" :enemy="true" :buffstoshow="buffstoshow"/>
         <div class="d-flex flex-column mb-1 mt-1">
-            <combat-replay-target-status-component :time="time" :targetindex="targetindex"/>
+            <combat-replay-actor-status-component :time="time" :actorIndex="targetindex" :isTarget="true"></combat-replay-actor-status-component>
             <combat-replay-actor-rotation-component :time="time" :actorindex="targetindex" :enemy="true"/>
         </div>
         <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">
@@ -43,9 +43,9 @@
                 return logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(this.targetindex) > -1);
             },
             hasBreakbarPercent: function () {
-                return !!this.breakbarPercent;
+                return !!this.breakbar;
             },
-            breakbarPercent: function () {
+            breakbar: function () {
                 return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.targetindex];
             },
         }

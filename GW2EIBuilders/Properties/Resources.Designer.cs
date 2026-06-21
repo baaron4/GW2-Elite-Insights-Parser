@@ -178,7 +178,8 @@ namespace GW2EIBuilders.Properties {
         ///.scrollable-y {
         ///    overflow-y: auto;
         ///    scrollbar-width: thin;
-        ///}        /// [rest of string was truncated]&quot;;.
+        ///}
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string css {
             get {
@@ -270,7 +271,8 @@ namespace GW2EIBuilders.Properties {
         ///    Breakbar: 3
         ///};
         ///
-        ///const GraphType = {        /// [rest of string was truncated]&quot;;.
+        ///const GraphType = {
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
@@ -889,7 +891,8 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;conditions-table-component&quot;, {
         ///        props: [&apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        mixins: [buffComponent, encounterPhaseComponent],        /// [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent, encounterPhaseComponent],
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplConditionsTable {
             get {
@@ -1825,7 +1828,8 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
-        ///        /// [rest of string was truncated]&quot;;.
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingTabGraph {
             get {
