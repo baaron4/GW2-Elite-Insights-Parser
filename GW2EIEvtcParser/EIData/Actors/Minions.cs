@@ -30,6 +30,8 @@ public class Minions : Actor
         _minionList.Add(minion);
     }
 
+    public bool IsUniquePerTimeFrame => RangerHelper.IsJuvenilePet(ReferenceAgentItem) || MechanistHelper.IsJadeMech(ReferenceAgentItem) || NecromancerHelper.IsUndeadMinion(ReferenceAgentItem);
+
     #region DAMAGE
 
     protected override void InitDamageEvents(ParsedEvtcLog log)

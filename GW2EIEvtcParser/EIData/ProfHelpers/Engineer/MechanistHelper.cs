@@ -117,4 +117,13 @@ internal static class MechanistHelper
         return Minions.Contains(id);
     }
 
+    internal static bool IsJadeMech(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return agentItem.IsSpecies(MinionID.JadeMech);
+    }
+
 }

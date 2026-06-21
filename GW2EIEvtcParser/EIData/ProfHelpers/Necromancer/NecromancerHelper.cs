@@ -201,13 +201,17 @@ internal static class NecromancerHelper
             || HarbingerHelper.IsHarbingerShroudTransform(id)
             || RitualistHelper.IsRitualistShroudTransform(id);
     }
-
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> UniqueMinions =
     [
         (int)MinionID.BloodFiend,
         (int)MinionID.FleshGolem,
         (int)MinionID.ShadowFiend,
         (int)MinionID.FleshWurm,
+    ];
+
+    private static readonly HashSet<int> Minions =
+    [
+        ..UniqueMinions,
         (int)MinionID.BoneFiend,
         (int)MinionID.BoneMinion,
         (int)MinionID.UnstableHorror,
@@ -227,6 +231,14 @@ internal static class NecromancerHelper
             return false;
         }
         return IsKnownMinionID(agentItem.ID) || ReaperHelper.IsKnownMinionID(agentItem.ID) || agentItem.IsSpecies(MinionID.JaggedHorror);
+    }
+    internal static bool IsUniqueUndeadMinion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return UniqueMinions.Contains(agentItem.ID);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
