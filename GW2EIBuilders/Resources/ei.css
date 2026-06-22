@@ -88,13 +88,6 @@
     width: 210px;
 }
 
-.buff-container {
-    position: relative;
-    text-align: center;
-    height: 18px;
-    margin-right: 0.05em;
-}
-
 .buff-number {
     position: absolute;
     pointer-events: none;
