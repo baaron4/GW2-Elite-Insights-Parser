@@ -1,5 +1,5 @@
 <template>
-    <div v-if="buffarray.length > 0" class="d-flex">
+    <div v-if="buffarray.length > 0">
         <span v-for="buffData in buffarray" class="d-inline-block position-relative">
             <img :src="buffData.buff.icon" :title="buffData.buff.name + ' - ' + buffData.buff.id" :alt="buffData.buff.name + ' - ' + buffData.buff.id" class="icon-s" />
             <span v-if="buffData.state > 1" class="buff-number">{{buffData.state}}</span>
@@ -8,8 +8,8 @@
 </template>
 
 <script>
-    Vue.component("combat-replay-actor-buff", {     
-        props: ["buffarray"],    
+    Vue.component("combat-replay-actor-buff", {
+        props: ["buffarray"],
         template: `${template}`
     });
 </script>
