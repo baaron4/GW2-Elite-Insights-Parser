@@ -41,7 +41,7 @@
     });
     Vue.component("combat-replay-actor-buffs-stats-component", {
         mixins: [timeRefreshComponent],
-        props: ["actorindex", "enemy", "buffstoshow"],
+        props: ["actorindex", "isTarget", "buffstoshow"],
         template: `${template}`,
         methods: {
             isPresent: function(type) {
@@ -121,7 +121,7 @@
                 return hash;
             },
             actor: function () {
-                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                return this.isTarget ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             buffData: function () {
                 return this.actor.details.boonGraph[0];

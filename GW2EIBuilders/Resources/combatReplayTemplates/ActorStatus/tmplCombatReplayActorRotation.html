@@ -16,7 +16,7 @@
     
     Vue.component("combat-replay-actor-rotation-component", {
         mixins: [timeRefreshComponent],
-        props: ["actorindex", "enemy"],
+        props: ["actorindex", "isTarget"],
         template: `${template}`,
         methods: {
             getSkillDuration: function(item) {
@@ -78,7 +78,7 @@
         },
         computed: {
             actor: function () {
-                return this.enemy ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                return this.isTarget ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
                 return this.actor.details.rotation[0];

@@ -12,7 +12,7 @@
 
 <script>
     Vue.component("combat-replay-actor-breakbars-component", {
-        props: ["actorIndex", "enemy"],
+        props: ["actorIndex", "isTarget"],
         template: `${template}`,
         methods: {
             updatePhaseTime: function (phase) {
@@ -30,7 +30,7 @@
         },
         computed: {
             breakbar: function () {
-                if (this.enemy) {
+                if (this.isTarget) {
                     return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
                 }
 
