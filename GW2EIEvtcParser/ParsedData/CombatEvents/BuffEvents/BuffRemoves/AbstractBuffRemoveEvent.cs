@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class AbstractBuffRemoveEvent : BuffEvent
 {
-    public int RemovedDuration { get; private set; }
+    public int RemovedDuration { get; protected set; }
 
     internal AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
     {
@@ -18,10 +18,5 @@ public abstract class AbstractBuffRemoveEvent : BuffEvent
         RemovedDuration = removedDuration;
         By = by.EnglobingAgentItem;
         To = to.EnglobingAgentItem;
-    }
-
-    internal void OverrideRemovedDuration(int removedDuration)
-    {
-        RemovedDuration = Math.Max(removedDuration, 0);
     }
 }

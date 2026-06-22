@@ -51,9 +51,9 @@ internal static class NecromancerHelper
         new EXTHealingCastFinder(SpitefulRenewal, SpitefulRenewal)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Minions
-        new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
-        new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
-        new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
+        new MinionCommandCastFinder(RigorMortisSkill, MinionID.BoneFiend),
+        new MinionCommandCastFinder(HauntSkill, MinionID.ShadowFiend),
+        new MinionCommandCastFinder(NecroticTraversal, MinionID.FleshWurm),
         // Spear
         new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress)
             .UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff), effectEvent.Time).Any()),
@@ -201,14 +201,18 @@ internal static class NecromancerHelper
             || HarbingerHelper.IsHarbingerShroudTransform(id)
             || RitualistHelper.IsRitualistShroudTransform(id);
     }
-
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> UniqueMinions =
     [
         (int)MinionID.BloodFiend,
         (int)MinionID.FleshGolem,
         (int)MinionID.ShadowFiend,
         (int)MinionID.FleshWurm,
         (int)MinionID.BoneFiend,
+    ];
+
+    private static readonly HashSet<int> Minions =
+    [
+        ..UniqueMinions,
         (int)MinionID.BoneMinion,
         (int)MinionID.UnstableHorror,
     ];
@@ -227,6 +231,14 @@ internal static class NecromancerHelper
             return false;
         }
         return IsKnownMinionID(agentItem.ID) || ReaperHelper.IsKnownMinionID(agentItem.ID) || agentItem.IsSpecies(MinionID.JaggedHorror);
+    }
+    internal static bool IsUniqueUndeadMinion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return UniqueMinions.Contains(agentItem.ID);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

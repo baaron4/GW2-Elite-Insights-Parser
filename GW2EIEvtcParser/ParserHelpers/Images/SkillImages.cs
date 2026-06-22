@@ -541,7 +541,7 @@ internal static class SkillImages
     public const string PhotosynthesizeJacaranda = "https://render.guildwars2.com/file/976A0CC4EA0F36C8A4A705FDE22F03D65CD050D1/1770577.png";
     public const string EvilEyeDemon = "https://wiki.guildwars2.com/images/2/27/Evil_Eye.png";
     public const string TormentingVisionSpinegazer = "https://render.guildwars2.com/file/CE7504440B0506240A599CF3C4F2B99D67354278/3307110.png";
-    public const string EletroctuteJuvenileSkyChak = "https://render.guildwars2.com/file/5C800D284EF75CA76EE34868E35FEFD3F7964E22/3256377.png";
+    public const string Electrocute_JuvenileSkyChak = "https://render.guildwars2.com/file/5C800D284EF75CA76EE34868E35FEFD3F7964E22/3256377.png";
     public const string HarmonicCry = "https://render.guildwars2.com/file/C8E6011DF9B8665510E9BC12186A01B64006A62A/103556.png";
     public const string QuickeningScreech = "https://render.guildwars2.com/file/69F1291534027E0937A5C020FFEBCC96F301EC54/104048.png";
     public const string WolfsOnslaught = "https://render.guildwars2.com/file/E1550C4BB87B62B14AC39E3F2DB2AC4E07F55F91/3379175.png";

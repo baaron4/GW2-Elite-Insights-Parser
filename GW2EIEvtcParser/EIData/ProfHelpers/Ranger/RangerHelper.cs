@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using System.Collections;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -39,11 +40,13 @@ internal static class RangerHelper
         (int)MinionID.JuvenileWarclaw,
     ];
 
-    private static readonly HashSet<int> JuvenileBirdPetIDs =
+    private static readonly HashSet<int> JuvenileAvianPetIDs =
     [
         (int)MinionID.JuvenileEagle,
         (int)MinionID.JuvenileHawk,
         (int)MinionID.JuvenileOwl,
+        (int)MinionID.JuvenileRaven,
+        (int)MinionID.JuvenileRaptorSwiftwing,
         (int)MinionID.JuvenileRaven,
         (int)MinionID.JuvenileWhiteRaven,
     ];
@@ -124,7 +127,6 @@ internal static class RangerHelper
         (int)MinionID.JuvenileBristleback,
         (int)MinionID.JuvenileFangedIboga,
         (int)MinionID.JuvenileJacaranda,
-        (int)MinionID.JuvenilePhoenix,
         (int)MinionID.JuvenileRockGazelle,
         (int)MinionID.JuvenileShark,
         (int)MinionID.JuvenileSiegeTurtle,
@@ -134,11 +136,10 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileJanthiriBee,
-        (int)MinionID.JuvenileRaptorSwiftwing,
         (int)MinionID.JuvenileRiverOtter,
     }
     .Union(JuvenileFelinePetIDs)
-    .Union(JuvenileBirdPetIDs)
+    .Union(JuvenileAvianPetIDs)
     .Union(JuvenileDrakePetIDs)
     .Union(JuvenileUrsinePetIDs)
     .Union(JuvenilePorcinePetIDs)
@@ -159,13 +160,13 @@ internal static class RangerHelper
         return JuvenileFelinePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvenileBirdPet(AgentItem agentItem)
+    internal static bool IsJuvenileAvianPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
         {
             return false;
         }
-        return JuvenileBirdPetIDs.Contains(agentItem.ID);
+        return JuvenileAvianPetIDs.Contains(agentItem.ID);
     }
 
     internal static bool IsJuvenileDrakePet(AgentItem agentItem)
@@ -309,9 +310,88 @@ internal static class RangerHelper
             .UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
             .UsingDstBaseSpecChecker(Spec.Ranger),
+        // Pets
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
             .UsingNotAccurate(),
-        new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, (int)MinionID.JuvenileRiverOtter),
+        new MinionCommandCastFinder(DimensionBreach, MinionID.JuvenileAetherHunter),
+        new MinionCommandCastFinder(StunningRush, MinionID.JuvenileArmorFish),
+        new MinionCommandCastFinder(BrashSlash, MinionID.JuvenileEagle),
+        new MinionCommandCastFinder(LaceratingSlash, MinionID.JuvenileHawk),
+        new MinionCommandCastFinder(ChillingSlash, MinionID.JuvenileOwl),
+        new MinionCommandCastFinder(BlindingSlash, MinionID.JuvenileRaven),
+        new MinionCommandCastFinder(BlindingSlash, MinionID.JuvenileWhiteRaven),
+        new MinionCommandCastFinder(GaleBreath, MinionID.JuvenilePhoenix),
+        new MinionCommandCastFinder(PiercingShriek, MinionID.JuvenileRaptorSwiftwing),
+        new MinionCommandCastFinder(SpikeBarrage, MinionID.JuvenileBristleback),
+        new MinionCommandCastFinder(ChillingHowl, MinionID.JuvenileAlpineWolf),
+        new MinionCommandCastFinder(Regenerate_FernHound, MinionID.JuvenileFernHound),
+        new MinionCommandCastFinder(HowlOfThePack, MinionID.JuvenileHyena),
+        new MinionCommandCastFinder(IntimidatingHowl, MinionID.JuvenileKrytanDrakehound),
+        new MinionCommandCastFinder(TerrifyingHowl, MinionID.JuvenileWolf),
+        new MinionCommandCastFinder(LeyEnergyPulse, MinionID.JuvenileSkyChakStriker),
+        new MinionCommandCastFinder(Panopticon, MinionID.JuvenileSpinegazer),
+        new MinionCommandCastFinder(PoisonousCloud, MinionID.JuvenileCarrionDevourer),
+        new MinionCommandCastFinder(Regenerate_CarrionDevourer, MinionID.JuvenileCarrionDevourer),
+        new MinionCommandCastFinder(RendingBarbs, MinionID.JuvenileLashtailDevourer),
+        new MinionCommandCastFinder(LashtailVenom, MinionID.JuvenileLashtailDevourer),
+        new MinionCommandCastFinder(PoisonBarbs, MinionID.JuvenileWhiptailDevourer),
+        new MinionCommandCastFinder(PoisonCloud_WhiptailDevourer, MinionID.JuvenileWhiptailDevourer),
+        new MinionCommandCastFinder(FrostBreath, MinionID.JuvenileIceDrake),
+        new MinionCommandCastFinder(FrostNova, MinionID.JuvenileIceDrake),
+        new MinionCommandCastFinder(InsectSwarm, MinionID.JuvenileMarshDrake),
+        new MinionCommandCastFinder(PoisonCloud_MarshDrake, MinionID.JuvenileMarshDrake),
+        new MinionCommandCastFinder(SonicShriek, MinionID.JuvenileReefDrake),
+        new MinionCommandCastFinder(SonicBarrier, MinionID.JuvenileReefDrake),
+        new MinionCommandCastFinder(LightningBreath, MinionID.JuvenileRiverDrake),
+        new MinionCommandCastFinder(Electrocute_RiverDrake, MinionID.JuvenileRiverDrake),
+        new MinionCommandCastFinder(FireBreath_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
+        new MinionCommandCastFinder(Boil_SalamanderDrake, MinionID.JuvenileSalamanderDrake),
+        new MinionCommandCastFinder(Stalk, MinionID.JuvenileJaguar),
+        new MinionCommandCastFinder(MightyRoar, MinionID.JuvenileJungleStalker),
+        new MinionCommandCastFinder(IcyPounce, MinionID.JuvenileSnowLeopard),
+        new MinionCommandCastFinder(IcyBite, MinionID.JuvenileSnowLeopard),
+        new MinionCommandCastFinder(FuriousPounce, MinionID.JuvenileTiger),
+        new MinionCommandCastFinder(GuardiansRoar, MinionID.JuvenileWhiteTiger),
+        new MinionCommandCastFinder(RendingPounce, MinionID.JuvenileLynx),
+        new MinionCommandCastFinder(SavannahStrike, MinionID.JuvenileCheetah),
+        new MinionCommandCastFinder(BlindingRoar, MinionID.JuvenileSandLion),
+        new MinionCommandCastFinder(RallyingRoar, MinionID.JuvenileWarclaw),
+        new MinionCommandCastFinder(FangGrapple, MinionID.JuvenileFangedIboga),
+        new MinionCommandCastFinder(JacarandasEmbraceSkill, MinionID.JuvenileJacaranda),
+        new MinionCommandCastFinder(HoneyToss, MinionID.JuvenileJanthiriBee),
+        new MinionCommandCastFinder(ChillingWhirl, MinionID.JuvenileBlueJellyfish),
+        new MinionCommandCastFinder(ImmobilizingWhirl, MinionID.JuvenileRedJellyfish),
+        new MinionCommandCastFinder(ChillingWhirl, MinionID.JuvenileRainbowJellyfish),
+        new MinionCommandCastFinder(ProtectingScreech, MinionID.JuvenileBlueMoa),
+        new MinionCommandCastFinder(DazingScreech_PinkMoa, MinionID.JuvenilePinkMoa),
+        new MinionCommandCastFinder(FuriousScreech, MinionID.JuvenileRedMoa),
+        new MinionCommandCastFinder(IcyScreech, MinionID.JuvenileWhiteMoa),
+        new MinionCommandCastFinder(DazingScreech_BlackMoa, MinionID.JuvenileBlackMoa),
+        new MinionCommandCastFinder(ForageRock, MinionID.JuvenileBoar),
+        new MinionCommandCastFinder(ForageSword, MinionID.JuvenilePig),
+        new MinionCommandCastFinder(ForageFeathers, MinionID.JuvenileSiamoth),
+        new MinionCommandCastFinder(ForageScale, MinionID.JuvenileWarthog),
+        new MinionCommandCastFinder(BloodthirstyCharge, MinionID.JuvenileWallow),
+        new MinionCommandCastFinder(HeadToss, MinionID.JuvenileRockGazelle),
+        new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
+        new MinionCommandCastFinder(FeedingFrenzy, MinionID.JuvenileShark),
+        new MinionCommandCastFinder(HunkerDown_Turtle, MinionID.JuvenileSiegeTurtle),
+        new MinionCommandCastFinder(SmokeCloud, MinionID.JuvenileSmokescale),
+        new MinionCommandCastFinder(WeakeningVenom, MinionID.JuvenileCaveSpider),
+        new MinionCommandCastFinder(DeadlyVenom, MinionID.JuvenileForestSpider),
+        new MinionCommandCastFinder(ParalyzingVenom, MinionID.JuvenileJungleSpider),
+        new MinionCommandCastFinder(ParalyzingVenom, MinionID.JuvenileBlackWidowSpider),
+        new MinionCommandCastFinder(RendingMaul, MinionID.JuvenileArctodus),
+        new MinionCommandCastFinder(EnfeeblingRoar, MinionID.JuvenileBlackBear),
+        new MinionCommandCastFinder(EnfeeblingMaul, MinionID.JuvenileBlackBear),
+        new MinionCommandCastFinder(ShakeItOff, MinionID.JuvenileBrownBear),
+        new MinionCommandCastFinder(PurgeConditions, MinionID.JuvenileBrownBear),
+        new MinionCommandCastFinder(PoisonCloud_Murellow, MinionID.JuvenileMurellow),
+        new MinionCommandCastFinder(PoisonousMaul, MinionID.JuvenileMurellow),
+        new MinionCommandCastFinder(IcyRoar, MinionID.JuvenilePolarBear),
+        new MinionCommandCastFinder(IcyMaul, MinionID.JuvenilePolarBear),
+        new MinionCommandCastFinder(LightningAssault, MinionID.JuvenileEletricWywern),
+        new MinionCommandCastFinder(ConsumingFlame, MinionID.JuvenileFireWywern),
     ];
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
@@ -575,7 +655,7 @@ internal static class RangerHelper
         // Siege Turtle Hunker Down
         if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown, out var hunkerDowns))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDownPetTurtle, SkillModeCategory.ProjectileManagement);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDown_Turtle, SkillModeCategory.ProjectileManagement);
             foreach (EffectEvent effect in hunkerDowns)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);

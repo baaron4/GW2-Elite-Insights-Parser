@@ -98,6 +98,12 @@ const reactiveAnimationData = {
         max: 1e12
     },
     selectedExtraDecorations: false,
+    selectedMechanic: {
+        actorId: null,
+        actorName: null,
+        name: null,
+        times: [],
+    }
 };
 
 var sliderDelimiter = {

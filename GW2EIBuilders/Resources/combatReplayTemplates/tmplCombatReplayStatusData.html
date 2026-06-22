@@ -11,7 +11,7 @@
         <div class="squad-details">
             <keep-alive>
                 <combat-replay-actors-stats-component v-if="mode === 0" :key="'actors-cr-details'" :time="time" :selectedactorid="selectedactorid"></combat-replay-actors-stats-component>
-                <combat-replay-mechanics-list-component v-if="mode === 1" :key="'mechanics-cr-details'" :time="time" :selectedplayerid="selectedactorid"></combat-replay-mechanics-list-component>
+                <combat-replay-mechanics-list-component v-if="mode === 1" :key="'mechanics-cr-details'" :time="time" :selectedactorid="selectedactorid"></combat-replay-mechanics-list-component>
             </keep-alive>
         </div>
     </div>

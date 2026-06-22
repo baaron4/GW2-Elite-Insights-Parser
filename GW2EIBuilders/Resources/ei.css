@@ -679,6 +679,14 @@ th {
     background-color: rgba(50, 120, 0, 0.5);
 }
 
+table tbody td.mech-active {
+    font-weight: bold;
+}
+
+table tbody td.mech-actor-active {
+    font-weight: bold;
+}
+
 .nav-item .nav-link {
     margin-left: -1px;
     border-radius: 0;
