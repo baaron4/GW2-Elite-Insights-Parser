@@ -613,9 +613,9 @@ internal class CombatReplayDecorationContainer
     internal delegate void MissileDecorationHandler((long start, long end) lifespan, GeographicalConnector connector);
     internal delegate void MissileRotatingDecorationHandler((long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
 
-    internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
+    internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler, long? endOverride = null)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? (endOverride.HasValue ? Math.Min(endOverride.Value, log.LogData.LogEnd) : log.LogData.LogEnd);
         var launchEvents = missileEvent.LaunchEvents;
         for (int i = 0; i < launchEvents.Count; i++)
         {
