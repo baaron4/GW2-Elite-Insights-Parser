@@ -791,10 +791,11 @@ internal class GreerTheBlightbringer : MountBalrior
         foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
         {
             lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd);
-            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+            var launchEvents = missileEvent.LaunchEvents;
+            for (int i = 0; i < launchEvents.Count; i++)
             {
-                MissileLaunchEvent? launch = missileEvent.LaunchEvents[i];
-                lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
+                MissileLaunchEvent? launch = launchEvents[i];
+                lifespan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : lifespan.end);
                 if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
                 {
                     replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed)));
