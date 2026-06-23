@@ -792,8 +792,8 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             CombatReplayDecorationContainer.AddHomingMissile(log, missileEvent, (lifespan, connector) =>
             {
-                replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, connector);
-                replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, connector);
+                replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, connector));
+                replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, connector));
             });
         }
 

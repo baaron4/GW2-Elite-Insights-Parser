@@ -496,8 +496,6 @@ internal class ConjuredAmalgamate : MythwrightGambit
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
 
-        (long start, long end) lifespan;
-
         // Junk Absorption - Collecting Phase
         var purpleOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorption);
         var swordOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorptionSword);
