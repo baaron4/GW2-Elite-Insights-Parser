@@ -41,6 +41,7 @@ internal static class LogImages
     internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
     internal const string CombatReplaySiax = "https://i.imgur.com/hauz1jK.png";
     internal const string CombatReplayEnsolyss = "https://i.imgur.com/kjelZ4t.png";
+    internal const string CombatReplayEnsolyss_NoCapturePoints = "https://i.imgur.com/87B12xN.png";
     internal const string CombatReplayNightmare = "https://wiki.guildwars2.com/images/9/95/Nightmare_Fractal_map.jpg";
     internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
     internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
@@ -104,7 +105,7 @@ internal static class LogImages
     internal const string CombatReplaySpiritVale = "https://wiki.guildwars2.com/images/3/35/Spirit_Vale_map.jpg";
     internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
     internal const string CombatReplaySpiritRun = "https://i.imgur.com/RyA0XH3.png";
-    internal const string CombatReplayGorseval = "https://i.imgur.com/U9pH5dG.png";
+    internal const string CombatReplayGorseval = "https://i.imgur.com/ESmGD3Z.png";
     internal const string CombatReplaySabetha = "https://i.imgur.com/HXjxqlu.png";
     internal const string CombatReplaySalvationPass = "https://wiki.guildwars2.com/images/7/7f/Salvation_Pass_map.jpg";
     internal const string CombatReplaySlothasor = "https://i.imgur.com/pChxnuf.png";

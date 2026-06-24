@@ -55,7 +55,7 @@ internal class Ensolyss : Nightmare
     {
         var crMap = new CombatReplayMap((366, 366),
                         (532, 431, 2612, 2521));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap, parentMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.GadgetCapturesAdded ? CombatReplayEnsolyss_NoCapturePoints : CombatReplayEnsolyss, crMap, parentMap);
         return crMap;
     }
 
