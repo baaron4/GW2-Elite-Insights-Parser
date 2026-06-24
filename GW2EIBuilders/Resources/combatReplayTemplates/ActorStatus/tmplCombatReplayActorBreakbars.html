@@ -1,0 +1,50 @@
+﻿<template>
+    <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">
+        <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
+            <li class="nav-item" v-for="(phase, id) in breakbarPhases"
+                @click="updatePhaseTime(phase)"
+                :data-original-title="getTooltip(phase)">
+                <a class="nav-link">{{id + 1}} </a>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-actor-breakbars-component", {
+        props: ["actorIndex", "isTarget"],
+        template: `${template}`,
+        methods: {
+            updatePhaseTime: function (phase) {
+                animationControlComponent.updatePhaseTime(phase);
+            },
+            getTooltip: function(phase) {
+                var target = logData.targets[this.actorIndex];
+                var phaseId = logData.phases.indexOf(phase);
+                var breakbarTaken = target.details.dmgDistributionsTaken[phaseId].contributedBreakbarDamage;
+                return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end +
+                    '<br /> Breakbar Active at: ' + phase.breakbarStart +
+                    '<br /> Breakbar Damage: ' + breakbarTaken +
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + phase.breakbarRecovered;
+            },
+        },
+        computed: {
+            breakbar: function () {
+                if (this.isTarget) {
+                    return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
+                }
+
+                return null;
+            },
+            breakbarPhases: function () {
+                if (!this.hasBreakbarPercent) {
+                    return [];
+                }
+                return logData.phases.filter(phase => phase.breakbarPhase && phase.targets.indexOf(this.actorIndex) > -1);
+            },
+            hasBreakbarPercent: function () {
+                return !!this.breakbar;
+            }
+        }
+    });
+</script>

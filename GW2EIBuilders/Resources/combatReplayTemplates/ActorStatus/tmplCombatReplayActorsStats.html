@@ -24,8 +24,8 @@
                     <legend v-if="!singleGroup" style="font-size: 0.80rem; width: auto; padding: 0 5px; margin-left: 5px;">Group {{id}}</legend>
                     <div class="d-flex flex-row flex-wrap align-items-center">
                         <div v-for="(playerData, index) in group" :style="getPlayerDataStyle(index, group)"
-                            class="player-data ml-1 mr-1" :class="{active: selectedactorid === playerData.player.uniqueID}">
-                            <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="playerData.player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
+                             class="player-data ml-1 mr-1" :class="{active: selectedactorid === playerData.player.uniqueID}">
+                            <combat-replay-actor-stats-component :actorIndex="playerData.player.id" :time="time" :buffstoshow="buffsToShow" :isTarget="false" :buffs="buffs" :rotation="rotation" />
                         </div>
                     </div>
                 </fieldset>
@@ -35,7 +35,7 @@
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <div class="ml-2" style="width:220px; height:1px;"></div>
                 <div v-for="targetData in targets" v-if="render(targetData)" style="width:220px;" class="target-data ml-2" :class="{active: selectedactorid === targetData.target.uniqueID}">
-                    <combat-replay-target-stats-component :time="time" :targetindex="targetData.target.id" :buffstoshow="buffsToShowTarget"/>
+                    <combat-replay-actor-stats-component :actorIndex="targetData.target.id" :time="time" :buffstoshow="buffsToShowTarget" :isTarget="true" :buffs="true" :rotation="true" />
                 </div>
             </div>
         </div>
