@@ -347,6 +347,22 @@ internal class Xera : StrongholdOfTheFaithful
         AgentManipulationHelper.RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
     }
 
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var statues = agentData.GetStableSpeciesByID(TargetID.HauntingStatue);
+        if (statues.Count > 0)
+        {
+            var xeras = agentData.GetStableSpeciesByID(TargetID.Xera);
+            foreach (var maybeDeletedXera in xeras)
+            {
+                if (maybeDeletedXera.FirstAware <= statues.Max(x => x.FirstAware) || statues.Any(x => x.InAwareTimes(maybeDeletedXera)))
+                {
+                    maybeDeletedXera.OverrideID(TargetID.Unknown, agentData);
+                }
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // find target
