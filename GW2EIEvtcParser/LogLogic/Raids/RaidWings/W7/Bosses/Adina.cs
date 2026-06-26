@@ -19,22 +19,22 @@ internal class Adina : TheKeyOfAhdashim
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(RadiantBlindness, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", MechanicSeverity.P0, 0),
-                new PlayerDstHealthDamageHitMechanic(DiamondPalisadeEye, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", MechanicSeverity.P0, 0),
+                new PlayerDstBuffApplyMechanic(RadiantBlindness, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", MechanicSeverity.Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(DiamondPalisadeEye, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", MechanicSeverity.Sev0, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(PerilousPulse, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", MechanicSeverity.P0, 0)
+                new PlayerDstHealthDamageHitMechanic(PerilousPulse, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", MechanicSeverity.Sev0, 0)
                     .UsingBuffChecker(Stability, false),
-                new PlayerDstHealthDamageHitMechanic(StalagmitesDetonation, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", MechanicSeverity.P0, 0),
-                new PlayerDstHealthDamageMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", MechanicSeverity.P0, 0)
+                new PlayerDstHealthDamageHitMechanic(StalagmitesDetonation, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", MechanicSeverity.Sev0, 0),
+                new PlayerDstHealthDamageMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", MechanicSeverity.Sev0, 0)
                     .UsingChecker((de, log) => de.HasKilled),
             ]),
             new MechanicGroup([
-                new PlayerDstEffectMechanic(EffectGUIDs.AdinaSelectedForPillar,new MechanicPlotlySetting(Symbols.Circle,Colors.Brown), "Slctd.Pillar", "Selected for dropping a Pillar", "Selected for Pillar", MechanicSeverity.P0, 0),
-                new PlayerDstHealthDamageHitMechanic(BoulderBarrage, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", MechanicSeverity.P0, 0),
+                new PlayerDstEffectMechanic(EffectGUIDs.AdinaSelectedForPillar,new MechanicPlotlySetting(Symbols.Circle,Colors.Brown), "Slctd.Pillar", "Selected for dropping a Pillar", "Selected for Pillar", MechanicSeverity.Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(BoulderBarrage, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", MechanicSeverity.Sev0, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(ErodingCurse, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", MechanicSeverity.P0, 0),
+                new PlayerDstBuffApplyMechanic(ErodingCurse, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", MechanicSeverity.Sev0, 0),
             ]),
         ]);
     public Adina(int triggerID) : base(triggerID)

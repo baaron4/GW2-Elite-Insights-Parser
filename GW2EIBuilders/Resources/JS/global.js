@@ -38,12 +38,13 @@ const GraphType = {
 };
 
 const MechanicSeverity = {
-    P0: 0,
-    P1: 1,
-    P2: 2,
-    P3: 3,
+    Sev0: 0,
+    Sev1: 1,
+    Sev2: 2,
+    Sev3: 3,
+    Sev4: 4,
 
-    SeverityMask: 0 | 1 | 2 | 3,
+    SeverityMask: 0 | 1 | 2 | 3 | 4,
 
     Success: 8,
     Failure: 16,
@@ -51,10 +52,11 @@ const MechanicSeverity = {
 }
 
 const MechanicSeverityToName = {
-    0: "High Priority",
-    1: "Medium Priority",
-    2: "Low Priority",
-    3: "Informational",
+    0: "Critical",
+    1: "High",
+    2: "Medium",
+    3: "Low",
+    4: "Informational",
 };
 
 const reactiveLogdata = {

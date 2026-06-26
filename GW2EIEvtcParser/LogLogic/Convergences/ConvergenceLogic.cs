@@ -15,7 +15,7 @@ internal abstract class ConvergenceLogic : LogLogic
         SkillMode = SkillModeEnum.PvE;
         MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstBuffApplyMechanic([KryptisEssence, CalibratedEssence], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Essence", "Collected Essence", "Essence Gain", MechanicSeverity.P1, 0),
+            new PlayerDstBuffApplyMechanic([KryptisEssence, CalibratedEssence], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Essence", "Collected Essence", "Essence Gain", MechanicSeverity.Sev1, 0),
         ]));
         LogCategoryInformation.Category = LogCategory.Convergence;
         LogID |= LogIDs.LogMasks.ConvergenceMask;

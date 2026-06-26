@@ -16,34 +16,34 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class KeepConstruct : StrongholdOfTheFaithful
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", MechanicSeverity.P0, 0),
-            new PlayerDstHealthDamageHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", MechanicSeverity.P1, 0),
-            new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", MechanicSeverity.P0, 0),
+            new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", MechanicSeverity.Sev1, 0),
+            new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", MechanicSeverity.Sev0, 0),
             new MechanicGroup([
-                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%", "Magic Blast (Orbs eaten by KC) at 33%","Magic Blast 33%", MechanicSeverity.P0, 0)
+                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%", "Magic Blast (Orbs eaten by KC) at 33%","Magic Blast 33%", MechanicSeverity.Sev0, 0)
                     .UsingChecker( (de, log) => de.To.GetCurrentHealthPercent(log, de.Time) <= 40),
-                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%", "Magic Blast (Orbs eaten by KC) at 66%","Magic Blast 66%", MechanicSeverity.P0, 0)
+                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%", "Magic Blast (Orbs eaten by KC) at 66%","Magic Blast 66%", MechanicSeverity.Sev0, 0)
                     .UsingChecker( (de, log) => {
                             var curHP = de.To.GetCurrentHealthPercent(log, de.Time);
                             return curHP <= 70 &&  curHP >= 60;
                         }
                     ),
             ]),
-            new SpawnMechanic((int) TargetID.InsidiousProjection, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge", "Insidious Projection spawn (2 Statue merge)","Merged Statues", MechanicSeverity.P0, 0),
-            new PlayerDstHealthDamageHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza", "Phantasmal Blades (rotating Attack)","Phantasmal Blades", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic(TowerDrop, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump", "Tower Drop (KC Jump)","Tower Drop", MechanicSeverity.P1, 0),
-            new PlayerDstBuffApplyMechanic(XerasFury, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb", "Xera's Fury (Large Bombs) application","Bombs", MechanicSeverity.P0, 0),
+            new SpawnMechanic((int) TargetID.InsidiousProjection, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge", "Insidious Projection spawn (2 Statue merge)","Merged Statues", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza", "Phantasmal Blades (rotating Attack)","Phantasmal Blades", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(TowerDrop, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump", "Tower Drop (KC Jump)","Tower Drop", MechanicSeverity.Sev1, 0),
+            new PlayerDstBuffApplyMechanic(XerasFury, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb", "Xera's Fury (Large Bombs) application","Bombs", MechanicSeverity.Sev0, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb", "Good White Orb","Good White Orb", MechanicSeverity.P1, 0)
+                new PlayerDstHealthDamageHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb", "Good White Orb","Good White Orb", MechanicSeverity.Sev1, 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHealthDamageHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb", "Good Red Orb","Good Red Orb", MechanicSeverity.P1, 0)
+                new PlayerDstHealthDamageHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb", "Good Red Orb","Good Red Orb", MechanicSeverity.Sev1, 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-                new PlayerDstHealthDamageHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb", "Bad White Orb","Bad White Orb", MechanicSeverity.P1, 0)
+                new PlayerDstHealthDamageHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb", "Bad White Orb","Bad White Orb", MechanicSeverity.Sev1, 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHealthDamageHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb", "Bad Red Orb","Bad Red Orb", MechanicSeverity.P1, 0)
+                new PlayerDstHealthDamageHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb", "Bad Red Orb","Bad Red Orb", MechanicSeverity.Sev1, 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
             ]),
-            new PlayerSrcAllHealthDamageHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit", MechanicSeverity.P0,1000)
+            new PlayerSrcAllHealthDamageHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit", MechanicSeverity.Sev0,1000)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.KeepConstructCore) && de is DirectHealthDamageEvent)
         ]);
     public KeepConstruct(int triggerID) : base(triggerID)

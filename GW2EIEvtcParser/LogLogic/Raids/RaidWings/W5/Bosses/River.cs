@@ -19,12 +19,12 @@ internal class River : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
 
-            new PlayerDstHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", MechanicSeverity.P0, 0 ),
-            new PlayerDstHealthDamageHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", MechanicSeverity.P0, 0)
+            new PlayerDstHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", MechanicSeverity.Sev0, 0 ),
+            new PlayerDstHealthDamageHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", MechanicSeverity.Sev0, 0)
                 .UsingBuffChecker(Stability, false),
-            new EnemySrcHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Bomb Hit Desmina", "Hollowed Bomber hit Desmina", "Bomb Desmina", MechanicSeverity.P0, 0)
+            new EnemySrcHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Bomb Hit Desmina", "Hollowed Bomber hit Desmina", "Bomb Desmina", MechanicSeverity.Sev0, 0)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
-            new EnemySrcHealthDamageHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", MechanicSeverity.P0, 0)
+            new EnemySrcHealthDamageHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", MechanicSeverity.Sev0, 0)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
         ]);
     public River(int triggerID) : base(triggerID)

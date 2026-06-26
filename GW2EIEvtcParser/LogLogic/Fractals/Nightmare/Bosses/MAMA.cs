@@ -15,19 +15,19 @@ internal class MAMA : Nightmare
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB", "Blastwave (Spinning Knockback)","KB Spin", MechanicSeverity.P0, 0),
-            new PlayerDstHealthDamageHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)","Dual Spin/Slams", MechanicSeverity.P1, 700),
-            new PlayerDstHealthDamageHitMechanic(Leap, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump", "Leap (<33% only)","Leap", MechanicSeverity.P0, 0),
-            new PlayerDstHealthDamageHitMechanic(ShootGreenBalls, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot", "Toxic Shoot (Green Bullets)","Toxic Shoot", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic(ExplosiveImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump", "Explosive Impact (Knight Jump)","Knight Jump", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic(SweepingStrikes, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Sweep", "Swings (Many rapid front spins)","Sweeping Strikes", MechanicSeverity.P1, 200),
-            new PlayerDstHealthDamageHitMechanic(NightmareMiasmaMAMA, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo.M", "Nightmare Miasma (Poison Puddle)","Poison Goo", MechanicSeverity.P0, 700),
-            new PlayerDstHealthDamageHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage", "Grenade Barrage (Red Bullets with AoEs)","Ball Barrage", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball", "Shoot (Direct Red Bullets)","Bullet", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull.K", "Extraction (Knight Pull Circle)","Knight Pull", MechanicSeverity.P0, 0),
-            new PlayerDstHealthDamageHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades", "Homing Grenades","Homing Grenades", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", MechanicSeverity.P1, 0),
-            new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble.M", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", MechanicSeverity.P0, 0),
+            new PlayerDstHealthDamageHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB", "Blastwave (Spinning Knockback)","KB Spin", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)","Dual Spin/Slams", MechanicSeverity.Sev1, 700),
+            new PlayerDstHealthDamageHitMechanic(Leap, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump", "Leap (<33% only)","Leap", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(ShootGreenBalls, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot", "Toxic Shoot (Green Bullets)","Toxic Shoot", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(ExplosiveImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump", "Explosive Impact (Knight Jump)","Knight Jump", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(SweepingStrikes, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Sweep", "Swings (Many rapid front spins)","Sweeping Strikes", MechanicSeverity.Sev1, 200),
+            new PlayerDstHealthDamageHitMechanic(NightmareMiasmaMAMA, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo.M", "Nightmare Miasma (Poison Puddle)","Poison Goo", MechanicSeverity.Sev0, 700),
+            new PlayerDstHealthDamageHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage", "Grenade Barrage (Red Bullets with AoEs)","Ball Barrage", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball", "Shoot (Direct Red Bullets)","Bullet", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull.K", "Extraction (Knight Pull Circle)","Knight Pull", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades", "Homing Grenades","Homing Grenades", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble.M", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", MechanicSeverity.Sev0, 0),
         ]);
     public MAMA(int triggerID) : base(triggerID)
     {

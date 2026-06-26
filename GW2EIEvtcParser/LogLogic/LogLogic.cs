@@ -98,32 +98,32 @@ public abstract class LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", MechanicSeverity.P0, 0, (log, a) => log.CombatData.GetDeadEvents(a))
+                        new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", MechanicSeverity.Sev0, 0, (log, a) => log.CombatData.GetDeadEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<DownEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", MechanicSeverity.P0, 0, (log, a) => log.CombatData.GetDownEvents(a))
+                        new PlayerStatusMechanic<DownEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", MechanicSeverity.Sev0, 0, (log, a) => log.CombatData.GetDownEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<AliveEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", MechanicSeverity.P1, 0, (log, a) => log.CombatData.GetAliveEvents(a))
+                        new PlayerStatusMechanic<AliveEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", MechanicSeverity.Sev1, 0, (log, a) => log.CombatData.GetAliveEvents(a))
                             .UsingNoShowOnTable(),
                     ]
                 ),
-                new PlayerCastStartMechanic(SkillIDs.Resurrect, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res", MechanicSeverity.P2, 0)
+                new PlayerCastStartMechanic(SkillIDs.Resurrect, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res", MechanicSeverity.Sev2, 0)
                     .UsingNoShowOnTable(),
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DespawnEvent>(new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", MechanicSeverity.P2, 0, (log, a) => log.CombatData.GetDespawnEvents(a))
+                        new PlayerStatusMechanic<DespawnEvent>(new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", MechanicSeverity.Sev2, 0, (log, a) => log.CombatData.GetDespawnEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<SpawnEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", MechanicSeverity.P2, 0, (log, a) => log.CombatData.GetSpawnEvents(a))
+                        new PlayerStatusMechanic<SpawnEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", MechanicSeverity.Sev2, 0, (log, a) => log.CombatData.GetSpawnEvents(a))
                             .UsingNoShowOnTable()
                     ]
                 ),
                 new MechanicGroup(
                     [
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", MechanicSeverity.P0, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", MechanicSeverity.P0, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", MechanicSeverity.P0, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", MechanicSeverity.P0, 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), "Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...) ", MechanicSeverity.P0, 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), "Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked", MechanicSeverity.P0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", MechanicSeverity.Sev0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", MechanicSeverity.Sev0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", MechanicSeverity.Sev0, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", MechanicSeverity.Sev0, 0),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), "Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...) ", MechanicSeverity.Sev0, 0),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), "Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked", MechanicSeverity.Sev0, 0),
                     ]
                 ),
             ])

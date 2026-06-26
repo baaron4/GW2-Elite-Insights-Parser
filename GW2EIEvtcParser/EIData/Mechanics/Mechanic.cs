@@ -44,32 +44,33 @@ public abstract class Mechanic : MechanicContainer
     [Flags]
     public enum MechanicSeverity
     {
-        P0 = 0,
-        P1 = 1,
-        P2 = 2,
-        P3 = 3,
+        Sev0 = 0,
+        Sev1 = 1,
+        Sev2 = 2,
+        Sev3 = 3,
+        Sev4 = 4,
 
-        SeverityMask = P0 | P1 | P2 | P3,
+        SeverityMask = Sev0 | Sev1 | Sev2 | Sev3 | Sev4,
 
         Success = 8,
         Failure = 16,
         Neutral = 32,
 
-        P0Success = P0 | Success,
-        P0Failure = P0 | Failure,
-        P0Neutral = P0 | Neutral,
+        Sev0Success = Sev0 | Success,
+        Sev0Failure = Sev0 | Failure,
+        Sev0Neutral = Sev0 | Neutral,
 
-        P1Success = P1 | Success,
-        P1Failure = P1 | Failure,
-        P1Neutral = P1 | Neutral,
+        Sev1Success = Sev1 | Success,
+        Sev1Failure = Sev1 | Failure,
+        Sev1Neutral = Sev1 | Neutral,
 
-        P2Success = P2 | Success,
-        P2Failure = P2 | Failure,
-        P2Neutral = P2 | Neutral,
+        Sev2Success = Sev2 | Success,
+        Sev2Failure = Sev2 | Failure,
+        Sev2Neutral = Sev2 | Neutral,
 
-        P3Success = P3 | Success,
-        P3Failure = P3 | Failure,
-        P3Neutral = P3 | Neutral,
+        Sev3Success = Sev3 | Success,
+        Sev3Failure = Sev3 | Failure,
+        Sev3Neutral = Sev3 | Neutral,
     }
 
     public readonly int InternalCooldown;

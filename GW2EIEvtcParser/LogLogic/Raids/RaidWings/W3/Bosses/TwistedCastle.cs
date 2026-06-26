@@ -17,15 +17,15 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class TwistedCastle : StrongholdOfTheFaithful
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstBuffApplyMechanic(SpatialDistortion, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Statue TP", "Teleported by Statue", "Statue Teleport", MechanicSeverity.P0, 500),
+            new PlayerDstBuffApplyMechanic(SpatialDistortion, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Statue TP", "Teleported by Statue", "Statue Teleport", MechanicSeverity.Sev0, 500),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Still Waters (Immunity)", "Used a fountain for immunity", "Still Waters (Immunity)", MechanicSeverity.P1, 0)
+                new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Still Waters (Immunity)", "Used a fountain for immunity", "Still Waters (Immunity)", MechanicSeverity.Sev1, 0)
                     .UsingChecker((evt, log) => log.CombatData.GetBuffDataByIDByDst(SoothingWaters, evt.To).Any(x => x is BuffApplyEvent ba && Math.Abs(ba.Time - evt.Time) < 500)),
-                new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Magenta), "Still Waters (Removal)", "Used a fountain for stack removal", "Still Waters (Removal)", MechanicSeverity.P1, 0)
+                new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Magenta), "Still Waters (Removal)", "Used a fountain for stack removal", "Still Waters (Removal)", MechanicSeverity.Sev1, 0)
                     .UsingChecker((evt, log) => !log.CombatData.GetBuffDataByIDByDst(SoothingWaters, evt.To).Any(x => x is BuffApplyEvent ba && Math.Abs(ba.Time - evt.Time) < 500)),
             ]),
-            new PlayerDstBuffApplyMechanic(Madness, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Madness", "Stacking debuff", "Madness", MechanicSeverity.P0, 0),
-            new PlayerDstBuffApplyMechanic(ChaoticHaze, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Chaotic Haze", "Damaging Debuff from bombardement", "Chaotic Haze", MechanicSeverity.P0, 500),
+            new PlayerDstBuffApplyMechanic(Madness, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Madness", "Stacking debuff", "Madness", MechanicSeverity.Sev0, 0),
+            new PlayerDstBuffApplyMechanic(ChaoticHaze, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Chaotic Haze", "Damaging Debuff from bombardement", "Chaotic Haze", MechanicSeverity.Sev0, 500),
         ]);
     public TwistedCastle(int triggerID) : base(triggerID)
     {

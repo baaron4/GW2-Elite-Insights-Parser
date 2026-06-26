@@ -178,34 +178,41 @@
             let displayedSeverities = {
             };
             let trueCount = 0;
-            if (mechanicsForSeverity(MechanicSeverity.P0).length > 0) {
+            if (mechanicsForSeverity(MechanicSeverity.Sev0).length > 0) {
                 trueCount++;
-                displayedSeverities[MechanicSeverity.P0] = {
-                    id: "sev-" + MechanicSeverity.P0,
+                displayedSeverities[MechanicSeverity.Sev0] = {
+                    id: "sev-" + MechanicSeverity.Sev0,
                     display: true,
-                    name: MechanicSeverityToName[MechanicSeverity.P0],
+                    name: MechanicSeverityToName[MechanicSeverity.Sev0],
                 };
             }
-            if (mechanicsForSeverity(MechanicSeverity.P1).length > 0) {
+            if (mechanicsForSeverity(MechanicSeverity.Sev1).length > 0) {
                 trueCount++;
-                displayedSeverities[MechanicSeverity.P1] = {
-                    id: "sev-" + MechanicSeverity.P1,
+                displayedSeverities[MechanicSeverity.Sev1] = {
+                    id: "sev-" + MechanicSeverity.Sev1,
                     display: true,
-                    name: MechanicSeverityToName[MechanicSeverity.P1],
+                    name: MechanicSeverityToName[MechanicSeverity.Sev1],
                 };
             }
-            if (mechanicsForSeverity(MechanicSeverity.P2).length > 0) {
-                displayedSeverities[MechanicSeverity.P2] = {
-                    id: "sev-" + MechanicSeverity.P2,
+            if (mechanicsForSeverity(MechanicSeverity.Sev2).length > 0) {
+                displayedSeverities[MechanicSeverity.Sev2] = {
+                    id: "sev-" + MechanicSeverity.Sev2,
                     display: trueCount++ === 0,
-                    name: MechanicSeverityToName[MechanicSeverity.P2],
+                    name: MechanicSeverityToName[MechanicSeverity.Sev2],
                 };
             }
-            if (mechanicsForSeverity(MechanicSeverity.P3).length > 0) {
-                displayedSeverities[MechanicSeverity.P3] = {
-                    id: "sev-" + MechanicSeverity.P3,
+            if (mechanicsForSeverity(MechanicSeverity.Sev3).length > 0) {
+                displayedSeverities[MechanicSeverity.Sev3] = {
+                    id: "sev-" + MechanicSeverity.Sev3,
                     display: trueCount++ === 0,
-                    name: MechanicSeverityToName[MechanicSeverity.P3],
+                    name: MechanicSeverityToName[MechanicSeverity.Sev3],
+                };
+            }
+            if (mechanicsForSeverity(MechanicSeverity.Sev4).length > 0) {
+                displayedSeverities[MechanicSeverity.Sev4] = {
+                    id: "sev-" + MechanicSeverity.Sev4,
+                    display: trueCount++ === 0,
+                    name: MechanicSeverityToName[MechanicSeverity.Sev4],
                 };
             }
 
