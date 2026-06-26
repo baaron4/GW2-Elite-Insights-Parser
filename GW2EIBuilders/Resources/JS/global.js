@@ -50,6 +50,13 @@ const MechanicSeverity = {
     Neutral: 32,
 }
 
+const MechanicSeverityToName = {
+    0: "High Priority",
+    1: "Medium Priority",
+    2: "Low Priority",
+    3: "Informational",
+};
+
 const reactiveLogdata = {
     phases: [],
     players: [],

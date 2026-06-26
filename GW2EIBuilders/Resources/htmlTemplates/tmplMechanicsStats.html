@@ -38,7 +38,12 @@
                 return tables;
             },
             mechanicsBySeverity: function() {
-                let toTest = [this.p0Mechanics, this.p1Mechanics, this.p2Mechanics, this.p3Mechanics];
+                let toTest = [
+                    mechanicsForSeverity(MechanicSeverity.P0), 
+                    mechanicsForSeverity(MechanicSeverity.P1), 
+                    mechanicsForSeverity(MechanicSeverity.P2), 
+                    mechanicsForSeverity(MechanicSeverity.P3)
+                ];
                 return toTest.filter(x => x.length > 0);
             },
             showNavBar: function() {
@@ -46,30 +51,16 @@
             },
             navBars: function() {
                 let bars = [];
-                let names = ["High Priority", "Medium Priority", "Low Priority", "Very Low Priority"];
                 for (let i = 0; i < this.mechanicsBySeverity.length; i++) {
                     let mechanicBySeverity = this.mechanicsBySeverity[i];
                     let severity = mechanicBySeverity[0].severity & MechanicSeverity.SeverityMask;
-                    let name = names[severity];
                     bars.push({
                         index: i,
-                        name: name,
+                        name: MechanicSeverityToName[severity],
                         severity: severity,
                     });
                 }
                 return bars;
-            },
-            p0Mechanics: function() {
-                return mechanicsForSeverity(MechanicSeverity.P0);
-            },  
-            p1Mechanics: function() {
-                return mechanicsForSeverity(MechanicSeverity.P1);
-            },  
-            p2Mechanics: function() {
-                return mechanicsForSeverity(MechanicSeverity.P2);
-            },  
-            p3Mechanics: function() {
-                return mechanicsForSeverity(MechanicSeverity.P3);
             },
             phases: function() {
                 return logData.phases;
