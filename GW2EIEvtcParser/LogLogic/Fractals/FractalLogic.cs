@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -23,18 +24,18 @@ internal abstract class FractalLogic : LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(FluxBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", MechanicSeverity.Sev1, 0),
-                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", MechanicSeverity.Sev0, 0), // No longer tracking damage
+                        new PlayerDstBuffApplyMechanic(FluxBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", Sev1, 0),
+                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", Sev0, 0), // No longer tracking damage
                     ]
                 ),
-                new SpawnMechanic((int)TargetID.FractalVindicator, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", MechanicSeverity.Sev2, 0),
+                new SpawnMechanic((int)TargetID.FractalVindicator, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", Sev2, 0),
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", MechanicSeverity.Sev2, 0),
-                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", MechanicSeverity.Sev2, 0),
-                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", MechanicSeverity.Sev0, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", Sev2, 0),
+                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", Sev2, 0),
+                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", Sev0, 0)
                             .UsingChecker((bae, log) => bae.To.IsPlayer),
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", MechanicSeverity.Sev1, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", Sev1, 0)
                             .UsingChecker((bae, log) => bae.By.IsPlayer),
                     ]
                 ),

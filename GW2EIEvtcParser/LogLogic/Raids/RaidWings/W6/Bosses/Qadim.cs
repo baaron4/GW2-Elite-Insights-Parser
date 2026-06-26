@@ -15,6 +15,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -22,78 +23,78 @@ internal class Qadim : MythwrightGambit
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new EnemyCastStartMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC", "Qadim CC","Qadim CC", MechanicSeverity.Sev2, 0),
-                new EnemyCastEndMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed", "Qadim Breakbar broken","Qadim CCed", MechanicSeverity.Sev0, 0)
+                new EnemyCastStartMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC", "Qadim CC","Qadim CC", Sev2, 0),
+                new EnemyCastEndMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed", "Qadim Breakbar broken","Qadim CCed", Sev0, 0)
                     .UsingChecker((ce, log) => ce.ActualDuration < 6500),
-                new EnemyCastStartMechanic(QadimRiposte, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkRed), "Q.CC Fail", "Qadim Breakbar failed","Qadim CC Fail", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(QadimRiposte, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", MechanicSeverity.Sev1, 0),
+                new EnemyCastStartMechanic(QadimRiposte, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkRed), "Q.CC Fail", "Qadim Breakbar failed","Qadim CC Fail", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(QadimRiposte, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", Sev1, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([ FieryDance1, FieryDance2, FieryDance3, FieryDance4 ], new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(SeaOfFlame, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Q.Hitbox", "Sea of Flame (Stood in Qadim Hitbox)","Qadim Hitbox AoE", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(ShatteringImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Stun", "Shattering Impact (Stunning flame bolt)","Flame Bolt Stun", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(FlameWave, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "KB", "Flame Wave (Knockback Frontal Beam)","KB Push", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(FireWaveQadim, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Q.Wave", "Fire Wave (Shockwave after Qadim's Mace attack)","Mace Shockwave", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(BigHit, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Mace", "Big Hit (Mace Impact)","Mace Impact", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(Inferno, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "Inf.", "Inferno (Lava Pool drop  on long platform spokes)","Inferno Pool", MechanicSeverity.Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic([ FieryDance1, FieryDance2, FieryDance3, FieryDance4 ], new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(SeaOfFlame, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Q.Hitbox", "Sea of Flame (Stood in Qadim Hitbox)","Qadim Hitbox AoE", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(ShatteringImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Stun", "Shattering Impact (Stunning flame bolt)","Flame Bolt Stun", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(FlameWave, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "KB", "Flame Wave (Knockback Frontal Beam)","KB Push", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(FireWaveQadim, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Q.Wave", "Fire Wave (Shockwave after Qadim's Mace attack)","Mace Shockwave", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(BigHit, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Mace", "Big Hit (Mace Impact)","Mace Impact", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(Inferno, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "Inf.", "Inferno (Lava Pool drop  on long platform spokes)","Inferno Pool", Sev1, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(ElementalBreath, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "Hydra Breath", "Elemental Breath (Hydra Breath)","Hydra Breath", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(Fireball, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow,10), "H.FBall", "Fireball (Hydra)","Hydra Fireball", MechanicSeverity.Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(ElementalBreath, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "Hydra Breath", "Elemental Breath (Hydra Breath)","Hydra Breath", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(Fireball, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow,10), "H.FBall", "Fireball (Hydra)","Hydra Fireball", Sev2, 0),
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "H.Meteor", "Fiery Meteor (Hydra)","Hydra Meteor", MechanicSeverity.Sev1, 0),
-                    new EnemyCastStartMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "H.CC", "Fiery Meteor (Hydra Breakbar)","Hydra CC", MechanicSeverity.Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "H.Meteor", "Fiery Meteor (Hydra)","Hydra Meteor", Sev1, 0),
+                    new EnemyCastStartMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "H.CC", "Fiery Meteor (Hydra Breakbar)","Hydra CC", Sev2, 0),
                     //new Mechanic(718, "Fiery Meteor (Spawn)", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Qadim, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC.Fail","Fiery Meteor Spawned (Hydra Breakbar)", "Hydra CC Fail",0,(condition =>  condition.CombatItem.IFF == ParseEnum.IFF.Foe)),
-                    new EnemyCastEndMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "H.CCed", "Fiery Meteor (Hydra Breakbar broken)","Hydra CCed", MechanicSeverity.Sev0, 0)
+                    new EnemyCastEndMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "H.CCed", "Fiery Meteor (Hydra Breakbar broken)","Hydra CCed", Sev0, 0)
                         .UsingChecker((ce, log) => ce.ActualDuration < 12364),
-                    new EnemyCastEndMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC Fail", "Fiery Meteor (Hydra Breakbar not broken)","Hydra CC Failed", MechanicSeverity.Sev0, 0)
+                    new EnemyCastEndMechanic(FieryMeteor, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkRed), "H.CC Fail", "Fiery Meteor (Hydra Breakbar not broken)","Hydra CC Failed", Sev0, 0)
                         .UsingChecker((ce,log) => ce.ActualDuration >= 12364),
                 ]),
-                new PlayerDstHealthDamageHitMechanic(TeleportHydra, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "H.KB", "Teleport Knockback (Hydra)","Hydra TP KB", MechanicSeverity.Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(TeleportHydra, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "H.KB", "Teleport Knockback (Hydra)","Hydra TP KB", Sev1, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(FireWaveDestroyer, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkRed), "D.Wave", "Fire Wave (Shockwave after Destroyer's Jump or Stomp)","Destroyer Shockwave", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(SeismicStomp, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Yellow), "D.Stomp", "Seismic Stomp (Destroyer Stomp)","Seismic Stomp (Destroyer)", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(ShatteredEarth, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "D.Slam", "Shattered Earth (Destroyer Jump Slam)","Jump Slam (Destroyer)", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(WaveOfForce, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Orange), "D.Pizza", "Wave of Force (Destroyer Pizza)","Destroyer Auto", MechanicSeverity.Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(FireWaveDestroyer, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkRed), "D.Wave", "Fire Wave (Shockwave after Destroyer's Jump or Stomp)","Destroyer Shockwave", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(SeismicStomp, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Yellow), "D.Stomp", "Seismic Stomp (Destroyer Stomp)","Seismic Stomp (Destroyer)", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(ShatteredEarth, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "D.Slam", "Shattered Earth (Destroyer Jump Slam)","Jump Slam (Destroyer)", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(WaveOfForce, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Orange), "D.Pizza", "Wave of Force (Destroyer Pizza)","Destroyer Auto", Sev2, 0),
                 new MechanicGroup([
-                    new EnemyCastStartMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkTeal), "D.CC", "Summon (Destroyer Breakbar)","Destroyer CC", MechanicSeverity.Sev2, 0),
-                    new EnemyCastEndMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkGreen), "D.CCed", "Summon (Destroyer Breakbar broken)","Destroyer CCed", MechanicSeverity.Sev0, 0).UsingChecker((ce, log) => ce.ActualDuration < 8332),
-                    new EnemyCastEndMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkRed), "D.CC Fail", "Summon (Destroyer Breakbar failed)","Destroyer CC Fail", MechanicSeverity.Sev0, 0).UsingChecker((ce,log) => ce.ActualDuration >= 8332),
-                    new SpawnMechanic(SummonSpawn, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkRed), "D.Spwn", "Summon (Destroyer Trolls summoned)","Destroyer Summoned", MechanicSeverity.Sev1, 0),
+                    new EnemyCastStartMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkTeal), "D.CC", "Summon (Destroyer Breakbar)","Destroyer CC", Sev2, 0),
+                    new EnemyCastEndMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkGreen), "D.CCed", "Summon (Destroyer Breakbar broken)","Destroyer CCed", Sev0, 0).UsingChecker((ce, log) => ce.ActualDuration < 8332),
+                    new EnemyCastEndMechanic(SummonDestroyer, new MechanicPlotlySetting(Symbols.StarTriangleDown,Colors.DarkRed), "D.CC Fail", "Summon (Destroyer Breakbar failed)","Destroyer CC Fail", Sev0, 0).UsingChecker((ce,log) => ce.ActualDuration >= 8332),
+                    new SpawnMechanic(SummonSpawn, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkRed), "D.Spwn", "Summon (Destroyer Trolls summoned)","Destroyer Summoned", Sev1, 0),
                 ]),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(SlashWyvern, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Slash", "Wyvern Slash (Double attack: knock into pin down)","KB/Pin down", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(TailSwipe, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Yellow), "W.Pizza", "Wyvern Tail Swipe (Pizza attack)","Tail Swipe", MechanicSeverity.Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(FireBreath, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Orange), "W.Breath", "Fire Breath (Wyvern)","Fire Breath", MechanicSeverity.Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(WingBuffet, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkTeal), "W.Wing", "Wing Buffet (Wyvern Launching Wing Storm)","Wing Buffet", MechanicSeverity.Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(SlashWyvern, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Slash", "Wyvern Slash (Double attack: knock into pin down)","KB/Pin down", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(TailSwipe, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Yellow), "W.Pizza", "Wyvern Tail Swipe (Pizza attack)","Tail Swipe", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(FireBreath, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Orange), "W.Breath", "Fire Breath (Wyvern)","Fire Breath", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(WingBuffet, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.DarkTeal), "W.Wing", "Wing Buffet (Wyvern Launching Wing Storm)","Wing Buffet", Sev0, 0),
                 new MechanicGroup([
-                    new EnemyCastStartMechanic(PatriarchCC, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkTeal), "W.BB", "Platform Destruction (Patriarch CC)","Patriarch CC", MechanicSeverity.Sev2, 0),
-                    new EnemyCastEndMechanic(PatriarchCC, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkGreen), "W.CCed", "Platform Destruction (Patriarch Breakbar broken)","Patriarch CCed", MechanicSeverity.Sev0, 0)
+                    new EnemyCastStartMechanic(PatriarchCC, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkTeal), "W.BB", "Platform Destruction (Patriarch CC)","Patriarch CC", Sev2, 0),
+                    new EnemyCastEndMechanic(PatriarchCC, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkGreen), "W.CCed", "Platform Destruction (Patriarch Breakbar broken)","Patriarch CCed", Sev0, 0)
                         .UsingChecker((ce, log) => ce.ActualDuration < 6500),
-                    new EnemyCastStartMechanic(PatriarchCCJumpInAir, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkRed), "Wyv CC Fail", "Platform Destruction (Patriarch Breakbar failed)","Patriarch CC Fail", MechanicSeverity.Sev0, 0),
+                    new EnemyCastStartMechanic(PatriarchCCJumpInAir, new MechanicPlotlySetting(Symbols.StarSquare,Colors.DarkRed), "Wyv CC Fail", "Platform Destruction (Patriarch Breakbar failed)","Patriarch CC Fail", Sev0, 0),
                 ]),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(SwapQadim, new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port", "Swap (Ported from below Legendary Creature to Qadim)","Port to Qadim", MechanicSeverity.Sev1, 0),
-                new PlayerDstBuffApplyMechanic(PowerOfTheLamp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp", "Power of the Lamp (Returned from the Lamp)","Lamp Return", MechanicSeverity.Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(SwapQadim, new MechanicPlotlySetting(Symbols.CircleCrossOpen,Colors.Magenta), "Port", "Swap (Ported from below Legendary Creature to Qadim)","Port to Qadim", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(PowerOfTheLamp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp", "Power of the Lamp (Returned from the Lamp)","Lamp Return", Sev0, 0),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_TakingTurns, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns.N.G", "Achievement Eligibility: Taking Turns not Gained", "Taking Turns not Gained", 0)
                         .UsingChecker((evt, log) => evt.Lost),
                     new AchievementEligibilityMechanic(Ach_TakingTurns, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Grey), "Taking Turns.G", "Achievement Eligibility: Taking Turns Gained", "Taking Turns Gained", 0)
                         .UsingChecker((evt, log) => !evt.Lost)
                 ]),
-                new PlayerDstHealthDamageHitMechanic(Claw, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw", "Claw (Reaper of Flesh attack)","Reaper Claw", MechanicSeverity.Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(Claw, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw", "Claw (Reaper of Flesh attack)","Reaper Claw", Sev2, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(BodyOfFlame, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Pink,10), "P.AoE", "Body of Flame (Pyre Ground AoE (CM))","Pyre Hitbox AoE", MechanicSeverity.Sev1, 0),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K", "Pyre Killed","Pyre Killed", MechanicSeverity.Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K", "Stab Pyre Killed","Stab Pyre Killed", MechanicSeverity.Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K", "Protect Pyre Killed","Protect Pyre Killed", MechanicSeverity.Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", MechanicSeverity.Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
+                new PlayerDstHealthDamageHitMechanic(BodyOfFlame, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Pink,10), "P.AoE", "Body of Flame (Pyre Ground AoE (CM))","Pyre Hitbox AoE", Sev1, 0),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K", "Pyre Killed","Pyre Killed", Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K", "Stab Pyre Killed","Stab Pyre Killed", Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K", "Protect Pyre Killed","Protect Pyre Killed", Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
                     .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", MechanicSeverity.Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
+                new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", Sev0, 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>())
                     .WithBuilds(GW2Builds.May2021Balance),
             ]),
         ]);

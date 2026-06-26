@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -19,15 +20,15 @@ internal class Kanaxai : SilentSurf
         [
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic(RendingStormSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", MechanicSeverity.Sev1, 0),
-                    new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", MechanicSeverity.Sev1, 150),
+                    new PlayerDstHealthDamageHitMechanic(RendingStormSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", Sev1, 0),
+                    new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", Sev1, 150),
                 ]
             ),
-            new PlayerDstHealthDamageHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", Sev0, 0),
             new MechanicGroup(
                 [
-                    new PlayerDstBuffApplyMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", MechanicSeverity.Sev0, 150),
-                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Eye.D", "Died to Dread Visage (Eye)", "Dread Visage Death", MechanicSeverity.Sev0, 150)
+                    new PlayerDstBuffApplyMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", Sev0, 150),
+                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Eye.D", "Died to Dread Visage (Eye)", "Dread Visage Death", Sev0, 150)
                         .UsingChecker((remove, log) =>
                         {
                             // 5s extreme vulnerability from dread visage
@@ -47,7 +48,7 @@ internal class Kanaxai : SilentSurf
                                 });
                         }
                     ),
-                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", MechanicSeverity.Sev0, 150)
+                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", Sev0, 150)
                         .UsingChecker((remove, log) =>
                         {
                             // 60s extreme vulnerability from frightening speed
@@ -69,10 +70,10 @@ internal class Kanaxai : SilentSurf
                     ),
                 ]
             ),
-            new PlayerDstBuffApplyMechanic(ExposedPlayer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", MechanicSeverity.Sev0, 0),
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", MechanicSeverity.Sev0, 150),
-            new PlayerDstBuffApplyMechanic(Phantasmagoria, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", MechanicSeverity.Sev1, 150),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A.K", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", MechanicSeverity.Sev0, 150),
+            new PlayerDstBuffApplyMechanic(ExposedPlayer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", Sev0, 150),
+            new PlayerDstBuffApplyMechanic(Phantasmagoria, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", Sev1, 150),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A.K", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", Sev0, 150),
         ]);
     public Kanaxai(int triggerID) : base(triggerID)
     {

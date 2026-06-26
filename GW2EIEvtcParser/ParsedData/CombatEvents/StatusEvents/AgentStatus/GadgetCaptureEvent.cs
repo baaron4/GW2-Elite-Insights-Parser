@@ -80,7 +80,7 @@ public class GadgetCaptureEvent : StatusEvent
         return relativePoints;
     }
 
-    public Color GetColor(byte owner)
+    public static Color GetColor(byte owner)
     {
         switch (owner)
         {

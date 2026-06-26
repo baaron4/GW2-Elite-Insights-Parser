@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -17,18 +18,18 @@ internal class StatueOfDarkness : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
 
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared", "Feared by Eye Teleport Skill","Feared", MechanicSeverity.Sev0, 0),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared", "Feared by Eye Teleport Skill","Feared", Sev0, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(LightCarrier, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb", "Light Carrier (picked up a light orb)","Picked up orb", MechanicSeverity.Sev1, 0),
-                new PlayerCastStartMechanic(Flare, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate", "Flare (detonate light orb to incapacitate eye)","Detonate orb", MechanicSeverity.Sev0, 0)
+                new PlayerDstBuffApplyMechanic(LightCarrier, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb", "Light Carrier (picked up a light orb)","Picked up orb", Sev1, 0),
+                new PlayerCastStartMechanic(Flare, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate", "Flare (detonate light orb to incapacitate eye)","Detonate orb", Sev0, 0)
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
-            new PlayerDstHealthDamageHitMechanic(PiercingShadow, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin.SoD", "Piercing Shadow (damaging spin to all players in sight)","Eye Spin", MechanicSeverity.Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(DeepAbyss, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam", "Deep Abyss (ticking eye beam)","Eye Beam", MechanicSeverity.Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(PiercingShadow, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin.SoD", "Piercing Shadow (damaging spin to all players in sight)","Eye Spin", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(DeepAbyss, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam", "Deep Abyss (ticking eye beam)","Eye Beam", Sev1, 0),
             new MechanicGroup([
-                new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate", "Applied Daze/Fear/Knockdown on Eye of Fate","CC Fate", MechanicSeverity.Sev0, 50)
+                new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate", "Applied Daze/Fear/Knockdown on Eye of Fate","CC Fate", Sev0, 50)
                     .UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfFate)),
-                new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge", "Applied Daze/Fear/Knockdown on Eye of Judgement","CC Judge", MechanicSeverity.Sev0, 50)
+                new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge", "Applied Daze/Fear/Knockdown on Eye of Judgement","CC Judge", Sev0, 50)
                     .UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfJudgement)),
             ]),
         //47857 <- teleport + fear skill? 

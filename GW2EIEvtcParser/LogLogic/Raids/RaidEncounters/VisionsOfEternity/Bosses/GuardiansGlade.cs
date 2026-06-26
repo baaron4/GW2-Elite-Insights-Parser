@@ -15,6 +15,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -39,53 +40,53 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal readonly MechanicGroup Mechanics = new([
         // Kela Stomp Left / Right
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", MechanicSeverity.Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", Sev1, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", MechanicSeverity.Sev0, 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", Sev0, 0),
                     false
                 ),
         ]),
         // Kela Claw Slam
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", MechanicSeverity.Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", Sev1, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", MechanicSeverity.Sev0, 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", Sev0, 0),
                     false
                 ),
         ]),
         // Lightning Strike
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", MechanicSeverity.Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(KelaLightningStrike, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "LightStk.H", "Hit by Lightning Strike", "Lightning Strike Hit", Sev1, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", MechanicSeverity.Sev0, 10),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "LightStk.CC", "CC by Lightning Strike", "Lightning Strike CC", Sev0, 10),
                     false
                 ),
         ]),
         // Crocodilian Razortooth Tackle
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", MechanicSeverity.Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", Sev1, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", MechanicSeverity.Sev0, 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", Sev0, 0),
                     false
                 ),
         ]),
         // Tornado
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", MechanicSeverity.Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", Sev1, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", MechanicSeverity.Sev0, 0),
+                    new SubMechanic(new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", Sev0, 0),
                     false
                 ),
         ]),
-        new PlayerDstHealthDamageHitMechanic([KelaAmbush1, KelaAmbush2], new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Ambush.H", "Hit by Ambush", "Ambush Hit", MechanicSeverity.Sev0, 0),
-        new PlayerDstHealthDamageHitMechanic([KelaTantrum1, KelaTantrum2], new MechanicPlotlySetting(Symbols.Square, Colors.BreakbarActiveBlue), "Tantrum.H", "Hit by Tantrum", "Tantrum", MechanicSeverity.Sev1, 0),
-        new PlayerDstHealthDamageHitMechanic(ScaldingWave, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "ScalWave.H", "Hit by Scalding Wave", "Scalding Wave Hit", MechanicSeverity.Sev0, 0),
-        new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela", "Kela Fixated", MechanicSeverity.Sev0, 0),
-        new PlayerDstBuffApplyMechanic(Hunted, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "Croc.Fix", "Fixated by Crocodilian Razortooth", "Croc Fixated", MechanicSeverity.Sev1, 0),
-        new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", MechanicSeverity.Sev0, 0),
+        new PlayerDstHealthDamageHitMechanic([KelaAmbush1, KelaAmbush2], new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Ambush.H", "Hit by Ambush", "Ambush Hit", Sev0, 0),
+        new PlayerDstHealthDamageHitMechanic([KelaTantrum1, KelaTantrum2], new MechanicPlotlySetting(Symbols.Square, Colors.BreakbarActiveBlue), "Tantrum.H", "Hit by Tantrum", "Tantrum", Sev1, 0),
+        new PlayerDstHealthDamageHitMechanic(ScaldingWave, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "ScalWave.H", "Hit by Scalding Wave", "Scalding Wave Hit", Sev0, 0),
+        new PlayerDstBuffApplyMechanic(FixatedKela, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated by Kela", "Kela Fixated", Sev0, 0),
+        new PlayerDstBuffApplyMechanic(Hunted, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "Croc.Fix", "Fixated by Crocodilian Razortooth", "Croc Fixated", Sev1, 0),
+        new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", Sev0, 0),
         // Loose Sand
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", MechanicSeverity.Sev1, 0),
+            new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", Sev1, 0),
             new MechanicGroup([
                 new AchievementEligibilityMechanic(Ach_Surefooted, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkPurple), "Achiv.Sand.L", "Achievement Eligibility: Surefooted Lost", "Achiv: Surefooted Lost", 0)
                     .UsingChecker((evt, log) => evt.Lost),
@@ -95,25 +96,25 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ]),
         // Biting Swarm
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", MechanicSeverity.Sev1, 0)
-                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", MechanicSeverity.Sev0, 0), (time, actor, log) => IsFirstBee(time, actor.AgentItem, log))
-                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Cntmntd", "Contaminated by Bitting Swarm", "Contaminated by Bitting Swarm ", MechanicSeverity.Sev0, 0), (time, actor, log) => !IsFirstBee(time, actor.AgentItem, log))
+            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", Sev1, 0)
+                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", Sev0, 0), (time, actor, log) => IsFirstBee(time, actor.AgentItem, log))
+                .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Cntmntd", "Contaminated by Bitting Swarm", "Contaminated by Bitting Swarm ", Sev0, 0), (time, actor, log) => !IsFirstBee(time, actor.AgentItem, log))
                 .UsingIgnored()
         ]),
-        new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", MechanicSeverity.Sev1, 0),
+        new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", Sev1, 0),
         // Eating
         new MechanicGroup([
-            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Ate Croc", "Ate a Crocodilian Razortooth", "Ate Croc", MechanicSeverity.Sev0, 0)
+            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Ate Croc", "Ate a Crocodilian Razortooth", "Ate Croc", Sev0, 0)
                 .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.DownedEliteCrocodilianRazortooth)),
-            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Ate Artifact", "Ate the Cursed Artifact", "Ate Artifact", MechanicSeverity.Sev0, 0)
+            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Ate Artifact", "Ate the Cursed Artifact", "Ate Artifact", Sev0, 0)
                 .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.CursedArtifact_NPC)),
             new MechanicGroup([
-                new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Red), "Ate Player", "Ate a Player", "Ate Player", MechanicSeverity.Sev0, 0)
+                new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Red), "Ate Player", "Ate a Player", "Ate Player", Sev0, 0)
                     .UsingChecker((hde, log) => hde.To.IsPlayer),
-                new PlayerDstHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Red), "Player Eaten", "Player Eaten", "Player Eaten", MechanicSeverity.Sev0, 0)
+                new PlayerDstHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Red), "Player Eaten", "Player Eaten", "Player Eaten", Sev0, 0)
                     .UsingChecker((hde, log) => hde.From.IsSpecies(TargetID.KelaSeneschalOfWaves))
                     .WithSubMechanic(
-                        new SubMechanic(new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "Tank Eaten", "Tank Eaten", "Tank Eaten", MechanicSeverity.Sev0, 0)
+                        new SubMechanic(new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "Tank Eaten", "Tank Eaten", "Tank Eaten", Sev0, 0)
                         , (time, agent, log) => agent.HasBuff(log, FixatedKela, time - 50)
                     ),
             ]),

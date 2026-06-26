@@ -5,6 +5,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -15,7 +16,7 @@ internal abstract class Nightmare : FractalLogic
         LogCategoryInformation.SubCategory = SubLogCategory.Nightmare;
         LogID |= LogIDs.FractalMasks.NightmareMask;
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", MechanicSeverity.Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", Sev0, 0),
         ]));
     }
 
