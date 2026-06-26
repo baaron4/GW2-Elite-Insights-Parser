@@ -539,7 +539,7 @@ public abstract class LogLogic
                     // Initial state to first progress
                     {
                         var lifespan = (gadgetCapture.Time, gadgetCapture.Progress[0].Time);
-                        var color = gadgetCapture.GetColor(gadgetCapture.OriginalOwner);
+                        var color = GadgetCaptureEvent.GetColor(gadgetCapture.OriginalOwner);
                         if (gadgetCapture.IsCircle)
                         {
                             environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
@@ -553,8 +553,8 @@ public abstract class LogLogic
                     for (var i = 0; i < gadgetCapture.Progress.Count; i++)
                     {
                         var progress = gadgetCapture.Progress[i];
-                        var color = gadgetCapture.GetColor(progress.By);
-                        var fromColor = gadgetCapture.GetColor(progress.From);
+                        var color = GadgetCaptureEvent.GetColor(progress.By);
+                        var fromColor = GadgetCaptureEvent.GetColor(progress.From);
                         double progressValue = progress.Progress;
                         var addProgressBar = true;
                         if (progressValue == 100)
@@ -590,7 +590,7 @@ public abstract class LogLogic
                 {
                     // should not happen, but as a safety net
                     var lifespan = (gadgetCapture.Time, gadgetCapture.EndTime);
-                    var color = gadgetCapture.GetColor(gadgetCapture.OriginalOwner);
+                    var color = GadgetCaptureEvent.GetColor(gadgetCapture.OriginalOwner);
                     if (gadgetCapture.IsCircle)
                     {
                         environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
