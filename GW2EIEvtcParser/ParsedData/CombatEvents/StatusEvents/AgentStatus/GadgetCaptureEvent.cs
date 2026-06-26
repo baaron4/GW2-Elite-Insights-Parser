@@ -8,7 +8,7 @@ public class GadgetCaptureEvent : StatusEvent
     public long EndTime { get; private set; } = long.MinValue;
     public bool EndIsSet => EndTime != long.MinValue;
 
-    public readonly byte OriginalOwner;
+    public byte OriginalOwner { get; private set; }
 
     public bool IsCircle => _points.Length == 1;
 
@@ -56,7 +56,11 @@ public class GadgetCaptureEvent : StatusEvent
         {
             return;
         }
-        _progress.Add((evtcItem.Time, BitConverter.Int32BitsToSingle(evtcItem.Value), evtcItem.Result, evtcItem.IsBuff));
+        if (_progress.Count == 0)
+        {
+            OriginalOwner = evtcItem.IsBuff;
+        }
+        _progress.Add((evtcItem.Time, BitConverter.Int32BitsToSingle(evtcItem.Value) * 100.0f, evtcItem.IsBuff, evtcItem.Result));
     }
 
     public IReadOnlyList<Vector3> GetRelativePoints(Vector3 position)
@@ -76,4 +80,19 @@ public class GadgetCaptureEvent : StatusEvent
         return relativePoints;
     }
 
+    public Color GetColor(byte owner)
+    {
+        switch (owner)
+        {
+            default:
+            case 0:
+                return Colors.White;
+            case 1:
+                return Colors.Red;
+            case 2:
+                return Colors.LightBlue;
+            case 3:
+                return Colors.Green;
+        }
+    }
 }

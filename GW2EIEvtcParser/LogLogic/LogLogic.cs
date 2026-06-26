@@ -1,4 +1,8 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -511,6 +515,92 @@ public abstract class LogLogic
                 if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
                     environmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
+                }
+            }
+        }
+        foreach (var gadgetCapture in log.CombatData.GetGadgetCaptureEvents())
+        {
+            var src = gadgetCapture.Src;
+            if (src.TryGetCurrentPosition(log, gadgetCapture.Time, out var position))
+            {
+                var positionConnector = new PositionConnector(position.Value);
+                if (gadgetCapture.Progress.Count > 0)
+                {
+                    uint barSize = 0;
+                    IReadOnlyList<Vector3> relativePositions = new List<Vector3>();
+                    if (gadgetCapture.IsCircle)
+                    {
+                        barSize = (uint)(gadgetCapture.Radius / 1.5);
+                    }
+                    else
+                    {
+                        relativePositions = gadgetCapture.GetRelativePoints(position.Value);
+                        barSize = (uint)(relativePositions.Sum(x => x.Length()) / (1.5 * relativePositions.Count));
+                    }
+                    // Initial state to first progress
+                    {
+                        var lifespan = (gadgetCapture.Time, gadgetCapture.Progress[0].Time);
+                        var color = gadgetCapture.GetColor(gadgetCapture.OriginalOwner);
+                        if (gadgetCapture.IsCircle)
+                        {
+                            environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        else
+                        {
+                            environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                    }
+                    // Progresses
+                    for (var i = 0; i < gadgetCapture.Progress.Count; i++)
+                    {
+                        var progress = gadgetCapture.Progress[i];
+                        var color = gadgetCapture.GetColor(progress.By);
+                        var fromColor = gadgetCapture.GetColor(progress.From);
+                        double progressValue = progress.Progress;
+                        var addProgressBar = true;
+                        if (progressValue == 100)
+                        {
+                            // Not being capped
+                            color = fromColor;
+                            addProgressBar = false;
+                        }
+                        else if (progressValue == 0)
+                        {
+                            // Capped
+                            fromColor = color;
+                            addProgressBar = false;
+                        }
+
+                        var lifespan = (progress.Time, i < gadgetCapture.Progress.Count - 1 ? gadgetCapture.Progress[i + 1].Time : gadgetCapture.EndTime);
+                        if (gadgetCapture.IsCircle)
+                        {
+                            environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        else
+                        {
+                            environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        if (addProgressBar)
+                        {
+                            environmentDecorations.Add(new ProgressBarDecoration(barSize, 30, lifespan, fromColor, 0.2, color, 0.6, [(progress.Time, progressValue)], positionConnector));
+
+                        }
+                    }
+                }
+                else
+                {
+                    // should not happen, but as a safety net
+                    var lifespan = (gadgetCapture.Time, gadgetCapture.EndTime);
+                    var color = gadgetCapture.GetColor(gadgetCapture.OriginalOwner);
+                    if (gadgetCapture.IsCircle)
+                    {
+                        environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                    }
+                    else
+                    {
+                        var relativePositions = gadgetCapture.GetRelativePoints(position.Value);
+                        environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                    }
                 }
             }
         }

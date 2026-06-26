@@ -40,6 +40,7 @@ public static class ArcDPSEnums
         public const int ResultEnumRework = 20260501;
         public const int VisibilityInTargetableStateChange = 20260522;
         public const int VisibilityOnStateChange = 20260527;
+        public const int GadgetCapturesAdded = 20260602;
         //
         public const int EndOfLife = int.MaxValue;
     }

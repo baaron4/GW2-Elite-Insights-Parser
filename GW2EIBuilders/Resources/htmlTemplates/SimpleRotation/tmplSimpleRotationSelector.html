@@ -1,0 +1,58 @@
+<template>
+    <div>
+        <div v-if="minionsToUse.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: minionMode === -1}" @click="minionMode = -1">{{actor.name}}</a>
+                </li>
+                <li v-for="minionStruct in minionsToUse">
+                    <a class="nav-link" :class="{active: minionMode === minionStruct.minionIndex}"
+                        @click="minionMode = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
+                </li>
+            </ul>
+        </div>
+            <simplerotation-component
+                v-show="minionMode === -1"
+                :actorindex="actorindex"
+                :phaseindex="phaseindex" :target="target" :minionindex="-1">
+            </simplerotation-component>  
+            <simplerotation-component v-for="minionStruct in minionsToUse" 
+                v-show="minionMode === minionStruct.minionIndex"
+                :actorindex="actorindex"
+                :phaseindex="phaseindex" :target="target" :minionindex="minionStruct.minionIndex">
+            </simplerotation-component>  
+    </div>
+</template>
+
+<script>
+    Vue.component("simplerotation-selector-component", {
+        props: ["actorindex", "phaseindex", "target"],
+        template: `${template}`,
+        data: function () {
+            return {
+                minionMode: -1,
+            };
+        },
+        computed: {
+           actor: function(){         
+                const data = this.target ? logData.targets : logData.players;
+                return data[this.actorindex];
+           },
+           minionsToUse: function() {
+                let result = [];
+                const actor = this.actor;
+                const minions = actor.minions;
+                for (let i = 0; i < minions.length; i++) {
+                    const rotation = actor.details.minions[i].rotation;
+                    if (rotation && rotation.length >= 0) {
+                        result.push({
+                            minion: minions[i],
+                            minionIndex: i
+                        });
+                    }
+                }
+                return result;
+           },
+        },
+    });
+</script>

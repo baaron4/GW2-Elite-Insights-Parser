@@ -1773,15 +1773,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 var graspOfJormagProjectiles = log.CombatData.GetMissileEventsBySkillID(GraspOfJormag);
                 foreach (MissileEvent grasp in graspOfJormagProjectiles)
                 {
-                    lifespan = (grasp.Time, grasp.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, target.LastAware));
-                    for (int i = 0; i < grasp.LaunchEvents.Count; i++)
+                    CombatReplayDecorationContainer.AddNonHomingMissile(log, grasp, (lifespan, connector) =>
                     {
-                        MissileLaunchEvent? launch = grasp.LaunchEvents[i];
-                        lifespan = (launch.Time, i != grasp.LaunchEvents.Count - 1 ? grasp.LaunchEvents[i + 1].Time : lifespan.end);
-                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)]);
                         var beamAoE = new CircleDecoration(160, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
-                    }
+                    }, Math.Min(log.LogData.LogEnd, target.LastAware));
                 }
                 // Frost Beam - Non-NPC sets
                 var breathOfJormag = log.CombatData.GetMissileEventsBySkillID(BreathOfJormagSouth);
@@ -1803,16 +1799,12 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     // If there isn't a VelocityEvent, it uses FightEnd, otherwise it's always LastAware
                     // The beams can spawn after Jormag has died, they last roughly 3 seconds, if they spawn just before Jormag dies, they get cancelled
                     var end = breath.Time >= target.LastAware ? Math.Min(target.LastAware + 3000, beamAgentSpawnTime) : Math.Min(target.LastAware, beamAgentSpawnTime);
-                    lifespan = (breath.Time, end);
 
-                    for (int i = 0; i < breath.LaunchEvents.Count; i++)
+                    CombatReplayDecorationContainer.AddNonHomingMissile(log, breath, (lifespan, connector) =>
                     {
-                        MissileLaunchEvent? launch = breath.LaunchEvents[i];
-                        lifespan = (launch.Time, i != breath.LaunchEvents.Count - 1 ? breath.LaunchEvents[i + 1].Time : lifespan.end);
-                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)]);
                         var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
-                    }
+                    }, end);
                 }
                 break;
             case (int)TargetID.JormagMovingFrostBeam:

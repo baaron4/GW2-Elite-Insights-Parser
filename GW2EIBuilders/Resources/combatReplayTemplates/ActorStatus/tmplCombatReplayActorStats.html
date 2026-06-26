@@ -1,0 +1,15 @@
+﻿<template>
+    <div>
+        <combat-replay-actor-buffs-stats-component v-if="buffs" :time="time" :actorindex="actorIndex" :isTarget="isTarget" :buffstoshow="buffstoshow" />
+        <combat-replay-actor-status-component :time="time" :actorIndex="actorIndex" :isTarget="isTarget" />
+        <combat-replay-actor-rotation-component v-if="rotation" :time="time" :actorindex="actorIndex" :isTarget="isTarget" />
+        <combat-replay-actor-breakbars-component :actorIndex="actorIndex" :isTarget="isTarget" />
+    </div>
+</template>
+
+<script>
+    Vue.component("combat-replay-actor-stats-component", {
+        props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation"],
+        template: `${template}`
+    });
+</script>

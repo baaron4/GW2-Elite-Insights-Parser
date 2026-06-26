@@ -866,15 +866,11 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             }
             else
             {
-                long end = orb.RemoveEvent?.Time ?? log.LogData.LogEnd;
-                for (int i = 0; i < orb.LaunchEvents.Count; i++)
+                CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (lifespan, connector) =>
                 {
-                    MissileLaunchEvent launch = orb.LaunchEvents[i];
-                    (long start, long end ) lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : end);
-                    var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                     replay.Decorations.Add(new CircleDecoration(30, lifespan, Colors.Black, 0.5, connector));
                     replay.Decorations.Add(new DoughnutDecoration(30, 40, lifespan, Colors.RedSkin, 0.8, connector));
-                }
+                });
             }
         }
     }

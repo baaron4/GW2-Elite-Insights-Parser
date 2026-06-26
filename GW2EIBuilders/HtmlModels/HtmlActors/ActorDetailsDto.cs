@@ -66,6 +66,11 @@ internal class ActorDetailsDto
             DmgDistributionsTaken = new(phases.Count),
         };
 
+        if (minion.IsUniquePerTimeFrame)
+        {
+            dto.Rotation = new(phases.Count);
+        }
+
         foreach (PhaseData phase in phases)
         {
             var allTargets = phase.Targets;
@@ -77,6 +82,10 @@ internal class ActorDetailsDto
             dto.DmgDistributionsTargets.Add(dmgTargetsDto);
             dto.DmgDistributions.Add(DamageDistributionDto.BuildMinionsDamageDistributionData(log, minion, null, phase, usedSkills, usedBuffs));
             dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildMinionsDamageTakenDistributionData(log, minion, phase, usedSkills, usedBuffs));
+            if (minion.IsUniquePerTimeFrame)
+            {
+                dto.Rotation!.Add(SkillDto.BuildRotationData(log, minion, phase, usedSkills));
+            }
         }
         return dto;
     }

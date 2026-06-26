@@ -55,8 +55,8 @@ internal class Ensolyss : Nightmare
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
         var crMap = new CombatReplayMap((366, 366),
-                        (132, 1, 3012, 2881));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap, parentMap);
+                        (532, 431, 2612, 2521));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.GadgetCapturesAdded ? CombatReplayEnsolyss_NoCapturePoints : CombatReplayEnsolyss, crMap, parentMap);
         return crMap;
     }
 

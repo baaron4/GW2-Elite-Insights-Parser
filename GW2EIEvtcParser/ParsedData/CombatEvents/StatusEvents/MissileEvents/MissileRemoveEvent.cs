@@ -1,4 +1,7 @@
-﻿using static GW2EIEvtcParser.ParserHelper;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParsedData.MissileEvent;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -19,6 +22,7 @@ public class MissileRemoveEvent : TimeCombatEvent
     public MissileEvent Missile { get; internal set; }
 
     public readonly int FriendlyFireTotalDamage;
+    public readonly Vector3 Position;
     internal MissileRemoveEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
         if (evtcItem.SrcAgent != 0)
@@ -27,5 +31,23 @@ public class MissileRemoveEvent : TimeCombatEvent
         }
         DidHit = evtcItem.IsFlanking > 0;
         FriendlyFireTotalDamage = evtcItem.Value;
+
+        var removePositionBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);
+        // 1
+        removePositionBytes.PushNative(evtcItem.BuffDmg);
+        // 1 
+        removePositionBytes.PushNative(evtcItem.OverstackValue);
+        unsafe
+        {
+            fixed (byte* ptr = removePositionBytes.Span)
+            {
+                var removePositionShorts = (short*)ptr;
+                Position = new(
+                        removePositionShorts[0] * MissilePositionConvertConstant,
+                        removePositionShorts[1] * MissilePositionConvertConstant,
+                        removePositionShorts[2] * MissilePositionConvertConstant
+                    );
+            }
+        }
     }
 }
