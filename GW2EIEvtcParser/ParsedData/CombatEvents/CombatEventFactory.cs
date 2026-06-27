@@ -625,6 +625,9 @@ partial class CombatData
                 var pointGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
                 Add(statusEvents.GadgetCapturePointCombatItemsBySrc, pointGadgetCapture, stateChangeEvent);
                 break;
+            case StateChange.Tick:
+                metaDataEvents.TickEvents.Add(new TickEvent(stateChangeEvent));
+                break;
             default:
                 break;
         }
