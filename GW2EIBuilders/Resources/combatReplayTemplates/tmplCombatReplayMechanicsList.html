@@ -9,7 +9,7 @@
                  Reset Mechanic Selection
             </div>
         </div>
-        <div class="d-flex align-items-center mb-2 scale75">
+        <div v-if="Object.keys(displayedSeverities).length > 0"class="d-flex align-items-center mb-2 scale75">
             <div v-for="displayedSeverity in displayedSeverities" class="form-check mb-2 mr-2">
                 <input :id="displayedSeverity.id" type="checkbox" v-model="displayedSeverity.display"/>
                 <label :for="displayedSeverity.id" class="mb-0">{{displayedSeverity.name}}</label>
