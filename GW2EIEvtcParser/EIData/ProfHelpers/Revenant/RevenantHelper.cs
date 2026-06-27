@@ -275,6 +275,17 @@ internal static class RevenantHelper
         return Minions.Contains(id);
     }
 
+    private static readonly HashSet<long> _spearAAs =
+    [
+        AbyssalStrike_SecondHit,
+    ];
+
+    public static bool IsAutoAttack(ParsedEvtcLog log, long id)
+    {
+        var build = log.CombatData.GetGW2BuildEvent().Build;
+        return build >= GW2Builds.June2024SpearBeta && _spearAAs.Contains(id);
+    }
+
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData, AgentData agentData)
     {
         var allTablets = new HashSet<AgentItem>();

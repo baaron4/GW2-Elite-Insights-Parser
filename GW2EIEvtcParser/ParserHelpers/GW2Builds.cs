@@ -199,6 +199,9 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2024-06-25
     public const ulong June2024Balance = 164824;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2024-06-27
+    public const ulong June2024SpearBeta = 167985;
+
     // https://wiki.guildwars2.com/wiki/Game_updates/2024-08-20
     public const ulong August2024JWRelease = 167136;
 
