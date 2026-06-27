@@ -45,7 +45,7 @@
                     mechanicsForSeverity(MechanicSeverity.Sev3), 
                     mechanicsForSeverity(MechanicSeverity.Sev4)
                 ];
-                return toTest.filter(x => x.length > 0);
+                return toTest.filter(x => x.filter(y => y.playerMech || y.enemyMech).length > 0);
             },
             showNavBar: function() {
                 return this.mechanicsBySeverity.length > 1;
