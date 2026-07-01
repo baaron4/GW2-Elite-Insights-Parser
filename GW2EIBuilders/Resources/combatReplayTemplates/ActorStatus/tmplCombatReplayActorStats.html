@@ -1,12 +1,12 @@
 ﻿<template>
     <div>
         <div v-if="buffs">
-            <combat-replay-actor-buff v-if="isPresent('Encounter Specifics', data.encounterSpecifics)" :buffarray="data.encounterSpecifics" />
-            <combat-replay-actor-buff v-if="isPresent('Others', data.others.length)" :buffarray="data.others" />
-            <combat-replay-actor-buff v-if="isPresent('Conditions', data.conditions)" :buffarray="data.conditions" />
-            <combat-replay-actor-buff v-if="isPresent('Shared', data.shared)" :buffarray="data.shared" />
-            <combat-replay-actor-buff v-if="isPresent('Boons', data.boons)" :buffarray="data.boons" />
-            <combat-replay-actor-buff v-if="isPresent('Consumables', data.consumables)" :buffarray="data.consumables" class="pb-1" />
+            <combat-replay-actor-buff v-if="isPresent('Encounter Specifics')" :buffarray="data.encounterSpecifics" />
+            <combat-replay-actor-buff v-if="isPresent('Others')" :buffarray="data.others" />
+            <combat-replay-actor-buff v-if="isPresent('Conditions')" :buffarray="data.conditions" />
+            <combat-replay-actor-buff v-if="isPresent('Shared')" :buffarray="data.shared" />
+            <combat-replay-actor-buff v-if="isPresent('Boons')" :buffarray="data.boons" />
+            <combat-replay-actor-buff v-if="isPresent('Consumables')" :buffarray="data.consumables" class="pb-1" />
         </div>
 
         <combat-replay-actor-status-component :time="time" :actorIndex="actorIndex" :isTarget="isTarget" />
@@ -21,8 +21,8 @@
         props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation"],
         template: `${template}`,
         methods: {
-            isPresent: function (type, buffArray) {
-                return this.buffstoshow.includes(type) && buffArray.length > 0;
+            isPresent: function (type) {
+                return this.buffstoshow.includes(type);
             }
         },
         computed: {

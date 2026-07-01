@@ -1102,3 +1102,7 @@ td.approximate::before {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.actor-buff-container {
+    min-height: 22.5px;
+}
