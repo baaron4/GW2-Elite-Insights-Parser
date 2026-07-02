@@ -5172,7 +5172,7 @@ public static class SkillIDs
     public const long TerrestialCryoflash = 76420;
     public const long POV_HeartOfTheTitan = 76448;
     public const long FreezingVortex = 76444;
-    public const long DeathlyGrime = 76446;
+    public const long DeathlyRime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
     public const long WintryOrb = 76482;

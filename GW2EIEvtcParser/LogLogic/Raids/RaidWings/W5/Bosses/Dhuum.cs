@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -12,17 +13,18 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
 internal class Dhuum : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstHealthDamageHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem.D", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
+            new PlayerDstHealthDamageHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem.D", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", Sev1, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(ArcingAfflictionHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg", "Arcing Affliction (Bomb) hit","Bomb dmg", 0),
-                new PlayerDstBuffApplyMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb", "Arcing Affliction (Bomb) application","Bomb", 0),
-                new PlayerDstBuffRemoveMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0).UsingChecker((br, log) =>
+                new PlayerDstHealthDamageHitMechanic(ArcingAfflictionHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg", "Arcing Affliction (Bomb) hit","Bomb dmg", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb", "Arcing Affliction (Bomb) application","Bomb", Sev0, 0),
+                new PlayerDstBuffRemoveMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered", Sev0,0).UsingChecker((br, log) =>
                 {
                     // Removal duration check
                     if (br.RemovedDuration < 50)
@@ -47,44 +49,44 @@ internal class Dhuum : HallOfChains
                  }),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(ConeSlash, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone", "Boon ripping Cone Attack","Cone", 0),
-                new PlayerDstHealthDamageHitMechanic(CullDamage, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Teal), "Crack", "Cull (Fearing Fissures)","Cracks", 0),
-                new PlayerDstHealthDamageHitMechanic(PutridBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark", "Necro Marks during Scythe attack","Necro Marks", 0),
-                new PlayerDstHealthDamageHitMechanic(CataclysmicCycle, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg", "Damage when sucked to close to middle","Suck dmg", 0),
+                new PlayerDstHealthDamageHitMechanic(ConeSlash, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone", "Boon ripping Cone Attack","Cone", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(CullDamage, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Teal), "Crack", "Cull (Fearing Fissures)","Cracks", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(PutridBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark", "Necro Marks during Scythe attack","Necro Marks", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(CataclysmicCycle, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg", "Damage when sucked to close to middle","Suck dmg", Sev0, 0),
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(DeathMark, new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip", "Lesser Death Mark hit (Dip into ground)","Dip AoE", 0),
-                    new PlayerDstHealthDamageHitMechanic(GreaterDeathMark, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg", "Knockback damage during Greater Deathmark (mid port)","Knockback dmg", 0),
+                    new PlayerDstHealthDamageHitMechanic(DeathMark, new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip", "Lesser Death Mark hit (Dip into ground)","Dip AoE", Sev0, 0),
+                    new PlayerDstHealthDamageHitMechanic(GreaterDeathMark, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg", "Knockback damage during Greater Deathmark (mid port)","Knockback dmg", Sev2, 0),
                 ]),
-                new PlayerDstHealthDamageHitMechanic(RendingSwipe, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightOrange), "Enf.Swipe", "Hit by Dhuum's Enforcer Rending Swipe", "Rending Swipe Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(RendingSwipe, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightOrange), "Enf.Swipe", "Hit by Dhuum's Enforcer Rending Swipe", "Rending Swipe Hit", Sev1, 0),
             ]),
             new MechanicGroup([
-                new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
-                new PlayerDstHealthDamageHitMechanic(DhuumShacklesHit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg", "Soul Shackle (Tether) dmg ticks","Shackles Dmg", 0)
+                new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles", Sev0,10000),//  //also used for removal.
+                new PlayerDstHealthDamageHitMechanic(DhuumShacklesHit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg", "Soul Shackle (Tether) dmg ticks","Shackles Dmg", Sev0, 0)
                     .UsingChecker((de,log) => de.HealthDamage > 0),
             ]),
             new MechanicGroup([
-                new PlayerCastStartMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Eth.Seal.S","Started channeling an Ethereal Seal", "Ethereal Seal channeling",0)
+                new PlayerCastStartMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Eth.Seal.S","Started channeling an Ethereal Seal", "Ethereal Seal channeling", Sev1,0)
                     .UsingChecker((gie, log) => !gie.IsInterrupted),
-                new PlayerCastEndMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Eth.Seal.I","Succesfully interacted with an Ethereal Seal", "Ethereal Seal interacted",0)
+                new PlayerCastEndMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Eth.Seal.I","Succesfully interacted with an Ethereal Seal", "Ethereal Seal interacted", Sev0,0)
                     .UsingChecker((gie, log) => !gie.IsInterrupted),
-                new PlayerCastEndMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.CircleCross,Colors.Teal), "Eth.Seal.F","Failed to interact with an Ethereal Seal", "Ethereal Seal failed",0)
+                new PlayerCastEndMechanic(DhuumEtherealSealInteract, new MechanicPlotlySetting(Symbols.CircleCross,Colors.Teal), "Eth.Seal.F","Failed to interact with an Ethereal Seal", "Ethereal Seal failed", Sev0,0)
                     .UsingChecker((gie, log) => gie.IsInterrupted),
             ]),
-            new PlayerDstBuffApplyMechanic(Superspeed, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Grey), "SupSpeed.Orb", "Gained Superspeed from Desmina (Walked over orb)", "Took Superspeed orb", 0)
+            new PlayerDstBuffApplyMechanic(Superspeed, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Grey), "SupSpeed.Orb", "Gained Superspeed from Desmina (Walked over orb)", "Took Superspeed orb", Sev2, 0)
                 .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.DhuumDesmina)),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU", "Picked up by Ender's Echo","Ender's Pick up", 3000),
-                new PlayerDstBuffRemoveMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0)
+                new PlayerDstBuffApplyMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Echo PU", "Picked up by Ender's Echo","Ender's Pick up", Sev0, 3000),
+                new PlayerDstBuffRemoveMechanic(EchosPickup, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "F Echo","Freed from Ender's Echo", "Freed from Echo", Sev0, 0)
                     .UsingChecker((br,log) => !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(x.Time - br.Time) <= 150)),
-                new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "Echo.BrkDmg", "Breakbar damage done against Ender's Echo while a player is picked", "Breakbar Damage Ender's Echo", 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
+                new PlayerBreakbarDamageMechanic(new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "Echo.BrkDmg", "Breakbar damage done against Ender's Echo while a player is picked", "Breakbar Damage Ender's Echo", Sev1, 0, (log, a) => log.CombatData.GetBreakbarDamageData(a))
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, brae.Time))
                     .UsingWeight(),
-                new PlayerSrcBuffApplyMechanic([Fear, Taunt, Immobile, Slow], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Echo.BrkCndApp1", "Applied Fear, Taunt, Immobile, Slow against Ender's Echo breakbar while a player is picked", "Strong Condition Breakbar Ender's Echo", 0)
+                new PlayerSrcBuffApplyMechanic([Fear, Taunt, Immobile, Slow], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Echo.BrkCndApp1", "Applied Fear, Taunt, Immobile, Slow against Ender's Echo breakbar while a player is picked", "Strong Condition Breakbar Ender's Echo", Sev1, 0)
                     .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, bae.Time)),
-                new PlayerSrcBuffApplyMechanic([Chilled, Blind, Weakness, Crippled], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightRed), "Echo.BrkCndApp2", "Applied Chilled, Blind, Weakness, Crippled against Ender's Echo breakbar while a player is picked", "Weak Condition Breakbar Ender's Echo", 0)
+                new PlayerSrcBuffApplyMechanic([Chilled, Blind, Weakness, Crippled], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightRed), "Echo.BrkCndApp2", "Applied Chilled, Blind, Weakness, Crippled against Ender's Echo breakbar while a player is picked", "Weak Condition Breakbar Ender's Echo", Sev1, 0)
                     .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EndersEcho) && EchoBreakbarMechanicChecker(log, bae.Time)),
             ]),
-            new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10)
+            new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", Sev1, 10)
                 .UsingChecker((bae, log) =>
                 {
                     // Additional buff applications can happen, filtering them out

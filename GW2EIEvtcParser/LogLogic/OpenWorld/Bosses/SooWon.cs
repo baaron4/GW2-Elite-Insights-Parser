@@ -3,11 +3,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic.OpenWorld;
 
@@ -17,32 +19,32 @@ internal class SooWon : OpenWorldLogic
     {
         MechanicList.Add(new MechanicGroup([
         
-        new PlayerDstHealthDamageHitMechanic(TsunamiSlamOW, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
-        new PlayerDstHealthDamageHitMechanic(VoidPurgeOW, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
-        new PlayerDstHealthDamageMechanic(ClawSlapOW, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0)
+        new PlayerDstHealthDamageHitMechanic(TsunamiSlamOW, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", Sev1, 0),
+        new PlayerDstHealthDamageHitMechanic(VoidPurgeOW, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", Sev1, 0),
+        new PlayerDstHealthDamageMechanic(ClawSlapOW, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", Sev0, 0)
             .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
-        new PlayerDstHealthDamageHitMechanic(TailSlap, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
-        new PlayerDstHealthDamageHitMechanic(BiteOW, new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
+        new PlayerDstHealthDamageHitMechanic(TailSlap, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", Sev1, 0),
+        new PlayerDstHealthDamageHitMechanic(BiteOW, new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", Sev1, 0),
         new MechanicGroup([
 
-            new PlayerDstHealthDamageMechanic(NightmareDevastationOW1, new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),
-            new PlayerDstHealthDamageMechanic(NightmareDevastationOW2, new MechanicPlotlySetting(Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", 0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW1, new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", Sev0, 0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW2, new MechanicPlotlySetting(Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", Sev0, 0),
         ]),
-        new PlayerDstBuffApplyMechanic(WispForm, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", 0),
-        new PlayerDstHealthDamageMechanic(SeveredFromBody, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", 0).UsingChecker((de, log) => de.HasKilled),
+        new PlayerDstBuffApplyMechanic(WispForm, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", Sev1, 0),
+        new PlayerDstHealthDamageMechanic(SeveredFromBody, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", Sev0, 0).UsingChecker((de, log) => de.HasKilled),
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(Drown1, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble", 0),
-            new PlayerDstBuffApplyMechanic(Drown2, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkTeal), "Whirlpool", "Player was trapped in a whirlpool", "Whirlpool", 0),
+            new PlayerDstBuffApplyMechanic(Drown1, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble", Sev1, 0),
+            new PlayerDstBuffApplyMechanic(Drown2, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkTeal), "Whirlpool", "Player was trapped in a whirlpool", "Whirlpool", Sev1, 0),
         ]),
         new MechanicGroup([
-            new EnemyDstBuffApplyMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkTeal), "Tail", "Soo-Won's Tail spawned", "Tail", 0),
-            new EnemyDstBuffRemoveMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", 0)
+            new EnemyDstBuffApplyMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkTeal), "Tail", "Soo-Won's Tail spawned", "Tail", Sev1, 0),
+            new EnemyDstBuffRemoveMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", Sev0, 0)
                 .UsingChecker((bre, log) => !bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
-            new EnemyDstBuffRemoveMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", 0)
+            new EnemyDstBuffRemoveMechanic(HardenedShell, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", Sev0, 0)
                 .UsingChecker((bre, log) => bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
         ]),
-        new EnemyDstBuffApplyMechanic(DamageImmunity1, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
-        new EnemyDstBuffApplyMechanic(OldExposed, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0)
+        new EnemyDstBuffApplyMechanic(DamageImmunity1, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", Sev2, 0),
+        new EnemyDstBuffApplyMechanic(OldExposed, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", Sev0, 0)
             .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
         ]));
         Extension = "soowon";
