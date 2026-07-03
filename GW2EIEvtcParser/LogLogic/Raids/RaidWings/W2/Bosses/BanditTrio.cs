@@ -38,14 +38,14 @@ internal class BanditTrio : SalvationPass
                 new PlayerDstHealthDamageHitMechanic(OverheadSmashBerg, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash", "Overhead Smash (CC Attack Berg)","CC Smash", Sev0, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(Blind, new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", Sev0, 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Zane)),
-                new PlayerDstHealthDamageHitMechanic(HailOfBulletsZane, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone", "Hail of Bullets (Zane Cone Shot)","Hail of Bullets", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(Blind, new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", Sev1, 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Zane)),
+                new PlayerDstHealthDamageHitMechanic(HailOfBulletsZane, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone", "Hail of Bullets (Zane Cone Shot)","Hail of Bullets", Sev2, 0),
             ]),
             new MechanicGroup([
                 new PlayerCastStartMechanic(ThrowOilKeg, new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", Sev0, 0),
                 new PlayerDstBuffApplyMechanic(Burning, new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", Sev1, 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Narella)),
                 new PlayerDstHealthDamageHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado.N", "Fiery Vortex (Tornado Narella)","Tornado (Narella)", Sev0, 250),
-                new PlayerDstHealthDamageHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", Sev2, 0),
             ]),
         ]);
     public BanditTrio(int triggerID) : base(triggerID)

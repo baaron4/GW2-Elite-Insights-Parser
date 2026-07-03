@@ -21,8 +21,8 @@ internal class Samarog : BastionOfThePenitent
                 .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", Sev0, 0)
                 .UsingBuffChecker(Stability, false),
-            new PlayerDstHealthDamageHitMechanic(TramplingRush, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl", "Trampling Rush (hit by stampede towards home)","Trampling Rush", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(Bludgeon , new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam", "Bludgeon (vertical Slam)","Slam", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(TramplingRush, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl", "Trampling Rush (hit by stampede towards home)","Trampling Rush", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(Bludgeon , new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam", "Bludgeon (vertical Slam)","Slam", Sev2, 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(FixatedSamarog, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "S.Fix", "Fixated by Samarog","Fixate: Samarog", Sev0, 0),
                 new PlayerDstBuffApplyMechanic(FixatedGuldhem, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Orange), "G.Fix", "Fixated by Guldhem","Fixate: Guldhem", Sev1, 0),
@@ -33,8 +33,8 @@ internal class Samarog : BastionOfThePenitent
                 new PlayerDstBuffApplyMechanic(InevitableBetrayalSmall, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "S.Gr", "Small Green (friends mechanic)","Small Green", Sev0, 0),
             ]),
             new MechanicGroup([
-                new EnemyDstBuffApplyMechanic(StrengthenedBondGuldhem, new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Orange), "G.Str", "Strengthened Bond: Guldhem","Strengthened: Guldhem", Sev1, 0),
-                new EnemyDstBuffApplyMechanic(StrengthenedBondRigom, new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Red), "R.Str", "Strengthened Bond: Rigom","Strengthened: Rigom", Sev1, 0),
+                new EnemyDstBuffApplyMechanic(StrengthenedBondGuldhem, new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Orange), "G.Str", "Strengthened Bond: Guldhem","Strengthened: Guldhem", Sev3, 0),
+                new EnemyDstBuffApplyMechanic(StrengthenedBondRigom, new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Red), "R.Str", "Strengthened Bond: Rigom","Strengthened: Rigom", Sev3, 0),
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(SpearReturn, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "S.Rt", "Hit by Spear Return","Spear Return", Sev2, 0),
@@ -43,8 +43,8 @@ internal class Samarog : BastionOfThePenitent
             ]),
             new PlayerDstHealthDamageHitMechanic([InevitableBetrayalFailSmall, InevitableBetrayalFailBig], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl", "Inevitable Betrayal (failed Green)","Failed Green", Sev0, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(BrutalizeBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)","Brutalized", Sev0, 0),
-                new EnemyCastEndMechanic(BrutalizeCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.Sam","Brutalize (Breakbar)","Breakbar", Sev2, 0),
+                new PlayerDstBuffApplyMechanic(BrutalizeBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)","Brutalized", Sev1, 0),
+                new EnemyCastEndMechanic(BrutalizeCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.Sam","Brutalize (Breakbar)","Breakbar", Sev3, 0),
                 new PlayerDstHealthDamageMechanic(BrutalizeKill, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Sam Fail", "Brutalize (Failed CC)","CC Fail", Sev0, 0)
                     .UsingChecker((de, log) => de.HasKilled),
                 new EnemyDstBuffRemoveMechanic(FanaticalResilience, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC.Sam End", "Ended Brutalize","CC Ended", Sev0, 0),
@@ -53,7 +53,8 @@ internal class Samarog : BastionOfThePenitent
             //new Mechanic(BrutalizeEffect, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,"rgb(110,160,0)"), "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),
             new PlayerDstBuffApplyMechanic(SoulSwarm, new MechanicPlotlySetting(Symbols.XThinOpen,Colors.Teal), "Wall","Soul Swarm (stood in or beyond Spear Wall)","Spear Wall", Sev1, 0),
             new PlayerDstHealthDamageHitMechanic(ImpalingStab, new MechanicPlotlySetting(Symbols.Hourglass,Colors.Blue), "Shck.Wv Ctr","Impaling Stab (hit by Spears causing Shockwave)","Shockwave Center", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(AnguishedBolt, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Stun","Anguished Bolt (AoE Stun Circle by Guldhem)","Guldhem's Stun", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(AnguishedBolt, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Stun","Anguished Bolt (AoE Stun Circle by Guldhem)","Guldhem's Stun", Sev0, 0)
+                .UsingBuffChecker(Stability, false),
         
             //  new Mechanic(SpearImpact, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.StarSquare,Color.Red), "CC Target", casted without dmg odd
         ]);

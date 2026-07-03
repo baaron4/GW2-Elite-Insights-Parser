@@ -25,15 +25,15 @@ internal class Xera : StrongholdOfTheFaithful
                 new PlayerDstHealthDamageHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", Sev0, 0),
                 new PlayerDstHealthDamageHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", Sev0, 0),
             ]),
-            new PlayerDstBuffApplyMechanic(BloodstoneProtection, new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble", "Bloodstone Protection (Stood in Bubble)","Inside Bubble", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(BloodstoneProtection, new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble", "Bloodstone Protection (Stood in Bubble)","Inside Bubble", Sev2, 0),
             new MechanicGroup([
-                new EnemyCastStartMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.X", "Summon Fragment (Xera Breakbar)","Breakbar", Sev2, 0),
+                new EnemyCastStartMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.X", "Summon Fragment (Xera Breakbar)","Breakbar", Sev3, 0),
                 new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.X Fail", "Summon Fragment (Failed CC)","CC Fail", Sev0, 0)
                     .UsingChecker( (ce,log) => ce.ActualDuration > 11940),
                 new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.X", "Summon Fragment (Breakbar broken)","CCed", Sev0, 0)
                     .UsingChecker( (ce, log) => ce.ActualDuration <= 11940),
             ]),
-            new PlayerDstBuffApplyMechanic(Derangement, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks", "Derangement (Stacking Debuff)","Derangement", Sev1, 0),
+            new PlayerDstBuffApplyMechanic(Derangement, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks", "Derangement (Stacking Debuff)","Derangement", Sev2, 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(BendingChaos, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1", "Bending Chaos (Stood on 1st Button)","Button 1", Sev1, 0),
                 new PlayerDstBuffApplyMechanic(ShiftingChaos, new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2", "Bending Chaos (Stood on 2nd Button)","Button 2", Sev1, 0),

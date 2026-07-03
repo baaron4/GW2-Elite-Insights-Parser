@@ -22,16 +22,16 @@ internal class ValeGuardian : SpiritVale
                 new PlayerDstHealthDamageHitMechanic(BulletStorm, new MechanicPlotlySetting(Symbols.Circle, Colors.White), "Orbs", "Bullet Storm (Orbs during split)", "Bullet Storm Orbs", Sev2, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green", "Distributed Magic (Stood in Green)","Green Team", Sev1, 0),
-                new EnemyCastStartMechanic(DistributedMagicBlue, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B", "Distributed Magic (Green Field appeared in Blue Sector)","Green in Blue", Sev2, 0),
-                new EnemyCastStartMechanic(DistributedMagicRed, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R", "Distributed Magic (Green Field appeared in Red Sector)","Green in Red", Sev2, 0),
-                new EnemyCastStartMechanic(DistributedMagicGreen, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G", "Distributed Magic (Green Field appeared in Green Sector)","Green in Green", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic([DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green", "Distributed Magic (Stood in Green)","Green Team", Sev2, 0),
+                new EnemyCastStartMechanic(DistributedMagicBlue, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B", "Distributed Magic (Green Field appeared in Blue Sector)","Green in Blue", Sev3, 0),
+                new EnemyCastStartMechanic(DistributedMagicRed, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R", "Distributed Magic (Green Field appeared in Red Sector)","Green in Red", Sev3, 0),
+                new EnemyCastStartMechanic(DistributedMagicGreen, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G", "Distributed Magic (Green Field appeared in Green Sector)","Green in Green", Sev3, 0),
             ]),
             new PlayerDstHealthDamageHitMechanic(MagicPulse, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Seeker", "Magic Pulse (Hit by Seeker)","Seeker", Sev0, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(PylonAttunementRed, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R", "Pylon Attunement: Red","Red Attuned", Sev1, 0),
-                new PlayerDstBuffApplyMechanic(PylonAttunementBlue, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B", "Pylon Attunement: Blue","Blue Attuned", Sev1, 0),
-                new PlayerDstBuffApplyMechanic(PylonAttunementGreen, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G", "Pylon Attunement: Green","Green Attuned", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(PylonAttunementRed, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R", "Pylon Attunement: Red","Red Attuned", Sev2, 0),
+                new PlayerDstBuffApplyMechanic(PylonAttunementBlue, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B", "Pylon Attunement: Blue","Blue Attuned", Sev2, 0),
+                new PlayerDstBuffApplyMechanic(PylonAttunementGreen, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G", "Pylon Attunement: Green","Green Attuned", Sev2, 0),
             ]),
             new EnemyDstBuffRemoveMechanic(BluePylonPower, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Invuln Strip", "Blue Guard Invuln was stripped","Blue Invuln Strip", Sev1, 0),
             new MechanicGroup([
@@ -40,7 +40,7 @@ internal class ValeGuardian : SpiritVale
                 new PlayerDstHealthDamageHitMechanic(UnstablePylonGreen, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G", "Unstable Pylon (Green Floor dmg)","Floor dmg", Sev0, 0),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.VG", "Magic Storm (Breakbar)","Breakbar", Sev2,0),
+                new EnemyCastStartMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.VG", "Magic Storm (Breakbar)","Breakbar", Sev3,0),
                 new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.VG", "Magic Storm (Breakbar broken) ","CCed", Sev0, 0)
                     .UsingChecker((c, log) => c.ActualDuration <= 8544),
                 new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.VG Fail", "Magic Storm (Breakbar failed) ","CC Fail", Sev0, 0)

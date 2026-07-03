@@ -20,7 +20,7 @@ internal class Sabetha : SpiritVale
     internal readonly MechanicGroup Mechanics = new([
        
             // NOTE: Time Bomb damage is registered only for the user that has the bomb, damage to others is not logged.
-            new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (launched up to cannons)","Shell-Shocked", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (launched up to cannons)","Shell-Shocked", Sev2, 0),
             new PlayerDstBuffApplyMechanic(SapperBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb", "Got a Sapper Bomb","Sapper Bomb", Sev1, 0),
             new PlayerDstHealthDamageMechanic(Firestorm, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Flamewall", "Firestorm (killed by Flamewall)","Flamewall", Sev0, 0)
                 .UsingChecker((de, log) => de.HasKilled),
@@ -39,7 +39,7 @@ internal class Sabetha : SpiritVale
             new PlayerCastStartMechanic(KickHeavyBomb, new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", Sev0, 0)
                 .UsingChecker((ce, log) => !ce.IsInterrupted && !ce.IsUnknown),
             new MechanicGroup([
-                new EnemyCastStartMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.K", "Platform Quake (Breakbar)","Breakbar", Sev2,0),
+                new EnemyCastStartMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.K", "Platform Quake (Breakbar)","Breakbar", Sev3,0),
                 new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.K", "Platform Quake (Breakbar broken) ","CCed", Sev0, 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 4400),
                 new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.K Fail", "Platform Quake (Breakbar failed) ","CC Fail", Sev0, 0)

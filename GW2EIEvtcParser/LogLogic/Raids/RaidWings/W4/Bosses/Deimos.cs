@@ -36,14 +36,14 @@ internal class Deimos : BastionOfThePenitent
                 ),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC", "Off Balance (Saul TP Breakbar)","Saul TP Start", Sev2, 0),
+                new EnemyCastStartMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC", "Off Balance (Saul TP Breakbar)","Saul TP Start", Sev3, 0),
                 new EnemyCastEndMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail", "Failed Saul TP CC","Failed CC (TP)", Sev0, 0)
                     .UsingChecker((ce,log) => ce.ActualDuration >= 2200),
                 new EnemyCastEndMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed", "Saul TP CCed","CCed (TP)", Sev0, 0)
                     .UsingChecker((ce, log) => ce.ActualDuration < 2200),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC", "Boon Thief (Saul Breakbar)","Boon Thief Start", Sev2, 0),
+                new EnemyCastStartMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC", "Boon Thief (Saul Breakbar)","Boon Thief Start", Sev3, 0),
                 new EnemyCastEndMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail", "Failed Boon Thief CC","Failed CC (Thief)", Sev0, 0)
                     .UsingChecker((ce,log) => ce.ActualDuration >= 4400),
                 new EnemyCastEndMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed", "Boon Thief CCed","CCed (Thief)", Sev0, 0)
@@ -55,11 +55,11 @@ internal class Deimos : BastionOfThePenitent
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(MindCrush, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush", "Hit by Mind Crush without Bubble Protection","Mind Crush", Sev0, 0)
                     .UsingChecker( (de,log) => de.HealthDamage > 0),
-                new PlayerDstBuffApplyMechanic(WeakMinded, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind", "Weak Minded (Debuff after Mind Crush)","Weak Minded", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(WeakMinded, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind", "Weak Minded (Debuff after Mind Crush)","Weak Minded", Sev3, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(DeimosSelectedByGreen, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green.D", "Chosen by the Eye of Janthir","Chosen (Green)", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(GreenTeleport, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP", "Teleport to/from Demonic Realm","Teleport", Sev0, 0),
+                new PlayerDstBuffApplyMechanic(DeimosSelectedByGreen, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green.D", "Chosen by the Eye of Janthir","Chosen (Green)", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(GreenTeleport, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP", "Teleport to/from Demonic Realm","Teleport", Sev2, 0),
             ]),
             new EnemyDstBuffApplyMechanic(UnnaturalSignet, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff", "Double Damage Debuff on Deimos","+100% Dmg Buff", Sev0, 0)
         ]);
