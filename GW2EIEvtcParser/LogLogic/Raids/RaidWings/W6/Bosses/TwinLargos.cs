@@ -19,25 +19,26 @@ internal class TwinLargos : MythwrightGambit
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.L", "Breakbar","Breakbar", Sev2, 0),
+                new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.L", "Breakbar","Breakbar", Sev3, 0),
                 new EnemyCastEndMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.L", "Breakbar broken","CCed", Sev0, 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Waterlogged, new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff", "Waterlogged (stacking water debuff)","Waterlogged", Sev1, 0),
                 new PlayerDstHealthDamageHitMechanic(VaporRush, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge", "Vapor Rush (Triple Charge)","Vapor Rush Charge", Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(TidalPoolSkill, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool", "Tidal Pool","Tidal Pool", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(TidalPoolSkill, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool", "Tidal Pool","Tidal Pool", Sev2, 0),
                 new PlayerDstBuffApplyMechanic(TidalPoolBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison", "Expanding Water Field","Water Poison", Sev0, 0),
                 new PlayerDstHealthDamageHitMechanic(AquaticDetainmentHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float", "Aquatic Detainment (Float Bubble)","Float Bubble", Sev0, 6000),
-                new PlayerDstBuffApplyMechanic(AquaticAuraNikare, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura", "Increasing Damage Debuff on Nikare's Last Platform","Nikare Aura Debuff", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(AquaticAuraNikare, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura", "Increasing Damage Debuff on Nikare's Last Platform","Nikare Aura Debuff", Sev2, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(SeaSwell, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave", "Sea Swell (Shockwave)","Shockwave", Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(AquaticVortex, new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado", "Aquatic Vortex (Water Tornados)","Tornado", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(SeaSwell, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave", "Sea Swell (Shockwave)","Shockwave", Sev0, 0)
+                    .UsingBuffChecker(Stability, false),
+                new PlayerDstHealthDamageHitMechanic(AquaticVortex, new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado", "Aquatic Vortex (Water Tornados)","Tornado", Sev1, 0),
                 new PlayerDstHealthDamageHitMechanic(VaporJet, new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal", "Vapor Jet (Boon Steal)","Boon Steal", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(AquaticAuraKenut, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura", "Increasing Damage Debuff on Kenut's Last Platform","Kenut Aura Debuff", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(CycloneBurst, new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field", "Cyclone Burst (triangular rotating fields on Kenut)","Cyclone Burst", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(AquaticAuraKenut, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura", "Increasing Damage Debuff on Kenut's Last Platform","Kenut Aura Debuff", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(CycloneBurst, new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field", "Cyclone Burst (triangular rotating fields on Kenut)","Cyclone Burst", Sev2, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic(Geyser, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch", "Geyser (Launching Aoes)","Launch Field", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(Geyser, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch", "Geyser (Launching Aoes)","Launch Field", Sev3, 0),
             new EnemyDstBuffApplyMechanic(EnragedTwinLargos, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage", "Enraged","Enrage", Sev0, 0),
         ]);
     public TwinLargos(int triggerID) : base(triggerID)

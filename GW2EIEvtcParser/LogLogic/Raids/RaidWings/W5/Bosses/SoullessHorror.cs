@@ -21,8 +21,8 @@ internal class SoullessHorror : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", Sev1, 0),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_NecroDancer, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange), "NecDancer.Achiv.L", "Achievement Eligibility: Necro Dancer Lost", "Necro Dancer Lost", 0)
                         .UsingChecker((evt, log) => evt.Lost),
@@ -31,7 +31,7 @@ internal class SoullessHorror : HallOfChains
                 ]),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([QuadSlashFirstSet, QuadSlashSecondSet], new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "4Slice", "Quad Slash (4 Slices)","4 Slices", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic([QuadSlashFirstSet, QuadSlashSecondSet], new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "4Slice", "Quad Slash (4 Slices)","4 Slices", Sev2, 0),
                 new PlayerDstHealthDamageHitMechanic(DeathBloom, new MechanicPlotlySetting(Symbols.Octagon,Colors.LightOrange), "8Slice", "Death Bloom (8 Slices)","8 Slices", Sev1, 0),
             ]),
             new PlayerDstHealthDamageHitMechanic(SpinningSlash, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.DarkRed), "Scythe", "Spinning Slash (hit by Scythe)","Scythe", Sev0, 0),
@@ -40,9 +40,9 @@ internal class SoullessHorror : HallOfChains
                 new PlayerDstBuffApplyMechanic(Necrosis, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Necrosis", "Necrosis (Tanking Debuff)","Necrosis Debuff", Sev0, 50),
             ]),
             new PlayerDstHealthDamageHitMechanic(CorruptTheLiving, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Spin.SH", "Corrupt the Living (Torment+Poison Spin)","Torment+Poison Spin", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(WurmSpit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit", "Wurm Spit","Wurm Spit", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(WurmSpit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkTeal), "Spit", "Wurm Spit","Wurm Spit", Sev3, 0),
             new MechanicGroup([
-                new EnemyCastStartMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.SH", "Howling Death (Breakbar)","Breakbar", Sev2, 0),
+                new EnemyCastStartMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.SH", "Howling Death (Breakbar)","Breakbar", Sev3, 0),
                 new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.SH", "Howling Death (Breakbar) broken","CCed", Sev0, 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 6800),
                 new EnemyCastEndMechanic(HowlingDeath, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.SH Fail", "Howling Death (Breakbar failed) ","CC Fail", Sev0, 0)

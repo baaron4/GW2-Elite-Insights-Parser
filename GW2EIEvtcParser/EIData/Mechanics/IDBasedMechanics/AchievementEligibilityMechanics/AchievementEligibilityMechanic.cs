@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class AchievementEligibilityMechanic : IDBasedMechanic<AchievementEligibilityEvent>
 {
-     public AchievementEligibilityMechanic(long achievementID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base([achievementID], plotlySetting, shortName, description, fullName, Sev3, internalCoolDown)
+     public AchievementEligibilityMechanic(long achievementID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base([achievementID], plotlySetting, shortName, description, fullName, Sev4, internalCoolDown)
     {
         IsEnemyMechanic = false;
     }

@@ -28,8 +28,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     ),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(JunkAbsorption, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls", "Junk Absorption (Purple Balls during collect)","Purple Balls", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic([JunkFall1, JunkFall2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk", "Junk Fall (Falling Debris)","Junk Fall", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(JunkAbsorption, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls", "Junk Absorption (Purple Balls during collect)","Purple Balls", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic([JunkFall1, JunkFall2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk", "Junk Fall (Falling Debris)","Junk Fall", Sev2, 0),
                 new PlayerDstHealthDamageHitMechanic(JunkTorrent, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall", "Junk Torrent (Moving Wall)","Junk Torrent (Wall)", Sev0, 0)
                     .UsingChecker((de,log) => de.HealthDamage > 0),
             ]),
@@ -46,7 +46,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 new PlayerDstBuffApplyMechanic(ConjuredShield, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C", "Collected Shield","Shield Collect", Sev1, 50),
             ]),
             new MechanicGroup([
-                new EnemyDstBuffApplyMechanic(AugmentedPower, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power", "Augmented Power","Augmented Power", Sev0, 50),
+                new EnemyDstBuffApplyMechanic(AugmentedPower, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power", "Augmented Power","Augmented Power", Sev2, 50),
                 new EnemyDstBuffApplyMechanic(ShieldedCA, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Green), "Shielded", "Shielded","Shielded", Sev0, 50),
             ]),
         ]);
