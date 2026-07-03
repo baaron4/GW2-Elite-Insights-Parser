@@ -730,14 +730,15 @@ canvas {
 }
 
 .combat-replay-mechanics-list-container {
-    height: 800px;
+    max-height: 800px;
 }
 
 .combat-actor-status-container {
-    height: 830px;
+    max-height: 830px;
 }
 
 .combat-replay-mechanics-list-row {
+    height: 34px;
     cursor: pointer;
 }
 
