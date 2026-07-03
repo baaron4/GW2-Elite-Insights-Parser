@@ -71,9 +71,9 @@ internal class Kanaxai : SilentSurf
                 ]
             ),
             new PlayerDstBuffApplyMechanic(ExposedPlayer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", Sev0, 0),
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", Sev0, 150),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", Sev2, 150),
             new PlayerDstBuffApplyMechanic(Phantasmagoria, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", Sev1, 150),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A.K", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", Sev0, 150),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A.K", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", Sev1, 150),
         ]);
     public Kanaxai(int triggerID) : base(triggerID)
     {

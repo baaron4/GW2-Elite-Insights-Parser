@@ -41,7 +41,7 @@ internal class WhisperingShadow : Kinfall
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "Green.T", "Targeted by Wintry Orb (Green)", "Wintry Orb Target", Sev0, 500),
                 new PlayerDstHealthDamageHitMechanic(WintryOrb, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.H", "Hit by Wintry Orb (Green)", "Wintry Orb Hit", Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(HailstormWhisperingShadow, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Spread.H", "Hit by Hailstorm (Spread)", "Hailstorm Hit", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(HailstormWhisperingShadow, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Spread.H", "Hit by Hailstorm (Spread)", "Hailstorm Hit", Sev1, 0),
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", Sev0, 0),

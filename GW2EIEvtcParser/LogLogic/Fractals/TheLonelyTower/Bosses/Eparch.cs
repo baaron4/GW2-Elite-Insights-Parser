@@ -23,12 +23,12 @@ internal class Eparch : LonelyTower
         [
             // Player Attunements
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(DespairAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Desp.Att", "Collected Despair Attunement", "Despair Attunement", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(EnvyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Emvy.Att", "Collected Envy Attunement", "Envy Attunement", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(GluttonyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Glut.Att", "Collected Gluttony Attunement", "Gluttony Attunement", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(MaliceAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Mali.Att", "Collected Malice Attunement", "Malice Attunement", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(RageAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Rage.Att", "Collected Rage Attunement", "Rage Attunement", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(RegretAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Regr.Att", "Collected Regret Attunement", "Regret Attunement", Sev0, 0),
+                new PlayerDstBuffApplyMechanic(DespairAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Desp.Att", "Collected Despair Attunement", "Despair Attunement", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(EnvyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Emvy.Att", "Collected Envy Attunement", "Envy Attunement", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(GluttonyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Glut.Att", "Collected Gluttony Attunement", "Gluttony Attunement", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(MaliceAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Mali.Att", "Collected Malice Attunement", "Malice Attunement", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(RageAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Rage.Att", "Collected Rage Attunement", "Rage Attunement", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(RegretAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Regr.Att", "Collected Regret Attunement", "Regret Attunement", Sev1, 0),
             ]),
             // Eparch Empowerments
             new MechanicGroup([
@@ -53,16 +53,16 @@ internal class Eparch : LonelyTower
             ]),
             // Split Phase
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([CruelDetonation1, CruelDetonation2], new MechanicPlotlySetting(Symbols.Square, Colors.Ice), "CruDeto.H", "Hit by Cruel Detonation", "Cruel Detonation Hit", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(WallOfTalons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "Wall.H", "Hit by Wall of Talons", "Wall of Talons Hit", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(PoolOfDraining, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "PoolDra.H", "Hit by Pool of Draining (Boonstrip)", "Pool of Draining Hit", Sev0, 0),
-                new PlayerDstHealthDamageHitMechanic(UnliddedEye, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "EyeWave.H", "Hit by Unlidded Eye (Shockwave)", "Unlidded Eye Hit", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(EyeOfJudgment, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.LightOrange), "EyeArrow.H", "Hit by Eye of Judgment (Arrows)", "Eye of Judgment Hit", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic([CruelDetonation1, CruelDetonation2], new MechanicPlotlySetting(Symbols.Square, Colors.Ice), "CruDeto.H", "Hit by Cruel Detonation", "Cruel Detonation Hit", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(WallOfTalons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "Wall.H", "Hit by Wall of Talons", "Wall of Talons Hit", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(PoolOfDraining, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "PoolDra.H", "Hit by Pool of Draining (Boonstrip)", "Pool of Draining Hit", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(UnliddedEye, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "EyeWave.H", "Hit by Unlidded Eye (Shockwave)", "Unlidded Eye Hit", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(EyeOfJudgment, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.LightOrange), "EyeArrow.H", "Hit by Eye of Judgment (Arrows)", "Eye of Judgment Hit", Sev2, 0),
             ]),
             // Eparch Casts
             new MechanicGroup([
-                new EnemyCastStartMechanic(BreakbarEparch, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkGreen), "Breakbar", "Cast Breakbar", "Cast Breakbar", Sev2, 0),
-                new EnemyCastStartMechanic(RegretSkillEparch, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Yellow), "Regret", "Cast Regret Skill", "Cast Regret Skill", Sev2, 0),
+                new EnemyCastStartMechanic(BreakbarEparch, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkGreen), "Breakbar", "Cast Breakbar", "Cast Breakbar", Sev3, 0),
+                new EnemyCastStartMechanic(RegretSkillEparch, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Yellow), "Regret", "Cast Regret Skill", "Cast Regret Skill", Sev3, 0),
             ])
         ]);
         Extension = "eparch";

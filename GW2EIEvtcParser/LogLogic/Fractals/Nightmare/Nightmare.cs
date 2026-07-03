@@ -16,7 +16,7 @@ internal abstract class Nightmare : FractalLogic
         LogCategoryInformation.SubCategory = SubLogCategory.Nightmare;
         LogID |= LogIDs.FractalMasks.NightmareMask;
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", Sev1, 0),
         ]));
     }
 

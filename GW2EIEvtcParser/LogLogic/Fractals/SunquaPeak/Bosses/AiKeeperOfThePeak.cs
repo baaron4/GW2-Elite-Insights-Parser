@@ -32,7 +32,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     new PlayerDstHealthDamageHitMechanic(VolatileWind, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.", "Volatile Wind","Volatile Wind", Sev1, 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstHealthDamageHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.", "Wind Burst","Wind Burst", Sev1, 0)
+                            new PlayerDstHealthDamageHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.", "Wind Burst","Wind Burst", Sev2, 0)
                                 .WithStabilitySubMechanic(
                                     new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst", "Launched up by Wind Burst","Wind Burst Launch", Sev0, 0),
                                     false
