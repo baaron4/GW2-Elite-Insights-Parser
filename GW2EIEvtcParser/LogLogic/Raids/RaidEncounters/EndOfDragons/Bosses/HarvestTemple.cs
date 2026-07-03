@@ -894,6 +894,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
                 usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
+            .DistinctBy(x => x.EffectID)
             .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.EffectID)))
             .GroupBy(x => x.Item1)
             .ToDictionary(x => x.Key.GUID, x => x.SelectMany(x => x.Item2));

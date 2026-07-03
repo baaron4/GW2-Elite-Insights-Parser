@@ -14,6 +14,7 @@ internal class MetaEventsContainer
     public readonly List<MapChangeEvent> MapChangeEvents = [];
     public ShardEvent? ShardEvent;
     public readonly List<TickRateEvent> TickRateEvents = [];
+    public readonly List<TickEvent> TickEvents = [];
     public PointOfViewEvent? PointOfViewEvent;
     public FractalScaleEvent? FractalScaleEvent;
     public EvtcVersionEvent? EvtcVersionEvent;

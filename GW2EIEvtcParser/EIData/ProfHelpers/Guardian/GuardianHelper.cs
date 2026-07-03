@@ -279,6 +279,17 @@ internal static class GuardianHelper
         return Minions.Contains(id);
     }
 
+    private static readonly HashSet<long> _spearAAs =
+    [
+        DaybreakingSlashWave,
+    ];
+
+    public static bool IsAutoAttack(ParsedEvtcLog log, long id)
+    {
+        var build = log.CombatData.GetGW2BuildEvent().Build;
+        return build >= GW2Builds.June2024SpearBeta && _spearAAs.Contains(id);
+    }
+
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Guardian;

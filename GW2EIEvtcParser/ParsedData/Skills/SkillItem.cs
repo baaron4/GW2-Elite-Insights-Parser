@@ -40,7 +40,9 @@ public class SkillItem
         || IsAnimatedDodge(skillData);
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID;
     public bool IsAutoAttack(ParsedEvtcLog log) => AA
+        || GuardianHelper.IsAutoAttack(log, ID)
         || FirebrandHelper.IsAutoAttack(log, ID)
+        || RevenantHelper.IsAutoAttack(log, ID)
         || BladeswornHelper.IsAutoAttack(log, ID);
     public string Name { get; private set; } = "";
     public string Icon { get; private set; } = "";
