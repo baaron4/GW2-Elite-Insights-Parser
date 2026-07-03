@@ -5,12 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -18,12 +20,12 @@ internal class River : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
 
-            new PlayerDstHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-            new PlayerDstHealthDamageHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", 0)
+            new PlayerDstHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", Sev0, 0 ),
+            new PlayerDstHealthDamageHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", Sev0, 0)
                 .UsingBuffChecker(Stability, false),
-            new EnemySrcHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Bomb Hit Desmina", "Hollowed Bomber hit Desmina", "Bomb Desmina", 0)
+            new EnemySrcHealthDamageHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Bomb Hit Desmina", "Hollowed Bomber hit Desmina", "Bomb Desmina", Sev0, 0)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
-            new EnemySrcHealthDamageHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", 0)
+            new EnemySrcHealthDamageHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", Sev0, 0)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
         ]);
     public River(int triggerID) : base(triggerID)

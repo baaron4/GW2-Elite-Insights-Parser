@@ -5,13 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -20,28 +22,28 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", 0),
-                new PlayerDstHealthDamageHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", 0),
+                new PlayerDstHealthDamageHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", Sev0, 0),
+                new PlayerDstHealthDamageHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", Sev0, 0),
             ]),
-            new PlayerDstBuffApplyMechanic(BloodstoneProtection, new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble", "Bloodstone Protection (Stood in Bubble)","Inside Bubble", 0),
+            new PlayerDstBuffApplyMechanic(BloodstoneProtection, new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble", "Bloodstone Protection (Stood in Bubble)","Inside Bubble", Sev2, 0),
             new MechanicGroup([
-                new EnemyCastStartMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.X", "Summon Fragment (Xera Breakbar)","Breakbar", 0),
-                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.X Fail", "Summon Fragment (Failed CC)","CC Fail", 0)
+                new EnemyCastStartMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.X", "Summon Fragment (Xera Breakbar)","Breakbar", Sev3, 0),
+                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.X Fail", "Summon Fragment (Failed CC)","CC Fail", Sev0, 0)
                     .UsingChecker( (ce,log) => ce.ActualDuration > 11940),
-                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.X", "Summon Fragment (Breakbar broken)","CCed", 0)
+                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.X", "Summon Fragment (Breakbar broken)","CCed", Sev0, 0)
                     .UsingChecker( (ce, log) => ce.ActualDuration <= 11940),
             ]),
-            new PlayerDstBuffApplyMechanic(Derangement, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks", "Derangement (Stacking Debuff)","Derangement", 0),
+            new PlayerDstBuffApplyMechanic(Derangement, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks", "Derangement (Stacking Debuff)","Derangement", Sev2, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(BendingChaos, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1", "Bending Chaos (Stood on 1st Button)","Button 1", 0),
-                new PlayerDstBuffApplyMechanic(ShiftingChaos, new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2", "Bending Chaos (Stood on 2nd Button)","Button 2", 0),
-                new PlayerDstBuffApplyMechanic(TwistingChaos, new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3", "Bending Chaos (Stood on 3rd Button)","Button 3", 0),
+                new PlayerDstBuffApplyMechanic(BendingChaos, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1", "Bending Chaos (Stood on 1st Button)","Button 1", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(ShiftingChaos, new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2", "Bending Chaos (Stood on 2nd Button)","Button 2", Sev1, 0),
+                new PlayerDstBuffApplyMechanic(TwistingChaos, new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3", "Bending Chaos (Stood on 3rd Button)","Button 3", Sev1, 0),
             ]),
-            new PlayerDstBuffApplyMechanic(InterventionSkillOwnerBuff, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield", "Intervention (got Special Action Key)","Shield", 0),
-            new PlayerDstBuffApplyMechanic(GravityWellXera, new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half", "Half-platform Gravity Well","Gravity Well", 4000),
+            new PlayerDstBuffApplyMechanic(InterventionSkillOwnerBuff, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield", "Intervention (got Special Action Key)","Shield", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(GravityWellXera, new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half", "Half-platform Gravity Well","Gravity Well", Sev0, 4000),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(HerosDeparture, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out", "Hero's Departure (Teleport to Platform)","TP",0),
-                new PlayerDstBuffApplyMechanic(HerosReturn, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back", "Hero's Return (Teleport back)","TP back", 0),
+                new PlayerDstBuffApplyMechanic(HerosDeparture, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out", "Hero's Departure (Teleport to Platform)","TP", Sev1,0),
+                new PlayerDstBuffApplyMechanic(HerosReturn, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back", "Hero's Return (Teleport back)","TP back", Sev1, 0),
             ]),
             /*new Mechanic(Intervention, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
             //new Mechanic(Disruption, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 

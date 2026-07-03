@@ -14,7 +14,7 @@ internal class SubMechanic : Mechanic
     /// <param name="description">description of the mechanic</param>
     /// <param name="fullName">full name of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    public SubMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
+    public SubMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown)
     {
     }
 
