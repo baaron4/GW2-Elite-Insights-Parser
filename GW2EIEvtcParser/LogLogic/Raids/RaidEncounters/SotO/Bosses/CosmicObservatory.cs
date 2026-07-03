@@ -31,7 +31,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                             .UsingChecker((evt, log) => !evt.Lost)
                 ]),
                 new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", Sev0, 0),
-                new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", Sev2, 0),
+                new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", Sev3, 0),
             ]),
             new PlayerDstHealthDamageHitMechanic(DemonicBlast, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Dmn.Blst.H", "Demonic Blast Hit (Cones AoEs)", "Demonic Blast Hit", Sev1, 0),
             new MechanicGroup([
@@ -40,17 +40,17 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                     .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(PlanetCrashProjectileSkill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", Sev1, 0),
-                new EnemyCastStartMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(PlanetCrashProjectileSkill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", Sev2, 0),
+                new EnemyCastStartMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", Sev3, 0),
                 new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", Sev0, 0)
                     .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Dagda)),
                 new EnemySrcHealthDamageMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", Sev0, 1000)
                     .UsingChecker((ahde, log) => ahde.HealthDamage >= 0 && ahde.To.IsPlayer),
             ]),
-            new PlayerDstHealthDamageHitMechanic(ChargingConstellationDamage, new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(ChargingConstellationDamage, new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", Sev2, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targeted by Shooting Stars", Sev0, 0),
-                new EnemyCastStartMechanic(ShootingStars, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", Sev2, 0),
+                new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targeted by Shooting Stars", Sev1, 0),
+                new EnemyCastStartMechanic(ShootingStars, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", Sev3, 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ResidualAnxiety, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", Sev0, 0),

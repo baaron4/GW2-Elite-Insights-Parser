@@ -28,14 +28,14 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         MechanicList.Add(new MechanicGroup([
             // General
             new MechanicGroup([
-                new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", Sev0, 150),
+                new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", Sev1, 150),
                 new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", Sev0, 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", Sev0, 150),
                 new PlayerDstHealthDamageHitMechanic(InfluenceOfTheVoidSkill, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", Sev1, 150),
                 new PlayerDstHealthDamageHitMechanic([VoidPoolNM, VoidPoolCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", Sev0, 150),
                 new PlayerDstHealthDamageMechanic([HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Targeted Expulsion (Spread)", "Targeted Expulsion (Spread)", Sev1, 150)
                     .UsingChecker((@event, log) => @event.HasHit || @event.IsNotADamageEvent),
-                new PlayerSrcAllHealthDamageHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", Sev1, 0)
+                new PlayerSrcAllHealthDamageHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", Sev3, 0)
                     .UsingChecker((de, log) => (de.To.IsSpecies(TargetID.PushableVoidAmalgamate) || de.To.IsSpecies(TargetID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_NopeRopes, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkYellow), "NopeRopes.Achiv.L", "Achievement Eligibility: Jumping the Nope Ropes Lost", "Achiv Jumping Nope Ropes Lost", 0)
@@ -57,14 +57,14 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             ]),
             // Purification 1
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(LightningOfJormag, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(FlamesOfPrimordus, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Orange), "Flame.H", "Hit by Flames of Primordus", "Flames of Primordus", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(LightningOfJormag, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(FlamesOfPrimordus, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Orange), "Flame.H", "Hit by Flames of Primordus", "Flames of Primordus", Sev2, 0),
                 new PlayerDstHealthDamageHitMechanic(Stormfall, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Purple), "Storm.H", "Hit by Kralkatorrik's Stormfall", "Kralkatorrik's Stormfall", Sev0, 0),
             ]),
             // Jormag
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([BreathOfJormagNorth, BreathOfJormagSouth, BreathOfJormagCenter], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", Sev1, 150),
-                new PlayerDstHealthDamageHitMechanic(GraspOfJormag, new MechanicPlotlySetting(Symbols.StarOpen, Colors.DarkWhite), "J.Grasp.H", "Hit by Grasp of Jormag", "Grasp of Jormag", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(GraspOfJormag, new MechanicPlotlySetting(Symbols.StarOpen, Colors.DarkWhite), "J.Grasp.H", "Hit by Grasp of Jormag", "Grasp of Jormag", Sev2, 0),
                 new PlayerDstHealthDamageHitMechanic(FrostMeteor, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", Sev1, 150),
             ]),
             // Primordus
@@ -74,9 +74,9 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             ]),
             // Kralkatorrik 
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(CrystalBarrage, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", Sev1, 150),
+                new PlayerDstHealthDamageHitMechanic(CrystalBarrage, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", Sev2, 150),
                 new PlayerDstHealthDamageHitMechanic(BrandingBeam, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik's Branding Beam", "Kralkatorrik Beam", Sev1, 150),
-                new PlayerDstHealthDamageHitMechanic(BrandedArtillery, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", Sev1, 150),
+                new PlayerDstHealthDamageHitMechanic(BrandedArtillery, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", Sev2, 150),
                 new PlayerDstHealthDamageHitMechanic(VoidPoolKralkatorrik, new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "K.Pool.H", "Hit by Kralkatorrik Void Pool", "Kralkatorrik Void Pool", Sev0, 150),
             ]),
             // Purification 2
@@ -85,29 +85,29 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 new PlayerDstHealthDamageHitMechanic(SwarmOfMordremoth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", Sev0, 150),
                 // Timecaster
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(GravityCrushDamage, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Black), "Grav.Cru.H", "Hit by Gravity Crush", "Gravity Crush", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(NightmareEpochDamage, new MechanicPlotlySetting(Symbols.Hexagon, Colors.Pink), "NigEpoch.H", "Hit by Nightmare Epoch", "Nightmare Epoch", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(GravityCrushDamage, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Black), "Grav.Cru.H", "Hit by Gravity Crush", "Gravity Crush", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(NightmareEpochDamage, new MechanicPlotlySetting(Symbols.Hexagon, Colors.Pink), "NigEpoch.H", "Hit by Nightmare Epoch", "Nightmare Epoch", Sev3, 0),
                 ]),
             ]),
             // Mordremoth
             new MechanicGroup([
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic(MordremothShockwave, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth's Shockwave", "Mordremoth Shockwave", Sev0, 150),
-                    new EnemyCastStartMechanic(MordremothShockwave, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Green), "ShckWv.Start", "Mordremoth's Shockwave started", "Mordremoth Shockwave Start", Sev2, 150)
+                    new EnemyCastStartMechanic(MordremothShockwave, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Green), "ShckWv.Start", "Mordremoth's Shockwave started", "Mordremoth Shockwave Start", Sev3, 150)
                 ]),
                 new PlayerDstHealthDamageHitMechanic(PoisonRoar, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth's Poison Roar", "Mordremoth Poison", Sev0, 150),
                 // Skullpiercer
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", Sev0, 150)
                         .UsingBuffChecker(Stability, false),
-                    new PlayerDstHealthDamageHitMechanic(ChargedShot, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.FluoOrange), "ChrgShot.H", "Hit by Void Skullpiercer's Charged Shot", "Skullpiercer Charged Shot", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(ChargedShot, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.FluoOrange), "ChrgShot.H", "Hit by Void Skullpiercer's Charged Shot", "Skullpiercer Charged Shot", Sev3, 0),
                 ]),
             ]),
             // Giants
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(DeathScream, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Grey), "Scream.G.CC", "CC'd by Giant's Death Scream", "Death Scream", Sev0, 0)
                     .UsingBuffChecker(Stability, false),
-                new PlayerDstHealthDamageHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", Sev2, 0),
                 new PlayerDstHealthDamageHitMechanic(Stomp, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Teal), "Stomp.CC", "CC'd by Giant's Stomp", "Stomp", Sev0, 0)
                     .UsingBuffChecker(Stability, false),
             ]),
@@ -122,11 +122,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 new PlayerDstHealthDamageHitMechanic(SwarmOfMordremoth_CorruptedWaters, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightBlue), "Prjtile.H", "Hit by Corrupted Waters (Heart Projectile)", "Heart Projectile", Sev1, 150),
                 // Saltspray
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(HydroBurst, new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Hydro Burst (Whirlpool)", "Hydro Burst (Whirlpool)", Sev2, 150),
-                    new PlayerDstHealthDamageHitMechanic(CallLightning, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Purple), "CallLigh.H", "Hit by Call Lightning", "Call Lightning", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic(FrozenFury, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Ice), "FrozFury.H", "Hit by Frozen Fury", "Frozen Fury", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic(RollingFlame, new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "RollFlame.H", "Hit by Rolling Flame", "Rolling Flame", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic([ShatterEarth, ShatterEarth2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Brown), "ShatEarth.H", "Hit by Shatter Earth", "Shatter Earth", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(HydroBurst, new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Hydro Burst (Whirlpool)", "Hydro Burst (Whirlpool)", Sev3, 150),
+                    new PlayerDstHealthDamageHitMechanic(CallLightning, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Purple), "CallLigh.H", "Hit by Call Lightning", "Call Lightning", Sev3, 0),
+                    new PlayerDstHealthDamageHitMechanic(FrozenFury, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Ice), "FrozFury.H", "Hit by Frozen Fury", "Frozen Fury", Sev3, 0),
+                    new PlayerDstHealthDamageHitMechanic(RollingFlame, new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "RollFlame.H", "Hit by Rolling Flame", "Rolling Flame", Sev3, 0),
+                    new PlayerDstHealthDamageHitMechanic([ShatterEarth, ShatterEarth2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Brown), "ShatEarth.H", "Hit by Shatter Earth", "Shatter Earth", Sev3, 0),
                 ]),
             ]),
             // Soo Won
@@ -139,8 +139,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 new PlayerDstHealthDamageHitMechanic(MagicHail, new MechanicPlotlySetting(Symbols.CircleX, Colors.Black), "MagHail.H", "Hit by Magic Hail", "Magic Hail Hit", Sev1, 0),
                 // Obliterator
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", Sev3, 0),
+                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", Sev3, 0),
                     new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", Sev2, 0)
                         .WithStabilitySubMechanic(
                             new SubMechanic(new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", Sev0, 0),
@@ -158,7 +158,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             ]),
             // Purification 4
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(GraspOfTheVoid, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Black), "GraspVoid.H", "Hit by Grasp of the Void (Final Orb Projectile)", "Grasp of the Void", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(GraspOfTheVoid, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Black), "GraspVoid.H", "Hit by Grasp of the Void (Final Orb Projectile)", "Grasp of the Void", Sev2, 0),
             ]),
         ]));
         Icon = EncounterIconHarvestTemple;

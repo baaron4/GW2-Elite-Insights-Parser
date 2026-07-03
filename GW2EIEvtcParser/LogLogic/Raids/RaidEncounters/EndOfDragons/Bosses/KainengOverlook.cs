@@ -25,7 +25,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             //Li
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", Sev0, 150),
-                new PlayerDstHealthDamageHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", Sev0, 150),
+                new PlayerDstHealthDamageHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", Sev1, 150),
                 new PlayerDstHealthDamageHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", Sev0, 150),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_TestReflexes, new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkRed), "TextReflx.Achiv.L", "Achievement Eligibility: A Test of Your Reflexes Lost", "Achiv Test Reflexes Lost", 0)
@@ -37,14 +37,14 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             new MechanicGroup([             
                 // Mindblade
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", Sev1, 150),
+                    new PlayerDstHealthDamageHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", Sev2, 150),
                     new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targeted by Rain of Blades", "Rain of Blades Target", Sev1, 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", Sev0, 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheMindblade, TargetID.TheMindbladeCM })),
                 ]),
                 // Enforcer
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", Sev0, 150),
+                    new PlayerDstHealthDamageHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", Sev1, 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", Sev0, 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheEnforcer, TargetID.TheEnforcerCM })),
                     new PlayerDstHealthDamageHitMechanic(BoomingCommandSkillNM, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", Sev0, 150),
@@ -57,9 +57,9 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             new MechanicGroup([          
                 // Mech Rider
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", Sev1, 150),
-                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", Sev1, 150),
-                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", Sev0, 150),
+                    new PlayerDstHealthDamageHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", Sev2, 150),
+                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", Sev2, 150),
+                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", Sev1, 150),
                     new PlayerDstHealthDamageHitMechanic([ ElectricRainNM, ElectricRainCM ], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", Sev0, 150),
                     new PlayerDstHealthDamageHitMechanic(JadeBusterCannonMechRider, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", Sev0, 150),
                 ]),
@@ -67,9 +67,9 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 new MechanicGroup([
                     new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Sniper.T", "Targeted by Sniper Ricochet", "Ricochet Target", Sev0, 150),
                 ]),
-                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", Sev1, 150),
-                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", Sev1, 150),
-                new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", Sev1, 150),
+                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", Sev2, 150),
+                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", Sev3, 150),
+                new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", Sev3, 150),
                 new PlayerDstHealthDamageHitMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Equal.H", "Hit by Equalizer", "Equalizer Hit", Sev0, 150),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_MostResistance, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkPurple), "MostResi.Achiv.N.G", "Achievement Eligibility: The Path of Most Resistance not Gained", "Achiv Most Resistance not Gained", 0)

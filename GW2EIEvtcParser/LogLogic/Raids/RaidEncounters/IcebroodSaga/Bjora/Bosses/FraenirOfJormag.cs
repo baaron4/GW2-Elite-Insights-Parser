@@ -27,20 +27,20 @@ internal class FraenirOfJormag : Bjora
             new MechanicGroup([          
                 new PlayerDstHealthDamageHitMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile", Sev0, 4000)
                     .UsingBuffChecker(Stability, false),
-                new EnemyCastStartMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightOrange), "Frozen Missile", "Cast Frozen Missile", "Frozen Missile", Sev2, 4000),
+                new EnemyCastStartMechanic(FrozenMissile, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightOrange), "Frozen Missile", "Cast Frozen Missile", "Frozen Missile", Sev3, 4000),
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "SeismicCrush.CC", "Knocked by Seismic Crush", "Seismic Crush", Sev0, 4000)
                     .UsingBuffChecker(Stability, false),
-                new EnemyCastStartMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Seismic Crush (Breakbar)", "Cast Seismic Crush & Breakbar", "Seismic Crush", Sev2, 0),
+                new EnemyCastStartMechanic(SeismicCrush, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Seismic Crush (Breakbar)", "Cast Seismic Crush & Breakbar", "Seismic Crush", Sev3, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Teal), "FrigidFusillade.H", "Hit by Frigid Fusillade (Fraenir Arrows)", "Frigid Fusillade", Sev1, 0),
-                new EnemyCastStartMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkTeal), "Frigid Fusillade", "Cast Frigid Fusillade", "Frigid Fusillade", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Teal), "FrigidFusillade.H", "Hit by Frigid Fusillade (Fraenir Arrows)", "Frigid Fusillade", Sev2, 0),
+                new EnemyCastStartMechanic(FrigidFusillade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkTeal), "Frigid Fusillade", "Cast Frigid Fusillade", "Frigid Fusillade", Sev3, 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Frozen, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Frozen", "Frozen", "Frozen", Sev0, 500),
-                new PlayerDstBuffRemoveMechanic(Frozen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Unfrozen", "Unfrozen", "Unfrozen", Sev0, 500),
+                new PlayerDstBuffRemoveMechanic(Frozen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Unfrozen", "Unfrozen", "Unfrozen", Sev1, 500),
             ]),
             new PlayerDstBuffApplyMechanic(Snowblind, new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Snowblind", "Snowblind", "Snowblind", Sev1, 500),
         ])

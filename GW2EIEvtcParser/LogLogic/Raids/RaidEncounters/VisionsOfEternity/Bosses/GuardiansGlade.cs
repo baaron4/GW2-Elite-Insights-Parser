@@ -40,7 +40,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
     internal readonly MechanicGroup Mechanics = new([
         // Kela Stomp Left / Right
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic([KelaStompLeft, KelaStompRight], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Stomp.H", "Hit by Stomp", "Stomp Hit", Sev2, 0)
                 .WithStabilitySubMechanic(
                     new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Orange), "Stomp.CC", "CC by Stomp", "Stomp CC", Sev0, 0),
                     false
@@ -48,7 +48,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ]),
         // Kela Claw Slam
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(KelaClawSlam, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "ClawSlam.H", "Hit by ClawSlam", "ClawSlam Hit", Sev2, 0)
                 .WithStabilitySubMechanic(
                     new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Orange), "ClawSlam.CC", "CC by ClawSlam", "ClawSlam CC", Sev0, 0),
                     false
@@ -64,7 +64,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ]),
         // Crocodilian Razortooth Tackle
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(CrocodilianRazortoothTackle, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "CrocTackle.H", "Hit by Crocodilian Razortooth Tackle", "Croc Tackle Hit", Sev0, 0)
                 .WithStabilitySubMechanic(
                     new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "CrocTackle.CC", "CC by Crocodilian Razortooth Tackle", "Croc Tackle CC", Sev0, 0),
                     false
@@ -72,7 +72,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ]),
         // Tornado
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", Sev1, 0)
+            new PlayerDstHealthDamageHitMechanic(KelaTornado, new MechanicPlotlySetting(Symbols.YUp, Colors.Grey), "Tornado.H", "Hit by Tornado", "Tornado Hit", Sev2, 0)
                 .WithStabilitySubMechanic(
                     new SubMechanic(new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Grey), "Tornado.CC", "CC by Tornado", "Tornado CC", Sev0, 0),
                     false
@@ -86,7 +86,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         new PlayerDstBuffApplyMechanic(ShreddedArmor, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "ShredArmor.A", "Applied Shredded Armor", "Shredded Armor Applied", Sev0, 0),
         // Loose Sand
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", Sev1, 0),
+            new PlayerDstBuffApplyMechanic(LooseSand, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightPurple), "LooSand.A", "Applied Loose Sand", "Loose Sand Applied", Sev2, 0),
             new MechanicGroup([
                 new AchievementEligibilityMechanic(Ach_Surefooted, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkPurple), "Achiv.Sand.L", "Achievement Eligibility: Surefooted Lost", "Achiv: Surefooted Lost", 0)
                     .UsingChecker((evt, log) => evt.Lost),
@@ -96,15 +96,15 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         ]),
         // Biting Swarm
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", Sev1, 0)
+            new PlayerDstBuffApplyMechanic(BitingSwarm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee", "Biting Swarm Application", "Biting Swarm", Sev3, 0)
                 .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.Diamond, Colors.Orange), "Bee.First", "Biting Swarm First Application", "First Biting Swarm", Sev0, 0), (time, actor, log) => IsFirstBee(time, actor.AgentItem, log))
                 .WithSubMechanic(new SubMechanic(new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Orange), "Bee.Cntmntd", "Contaminated by Bitting Swarm", "Contaminated by Bitting Swarm ", Sev0, 0), (time, actor, log) => !IsFirstBee(time, actor.AgentItem, log))
                 .UsingIgnored()
         ]),
-        new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", Sev1, 0),
+        new EnemyDstBuffApplyMechanic(RelentlessSpeed, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Blue), "Speed", "Gained Relentless Speed", "Relentless Speed Applied", Sev2, 0),
         // Eating
         new MechanicGroup([
-            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Ate Croc", "Ate a Crocodilian Razortooth", "Ate Croc", Sev0, 0)
+            new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Red), "Ate Croc", "Ate a Crocodilian Razortooth", "Ate Croc", Sev1, 0)
                 .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.DownedEliteCrocodilianRazortooth)),
             new EnemySrcHealthDamageMechanic(ArcDPSGenericKill, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Red), "Ate Artifact", "Ate the Cursed Artifact", "Ate Artifact", Sev0, 0)
                 .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.CursedArtifact_NPC)),
