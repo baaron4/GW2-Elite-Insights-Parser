@@ -613,6 +613,13 @@ internal class CombatReplayDecorationContainer
     internal delegate void MissileDecorationHandler((long start, long end) lifespan, GeographicalConnector connector);
     internal delegate void MissileRotatingDecorationHandler((long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
 
+    /// <summary>
+    /// Add a missile going from a Point A to Point B, supports multi launches
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="missileEvent"></param>
+    /// <param name="handler">Handler that will create the decoration</param>
+    /// <param name="endOverride"></param>
     internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler, long? endOverride = null)
     {
         long end = missileEvent.RemoveEvent?.Time ?? (endOverride.HasValue ? Math.Min(endOverride.Value, log.LogData.LogEnd) : log.LogData.LogEnd);
@@ -660,7 +667,14 @@ internal class CombatReplayDecorationContainer
             Add(new IconDecoration(imageUrl, 0, worldSize, opacity, lifespan, connector));
         });
     }
-
+    /// <summary>
+    /// Add a missile rotating around Targeted Agent
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="missileEvent"></param>
+    /// <param name="angleOffset"></param>
+    /// <param name="handler">Handler that will create the decoration</param>
+    /// <param name="useTargetOrientation"></param>
     internal static void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, float angleOffset, MissileRotatingDecorationHandler handler, bool useTargetOrientation = false)
     {
         long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
@@ -708,7 +722,12 @@ internal class CombatReplayDecorationContainer
             Add(new CircleDecoration(radius, lifespan, color, opacity, connector).UsingRotationConnector(rotationConnector));
         }, useTargetOrientation);    
     }
-
+    /// <summary>
+    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="handler">Handler that will create the decoration</param>
+    /// <param name="handler"></param>
     internal static void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
     {
         long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
