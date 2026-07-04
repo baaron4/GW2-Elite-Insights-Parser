@@ -68,4 +68,8 @@ public class JsonMechanics
     /// Discontinued as of EI 3.17.0.0.
     /// </summary>
     public bool IsAchievementEligibility;
+    /// <summary>
+    /// Severity of the mechanic in: "Sev0", "Sev1", "Sev2", "Sev3" and "Sev4"
+    /// </summary>
+    public string? Severity;
 }

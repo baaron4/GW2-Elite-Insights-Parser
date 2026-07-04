@@ -35,6 +35,24 @@ internal static class JsonMechanicsBuilder
             InternalCooldown = mech.InternalCooldown > 0 ? mech.InternalCooldown : null,
             MechanicsData = data
         };
+        switch (mech.Severity & Mechanic.MechanicSeverity.SeverityMask)
+        {
+            case Mechanic.MechanicSeverity.Sev0:
+                jsMechs.Severity = "Sev0";
+                break;
+            case Mechanic.MechanicSeverity.Sev1:
+                jsMechs.Severity = "Sev1";
+                break;
+            case Mechanic.MechanicSeverity.Sev2:
+                jsMechs.Severity = "Sev2";
+                break;
+            case Mechanic.MechanicSeverity.Sev3:
+                jsMechs.Severity = "Sev3";
+                break;
+            case Mechanic.MechanicSeverity.Sev4:
+                jsMechs.Severity = "Sev4";
+                break;
+        }
         return jsMechs;
     }
 
