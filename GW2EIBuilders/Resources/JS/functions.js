@@ -1200,3 +1200,18 @@ function playerIsRunningHealingExtension(playerData) {
     }
     return false;
 }
+
+function numberFormater(value, minimumFractionDigits, maximumFractionDigits) {
+    return value.toLocaleString(undefined, {
+        minimumFractionDigits,
+        maximumFractionDigits
+    });
+}
+
+function percentFormater(value) {
+    return value.toLocaleString(undefined, {
+        style: "percent",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}

@@ -2,7 +2,7 @@
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}">
             <p class="mb-0 scale65">
-                {{percentageFormater(healths, time)}} %
+                {{percentageFormater(healths, time)}}
             </p>
 
             <h6 class="text-center mb-0 ellipis align-self-center">
@@ -12,13 +12,13 @@
             </h6>
 
             <p class="mb-0 scale65 ml-auto">
-                {{percentageFormater(barriers, time)}} %
+                {{percentageFormater(barriers, time)}}
             </p>
         </div>
 
         <div v-if="hasBreakbar" :style="{'background': getBreakbarGradient(time)}">
             <p class="text-center scale65 m-0">
-                {{percentageFormater(breakbar, time)}} %
+                {{percentageFormater(breakbar, time)}}
             </p>
         </div>
     </div>
@@ -64,8 +64,8 @@
                 return computeGradient(color, this.getPercent(this.breakbar, time), 'black');
             },
             percentageFormater: function (healths, time) {
-                const percent = this.getPercent(healths, time);
-                return (Math.round(percent * 100) / 100).toFixed(2);
+                const percent = this.getPercent(healths, time) / 100;
+                return percentFormater(percent);
             },
             getActorHeight: function () {
                 if (this.isTarget) {

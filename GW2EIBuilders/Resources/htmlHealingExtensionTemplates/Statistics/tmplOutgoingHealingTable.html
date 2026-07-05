@@ -87,11 +87,11 @@
                     </td>
                     <td v-if="!showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
-                        {{round(value/phase.durationS)}}
+                        {{numberFormater(round(value/phase.durationS))}}
                     </td>
                     <td v-if="showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
-                        {{value}}
+                        {{numberFormater(value)}}
                     </td>
                 </tr>
             </tbody>
@@ -104,10 +104,10 @@
                     </td>
                     <td></td>
                     <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="value + ' healing'">
-                        {{round(value/phase.durationS)}}                
+                        {{numberFormater(round(value/phase.durationS))}}
                     </td>
                     <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="round(value/phase.durationS) + ' hps'">
-                        {{value}}               
+                        {{numberFormater(value)}}
                     </td>
                 </tr>
             </tfoot>

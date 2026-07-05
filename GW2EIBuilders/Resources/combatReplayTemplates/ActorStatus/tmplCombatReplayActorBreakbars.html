@@ -24,8 +24,8 @@
                 var breakbarTaken = target.details.dmgDistributionsTaken[phaseId].contributedBreakbarDamage;
                 return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end +
                     '<br /> Breakbar Active at: ' + phase.breakbarStart +
-                    '<br /> Breakbar Damage: ' + breakbarTaken +
-                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + phase.breakbarRecovered;
+                    '<br /> Breakbar Damage: ' + numberFormater(breakbarTaken) +
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + numberFormater(phase.breakbarRecovered, 1, 1);
             },
         },
         computed: {

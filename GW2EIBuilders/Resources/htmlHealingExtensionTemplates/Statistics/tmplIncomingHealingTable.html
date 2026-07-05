@@ -58,7 +58,7 @@
                             class="icon" data-original-title="Complete Healing Data">
                     </td>
                     <td v-for="(value, index) in row.incomingHeal" :class="getBodyClass('Data', index)">
-                        {{value}}
+                        {{numberFormater(value)}}
                     </td>
                 </tr>
             </tbody>
@@ -71,7 +71,7 @@
                     </td>
                     <td></td>
                     <td v-for="(value, index) in sum.incomingHeal">
-                        {{value}}
+                        {{numberFormater(value)}}
                     </td>
                 </tr>
             </tfoot>

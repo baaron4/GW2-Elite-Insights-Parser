@@ -109,19 +109,19 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ round3(100*getBarrierOutput(row)/barrierdist.contributedBarrier) }}%
+                        {{ percentFormater(round3(getBarrierOutput(row)/barrierdist.contributedBarrier)) }}
                     </td>
-                    <td :class="getBodyClass('Data', 1)" :data-original-title="round2(getBarrierOutput(row)/phase.durationS) +' hps'">
-                        {{ getBarrierOutput(row) }}
+                    <td :class="getBodyClass('Data', 1)" :data-original-title="numberFormater(round2(getBarrierOutput(row)/phase.durationS)) +' hps'">
+                        {{ numberFormater(getBarrierOutput(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)">
-                        {{ getMinBarrier(row) }}
+                        {{ numberFormater(getMinBarrier(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{ round(getBarrierOutput(row)/getConnectedHits(row)) }}
+                        {{ numberFormater(round(getBarrierOutput(row)/getConnectedHits(row))) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ getMaxBarrier(row) }}
+                        {{ numberFormater(getMaxBarrier(row)) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 5, row)" v-if="actor !== null">
                         {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
@@ -138,20 +138,20 @@
                     <td :class="getBodyClass('Data', 12)" v-if="actor !== null" 
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's' + 
-                                '<br> Max: '+ round3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'
+                                'Min: ' + numberFormater(round3(0.001 * getMinCastingTimeNoInterrupt(row))) + 's' + 
+                                '<br> Max: '+ numberFormater(round3(0.001 * getMaxCastingTimeNoInterrupt(row))) + 's'
                             ) 
                             : 
                             null">
-                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row) ) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? numberFormater(round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row))) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
-                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
+                        {{ getCastTimeWasted(row) ? numberFormater(getCastTimeWasted(row)) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
                         :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
-                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
+                        {{ getCastTimeSaved(row) ? numberFormater(getCastTimeSaved(row)) + 's' : ''}}
                     </td>
                 </tr>
             </tbody>
@@ -160,7 +160,7 @@
                     <td class="text-left">Total</td>
                     <td></td>
                     <td :data-original-title="Math.round(barrierdist.contributedBarrier/phase.durationS) +' hps'">
-                        {{barrierdist.contributedBarrier}}
+                        {{numberFormater(barrierdist.contributedBarrier)}}
                     </td>
                     <td></td>
                     <td></td>
@@ -171,7 +171,7 @@
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{round2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting))}}
+                        {{numberFormater(round2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting)))}}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
