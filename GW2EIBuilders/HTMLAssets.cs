@@ -125,6 +125,7 @@ public class HTMLAssets
             Properties.Resources.tmplPlayerStats,
             Properties.Resources.tmplPlayerTab,
             Properties.Resources.tmplSimpleRotation,
+            Properties.Resources.tmplSimpleRotationSelector,
             Properties.Resources.tmplAdvancedRotation,
             Properties.Resources.tmplSupportTable,
             Properties.Resources.tmplTargets,

@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class NonSpecializedCombatEventListMechanic<T> : CombatEventListMechanic<T> where T : TimeCombatEvent
 {
 
-    public NonSpecializedCombatEventListMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, bool isEnemyMechanic, CombatEventsGetter getter) : base(plotlySetting, shortName, description, fullName, internalCoolDown, getter)
+    public NonSpecializedCombatEventListMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown, bool isEnemyMechanic, CombatEventsGetter getter) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown, getter)
     {
         IsEnemyMechanic = isEnemyMechanic;
     }

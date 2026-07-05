@@ -1,5 +1,9 @@
 var NAVTREEINDEX4 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ad0390ccbe3249654b1a90a03576ee7e6":[1,0,0,14,0,17],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae39a49e163ffa4824d006a925836d45e":[0,0,0,14,0,6],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae39a49e163ffa4824d006a925836d45e":[1,0,0,14,0,6],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae51ae3f652744b19f1309dfbd689768a":[0,0,0,14,0,22],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae51ae3f652744b19f1309dfbd689768a":[1,0,0,14,0,22],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae5e1dbcb71643b5489a3998803a1a27c":[0,0,0,14,0,2],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae5e1dbcb71643b5489a3998803a1a27c":[1,0,0,14,0,2],

@@ -18,7 +18,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
     private bool _weighted = false;
 
-    protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
+    protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown)
     {
         Checkers = [];
     }

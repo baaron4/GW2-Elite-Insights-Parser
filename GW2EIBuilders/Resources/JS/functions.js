@@ -963,6 +963,14 @@ function hasDamageMods() {
     return hasOutgoingDamageMods() || hasIncomingDamageMods();
 }
 
+function mechanics() {
+    return logData.mechanicMap;
+}
+
+function mechanicsForSeverity(severity) {
+    return mechanics().filter(x => (x.severity & MechanicSeverity.SeverityMask) === severity);
+}
+
 function playerMechanics() {
     var playerMechanics = [];
     for (var i = 0; i < logData.mechanicMap.length; i++) {
@@ -974,6 +982,10 @@ function playerMechanics() {
     return playerMechanics;
 }
 
+function playerMechanicsForSeverity(severity) {
+    return playerMechanics().filter(x => (x.severity & MechanicSeverity.SeverityMask) === severity);
+}
+
 function enemyMechanics() {
     var enemyMechanics = [];
     for (var i = 0; i < logData.mechanicMap.length; i++) {
@@ -983,6 +995,10 @@ function enemyMechanics() {
         }
     }
     return enemyMechanics;
+}
+
+function enemyMechanicsForSeverity(severity) {
+    return enemyMechanics().filter(x => (x.severity & MechanicSeverity.SeverityMask) === severity);
 }
 
 function hasMechanics() {

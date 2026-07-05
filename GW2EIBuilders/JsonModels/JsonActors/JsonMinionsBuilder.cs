@@ -18,7 +18,8 @@ internal static class JsonMinionsBuilder
     {
         var jsonMinions = new JsonMinions
         {
-            Id = minions.ID
+            Id = minions.ID,
+            IsUniquePerTimeFrame = minions.IsUniquePerTimeFrame,
         };
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
@@ -146,6 +147,7 @@ internal static class JsonMinionsBuilder
             }
             jsonMinions.TargetDamageDist = targetDamageDist;
         }
+        //
         if (log.CombatData.HasEXTHealing && !isEnemyMinion)
         {
             jsonMinions.EXTHealingStats = EXTJsonMinionsHealingStatsBuilder.BuildMinionsHealingStats(minions, log, skillMap, buffMap);

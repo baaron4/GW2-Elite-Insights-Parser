@@ -41,11 +41,46 @@ public class MechanicPlotlySetting
 
 public abstract class Mechanic : MechanicContainer
 {
+    [Flags]
+    public enum MechanicSeverity
+    {
+        Sev0 = 0,
+        Sev1 = 1,
+        Sev2 = 2,
+        Sev3 = 3,
+        Sev4 = 4,
+
+        SeverityMask = Sev0 | Sev1 | Sev2 | Sev3 | Sev4,
+
+        Success = 8,
+        Failure = 16,
+        Neutral = 32,
+
+        Sev0Success = Sev0 | Success,
+        Sev0Failure = Sev0 | Failure,
+        Sev0Neutral = Sev0 | Neutral,
+
+        Sev1Success = Sev1 | Success,
+        Sev1Failure = Sev1 | Failure,
+        Sev1Neutral = Sev1 | Neutral,
+
+        Sev2Success = Sev2 | Success,
+        Sev2Failure = Sev2 | Failure,
+        Sev2Neutral = Sev2 | Neutral,
+
+        Sev3Success = Sev3 | Success,
+        Sev3Failure = Sev3 | Failure,
+        Sev3Neutral = Sev3 | Neutral,
+    }
+
     public readonly int InternalCooldown;
     public readonly MechanicPlotlySetting PlotlySetting;
     public readonly string Description;
     public readonly string ShortName;
     public readonly string FullName;
+
+    public readonly MechanicSeverity Severity;
+
     public bool IsEnemyMechanic { get; protected set; }
     public bool ShowOnTable { get; private set; }
     public bool Ignored { get; private set; }
@@ -66,7 +101,7 @@ public abstract class Mechanic : MechanicContainer
     /// <param name="description">description of the mechanic</param>
     /// <param name="fullName">full name of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
+    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown)
     {
         PlotlySetting = plotlySetting;
         ShortName = shortName;
@@ -74,6 +109,7 @@ public abstract class Mechanic : MechanicContainer
         Description = description;
         InternalCooldown = internalCoolDown;
         ShowOnTable = true;
+        Severity = severity;
         _enableConditions = [];
     }
 

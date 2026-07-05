@@ -1,8 +1,19 @@
 <template>
     <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
         <div class="d-flex align-items-center mb-2 scale85">
-            <input id="followTimeline" type="checkbox" v-model="followTimeline" class="mr-1"/>
+            <input id="followTimeline" type="checkbox" v-model="followTimeline" class="mr-1" />
             <label for="followTimeline" class="mb-0 ml-1">Scroll with timeline</label>
+            <div v-if="!isTouchDevice"
+                 @click="resetMechanic()" class="ml-3 btn btn-small"
+                 :class="{'btn-dark': !light, 'btn-light': light}">
+                 Reset Mechanic Selection
+            </div>
+        </div>
+        <div v-if="Object.keys(displayedSeverities).length > 0"class="d-flex align-items-center mb-2 scale75">
+            <div v-for="displayedSeverity in displayedSeverities" class="form-check mb-2 mr-2">
+                <input :id="displayedSeverity.id" type="checkbox" v-model="displayedSeverity.display"/>
+                <label :for="displayedSeverity.id" class="mb-0">{{displayedSeverity.name}}</label>
+            </div>
         </div>
         <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
              style="max-width:450px; overflow-y:auto;">
@@ -17,7 +28,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Mechanics">
                                     Mechanic <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
+                                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown">
                                     <li class="d-flex flex-column justify-content-center align-items-center mb-1">
                                         <button style="width:165px;padding: 0.25rem 1rem;" type="button" class="btn btn-primary btn-sm"
                                                 @click="selectAllMechanics()" @click.stop="stopClickEvent">
@@ -30,11 +41,11 @@
                                             Deselect all mechanics
                                         </button>
                                     </li>
-                                    <li v-for="(mechanic, index) in mechanicsList" :key="index">
-                                        <input :id="'crml-mechanic-' + index" type="checkbox" v-model="mechanic.included"
+                                    <li v-for="(mechanic, index) in filteredMechanicsList" :key="index">
+                                        <input :id="'crml-mechanic-' + index" type="checkbox" v-model="mechanic.displayed"
                                                @click.stop="stopClickEvent" />
                                         <label :for="'crml-mechanic-' + index" @click.stop="stopClickEvent">
-                                            {{mechanic.shortName}}
+                                            {{mechanic.name}}
                                         </label>
                                     </li>
                                 </ul>
@@ -45,7 +56,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Actors">
                                     Actor <span class="caret"></span>
                                 </a>
-                                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-150px">
+                                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown">
                                     <li class="d-flex flex-column justify-content-center align-items-center mb-1">
                                         <button style="width:140px;padding: 0.25rem 1rem;" type="button" class="btn btn-primary btn-sm"
                                                 @click="selectAllActors()" @click.stop="stopClickEvent">
@@ -59,7 +70,7 @@
                                         </button>
                                     </li>
                                     <li v-for="(actor, index) in actorsList" :key="index">
-                                        <input :id="'crml-actor-' + index" type="checkbox" v-model="actor.included"
+                                        <input :id="'crml-actor-' + index" type="checkbox" v-model="actor.displayed"
                                                @click.stop="stopClickEvent" />
                                         <label :for="'crml-actor-' + index" @click.stop="stopClickEvent">
                                             {{actor.name}}
@@ -72,10 +83,20 @@
                 </thead>
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
-                        :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
-                        <td :data-original-title="'Timestamp'">{{numberFormater(event.time / 1000, 2, 2)}}s</td>
-                        <td class="text-left" :data-original-title="event.mechanic.name">{{event.mechanic.shortName}}</td>
-                        <td class="text-left">
+                        :class="{active: event.actor.id === selectedactorid}" @click="selectMechanic(event)">
+                        <td :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                    reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
+                                :data-original-title="'Timestamp'">
+                                {{numberFormater(event.time / 1000, 2, 2)}}s
+                        </td>
+                        <td class="text-left mech-cell" 
+                            :class="{'mech-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name}" 
+                            :data-original-title="event.mechanic.description">
+                            {{event.mechanic.name}}
+                        </td>
+                        <td class="text-left"
+                            :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
+                                reactiveAnimationData.selectedMechanic.actorId === event.actor.id}">
                             <span class="cr-ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
                             </span>
@@ -89,26 +110,26 @@
 
 <script>
     Vue.component("combat-replay-mechanics-list-component", {
-        props: ['time', 'selectedplayerid'],
+        props: ['time', 'light', 'selectedactorid'],
         template: `${template}`,
         data: function () {
-            var mechanicEvents = [];
-            var phase = logData.phases[0];
-            var phaseTargets = phase.targets;
-            for (var mechI = 0; mechI < graphData.mechanics.length; mechI++) {
-                var graphMechData = graphData.mechanics[mechI];
-                var logMechData = logData.mechanicMap[mechI];
-                var mechData = { name: logMechData.name, shortName: logMechData.shortName };
-                var pointsArray = graphMechData.points[0];
-                var icd = logMechData.icd;
+            const mechanicEvents = [];
+            const phase = logData.phases[0];
+            const phaseTargets = phase.targets;
+            for (let mechI = 0; mechI < graphData.mechanics.length; mechI++) {
+                const graphMechData = graphData.mechanics[mechI];
+                const logMechData = logData.mechanicMap[mechI];
+                const mechData = { name: logMechData.name, shortName: logMechData.shortName, severity: logMechData.severity };
+                const pointsArray = graphMechData.points[0];
+                const icd = logMechData.icd;
                 // players
                 if (!logMechData.enemyMech) {
-                    for (var playerI = 0; playerI < pointsArray.length; playerI++) {
-                        var lastTime = -1000000;
-                        var points = pointsArray[playerI];
-                        var player = logData.players[playerI];
-                        for (var i = 0; i < points.length; i++) {
-                            var time = points[i][0] * 1000; // when mechanic occured in seconds
+                    for (let playerI = 0; playerI < pointsArray.length; playerI++) {
+                        let lastTime = -1000000;
+                        const points = pointsArray[playerI];
+                        const player = logData.players[playerI];
+                        for (let i = 0; i < points.length; i++) {
+                            const time = points[i][0] * 1000; // when mechanic occured in seconds
                             if (icd === 0 || (time - lastTime > icd)) {
                                 mechanicEvents.push({
                                     time: time,
@@ -121,27 +142,27 @@
                     }
                 } else {
                     // enemy
-                    for (var targetI = 0; targetI < pointsArray.length; targetI++) {
-                        var points = pointsArray[targetI];
-                        var tarId = phaseTargets[targetI];
+                    for (let targetI = 0; targetI < pointsArray.length; targetI++) {
+                        const points = pointsArray[targetI];
+                        const tarId = phaseTargets[targetI];
                         // target tracked in phase
                         if (tarId >= 0) {
-                            var target = logData.targets[tarId];
-                            for (var i = 0; i < points.length; i++) {
-                                var time = points[i][0]; // when mechanic occured in seconds
+                            const target = logData.targets[tarId];
+                            for (let i = 0; i < points.length; i++) {
+                                const time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: target.name, enemy: true, id: -1 }, // target selection not supported
+                                    actor: { name: target.name, enemy: true, id: target.uniqueID }, // target selection not supported
                                     mechanic: mechData,
                                 });
                             }
                         } else {
                             // target not tracked in phase
-                            for (var i = 0; i < points.length; i++) {
-                                var time = points[i][0]; // when mechanic occured in seconds
+                            for (let i = 0; i < points.length; i++) {
+                                const time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
-                                    actor: { name: points[i][1], enemy: true, id: -1 },
+                                    actor: { name: points[i][1], enemy: true, id: points[i][2] },
                                     mechanic: mechData,
                                 });
                             }
@@ -154,35 +175,62 @@
                 return a.time - b.time;
             });
 
-            var actors = {};
-            var mechanics = {};
-            for (var i = 0; i < mechanicEvents.length; i++) {
-                var event = mechanicEvents[i];
-                var mechName = event.mechanic.name;
-                var actorName = event.actor.name;
-                if (!mechanics[mechName]) {
-                    mechanics[mechName] = Object.assign({}, event.mechanic, { included: true });
-                }
-                if (!actors[actorName]) {
-                    actors[actorName] = Object.assign({}, event.actor, { included: true });
+            let severities = [
+                MechanicSeverity.Sev0,
+                MechanicSeverity.Sev1,
+                MechanicSeverity.Sev2,
+                MechanicSeverity.Sev3,
+                MechanicSeverity.Sev4,
+            ];
+            let displayedSeverities = {
+            };
+            let trueCount = 0;
+            for (let i = 0; i < severities.length; i++) {
+                const sev = severities[i];
+                if (mechanicsForSeverity(sev).length > 0) {
+                    displayedSeverities[sev] = {
+                        id: "sev-" + sev,
+                        display: trueCount++ === 0 || sev <= MechanicSeverity.Sev1,
+                        name: MechanicSeverityToName[sev],
+                    };
                 }
             }
 
-            var actorsList = Object.values(actors); // could be sorted for more clarity
+            const actors = {};
+            const mechanics = {};
+            for (let i = 0; i < mechanicEvents.length; i++) {
+                const event = mechanicEvents[i];
+                const mechanic = event.mechanic;
+                const mechName = mechanic.name;
+                const actorName = event.actor.name;
+                if (!mechanics[mechName]) {
+                    mechanics[mechName] = Object.assign({}, event.mechanic, { displayed: true});
+                }
+                if (!actors[actorName]) {
+                    actors[actorName] = Object.assign({}, event.actor, { displayed: true });
+                }
+            }
+
+            const actorsList = Object.values(actors); // could be sorted for more clarity
             actorsList.sort(function (a, b) {
                 if (a.enemy !== b.enemy) {
-                    // Sort enemies before players
-                    return a.enemy ? -1 : 1;
+                    // Sort enemies after players
+                    return a.enemy ? 1 : -1;
                 }
                 return a.name.localeCompare(b.name);
             });
 
-            var mechanicsList = Object.values(mechanics);
+            const mechanicsList = Object.values(mechanics);
             mechanicsList.sort(function (a, b) {
-                return a.shortName.localeCompare(b.shortName);
+                if (a.enemy !== b.enemy) {
+                    // Sort enemies after players
+                    return a.enemy ? 1 : -1;
+                }
+                return a.name.localeCompare(b.name);
             });
 
             return {
+                isTouchDevice: isTouchDevice,
                 mechanicEvents: mechanicEvents,
                 actors: actors,
                 actorsList: actorsList,
@@ -191,6 +239,8 @@
                 scrollTop: 0,
                 div: null,
                 followTimeline: false,
+                reactiveAnimationData: reactiveAnimationData,
+                displayedSeverities: displayedSeverities,
             };
         },
         activated() {
@@ -209,28 +259,46 @@
                 this.followTimeline = false;
                 animator.stopAnimate(true);
                 animator.updateTime(mechanic.time);
+
+                // Deselection
+                if (reactiveAnimationData.selectedMechanic.actorId == mechanic.actor.id &&
+                    reactiveAnimationData.selectedMechanic.name == mechanic.mechanic.name) {
+                    this.resetMechanic();
+                    return;
+                }
+
+                // Selection
+                reactiveAnimationData.selectedMechanic.actorId = mechanic.actor.id;
+                reactiveAnimationData.selectedMechanic.name = mechanic.mechanic.name;
+                reactiveAnimationData.selectedMechanic.times =
+                    this.mechanicEvents
+                        .filter(event =>
+                            event.actor.id === mechanic.actor.id &&
+                            event.mechanic.name === mechanic.mechanic.name)
+                        .map(event => event.time);
+                reactiveAnimationData.selectedMechanic.actorName = mechanic.actor.name;
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();
             },
             selectAllMechanics: function () {
-                for (var i = 0; i < this.mechanicsList.length; i++) {
-                    this.mechanicsList[i].included = true;
+                for (let i = 0; i < this.mechanicsList.length; i++) {
+                    this.mechanicsList[i].displayed = true;
                 }
             },
             selectAllActors: function () {
-                for (var i = 0; i < this.actorsList.length; i++) {
-                    this.actorsList[i].included = true;
+                for (let i = 0; i < this.actorsList.length; i++) {
+                    this.actorsList[i].displayed = true;
                 }
             },
             deselectAllMechanics: function () {
-                for (var i = 0; i < this.mechanicsList.length; i++) {
-                    this.mechanicsList[i].included = false;
+                for (let i = 0; i < this.mechanicsList.length; i++) {
+                    this.mechanicsList[i].displayed = false;
                 }
             },
             deselectAllActors: function () {
-                for (var i = 0; i < this.actorsList.length; i++) {
-                    this.actorsList[i].included = false;
+                for (let i = 0; i < this.actorsList.length; i++) {
+                    this.actorsList[i].displayed = false;
                 }
             },
             scrollToClosestEvent: function (time) {
@@ -261,20 +329,43 @@
 
                 container.scrollTop = targetScroll;
             },
+            resetMechanic() {
+                reactiveAnimationData.selectedMechanic = {
+                    actorId: null,
+                    actorName: null,
+                    name: null,
+                    times: [],
+                };
+            },
         },
         computed: {
             filteredMechanicEvents: function () {
                 return this.mechanicEvents.filter(function (event) {
-                    var actor = this.actors[event.actor.name];
-                    var mechanic = this.mechanics[event.mechanic.name];
-                    if (actor && !actor.included) {
+                    const severity = (event.mechanic.severity & MechanicSeverity.SeverityMask);
+                    if (!this.displayedSeverities[severity].display) {
                         return false;
                     }
-                    if (mechanic && !mechanic.included) {
+                    const mechanic = this.mechanics[event.mechanic.name];
+                    if (mechanic && !mechanic.displayed) {
+                        return false;
+                    }
+                    const actor = this.actors[event.actor.name];
+                    if (actor && !actor.displayed) {
                         return false;
                     }
                     return true;
                 }.bind(this))
+            },
+            filteredMechanicsList: function() {
+                let result = [];
+                for (let i = 0; i< this.mechanicsList.length; i++) {
+                    const mech = this.mechanicsList[i];           
+                    const severity = (mech.severity & MechanicSeverity.SeverityMask);
+                    if (this.displayedSeverities[severity].display) {
+                        result.push(mech);
+                    }
+                }
+                return result;
             },
         },
         watch: {

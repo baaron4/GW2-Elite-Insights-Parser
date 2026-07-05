@@ -6,7 +6,7 @@ public abstract class StringBasedMechanic<Checkable> : CheckedMechanic<Checkable
 
     protected readonly HashSet<GUID> MechanicIDs = [];
 
-    protected StringBasedMechanic(ReadOnlySpan<GUID> mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
+    protected StringBasedMechanic(ReadOnlySpan<GUID> mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown)
     {
         MechanicIDs.ReserveAdditional(mechanicIDs.Length);
         for(int i = 0; i < mechanicIDs.Length; i++)

@@ -625,6 +625,9 @@ partial class CombatData
                 var pointGadgetCapture = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
                 Add(statusEvents.GadgetCapturePointCombatItemsBySrc, pointGadgetCapture, stateChangeEvent);
                 break;
+            case StateChange.Tick:
+                metaDataEvents.TickEvents.Add(new TickEvent(stateChangeEvent));
+                break;
             default:
                 break;
         }
@@ -636,11 +639,7 @@ partial class CombatData
         {
             if (buffEvent.IsStateChange == StateChange.BuffChange)
             {
-                var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
-                if (extensionEvent.ExtendedDuration > 0)
-                {
-                    buffEvents.Add(extensionEvent);
-                }
+                buffEvents.Add(new BuffExtensionEvent(buffEvent, agentData, skillData));
             } 
             else
             {

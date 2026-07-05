@@ -52,7 +52,7 @@ public class CombatItem
         || IsStateChange == StateChange.GWBuild || IsStateChange == StateChange.InstanceStart 
         || IsStateChange == StateChange.LogNPCUpdate || IsStateChange == StateChange.FractalScale 
         || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID 
-        || IsStateChange == StateChange.RuleSet
+        || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.Tick
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart 
         || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams;
 
@@ -160,6 +160,7 @@ public class CombatItem
             || IsStateChange == StateChange.MapID
             || IsStateChange == StateChange.MapChange
             || IsStateChange == StateChange.WvWObjectiveStatus
+            || IsStateChange == StateChange.Tick
             ;
     }
 

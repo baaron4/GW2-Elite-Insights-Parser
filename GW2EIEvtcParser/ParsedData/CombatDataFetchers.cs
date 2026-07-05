@@ -206,6 +206,11 @@ partial class CombatData
         return _metaDataEvents.TickRateEvents;
     }
 
+    public IReadOnlyList<TickEvent> GetTickEvents()
+    {
+        return _metaDataEvents.TickEvents;
+    }
+
     #region MARKERS
 
     /// <summary>

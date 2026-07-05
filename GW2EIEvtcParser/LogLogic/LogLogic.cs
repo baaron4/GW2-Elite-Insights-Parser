@@ -1,15 +1,21 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Decoration;
+using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -93,32 +99,32 @@ public abstract class LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a))
+                        new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", Sev0, 0, (log, a) => log.CombatData.GetDeadEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<DownEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a))
+                        new PlayerStatusMechanic<DownEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", Sev0, 0, (log, a) => log.CombatData.GetDownEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<AliveEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a))
+                        new PlayerStatusMechanic<AliveEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", Sev1, 0, (log, a) => log.CombatData.GetAliveEvents(a))
                             .UsingNoShowOnTable(),
                     ]
                 ),
-                new PlayerCastStartMechanic(SkillIDs.Resurrect, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res", 0)
+                new PlayerCastStartMechanic(SkillIDs.Resurrect, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res", Sev2, 0)
                     .UsingNoShowOnTable(),
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DespawnEvent>(new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a))
+                        new PlayerStatusMechanic<DespawnEvent>(new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", Sev4, 0, (log, a) => log.CombatData.GetDespawnEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<SpawnEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a))
+                        new PlayerStatusMechanic<SpawnEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", Sev4, 0, (log, a) => log.CombatData.GetSpawnEvents(a))
                             .UsingNoShowOnTable()
                     ]
                 ),
                 new MechanicGroup(
                     [
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), "Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...) ", 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), "Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked", 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), "Knck.Dwn", "Knocked Down", "Knocked Down", Sev4, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), "Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled", Sev4, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), "Flt", "Float", "Float", Sev4, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), "Lnch", "Launched", "Launched", Sev4, 0),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), "Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...) ", Sev4, 0),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), "Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked", Sev4, 0),
                     ]
                 ),
             ])
@@ -510,6 +516,92 @@ public abstract class LogLogic
                 if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
                     environmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
+                }
+            }
+        }
+        foreach (var gadgetCapture in log.CombatData.GetGadgetCaptureEvents())
+        {
+            var src = gadgetCapture.Src;
+            if (src.TryGetCurrentPosition(log, gadgetCapture.Time, out var position))
+            {
+                var positionConnector = new PositionConnector(position.Value);
+                if (gadgetCapture.Progress.Count > 0)
+                {
+                    uint barSize = 0;
+                    IReadOnlyList<Vector3> relativePositions = new List<Vector3>();
+                    if (gadgetCapture.IsCircle)
+                    {
+                        barSize = (uint)(gadgetCapture.Radius / 1.5);
+                    }
+                    else
+                    {
+                        relativePositions = gadgetCapture.GetRelativePoints(position.Value);
+                        barSize = (uint)(relativePositions.Sum(x => x.Length()) / (1.5 * relativePositions.Count));
+                    }
+                    // Initial state to first progress
+                    {
+                        var lifespan = (gadgetCapture.Time, gadgetCapture.Progress[0].Time);
+                        var color = GadgetCaptureEvent.GetColor(gadgetCapture.OriginalOwner);
+                        if (gadgetCapture.IsCircle)
+                        {
+                            environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        else
+                        {
+                            environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                    }
+                    // Progresses
+                    for (var i = 0; i < gadgetCapture.Progress.Count; i++)
+                    {
+                        var progress = gadgetCapture.Progress[i];
+                        var color = GadgetCaptureEvent.GetColor(progress.By);
+                        var fromColor = GadgetCaptureEvent.GetColor(progress.From);
+                        double progressValue = progress.Progress;
+                        var addProgressBar = true;
+                        if (progressValue == 100)
+                        {
+                            // Not being capped
+                            color = fromColor;
+                            addProgressBar = false;
+                        }
+                        else if (progressValue == 0)
+                        {
+                            // Capped
+                            fromColor = color;
+                            addProgressBar = false;
+                        }
+
+                        var lifespan = (progress.Time, i < gadgetCapture.Progress.Count - 1 ? gadgetCapture.Progress[i + 1].Time : gadgetCapture.EndTime);
+                        if (gadgetCapture.IsCircle)
+                        {
+                            environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        else
+                        {
+                            environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                        }
+                        if (addProgressBar)
+                        {
+                            environmentDecorations.Add(new ProgressBarDecoration(barSize, 30, lifespan, fromColor, 0.2, color, 0.6, [(progress.Time, progressValue)], positionConnector));
+
+                        }
+                    }
+                }
+                else
+                {
+                    // should not happen, but as a safety net
+                    var lifespan = (gadgetCapture.Time, gadgetCapture.EndTime);
+                    var color = GadgetCaptureEvent.GetColor(gadgetCapture.OriginalOwner);
+                    if (gadgetCapture.IsCircle)
+                    {
+                        environmentDecorations.Add(new CircleDecoration((uint)gadgetCapture.Radius, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                    }
+                    else
+                    {
+                        var relativePositions = gadgetCapture.GetRelativePoints(position.Value);
+                        environmentDecorations.Add(new CustomPolygonDecoration(relativePositions, lifespan, color, 0.3, positionConnector).UsingFilled(false));
+                    }
                 }
             }
         }

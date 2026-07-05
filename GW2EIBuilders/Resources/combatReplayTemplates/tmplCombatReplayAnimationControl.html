@@ -133,6 +133,18 @@
                                 </text>
                             </g>
 
+                            <!-- Mechanics ticks -->
+                            <g v-for="tick in playerMechanicTicks">
+                                <line :x1="tick.x" y1="15" :x2="tick.x" y2="25"
+                                      :stroke="timelineColors.mechanic" />
+                                <!-- Top -->
+                                <line :x1="tick.x - 1" y1="15" :x2="tick.x + 1" y2="15"
+                                      :stroke="timelineColors.mechanic" />
+                                <!-- Bottom -->
+                                <line :x1="tick.x - 1" y1="25" :x2="tick.x + 1" y2="25"
+                                      :stroke="timelineColors.mechanic" />
+                            </g>
+
                             <!-- Moving time -->
                             <g v-if="isHoveringTimeline">
                                 <rect :x="timeToX(hoverTime) - 18"
@@ -169,17 +181,32 @@
                     <img class="icon mr-2" :src="UIIcons.QuestionMark"
                          data-original-title="You can click on the canvas to select agents" />
                     <div @click="toggleAnimate();" class="btn btn-small"
-                         :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;">
+                         :class="{'btn-dark': !light, 'btn-light': light}" style="width: 50px;"
+                         data-original-title="Play / pause animation">
                         {{ animated ? "Pause" : "Play "}}
                     </div>
                     <div @click="restartAnimate();" class="btn btn-small"
-                         :class="{'btn-dark': !light, 'btn-light': light}">
+                         :class="{'btn-dark': !light, 'btn-light': light}"
+                         data-original-title="Reset back to start">
                         Restart
                     </div>
                     <div @click="toggleBackwards();" class="btn btn-small"
-                         :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
+                         :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}"
+                         data-original-title="Play animation backwards">
+                        Backwards
+                    </div>
                     <div @click="resetViewpoint();" class="btn btn-small"
-                         :class="{'btn-dark': !light, 'btn-light': light}">Reset Viewpoint</div>
+                         :class="{'btn-dark': !light, 'btn-light': light}"
+                         data-original-title="Reset canvas position">
+                        Reset Viewpoint
+                    </div>
+                    <div v-if="!isTouchDevice && isMechanicSelected"
+                         id="mechReset"
+                         @click="resetMechanic();" class="btn btn-small"
+                         :class="{'btn-dark': !light, 'btn-light': light}"
+                         data-original-title="Remove mechanic ticks from timeline">
+                        Reset Mechanic
+                    </div>
                     <input v-if="!isTouchDevice" style="width: 100px; text-align: right;" class="ml-3 mr-1" type="number" step="0.001"
                            :id="htmlElementIDs.timeRangeDisplayID" value="0"
                            @input="updateInputTime($event.target.value);">
@@ -257,6 +284,7 @@
                 blockDragCursor: false,
                 phaseDoubleClickTimeout: null, 
                 dragThroughPhaseBlockTimeout: null,
+                animationData: reactiveAnimationData,
             };
         },
         watch: {
@@ -425,6 +453,7 @@
                         cursor: "#ff6b6b",
                         background: "#f8f9fa",
                         backgroundBorder: "#dee2e6",
+                        mechanic: "#ff8a9d",
                     };
                 } else {
                     return {
@@ -433,9 +462,21 @@
                         cursor: "#ff6b6b",
                         background: "#2C3035",
                         backgroundBorder: "#3e444c",
+                        mechanic: "#ff8a9d",
                     };
                 }
             },
+            playerMechanicTicks() {
+                return this.animationData.selectedMechanic.times.map(
+                    time => ({
+                        x: this.timeOffsetedToX(time / 1000),
+                        time: time
+                    })
+                );
+            },
+            isMechanicSelected() {
+                return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
+            }
         },
         methods: {
             updateAnimatorTimes(phase) {
@@ -484,7 +525,21 @@
             },
             getFormattedPhaseText: function (phase) {              
                 const offset = (this.range.min / 1000);
-                return this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
+                var res = this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
+                if (this.animationData.selectedMechanic.name != null) {
+                    res += ' | ' + this.animationData.selectedMechanic.name + ' (' + this.animationData.selectedMechanic.actorName + ')';
+                }
+                return res;
+            },
+            resetMechanic: function () {
+                $('#mechReset').tooltip('hide');
+
+                this.animationData.selectedMechanic = {
+                    actorId: null,
+                    actorName: null,
+                    name: null,
+                    times: [],
+                };
             },
             updatePhaseTime: function (phase) {
                 this.selectedPhase = phase;

@@ -940,7 +940,7 @@ public static class SkillItemOverrides
             { EvilEye, SkillImages.EvilEyeDemon },
             { TormentingVisionSpinegazer, SkillImages.TormentingVisionSpinegazer },
             { WolfsOnslaughtFollowUp, SkillImages.WolfsOnslaught },
-            { EletroctuteSkyChak, SkillImages.EletroctuteJuvenileSkyChak },
+            { Electrocute_SkyChak, SkillImages.Electrocute_JuvenileSkyChak },
             { EvasivePurity, TraitImages.EvasivePurity },
             { SpitGoopSkyChak, SkillImages.SpitGoopSkyChak },
             { UnleashEnergySkyChak, SkillImages.UnleashEnergySkyChak },

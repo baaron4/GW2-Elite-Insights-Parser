@@ -108,7 +108,7 @@
 
 <script>
     Vue.component("simplerotation-component", {
-        props: ["actorindex", "phaseindex", "target"],
+        props: ["actorindex", "minionindex", "phaseindex", "target"],
         template: `${template}`,
         mixins: [UIIconsComponent],
         data: function () {
@@ -118,7 +118,7 @@
             for (let phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
                 const skillList = [];
                 const castCounts = {};
-                const rotation = this.target ? logData.targets[this.actorindex].details.rotation[phaseIndex] : logData.players[this.actorindex].details.rotation[phaseIndex];
+                const rotation = this.getRotationData(phaseIndex);
                 for (var i = 0; i < rotation.length; i++) {
                     const rota = rotation[i];
                     const skillID = rota[1];
@@ -169,10 +169,9 @@
         },
         computed: {
             rotation: function () {
-                var data = this.target ? logData.targets : logData.players;
                 var globalCast = 0;
                 var individualCasts = {};
-                return data[this.actorindex].details.rotation[this.phaseindex].map((cast) => {
+                return this.getRotationData(this.phaseindex).map((cast) => {
                     var skillID = cast[1];
                     if (typeof individualCasts[skillID] !== "number") {
                         individualCasts[skillID] = 0;
@@ -197,9 +196,16 @@
             },
             castCounts: function () {
                 return this.phaseData[this.phaseindex].castCounts;
-            }
+            },
         },
         methods: {
+            getActor: function() {
+                return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+            },
+            getRotationData(phaseIndex) {
+                const minionIndex = this.minionindex;
+                return minionIndex >= 0 ? this.getActor().details.minions[minionIndex].rotation[phaseIndex] :  this.getActor().details.rotation[phaseIndex];
+            },
             stopClickEvent: function (event) {
                 event.stopPropagation();
             },
