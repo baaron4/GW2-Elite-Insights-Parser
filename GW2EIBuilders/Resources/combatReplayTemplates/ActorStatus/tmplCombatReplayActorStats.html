@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <div v-if="buffs">
+        <div v-if="buffs" class="mb-1">
             <combat-replay-actor-buff v-if="isPresent('Encounter Specifics')" :buffarray="data.encounterSpecifics" />
             <combat-replay-actor-buff v-if="isPresent('Others')" :buffarray="data.others" />
             <combat-replay-actor-buff v-if="isPresent('Conditions')" :buffarray="data.conditions" />
@@ -17,7 +17,7 @@
 
 <script>
     Vue.component("combat-replay-actor-stats-component", {
-        mixins: [timeRefreshComponent],
+        mixins: [timeRefreshComponent, encounterPhaseComponent],
         props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation"],
         template: `${template}`,
         methods: {
@@ -29,6 +29,9 @@
             actor: function () {
                 return this.isTarget ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
             },
+            boonGraph: function() {
+                return this.actor.details.boonGraph[this.encounterPhase.id];
+            },
             data: function () {
                 const res = {
                     shared: [],
@@ -38,8 +41,9 @@
                     others: [],
                     consumables: []
                 };
-                for (const { id, states } of this.actor.details.boonGraph[0]) {
-                    const state = findState(states, this.timeToUse / 1000, 0, states.length - 1);
+                const time = this.timeToUse / 1000 - this.encounterPhase.start;
+                for (const { id, states } of this.boonGraph) {
+                    const state = findState(states, time, 0, states.length - 1);
                     if (!state) {
                         continue;
                     }

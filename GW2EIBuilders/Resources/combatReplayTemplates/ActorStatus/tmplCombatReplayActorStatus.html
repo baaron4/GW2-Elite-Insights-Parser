@@ -27,6 +27,7 @@
 
 <script>
     Vue.component("combat-replay-actor-status-component", {
+        mixins: [encounterPhaseComponent],
         props: ["isTarget", "actorIndex", "time"],
         template: `${template}`,
         methods: {
@@ -44,7 +45,11 @@
                 if (!state) {
                     return 100;
                 }
-                return findState(state, time / 1000.0, 0, state.length - 1);
+                let timeToUse = time / 1000.0;
+                if (!this.isTarget) {
+                    timeToUse -= this.encounterPhase.start;
+                }
+                return findState(state, timeToUse, 0, state.length - 1);
             },
             getActorGradient: function (time, status) {
                 const color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
@@ -77,9 +82,6 @@
             }
         },
         computed: {
-            phase: function () {
-                return logData.phases[0];
-            },
             status: function () {
                 var crPData = animator.getActorData(this.actor.uniqueID);
                 var icon = crPData.getIcon(this.time);
@@ -97,14 +99,14 @@
                     return graphData.phases[0].targetsHealthStatesForCR[this.actorIndex];
                 }
 
-                return graphData.phases[0].players[this.actorIndex].healthStates;
+                return graphData.phases[this.encounterPhase.id].players[this.actorIndex].healthStates;
             },
             barriers: function () {
                 if (this.isTarget) {
                     return graphData.phases[0].targetsBarrierStatesForCR[this.actorIndex];
                 }
 
-                return graphData.phases[0].players[this.actorIndex].barrierStates;
+                return graphData.phases[this.encounterPhase.id].players[this.actorIndex].barrierStates;
             },
             breakbar: function () {
                 if (this.isTarget) {
