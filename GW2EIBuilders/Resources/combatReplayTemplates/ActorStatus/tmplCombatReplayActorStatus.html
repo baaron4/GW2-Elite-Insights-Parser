@@ -1,6 +1,7 @@
 ﻿<template>
     <div class="text-white" @click="select">
-        <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}">
+        <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
+            :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
             <p class="mb-0 scale65">
                 {{percentageFormater(healths, time)}} %
             </p>
