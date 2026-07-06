@@ -15,15 +15,14 @@
                 <label :for="displayedSeverity.id" class="mb-0">{{displayedSeverity.name}}</label>
             </div>
         </div>
-        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
-             style="max-width:450px; overflow-y:auto;">
+        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row w-100 scrollable-y">
             <table class="table table-sm table-striped table-hover mb-0" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th class="sticky-header wd-100px">
+                        <th class="sticky-header combat-replay-mechanics-list-time-header">
                             <div class="position-relative">Time</div>
                         </th>
-                        <th class="sticky-header text-left combat-replay-mechanics-list-header wd-200px">
+                        <th class="sticky-header text-left combat-replay-mechanics-list-header combat-replay-mechanics-list-mech-header">
                             <div class="position-relative">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Mechanics">
                                     Mechanic <span class="caret"></span>
@@ -51,7 +50,7 @@
                                 </ul>
                             </div>
                         </th>
-                        <th class="sticky-header text-left combat-replay-mechanics-list-header wd-150px">
+                        <th class="sticky-header text-left combat-replay-mechanics-list-header combat-replay-mechanics-list-actor-header">
                             <div class="position-relative">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Actors">
                                     Actor <span class="caret"></span>
@@ -100,6 +99,14 @@
                             <span class="cr-ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
                             </span>
+                        </td>
+                    </tr>
+                    <tr v-for="event in paddedMechanics" class="combat-replay-mechanics-list-row">
+                        <td>
+                        </td>
+                        <td class="text-left mech-cell" >
+                        </td>
+                        <td class="text-left">
                         </td>
                     </tr>
                 </tbody>
@@ -366,6 +373,14 @@
                     }
                 }
                 return result;
+            },
+            // The drop downs look super bad on an empty array
+            paddedMechanics: function() {
+                const maxPadSize = 15;
+                if (this.filteredMechanicEvents.length < maxPadSize) {
+                    return new Array(maxPadSize - this.filteredMechanicEvents.length);
+                }
+                return [];
             },
         },
         watch: {

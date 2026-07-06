@@ -731,6 +731,8 @@ canvas {
 
 .combat-replay-mechanics-list-container {
     max-height: 800px;
+    max-width:450px; 
+    overflow-y:auto;
 }
 
 .combat-actor-status-container {
@@ -744,6 +746,16 @@ canvas {
 
 .combat-replay-mechanics-list-header > a:hover {
     text-decoration: none;
+}
+
+.combat-replay-mechanics-list-mech-header {
+    width: 250px;
+}
+.combat-replay-mechanics-list-time-header {
+    width: 70px;
+}
+.combat-replay-mechanics-list-actor-header {
+    width: 130px;
 }
 .sticky-header {
     position: sticky;
