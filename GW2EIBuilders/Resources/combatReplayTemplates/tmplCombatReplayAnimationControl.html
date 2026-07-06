@@ -306,7 +306,7 @@
             const encounterPhase = this.encounterPhase;
             this.updateAnimatorTimes(encounterPhase);
             this.resetViewpoint();
-            this.selectedPhase = this.phases[0];
+            this.selectedPhase = this.normalPhases[0];
             animationControlComponent = this;
         },
         computed: {
@@ -553,7 +553,8 @@
                 this.updateTime(min - offset);
             },
             updateInputTime: function (value) {
-                animator.updateInputTime(value);
+                const offset = this.range.min;
+                animator.updateInputTime(value, offset);
             },
             timeToX(time) {
                 time = time || this.minTime;
