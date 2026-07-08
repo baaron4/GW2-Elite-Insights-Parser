@@ -180,7 +180,7 @@ internal class Skorvald : ShatteredObservatory
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         skorvald.OverrideName("Skorvald");
-        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
+        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 1))
         {
             // Remove manual scale from T1 to T3 for now
             combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);

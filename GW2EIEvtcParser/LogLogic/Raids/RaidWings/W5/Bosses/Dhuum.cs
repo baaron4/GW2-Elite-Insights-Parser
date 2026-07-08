@@ -375,7 +375,7 @@ internal class Dhuum : HallOfChains
     {
         // There are other gadgets with MaxHP 0, Width 16.
         var candidates = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) <= 1)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
             .Distinct()
