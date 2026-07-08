@@ -12,6 +12,8 @@ public static class SkillItemOverrides
         { Resurrect, "Resurrect" },
         { Resurrect2, "Resurrect" },
         { Bandage, "Bandage" },
+        { WeaponStow, "Weapon Stow" },
+        { WeaponDraw, "Weapon Draw" },
 #region ArcDPS
         { ArcDPSDodge, "Dodge" },
         { ArcDPSDodge20220307, "Dodge" },
