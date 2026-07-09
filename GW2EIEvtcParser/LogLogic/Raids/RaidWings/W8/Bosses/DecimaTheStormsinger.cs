@@ -263,7 +263,13 @@ internal class DecimaTheStormsinger : MountBalrior
         // Final phases + Boulder phases
         if (isCM)
         {
-            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem) && encounterPhase.InInterval(x.Time));
+            var sortedBoulders = targets
+                .Where(x => x.IsSpecies(TargetID.TranscendentBoulder) && encounterPhase.InInterval(x.FirstAware))
+                .OrderBy(x => x.FirstAware)
+                .ToList();
+            var finalSeismicJumpEvent = log.CombatData
+                .GetBuffApplyDataByIDByDst(SeismicRepositionInvul, decima.AgentItem)
+                .FirstOrDefault(x => !sortedBoulders.Any(y => y.InAwareTimes(x.Time - 5000, x.Time + 1000)) && encounterPhase.InInterval(x.Time));
             if (finalSeismicJumpEvent != null)
             {
                 var p3 = mainPhases[^1];
@@ -271,7 +277,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 preFinalPhase.AddParentPhase(p3);
                 preFinalPhase.AddTarget(decima, log);
                 phases.Add(preFinalPhase);
-                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByIDByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
+                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByIDByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => x.Time >= finalSeismicJumpEvent.Time && encounterPhase.InInterval(x.Time));
                 if (finalPhaseStartEvent != null)
                 {
                     var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, p3.End, "10% - 0%");
@@ -280,7 +286,6 @@ internal class DecimaTheStormsinger : MountBalrior
                     phases.Add(finalPhase);
                 }
             }
-            var sortedBoulders = targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder) && encounterPhase.InInterval(x.FirstAware)).OrderBy(x => x.FirstAware);
             var firstBoulders = sortedBoulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {
