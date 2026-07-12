@@ -1,18 +1,11 @@
 <template>
     <div>
         <div v-if="actor !== null" class="mb-1 mt-1">
-            <div v-if="isminion">
-                <p style="display: table-row;">
-                    {{actor.name}} did {{round3(100*healingdist.contributedHealing/healingdist.totalHealing)}}% of its master's total
-                    {{istarget ? 'Target' :''}} healing ({{healingdist.contributedHealing}})
-                </p>
-            </div>
-            <div v-else>
-                <p style="display: table-row;">
-                    {{actor.name}} did {{round3(100*healingdist.contributedHealing/healingdist.totalHealing)}}% of their total {{istarget ?
-                        'Target' :''}} healing ({{healingdist.contributedHealing}})
-                </p> 
-            </div>
+            <p style="display: table-row;">
+                {{ actor.name }} did {{ percentFormater(round3(barrierdist.contributedBarrier / barrierdist.totalBarrier)) }}
+                {{ isminion ? "of its master's total" : 'of their total' }}
+                {{ istarget ? 'Target' : '' }} healing ({{ numberFormater(barrierdist.contributedBarrier) }})
+            </p>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -155,11 +148,11 @@
                         {{ getCastDurationNoInterrupt(row) ? numberFormater(round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row))) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
-                        :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
+                        :data-original-title="getCastTimeWasted(row) ? percentFormater(round2(getCastTimeWasted(row)/phase.durationS)) + ' of the phase' : false">
                         {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null"
-                        :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
+                        :data-original-title="getCastTimeSaved(row) ? percentFormater(round2(getCastTimeSaved(row)/phase.durationS)) + ' of the phase' : false">
                         {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
                     </td>
                 </tr>
@@ -168,10 +161,10 @@
                 <tr>
                     <td class="text-left">Total</td>
                     <td></td>
-                    <td :data-original-title="Math.round(healingdist.contributedHealing/phase.durationS) +' hps'">
+                    <td :data-original-title="numberFormater(Math.round(healingdist.contributedHealing/phase.durationS)) +' hps'">
                         {{healingdist.contributedHealing}}
                     </td>
-                    <td :data-original-title="Math.round(healingdist.contributedDownedHealing/phase.durationS) +' hps'">
+                    <td :data-original-title="numberFormater(Math.round(healingdist.contributedDownedHealing/phase.durationS)) +' hps'">
                         {{healingdist.contributedDownedHealing}}
                     </td>
                     <td></td>

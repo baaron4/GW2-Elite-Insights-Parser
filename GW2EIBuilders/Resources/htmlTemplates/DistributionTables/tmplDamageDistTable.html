@@ -1,26 +1,15 @@
 <template>
     <div>
         <div v-if="actor !== null" class="mb-1 mt-1">
-            <div v-if="isminion">
-                <p style="display: table-row;">
-                    {{actor.name}} did {{percentFormater(round3(dmgdist.contributedDamage/dmgdist.totalDamage))}} of its master's total
-                    {{istarget ? 'Target' :''}} damage ({{numberFormater(dmgdist.contributedDamage)}})
-                </p>
-                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
-                    {{actor.name}} did {{percentFormater(round3(dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage))}} of its master's total
-                    {{istarget ? 'Target' :''}} breakbar damage ({{numberFormater(round1(dmgdist.contributedBreakbarDamage))}})
-                </p>
-            </div>
-            <div v-else>
-                <p style="display: table-row;">
-                    {{actor.name}} did {{percentFormater(round3(dmgdist.contributedDamage/dmgdist.totalDamage))}} of their total {{istarget ?
-                        'Target' :''}} damage ({{numberFormater(dmgdist.contributedDamage)}})
-                </p>              
-                <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
-                    {{actor.name}} did {{percentFormater(round3(dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage))}} of their total
-                    {{istarget ? 'Target' :''}} breakbar damage ({{numberFormater(round1(dmgdist.contributedBreakbarDamage))}})
-                </p>
-            </div>
+            <p style="display: table-row;">
+                {{actor.name}} did {{percentFormater(round3(dmgdist.contributedDamage/dmgdist.totalDamage))}}
+                {{ isminion ? "of its master's total" : "of their total" }}
+                {{istarget ? 'Target' :''}} damage ({{numberFormater(dmgdist.contributedDamage)}})
+            </p>
+            <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
+                {{actor.name}} did {{percentFormater(round3(dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage))}} of its master's total
+                {{istarget ? 'Target' :''}} breakbar damage ({{numberFormater(round1(dmgdist.contributedBreakbarDamage))}})
+            </p>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -172,11 +161,11 @@
                         {{ percentFormater(round3(getDamage(row)/dmgdist.contributedDamage)) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)"
-                        :data-original-title="round2(getDamage(row)/phase.durationS) +' dps'">
+                        :data-original-title="numberFormater(round2(getDamage(row)/phase.durationS)) +' dps'">
                         {{ numberFormater(getDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)"
-                        :data-original-title="round2(getBarrierDamage(row)/phase.durationS) +' dps'">
+                        :data-original-title="numberFormater(round2(getBarrierDamage(row)/phase.durationS)) +' dps'">
                         {{ numberFormater(getBarrierDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
@@ -195,7 +184,7 @@
                         {{ percentFormater(round3(getBreakbarDamage(row)/dmgdist.contributedBreakbarDamage)) }}
                     </td>
                     <td :class="getBodyClass('Data', 7)" v-if="hasBreakbarDamage"
-                        :data-original-title="round2(getBreakbarDamage(row)/phase.durationS) +' bps'">
+                        :data-original-title="numberFormater(round2(getBreakbarDamage(row)/phase.durationS)) +' bps'">
                         {{ numberFormater(getBreakbarDamage(row)) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 8, row)" v-if="actor !== null">
@@ -239,11 +228,11 @@
                         {{getConnectedHits(row) ? percentFormater(round2(getAgainstMovingHits(row)/getConnectedHits(row))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 16)"  v-if="actor !== null"
-                        :data-original-title="getCastTimeWasted(row) ? round2(100.0 * getCastTimeWasted(row)/phase.durationS) + '% of the phase' : false">
+                        :data-original-title="getCastTimeWasted(row) ? percentFormater(round2(getCastTimeWasted(row)/phase.durationS)) + ' of the phase' : ''">
                         {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 17)" v-if="actor !== null"
-                        :data-original-title="getCastTimeSaved(row) ? round2(100.0 * getCastTimeSaved(row)/phase.durationS) + '% of the phase' : false">
+                        :data-original-title="getCastTimeSaved(row) ? percentFormater(round2(getCastTimeSaved(row)/phase.durationS)) + ' of the phase' : ''">
                         {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
                     </td>
                 </tr>
@@ -254,10 +243,10 @@
                         Total
                     </td>
                     <td></td>
-                    <td :data-original-title="Math.round(dmgdist.contributedDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="numberFormater(Math.round(dmgdist.contributedDamage/phase.durationS)) +' dps'">
                         {{numberFormater(dmgdist.contributedDamage)}}
                     </td>
-                    <td :data-original-title="Math.round(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="numberFormater(Math.round(dmgdist.contributedShieldDamage/phase.durationS)) +' dps'">
                         {{numberFormater(dmgdist.contributedShieldDamage)}}
                     </td>
                     <td></td>
@@ -267,7 +256,7 @@
                         {{dmgdist.contributedDownContribution >= 0 ? dmgdist.contributedDownContribution : ''}}
                     </td>
                     <td v-if="hasBreakbarDamage"></td>
-                    <td v-if="hasBreakbarDamage" :data-original-title="Math.round(dmgdist.contributedBreakbarDamage/phase.durationS) +' bps'">
+                    <td v-if="hasBreakbarDamage" :data-original-title="numberFormater(Math.round(dmgdist.contributedBreakbarDamage/phase.durationS)) +' bps'">
                         {{numberFormater(dmgdist.contributedBreakbarDamage)}}
                     </td>
                     <td v-if="actor !== null"></td>           

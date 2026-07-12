@@ -168,7 +168,7 @@
                 return rows;
             },
             computeTotalContribution: function (index, row, sums) {
-                return this.round2(row[index] * 100 / sums[sums.length - 1].hps[index]) + '% of total';
+                return percentFormater(this.round2(row[index] / sums[sums.length - 1].hps[index])) + ' of total';
             },
             computeGroupContribution: function (groupIndex, index, row, sums) {
                 let sumId = 0;
@@ -177,16 +177,16 @@
                         break;
                     }
                 }
-                return this.round2(row[index] * 100 / sums[sumId].hps[index]) + '% of group';
+                return percentFormater(this.round2(row[index] / sums[sumId].hps[index])) + ' of group';
             },          
             computeSelfContribution: function (index, totalIndex, row, target) {
                 const playerTotal = row.hps[totalIndex] || 1; // If total == 0 divide by 1, 0/1 = 0%;
 
-                var selfContrib = this.round2(row.hps[index] * 100 / playerTotal) + '% of self';
+                var selfContrib = percentFormater(this.round2(row.hps[index] / playerTotal)) + ' of self';
                 return selfContrib + (target ? " target" : " all");
             },
             getPlayerTooltip: function (value, index, row, sums, target, showHealingPowerContribution = false, showConversionContribution = false) {
-                var base = this.showHealing ? this.round(value / this.phase.durationS) + ' per second' : value + ' total';
+                var base = this.showHealing ? numberFormater(this.round(value / this.phase.durationS)) + ' per second' : numberFormater(value) + ' total';
                 var total = this.computeTotalContribution(index, row.hps, sums);
                 var group = this.computeGroupContribution(row.player.group, index, row.hps, sums);
 

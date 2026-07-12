@@ -195,7 +195,7 @@
                 let res = "";
                 let linebreak = "";
                 if (showTotalHP) {
-                    res = "Total Health: " + target.health;
+                    res = "Total Health: " + numberFormater(target.health);
                     linebreak = "<br>";
                 }
                 if (hpLeft > 0 && barrierLeft > 0) {
