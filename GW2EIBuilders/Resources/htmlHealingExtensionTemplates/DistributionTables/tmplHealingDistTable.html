@@ -108,7 +108,7 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ percentFormater(round3(getHealingOutput(row)/healingdist.contributedHealing)) }}
+                        {{ percentFormater(getHealingOutput(row) / healingdist.contributedHealing) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)" :data-original-title="round2(getHealingOutput(row)/phase.durationS) +' hps'">
                         {{ numberFormater(getHealingOutput(row)) }}
@@ -120,7 +120,7 @@
                         {{ numberFormater(getMinHealing(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ numberFormater(round(getHealingOutput(row)/getConnectedHits(row))) }}
+                        {{ numberFormater(getHealingOutput(row)/getConnectedHits(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
                         {{ numberFormater(getMaxHealing(row)) }}
@@ -132,20 +132,20 @@
                         {{ getConnectedHits(row) }}
                     </td>
                     <td :class="getHitsPerCastBodyClass('Data', 8, row)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(round2(getConnectedHits(row)/getCast(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(round2(getHealingOutput(row)/(0.001 * getCastDuration(row)))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 13)" v-if="actor !== null" 
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + numberFormater(round3(0.001 * getMinCastingTimeNoInterrupt(row))) + 's' + 
-                                '<br> Max: '+ numberFormater(round3(0.001 * getMaxCastingTimeNoInterrupt(row))) + 's'
+                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 3, 3) + 's' + 
+                                '<br> Max: '+ numberFormater((0.001 * getMaxCastingTimeNoInterrupt(row), 3, 3) + 's'
                             ) 
                             : 
                             null">
-                        {{ getCastDurationNoInterrupt(row) ? numberFormater(round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row))) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 3, 3) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? percentFormater(round2(getCastTimeWasted(row)/phase.durationS)) + ' of the phase' : false">
@@ -176,7 +176,7 @@
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{numberFormater(round2(healingdist.contributedHealing/(0.001 * healingdist.totalCasting)))}}
+                        {{numberFormater(healingdist.contributedHealing / (0.001 * healingdist.totalCasting))}}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>

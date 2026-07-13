@@ -87,7 +87,7 @@
                     </td>
                     <td v-if="!showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
-                        {{numberFormater(round(value/phase.durationS))}}
+                        {{numberFormater(value/phase.durationS)}}
                     </td>
                     <td v-if="showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
@@ -103,10 +103,10 @@
                         {{sum.name}}
                     </td>
                     <td></td>
-                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="value + ' healing'">
-                        {{numberFormater(round(value/phase.durationS))}}
+                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="numberFormater(value) + ' healing'">
+                        {{numberFormater(value/phase.durationS)}}
                     </td>
-                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="round(value/phase.durationS) + ' hps'">
+                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="numberFormater(value/phase.durationS) + ' hps'">
                         {{numberFormater(value)}}
                     </td>
                 </tr>
@@ -168,7 +168,7 @@
                 return rows;
             },
             computeTotalContribution: function (index, row, sums) {
-                return percentFormater(this.round2(row[index] / sums[sums.length - 1].hps[index])) + ' of total';
+                return percentFormater(row[index] / sums[sums.length - 1].hps[index], 0, 0) + ' of total';
             },
             computeGroupContribution: function (groupIndex, index, row, sums) {
                 let sumId = 0;
@@ -177,16 +177,16 @@
                         break;
                     }
                 }
-                return percentFormater(this.round2(row[index] / sums[sumId].hps[index])) + ' of group';
+                return percentFormater(row[index] / sums[sumId].hps[index], 0, 0) + ' of group';
             },          
             computeSelfContribution: function (index, totalIndex, row, target) {
                 const playerTotal = row.hps[totalIndex] || 1; // If total == 0 divide by 1, 0/1 = 0%;
 
-                var selfContrib = percentFormater(this.round2(row.hps[index] / playerTotal)) + ' of self';
+                var selfContrib = percentFormater(row.hps[index] / playerTotal, 0, 0) + ' of self';
                 return selfContrib + (target ? " target" : " all");
             },
             getPlayerTooltip: function (value, index, row, sums, target, showHealingPowerContribution = false, showConversionContribution = false) {
-                var base = this.showHealing ? numberFormater(this.round(value / this.phase.durationS)) + ' per second' : numberFormater(value) + ' total';
+                var base = this.showHealing ? numberFormater(value / this.phase.durationS) + ' per second' : numberFormater(value) + ' total';
                 var total = this.computeTotalContribution(index, row.hps, sums);
                 var group = this.computeGroupContribution(row.player.group, index, row.hps, sums);
 

@@ -102,7 +102,7 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ percentFormater(round3(getBarrierOutput(row)/barrierdist.contributedBarrier)) }}
+                        {{ percentFormater(getBarrierOutput(row) / barrierdist.contributedBarrier) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)" :data-original-title="numberFormater(round2(getBarrierOutput(row)/phase.durationS)) +' hps'">
                         {{ numberFormater(getBarrierOutput(row)) }}
@@ -111,7 +111,7 @@
                         {{ numberFormater(getMinBarrier(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{ numberFormater(round(getBarrierOutput(row)/getConnectedHits(row))) }}
+                        {{ numberFormater(getBarrierOutput(row) / getConnectedHits(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
                         {{ numberFormater(getMaxBarrier(row)) }}
@@ -123,20 +123,20 @@
                         {{ getConnectedHits(row) }}
                     </td>
                     <td :class="getHitsPerCastBodyClass('Data', 7, row)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 8)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" v-if="actor !== null" 
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + numberFormater(round3(0.001 * getMinCastingTimeNoInterrupt(row))) + 's' + 
-                                '<br> Max: '+ numberFormater(round3(0.001 * getMaxCastingTimeNoInterrupt(row))) + 's'
+                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 3, 3) + 's' + 
+                                '<br> Max: '+ numberFormater(0.001 * getMaxCastingTimeNoInterrupt(row), 3, 3) + 's'
                             ) 
                             : 
                             null">
-                        {{ getCastDurationNoInterrupt(row) ? numberFormater(round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row))) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 3, 3) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? percentFormater(round2(getCastTimeWasted(row)/phase.durationS)) + ' of the phase' : ''">
@@ -164,7 +164,7 @@
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{numberFormater(round2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting)))}}
+                        {{numberFormater(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting), 2, 2)}}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
