@@ -255,12 +255,12 @@ public static class DamageModifierIDs
     public const int Mod_PredatorsOnslaught = 242;
     public const int Mod_ColdShoulder = 243;
     public const int Mod_Dread = 244;
-    public const int Mod_SpitefulTalisman = 245;
+    public const int Mod_SpitefulTalismanNoBoons = 245;
     public const int Mod_WickedCorruptionCrit = 246;
     public const int Mod_FieryWrath = 247;
     public const int Mod_SymbolicExposure = 248;
     public const int Mod_DangerTime = 249;
-    public const int Mod_ViciousExpression = 250;
+    public const int Mod_ViciousExpressionBoons = 250;
     public const int Mod_Fragility = 251;
     public const int Mod_ExposedStrike = 252;
     public const int Mod_OldExposedStrike = 253;
@@ -339,7 +339,7 @@ public static class DamageModifierIDs
     public const int Mod_Wolfsong = 326;
     public const int Mod_BeastlyWarden_Pet = 327;
     public const int Mod_EmpoweredIllusions = 328;
-    public const int Mod_ViciousExpressionWithIllusions = 329;
+    public const int Mod_ViciousExpressionNoBoons = 329;
     public const int Mod_SuperiorityComplex = 330;
     public const int Mod_SuperiorityComplexBonus = 331;
     public const int Mod_PhantasmalForce = 332;
@@ -447,4 +447,11 @@ public static class DamageModifierIDs
     public const int Mod_DraconicEchoFacetOfChaos = 434;
     public const int Mod_ForcedEngagement = 435;
     public const int Mod_FlockTogether_Pet = 436;
+    public const int Mod_StoneResonanceProtection = 437;
+    public const int Mod_RiteOfTheGreatDwarf = 438;
+    public const int Mod_SpitefulTalismanBoons = 439;
+    public const int Mod_DarkDefense = 440;
+    public const int Mod_CorruptersFervor = 441;
+    public const int Mod_RiteOfTheGreatDwarf_VersedInStone = 442;
+    public const int Mod_Heartpiercer = 442;
 }

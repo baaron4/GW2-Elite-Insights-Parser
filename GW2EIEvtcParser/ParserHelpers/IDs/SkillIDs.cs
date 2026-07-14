@@ -5686,6 +5686,8 @@ public static class SkillIDs
     public const long TailWhipJuvenileRiverOtter = 80164;
     public const long ScratchJuvenileRiverOtter= 80186;
     public const long ElderDracoPop = 80194;
+    public const long CascadingCorruptionStackBuff = 999999;
+    public const long CascadingCorruptionDamageModBuff = 999999;
     #endregion
 
 }

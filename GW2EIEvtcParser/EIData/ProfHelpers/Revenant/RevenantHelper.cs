@@ -151,9 +151,18 @@ internal static class RevenantHelper
         // Legendary Dwarf
         // - Rite of the Great Dwarf
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.HoTRelease, GW2Builds.July2026Balance)
             .UsingSpecSpecificShared(),
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.HoTRelease, GW2Builds.July2026Balance)
             .UsingSpecSpecificShared(),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarf, RiteOfTheGreatDwarf, "Rite of the Great Dwarf", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance)
+            .UsingSpecSpecificShared(),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarf_VersedInStone, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (Versed in Stone)", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance)
+            .UsingSpecSpecificShared(),
+        // TODO check what happens to the echo
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
             .UsingSpecSpecificShared(),
         // - Vengeful Hammers

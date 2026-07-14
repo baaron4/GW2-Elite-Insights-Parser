@@ -154,12 +154,18 @@ internal static class MesmerHelper
         new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "15% for Illusions", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, IllusionsChecker, DamageModifierMode.All)
             .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsIllusion(x.ReferenceAgentItem))),
         // - Vicious Expression
-        new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionNoBoons, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
             .UsingChecker(IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionNoBoons, NumberOfBoons, "Vicious Expression", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
             .UsingChecker(IllusionsWithMesmerChecker)
-            .WithBuilds(GW2Builds.February2020Balance2),
+            .WithBuilds(GW2Builds.February2020Balance2, GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionNoBoons, NumberOfBoons, "Vicious Expression (No Boons)", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
+            .UsingChecker(IllusionsWithMesmerChecker)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionBoons, NumberOfBoons, "Vicious Expression (Boons)", "5% on target with boons", DamageSource.All, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByPresence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
+            .UsingChecker(IllusionsWithMesmerChecker)
+            .WithBuilds(GW2Builds.July2026Balance),
         // - Egotism
         new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, FromHigherThanToHPChecker, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)

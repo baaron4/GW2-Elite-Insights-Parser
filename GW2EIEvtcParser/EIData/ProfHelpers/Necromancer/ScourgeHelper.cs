@@ -67,13 +67,20 @@ internal static class ScourgeHelper
             }
             SkillItem skill = shade.GUIDEvent.GUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
             int expectedDuration;
-            if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
+            if (gw2Build.Build >= GW2Builds.July2026Balance)
             {
-                expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
-            }
+                expectedDuration = 15000;
+            } 
             else
             {
-                expectedDuration = gw2Build.Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+                if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
+                {
+                    expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+                }
+                else
+                {
+                    expectedDuration = gw2Build.Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+                }
             }
             int duration = shade.HasDynamicEndTime ? Math.Min((int)(shade.DynamicEndTime - shade.Time), expectedDuration) : expectedDuration;
             res.Add(new BuffApplyEvent(shade.Src, shade.Src, shade.Time, duration, skill, IFF.Friend, buffInstance, true));

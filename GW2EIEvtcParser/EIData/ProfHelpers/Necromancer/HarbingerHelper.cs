@@ -22,16 +22,20 @@ internal static class HarbingerHelper
             .UsingBeforeWeaponSwap(),
         new DamageCastFinder(CascadingCorruption, CascadingCorruption)
             .UsingDisableWithEffectData()
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
         new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
         new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
         new EffectCastFinderByDst(ApproachingDoom, EffectGUIDs.HarbingerDoomApproaches)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
     ];
 
 

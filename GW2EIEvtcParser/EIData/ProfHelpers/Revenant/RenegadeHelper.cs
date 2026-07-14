@@ -65,9 +65,9 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.February2025Balance),
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.February2025Balance),
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -92,7 +92,8 @@ internal static class RenegadeHelper
         new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, SkillImages.SoulcleavesSummit),
         new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
         new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
-        new Buff("All for One", AllForOne, Source.Renegade, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.AllForOne),
+        new Buff("All for One", AllForOne, Source.Renegade, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.AllForOne)
+            .WithBuilds(GW2Builds.June2024Balance, GW2Builds.July2026Balance),
     ];
 
     public static bool IsLegendSwap(long id)
