@@ -68,16 +68,18 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance),
         // Furious Strength
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.September2023Balance, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.FuriousStrength, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
         // Loud Whistle
         new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle (Merged)", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All)
             .UsingChecker((x,log) => x.IsOverNinety)
