@@ -32,20 +32,31 @@ internal static class UntamedHelper
             .WithMinions(),
     ];
 
+    private static bool FerociousSymbiosisChecker(HealthDamageEvent dl, ParsedEvtcLog log)
+    {
+        return dl.CreditedFrom.Is(dl.From) || RangerHelper.IsJuvenilePet(dl.From);
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Ferocious Symbiosis
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.All, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.All)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "4% per stack", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "4% per stack", DamageSource.All, 4.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.PvE)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "5% per stack", DamageSource.All, 5.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.PvE)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.All, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.sPvPWvW)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.May2023BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "2% per stack", DamageSource.All, 2.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.sPvP)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.May2023BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.WvW)
+        new BuffOnActorDamageModifier(Mod_FerociousSymbiosis, FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.All, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, TraitImages.FerociousSymbiosis, DamageModifierMode.WvW)
+            .UsingChecker(FerociousSymbiosisChecker)
             .WithBuilds(GW2Builds.May2023BalanceHotFix),
         // Vow of the Untamed
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
