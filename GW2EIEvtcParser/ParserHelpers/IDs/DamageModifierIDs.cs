@@ -453,5 +453,6 @@ public static class DamageModifierIDs
     public const int Mod_DarkDefense = 440;
     public const int Mod_CorruptersFervor = 441;
     public const int Mod_RiteOfTheGreatDwarf_VersedInStone = 442;
-    public const int Mod_Heartpiercer = 442;
+    public const int Mod_Heartpiercer = 443;
+    public const int Mod_Meltdown = 444;
 }

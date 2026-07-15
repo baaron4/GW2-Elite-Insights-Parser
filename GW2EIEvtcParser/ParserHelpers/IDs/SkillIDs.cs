@@ -3713,7 +3713,7 @@ public static class SkillIDs
     public const long Blight = 62653;
     public const long ExecutionersCallingDualStrike = 62656;
     public const long VirtuosoBlade1 = 62658;
-    public const long CascadingCorruption = 62660;
+    public const long CascadingCorruptionDamage = 62660;
     public const long ElixirOfPromise = 62667;
     public const long RushingJusticeSkill = 62668;
     public const long DeathlyHaste = 62671;
@@ -5686,8 +5686,8 @@ public static class SkillIDs
     public const long TailWhipJuvenileRiverOtter = 80164;
     public const long ScratchJuvenileRiverOtter= 80186;
     public const long ElderDracoPop = 80194;
-    public const long CascadingCorruptionStackBuff = 999999;
-    public const long CascadingCorruptionDamageModBuff = 999999;
+    public const long Meltdown = 80215;
+    public const long CascadingCorruptionStackBuff = 80279;
     #endregion
 
 }

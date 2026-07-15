@@ -794,7 +794,7 @@ public static class SkillItemOverrides
             { SandstormShroudDetonation, SkillImages.SandstormShroud },
             { SandFlareSharedBarrier, SkillImages.SandFlare },
             { DesertEmpowerment, TraitImages.DesertEmpowerment },
-            { CascadingCorruption, TraitImages.CascadingCorruption },
+            { CascadingCorruptionDamage, TraitImages.CascadingCorruption },
             { DeathlyHaste, TraitImages.DeathlyHaste },
             { ApproachingDoom, TraitImages.DoomApproaches },
             { UnstableExplosion, SkillImages.SummonMadness },

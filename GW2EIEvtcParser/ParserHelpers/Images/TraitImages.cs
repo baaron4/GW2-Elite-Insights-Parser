@@ -176,6 +176,8 @@ internal static class TraitImages
     public const string ImplacableFoe = "https://render.guildwars2.com/file/E3ABCC0E40170F08B0BDE72378D200BC06D1AF13/2479341.png";
     public const string LingeringSpirits = "https://render.guildwars2.com/file/A14721D00D6A034E9EB60BB00F7B1414C118CA06/3679986.png";
     public const string ExplosiveGrowth = "https://render.guildwars2.com/file/EBEED007E2F92B18B921210ACE261F279329E31F/3679981.png";
+    public const string CascadingCorruptionStackBuff = "https://render.guildwars2.com/file/B90C69BABF665046A728E537AAA8E61FA7EBA5A0/3790488.png";
+    public const string Meltdown = "https://render.guildwars2.com/file/03291423C8D1BE039F100726B40BC218F021EFEF/3790487.png ";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://render.guildwars2.com/file/4ED02272F05D430FECBB55DBAEBE2B3F776F3E1C/1012657.png";
