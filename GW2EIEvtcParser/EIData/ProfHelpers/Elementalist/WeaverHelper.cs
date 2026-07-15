@@ -42,7 +42,10 @@ internal static class WeaverHelper
         new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceBuff),
         new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceBuff)
             .UsingICD(500),
-        new BuffGainCastFinder(UnravelSkill, UnravelBuff),
+        new BuffGainCastFinder(UnravelSkill, UnravelBuff)
+            .WithBuilds(GW2Builds.September2017PathOfFireRelease, GW2Builds.July2026Balance),
+        new BuffGainCastFinder(UnravelElementsOrRageSkill, UnravelBuff)
+            .WithBuilds(GW2Builds.July2026Balance),
         // Fire       
         new BuffGainCastFinder(DualFireAttunement, DualFireAttunement),
         new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement),

@@ -5687,6 +5687,7 @@ public static class SkillIDs
     public const long ScratchJuvenileRiverOtter= 80186;
     public const long ElderDracoPop = 80194;
     public const long Meltdown = 80215;
+    public const long UnravelElementsOrRageSkill = 80231;
     public const long CascadingCorruptionStackBuff = 80279;
     #endregion
 
