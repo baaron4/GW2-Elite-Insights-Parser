@@ -159,7 +159,7 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ percentFormater(getDamage(row)/dmgdist.contributedDamage) }}
+                        {{ percentFormater(getDamage(row)/dmgdist.contributedDamage, 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)"
                         :data-original-title="numberFormater(getDamage(row)/phase.durationS) +' dps'">
@@ -173,20 +173,20 @@
                         {{ numberFormater(getMinDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ numberFormater(getDamage(row)/getConnectedHits(row)) }}
+                        {{ getConnectedHits(row) === 0 ? '' : numberFormater(getDamage(row) / getConnectedHits(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
                         {{ numberFormater(getMaxDamage(row)) }}
                     </td>
                     <td v-if="wvw && actor !== null" :class="getBodyClass('Data', 22)">
-                        {{ getDownContribution(row) < 0 ? 'N/A' : getDownContribution(row) }}
+                        {{ getDownContribution(row) < 0 ? 'N/A' : numberFormater(getDownContribution(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 6)" v-if="hasBreakbarDamage">
-                        {{ percentFormater(round3(getBreakbarDamage(row)/dmgdist.contributedBreakbarDamage)) }}
+                        {{ dmgdist.contributedBreakbarDamage === 0 ? '' : percentFormater(getBreakbarDamage(row) / dmgdist.contributedBreakbarDamage, 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 7)" v-if="hasBreakbarDamage"
                         :data-original-title="numberFormater(getBreakbarDamage(row)/phase.durationS) +' bps'">
-                        {{ numberFormater(getBreakbarDamage(row)) }}
+                        {{ numberFormater(getBreakbarDamage(row) ?? 0) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 8, row)" v-if="actor !== null">
                         {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
@@ -195,46 +195,50 @@
                         :data-original-title="(getAllHits(row) - getConnectedHits(row)) + ' hit(s) not connected'">
                         {{ getConnectedHits(row) }}
                     </td>
-                    <td :class="getHitsPerCastBodyClass('Data', 10, row)" v-if="actor !== null" 
-                        :data-original-title=" (!getSkill(row).condi && getAllHits(row) && getCast(row)) ? (showInequality(row) ? '<= ' : '') + round2(getAllHits(row)/getCast(row)) + ' with missed hits' : false" >
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
+                    <td :class="getHitsPerCastBodyClass('Data', 10, row)" v-if="actor !== null"
+                        :data-original-title=" (!getSkill(row).condi && getAllHits(row) && getCast(row)) ? (showInequality(row) ? '<= ' : '') + round2(getAllHits(row)/getCast(row)) + ' with missed hits' : false">
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>    
                     <td :class="getBodyClass('Data', 19)" v-if="actor !== null"
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 3, 3) + 's' + 
-                                '<br> Max: '+ numberFormater(0.001 * getMaxCastingTimeNoInterrupt(row), 3, 3) + 's'
+                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 0, 3) + 's' + 
+                                '<br> Max: '+ numberFormater(0.001 * getMaxCastingTimeNoInterrupt(row), 0, 3) + 's'
                             ) 
                             : 
                             null" >
-                        {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 3, 3) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 0, 3) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 12)"
-                        :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? getCriticalHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s) <br> Damage: ' + getCriticalDamage(row) + '<br>' + round2(getCriticalDamage(row)*100/getDamage(row)) + '% of skill damage' : false">
+                        :data-original-title=" (!getSkill(row).condi && getConnectedHits(row)) ?
+                            numberFormater(getCriticalHits(row)) +' out of ' + numberFormater(getConnectedHits(row)) + ' connected hit(s) <br>' +
+                            ' Damage: ' + numberFormater(getCriticalDamage(row)) + '<br>' + 
+                            percentFormater(getCriticalDamage(row)/getDamage(row)) + ' of skill damage'
+                            : false">
                         {{(!getSkill(row).condi && getConnectedHits(row)) ? percentFormater(getCriticalHits(row)/getConnectedHits(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 13)"
-                        :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? getFlankingHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s)': false">
+                        :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? numberFormater(getFlankingHits(row)) +' out of ' + numberFormater(getConnectedHits(row)) + ' connected hit(s)': false">
                         {{(!getSkill(row).condi && getConnectedHits(row)) ? percentFormater(getFlankingHits(row)/getConnectedHits(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 14)"
-                        :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? getGlancingHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s)': false">
+                        :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? numberFormater(getGlancingHits(row)) +' out of ' + numberFormater(getConnectedHits(row)) + ' connected hit(s)': false">
                         {{(!getSkill(row).condi && getConnectedHits(row)) ? percentFormater(getGlancingHits(row)*100/getConnectedHits(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 15)"
-                        :data-original-title="getAgainstMovingHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s)'">
+                        :data-original-title="numberFormater(getAgainstMovingHits(row)) +' out of ' + numberFormater(getConnectedHits(row)) + ' connected hit(s)'">
                         {{getConnectedHits(row) ? percentFormater(getAgainstMovingHits(row)/getConnectedHits(row)) : ''}}
                     </td>
-                    <td :class="getBodyClass('Data', 16)"  v-if="actor !== null"
+                    <td :class="getBodyClass('Data', 16)" v-if="actor !== null"
                         :data-original-title="getCastTimeWasted(row) ? percentFormater(getCastTimeWasted(row)/phase.durationS) + ' of the phase' : ''">
-                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
+                        {{ getCastTimeWasted(row) ? numberFormater(getCastTimeWasted(row), 0, 3) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 17)" v-if="actor !== null"
                         :data-original-title="getCastTimeSaved(row) ? percentFormater(getCastTimeSaved(row)/phase.durationS) + ' of the phase' : ''">
-                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
+                        {{ getCastTimeSaved(row) ? numberFormater(getCastTimeSaved(row), 0, 3)  + 's' : ''}}
                     </td>
                 </tr>
             </tbody>

@@ -74,27 +74,27 @@
                         {{row.player.acc}}
                     </td>
                     <td :class="getBodyClass('Data', 0)"
-                        :data-original-title="row.commons[1] + ' cancels <br>' + round2(100.0 * row.commons[0] / phase.durationS) + '% of the phase'">
-                        {{row.commons[0]}}
+                        :data-original-title="numberFormater(row.commons[1]) + ' cancels <br>' + percentFormater(row.commons[0] / phase.durationS) + ' of the phase'">
+                        {{ numberFormater(row.commons[0], 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)"
-                        :data-original-title="row.commons[3] + ' cancels <br>' + round2(100.0 * row.commons[2] / phase.durationS) + '% of the phase'">
-                        {{row.commons[2]}}
+                        :data-original-title="numberFormater(row.commons[3]) + ' cancels <br>' + percentFormater(row.commons[2] / phase.durationS) + ' of the phase'">
+                        {{ numberFormater(row.commons[2] ,0 ,3) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{row.commons[4]}}
+                        {{ numberFormater(row.commons[4])}}
                     </td>
                     <td :class="getBodyClass('Data', 7)">
-                        {{row.commons[7]}}%
+                        {{ percentFormater(row.commons[7] / 100, 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 8)">
-                        {{row.commons[8]}}%
+                        {{ percentFormater(row.commons[8] / 100, 0, 3)}}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
-                        {{row.commons[5]}}
+                        {{ numberFormater(row.commons[5], 0, 2) }}
                     </td>
                     <td :class="getBodyClass('Data', 6)" v-if="hasCommander">
-                        {{row.commons[6]}}
+                        {{ numberFormater(row.commons[6], 0, 2) }}
                     </td>
                 </tr>
             </tbody>
@@ -104,13 +104,13 @@
                     <td></td>
                     <td class="text-left">{{row.name}}</td>
                     <td></td>
-                    <td :data-original-title="row.commons[1] + ' cancels'">{{round3(row.commons[0])}}</td>
-                    <td :data-original-title="row.commons[3] + ' cancels'">{{round3(row.commons[2])}}</td>
-                    <td>{{row.commons[4]}}</td>
+                    <td :data-original-title="numberFormater(row.commons[1]) + ' cancels'">{{ numberFormater(row.commons[0], 0, 3) }}</td>
+                    <td :data-original-title="numberFormater(row.commons[3]) + ' cancels'">{{ numberFormater(row.commons[2], 0, 3) }}</td>
+                    <td>{{ numberFormater(row.commons[4]) }}</td>
                     <td></td>
                     <td></td>
-                    <td>{{round2(row.commons[5] / row.count)}}</td>
-                    <td v-if="hasCommander">{{round2(row.commons[6] / row.count)}}</td>
+                    <td>{{ numberFormater(row.commons[5] / row.count) }}</td>
+                    <td v-if="hasCommander">{{ numberFormater(row.commons[6] / row.count, 0, 2) }}</td>
                 </tr>
             </tfoot>
         </table>

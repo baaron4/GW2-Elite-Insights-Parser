@@ -271,7 +271,7 @@
                 }
 
                 if (instanceBuff.remainingDuration) {
-                    title += '<br> Remaining Duration: ' + this.round3(instanceBuff.remainingDuration / 1000) + ' seconds';
+                    title += '<br> Remaining Duration: ' + numberFormater(instanceBuff.remainingDuration / 1000, 0, 3) + ' seconds';
                 }
 
                 return title;

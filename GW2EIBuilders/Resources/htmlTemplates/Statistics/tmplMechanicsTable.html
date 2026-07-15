@@ -24,10 +24,10 @@
                         <span style="display:none">{{row.player.profession}}</span>
                     </td>
                     <td :class="getPlayerBodyClass('Name')" class="text-left">{{row.player.name}}</td>
-                    <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
+                    <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)"
                         v-show="isInPlayerColPage(index)"
-                        :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                        {{ (mech[0] ? mech[0] : '-')}}
+                        :data-original-title="mech[1] !== mech[0] ? numberFormater(mech[1]) + ' times (multi hits)' : false">
+                        {{ (mech[0] ? numberFormater(mech[0]) : '-') }}
                     </td>
                 </tr>
             </tbody>
@@ -42,7 +42,7 @@
                     <th class="mech-cell" v-for="(mech, index) in enemyMechHeader" 
                         v-show="isInEnemyColPage(index)"
                         :class="getEnemyHeaderClass('Data', index)" @click="sortEnemyBy('Data', index)" :data-original-title="(mech.description !== mech.name ? mech.name + ': ' : '') + mech.description">
-                        <span>{{ mech.name}}</span>
+                        <span>{{ mech.name }}</span>
                     </th>
                 </tr>
             </thead>
@@ -52,12 +52,12 @@
                         class="text-left">
                         {{row.enemy}}
                     </td>
-                    <td v-for="(mech, index) in row.mechs" 
-                        class="stat-cell" 
-                        :class="getEnemyBodyClass('Data', index)"                 
+                    <td v-for="(mech, index) in row.mechs"
+                        class="stat-cell"
+                        :class="getEnemyBodyClass('Data', index)"
                         v-show="isInEnemyColPage(index)"
-                        :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
-                        {{mech[0] ? mech[0] : '-'}}
+                        :data-original-title="mech[1] !== mech[0] ? numberFormater(mech[1]) + ' times (multi hits)' : false">
+                        {{mech[0] ? numberFormater(mech[0]) : '-'}}
                     </td>
                 </tr>
             </tbody>

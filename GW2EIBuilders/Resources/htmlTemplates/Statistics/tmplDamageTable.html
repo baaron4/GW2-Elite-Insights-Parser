@@ -199,7 +199,7 @@
                 const group = this.computeGroupContribution(row.player.group, index, row.dps, sums);
 
                 if (showConditionContribution || showPowerContribution) {
-                    return damage
+                    return damage +
                         '<br>' + this.computeSelfContribution(index, showConditionContribution ? index - 2 : index - 1, row, target) +
                         '<br>' + total +
                         '<br>' + group;

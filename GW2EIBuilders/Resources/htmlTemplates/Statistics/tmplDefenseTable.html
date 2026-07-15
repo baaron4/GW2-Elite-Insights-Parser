@@ -112,49 +112,49 @@
                         {{row.player.acc}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{row.def[0]}}
+                        {{ numberFormater(row.def[0]) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)">
-                        {{row.def[1]}}
+                        {{ numberFormater(row.def[1]) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)">
-                        {{row.def[2]}}
+                        {{ numberFormater(row.def[2]) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{row.def[3]}}
+                        {{ numberFormater(row.def[3]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 17)" :data-original-title="round3(row.def[18]/1000) + ' seconds'">
-                        {{row.def[17]}}
+                    <td :class="getBodyClass('Data', 17)" :data-original-title="numberFormater(row.def[18] / 1000, 0, 3) + ' seconds'">
+                        {{ numberFormater(row.def[17]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 19)" :data-original-title="round3(row.def[20]) + ' seconds'">
-                        {{row.def[19]}}
+                    <td :class="getBodyClass('Data', 19)" :data-original-title="numberFormater(row.def[20], 0, 3) + ' seconds'">
+                        {{ numberFormater(row.def[19]) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{row.def[4]}}
+                        {{ numberFormater(row.def[4]) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
-                        {{row.def[5]}}
+                        {{ numberFormater(row.def[5]) }}
                     </td>
                     <td :class="getBodyClass('Data', 6)">
-                        {{row.def[6]}}
+                        {{ numberFormater(row.def[6]) }}
                     </td>
                     <td :class="getBodyClass('Data', 7)">
-                        {{row.def[7]}}
+                        {{ numberFormater(row.def[7]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 8)" :data-original-title="row.def[9] + ' seconds'">
-                        {{row.def[8]}}
+                    <td :class="getBodyClass('Data', 8)" :data-original-title="numberFormater(row.def[9]) + ' seconds'">
+                        {{ numberFormater(row.def[8]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 10)" :data-original-title="row.def[11] + ' seconds'">
-                        {{row.def[10]}}
+                    <td :class="getBodyClass('Data', 10)" :data-original-title="numberFormater(row.def[11]) + ' seconds'">
+                        {{ numberFormater(row.def[10]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 12)" :data-original-title="row.def[13]">
-                        {{row.def[12]}}
+                    <td :class="getBodyClass('Data', 12)" :data-original-title="numberFormater(row.def[13])">
+                        {{ numberFormater(row.def[12]) }}
                     </td>
                     <td :class="getBodyClass('Data', 16)">
-                        {{row.def[16]}}
+                        {{ numberFormater(row.def[16]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 14)" :data-original-title="row.def[15]">
-                        {{row.def[14]}}
+                    <td :class="getBodyClass('Data', 14)" :data-original-title="numberFormater(row.def[15])">
+                        {{ numberFormater(row.def[14]) }}
                     </td>
                 </tr>
             </tbody>
@@ -162,23 +162,23 @@
                 <tr v-for="sum in tableData.sums">
                     <td></td>
                     <td></td>
-                    <td class="text-left">{{sum.name}}</td>
+                    <td class="text-left">{{ sum.name }}</td>
                     <td></td>
-                    <td>{{sum.def[0]}}</td>
-                    <td>{{sum.def[1]}}</td>
-                    <td>{{sum.def[2]}}</td>
-                    <td>{{sum.def[3]}}</td>
-                    <td :data-original-title="round3(sum.def[18]/1000) + ' seconds'">{{sum.def[17]}}</td>
-                    <td :data-original-title="round3(sum.def[20]) + ' seconds'">{{sum.def[19]}}</td>
-                    <td>{{sum.def[4]}}</td>
-                    <td>{{sum.def[5]}}</td>
-                    <td>{{sum.def[6]}}</td>
-                    <td>{{sum.def[7]}}</td>
-                    <td :data-original-title="sum.def[9] + ' seconds'">{{sum.def[8]}}</td>
-                    <td :data-original-title="sum.def[11] + ' seconds'">{{sum.def[10]}}</td>
-                    <td>{{sum.def[12]}}</td>
-                    <td>{{sum.def[16]}}</td>
-                    <td>{{sum.def[14]}}</td>
+                    <td>{{ numberFormater(sum.def[0]) }}</td>
+                    <td>{{ numberFormater(sum.def[1]) }}</td>
+                    <td>{{ numberFormater(sum.def[2]) }}</td>
+                    <td>{{ numberFormater(sum.def[3]) }}</td>
+                    <td :data-original-title="numberFormater(sum.def[18]/1000, 0, 3) + ' seconds'">{{ numberFormater(sum.def[17]) }}</td>
+                    <td :data-original-title="numberFormater(sum.def[20], 0, 3) + ' seconds'">{{ numberFormater(sum.def[19]) }}</td>
+                    <td>{{ numberFormater(sum.def[4]) }}</td>
+                    <td>{{ numberFormater(sum.def[5]) }}</td>
+                    <td>{{ numberFormater(sum.def[6]) }}</td>
+                    <td>{{ numberFormater(sum.def[7]) }}</td>
+                    <td :data-original-title="numberFormater(sum.def[9], 0, 3) + ' seconds'">{{ numberFormater(sum.def[8]) }}</td>
+                    <td :data-original-title="numberFormater(sum.def[11], 0, 3) + ' seconds'">{{ numberFormater(sum.def[10]) }}</td>
+                    <td>{{ numberFormater(sum.def[12]) }}</td>
+                    <td>{{ numberFormater(sum.def[16]) }}</td>
+                    <td>{{ numberFormater(sum.def[14]) }}</td>
                 </tr>
             </tfoot>
         </table>
