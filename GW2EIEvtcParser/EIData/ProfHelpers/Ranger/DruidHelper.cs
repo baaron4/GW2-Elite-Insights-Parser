@@ -78,6 +78,8 @@ internal static class DruidHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, TraitImages.LingeringLight)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Lingering Light", LingeringLight, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.LingeringLight)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, TraitImages.NaturalBalance)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
