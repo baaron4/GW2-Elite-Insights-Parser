@@ -450,10 +450,9 @@ public static class DamageModifierIDs
     public const int Mod_StoneResonanceProtection = 437;
     public const int Mod_RiteOfTheGreatDwarf = 438;
     public const int Mod_SpitefulTalismanBoons = 439;
-    public const int Mod_DarkDefense = 440;
-    public const int Mod_CorruptersFervor = 441;
-    public const int Mod_RiteOfTheGreatDwarf_VersedInStone = 442;
-    public const int Mod_Heartpiercer = 443;
-    public const int Mod_Meltdown = 444;
-    public const int Mod_ShadowRefuge = 445;
+    public const int Mod_CorruptersFervor = 440;
+    public const int Mod_RiteOfTheGreatDwarf_VersedInStone = 441;
+    public const int Mod_Heartpiercer = 442;
+    public const int Mod_Meltdown = 443;
+    public const int Mod_ShadowRefuge = 444;
 }

@@ -126,11 +126,19 @@ internal static class NecromancerHelper
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
         
         // Death Magic
-        // - Dark Defiance
-        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All),
+        // - Dark Defiance / Dark Defense
+        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.December2018Balance, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defense", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance),
         // - Beyond the Veil
-        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(10), TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(10), TraitImages.BeyondTheVeil, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
+        // - Corrupter's Fervor
+        new BuffOnActorDamageModifier(Mod_CorruptersFervor, DeathsCarapace, "Corrupter's Fervor", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(25), TraitImages.CorruptersFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_CorruptersFervor, DeathsCarapace, "Corrupter's Fervor", "-15%", DamageSource.Incoming, -15, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(25), TraitImages.CorruptersFervor, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
