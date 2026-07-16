@@ -68,6 +68,11 @@ internal static class RenegadeHelper
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.July2026Balance),
+        // Heartpiercer
+        new BuffOnFoeDamageModifier(Mod_Heartpiercer, Bleeding, "Heartpiercer", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Renegade, ByPresence, TraitImages.Heartpiercer, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_Heartpiercer, Bleeding, "Heartpiercer", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Renegade, ByPresence, TraitImages.Heartpiercer, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
