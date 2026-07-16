@@ -118,7 +118,7 @@ internal static class HarbingerHelper
             foreach (EffectEvent effect in vitalDraws)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectVitalDraw);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, (uint)(effect.Scale * 240), EffectImages.EffectVitalDraw);
             }
         }
     }
