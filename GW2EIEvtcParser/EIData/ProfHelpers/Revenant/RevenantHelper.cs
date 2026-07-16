@@ -159,12 +159,13 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarf, RiteOfTheGreatDwarf, "Rite of the Great Dwarf", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2026Balance)
             .UsingSpecSpecificShared(),
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarf_VersedInStone, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (Versed in Stone)", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarf_VersedInStone, RiteOfTheGreatDwarfVersedInStone, "Rite of the Great Dwarf (Versed in Stone)", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2026Balance)
             .UsingSpecSpecificShared(),
         // TODO check what happens to the echo
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All)
-            .UsingSpecSpecificShared(),
+            .UsingSpecSpecificShared()
+            .WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2026Balance),
         // - Vengeful Hammers
         new BuffOnActorDamageModifier(Mod_VengefulHammers, VengefulHammersBuff, "Vengeful Hammers", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnFoeDamageModifier(Mod_ForcedEngagement, Taunt, "Forced Engagement", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, SkillImages.ForcedEngagement, DamageModifierMode.All)
@@ -225,7 +226,10 @@ internal static class RevenantHelper
     [
         new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, SkillImages.VengefulHammers),
         new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, SkillImages.RiteOfTheGreatDwarf),
-        new Buff("Rite of the Great Dwarf (Ancient Echo)", RiteOfTheGreatDwarfAncientEcho, Source.Revenant, BuffClassification.Defensive, SkillImages.RiteOfTheGreatDwarf),
+        new Buff("Rite of the Great Dwarf (Versed in Stone)", RiteOfTheGreatDwarfVersedInStone, Source.Revenant, BuffClassification.Defensive, SkillImages.RiteOfTheGreatDwarf)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new Buff("Rite of the Great Dwarf (Ancient Echo)", RiteOfTheGreatDwarfAncientEcho, Source.Revenant, BuffClassification.Defensive, SkillImages.RiteOfTheGreatDwarf)
+            .WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2026Balance),
         new Buff("Embrace the Darkness", EmbraceTheDarkness, Source.Revenant, BuffClassification.Other, SkillImages.EmbraceTheDarkness),
         new Buff("Enchanted Daggers", EnchantedDaggers, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.EnchantedDaggers),
         new Buff("Phase Traversal", PhaseTraversal, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PhaseTraversal),

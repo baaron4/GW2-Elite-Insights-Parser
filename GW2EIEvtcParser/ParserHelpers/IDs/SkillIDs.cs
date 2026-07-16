@@ -5690,6 +5690,7 @@ public static class SkillIDs
     public const long ShadowRefugeBuff = 80216;
     public const long UnravelElementsOrRageSkill = 80231;
     public const long CascadingCorruptionStackBuff = 80279;
+    public const long RiteOfTheGreatDwarfVersedInStone = 80245;
     #endregion
 
 }
