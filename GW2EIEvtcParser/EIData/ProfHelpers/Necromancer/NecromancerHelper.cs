@@ -66,12 +66,14 @@ internal static class NecromancerHelper
         new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2026Balancepocalypse),
         new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "3% on target with boons", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "12% on boonless target", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "7% on target with boons", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.July2026Balance),
         new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "5% on boonless target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "2% on target with boons", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "3% on target with boons", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.July2026Balance),
         // - Death's Embrace
         new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.All)

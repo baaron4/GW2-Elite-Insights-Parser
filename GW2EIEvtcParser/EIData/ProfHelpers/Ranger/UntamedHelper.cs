@@ -75,13 +75,13 @@ internal static class UntamedHelper
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "25% when unleashed or biorhythm proc", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "10% when unleashed or biorhythm proc", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
-            .WithBuilds(GW2Builds.June2025Balance),
+            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "20% when unleashed or biorhythm proc", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.June2025Balance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "15% when unleashed or biorhythm proc", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "10% when unleashed or biorhythm proc", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "10% when unleashed or biorhythm proc", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -110,9 +110,11 @@ internal static class UntamedHelper
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "-25% when not unleashed or biorhythm proc", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "-10% when not unleashed or biorhythm proc", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
-            .WithBuilds( GW2Builds.June2025Balance),
+            .WithBuilds( GW2Builds.June2025Balance, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "-15% when not unleashed or biorhythm proc", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
-            .WithBuilds( GW2Builds.June2025Balance),
+            .WithBuilds( GW2Builds.June2025Balance, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorhythm], "Vow of the Untamed", "-10% when not unleashed or biorhythm proc", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
+            .WithBuilds( GW2Builds.July2026Balance),
     ];
 
 
