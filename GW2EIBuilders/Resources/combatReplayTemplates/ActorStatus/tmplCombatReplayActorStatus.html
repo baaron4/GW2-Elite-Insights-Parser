@@ -37,9 +37,8 @@
             select: function () {
                 animator.selectActor(this.actor.uniqueID);
             },
-            hasBarrier: function (time) {
-                const barrierPercent = this.getPercent(this.barriers, time);
-                return this.barriers && barrierPercent > 0;
+            hasActiveBarrier: function (time) {
+                return this.hasBarrier && this.getPercent(this.barriers, time) > 0;
             },
             getPercent: function (state, time) {
                 if (!state) {
@@ -56,7 +55,7 @@
                 const healthPercent = this.getPercent(this.healths, time);
                 const healthGradient = computeGradient(color, healthPercent, 'black');
 
-                if (!this.hasBarrier(time)) {
+                if (!this.hasActiveBarrier(time)) {
                     return healthGradient;
                 }
 
@@ -69,8 +68,8 @@
                 var color = animator.getActorData(this.actor.uniqueID).isBreakbarActive() ? "#20B2AA" : "#888888";
                 return computeGradient(color, this.getPercent(this.breakbar, time), 'black');
             },
-            percentageFormater: function (healths, time) {
-                const percent = this.getPercent(healths, time);
+            percentageFormater: function (states, time) {
+                const percent = this.getPercent(states, time);
                 return (Math.round(percent * 100) / 100).toFixed(2);
             },
             getActorHeight: function () {
@@ -116,10 +115,13 @@
                 return null;
             },
             hasHealth: function () {
-                return !!this.healths;
+                return !!this.healths && this.healths.length > 0;
+            },
+            hasBarrier: function () {
+                return this.barriers && this.barriers.length > 0 ;
             },
             hasBreakbar: function () {
-                return !!this.breakbar;
+                return !!this.breakbar && this.breakbar.length > 0;
             },
             
         }
