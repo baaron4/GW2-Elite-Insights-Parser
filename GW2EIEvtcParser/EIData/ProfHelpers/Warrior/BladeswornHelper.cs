@@ -60,7 +60,9 @@ internal static class BladeswornHelper
     [
         // Fierce as Fire
         new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.EODBeta4),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

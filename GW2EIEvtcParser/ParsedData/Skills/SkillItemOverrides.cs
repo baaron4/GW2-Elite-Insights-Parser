@@ -615,6 +615,7 @@ public static class SkillItemOverrides
         { ElutriateSecondaryAttack, SkillImages.Elutriate },
         { SoothingBurstSecondaryAttack, SkillImages.SoothingBurst },
         { ShaleStormSecondaryAttack, SkillImages.ShaleStorm },
+        { MastersFortitudeBarrier, TraitImages.MastersFortitude },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -794,7 +795,7 @@ public static class SkillItemOverrides
             { SandstormShroudDetonation, SkillImages.SandstormShroud },
             { SandFlareSharedBarrier, SkillImages.SandFlare },
             { DesertEmpowerment, TraitImages.DesertEmpowerment },
-            { CascadingCorruption, TraitImages.CascadingCorruption },
+            { CascadingCorruptionDamage, TraitImages.CascadingCorruption },
             { DeathlyHaste, TraitImages.DeathlyHaste },
             { ApproachingDoom, TraitImages.DoomApproaches },
             { UnstableExplosion, SkillImages.SummonMadness },
@@ -961,6 +962,7 @@ public static class SkillItemOverrides
             { JetJuvenileRiverOtter, SkillImages.JetOtter },
             { ScratchJuvenileRiverOtter, SkillImages.ScratchOtter },
             { TailWhipJuvenileRiverOtter, SkillImages.TailWhipOtter  },
+            { VerdantEtchingHeal, TraitImages.VerdantEtching  },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
@@ -1145,6 +1147,7 @@ public static class SkillItemOverrides
             { OnYourKneesEcho, SkillImages.OnYourKnees },
             { ChantOfRecuperationHealing, SkillImages.ChantOfRecuperation },
             { ChantOfRecuperationBarrier, SkillImages.ChantOfRecuperation },
+            { UnshakableMountainBarrier, TraitImages.UnshakableMountain },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },

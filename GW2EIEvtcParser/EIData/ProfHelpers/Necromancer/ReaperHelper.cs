@@ -46,7 +46,16 @@ internal static class ReaperHelper
         // Soul Eater
         new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.All)
             .UsingApproximate()
-            .WithBuilds(GW2Builds.July2019Balance),
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.April2026Balancepocalypse),
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.sPvPWvW)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "12% to foes within 300 range", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.PvE)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "15% to foes within 300 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.PvE)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

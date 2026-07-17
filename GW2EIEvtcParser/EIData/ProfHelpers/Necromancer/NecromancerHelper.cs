@@ -63,12 +63,18 @@ internal static class NecromancerHelper
     [
         // Spite
         // - Spiteful Talisman
-        new BuffOnFoeDamageModifier(Mod_SpitefulTalisman, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2026Balancepocalypse),
-        new BuffOnFoeDamageModifier(Mod_SpitefulTalisman, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "12% on boonless target", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "7% on target with boons", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanNoBoons, NumberOfBoons, "Spiteful Talisman (No Boons)", "5% on boonless target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnFoeDamageModifier(Mod_SpitefulTalisman, NumberOfBoons, "Spiteful Talisman", "5% on boonless target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new BuffOnFoeDamageModifier(Mod_SpitefulTalismanBoons, NumberOfBoons, "Spiteful Talisman (Boons)", "3% on target with boons", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SpitefulTalisman, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
         // - Death's Embrace
         new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
@@ -122,11 +128,19 @@ internal static class NecromancerHelper
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
         
         // Death Magic
-        // - Dark Defiance
-        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All),
+        // - Dark Defiance / Dark Defense
+        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.December2018Balance, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defense", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance),
         // - Beyond the Veil
-        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(10), TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(10), TraitImages.BeyondTheVeil, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
+        // - Corrupter's Fervor
+        new BuffOnActorDamageModifier(Mod_CorruptersFervor, DeathsCarapace, "Corrupter's Fervor", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(25), TraitImages.CorruptersFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_CorruptersFervor, DeathsCarapace, "Corrupter's Fervor", "-15%", DamageSource.Incoming, -15, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, new GainComputerByAtLeastNStacksPresent(25), TraitImages.CorruptersFervor, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

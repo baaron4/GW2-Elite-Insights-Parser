@@ -1062,7 +1062,7 @@ public static class SkillIDs
     public const long IceDrakeVenomSkill = 13096;
     public const long ShadowReturn = 13106;
     public const long TwistingFangs = 13110;
-    public const long ShadowRefuge = 13117;
+    public const long ShadowRefugeSkill = 13117;
     public const long BasiliskVenomSkill = 13132;
     public const long BasiliskVenomBuff = 13133;
     public const long DaggerStorm = 13134;
@@ -1711,6 +1711,7 @@ public static class SkillIDs
     public const long InvigoratedBulwark = 30207;
     public const long JusticeDragonhunter = 30232;
     public const long MedBlasterHeal = 30235;
+    public const long VerdantEtchingHeal = 30245;
     public const long DebilitatingArcRoll = 30246;
     public const long LesserSignetOfWrath = 30255;
     public const long Outrage = 30258;
@@ -2625,6 +2626,7 @@ public static class SkillIDs
     public const long FullCounterHit = 41243;
     public const long SkimmerBarrelRollSkill = 41253;
     public const long Chapter1SearingSpell = 41258;
+    public const long MastersFortitudeBarrier = 41284;
     public const long PhantasmalSeekingAxe = 41324;
     public const long UnhinderedDelivery = 41328;
     public const long Mercy = 41372;
@@ -3713,7 +3715,7 @@ public static class SkillIDs
     public const long Blight = 62653;
     public const long ExecutionersCallingDualStrike = 62656;
     public const long VirtuosoBlade1 = 62658;
-    public const long CascadingCorruption = 62660;
+    public const long CascadingCorruptionDamage = 62660;
     public const long ElixirOfPromise = 62667;
     public const long RushingJusticeSkill = 62668;
     public const long DeathlyHaste = 62671;
@@ -5686,6 +5688,12 @@ public static class SkillIDs
     public const long TailWhipJuvenileRiverOtter = 80164;
     public const long ScratchJuvenileRiverOtter= 80186;
     public const long ElderDracoPop = 80194;
+    public const long Meltdown = 80215;
+    public const long ShadowRefugeBuff = 80216;
+    public const long UnravelElementsOfRageSkill = 80231;
+    public const long UnshakableMountainBarrier = 80234;
+    public const long RiteOfTheGreatDwarfVersedInStone = 80245;
+    public const long CascadingCorruptionStackBuff = 80279;
     #endregion
 
 }
