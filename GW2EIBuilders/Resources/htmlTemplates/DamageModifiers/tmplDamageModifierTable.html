@@ -295,9 +295,9 @@
                     } else {
                         gain = "Pure Damage: ";
                     }
-                    gain += numberFormater(item[2]);
+                    gain += numberFormater(item[2], 0, 0);
                     if (mod.nonMultiplier) {
-                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3], 0, 3);
+                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3], 0, 2);
                     }
                     res += "<br>" + gain;
                 } else if (item[2] > 0) {
