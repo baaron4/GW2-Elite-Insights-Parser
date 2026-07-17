@@ -532,9 +532,8 @@ internal class UraTheSteamshrieker : MountBalrior
                 {
                     foreach (var effect in shockwaves)
                     {
-                        // Looks like in game it loses velocity as it gets further away from the starting point, can't display it as velocity is unknown.
                         lifespan = effect.ComputeLifespan(log, 8000);
-                        replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.5, 5000);
+                        replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.5, 3400);
                     }
                 }
                 break;
