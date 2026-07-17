@@ -82,7 +82,7 @@
                 return classes;
             },
             formatValue: function (buff, value) {
-                return buff.stacking ? numberFormater(value) : percentFormater(value / 100);
+                return buff.stacking ? numberFormater(value) : percentFormater(value / 100, 0, 3);
             },
             sortData: function(rows) {
                 const order = this.sortdata.order === "asc" ? 1 : -1;
@@ -129,7 +129,7 @@
                         let res = '';
                         if (val[6] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += percentFormater(val[6] / 100) + " generated as presence";
+                            res += percentFormater(val[6] / 100, 0, 3) + " generated as presence";
                         }
                         if (val[1] !== val[0]) {
                             res += res.length > 0 ? "<br>" : '';
@@ -153,7 +153,7 @@
                         }
                         return res.length > 0 ? res : false;
                     } else if (buff.stacking && val[1] > 0) {
-                        return "Uptime: " + percentFormater(val[1] / 100);
+                        return "Uptime: " + percentFormater(val[1] / 100, 0, 3);
                     } else {
                         return false;
                     }

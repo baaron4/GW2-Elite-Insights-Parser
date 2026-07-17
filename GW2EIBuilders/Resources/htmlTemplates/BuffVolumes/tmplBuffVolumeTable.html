@@ -151,7 +151,7 @@
                     force = this.outgoing && (val[1] > 0 || val[2] > 0);
                 }
                 if (value > 0 || force) {
-                    return buff.stacking ? numberFormater(value) : percentFormater(value / 100);
+                    return this.formatValue(buff, value);
                 }
                 return "-";
             }
