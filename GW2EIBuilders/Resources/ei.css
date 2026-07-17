@@ -503,6 +503,10 @@ th:hover img.icon-hover,
     text-overflow: ellipsis;
 }
 
+.cr-status-percent {
+    width: 39.2px;
+}
+
 .damage-cell {
     width: 150px;
 }
@@ -1074,6 +1078,10 @@ td.approximate::before {
 }
 .wd-200px {
     width: 200px;
+}
+
+.invisible-text {
+    color: transparent !important;
 }
 
 /* Graph range control */

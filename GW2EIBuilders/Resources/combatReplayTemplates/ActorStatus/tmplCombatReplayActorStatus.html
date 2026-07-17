@@ -2,7 +2,7 @@
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
             :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
-            <p class="mb-0 scale65">
+            <p class="mb-0 scale65 cr-status-percent text-left">
                 {{percentageFormater(healths, time)}} %
             </p>
 
@@ -12,7 +12,7 @@
                 {{actor.name}}
             </h6>
 
-            <p class="mb-0 scale65 ml-auto">
+            <p class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
                 {{percentageFormater(barriers, time)}} %
             </p>
         </div>
