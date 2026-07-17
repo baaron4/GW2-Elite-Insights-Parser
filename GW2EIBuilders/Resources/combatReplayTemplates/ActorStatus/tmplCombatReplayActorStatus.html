@@ -45,7 +45,7 @@
                     return 100;
                 }
                 let timeToUse = time / 1000.0;
-                if (!this.isTarget) {
+                if (!this.isTarget || this.actorPhaseTargetIndex >= 0) {
                     timeToUse -= this.encounterPhase.start;
                 }
                 return findState(state, timeToUse, 0, state.length - 1);
@@ -93,8 +93,17 @@
 
                 return logData.players[this.actorIndex];
             },
+            actorPhaseTargetIndex: function() {
+                if (this.isTarget) {
+                    return this.encounterPhase.targets.indexOf(this.actorIndex);
+                }
+                return -1;
+            },
             healths: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].healthStates;
+                    }
                     return graphData.phases[0].targetsHealthStatesForCR[this.actorIndex];
                 }
 
@@ -102,6 +111,9 @@
             },
             barriers: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].barrierStates;
+                    }
                     return graphData.phases[0].targetsBarrierStatesForCR[this.actorIndex];
                 }
 
@@ -109,6 +121,9 @@
             },
             breakbar: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].breakbarPercentStates;
+                    }
                     return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
                 }
 
