@@ -348,6 +348,42 @@ internal static class WeaverHelper
         new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShaleStorm),
     ];
 
+    private static readonly HashSet<long> _dualAttunements =
+    [
+        DualFireAttunement,
+        DualWaterAttunement,
+        DualAirAttunement,
+        DualEarthAttunement,
+    ];
+    private static readonly HashSet<long> _minorAttunements =
+    [
+        FireMinorAttunement,
+        WaterMinorAttunement,
+        AirMinorAttunement,
+        EarthMinorAttunement
+    ];
+    private static readonly HashSet<long> _majorAttunements =
+    [
+        FireMajorAttunement,
+        WaterMajorAttunement,
+        AirMajorAttunement,
+        EarthMajorAttunement
+    ];
+    private static readonly HashSet<long> _basicAttunements =
+    [
+        FireAttunementBuff,
+        WaterAttunementBuff,
+        AirAttunementBuff,
+        EarthAttunementBuff
+    ];
+
+    private static readonly Dictionary<long, long> _basicToDualTranslation = new()
+    {
+        { FireAttunementBuff, DualFireAttunement },
+        { WaterAttunementBuff, DualWaterAttunement },
+        { AirAttunementBuff, DualAirAttunement },
+        { EarthAttunementBuff, DualEarthAttunement },
+    };
 
     private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new()
     {
@@ -365,7 +401,15 @@ internal static class WeaverHelper
         { EarthMajorAttunement, [EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement] },
     };
 
-    private static long TranslateWeaverAttunement(IEnumerable<BuffApplyEvent> buffApplies)
+    private static readonly Dictionary<long, HashSet<long>> _basicsTranslation = new()
+    {
+        { FireAttunementBuff, [FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement] },
+        { WaterAttunementBuff, [WaterFireAttunement, WaterAirAttunement, WaterEarthAttunement, DualWaterAttunement] },
+        { AirAttunementBuff, [AirFireAttunement, AirWaterAttunement, AirEarthAttunement, DualAirAttunement] },
+        { EarthAttunementBuff, [EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement] },
+    };
+
+    private static long TranslateWeaverAttunement(IReadOnlyList<BuffApplyEvent> buffApplies)
     {
         // check if more than 3 ids are present
         // Seems to happen when the attunement bug happens
@@ -374,22 +418,23 @@ internal static class WeaverHelper
         {
             throw new EIException("Too much buff apply events in TranslateWeaverAttunement");
         }*/
-        HashSet<long> duals =
-        [
-            DualFireAttunement,
-            DualWaterAttunement,
-            DualAirAttunement,
-            DualEarthAttunement,
-        ];
         HashSet<long>? major = null;
         HashSet<long>? minor = null;
+        if (buffApplies.Count == 1 && _basicAttunements.Contains(buffApplies[0].BuffID)) 
+        {
+            return _basicToDualTranslation[buffApplies[0].BuffID];
+        }
         foreach (BuffApplyEvent c in buffApplies)
         {
-            if (duals.Contains(c.BuffID))
+            if (_dualAttunements.Contains(c.BuffID))
             {
                 return c.BuffID;
             }
-            if (_majorsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
+            if (_basicsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
+            {
+                major = potentialMajors;
+            }
+            else if (_majorsTranslation.TryGetValue(c.BuffID, out potentialMajors))
             {
                 major = potentialMajors;
             }
@@ -402,64 +447,30 @@ internal static class WeaverHelper
         {
             return 0;
         }
-        IEnumerable<long> inter = major.Intersect(minor);
-        if (inter.Count() != 1)
+        var inter = major.Intersect(minor).ToList();
+        if (inter.Count != 1)
         {
             throw new InvalidDataException("Intersection incorrect in TranslateWeaverAttunement");
         }
-        return inter.First();
+        return inter[0];
     }
 
     public static List<BuffEvent> TransformWeaverAttunements(IReadOnlyList<BuffEvent> buffs, Dictionary<long, List<BuffEvent>> buffsByID, AgentItem a, SkillData skillData)
     {
         List<BuffEvent> res = [];
-        HashSet<long> attunements =
-        [
-            FireAttunementBuff,
-            WaterAttunementBuff,
-            AirAttunementBuff,
-            EarthAttunementBuff
-        ];
-
-        // not useful for us
-        /*const long fireAir = 45162;
-        const long fireEarth = 42756;
-        const long fireWater = 45502;
-        const long waterAir = 46418;
-        const long waterEarth = 42792;
-        const long airEarth = 45683;*/
 
         HashSet<long> weaverAttunements =
         [
-            FireMajorAttunement,
-            FireMinorAttunement,
-            WaterMajorAttunement,
-            WaterMinorAttunement,
-            AirMajorAttunement,
-            AirMinorAttunement,
-            EarthMajorAttunement,
-            EarthMinorAttunement,
+            .._basicAttunements,
 
-            DualFireAttunement,
-            DualWaterAttunement,
-            DualAirAttunement,
-            DualEarthAttunement,
+            .._majorAttunements,
 
-            /*fireAir,
-            fireEarth,
-            fireWater,
-            waterAir,
-            waterEarth,
-            airEarth,*/
+            .._minorAttunements,
+
+            .._dualAttunements
+
         ];
-        // first we get rid of standard attunements
         HashSet<long> toClean = [];
-        var attuns = buffs.Where(x => attunements.Contains(x.BuffID));
-        foreach (BuffEvent c in attuns)
-        {
-            toClean.Add(c.BuffID);
-            c.Invalidate(skillData);
-        }
         // get all weaver attunements ids and group them by time
         var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID));
         if (!weaverAttuns.Any())
@@ -470,7 +481,7 @@ internal static class WeaverHelper
         long prevID = 0;
         foreach (KeyValuePair<long, List<BuffEvent>> pair in groupByTime)
         {
-            var applies = pair.Value.OfType<BuffApplyEvent>();
+            var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
             long curID = TranslateWeaverAttunement(applies);
             foreach (BuffEvent c in pair.Value)
             {
