@@ -380,7 +380,7 @@ public abstract class LogLogic
         LogID = LogIDs.LogMasks.Unsupported;
     }
 
-    internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+    internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases, IReadOnlyList<EncounterPhaseData> encounterPhases)
     {
         if (!requirePhases)
         {
@@ -396,6 +396,14 @@ public abstract class LogLogic
             {
                 continue;
             }
+            long targetStart = Math.Max(target.FirstAware, log.LogData.LogStart);
+            long targetEnd = Math.Min(target.LastAware, log.LogData.LogEnd);
+            var encounterPhase = encounterPhases.FirstOrDefault(x => x.Targets.ContainsKey(target));
+            if (encounterPhase != null)
+            {
+                targetStart = Math.Max(encounterPhase.Start, targetStart);
+                targetEnd = Math.Min(encounterPhase.End, targetEnd);
+            }
             int i = 0;
             var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
             var (_, _, _, actives) = target.GetStatus(log);
@@ -406,8 +414,8 @@ public abstract class LogLogic
                     continue;
                 }
 
-                long start = Math.Max(breakbarActive.Start - BreakbarPhaseTimeBuildup, log.LogData.LogStart);
-                long end = Math.Min(breakbarActive.End, log.LogData.LogEnd);
+                long start = Math.Max(breakbarActive.Start - BreakbarPhaseTimeBuildup, targetStart);
+                long end = Math.Min(breakbarActive.End, targetEnd);
                 var phase = new BreakbarPhaseData(start, end, target.Character + " Breakbar " + ++i, start - breakbarActive.Start);
                 phase.AddTarget(target, log);
                 breakbarPhases.Add(phase);

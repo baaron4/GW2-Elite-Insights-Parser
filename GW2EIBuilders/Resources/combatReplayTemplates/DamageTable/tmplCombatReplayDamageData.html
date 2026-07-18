@@ -11,6 +11,7 @@
 <script>
     Vue.component("combat-replay-damage-data-component", {
         template: `${template}`,
+        mixins: [encounterPhaseComponent],
         props: ["time", "selectedactorid"],
         data: function () {
             return {
@@ -23,11 +24,8 @@
         },
         computed: {
             phase: function () {
-                return logData.phases[0];
+                return logData.phases[this.encounterPhase.id];
             },   
-            targets: function () {
-                return logData.targetless ? [] : this.phase.targets;
-            },
             selectorWidth: function () {
                 return  620;
             },

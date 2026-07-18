@@ -27,9 +27,19 @@ internal class PhaseChartDataDto
             TargetsBarrierStatesForCR = new(log.LogData.Logic.Targets.Count);
             foreach (SingleActor target in log.LogData.Logic.Targets)
             {
-                TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));
-                TargetsBreakbarPercentStatesForCR.Add(ChartDataDto.BuildBreakbarPercentStates(log, target, phase));
-                TargetsBarrierStatesForCR.Add(ChartDataDto.BuildBarrierStates(log, target, phase));
+                // If already a target for the encounter, states are present, we don't need to duplicate them
+                if (log.LogData.GetEncounterPhases(log).Any(x => x.Targets.ContainsKey(target)))
+                {
+                    TargetsHealthStatesForCR.Add([]);
+                    TargetsBreakbarPercentStatesForCR.Add(null);
+                    TargetsBarrierStatesForCR.Add(null);
+                } 
+                else
+                {
+                    TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));
+                    TargetsBreakbarPercentStatesForCR.Add(ChartDataDto.BuildBreakbarPercentStates(log, target, phase));
+                    TargetsBarrierStatesForCR.Add(ChartDataDto.BuildBarrierStates(log, target, phase));
+                }
             }
         }
     }

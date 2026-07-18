@@ -275,8 +275,8 @@
                 isTouchDevice: isTouchDevice,
                 backwards: false,
                 sliderDelimiter: sliderDelimiter,
-                selectedPhase: null,
-                hoveredPhase: null,
+                selectedPhaseId: -1,
+                hoveredPhaseId: null,
                 draggingCursor: false,
                 hoverTime: 0,
                 isHoveringTimeline: false,    
@@ -295,7 +295,7 @@
                         const encounterPhase = this.encounterPhase;
                         this.updateAnimatorTimes(encounterPhase);
                         this.resetViewpoint();
-                        this.selectedPhase = this.phases[0];
+                        this.selectedPhaseId = this.phases[0].id;
                     }
                 },
                 deep: true
@@ -306,10 +306,16 @@
             const encounterPhase = this.encounterPhase;
             this.updateAnimatorTimes(encounterPhase);
             this.resetViewpoint();
-            this.selectedPhase = this.phases[0];
+            this.selectedPhaseId = this.normalPhases[0].id;
             animationControlComponent = this;
         },
         computed: {
+            selectedPhase: function() {
+                return logData.phases[this.selectedPhaseId];
+            },
+            hoveredPhase: function() {
+                return logData.phases[this.hoveredPhaseId];
+            },
             phases: function () {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
@@ -503,7 +509,7 @@
                 this.backwards = animator.toggleBackwards();
             },
             resetViewpoint: function () {
-                animator.resetViewpoint(this.phases[0].eiid);
+                animator.resetViewpoint(this.normalPhases[0].eiid);
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();
@@ -542,7 +548,7 @@
                 };
             },
             updatePhaseTime: function (phase) {
-                this.selectedPhase = phase;
+                this.selectedPhaseId = phase.id;
                 var min = phase.start * 1000;
                 var max = phase.end * 1000;
                 var name = this.getPhaseName(phase);
@@ -553,7 +559,8 @@
                 this.updateTime(min - offset);
             },
             updateInputTime: function (value) {
-                animator.updateInputTime(value);
+                const offset = this.range.min;
+                animator.updateInputTime(value, offset);
             },
             timeToX(time) {
                 time = time || this.minTime;
@@ -602,7 +609,7 @@
             },
             onTimelineMouseLeave() {
                 this.isHoveringTimeline = false;
-                this.hoveredPhase = null;
+                this.hoveredPhaseId = -1;
             },
             onTimelineMouseDown(e) {
                 let time = this.getTimeFromEvent(e);
@@ -612,20 +619,20 @@
                 }
             },
             getPhaseOpacity(phase) {
-                if (phase === this.hoveredPhase) {
+                if (phase.id === this.hoveredPhaseId) {
                     return 1.0;
                 }
-                return this.selectedPhase === phase ? 0.75 : 0.4;
+                return this.selectedPhaseId === phase.id ? 0.75 : 0.4;
             },
             hoverPhase(phase) {
-                this.hoveredPhase = phase;
+                this.hoveredPhaseId = phase.id;
                 if (this.clickThroughDragCursor) {
                     this.clickThroughDragCursor = false;
                     this.updatePhaseTime(phase);
                 }
             },
             resetHoveredPhase() {
-                this.hoveredPhase = null;
+                this.hoveredPhaseId = -1;
             },    
             clearPhaseMouseEvents() {
                 clearTimeout(this.dragThroughPhaseBlockTimeout);
@@ -637,7 +644,7 @@
                 if (this.phaseDoubleClickTimeout) {
                     return;
                 }
-                this.selectedPhase = phase;
+                this.selectedPhaseId = phase.id;
                 this.dragThroughPhaseBlockTimeout = this.dragThroughPhaseBlockTimeout ||  setTimeout(() => {
                     this.clearPhaseMouseEvents();
                     let time = this.getTimeFromEvent(e);

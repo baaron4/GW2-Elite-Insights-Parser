@@ -1,7 +1,8 @@
 ﻿<template>
     <div class="text-white" @click="select">
-        <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}">
-            <p class="mb-0 scale65">
+        <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
+             :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
+            <p class="mb-0 scale65 cr-status-percent text-left">
                 {{percentageFormater(healths, time)}}
             </p>
 
@@ -11,8 +12,8 @@
                 {{actor.name}}
             </h6>
 
-            <p class="mb-0 scale65 ml-auto">
-                {{percentageFormater(barriers, time)}}
+            <p class="mb-0 scale65 ml-autocr-status-percent text-right" :class="{'invisible-text': !hasBarrier}>
+                {{ percentageFormater(barriers, time) }}
             </p>
         </div>
 
@@ -26,6 +27,7 @@
 
 <script>
     Vue.component("combat-replay-actor-status-component", {
+        mixins: [encounterPhaseComponent],
         props: ["isTarget", "actorIndex", "time"],
         template: `${template}`,
         methods: {
@@ -35,22 +37,25 @@
             select: function () {
                 animator.selectActor(this.actor.uniqueID);
             },
-            hasBarrier: function (time) {
-                const barrierPercent = this.getPercent(this.barriers, time);
-                return this.barriers && barrierPercent > 0;
+            hasActiveBarrier: function (time) {
+                return this.hasBarrier && this.getPercent(this.barriers, time) > 0;
             },
             getPercent: function (state, time) {
                 if (!state) {
                     return 100;
                 }
-                return findState(state, time / 1000.0, 0, state.length - 1);
+                let timeToUse = time / 1000.0;
+                if (!this.isTarget || this.actorPhaseTargetIndex >= 0) {
+                    timeToUse -= this.encounterPhase.start;
+                }
+                return findState(state, timeToUse, 0, state.length - 1);
             },
             getActorGradient: function (time, status) {
                 const color = status === 0 ? 'black' : status === 1 ? 'red' : status === 2 ? 'grey' : 'green';
                 const healthPercent = this.getPercent(this.healths, time);
                 const healthGradient = computeGradient(color, healthPercent, 'black');
 
-                if (!this.hasBarrier(time)) {
+                if (!this.hasActiveBarrier(time)) {
                     return healthGradient;
                 }
 
@@ -64,8 +69,8 @@
                 return computeGradient(color, this.getPercent(this.breakbar, time), 'black');
             },
             percentageFormater: function (healths, time) {
-                const percent = this.getPercent(healths, time) / 100;
-                return percentFormater(percent);
+                const percent = this.getPercent(healths, time);
+                return (Math.round(percent * 100) / 100).toFixed(2);
             },
             getActorHeight: function () {
                 if (this.isTarget) {
@@ -76,9 +81,6 @@
             }
         },
         computed: {
-            phase: function () {
-                return logData.phases[0];
-            },
             status: function () {
                 var crPData = animator.getActorData(this.actor.uniqueID);
                 var icon = crPData.getIcon(this.time);
@@ -91,32 +93,50 @@
 
                 return logData.players[this.actorIndex];
             },
+            actorPhaseTargetIndex: function() {
+                if (this.isTarget) {
+                    return this.encounterPhase.targets.indexOf(this.actorIndex);
+                }
+                return -1;
+            },
             healths: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].healthStates;
+                    }
                     return graphData.phases[0].targetsHealthStatesForCR[this.actorIndex];
                 }
 
-                return graphData.phases[0].players[this.actorIndex].healthStates;
+                return graphData.phases[this.encounterPhase.id].players[this.actorIndex].healthStates;
             },
             barriers: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].barrierStates;
+                    }
                     return graphData.phases[0].targetsBarrierStatesForCR[this.actorIndex];
                 }
 
-                return graphData.phases[0].players[this.actorIndex].barrierStates;
+                return graphData.phases[this.encounterPhase.id].players[this.actorIndex].barrierStates;
             },
             breakbar: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].breakbarPercentStates;
+                    }
                     return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
                 }
 
                 return null;
             },
             hasHealth: function () {
-                return !!this.healths;
+                return !!this.healths && this.healths.length > 0;
+            },
+            hasBarrier: function () {
+                return this.barriers && this.barriers.length > 0 ;
             },
             hasBreakbar: function () {
-                return !!this.breakbar;
+                return !!this.breakbar && this.breakbar.length > 0;
             },
             
         }

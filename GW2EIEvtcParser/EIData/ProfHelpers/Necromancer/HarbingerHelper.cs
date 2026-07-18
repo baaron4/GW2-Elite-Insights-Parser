@@ -20,18 +20,28 @@ internal static class HarbingerHelper
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud)
             .UsingBeforeWeaponSwap(),
-        new DamageCastFinder(CascadingCorruption, CascadingCorruption)
+
+        new DamageCastFinder(CascadingCorruptionDamage, CascadingCorruptionDamage)
             .UsingDisableWithEffectData()
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
+        new EffectCastFinderByDst(CascadingCorruptionDamage, EffectGUIDs.HarbingerCascadingCorruption)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
+
         new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
+
         new EffectCastFinderByDst(ApproachingDoom, EffectGUIDs.HarbingerDoomApproaches)
             .UsingDstSpecChecker(Spec.Harbinger)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.July2026Balance),
+
+        new BuffGainCastFinder(Meltdown, Meltdown)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
 
@@ -68,6 +78,9 @@ internal static class HarbingerHelper
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        // Meltdown
+        new BuffOnActorDamageModifier(Mod_Meltdown, Meltdown, "Meltdown", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.Meltdown, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -80,6 +93,8 @@ internal static class HarbingerHelper
         new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, SkillImages.HarbingerShroud),
         new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.Blight),
         new Buff("Implacable Foe", ImplacableFoe, Source.Harbinger, BuffClassification.Other, TraitImages.ImplacableFoe),
+        new Buff("Cascading Corruption", CascadingCorruptionStackBuff, Source.Harbinger, BuffStackType.Stacking, 20, BuffClassification.Other, TraitImages.CascadingCorruptionStackBuff),
+        new Buff("Meltdown", Meltdown, Source.Harbinger, BuffClassification.Other, TraitImages.Meltdown),
     ];
 
     private static readonly HashSet<long> _harbingerShroudTransform =
@@ -103,7 +118,7 @@ internal static class HarbingerHelper
             foreach (EffectEvent effect in vitalDraws)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectVitalDraw);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, (uint)(effect.Scale * 240), EffectImages.EffectVitalDraw);
             }
         }
     }

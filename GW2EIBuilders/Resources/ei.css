@@ -139,7 +139,7 @@
 
 .cr-breakbar-phase-display {
     font-size: 0.65rem;
-    width: 180px;
+    width: 100%;
 }
 
 .squad-details {
@@ -503,6 +503,10 @@ th:hover img.icon-hover,
     text-overflow: ellipsis;
 }
 
+.cr-status-percent {
+    width: 39.2px;
+}
+
 .damage-cell {
     width: 150px;
 }
@@ -731,6 +735,8 @@ canvas {
 
 .combat-replay-mechanics-list-container {
     max-height: 800px;
+    max-width:450px; 
+    overflow-y:auto;
 }
 
 .combat-actor-status-container {
@@ -744,6 +750,16 @@ canvas {
 
 .combat-replay-mechanics-list-header > a:hover {
     text-decoration: none;
+}
+
+.combat-replay-mechanics-list-mech-header {
+    width: 250px;
+}
+.combat-replay-mechanics-list-time-header {
+    width: 70px;
+}
+.combat-replay-mechanics-list-actor-header {
+    width: 130px;
 }
 .sticky-header {
     position: sticky;
@@ -1062,6 +1078,10 @@ td.approximate::before {
 }
 .wd-200px {
     width: 200px;
+}
+
+.invisible-text {
+    color: transparent !important;
 }
 
 /* Graph range control */

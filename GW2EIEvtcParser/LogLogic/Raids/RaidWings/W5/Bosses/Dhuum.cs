@@ -126,18 +126,17 @@ internal class Dhuum : HallOfChains
             new DamageCastFinder(DeathlyAura, DeathlyAura),
             new BuffLossCastFinder(ExpelEnergySAK, ArcingAffliction).UsingChecker((brae, combatData, agentData, skillData) =>
             {
-                bool state = true;
                 // Buff loss caused by the Greather Death Mark
                 if (combatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To.Is(brae.To)))
                 {
-                    state = false;
+                    return false;
                 }
                 // Buff loss at the time of the 10% starting
                 if (combatData.GetBuffDataByIDByDst(SourcePureOblivionBuff, brae.To).Any(x => Math.Abs(x.Time - brae.Time) < 100))
                 {
-                    state = false;
+                    return false;
                 }
-                return state;
+                return brae.RemovedDuration > ServerDelayConstant;
             }),
         ];
     }
@@ -376,7 +375,7 @@ internal class Dhuum : HallOfChains
     {
         // There are other gadgets with MaxHP 0, Width 16.
         var candidates = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 0)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) <= 1)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
             .Distinct()

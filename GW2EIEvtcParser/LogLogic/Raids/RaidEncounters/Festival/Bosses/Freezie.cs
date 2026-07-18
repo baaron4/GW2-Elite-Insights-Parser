@@ -62,7 +62,7 @@ internal class Freezie : FestivalRaidEncounterLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Snow Piles
-        var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 2 && x.HitboxHeight == 300);
+        var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) <= 1 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 2 && x.HitboxHeight == 300);
         foreach (AgentItem pile in snowPiles)
         {
             pile.OverrideID(TargetID.SnowPile, agentData);

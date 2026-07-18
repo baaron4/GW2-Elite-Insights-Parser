@@ -42,7 +42,10 @@ internal static class WeaverHelper
         new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceBuff),
         new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceBuff)
             .UsingICD(500),
-        new BuffGainCastFinder(UnravelSkill, UnravelBuff),
+        new BuffGainCastFinder(UnravelSkill, UnravelBuff)
+            .WithBuilds(GW2Builds.September2017PathOfFireRelease, GW2Builds.July2026Balance),
+        new BuffGainCastFinder(UnravelElementsOfRageSkill, UnravelBuff)
+            .WithBuilds(GW2Builds.July2026Balance),
         // Fire       
         new BuffGainCastFinder(DualFireAttunement, DualFireAttunement),
         new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement),
@@ -244,21 +247,26 @@ internal static class WeaverHelper
             .WithBuilds(GW2Builds.September2023Balance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.September2023Balance, GW2Builds.April2026Balancepocalypse),
-        // Elements of Rage
+        // Elements of Rage Unified
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.September2023Balance, GW2Builds.April2026Balancepocalypse),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRageStrike, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRageCondition, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance),
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.September2023Balance, GW2Builds.April2026Balancepocalypse),
+        // Elements of Rage Split
+        new BuffOnActorDamageModifier(Mod_ElementsOfRageStrike, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_ElementsOfRageCondition, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_ElementsOfRageStrike, ElementsOfRage, "Elements of Rage", "15% (8s) after double attuning", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
+        new BuffOnActorDamageModifier(Mod_ElementsOfRageCondition, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2026Balance),
         // Woven Fire
         new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
         // Woven Air
@@ -280,9 +288,9 @@ internal static class WeaverHelper
         new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.July2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -340,6 +348,42 @@ internal static class WeaverHelper
         new Buff("Shale Storm (Additional Strike)", ShaleStormSecondaryAttackBuff, Source.Weaver, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShaleStorm),
     ];
 
+    private static readonly HashSet<long> _dualAttunements =
+    [
+        DualFireAttunement,
+        DualWaterAttunement,
+        DualAirAttunement,
+        DualEarthAttunement,
+    ];
+    private static readonly HashSet<long> _minorAttunements =
+    [
+        FireMinorAttunement,
+        WaterMinorAttunement,
+        AirMinorAttunement,
+        EarthMinorAttunement
+    ];
+    private static readonly HashSet<long> _majorAttunements =
+    [
+        FireMajorAttunement,
+        WaterMajorAttunement,
+        AirMajorAttunement,
+        EarthMajorAttunement
+    ];
+    private static readonly HashSet<long> _basicAttunements =
+    [
+        FireAttunementBuff,
+        WaterAttunementBuff,
+        AirAttunementBuff,
+        EarthAttunementBuff
+    ];
+
+    private static readonly Dictionary<long, long> _basicToDualTranslation = new()
+    {
+        { FireAttunementBuff, DualFireAttunement },
+        { WaterAttunementBuff, DualWaterAttunement },
+        { AirAttunementBuff, DualAirAttunement },
+        { EarthAttunementBuff, DualEarthAttunement },
+    };
 
     private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new()
     {
@@ -357,7 +401,15 @@ internal static class WeaverHelper
         { EarthMajorAttunement, [EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement] },
     };
 
-    private static long TranslateWeaverAttunement(IEnumerable<BuffApplyEvent> buffApplies)
+    private static readonly Dictionary<long, HashSet<long>> _basicsTranslation = new()
+    {
+        { FireAttunementBuff, [FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement] },
+        { WaterAttunementBuff, [WaterFireAttunement, WaterAirAttunement, WaterEarthAttunement, DualWaterAttunement] },
+        { AirAttunementBuff, [AirFireAttunement, AirWaterAttunement, AirEarthAttunement, DualAirAttunement] },
+        { EarthAttunementBuff, [EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement] },
+    };
+
+    private static long TranslateWeaverAttunement(IReadOnlyList<BuffApplyEvent> buffApplies)
     {
         // check if more than 3 ids are present
         // Seems to happen when the attunement bug happens
@@ -366,22 +418,23 @@ internal static class WeaverHelper
         {
             throw new EIException("Too much buff apply events in TranslateWeaverAttunement");
         }*/
-        HashSet<long> duals =
-        [
-            DualFireAttunement,
-            DualWaterAttunement,
-            DualAirAttunement,
-            DualEarthAttunement,
-        ];
         HashSet<long>? major = null;
         HashSet<long>? minor = null;
+        if (buffApplies.Count == 1 && _basicAttunements.Contains(buffApplies[0].BuffID)) 
+        {
+            return _basicToDualTranslation[buffApplies[0].BuffID];
+        }
         foreach (BuffApplyEvent c in buffApplies)
         {
-            if (duals.Contains(c.BuffID))
+            if (_dualAttunements.Contains(c.BuffID))
             {
                 return c.BuffID;
             }
-            if (_majorsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
+            if (_basicsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
+            {
+                major = potentialMajors;
+            }
+            else if (_majorsTranslation.TryGetValue(c.BuffID, out potentialMajors))
             {
                 major = potentialMajors;
             }
@@ -394,64 +447,30 @@ internal static class WeaverHelper
         {
             return 0;
         }
-        IEnumerable<long> inter = major.Intersect(minor);
-        if (inter.Count() != 1)
+        var inter = major.Intersect(minor).ToList();
+        if (inter.Count != 1)
         {
             throw new InvalidDataException("Intersection incorrect in TranslateWeaverAttunement");
         }
-        return inter.First();
+        return inter[0];
     }
 
     public static List<BuffEvent> TransformWeaverAttunements(IReadOnlyList<BuffEvent> buffs, Dictionary<long, List<BuffEvent>> buffsByID, AgentItem a, SkillData skillData)
     {
         List<BuffEvent> res = [];
-        HashSet<long> attunements =
-        [
-            FireAttunementBuff,
-            WaterAttunementBuff,
-            AirAttunementBuff,
-            EarthAttunementBuff
-        ];
-
-        // not useful for us
-        /*const long fireAir = 45162;
-        const long fireEarth = 42756;
-        const long fireWater = 45502;
-        const long waterAir = 46418;
-        const long waterEarth = 42792;
-        const long airEarth = 45683;*/
 
         HashSet<long> weaverAttunements =
         [
-            FireMajorAttunement,
-            FireMinorAttunement,
-            WaterMajorAttunement,
-            WaterMinorAttunement,
-            AirMajorAttunement,
-            AirMinorAttunement,
-            EarthMajorAttunement,
-            EarthMinorAttunement,
+            .._basicAttunements,
 
-            DualFireAttunement,
-            DualWaterAttunement,
-            DualAirAttunement,
-            DualEarthAttunement,
+            .._majorAttunements,
 
-            /*fireAir,
-            fireEarth,
-            fireWater,
-            waterAir,
-            waterEarth,
-            airEarth,*/
+            .._minorAttunements,
+
+            .._dualAttunements
+
         ];
-        // first we get rid of standard attunements
         HashSet<long> toClean = [];
-        var attuns = buffs.Where(x => attunements.Contains(x.BuffID));
-        foreach (BuffEvent c in attuns)
-        {
-            toClean.Add(c.BuffID);
-            c.Invalidate(skillData);
-        }
         // get all weaver attunements ids and group them by time
         var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID));
         if (!weaverAttuns.Any())
@@ -462,7 +481,7 @@ internal static class WeaverHelper
         long prevID = 0;
         foreach (KeyValuePair<long, List<BuffEvent>> pair in groupByTime)
         {
-            var applies = pair.Value.OfType<BuffApplyEvent>();
+            var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
             long curID = TranslateWeaverAttunement(applies);
             foreach (BuffEvent c in pair.Value)
             {

@@ -15,7 +15,7 @@
 <script>
     
     Vue.component("combat-replay-actor-rotation-component", {
-        mixins: [timeRefreshComponent],
+        mixins: [timeRefreshComponent, encounterPhaseComponent],
         props: ["actorindex", "isTarget"],
         template: `${template}`,
         methods: {
@@ -81,7 +81,7 @@
                 return this.isTarget ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
-                return this.actor.details.rotation[0];
+                return this.actor.details.rotation[this.encounterPhase.id];
             },
             actorSplitRotation: function () {
                 const actorNoInstantRotation = [];
@@ -108,7 +108,7 @@
                 if (this.actorRotation.length === 0) {
                     return res;
                 }
-                const time = this.timeToUse / 1000.0;
+                const time = this.timeToUse / 1000.0 - this.encounterPhase.start;
                 const [actorNoInstantRotation, actorNoInstantRotationIndex, actorInstantRotation, actorInstantRotationIndex] = this.actorSplitRotation;
                 let idInstant = -1;
                 let instantItem = null;

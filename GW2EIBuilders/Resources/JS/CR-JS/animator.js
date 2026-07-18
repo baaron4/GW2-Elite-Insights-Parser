@@ -637,14 +637,14 @@ class Animator {
         this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
     }
 
-    updateInputTime(value) {
+    updateInputTime(value, offset) {
         try {
             const cleanedString = value.replace(",", ".");
             const parsedTime = parseFloat(cleanedString);
             if (isNaN(parsedTime) || !isFinite(parsedTime)) {
                 return;
             }
-            const ms = Math.round(parsedTime * 1000.0);
+            const ms = Math.round(parsedTime * 1000.0) + offset;
             const min = this.reactiveDataStatus.range.min;
             const max = this.reactiveDataStatus.range.max;
             this.reactiveDataStatus.time = Math.min(Math.max(ms, min), max);
