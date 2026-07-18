@@ -168,6 +168,11 @@
                 return rows;
             },
             computeTotalContribution: function (index, row, sums) {
+                const value = sums[sums.length - 1].hps[index];
+                if (value === 0) {
+                    return '';
+                }
+
                 return percentFormater(row[index] / sums[sums.length - 1].hps[index], 0, 0) + ' of total';
             },
             computeGroupContribution: function (groupIndex, index, row, sums) {
@@ -176,6 +181,10 @@
                     if (sums[sumId].name.includes(groupIndex)) {
                         break;
                     }
+                }
+
+                if (sums[sumId].hps[index] === 0) {
+                    return '';
                 }
                 return percentFormater(row[index] / sums[sumId].hps[index], 0, 0) + ' of group';
             },          
@@ -186,7 +195,7 @@
                 return selfContrib + (target ? " target" : " all");
             },
             getPlayerTooltip: function (value, index, row, sums, target, showHealingPowerContribution = false, showConversionContribution = false) {
-                var base = this.showHealing ? numberFormater(value / this.phase.durationS) + ' per second' : numberFormater(value) + ' total';
+                var base = this.showHealing ? this.phase.durationS !== 0 ? (numberFormater(value / this.phase.durationS) + ' per second') : '' : numberFormater(value) + ' total';
                 var total = this.computeTotalContribution(index, row.hps, sums);
                 var group = this.computeGroupContribution(row.player.group, index, row.hps, sums);
 
