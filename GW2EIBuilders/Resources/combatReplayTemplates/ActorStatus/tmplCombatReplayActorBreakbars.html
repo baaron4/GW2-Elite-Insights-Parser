@@ -12,6 +12,7 @@
 
 <script>
     Vue.component("combat-replay-actor-breakbars-component", {
+        mixins: [encounterPhaseComponent],
         props: ["actorIndex", "isTarget"],
         template: `${template}`,
         methods: {
@@ -29,8 +30,17 @@
             },
         },
         computed: {
+            actorPhaseTargetIndex: function() {
+                if (this.isTarget) {
+                    return this.encounterPhase.targets.indexOf(this.actorIndex);
+                }
+                return -1;
+            },
             breakbar: function () {
                 if (this.isTarget) {
+                    if (this.actorPhaseTargetIndex > -1) {
+                        return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].breakbarPercentStates;
+                    }
                     return graphData.phases[0].targetsBreakbarPercentStatesForCR[this.actorIndex];
                 }
 
