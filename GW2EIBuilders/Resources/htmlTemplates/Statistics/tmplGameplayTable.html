@@ -109,7 +109,7 @@
                     <td>{{ numberFormater(row.commons[4]) }}</td>
                     <td></td>
                     <td></td>
-                    <td>{{ numberFormater(row.commons[5] / row.count) }}</td>
+                    <td>{{ numberFormater(row.commons[5] / row.count, 0, 2) }}</td>
                     <td v-if="hasCommander">{{ numberFormater(row.commons[6] / row.count, 0, 2) }}</td>
                 </tr>
             </tfoot>

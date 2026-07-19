@@ -2,12 +2,12 @@
     <div>
         <div v-if="actor !== null" class="mb-1 mt-1">
             <p style="display: table-row;">
-                {{ actor.name }} did {{ percentFormater(dmgdist.contributedDamage / dmgdist.totalDamage) }}
+                {{ actor.name }} did {{ percentFormater(dmgdist.contributedDamage / dmgdist.totalDamage, 0, 3) }}
                 {{ isminion ? "of its master's total" : "of their total" }}
                 {{ istarget ? 'Target' :'' }} damage ({{ numberFormater(dmgdist.contributedDamage) }})
             </p>
             <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
-                {{ actor.name }} did {{ percentFormater(dmgdist.contributedBreakbarDamage / dmgdist.totalBreakbarDamage) }}
+                {{ actor.name }} did {{ percentFormater(dmgdist.contributedBreakbarDamage / dmgdist.totalBreakbarDamage, 0, 3) }}
                 {{ isminion ? "of its master's total" : "of their total" }}
                 {{ istarget ? 'Target' :'' }} breakbar damage ({{ numberFormater(dmgdist.contributedBreakbarDamage) }})
             </p>
@@ -162,18 +162,18 @@
                         {{ percentFormater(getDamage(row)/dmgdist.contributedDamage, 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)"
-                        :data-original-title="numberFormater(getDamage(row)/phase.durationS) +' dps'">
+                        :data-original-title="numberFormater(getDamage(row)/phase.durationS, 0, 2) +' dps'">
                         {{ numberFormater(getDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)"
-                        :data-original-title="numberFormater(getBarrierDamage(row)/phase.durationS) +' dps'">
+                        :data-original-title="numberFormater(getBarrierDamage(row)/phase.durationS, 0, 2) +' dps'">
                         {{ numberFormater(getBarrierDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
                         {{ numberFormater(getMinDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ getConnectedHits(row) === 0 ? '' : numberFormater(getDamage(row) / getConnectedHits(row)) }}
+                        {{ getConnectedHits(row) === 0 ? '' : numberFormater(getDamage(row) / getConnectedHits(row), 0, 0) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
                         {{ numberFormater(getMaxDamage(row)) }}
@@ -185,7 +185,7 @@
                         {{ dmgdist.contributedBreakbarDamage === 0 ? '' : percentFormater(getBreakbarDamage(row) / dmgdist.contributedBreakbarDamage, 0, 3) }}
                     </td>
                     <td :class="getBodyClass('Data', 7)" v-if="hasBreakbarDamage"
-                        :data-original-title="numberFormater(getBreakbarDamage(row)/phase.durationS) +' bps'">
+                        :data-original-title="numberFormater(getBreakbarDamage(row)/phase.durationS, 0, 2) +' bps'">
                         {{ numberFormater(getBreakbarDamage(row) ?? 0) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 8, row)" v-if="actor !== null">
@@ -196,11 +196,11 @@
                         {{ getConnectedHits(row) }}
                     </td>
                     <td :class="getHitsPerCastBodyClass('Data', 10, row)" v-if="actor !== null"
-                        :data-original-title=" (!getSkill(row).condi && getAllHits(row) && getCast(row)) ? (showInequality(row) ? '<= ' : '') + round2(getAllHits(row)/getCast(row)) + ' with missed hits' : false">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row)) : ''}}
+                        :data-original-title=" (!getSkill(row).condi && getAllHits(row) && getCast(row)) ? (showInequality(row) ? '<= ' : '') + numberFormater(getAllHits(row)/getCast(row), 0, 2) + ' with missed hits' : false">
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row), 0, 2) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getDamage(row)/(0.001 * getCastDuration(row)), 0, 2) : ''}}
                     </td>    
                     <td :class="getBodyClass('Data', 19)" v-if="actor !== null"
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
@@ -248,10 +248,10 @@
                         Total
                     </td>
                     <td></td>
-                    <td :data-original-title="numberFormater(dmgdist.contributedDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="numberFormater(dmgdist.contributedDamage/phase.durationS, 0, 2) +' dps'">
                         {{numberFormater(dmgdist.contributedDamage)}}
                     </td>
-                    <td :data-original-title="numberFormater(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
+                    <td :data-original-title="numberFormater(dmgdist.contributedShieldDamage/phase.durationS, 0, 0) +' dps'">
                         {{numberFormater(dmgdist.contributedShieldDamage)}}
                     </td>
                     <td></td>
@@ -265,12 +265,12 @@
                         {{numberFormater(dmgdist.contributedBreakbarDamage)}}
                     </td>
                     <td v-if="actor !== null"></td>           
-                    <td :data-original-title="totalHits.notConnected + ' hit(s) not connected'">
-                        {{ totalHits.connected }}
+                    <td :data-original-title="numberFormater(totalHits.notConnected) + ' hit(s) not connected'">
+                        {{ numberFormater(totalHits.connected) }}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{numberFormater(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))}}
+                        {{numberFormater(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting), 0, 2)}}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td></td>

@@ -122,18 +122,18 @@
                             var res = ''; 
                             if (val[1] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(val[1]) + " by extension";
+                                res += this.formatValue(buff, val[1]) + " by extension";
                             }
                             return res.length > 0 ? res : false;
                         } else if (!this.outgoing && (val[1] > 0 || val[2] > 0)) {                     
                             var res = ''; 
                             if (val[1] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(val[1]) + " by extension";
+                                res += this.formatValue(buff, val[1]) + " by extension";
                             }
                             if (val[2] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(val[2]) + " by unknown extension";
+                                res += this.formatValue(buff, val[2]) + " by unknown extension";
                             }
                             return res.length > 0 ? res : false;
                         }

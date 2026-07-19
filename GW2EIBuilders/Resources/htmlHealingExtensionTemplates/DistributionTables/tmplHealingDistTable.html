@@ -2,7 +2,7 @@
     <div>
         <div v-if="actor !== null" class="mb-1 mt-1">
             <p style="display: table-row;">
-                {{ actor.name }} did {{ percentFormater(round3(barrierdist.contributedBarrier / barrierdist.totalBarrier)) }}
+                {{ actor.name }} did {{ percentFormater(barrierdist.contributedBarrier / barrierdist.totalBarrier, 0, 3) }}
                 {{ isminion ? "of its master's total" : 'of their total' }}
                 {{ istarget ? 'Target' : '' }} healing ({{ numberFormater(barrierdist.contributedBarrier) }})
             </p>
@@ -108,19 +108,19 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ percentFormater(getHealingOutput(row) / healingdist.contributedHealing) }}
+                        {{ percentFormater(getHealingOutput(row) / healingdist.contributedHealing, 0, 3) }}
                     </td>
-                    <td :class="getBodyClass('Data', 1)" :data-original-title="round2(getHealingOutput(row)/phase.durationS) +' hps'">
+                    <td :class="getBodyClass('Data', 1)" :data-original-title="numberFormater(getHealingOutput(row)/phase.durationS, 0, 2) +' hps'">
                         {{ numberFormater(getHealingOutput(row)) }}
                     </td>
-                    <td :class="getBodyClass('Data', 2)" :data-original-title="round2(getDownedHealingOutput(row)/phase.durationS) +' hps'">
+                    <td :class="getBodyClass('Data', 2)" :data-original-title="numberFormater(getDownedHealingOutput(row)/phase.durationS, 0, 2) +' hps'">
                         {{ numberFormater(getDownedHealingOutput(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
                         {{ numberFormater(getMinHealing(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ numberFormater(getHealingOutput(row)/getConnectedHits(row)) }}
+                        {{ numberFormater(getHealingOutput(row)/getConnectedHits(row), 0, 0) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
                         {{ numberFormater(getMaxHealing(row)) }}
@@ -132,28 +132,28 @@
                         {{ getConnectedHits(row) }}
                     </td>
                     <td :class="getHitsPerCastBodyClass('Data', 8, row)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row)) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row), 0, 2) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getHealingOutput(row)/(0.001 * getCastDuration(row)), 0, 1) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 13)" v-if="actor !== null" 
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 3, 3) + 's' + 
-                                '<br> Max: '+ numberFormater((0.001 * getMaxCastingTimeNoInterrupt(row), 3, 3) + 's'
+                                'Min: ' + numberFormater(getMinCastingTimeNoInterrupt(row) / 1000, 3, 3) + 's' + 
+                                '<br> Max: '+ numberFormater(getMaxCastingTimeNoInterrupt(row) / 1000, 3, 3) + 's'
                             ) 
                             : 
                             null">
                         {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 3, 3) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
-                        :data-original-title="getCastTimeWasted(row) ? percentFormater(round2(getCastTimeWasted(row)/phase.durationS)) + ' of the phase' : false">
-                        {{ getCastTimeWasted(row) ? getCastTimeWasted(row) + 's' : ''}}
+                        :data-original-title="getCastTimeWasted(row) ? percentFormater(getCastTimeWasted(row)/phase.durationS) + ' of the phase' : false">
+                        {{ getCastTimeWasted(row) ? numberFormater(getCastTimeWasted(row)) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null"
-                        :data-original-title="getCastTimeSaved(row) ? percentFormater(round2(getCastTimeSaved(row)/phase.durationS)) + ' of the phase' : false">
-                        {{ getCastTimeSaved(row) ? getCastTimeSaved(row) + 's' : ''}}
+                        :data-original-title="getCastTimeSaved(row) ? percentFormater(getCastTimeSaved(row)/phase.durationS) + ' of the phase' : false">
+                        {{ getCastTimeSaved(row) ? numberFormater(getCastTimeSaved(row)) + 's' : ''}}
                     </td>
                 </tr>
             </tbody>
@@ -161,22 +161,22 @@
                 <tr>
                     <td class="text-left">Total</td>
                     <td></td>
-                    <td :data-original-title="numberFormater(Math.round(healingdist.contributedHealing/phase.durationS)) +' hps'">
-                        {{healingdist.contributedHealing}}
+                    <td :data-original-title="numberFormater(healingdist.contributedHealing/phase.durationS, 0, 0) +' hps'">
+                        {{ numberFormater(healingdist.contributedHealing) }}
                     </td>
-                    <td :data-original-title="numberFormater(Math.round(healingdist.contributedDownedHealing/phase.durationS)) +' hps'">
-                        {{healingdist.contributedDownedHealing}}
+                    <td :data-original-title="numberFormater(healingdist.contributedDownedHealing/phase.durationS, 0, 0) +' hps'">
+                        {{ numberFormater(healingdist.contributedDownedHealing) }}
                     </td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td v-if="actor !== null"></td>
                     <td>
-                        {{ totalHits }}
+                        {{ numberFormater(totalHits) }}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{numberFormater(healingdist.contributedHealing / (0.001 * healingdist.totalCasting))}}
+                        {{ numberFormater(healingdist.contributedHealing / (0.001 * healingdist.totalCasting), 0, 2) }}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>

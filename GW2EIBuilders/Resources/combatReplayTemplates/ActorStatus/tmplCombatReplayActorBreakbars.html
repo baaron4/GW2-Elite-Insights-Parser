@@ -23,10 +23,10 @@
                 var target = logData.targets[this.actorIndex];
                 var phaseId = logData.phases.indexOf(phase);
                 var breakbarTaken = target.details.dmgDistributionsTaken[phaseId].contributedBreakbarDamage;
-                return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end +
-                    '<br /> Breakbar Active at: ' + phase.breakbarStart +
+                return phase.durationS + ' seconds <br /> Start: ' + numberFormater(phase.start) + '<br /> End: ' + numberFormater(phase.end) +
+                    '<br /> Breakbar Active at: ' + numberFormater(phase.breakbarStart) +
                     '<br /> Breakbar Damage: ' + numberFormater(breakbarTaken) +
-                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + numberFormater(phase.breakbarRecovered, 1, 1);
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + numberFormater(phase.breakbarRecovered);
             },
         },
         computed: {

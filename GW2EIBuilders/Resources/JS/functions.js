@@ -1224,7 +1224,7 @@ function numberFormater(value, minimumFractionDigits, maximumFractionDigits) {
     });
 }
 
-function percentFormater(value, minimumFractionDigits = 2, maximumFractionDigits = 2) {
+function percentFormater(value, minimumFractionDigits = 0, maximumFractionDigits = 2) {
     return value.toLocaleString(undefined, {
         style: "percent",
         minimumFractionDigits,
