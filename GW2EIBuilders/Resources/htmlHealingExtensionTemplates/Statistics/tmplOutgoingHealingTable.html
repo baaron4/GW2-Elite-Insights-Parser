@@ -170,7 +170,7 @@
             computeTotalContribution: function (index, row, sums) {
                 const value = sums[sums.length - 1].hps[index];
                 if (value === 0) {
-                    return '';
+                    return '0% of total';
                 }
 
                 return percentFormater(row[index] / sums[sums.length - 1].hps[index], 0, 2) + ' of total';
@@ -184,7 +184,7 @@
                 }
 
                 if (sums[sumId].hps[index] === 0) {
-                    return '';
+                    return '0% of group';
                 }
                 return percentFormater(row[index] / sums[sumId].hps[index], 0, 2) + ' of group';
             },          
