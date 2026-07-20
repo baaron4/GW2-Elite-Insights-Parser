@@ -83,9 +83,6 @@
                 var classes = this.getBodyClassBase(this.sortdata, key, index);
                 return classes;
             },
-            formatValue: function (buff, value) {
-                return buff.stacking ? numberFormater(value) : percentFormater(value / 100, 0, 3);
-            },
             sortData: function(rows) {
                 var order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
@@ -122,18 +119,18 @@
                             var res = ''; 
                             if (val[1] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(buff, val[1]) + " by extension";
+                                res += formatNumberOrPercent(buff.stacking, val[1]) + " by extension";
                             }
                             return res.length > 0 ? res : false;
                         } else if (!this.outgoing && (val[1] > 0 || val[2] > 0)) {                     
                             var res = ''; 
                             if (val[1] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(buff, val[1]) + " by extension";
+                                res += formatNumberOrPercent(buff.stacking, val[1]) + " by extension";
                             }
                             if (val[2] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += this.formatValue(buff, val[2]) + " by unknown extension";
+                                res += formatNumberOrPercent(buff.stacking, val[2]) + " by unknown extension";
                             }
                             return res.length > 0 ? res : false;
                         }
@@ -151,7 +148,7 @@
                     force = this.outgoing && (val[1] > 0 || val[2] > 0);
                 }
                 if (value > 0 || force) {
-                    return this.formatValue(buff, value);
+                    return formatNumberOrPercent(buff.stacking, value);
                 }
                 return "-";
             }

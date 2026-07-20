@@ -1231,3 +1231,9 @@ function percentFormater(value, minimumFractionDigits = 0, maximumFractionDigits
         maximumFractionDigits
     });
 }
+
+function formatNumberOrPercent(isNumber, value) {
+    return isNumber
+        ? numberFormater(value)
+        : percentFormater(value / 100, 0, 3);
+}
