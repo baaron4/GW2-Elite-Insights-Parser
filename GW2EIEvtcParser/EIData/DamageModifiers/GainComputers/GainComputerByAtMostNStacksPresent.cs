@@ -11,6 +11,6 @@ internal class GainComputerByAtMostNStacksPresent : GainComputer
 
     public override double ComputeGain(double gainPerStack, int stack)
     {
-        return stack <= ExpectedStacks ? gainPerStack * stack / (100 + stack * gainPerStack) : 0;
+        return stack <= ExpectedStacks ? gainPerStack / (100 + gainPerStack) : 0;
     }
 }
