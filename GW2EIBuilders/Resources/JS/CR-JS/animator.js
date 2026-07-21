@@ -884,7 +884,7 @@ class Animator {
         if (!this.selectedExtraDecorations) {
             return;
         }
-        this.selectedExtraDecorations.openingAngle.radius = value;
+        this.selectedExtraDecorations.coneControl.openingAngle = value;
         animateCanvas(noUpdateTime);
     }
 
