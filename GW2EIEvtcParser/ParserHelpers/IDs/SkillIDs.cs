@@ -2494,6 +2494,7 @@ public static class SkillIDs
     public const long FixatedBloom1 = 39131;
     public const long WaveOfMutilation = 39133;
     public const long HypernovaLaunchSAK = 39157;
+    public const long TawShot1 = 39160;
     public const long CranialCascadeSkorvald = 39220;
     public const long SupernovaSkorvaldCM = 39225;
     public const long SolarCyclone = 39228;
@@ -2512,6 +2513,7 @@ public static class SkillIDs
     public const long FriedOysterSandwich = 39348;
     public const long CranialCascade4 = 39394;
     public const long CrimsonDawnSkorvaldCM4 = 39395;
+    public const long TawShot2 = 39417;
     public const long HorizonStrikeSkorvald5 = 39423;
     public const long BlindingRadiance = 39442;
     public const long HorizonStrikeSkorvald = 39458;
@@ -2528,6 +2530,7 @@ public static class SkillIDs
     public const long FixatedBloom3 = 39558;
     public const long MistSmash = 39575;
     public const long CombustionRush3 = 39581;
+    public const long TawShot3 = 39609;
     public const long CombustionRush2 = 39615;
     public const long MistBomb = 39638;
     public const long ArkkBreakbarCast = 39645;
@@ -2541,6 +2544,7 @@ public static class SkillIDs
     public const long FocusedRage = 39711;
     public const long CrimsonDawnSkorvaldNM = 39713;
     public const long SolarFury = 39728;
+    public const long TawShot4 = 39748;
     public const long DiffractiveEdge2 = 39755;
     public const long SolarBolt2 = 39760;
     public const long HypernovaLaunchBuff = 39762;

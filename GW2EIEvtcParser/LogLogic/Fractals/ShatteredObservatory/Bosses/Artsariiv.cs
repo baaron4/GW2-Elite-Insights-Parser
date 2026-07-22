@@ -19,13 +19,16 @@ internal class Artsariiv : ShatteredObservatory
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault", "Vault from Big Adds","Vault (Add)", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam", "Slam (Vault) from Boss","Vault (Arts)", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(TeleportLunge, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump", "Triple Jump Mid->Edge","Triple Jump", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(AstralSurge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle", "Different sized spiraling circles","1000 Circles", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble", "Red KD Marble after Jump","Red Marble", Sev0, 0),
-            new SpawnMechanic((int)TargetID.Spark, new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark", Sev0,0),
+            new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Yellow), "Vault", "Vault from Big Adds", "Vault (Add)", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Slam", "Slam (Vault) from Boss", "Vault (Arts)", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(TeleportLunge, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.LightOrange), "3 Jump", "Triple Jump Mid->Edge", "Triple Jump", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(AstralSurge, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "Floor Circle", "Different sized spiraling circles", "1000 Circles", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Marble", "Red KD Marble after Jump", "Red Marble", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([TawShot1, TawShot2, TawShot3, TawShot4], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "Taw Shot", "Hit by Taw Shot projectile", "Taw Shot", Sev2, 0),
+            new PlayerSrcHealthDamageHitMechanic([TawShot1, TawShot2, TawShot3, TawShot4], new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Taw Shot Rfl.", "Hit reflected Taw Shot projectile", "Taw Shot Reflect", Sev0, 0),
+            new SpawnMechanic((int)TargetID.Spark, new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "Spark", "Spawned a Spark (missed marble)", "Spark", Sev0,0),
         ]);
+
     public Artsariiv(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -44,7 +47,7 @@ internal class Artsariiv : ShatteredObservatory
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -330,6 +333,10 @@ internal class Artsariiv : ShatteredObservatory
                 AddBeamingSmileDecoration(effect, (start, end), Colors.Red, 0.2, environmentDecorations);
             }
         }
+
+        // taw shots (small reflectable orbs)
+        var tawshots = log.CombatData.GetMissileEventsBySkillIDs([TawShot1, TawShot2, TawShot3, TawShot4]);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, tawshots, Colors.DarkRed, 0.3, Colors.Grey, 0.3, 25);
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
