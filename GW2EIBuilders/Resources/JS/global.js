@@ -315,4 +315,17 @@ const PhaseTypes = {
     TIMEFRAME: 3,
 };
 
-const EIUrlParams = new URLSearchParams(window.location.search);
+let EIUrlParams = new URLSearchParams(window.location.search);
+if (EIUrlParams.size === 0) {
+    if (window.location.hash.length > 0) {
+        EIUrlParams = new URLSearchParams(window.location.hash.slice(1));
+    } else {
+        try {
+            if (window.parent.location.hash.length > 0) {         
+                EIUrlParams = new URLSearchParams(window.parent.location.hash.slice(1));
+            }
+        } catch(e) {
+            // nothing
+        }
+    }
+}
