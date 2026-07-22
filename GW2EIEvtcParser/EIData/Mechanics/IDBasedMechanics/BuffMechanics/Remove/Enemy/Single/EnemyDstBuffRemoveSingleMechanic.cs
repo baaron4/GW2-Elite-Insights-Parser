@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData;
 internal class EnemyDstBuffRemoveSingleMechanic : EnemyBuffRemoveSingleMechanic
 {
 
-    public EnemyDstBuffRemoveSingleMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity) : base(mechanicID, plotlySetting, shortName, description, fullName, severity)
+    public EnemyDstBuffRemoveSingleMechanic(long mechanicID, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity) : base(mechanicID, id, plotlySetting, description, severity)
     {
         IsEnemyMechanic = true;
     }
 
-    public EnemyDstBuffRemoveSingleMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity) : base(mechanicIDs, plotlySetting, shortName, description, fullName, severity)
+    public EnemyDstBuffRemoveSingleMechanic(long[] mechanicIDs, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity) : base(mechanicIDs, id, plotlySetting, description, severity)
     {
         IsEnemyMechanic = true;
     }

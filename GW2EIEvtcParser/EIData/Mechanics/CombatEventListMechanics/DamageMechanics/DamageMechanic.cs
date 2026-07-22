@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class DamageMechanic : CombatEventListMechanic<HealthDamageEvent>
 {
 
-    public DamageMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown, CombatEventsGetter getter) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown, getter)
+    public DamageMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown, CombatEventsGetter getter) : base(id, plotlySetting, description, severity, internalCoolDown, getter)
     {
     }
 }

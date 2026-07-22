@@ -39,6 +39,26 @@ public class MechanicPlotlySetting
 
 }
 
+public class MechanicDescription
+{
+    public readonly string Description;
+    public readonly string ShortName;
+    public readonly string FullName;
+
+    internal MechanicDescription(string shortName, string description, string fullName)
+    {
+        Description = description;
+        ShortName = shortName;
+        FullName = fullName;
+    }
+    internal MechanicDescription(string shortName, string fullName) : this(shortName, fullName, fullName)
+    {
+    }
+    internal MechanicDescription(string fullName) : this(fullName, fullName, fullName)
+    {
+    }
+}
+
 public abstract class Mechanic : MechanicContainer
 {
     [Flags]
@@ -73,11 +93,14 @@ public abstract class Mechanic : MechanicContainer
         Sev3Neutral = Sev3 | Neutral,
     }
 
+    public readonly int ID;
+
     public readonly int InternalCooldown;
     public readonly MechanicPlotlySetting PlotlySetting;
-    public readonly string Description;
-    public readonly string ShortName;
-    public readonly string FullName;
+    private readonly MechanicDescription _MechDescription;
+    public string Description => _MechDescription.Description;
+    public string FullName => _MechDescription.FullName;
+    public string ShortName => _MechDescription.ShortName;
 
     public readonly MechanicSeverity Severity;
 
@@ -95,18 +118,16 @@ public abstract class Mechanic : MechanicContainer
     /// <summary>
     /// Full constructor without special checks
     /// </summary>
-    /// <param name="inGameName">official name of the mechanic</param>
+    /// <param name="id">unique id of the mechanic</param>
     /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
-    /// <param name="shortName">shortened name of the mechanic</param>
     /// <param name="description">description of the mechanic</param>
-    /// <param name="fullName">full name of the mechanic</param>
+    /// <param name="severity">severity category of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown)
+    protected Mechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown)
     {
+        ID = id;
         PlotlySetting = plotlySetting;
-        ShortName = shortName;
-        FullName = fullName;
-        Description = description;
+        _MechDescription = description;
         InternalCooldown = internalCoolDown;
         ShowOnTable = true;
         Severity = severity;

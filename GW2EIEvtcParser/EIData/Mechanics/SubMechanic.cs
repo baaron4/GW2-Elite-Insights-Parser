@@ -8,13 +8,11 @@ internal class SubMechanic : Mechanic
     /// <summary>
     /// Full constructor without special checks
     /// </summary>
-    /// <param name="inGameName">official name of the mechanic</param>
+    /// <param name="id">Unique id of the mechanic</param>
     /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
-    /// <param name="shortName">shortened name of the mechanic</param>
     /// <param name="description">description of the mechanic</param>
-    /// <param name="fullName">full name of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    public SubMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, severity, internalCoolDown)
+    public SubMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : base(id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

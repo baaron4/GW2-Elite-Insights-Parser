@@ -16,11 +16,11 @@ internal abstract class SrcEffectMechanic : EffectMechanic
         return effectEvt.Src;
     }
 
-    public SrcEffectMechanic(GUID effect, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : this([ effect ], plotlySetting, shortName, description, fullName, severity, internalCoolDown)
+    public SrcEffectMechanic(GUID effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : this([ effect ], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 
-    public SrcEffectMechanic(ReadOnlySpan<GUID> effects, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, MechanicSeverity severity, int internalCoolDown) : base(effects, plotlySetting, shortName, description, fullName, severity, internalCoolDown)
+    public SrcEffectMechanic(ReadOnlySpan<GUID> effects, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : base(effects, id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 }
