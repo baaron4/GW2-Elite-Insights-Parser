@@ -106,7 +106,7 @@ internal class GreerTheBlightbringer : MountBalrior
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -444,16 +444,16 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Eruption of Rot - Green AoE
-        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, 
-            [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], 
+        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem,
+            [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3],
             out var noxiousBlight))
         {
             foreach (EffectEvent effect in noxiousBlight)
             {
                 long duration = effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
-                string icon = 
-                    effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen 
-                    || effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen2 
+                string icon =
+                    effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen
+                    || effect.GUIDEvent.GUID == EffectGUIDs.GreerEruptionOfRotGreen2
                     ? ParserIcons.GreenMarkerSize2Overhead : ParserIcons.GreenMarkerSize3Overhead;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
@@ -686,7 +686,7 @@ internal class GreerTheBlightbringer : MountBalrior
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerStompTheGrowth, out var stompTheGrowth))
         {
             var casts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == StompTheGrowth || x.SkillID == StompTheGrowth2 || x.SkillID == StompTheGrowth3);
-            
+
             foreach (var cast in casts)
             {
                 foreach (EffectEvent effect in stompTheGrowth.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 3000)) // 3 seconds padding
@@ -799,7 +799,7 @@ internal class GreerTheBlightbringer : MountBalrior
         // Main Orbs
         foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
         {
-            CombatReplayDecorationContainer.AddHomingMissile(log, missileEvent, (lifespan, connector) =>
+            CombatReplayDecorationContainer.AddHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
             {
                 replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, connector));
                 replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, connector));

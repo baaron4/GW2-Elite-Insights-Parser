@@ -47,7 +47,7 @@ internal class CombatReplayDecorationContainer
 
     public void ReserveAdditionalCapacity(int additionalCapacity)
     {
-        if(Decorations.Capacity >= Decorations.Count + additionalCapacity) { return; }
+        if (Decorations.Capacity >= Decorations.Count + additionalCapacity) { return; }
 
         Decorations.Capacity = (int)(Decorations.Capacity * 1.4f);
     }
@@ -610,8 +610,8 @@ internal class CombatReplayDecorationContainer
     #region MISSILE
 
 
-    internal delegate void MissileDecorationHandler((long start, long end) lifespan, GeographicalConnector connector);
-    internal delegate void MissileRotatingDecorationHandler((long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
+    internal delegate void MissileDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector);
+    internal delegate void MissileRotatingDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
 
     /// <summary>
     /// Add a missile going from a Point A to Point B, supports multi launches
@@ -628,7 +628,7 @@ internal class CombatReplayDecorationContainer
         {
             var launch = launchEvents[i];
             (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
-            handler(trajectoryLifeSpan, new InterpolationConnector([
+            handler(launch, trajectoryLifeSpan, new InterpolationConnector([
                         new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
                         launch.GetFinalPosition(trajectoryLifeSpan)
                     ],
@@ -646,7 +646,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="radius"></param>
     internal void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        AddNonHomingMissile(log, missileEvent, (lifespan, connector) =>
+        AddNonHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
         {
             Add(new CircleDecoration(radius, lifespan, color, opacity, connector));
         });
@@ -662,11 +662,12 @@ internal class CombatReplayDecorationContainer
     /// <param name="worldSize"></param>
     internal void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, string imageUrl, float opacity, uint worldSize)
     {
-        AddNonHomingMissile(log, missileEvent, (lifespan, connector) =>
+        AddNonHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
         {
             Add(new IconDecoration(imageUrl, 0, worldSize, opacity, lifespan, connector));
         });
     }
+
     /// <summary>
     /// Add a missile rotating around Targeted Agent
     /// </summary>
@@ -701,7 +702,7 @@ internal class CombatReplayDecorationContainer
                 (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
                 long duration = trajectoryLifeSpan.end - trajectoryLifeSpan.start;
                 var orientation = (launch.LaunchFlags & (1 << 16)) > 0 ? -1 : 1; // Keep an eye on this, may be unstable.
-                handler(trajectoryLifeSpan, new AgentConnector(rotationCenterTarget).WithOffset(initialAngle + angleOffset, trajectoryRadius, true), new SpinningConnector(0, RadianToDegreeF(orientation * duration * launch.Speed / trajectoryRadius)));
+                handler(launch, trajectoryLifeSpan, new AgentConnector(rotationCenterTarget).WithOffset(initialAngle + angleOffset, trajectoryRadius, true), new SpinningConnector(0, RadianToDegreeF(orientation * duration * launch.Speed / trajectoryRadius)));
             }
         }
     }
@@ -717,11 +718,12 @@ internal class CombatReplayDecorationContainer
     /// <param name="useTargetOrientation"></param>
     internal void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius, float angleOffset, bool useTargetOrientation = false)
     {
-        AddRotatingAroundTargetMissile(log, missileEvent, angleOffset, (lifespan, connector, rotationConnector) =>
+        AddRotatingAroundTargetMissile(log, missileEvent, angleOffset, (launch, lifespan, connector, rotationConnector) =>
         {
             Add(new CircleDecoration(radius, lifespan, color, opacity, connector).UsingRotationConnector(rotationConnector));
-        }, useTargetOrientation);    
+        }, useTargetOrientation);
     }
+
     /// <summary>
     /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
     /// </summary>
@@ -738,11 +740,11 @@ internal class CombatReplayDecorationContainer
             (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
             if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
             {
-                handler(trajectoryLifeSpan, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed));
-            } 
+                handler(launch, trajectoryLifeSpan, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed));
+            }
             else
             {
-                handler(trajectoryLifeSpan, new InterpolationConnector([
+                handler(launch, trajectoryLifeSpan, new InterpolationConnector([
                         new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
                         launch.GetFinalPosition(trajectoryLifeSpan)
                     ],
@@ -761,7 +763,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="radius"></param>
     internal void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        AddHomingMissile(log, missileEvent, (lifespan, connector) =>
+        AddHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
         {
             Add(new CircleDecoration(radius, lifespan, color, opacity, connector));
         });
@@ -834,4 +836,3 @@ internal class CombatReplayDecorationContainer
     }
     #endregion MISSILE
 }
-
