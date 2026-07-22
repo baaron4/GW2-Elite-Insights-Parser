@@ -5171,7 +5171,7 @@ public static class SkillIDs
     public const long LoftedCryoflash = 76402;
     public const long InevitableDarknessPlayer = 76412;
     public const long FallingIceCM = 76417;
-    public const long TerrestialCryoflash = 76420;
+    public const long TerrestrialCryoflash = 76420;
     public const long POV_HeartOfTheTitan = 76448;
     public const long FreezingVortex = 76444;
     public const long DeathlyRime = 76446;

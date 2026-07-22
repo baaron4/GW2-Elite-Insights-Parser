@@ -22,43 +22,43 @@ public static class MechanicIDs
     private const int GolemMask = 0x08000000;
     private const int ConvergenceMask = 0x09000000;
 
-    private const int SpiritValeMask = 0x00010000;
-    private const int SalvationPassMask = 0x00020000;
-    private const int StrongholdOfTheFaithfulMask = 0x00030000;
-    private const int BastionOfThePenitentMask = 0x00040000;
-    private const int HallOfChainsMask = 0x00050000;
-    private const int MythwrightGambitMask = 0x00060000;
-    private const int TheKeyOfAhdashimMask = 0x00070000;
-    private const int MountBalriorMask = 0x00080000;
+    private const int SpiritValeMask = RaidWingMask | 0x00010000;
+    private const int SalvationPassMask = RaidWingMask | 0x00020000;
+    private const int StrongholdOfTheFaithfulMask = RaidWingMask | 0x00030000;
+    private const int BastionOfThePenitentMask = RaidWingMask | 0x00040000;
+    private const int HallOfChainsMask = RaidWingMask | 0x00050000;
+    private const int MythwrightGambitMask = RaidWingMask | 0x00060000;
+    private const int TheKeyOfAhdashimMask = RaidWingMask | 0x00070000;
+    private const int MountBalriorMask = RaidWingMask | 0x00080000;
 
-    private const int NightmareMask = 0x00010000;
-    private const int ShatteredObservatoryMask = 0x00020000;
-    private const int SunquaPeakMask = 0x00030000;
-    private const int SilentSurfMask = 0x00040000;
-    private const int LonelyTowerMask = 0x00050000;
-    private const int KinfallMask = 0x00060000;
+    private const int NightmareMask = FractalMask | 0x00010000;
+    private const int ShatteredObservatoryMask = FractalMask | 0x00020000;
+    private const int SunquaPeakMask = FractalMask | 0x00030000;
+    private const int SilentSurfMask = FractalMask | 0x00040000;
+    private const int LonelyTowerMask = FractalMask | 0x00050000;
+    private const int KinfallMask = FractalMask | 0x00060000;
 
-    private const int FestivalMask = 0x00010000;
-    private const int IBSMask = 0x00020000;
-    private const int EODMask = 0x00030000;
-    private const int CoreMask = 0x00040000;
-    private const int SotOMask = 0x00050000;
-    private const int VoEMask = 0x00060000;
+    private const int FestivalMask = RaidEncounterMask | 0x00010000;
+    private const int IBSMask = RaidEncounterMask | 0x00020000;
+    private const int EODMask = RaidEncounterMask | 0x00030000;
+    private const int CoreMask = RaidEncounterMask | 0x00040000;
+    private const int SotOMask = RaidEncounterMask | 0x00050000;
+    private const int VoEMask = RaidEncounterMask | 0x00060000;
 
-    private const int EternalBattlegroundsMask = 0x00010000;
-    private const int GreenAlpineBorderlandsMask = 0x00020000;
-    private const int BlueAlpineBorderlandsMask = 0x00030000;
-    private const int RedDesertBorderlandsMask = 0x00040000;
-    private const int ObsidianSanctumMask = 0x00050000;
-    private const int EdgeOfTheMistsMask = 0x00060000;
-    private const int ArmisticeBastionMask = 0x00070000;
-    private const int GildedHollowMask = 0x00080000;
-    private const int LostPrecipiceMask = 0x00090000;
-    private const int WindsweptHavenMask = 0x000A0000;
-    private const int IsleOfReflectionMask = 0x000B0000;
+    private const int EternalBattlegroundsMask = WvWMask | 0x00010000;
+    private const int GreenAlpineBorderlandsMask = WvWMask | 0x00020000;
+    private const int BlueAlpineBorderlandsMask = WvWMask | 0x00030000;
+    private const int RedDesertBorderlandsMask = WvWMask | 0x00040000;
+    private const int ObsidianSanctumMask = WvWMask | 0x00050000;
+    private const int EdgeOfTheMistsMask = WvWMask | 0x00060000;
+    private const int ArmisticeBastionMask = WvWMask | 0x00070000;
+    private const int GildedHollowMask = WvWMask | 0x00080000;
+    private const int LostPrecipiceMask = WvWMask | 0x00090000;
+    private const int WindsweptHavenMask = WvWMask | 0x000A0000;
+    private const int IsleOfReflectionMask = WvWMask | 0x000B0000;
 
-    private const int OuterNayosConvMask = 0x00010000;
-    private const int MountBalriorConvMask = 0x00020000;
+    private const int OuterNayosConvMask = ConvergenceMask | 0x00010000;
+    private const int MountBalriorConvMask = ConvergenceMask | 0x00020000;
 
 
     #region COMMONS
@@ -75,6 +75,28 @@ public static class MechanicIDs
     public const int Mech_PlayerLockOut = CommonMask | 11;
     public const int Mech_PlayerFloatSinkWater = CommonMask | 12;
     #endregion COMMONS
+
+    #region FRACTALS
+    #region KINFALL
+    public const int Mech_DeathlyRime = KinfallMask | 1;
+    public const int Mech_LifeFireApply = KinfallMask | 2;
+    public const int Mech_LifeFireRemove = KinfallMask | 3;
+    public const int Mech_VitreousSpiketHit = KinfallMask | 4;
+    public const int Mech_FaillingIceHit = KinfallMask | 5;
+    public const int Mech_FrozenTeethHit = KinfallMask | 6;
+    public const int Mech_LoftedCryOfFlashHit = KinfallMask | 7;
+    public const int Mech_TerrestrialCryOfFlashHit = KinfallMask | 8;
+    public const int Mech_GorefrostTarget = KinfallMask | 9;
+    public const int Mech_GorefrostHit = KinfallMask | 10;
+    public const int Mech_FreezingFanHit = KinfallMask | 11;
+    public const int Mech_LethalCoalescenceApply = KinfallMask | 12;
+    public const int Mech_WintryOrbHit = KinfallMask | 13;
+    public const int Mech_HailstormWhisperingShadowHit = KinfallMask | 14;
+    public const int Mech_EmpoweredWhsiperingShadow = KinfallMask | 15;
+    public const int Mech_ShatterstepLost = KinfallMask | 16;
+    public const int Mech_ShatterstepKept = KinfallMask | 17;
+    #endregion KINFALL
+    #endregion FRACTALS
 
     #region CONVERGENCE
     public const int Mech_EssenceCollected = ConvergenceMask | 1;
