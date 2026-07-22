@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
 using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -17,7 +17,7 @@ internal abstract class ConvergenceLogic : LogLogic
         SkillMode = SkillModeEnum.PvE;
         MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstBuffApplyMechanic([KryptisEssence, CalibratedEssence], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Essence", "Collected Essence", "Essence Gain", Sev2, 0),
+            new PlayerDstBuffApplyMechanic([KryptisEssence, CalibratedEssence], Mech_EssenceCollected, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), new("Essence", "Collected Essence", "Essence Gain"), Sev2),
         ]));
         LogCategoryInformation.Category = LogCategory.Convergence;
         LogID |= LogIDs.LogMasks.ConvergenceMask;

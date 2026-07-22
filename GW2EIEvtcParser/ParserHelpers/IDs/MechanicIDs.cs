@@ -75,4 +75,8 @@ public static class MechanicIDs
     public const int Mech_PlayerLockOut = CommonMask | 11;
     public const int Mech_PlayerFloatSinkWater = CommonMask | 12;
     #endregion COMMONS
+
+    #region CONVERGENCE
+    public const int Mech_EssenceCollected = ConvergenceMask | 1;
+    #endregion CONVERGENCE
 }
