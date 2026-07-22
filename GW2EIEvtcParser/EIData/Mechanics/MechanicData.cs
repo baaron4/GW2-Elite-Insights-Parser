@@ -28,7 +28,7 @@ public class MechanicData
         var logMechanics = _mechanicLogs;
         //TODO_PERF(Rennorb) @find average complexity
         var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(logMechanics.Count / 2);
-        var errorMechanicShortNaming = new Dictionary<string, Mechanic>(logMechanics.Count);
+        var errorMechanicID = new Dictionary<int, Mechanic>(logMechanics.Count);
         var errorMechanicNaming = new Dictionary<string, Dictionary<string, List<Mechanic>>>(logMechanics.Count);
         foreach (Mechanic m in logMechanics.Keys)
         {
@@ -63,39 +63,19 @@ public class MechanicData
                 }
             }
             {
-                if (!errorMechanicShortNaming.TryGetValue(m.ShortName, out var mech))
+                if (!errorMechanicID.TryGetValue(m.ID, out var mech))
                 {
-                    errorMechanicShortNaming.Add(m.ShortName, m);
+                    errorMechanicID.Add(m.ID, m);
                 }
                 else
                 {
-                    throw new InvalidDataException(m.ShortName + " is not a unique short name");
-                }
-            }
-            {
-
-                if (!errorMechanicNaming.TryGetValue(m.FullName, out var descriptionDict))
-                {
-                    //TODO_PERF(Rennorb)
-                    descriptionDict = [];
-                    errorMechanicNaming[m.FullName] = descriptionDict;
-                }
-                if (!descriptionDict.TryGetValue(m.Description, out var mList))
-                {
-                    //TODO_PERF(Rennorb)
-                    mList = [];
-                    descriptionDict[m.Description] = mList;
-                }
-                mList.Add(m);
-                if (mList.Count > 1)
-                {
-                    throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming/desc configuration");
+                    throw new InvalidDataException(m.ID + " is not a unique ID");
                 }
             }
         }
 
         Tracing.Trace.TrackAverageStat("errorMechanicConfig", errorMechanicConfig.Count);
-        Tracing.Trace.TrackAverageStat("errorMechanicShortNaming", errorMechanicShortNaming.Count);
+        Tracing.Trace.TrackAverageStat("errorMechanicShortNaming", errorMechanicID.Count);
         Tracing.Trace.TrackAverageStat("errorMechanicNaming", errorMechanicNaming.Count);
     }
 
