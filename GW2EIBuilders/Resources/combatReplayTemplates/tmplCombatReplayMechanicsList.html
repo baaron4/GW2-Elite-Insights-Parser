@@ -86,7 +86,7 @@
                         <td :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
                                     reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
                                 :data-original-title="'Timestamp'">
-                                {{numberFormater(event.time / 1000, 2, 2)}}s
+                                {{numberFormater3(event.time / 1000)}}s
                         </td>
                         <td class="text-left mech-cell" 
                             :class="{'mech-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name}" 
@@ -119,7 +119,7 @@
     const mechanicDataCache = new Map();
     Vue.component("combat-replay-mechanics-list-component", {
         props: ['time', 'light', 'selectedactorid'],
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {

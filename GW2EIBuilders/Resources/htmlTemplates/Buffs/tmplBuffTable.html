@@ -126,7 +126,7 @@
                         let res = '';
                         if (val[6] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += percentFormater(val[6] / 100, 0, 3) + " generated as presence";
+                            res += this.percentFormater3(val[6] / 100) + " generated as presence";
                         }
                         if (val[1] !== val[0]) {
                             res += res.length > 0 ? "<br>" : '';
@@ -134,23 +134,23 @@
                         }
                         if (val[4] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent(buff.stacking, val[4]) + " by extension";
+                            res += formatNumberOrPercent3(buff.stacking, val[4]) + " by extension";
                         }
                         if (val[2] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent(buff.stacking, val[2]) + " wasted";
+                            res += formatNumberOrPercent3(buff.stacking, val[2]) + " wasted";
                         }
                         if (val[5] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent(buff.stacking, val[5]) + " extended";
+                            res += formatNumberOrPercent3(buff.stacking, val[5]) + " extended";
                         }
                         if (val[3] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent(buff.stacking, val[3]) + " extended by unknown source";
+                            res += formatNumberOrPercent3(buff.stacking, val[3]) + " extended by unknown source";
                         }
                         return res.length > 0 ? res : false;
                     } else if (buff.stacking && val[1] > 0) {
-                        return "Uptime: " + percentFormater(val[1] / 100, 0, 3);
+                        return "Uptime: " + this.percentFormater3(val[1] / 100);
                     } else {
                         return false;
                     }

@@ -223,10 +223,10 @@
                 }
                 const barrierLeft = hpBar && hpBarIsActive(hpBar) ? target.barrierLeftPercent : 0;
                 if ((hpLeft > minPercent && barrierLeft > 0) || (hpLeft == minPercent && barrierLeft > 0)) { // If only barrier is left, show 0 + x.y barrier
-                    return numberFormater(health) + " HP (" + percentFormater(hpLeft / 100) + " + " + percentFormater(barrierLeft /100) + ")";
+                    return numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + " + " + this.percentFormater2(barrierLeft /100) + ")";
                 }
                 else if (hpLeft > minPercent && barrierLeft == 0) {
-                    return numberFormater(health) + " HP (" + percentFormater(hpLeft / 100) + ")";
+                    return numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + ")";
                 }
                 return numberFormater(health) + " HP";
             },
@@ -271,7 +271,7 @@
                 }
 
                 if (instanceBuff.remainingDuration) {
-                    title += '<br> Remaining Duration: ' + numberFormater(instanceBuff.remainingDuration / 1000, 0, 3) + ' seconds';
+                    title += '<br> Remaining Duration: ' + this.numberFormater3(instanceBuff.remainingDuration / 1000) + ' seconds';
                 }
 
                 return title;

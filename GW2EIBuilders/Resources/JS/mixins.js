@@ -1,11 +1,13 @@
 "use strict";
 
+
 var numberComponent = {
     methods: {
         // https://stackoverflow.com/questions/16637051/adding-space-between-numbers
         integerWithSpaces: function(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         },
+
         round: function (value) {
             if (isNaN(value) || !isFinite(value)) {
                 return 0;
@@ -32,6 +34,58 @@ var numberComponent = {
             }
             var mul = 1000;
             return Math.round(mul * value) / mul;
+        },
+
+        numberFormater: function(value, minimumFractionDigits, maximumFractionDigits) {
+            if (isNaN(value) || !isFinite(value)) {
+                return 0;
+            }
+            return value.toLocaleString(undefined, {
+                minimumFractionDigits,
+                maximumFractionDigits
+            });
+        },
+        numberFormater0: function (value) {
+            return this.numberFormater(value, 0, 0);
+        },
+        numberFormater1: function (value) {
+            return this.numberFormater(value, 0, 1);
+        },
+        numberFormater2: function (value) {
+            return this.numberFormater(value, 0, 2);
+        },
+        numberFormater3: function (value) {
+            return this.numberFormater(value, 0, 3);
+        },
+
+        percentFormater: function(value, minimumFractionDigits, maximumFractionDigits) {
+
+            if (isNaN(value) || !isFinite(value)) {
+                return '0%';
+            }
+            return value.toLocaleString(undefined, {
+                style: "percent",
+                minimumFractionDigits,
+                maximumFractionDigits
+            });
+        },
+        percentFormater0: function (value) {
+            return this.percentFormater(value, 0, 0);
+        },
+        percentFormater1: function (value) {
+            return this.percentFormater(value, 0, 1);
+        },
+        percentFormater2: function (value) {
+            return this.percentFormater(value, 0, 2);
+        },
+        percentFormater3: function (value) {
+            return this.percentFormater(value, 0, 3);
+        },
+
+        formatNumberOrPercent3: function(isNumber, value) {
+            return isNumber
+                ? this.numberFormater(value, 0, 3)
+                : this.percentFormater(value / 100, 0, 3);
         }
     }
 };

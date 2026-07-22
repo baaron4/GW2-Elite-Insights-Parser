@@ -2,7 +2,7 @@
     <div>
         <div v-if="actor !== null" class="mb-1 mt-1">
             <p style="display: table-row;">
-                {{ actor.name }} did {{ percentFormater(barrierdist.contributedBarrier / barrierdist.totalBarrier, 0, 3) }} 
+                {{ actor.name }} did {{ percentFormater3(barrierdist.contributedBarrier / barrierdist.totalBarrier) }} 
                 {{ isminion ? "of its master's total" : 'of their total' }}
                 {{ istarget ? 'Target' : '' }} barrier ({{ numberFormater(barrierdist.contributedBarrier) }})
             </p>
@@ -102,16 +102,16 @@
                         {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ percentFormater(getBarrierOutput(row) / barrierdist.contributedBarrier, 0, 3) }}
+                        {{ percentFormater3(getBarrierOutput(row) / barrierdist.contributedBarrier) }}
                     </td>
-                    <td :class="getBodyClass('Data', 1)" :data-original-title="numberFormater(getBarrierOutput(row)/phase.durationS, 0, 2) +' hps'">
+                    <td :class="getBodyClass('Data', 1)" :data-original-title="numberFormater2(getBarrierOutput(row)/phase.durationS) +' hps'">
                         {{ numberFormater(getBarrierOutput(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)">
                         {{ numberFormater(getMinBarrier(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{ numberFormater(getBarrierOutput(row) / getConnectedHits(row)) }}
+                        {{ numberFormater0(getBarrierOutput(row) / getConnectedHits(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
                         {{ numberFormater(getMaxBarrier(row)) }}
@@ -123,27 +123,27 @@
                         {{ getConnectedHits(row) }}
                     </td>
                     <td :class="getHitsPerCastBodyClass('Data', 7, row)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater(getConnectedHits(row)/getCast(row), 0, 2) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? numberFormater2(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 8)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater(getBarrierOutput(row)/(0.001 * getCastDuration(row)), 0, 1) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? numberFormater1(getBarrierOutput(row)/(0.001 * getCastDuration(row))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" v-if="actor !== null" 
                         :data-original-title=" getCastDurationNoInterrupt(row) ? 
                             (
-                                'Min: ' + numberFormater(0.001 * getMinCastingTimeNoInterrupt(row), 3, 3) + 's' + 
-                                '<br> Max: '+ numberFormater(0.001 * getMaxCastingTimeNoInterrupt(row), 3, 3) + 's'
+                                'Min: ' + numberFormater3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's' + 
+                                '<br> Max: '+ numberFormater3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'
                             ) 
                             : 
                             null">
-                        {{ getCastDurationNoInterrupt(row) ? numberFormater(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row), 3, 3) + 's'  : ' '}}
+                        {{ getCastDurationNoInterrupt(row) ? numberFormater3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row)) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null"
-                        :data-original-title="getCastTimeWasted(row) ? percentFormater(getCastTimeWasted(row)/phase.durationS, 0, 2) + ' of the phase' : ''">
+                        :data-original-title="getCastTimeWasted(row) ? percentFormater2(getCastTimeWasted(row)/phase.durationS) + ' of the phase' : ''">
                         {{ getCastTimeWasted(row) ? numberFormater(getCastTimeWasted(row)) + 's' : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 10)" v-if="actor !== null"
-                        :data-original-title="getCastTimeSaved(row) ? percentFormater(getCastTimeSaved(row)/phase.durationS) + ' of the phase' : ''">
+                        :data-original-title="getCastTimeSaved(row) ? percentFormater2(getCastTimeSaved(row)/phase.durationS) + ' of the phase' : ''">
                         {{ getCastTimeSaved(row) ? numberFormater(getCastTimeSaved(row)) + 's' : ''}}
                     </td>
                 </tr>
@@ -152,7 +152,7 @@
                 <tr>
                     <td class="text-left">Total</td>
                     <td></td>
-                    <td :data-original-title="numberFormater(barrierdist.contributedBarrier/phase.durationS, 0, 0) +' hps'">
+                    <td :data-original-title="numberFormater0(barrierdist.contributedBarrier/phase.durationS) +' hps'">
                         {{numberFormater(barrierdist.contributedBarrier)}}
                     </td>
                     <td></td>
@@ -164,7 +164,7 @@
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{numberFormater(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting), 0, 2)}}
+                        {{numberFormater2(barrierdist.contributedBarrier/(0.001 * barrierdist.totalCasting))}}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>

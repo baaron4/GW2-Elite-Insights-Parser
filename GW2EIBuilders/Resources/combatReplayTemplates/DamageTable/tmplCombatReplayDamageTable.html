@@ -108,8 +108,7 @@
         },
         methods: {
             tableRound: function (value) {
-                const round = this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value);
-                return numberFormater(round);
+                return this.graphdata.damagemode == GraphType.Breakbar ? this.numberFormat1(value) : this.numberFormat0(value);
             },
             sortBy: function (key, index) {
                 this.sortByBase(this.sortdata, key, index);

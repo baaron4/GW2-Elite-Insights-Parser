@@ -284,9 +284,9 @@
                 if (!mod.isCounter) {
                     let percent;
                     if (mod.skillBased) {
-                        percent = numberFormater(this.round3(1000.0 * item[1] / this.phase.duration)) + " hits/s";
+                        percent = this.numberFormater3(1000.0 * item[1] / this.phase.duration) + " hits/s";
                     } else {
-                        percent = numberFormater(this.round3(100.0 * item[0] / item[1])) + " hit %";
+                        percent = this.numberFormater3(100.0 * item[0] / item[1]) + " hit %";
                     }
                     res +=  "<br>" + percent;
                     let gain;
@@ -295,9 +295,9 @@
                     } else {
                         gain = "Pure Damage: ";
                     }
-                    gain += numberFormater(item[2], 0, 0);
+                    gain += this.numberFormater0(item[2]);
                     if (mod.nonMultiplier) {
-                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3], 0, 2);
+                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3]);
                     }
                     res += "<br>" + gain;
                 } else if (item[2] > 0) {
@@ -331,7 +331,7 @@
                     return "-";
                 }
 
-                value = percentFormater(value / 100, 0, 3);
+                value = this.percentFormater3(value / 100);
                 if (mod.isCounter) {
                     return "# " + value;
                 }

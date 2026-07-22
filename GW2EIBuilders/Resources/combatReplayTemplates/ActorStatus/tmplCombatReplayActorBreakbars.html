@@ -12,7 +12,7 @@
 
 <script>
     Vue.component("combat-replay-actor-breakbars-component", {
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, numberComponent],
         props: ["actorIndex", "isTarget"],
         template: `${template}`,
         methods: {
@@ -23,10 +23,10 @@
                 var target = logData.targets[this.actorIndex];
                 var phaseId = logData.phases.indexOf(phase);
                 var breakbarTaken = target.details.dmgDistributionsTaken[phaseId].contributedBreakbarDamage;
-                return phase.durationS + ' seconds <br /> Start: ' + numberFormater(phase.start) + '<br /> End: ' + numberFormater(phase.end) +
-                    '<br /> Breakbar Active at: ' + numberFormater(phase.breakbarStart) +
-                    '<br /> Breakbar Damage: ' + numberFormater(breakbarTaken) +
-                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + numberFormater(phase.breakbarRecovered);
+                return this.numberFormater3(phase.durationS) + ' seconds <br /> Start: ' + this.numberFormater3(phase.start) + 's<br /> End: ' + this.numberFormater3(phase.end) +
+                    's<br /> Breakbar Active at: ' + this.numberFormater3(phase.breakbarStart) +
+                    '<br /> Breakbar Damage: ' + this.numberFormater2(breakbarTaken) +
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + this.numberFormater2(phase.breakbarRecovered);
             },
         },
         computed: {

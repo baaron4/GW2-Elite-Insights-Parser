@@ -123,10 +123,10 @@
                     <td :class="getBodyClass('Data', 3)">
                         {{ numberFormater(row.def[3]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 17)" :data-original-title="numberFormater(row.def[18] / 1000, 0, 3) + ' seconds'">
+                    <td :class="getBodyClass('Data', 17)" :data-original-title="numberFormater3(row.def[18] / 1000) + ' seconds'">
                         {{ numberFormater(row.def[17]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 19)" :data-original-title="numberFormater(row.def[20], 0, 3) + ' seconds'">
+                    <td :class="getBodyClass('Data', 19)" :data-original-title="numberFormater3(row.def[20]) + ' seconds'">
                         {{ numberFormater(row.def[19]) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
@@ -168,14 +168,14 @@
                     <td>{{ numberFormater(sum.def[1]) }}</td>
                     <td>{{ numberFormater(sum.def[2]) }}</td>
                     <td>{{ numberFormater(sum.def[3]) }}</td>
-                    <td :data-original-title="numberFormater(sum.def[18]/1000, 0, 3) + ' seconds'">{{ numberFormater(sum.def[17]) }}</td>
-                    <td :data-original-title="numberFormater(sum.def[20], 0, 3) + ' seconds'">{{ numberFormater(sum.def[19]) }}</td>
+                    <td :data-original-title="numberFormater3(sum.def[18]/1000) + ' seconds'">{{ numberFormater(sum.def[17]) }}</td>
+                    <td :data-original-title="numberFormater3(sum.def[20]) + ' seconds'">{{ numberFormater(sum.def[19]) }}</td>
                     <td>{{ numberFormater(sum.def[4]) }}</td>
                     <td>{{ numberFormater(sum.def[5]) }}</td>
                     <td>{{ numberFormater(sum.def[6]) }}</td>
                     <td>{{ numberFormater(sum.def[7]) }}</td>
-                    <td :data-original-title="numberFormater(sum.def[9], 0, 3) + ' seconds'">{{ numberFormater(sum.def[8]) }}</td>
-                    <td :data-original-title="numberFormater(sum.def[11], 0, 3) + ' seconds'">{{ numberFormater(sum.def[10]) }}</td>
+                    <td :data-original-title="numberFormater3(sum.def[9]) + ' seconds'">{{ numberFormater(sum.def[8]) }}</td>
+                    <td :data-original-title="numberFormater3(sum.def[11]) + ' seconds'">{{ numberFormater(sum.def[10]) }}</td>
                     <td>{{ numberFormater(sum.def[12]) }}</td>
                     <td>{{ numberFormater(sum.def[16]) }}</td>
                     <td>{{ numberFormater(sum.def[14]) }}</td>
