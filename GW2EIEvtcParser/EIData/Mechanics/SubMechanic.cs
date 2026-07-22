@@ -12,7 +12,7 @@ internal class SubMechanic : Mechanic
     /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
     /// <param name="description">description of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    public SubMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : base(id, plotlySetting, description, severity, internalCoolDown)
+    public SubMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : base(id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

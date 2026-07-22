@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class PlayerDamageMechanic : DamageMechanic
 {
-    public PlayerDamageMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown, CombatEventsGetter getter) : base(id, plotlySetting, description, severity, internalCoolDown, getter)
+    public PlayerDamageMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, CombatEventsGetter getter, int internalCoolDown = 0) : base(id, plotlySetting, description, severity, getter, internalCoolDown)
     {
     }
 

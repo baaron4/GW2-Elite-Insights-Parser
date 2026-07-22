@@ -123,7 +123,7 @@ public abstract class Mechanic : MechanicContainer
     /// <param name="description">description of the mechanic</param>
     /// <param name="severity">severity category of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    protected Mechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown)
+    protected Mechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0)
     {
         ID = id;
         PlotlySetting = plotlySetting;

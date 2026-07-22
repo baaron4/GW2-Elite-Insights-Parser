@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData;
 internal class PlayerDstEffectMechanic : DstEffectMechanic
 {
 
-    public PlayerDstEffectMechanic(GUID effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : this([effect], id, plotlySetting, description, severity, internalCoolDown)
+    public PlayerDstEffectMechanic(GUID effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([effect], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 
-    public PlayerDstEffectMechanic(ReadOnlySpan<GUID> effects, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : base(effects, id, plotlySetting, description, severity, internalCoolDown)
+    public PlayerDstEffectMechanic(ReadOnlySpan<GUID> effects, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : base(effects, id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

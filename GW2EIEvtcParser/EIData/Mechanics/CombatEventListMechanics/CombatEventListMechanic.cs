@@ -14,7 +14,7 @@ internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T 
         return _getter(log, a);
     }
 
-    public CombatEventListMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown, CombatEventsGetter getter) : base(id, plotlySetting, description, severity, internalCoolDown)
+    public CombatEventListMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, CombatEventsGetter getter, int internalCoolDown = 0) : base(id, plotlySetting, description, severity, internalCoolDown)
     {
         _getter = getter;
         if (_getter == null)

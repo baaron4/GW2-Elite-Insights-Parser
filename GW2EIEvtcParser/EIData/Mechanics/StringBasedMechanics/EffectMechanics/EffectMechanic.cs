@@ -8,11 +8,11 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 {
     protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
 
-    public EffectMechanic(GUID effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : this([ effect ], id, plotlySetting, description, severity, internalCoolDown)
+    public EffectMechanic(GUID effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([ effect ], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 
-    public EffectMechanic(ReadOnlySpan<GUID> effects, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown) : base(effects, id, plotlySetting, description, severity, internalCoolDown)
+    public EffectMechanic(ReadOnlySpan<GUID> effects, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : base(effects, id, plotlySetting, description, severity, internalCoolDown)
     {
         UsingEnable(log => log.CombatData.HasEffectData);
     }
