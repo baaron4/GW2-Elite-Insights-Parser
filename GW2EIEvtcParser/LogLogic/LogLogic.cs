@@ -16,7 +16,8 @@ using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.MechanicIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
+using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -100,32 +101,32 @@ public abstract class LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DeadEvent>(Mech_PlayerDead, new MechanicPlotlySetting(Symbols.X, Colors.Black), new("Dead"), Sev0, 0, (log, a) => log.CombatData.GetDeadEvents(a))
+                        new PlayerStatusMechanic<DeadEvent>(Mech_PlayerDead, new MechanicPlotlySetting(Symbols.X, Colors.Black), new("Dead"), Sev0, (log, a) => log.CombatData.GetDeadEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<DownEvent>(Mech_PlayerDowned, new MechanicPlotlySetting(Symbols.Cross, Colors.Red),  new("Downed"), Sev0, 0, (log, a) => log.CombatData.GetDownEvents(a))
+                        new PlayerStatusMechanic<DownEvent>(Mech_PlayerDowned, new MechanicPlotlySetting(Symbols.Cross, Colors.Red),  new("Downed"), Sev0, (log, a) => log.CombatData.GetDownEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<AliveEvent>(Mech_PlayerUp, new MechanicPlotlySetting(Symbols.Cross, Colors.Green), new ("Got up"), Sev1, 0, (log, a) => log.CombatData.GetAliveEvents(a))
+                        new PlayerStatusMechanic<AliveEvent>(Mech_PlayerUp, new MechanicPlotlySetting(Symbols.Cross, Colors.Green), new ("Got up"), Sev1, (log, a) => log.CombatData.GetAliveEvents(a))
                             .UsingNoShowOnTable(),
                     ]
                 ),
-                new PlayerCastStartMechanic(SkillIDs.Resurrect, Mech_PlayerRes, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), new("Res"), Sev2, 0)
+                new PlayerCastStartMechanic(SkillIDs.Resurrect, Mech_PlayerRes, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), new("Res"), Sev2)
                     .UsingNoShowOnTable(),
                 new MechanicGroup(
                     [
-                        new PlayerStatusMechanic<DespawnEvent>(Mech_PlayerDC, new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), new("DC"), Sev4, 0, (log, a) => log.CombatData.GetDespawnEvents(a))
+                        new PlayerStatusMechanic<DespawnEvent>(Mech_PlayerDC, new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), new("DC"), Sev4, (log, a) => log.CombatData.GetDespawnEvents(a))
                             .UsingNoShowOnTable(),
-                        new PlayerStatusMechanic<SpawnEvent>(Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), new("Resp"), Sev4, 0, (log, a) => log.CombatData.GetSpawnEvents(a))
+                        new PlayerStatusMechanic<SpawnEvent>(Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), new("Resp"), Sev4, (log, a) => log.CombatData.GetSpawnEvents(a))
                             .UsingNoShowOnTable()
                     ]
                 ),
                 new MechanicGroup(
                     [
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), new("Knck.Dwn", "Knocked Down"), Sev4, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), new("Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled"), Sev4, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), new("Flt", "Float"), Sev4, 0),
-                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), new("Lnch", "Launched"), Sev4, 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), new("Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...)"), Sev4, 0),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), new("Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked"), Sev4, 0),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockdown, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.Brown), new("Knck.Dwn", "Knocked Down"), Sev4),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericKnockbackPull, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkGreen), new("Knck.Pll", "Knocked Back or Pulled", "Knocked Back/Pulled"), Sev4),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightBlue), new("Flt", "Float"), Sev4),
+                        new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkPurple), new("Lnch", "Launched"), Sev4),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.LightPurple), new("Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...)"), Sev4),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], Mech_PlayerSpawn, new MechanicPlotlySetting(Symbols.StarTriangleUp, Colors.DarkBlue), new("Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked"), Sev4),
                     ]
                 ),
             ])
