@@ -48,7 +48,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 [
                     new PlayerDstHealthDamageHitMechanic([ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Fr.Mnp.", "Elemental Manipulation (Fire)","Elemental Manipulation (Fire)", Sev2, 0),
                     new PlayerDstHealthDamageHitMechanic([RoilingFlames, RoilingFlamesDash], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Rlng.Flms.", "Roiling Flames","Roiling Flames", Sev1, 0),
-                    new PlayerSrcHealthDamageHitMechanic(RoilingFlamesDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "Rlng.Flms.Rfl.", "Reflected Roiling Flames projectiles","Roiling Flames Reflect", Sev0, 0),
+                    new PlayerSrcHealthDamageHitMechanic(RoilingFlamesDash, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Orange), "Rlng.Flms.Rfl.", "Hit reflected Roiling Flames projectiles","Roiling Flames Reflect", Sev0, 0),
                     new PlayerDstHealthDamageHitMechanic(VolatileFire, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Vlt.Fr.", "Volatile Fire","Volatile Fire", Sev1, 0),
                     new MechanicGroup(
                         [
@@ -66,7 +66,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 [
                     new PlayerDstHealthDamageHitMechanic([ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3], new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Wtr.Mnp.", "Elemental Manipulation (Water)","Elemental Manipulation (Water)", Sev2, 0),
                     new PlayerDstHealthDamageHitMechanic([TorrentialBolt, TorrentialBoltDash], new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Tr.Blt.", "Torrential Bolt","Torrential Bolt", Sev1, 0),
-                    new PlayerSrcHealthDamageHitMechanic(TorrentialBoltDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightBlue), "Tr.Blt..Rfl.", "Reflected Torrential Bolt projectiles","Torrential Bolt Reflect", Sev0, 0),
+                    new PlayerSrcHealthDamageHitMechanic(TorrentialBoltDash, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightBlue), "Tr.Blt..Rfl.", "Hit reflected Torrential Bolt projectiles","Torrential Bolt Reflect", Sev0, 0),
                     new PlayerDstHealthDamageHitMechanic(VolatileWater, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Vlt.Wtr.", "Volatile Water","Volatile Water", Sev1, 0),
                     new PlayerDstHealthDamageHitMechanic(AquaticBurst, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightBlue), "Aq.Brst.", "Aquatic Burst","Aquatic Burst", Sev1, 0),
                     new EnemyDstBuffApplyMechanic(TidalBarrier, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", Sev1, 0),
@@ -84,7 +84,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 [
                     new PlayerDstHealthDamageHitMechanic([EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9], new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Emp.Mnp.", "Empathic Manipulation","Empathic Manipulation", Sev2, 0),
                     new PlayerDstHealthDamageHitMechanic([FocusedWrath, FocusedWrathDash], new MechanicPlotlySetting(Symbols.Circle, Colors.LightPurple), "Fcsd.Wrth.", "Focused Wrath", "Focused Wrath", Sev4, 0),
-                    new PlayerSrcHealthDamageHitMechanic(FocusedWrathDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "Fcsd.Wrth.Rfl.", "Reflected Focused Wrath projectiles", "Focused Wrath Reflect", Sev0, 0),
+                    new PlayerSrcHealthDamageHitMechanic(FocusedWrathDash, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightPurple), "Fcsd.Wrth.Rfl.", "Hit reflected Focused Wrath projectiles", "Focused Wrath Reflect", Sev0, 0),
                     new PlayerDstHealthDamageHitMechanic(NegativeBurst, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightPurple), "N.Brst.", "Negative Burst","Negative Burst", Sev1, 500),
                     new PlayerDstHealthDamageHitMechanic(Terrorstorm, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightPurple), "TrrStrm", "Terrorstorm","Terrorstorm", Sev1, 0),
                     new MechanicGroup(
