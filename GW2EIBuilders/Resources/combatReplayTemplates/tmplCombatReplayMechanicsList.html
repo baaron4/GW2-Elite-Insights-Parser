@@ -86,7 +86,7 @@
                         <td :class="{'mech-actor-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name &&
                                     reactiveAnimationData.selectedMechanic.actorId === event.actor.id}" 
                                 :data-original-title="'Timestamp'">
-                                {{(event.time / 1000).toFixed(2)}}s
+                                {{numberFormater(event.time / 1000, 2, 2)}}s
                         </td>
                         <td class="text-left mech-cell" 
                             :class="{'mech-active': reactiveAnimationData.selectedMechanic.name === event.mechanic.name}" 

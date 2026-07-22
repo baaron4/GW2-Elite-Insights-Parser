@@ -1,9 +1,9 @@
 ﻿<template>
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
-            :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
+             :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
             <p class="mb-0 scale65 cr-status-percent text-left">
-                {{percentageFormater(healths, time)}} %
+                {{ percentFormater(getPercent(healths, time) / 100) }}
             </p>
 
             <h6 class="text-center mb-0 ellipis align-self-center">
@@ -13,13 +13,13 @@
             </h6>
 
             <p class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
-                {{percentageFormater(barriers, time)}} %
+                {{ percentFormater(getPercent(barriers, time) / 100) }}
             </p>
         </div>
 
         <div v-if="hasBreakbar" :style="{'background': getBreakbarGradient(time)}">
             <p class="text-center scale65 m-0">
-                {{percentageFormater(breakbar, time)}} %
+                {{ percentFormater(getPercent(breakbar, time) / 100) }}
             </p>
         </div>
     </div>
@@ -67,10 +67,6 @@
             getBreakbarGradient: function (time) {
                 var color = animator.getActorData(this.actor.uniqueID).isBreakbarActive() ? "#20B2AA" : "#888888";
                 return computeGradient(color, this.getPercent(this.breakbar, time), 'black');
-            },
-            percentageFormater: function (states, time) {
-                const percent = this.getPercent(states, time);
-                return (Math.round(percent * 100) / 100).toFixed(2);
             },
             getActorHeight: function () {
                 if (this.isTarget) {

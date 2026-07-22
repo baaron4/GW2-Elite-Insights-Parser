@@ -126,31 +126,31 @@
                         let res = '';
                         if (val[6] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += val[6] + "% generated as presence";
+                            res += percentFormater(val[6] / 100, 0, 3) + " generated as presence";
                         }
                         if (val[1] !== val[0]) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
+                            res += formatNumberOrPercent(buff.stacking, val[1] || 0) + " with overstack";
                         }
                         if (val[4] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += val[4] + (buff.stacking ? "" : "%") + " by extension";
+                            res += formatNumberOrPercent(buff.stacking, val[4]) + " by extension";
                         }
                         if (val[2] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += val[2] + (buff.stacking ? "" : "%") + " wasted";
+                            res += formatNumberOrPercent(buff.stacking, val[2]) + " wasted";
                         }
                         if (val[5] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += val[5] + (buff.stacking ? "" : "%") + " extended";
+                            res += formatNumberOrPercent(buff.stacking, val[5]) + " extended";
                         }
                         if (val[3] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += val[3] + (buff.stacking ? "" : "%") + " extended by unknown source";
+                            res += formatNumberOrPercent(buff.stacking, val[3]) + " extended by unknown source";
                         }
                         return res.length > 0 ? res : false;
                     } else if (buff.stacking && val[1] > 0) {
-                        return "Uptime: " + val[1] + "%";
+                        return "Uptime: " + percentFormater(val[1] / 100, 0, 3);
                     } else {
                         return false;
                     }
@@ -165,7 +165,7 @@
                     force = this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0);
                 }
                 if (value > 0 || force) {
-                    return buff.stacking ? value : value + "%";
+                    return formatNumberOrPercent(buff.stacking, value);
                 }
                 return "-";
             }

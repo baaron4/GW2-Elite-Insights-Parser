@@ -118,19 +118,19 @@
                         if (this.outgoing && val[1] > 0) {
                             var res = ''; 
                             if (val[1] > 0) {
-                            res += res.length > 0 ? "<br>" : '';
-                                res += val[1] + (buff.stacking ? "" : "%") + " by extension";
+                                res += res.length > 0 ? "<br>" : '';
+                                res += formatNumberOrPercent(buff.stacking, val[1]) + " by extension";
                             }
                             return res.length > 0 ? res : false;
                         } else if (!this.outgoing && (val[1] > 0 || val[2] > 0)) {                     
                             var res = ''; 
                             if (val[1] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += val[1] + (buff.stacking ? "" : "%") + " by extension";
+                                res += formatNumberOrPercent(buff.stacking, val[1]) + " by extension";
                             }
                             if (val[2] > 0) {
                                 res += res.length > 0 ? "<br>" : '';
-                                res += val[2] + (buff.stacking ? "" : "%") + " by unknown extension";
+                                res += formatNumberOrPercent(buff.stacking, val[2]) + " by unknown extension";
                             }
                             return res.length > 0 ? res : false;
                         }
@@ -148,7 +148,7 @@
                     force = this.outgoing && (val[1] > 0 || val[2] > 0);
                 }
                 if (value > 0 || force) {
-                    return buff.stacking ? value : value + "%";
+                    return formatNumberOrPercent(buff.stacking, value);
                 }
                 return "-";
             }

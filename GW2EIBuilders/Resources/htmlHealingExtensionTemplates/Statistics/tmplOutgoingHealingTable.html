@@ -87,11 +87,11 @@
                     </td>
                     <td v-if="!showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
-                        {{round(value/phase.durationS)}}
+                        {{numberFormater(value/phase.durationS, 0, 0)}}
                     </td>
                     <td v-if="showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
                         :data-original-title="getPlayerTooltip(value, index, row, tableData.sums, index < 5, index === 6 || index === 1, index === 7 || index === 2)">
-                        {{value}}
+                        {{numberFormater(value, 0, 0)}}
                     </td>
                 </tr>
             </tbody>
@@ -103,11 +103,11 @@
                         {{sum.name}}
                     </td>
                     <td></td>
-                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="value + ' healing'">
-                        {{round(value/phase.durationS)}}                
+                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="numberFormater(value) + ' healing'">
+                        {{numberFormater(value/phase.durationS, 0, 0)}}
                     </td>
-                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="round(value/phase.durationS) + ' hps'">
-                        {{value}}               
+                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="numberFormater(value/phase.durationS, 0, 0) + ' hps'">
+                        {{numberFormater(value)}}
                     </td>
                 </tr>
             </tfoot>
@@ -168,7 +168,12 @@
                 return rows;
             },
             computeTotalContribution: function (index, row, sums) {
-                return this.round2(row[index] * 100 / sums[sums.length - 1].hps[index]) + '% of total';
+                const value = sums[sums.length - 1].hps[index];
+                if (value === 0) {
+                    return '0% of total';
+                }
+
+                return percentFormater(row[index] / sums[sums.length - 1].hps[index], 0, 2) + ' of total';
             },
             computeGroupContribution: function (groupIndex, index, row, sums) {
                 let sumId = 0;
@@ -177,16 +182,20 @@
                         break;
                     }
                 }
-                return this.round2(row[index] * 100 / sums[sumId].hps[index]) + '% of group';
+
+                if (sums[sumId].hps[index] === 0) {
+                    return '0% of group';
+                }
+                return percentFormater(row[index] / sums[sumId].hps[index], 0, 2) + ' of group';
             },          
             computeSelfContribution: function (index, totalIndex, row, target) {
                 const playerTotal = row.hps[totalIndex] || 1; // If total == 0 divide by 1, 0/1 = 0%;
 
-                var selfContrib = this.round2(row.hps[index] * 100 / playerTotal) + '% of self';
+                var selfContrib = percentFormater(row.hps[index] / playerTotal, 0, 2) + ' of self';
                 return selfContrib + (target ? " target" : " all");
             },
             getPlayerTooltip: function (value, index, row, sums, target, showHealingPowerContribution = false, showConversionContribution = false) {
-                var base = this.showHealing ? this.round(value / this.phase.durationS) + ' per second' : value + ' total';
+                var base = this.showHealing ? this.phase.durationS !== 0 ? (numberFormater(value / this.phase.durationS, 0, 0) + ' per second') : '' : numberFormater(value) + ' total';
                 var total = this.computeTotalContribution(index, row.hps, sums);
                 var group = this.computeGroupContribution(row.player.group, index, row.hps, sums);
 

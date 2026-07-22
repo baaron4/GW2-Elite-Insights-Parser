@@ -279,14 +279,14 @@
                 if (item[0] === 0) {
                     return null;
                 }
-                const hits = item[0] + " out of " + item[1] + " hits";
+                const hits = numberFormater(item[0]) + " out of " + numberFormater(item[1]) + " hits";
                 let res = hits;
                 if (!mod.isCounter) {
                     let percent;
                     if (mod.skillBased) {
-                        percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
+                        percent = numberFormater(this.round3(1000.0 * item[1] / this.phase.duration)) + " hits/s";
                     } else {
-                        percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                        percent = numberFormater(this.round3(100.0 * item[0] / item[1])) + " hit %";
                     }
                     res +=  "<br>" + percent;
                     let gain;
@@ -295,13 +295,13 @@
                     } else {
                         gain = "Pure Damage: ";
                     }
-                    gain += this.round(item[2]);
+                    gain += numberFormater(item[2], 0, 0);
                     if (mod.nonMultiplier) {
-                        gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
+                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3], 0, 2);
                     }
                     res += "<br>" + gain;
                 } else if (item[2] > 0) {
-                    res += "<br> Damage During: " + item[2];
+                    res += "<br> Damage During: " + numberFormater(item[2]);
                 }
                 return res;
             },
@@ -330,11 +330,14 @@
                 if (Math.abs(value) < 1e-6 || isNaN(value) || !isFinite(value)) {
                     return "-";
                 }
+
+                value = percentFormater(value / 100, 0, 3);
                 if (mod.isCounter) {
-                    value = "# " + value;
+                    return "# " + value;
                 }
-                return value + "%";
+
+                return value;
             }
-        },
+        }
     });
 </script>

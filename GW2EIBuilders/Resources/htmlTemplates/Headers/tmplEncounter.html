@@ -195,17 +195,17 @@
                 let res = "";
                 let linebreak = "";
                 if (showTotalHP) {
-                    res = "Total Health: " + target.health;
+                    res = "Total Health: " + numberFormater(target.health);
                     linebreak = "<br>";
                 }
                 if (hpLeft > 0 && barrierLeft > 0) {
-                    res += linebreak + 'Remaining:<br>Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
+                    res += linebreak + 'Remaining:<br>Health: ' + numberFormater(hpLeft) + '<br>Barrier: ' + numberFormater(barrierLeft);
                 }
                 else if (hpLeft > 0 && barrierLeft == 0) {
-                    res += linebreak + 'Remaining Health: ' + hpLeft;
+                    res += linebreak + 'Remaining Health: ' + numberFormater(hpLeft);
                 }
                 else if (barrierLeft > 0) {
-                    res += linebreak + 'Remaining Barrier: ' + barrierLeft;
+                    res += linebreak + 'Remaining Barrier: ' + numberFormater(barrierLeft);
                 }
                 return res.length > 0 ? res : null;
             },
@@ -223,12 +223,12 @@
                 }
                 const barrierLeft = hpBar && hpBarIsActive(hpBar) ? target.barrierLeftPercent : 0;
                 if ((hpLeft > minPercent && barrierLeft > 0) || (hpLeft == minPercent && barrierLeft > 0)) { // If only barrier is left, show 0 + x.y barrier
-                    return health + " HP (" + hpLeft + "% + " + barrierLeft + "%)";
+                    return numberFormater(health) + " HP (" + percentFormater(hpLeft / 100) + " + " + percentFormater(barrierLeft /100) + ")";
                 }
                 else if (hpLeft > minPercent && barrierLeft == 0) {
-                    return health + " HP (" + hpLeft + "%)";
+                    return numberFormater(health) + " HP (" + percentFormater(hpLeft / 100) + ")";
                 }
-                return health + " HP";
+                return numberFormater(health) + " HP";
             },
             fightModeColorClass: function (mode) {
                 switch (mode) {
@@ -271,7 +271,7 @@
                 }
 
                 if (instanceBuff.remainingDuration) {
-                    title += '<br> Remaining Duration: ' + this.round3(instanceBuff.remainingDuration / 1000) + ' seconds';
+                    title += '<br> Remaining Duration: ' + numberFormater(instanceBuff.remainingDuration / 1000, 0, 3) + ' seconds';
                 }
 
                 return title;

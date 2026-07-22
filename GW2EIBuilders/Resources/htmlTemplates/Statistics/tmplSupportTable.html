@@ -52,17 +52,17 @@
                     <td :class="getBodyClass('Account')" class="text-left">
                         {{row.player.acc}}
                     </td>
-                    <td :class="getBodyClass('Data', 0)" :data-original-title="row.sup[1] + ' seconds'">
-                        {{row.sup[0]}}
+                    <td :class="getBodyClass('Data', 0)" :data-original-title="numberFormater(row.sup[1], 0, 3) + ' seconds'">
+                        {{ numberFormater(row.sup[0]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 2)" :data-original-title="row.sup[3] + ' seconds'">
-                        {{row.sup[2]}}
+                    <td :class="getBodyClass('Data', 2)" :data-original-title="numberFormater(row.sup[3], 0, 3) + ' seconds'">
+                        {{ numberFormater(row.sup[2]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 4)" :data-original-title="row.sup[5] + ' seconds'">
-                        {{row.sup[4]}}
+                    <td :class="getBodyClass('Data', 4)" :data-original-title="numberFormater(row.sup[5], 0, 3) + ' seconds'">
+                        {{ numberFormater(row.sup[4]) }}
                     </td>
-                    <td :class="getBodyClass('Data', 6)" :data-original-title="row.sup[7] + ' seconds'">
-                        {{row.sup[6]}}
+                    <td :class="getBodyClass('Data', 6)" :data-original-title="numberFormater(row.sup[7], 0, 3) + ' seconds'">
+                        {{ numberFormater(row.sup[6]) }}
                     </td>
                 </tr>
             </tbody>
@@ -70,12 +70,12 @@
                 <tr v-for="sum in tableData.sums">
                     <td></td>
                     <td></td>
-                    <td class="text-left">{{sum.name}}</td>
+                    <td class="text-left">{{ sum.name }}</td>
                     <td></td>
-                    <td :data-original-title="round3(sum.sup[1]) + ' seconds'">{{sum.sup[0]}}</td>
-                    <td :data-original-title="round3(sum.sup[3])  + ' seconds'">{{sum.sup[2]}}</td>
-                    <td :data-original-title="round3(sum.sup[5])  + ' seconds'">{{sum.sup[4]}}</td>
-                    <td :data-original-title="round3(sum.sup[7])  + ' seconds'">{{sum.sup[6]}}</td>
+                    <td :data-original-title="numberFormater(sum.sup[1], 0, 3) + ' seconds'">{{ numberFormater(sum.sup[0]) }}</td>
+                    <td :data-original-title="numberFormater(sum.sup[3], 0, 3) + ' seconds'">{{ numberFormater(sum.sup[2]) }}</td>
+                    <td :data-original-title="numberFormater(sum.sup[5], 0, 3) + ' seconds'">{{ numberFormater(sum.sup[4]) }}</td>
+                    <td :data-original-title="numberFormater(sum.sup[7], 0, 3) + ' seconds'">{{ numberFormater(sum.sup[6]) }}</td>
                 </tr>
             </tfoot>
         </table>
