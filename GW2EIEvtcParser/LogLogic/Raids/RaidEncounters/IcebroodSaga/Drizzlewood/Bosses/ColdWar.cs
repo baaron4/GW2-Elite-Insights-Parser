@@ -16,12 +16,12 @@ internal class ColdWar : Drizzlewood
     public ColdWar(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([ 
-            new PlayerDstHealthDamageHitMechanic(IcyEchoes, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech", "Tight stacking damage","Icy Echoes", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(Detonate, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.", "Hit by Detonation","Detonate", Sev2, 50),
-            new PlayerDstHealthDamageHitMechanic(LethalCoalescence, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.", "Soaked damage","Lethal Coalescence", Sev0, 50),
-            new PlayerDstHealthDamageHitMechanic(FlameWall, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall", "Stood in Flame Wall","Flame Wall", Sev1, 50),
-            new PlayerDstHealthDamageHitMechanic(CallAssassins, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.", "Hit by Assassins","Call Assassins", Sev1, 50),
-            new PlayerDstHealthDamageHitMechanic(Charge, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!", "Hit by Charge","Charge!", Sev1, 50),
+            new PlayerDstHealthDamageHitMechanic(IcyEchoes, new (Symbols.DiamondTall,Colors.Red), "Icy.Ech", "Tight stacking damage","Icy Echoes", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(Detonate, new (Symbols.Circle,Colors.Orange), "Det.", "Hit by Detonation","Detonate", Sev2, 50),
+            new PlayerDstHealthDamageHitMechanic(LethalCoalescence, new (Symbols.Hexagram,Colors.Orange), "Leth.Coal.", "Soaked damage","Lethal Coalescence", Sev0, 50),
+            new PlayerDstHealthDamageHitMechanic(FlameWall, new (Symbols.Square,Colors.Orange), "Flm.Wall", "Stood in Flame Wall","Flame Wall", Sev1, 50),
+            new PlayerDstHealthDamageHitMechanic(CallAssassins, new (Symbols.DiamondTall,Colors.LightRed), "Call Ass.", "Hit by Assassins","Call Assassins", Sev1, 50),
+            new PlayerDstHealthDamageHitMechanic(Charge, new (Symbols.DiamondTall,Colors.Orange), "Charge!", "Hit by Charge","Charge!", Sev1, 50),
         ])
         );
         Extension = "coldwar";

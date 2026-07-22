@@ -18,20 +18,20 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class Gorseval : SpiritVale
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstHealthDamageHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", Sev0, 4000)
+            new PlayerDstHealthDamageHitMechanic(SpectralImpact, new (Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
-            new PlayerDstBuffApplyMechanic(GhastlyPrison, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", Sev0, 500),
-            new PlayerDstBuffApplyMechanic(SpectralDarkness, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff", "Spectral Darkness (Stood in Orb AoE)","Orb Debuff", Sev0, 100),
-            new EnemyDstBuffApplyMechanic(SpiritedFusion, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff", "Spirited Fusion (Consumed a Spirit)","Ate Spirit", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(SpiritKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick.S", "Kicked by small add","Spirit Kick", Sev0, 0)
+            new PlayerDstBuffApplyMechanic(GhastlyPrison, new (Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", Sev0, 500),
+            new PlayerDstBuffApplyMechanic(SpectralDarkness, new (Symbols.Circle,Colors.Blue), "Orb Debuff", "Spectral Darkness (Stood in Orb AoE)","Orb Debuff", Sev0, 100),
+            new EnemyDstBuffApplyMechanic(SpiritedFusion, new (Symbols.Square,Colors.LightOrange), "Spirit Buff", "Spirited Fusion (Consumed a Spirit)","Ate Spirit", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(SpiritKick, new (Symbols.TriangleRight,Colors.Magenta), "Kick.S", "Kicked by small add","Spirit Kick", Sev0, 0)
                 .UsingBuffChecker(Stability, false),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(Vulnerability, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black", "Hit by Black Goo","Black Goo", Sev1,3000)
+                new PlayerDstBuffApplyMechanic(Vulnerability, new (Symbols.Circle,Colors.Black), "Black", "Hit by Black Goo","Black Goo", Sev1,3000)
                     .UsingChecker( (ba,log) => ba.AppliedDuration == 10000),
-                new EnemyCastStartMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC.G", "Ghastly Rampage (Breakbar)","Breakbar", Sev3, 0),
-                new EnemyCastEndMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.G End", "Ghastly Rampage (Full duration)","CC ran out", Sev1, 0)
+                new EnemyCastStartMechanic(GhastlyRampage, new (Symbols.DiamondTall,Colors.DarkTeal), "CC.G", "Ghastly Rampage (Breakbar)","Breakbar", Sev3, 0),
+                new EnemyCastEndMechanic(GhastlyRampage, new (Symbols.DiamondTall,Colors.Red), "CC.G End", "Ghastly Rampage (Full duration)","CC ran out", Sev1, 0)
                     .UsingChecker( (ce,log) => ce.ActualDuration > 21985),
-                new EnemyCastEndMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed.G", "Ghastly Rampage (Breakbar broken)","CCed", Sev0, 0)
+                new EnemyCastEndMechanic(GhastlyRampage, new (Symbols.DiamondTall,Colors.DarkGreen), "CCed.G", "Ghastly Rampage (Breakbar broken)","CCed", Sev0, 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 21985),
             ]),
         ]);

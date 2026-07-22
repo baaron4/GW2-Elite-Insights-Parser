@@ -19,40 +19,40 @@ internal class QadimThePeerless : TheKeyOfAhdashim
 {
     internal readonly MechanicGroup Mechanics = new([
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(EnergizedAffliction, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(ForceOfRetaliation, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Shck.KB", "Pushed by Shockwave", "Shockwave Push", Sev0, 1000)
+                new PlayerDstHealthDamageHitMechanic(EnergizedAffliction, new (Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(ForceOfRetaliation, new (Symbols.CircleOpen,Colors.Black), "Shck.KB", "Pushed by Shockwave", "Shockwave Push", Sev0, 1000)
                     .UsingBuffChecker(Stability, false),
-                new PlayerDstHealthDamageHitMechanic(BatteringBlitz, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", Sev2, 500),
-                new PlayerDstHealthDamageHitMechanic(ForceOfHavoc, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(ChaosCalled, new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", Sev2, 0),
-                new EnemySrcHealthDamageHitMechanic(EclipsedBacklash, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", Sev0, 1000),
+                new PlayerDstHealthDamageHitMechanic(BatteringBlitz, new (Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", Sev2, 500),
+                new PlayerDstHealthDamageHitMechanic(ForceOfHavoc, new (Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(ChaosCalled, new (Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", Sev2, 0),
+                new EnemySrcHealthDamageHitMechanic(EclipsedBacklash, new (Symbols.Circle,Colors.Orange), "Entropic.Expl", "Entropic Distortion exploded", "Eclipsed Backlash", Sev0, 1000),
             ]),
-            new PlayerDstHealthDamageHitMechanic(ExponentialRepercussionQadimShield, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.DarkPurple), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", Sev0, 1000),
+            new PlayerDstHealthDamageHitMechanic(ExponentialRepercussionQadimShield, new (Symbols.DiamondOpen,Colors.DarkPurple), "Dome.KB", "Pushed by Dome Shield Knockback", "Dome Knockback", Sev0, 1000),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(RainOfChaos, new MechanicPlotlySetting(Symbols.StarSquare,Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", Sev1, 0),
-                new PlayerDstHealthDamageHitMechanic(BrandstormLightning, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", Sev1, 0),
-            ]),
-            new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(ResidualImpactMagmaField, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", Sev0, 500),
-                new PlayerDstHealthDamageHitMechanic(ResidualImpactSmallMagmaField, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", Sev0, 500),
+                new PlayerDstHealthDamageHitMechanic(RainOfChaos, new (Symbols.StarSquare,Colors.Purple), "Lght.H", "Hit by Expanding Lightning", "Lightning Hit", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(BrandstormLightning, new (Symbols.TriangleUp,Colors.Yellow), "S.Lght.H", "Hit by Small Lightning", "Small Lightning Hit", Sev1, 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(CausticChaosProjectile, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", Sev2, 0),
-                new PlayerDstHealthDamageHitMechanic(CausticChaosExplosion, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", Sev1, 0),
-            ]),
-            new PlayerCastStartMechanic(PlayerLiftUpQadimThePeerless, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Up", "Player lifted up", "Player lifted up", Sev1, 0),
-            new MechanicGroup([
-                new PlayerCastEndMechanic(FluxDisruptorActivateCast, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Blue), "Flux.Act", "Flux Disruptor Activated", "Flux Disruptor Activated", Sev3, 0),
-                new PlayerCastEndMechanic(FluxDisruptorDeactivateCast, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Flux.Dea", "Flux Disruptor Deactivated", "Flux Disruptor Deactivated", Sev3, 0),
+                new PlayerDstHealthDamageHitMechanic(ResidualImpactMagmaField, new (Symbols.CircleOpen,Colors.Orange), "Magma.F", "Hit by Magma Field", "Magma Field", Sev0, 500),
+                new PlayerDstHealthDamageHitMechanic(ResidualImpactSmallMagmaField, new (Symbols.CircleOpen,Colors.Orange,10), "S.Magma.F", "Hit by Small Magma Field", "Small Magma Field", Sev0, 500),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(ExponentialRepercussionPylon, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", Sev0, 1000),
-                new PlayerDstHealthDamageHitMechanic(PylonDebrisField, new MechanicPlotlySetting(Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", Sev0, 0),
-                new PlayerDstBuffApplyMechanic(CriticalMass, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", Sev1, 0),
-                new EnemySrcHealthDamageHitMechanic(ShowerOfChaos, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", Sev0, 1000),
+                new PlayerDstHealthDamageHitMechanic(CausticChaosProjectile, new (Symbols.TriangleRight,Colors.Red), "A.Prj.H", "Hit by Aimed Projectile", "Aimed Projectile", Sev2, 0),
+                new PlayerDstHealthDamageHitMechanic(CausticChaosExplosion, new (Symbols.TriangleRightOpen,Colors.Red), "A.Prj.E", "Hit by Aimed Projectile Explosion", "Aimed Projectile Explosion", Sev1, 0),
             ]),
-            new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", Sev0, 0),
-            new PlayerDstBuffApplyMechanic(SappingSurge, new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", Sev0, 0),
+            new PlayerCastStartMechanic(PlayerLiftUpQadimThePeerless, new (Symbols.TriangleUp, Colors.Orange), "Up", "Player lifted up", "Player lifted up", Sev1, 0),
+            new MechanicGroup([
+                new PlayerCastEndMechanic(FluxDisruptorActivateCast, new (Symbols.CircleOpenDot, Colors.Blue), "Flux.Act", "Flux Disruptor Activated", "Flux Disruptor Activated", Sev3, 0),
+                new PlayerCastEndMechanic(FluxDisruptorDeactivateCast, new (Symbols.CircleOpenDot, Colors.LightBlue), "Flux.Dea", "Flux Disruptor Deactivated", "Flux Disruptor Deactivated", Sev3, 0),
+            ]),
+            new MechanicGroup([
+                new PlayerDstHealthDamageHitMechanic(ExponentialRepercussionPylon, new (Symbols.DiamondOpen,Colors.Magenta), "P.KB", "Pushed by Pylon Knockback", "Pylon Knockback", Sev0, 1000),
+                new PlayerDstHealthDamageHitMechanic(PylonDebrisField, new (Symbols.CircleOpenDot,Colors.Orange), "P.Magma", "Hit by Pylon Magma", "Pylon Magma", Sev0, 0),
+                new PlayerDstBuffApplyMechanic(CriticalMass, new (Symbols.CircleOpen,Colors.Red), "Orb caught", "Collected a Pylon Orb", "Critical Mass", Sev1, 0),
+                new EnemySrcHealthDamageHitMechanic(ShowerOfChaos, new (Symbols.Circle,Colors.Black), "Orb.D", "Pylon Orb not caught", "Shower of Chaos", Sev0, 1000),
+            ]),
+            new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, new (Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(SappingSurge, new (Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", Sev0, 0),
         ]);
     public QadimThePeerless(int triggerID) : base(triggerID)
     {

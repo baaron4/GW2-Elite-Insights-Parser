@@ -18,29 +18,29 @@ internal class IcebroodConstruct : Grothmar
     {
         MechanicList.Add(new MechanicGroup([   
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.Orange), "A.Swing", "Hit by Ice Arm Swing (Spin)", "Ice Arm Swing", Sev2, 0)
+                new PlayerDstHealthDamageHitMechanic(IceArmSwing, new (Symbols.Star, Colors.Orange), "A.Swing", "Hit by Ice Arm Swing (Spin)", "Ice Arm Swing", Sev2, 0)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "ArmSwing.CC", "Knocked by Ice Arm Swing (Spin)", "Ice Arm Swing", Sev0, 0),
+                    new SubMechanic(new (Symbols.Star, Colors.Yellow), "ArmSwing.CC", "Knocked by Ice Arm Swing (Spin)", "Ice Arm Swing", Sev0, 0),
                     false
                 ),
-                new EnemyCastEndMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.White), "Ice Arm Swing", "Cast Ice Arm Swing (Spin)", "Cast Ice Arm Swing", Sev3, 0),
+                new EnemyCastEndMechanic(IceArmSwing, new (Symbols.Star, Colors.White), "Ice Arm Swing", "Cast Ice Arm Swing (Spin)", "Cast Ice Arm Swing", Sev3, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic(IceShatter, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink), "Ice Orbs", "Hit by Rotating Ice Shatter (Orbs)", "Ice Shatter (Orbs)", Sev2, 50),
-            new PlayerDstHealthDamageHitMechanic(IceCrystal, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "I.Crystal", "Hit by Ice Crystal (Chill AoE)", "Ice Crystal", Sev1, 50),
-            new PlayerDstHealthDamageHitMechanic(Frostbite, new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Frostbite.H", "Hit by Frostbite", "Frostbite", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(IceShatter, new (Symbols.TriangleUp, Colors.Pink), "Ice Orbs", "Hit by Rotating Ice Shatter (Orbs)", "Ice Shatter (Orbs)", Sev2, 50),
+            new PlayerDstHealthDamageHitMechanic(IceCrystal, new (Symbols.Circle, Colors.LightOrange), "I.Crystal", "Hit by Ice Crystal (Chill AoE)", "Ice Crystal", Sev1, 50),
+            new PlayerDstHealthDamageHitMechanic(Frostbite, new (Symbols.Square, Colors.Blue), "Frostbite.H", "Hit by Frostbite", "Frostbite", Sev1, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Flail", "Hit by Ice Flail (Arm Swipe)", "Ice Flail", Sev1, 50)
+                new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new (Symbols.Square, Colors.Orange), "I.Flail", "Hit by Ice Flail (Arm Swipe)", "Ice Flail", Sev1, 50)
                 .WithStabilitySubMechanic(
-                    new SubMechanic(new MechanicPlotlySetting(Symbols.Square, Colors.Yellow), "IceFlail.CC", "Knocked by Ice Flail (Arm Swipe)", "Ice Flail", Sev0, 50),
+                    new SubMechanic(new (Symbols.Square, Colors.Yellow), "IceFlail.CC", "Knocked by Ice Flail (Arm Swipe)", "Ice Flail", Sev0, 50),
                     false
                 )
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(DeadlyIceShockWave, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "D.IceWave", "Hit by Deadly Ice Shock Wave", "Deadly Ice Shock Wave", Sev1, 0),
-                new EnemyCastEndMechanic(DeadlyIceShockWave, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", Sev3, 0),
-                new PlayerDstHealthDamageHitMechanic([IceShockWave1, IceShockWave2, IceShockWave3], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "ShockWave.H", "Hit by Ice Shock Wave", "Ice Shock Wave", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic(DeadlyIceShockWave, new (Symbols.CircleOpen, Colors.Red), "D.IceWave", "Hit by Deadly Ice Shock Wave", "Deadly Ice Shock Wave", Sev1, 0),
+                new EnemyCastEndMechanic(DeadlyIceShockWave, new (Symbols.CircleOpen, Colors.White), "Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", "Cast Deadly Ice Shock Wave", Sev3, 0),
+                new PlayerDstHealthDamageHitMechanic([IceShockWave1, IceShockWave2, IceShockWave3], new (Symbols.CircleOpen, Colors.LightOrange), "ShockWave.H", "Hit by Ice Shock Wave", "Ice Shock Wave", Sev1, 0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.White), "SpinIce.H", "Hit by Spinning Ice", "Spinning Ice", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4], new (Symbols.CircleOpenDot, Colors.White), "SpinIce.H", "Hit by Spinning Ice", "Spinning Ice", Sev1, 0),
         ])
         );
         Extension = "icebrood";

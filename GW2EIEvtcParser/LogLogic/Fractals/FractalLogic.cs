@@ -25,26 +25,26 @@ internal abstract class FractalLogic : LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(FluxBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", Sev2, 0),
-                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", Sev1, 0), // No longer tracking damage
+                        new PlayerDstBuffApplyMechanic(FluxBombBuff, new (Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", Sev2, 0),
+                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new (Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", Sev1, 0), // No longer tracking damage
                     ]
                 ),
-                new SpawnMechanic((int)TargetID.FractalVindicator, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", Sev3, 0),
+                new SpawnMechanic((int)TargetID.FractalVindicator, new (Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", Sev3, 0),
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", Sev2, 0),
-                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", Sev2, 0),
-                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", Sev1, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", Sev2, 0),
+                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], new (Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", Sev2, 0),
+                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", Sev1, 0)
                             .UsingChecker((bae, log) => bae.To.IsPlayer),
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", Sev1, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", Sev1, 0)
                             .UsingChecker((bae, log) => bae.By.IsPlayer),
                     ]
                 ),
                 /* Not trackable due to health % damage for now
-                new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
-                new PlayerDstHitMechanic(ExplodeLastLaugh, "Explode", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange, 10), "Explode.H", "Hit by Last Laugh Explode", "Last Laugh Hit", 0),
-                new PlayerDstHitMechanic(WeBleedFireBig, "We Bleed Fire", new MechanicPlotlySetting(Symbols.Star, Colors.LightRed, 10), "BleedFireB.H", "Hit by We Bleed Fire (Big)", "Big Bleed Fire Hit", 0),
-                new PlayerDstHitMechanic(WeBleedFireSmall, "We Bleed Fire", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed, 10), "BleedFireS.H", "Hit by We Bleed Fire (Small)", "Small Bleed FIre Hit", 0),
+                new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new (Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
+                new PlayerDstHitMechanic(ExplodeLastLaugh, "Explode", new (Symbols.CircleOpenDot, Colors.Orange, 10), "Explode.H", "Hit by Last Laugh Explode", "Last Laugh Hit", 0),
+                new PlayerDstHitMechanic(WeBleedFireBig, "We Bleed Fire", new (Symbols.Star, Colors.LightRed, 10), "BleedFireB.H", "Hit by We Bleed Fire (Big)", "Big Bleed Fire Hit", 0),
+                new PlayerDstHitMechanic(WeBleedFireSmall, "We Bleed Fire", new (Symbols.StarOpen, Colors.LightRed, 10), "BleedFireS.H", "Hit by We Bleed Fire (Small)", "Small Bleed FIre Hit", 0),
                  */
             ])
         ]));

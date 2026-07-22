@@ -19,10 +19,10 @@ namespace GW2EIEvtcParser.LogLogic;
 internal class StatueOfDeath : HallOfChains
 {
     internal readonly MechanicGroup Mechanics = new([
-            new PlayerDstHealthDamageHitMechanic(HungeringMiasma, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit", "Hungering Miasma (Vomit Goo)","Vomit Dmg", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(HungeringMiasma, new (Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit", "Hungering Miasma (Vomit Goo)","Vomit Dmg", Sev0, 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected", "Applied when taking a light orb","Light Orb", Sev0, 0),
-                new PlayerCastStartMechanic(ReclaimedEnergySkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown", "Has thrown a light orb","Light Orb Thrown", Sev0, 0)
+                new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, new (Symbols.Circle,Colors.Yellow), "Light Orb Collected", "Applied when taking a light orb","Light Orb", Sev0, 0),
+                new PlayerCastStartMechanic(ReclaimedEnergySkill, new (Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown", "Has thrown a light orb","Light Orb Thrown", Sev0, 0)
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
         ]);

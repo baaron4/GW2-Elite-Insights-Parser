@@ -18,28 +18,28 @@ internal class Boneskinner : Bjora
     public Boneskinner(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(Grasp, new MechanicPlotlySetting(Symbols.Circle, Colors.Grey), "Grasp.H", "Grasp (Claw AoE)", "Grasp Hit", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(Cascade, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Cascade.H", "Cascade (Rectangle AoEs from paws stomp)", "Cascade Hit", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(Grasp, new (Symbols.Circle, Colors.Grey), "Grasp.H", "Grasp (Claw AoE)", "Grasp Hit", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(Cascade, new (Symbols.TriangleDown, Colors.DarkRed), "Cascade.H", "Cascade (Rectangle AoEs from paws stomp)", "Cascade Hit", Sev2, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(BoneskinnerCharge, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "H.Charge", "Hit by Charge", "Charge hit", Sev1, 0),
-                new EnemyCastEndMechanic(BoneskinnerCharge, new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "D.Torch", "Charged a torch", "Charge", Sev0, 0)
+                new PlayerDstHealthDamageHitMechanic(BoneskinnerCharge, new (Symbols.TriangleUp, Colors.Red), "H.Charge", "Hit by Charge", "Charge hit", Sev1, 0),
+                new EnemyCastEndMechanic(BoneskinnerCharge, new (Symbols.Hexagram, Colors.LightRed), "D.Torch", "Charged a torch", "Charge", Sev0, 0)
                     .UsingChecker((ce, log) => !ce.IsInterrupted),
             ]),
-            new PlayerDstHealthDamageHitMechanic(CrushingCruelty, new MechanicPlotlySetting(Symbols.Star, Colors.DarkGreen), "Crush.Cru.H", "Hit by Crushing Cruelty (Jump middle after Charge)", "Crushing Cruelty Hit", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(CrushingCruelty, new (Symbols.Star, Colors.DarkGreen), "Crush.Cru.H", "Hit by Crushing Cruelty (Jump middle after Charge)", "Crushing Cruelty Hit", Sev0, 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(DeathWind, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Launched", "Hit by Death Wind", "Death Wind Hit", Sev0, 0), // This attack removes stability
-                new EnemyCastEndMechanic(DeathWind, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "D.Wind", "Cast Death Wind (extinguished one torch)", "Death Wind", Sev0, 0)
+                new PlayerDstHealthDamageHitMechanic(DeathWind, new (Symbols.TriangleUp, Colors.Orange), "Launched", "Hit by Death Wind", "Death Wind Hit", Sev0, 0), // This attack removes stability
+                new EnemyCastEndMechanic(DeathWind, new (Symbols.TriangleUpOpen, Colors.LightOrange), "D.Wind", "Cast Death Wind (extinguished one torch)", "Death Wind", Sev0, 0)
                     .UsingChecker((ce, log) => !ce.IsInterrupted),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(DouseInDarkness, new MechanicPlotlySetting(Symbols.Cross, Colors.DarkTeal), "DouseDarkness.H", "Hit by Douse in Darkness", "Douse in Darkness Hit", Sev1, 0),
-                new EnemyCastEndMechanic(DouseInDarkness, new MechanicPlotlySetting(Symbols.Cross, Colors.Teal), "D.Darkness", "Cast Douse in Darkness (extinguished all torches)", "Douse in Darkness", Sev0, 0)
+                new PlayerDstHealthDamageHitMechanic(DouseInDarkness, new (Symbols.Cross, Colors.DarkTeal), "DouseDarkness.H", "Hit by Douse in Darkness", "Douse in Darkness Hit", Sev1, 0),
+                new EnemyCastEndMechanic(DouseInDarkness, new (Symbols.Cross, Colors.Teal), "D.Darkness", "Cast Douse in Darkness (extinguished all torches)", "Douse in Darkness", Sev0, 0)
                     .UsingChecker((ce, log) => !ce.IsInterrupted),
             ]),
-            new PlayerDstHealthDamageHitMechanic(BarrageWispBoneskinner, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "Barrage.H", "Hit by Barrage (Wisp AoE)", "Barrage Hit", Sev0, 0),
-            new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", Sev0, 0),
-            new EnemyCastStartMechanic(BoneskinnerBreakbar, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Breakbar", "Casting a Breakbar", "Breakbar", Sev3, 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Pink), "Exposed.E", "Gained Exposed (Breakbar broken)", "Exposed", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(BarrageWispBoneskinner, new (Symbols.TriangleRight, Colors.Green), "Barrage.H", "Hit by Barrage (Wisp AoE)", "Barrage Hit", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, new (Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", Sev0, 0),
+            new EnemyCastStartMechanic(BoneskinnerBreakbar, new (Symbols.Square, Colors.Purple), "Breakbar", "Casting a Breakbar", "Breakbar", Sev3, 0),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new (Symbols.SquareOpen, Colors.Pink), "Exposed.E", "Gained Exposed (Breakbar broken)", "Exposed", Sev2, 0),
         ])
         );
         Extension = "boneskin";
