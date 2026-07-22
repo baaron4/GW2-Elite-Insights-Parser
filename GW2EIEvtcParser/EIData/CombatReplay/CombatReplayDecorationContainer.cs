@@ -802,6 +802,28 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add missiles going from a Point A to Point B, supports multi launches, different color for reflected, uses CircleDecoration
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvents">Missile events to process</param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    internal void AddReflectableNonHomingMissiles(ParsedEvtcLog log, IEnumerable<MissileEvent> missileEvents, Color color, double opacity, Color reflectedColor, double reflectedOpacity, uint radius)
+    {
+        foreach (var missile in missileEvents)
+        {
+            AddNonHomingMissile(log, missile, (launch, lifespan, connector) =>
+            {
+                var decoration = launch.MaybeReflected
+                    ? new CircleDecoration(radius, lifespan, reflectedColor, reflectedOpacity, connector)
+                    : new CircleDecoration(radius, lifespan, color, opacity, connector);
+                Add(decoration);
+            });
+        }
+    }
+
+    /// <summary>
     /// Add missiles rotating around TargetedAgent, supports multi launches
     /// </summary>
     /// <param name="log">Evtc log</param>

@@ -23,56 +23,57 @@ internal class AiKeeperOfThePeak : SunquaPeak
     internal readonly MechanicGroup Mechanics = new(
         [
             // General
-            new PlayerDstHealthDamageHitMechanic(ElementalWhirl, new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.", "Elemental Whirl","Elemental Whirl", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(ElementalWhirl, new MechanicPlotlySetting(Symbols.Square, Colors.LightRed), "Ele.Whrl.", "Elemental Whirl","Elemental Whirl", Sev1, 0),
             // Air
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3], new MechanicPlotlySetting(Symbols.Square,Colors.Magenta), "Ar.Mnp.", "Elemental Manipulation (Air)","Elemental Manipulation (Air)", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic([FulgorSphere1, FulgorSphere2], new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.", "Fulgor Sphere","Fulgor Sphere", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(VolatileWind, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.", "Volatile Wind","Volatile Wind", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3], new MechanicPlotlySetting(Symbols.Square, Colors.Magenta), "Ar.Mnp.", "Elemental Manipulation (Air)","Elemental Manipulation (Air)", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic([FulgorSphere1, FulgorSphere2], new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Flg.Sph.", "Fulgor Sphere","Fulgor Sphere", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic(VolatileWind, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Magenta), "Vlt.Wnd.", "Volatile Wind","Volatile Wind", Sev1, 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstHealthDamageHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.", "Wind Burst","Wind Burst", Sev2, 0)
+                            new PlayerDstHealthDamageHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Magenta), "Wnd.Brst.", "Wind Burst","Wind Burst", Sev2, 0)
                                 .WithStabilitySubMechanic(
-                                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst", "Launched up by Wind Burst","Wind Burst Launch", Sev0, 0),
+                                    new SubMechanic(new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Magenta), "L.Wnd.Burst", "Launched up by Wind Burst","Wind Burst Launch", Sev0, 0),
                                     false
                                 ),
                         ]
                     ),
-                    new PlayerDstHealthDamageHitMechanic(CallOfStorms , new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs", "Call of Storms","Call of Storms", Sev0, 0),
-                    new EnemyDstBuffApplyMechanic(WhirlwindShield, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Magenta),"W.Shield" , "Whirlwind Shield","Whirlwind Shield", Sev0,0),
+                    new PlayerDstHealthDamageHitMechanic(CallOfStorms , new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Magenta), "Call.Strs", "Call of Storms","Call of Storms", Sev0, 0),
+                    new EnemyDstBuffApplyMechanic(WhirlwindShield, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Magenta),"W.Shield" , "Whirlwind Shield","Whirlwind Shield", Sev0,0),
                 ]
             ),
             // Fire
             new MechanicGroup(
                 [
-
-                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3], new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Fr.Mnp.", "Elemental Manipulation (Fire)","Elemental Manipulation (Fire)", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic([RoilingFlames1, RoilingFlames2], new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Rlng.Flms.", "Roiling Flames","Roiling Flames", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(VolatileFire, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Vlt.Fr.", "Volatile Fire","Volatile Fire", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Fr.Mnp.", "Elemental Manipulation (Fire)","Elemental Manipulation (Fire)", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic([RoilingFlames, RoilingFlamesDash], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Rlng.Flms.", "Roiling Flames","Roiling Flames", Sev1, 0),
+                    new PlayerSrcHealthDamageHitMechanic(RoilingFlamesDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "Rlng.Flms.Rfl.", "Reflected Roiling Flames projectiles","Roiling Flames Reflect", Sev0, 0),
+                    new PlayerDstHealthDamageHitMechanic(VolatileFire, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "Vlt.Fr.", "Volatile Fire","Volatile Fire", Sev1, 0),
                     new MechanicGroup(
                         [
-                            new EnemyCastStartMechanic(CallMeteorSummon, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", Sev0, 0),
-                            new PlayerDstHealthDamageMechanic(CallMeteorHit, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Mtr.H", "Hit by Meteor","Meteor Hit", Sev0, 1000)
+                            new EnemyCastStartMechanic(CallMeteorSummon, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", Sev0, 0),
+                            new PlayerDstHealthDamageMechanic(CallMeteorHit, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Orange), "Mtr.H", "Hit by Meteor","Meteor Hit", Sev0, 1000)
                             .UsingChecker((evt, log) => evt.HasDowned || evt.HasKilled),
                         ]
                     ),
-                    new PlayerDstHealthDamageHitMechanic(FlameBurst, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Flm.Brst.", "Flame Burst","Flame Burst", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(FirestormAi, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Fr.Strm", "Firestorm","Firestorm", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic(FlameBurst, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Orange), "Flm.Brst.", "Flame Burst","Flame Burst", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic(FirestormAi, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Fr.Strm", "Firestorm","Firestorm", Sev1, 0),
                 ]
             ),
             // Water
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3], new MechanicPlotlySetting(Symbols.Square,Colors.LightBlue), "Wtr.Mnp.", "Elemental Manipulation (Water)","Elemental Manipulation (Water)", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic([TorrentialBolt1, TorrentialBolt2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Tr.Blt.", "Torrential Bolt","Torrential Bolt", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(VolatileWater, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Vlt.Wtr.", "Volatile Water","Volatile Water", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(AquaticBurst, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.", "Aquatic Burst","Aquatic Burst", Sev1, 0),
-                    new EnemyDstBuffApplyMechanic(TidalBarrier, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic([ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3], new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Wtr.Mnp.", "Elemental Manipulation (Water)","Elemental Manipulation (Water)", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic([TorrentialBolt, TorrentialBoltDash], new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Tr.Blt.", "Torrential Bolt","Torrential Bolt", Sev1, 0),
+                    new PlayerSrcHealthDamageHitMechanic(TorrentialBoltDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightBlue), "Tr.Blt..Rfl.", "Reflected Torrential Bolt projectiles","Torrential Bolt Reflect", Sev0, 0),
+                    new PlayerDstHealthDamageHitMechanic(VolatileWater, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Vlt.Wtr.", "Volatile Water","Volatile Water", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic(AquaticBurst, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightBlue), "Aq.Brst.", "Aquatic Burst","Aquatic Burst", Sev1, 0),
+                    new EnemyDstBuffApplyMechanic(TidalBarrier, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", Sev1, 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstBuffApplyMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.", "Downed by Tidal Bargain","Tidal Bargain", Sev0, 0),
-                            new PlayerDstBuffRemoveMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed", Sev0,0)
+                            new PlayerDstBuffApplyMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "Tdl.Brgn.", "Downed by Tidal Bargain","Tidal Bargain", Sev0, 0),
+                            new PlayerDstBuffRemoveMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed", Sev0,0)
                                 .UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffDataByIDByDst(Downed, evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae)),
                         ]
                     ),
@@ -81,32 +82,33 @@ internal class AiKeeperOfThePeak : SunquaPeak
             // Dark
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9], new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Emp.Mnp.", "Empathic Manipulation","Empathic Manipulation", Sev2, 0),
-                    new PlayerDstHealthDamageHitMechanic([FocusedWrath, FocusedWrath2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightPurple), "Fcsd.Wrth.", "Focused Wrath","Focused Wrath", Sev1, 0),
-                    new PlayerDstHealthDamageHitMechanic(NegativeBurst, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.", "Negative Burst","Negative Burst", Sev1, 500),
-                    new PlayerDstHealthDamageHitMechanic(Terrorstorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm", "Terrorstorm","Terrorstorm", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic([EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9], new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Emp.Mnp.", "Empathic Manipulation","Empathic Manipulation", Sev2, 0),
+                    new PlayerDstHealthDamageHitMechanic([FocusedWrath, FocusedWrathDash], new MechanicPlotlySetting(Symbols.Circle, Colors.LightPurple), "Fcsd.Wrth.", "Focused Wrath", "Focused Wrath", Sev4, 0),
+                    new PlayerSrcHealthDamageHitMechanic(FocusedWrathDash, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "Fcsd.Wrth.Rfl.", "Reflected Focused Wrath projectiles", "Focused Wrath Reflect", Sev0, 0),
+                    new PlayerDstHealthDamageHitMechanic(NegativeBurst, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightPurple), "N.Brst.", "Negative Burst","Negative Burst", Sev1, 500),
+                    new PlayerDstHealthDamageHitMechanic(Terrorstorm, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightPurple), "TrrStrm", "Terrorstorm","Terrorstorm", Sev1, 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstBuffApplyMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.", "Crushing Guilt","Crushing Guilt", Sev0, 0),
-                            new PlayerDstBuffRemoveMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down", Sev0,0)
+                            new PlayerDstBuffApplyMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightPurple), "Crsh.Glt.", "Crushing Guilt","Crushing Guilt", Sev0, 0),
+                            new PlayerDstBuffRemoveMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.Star, Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down", Sev0,0)
                                 .UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffDataByIDByDst(Downed, evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae)),
                         ]
                     ),
                     new PlayerDstBuffApplyMechanic([FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Fear.Fix.A", "Fixated by Fear", "Fixated Application", Sev0, 0),
                     new MechanicGroup(
                         [
-                            new EnemyCastStartMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", Sev2, 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", Sev1, 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", Sev2, 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", Sev1, 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
-                            new EnemyCastStartMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", Sev2, 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", Sev1, 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", Sev2, 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", Sev1, 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
-                            new EnemyCastStartMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", Sev2, 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", Sev1, 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", Sev2, 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", Sev1, 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
                         ]
                     ),
-                    new EnemyDstBuffApplyMechanic(CacophonousMind, new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.", "Cacophonous Mind","Cacophonous Mind", Sev0, 0),
+                    new EnemyDstBuffApplyMechanic(CacophonousMind, new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightPurple), "Ccphns.Mnd.", "Cacophonous Mind","Cacophonous Mind", Sev0, 0),
                 ]
             ),
         ]);
@@ -155,7 +157,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -419,7 +421,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 darkPhase = GetFightPhase(log, darkAi, phases[0], "Dark Phase");
                 phases.Add(darkPhase);
             }
-            phases.AddRange(ComputeDarkPhases(log, darkAi, darkPhase, china,requirePhases));
+            phases.AddRange(ComputeDarkPhases(log, darkAi, darkPhase, china, requirePhases));
         }
         return phases;
     }
@@ -461,7 +463,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 if (darkInvul895Gain != null)
                 {
                     successHandler.SetSuccess(true, darkInvul895Gain.Time);
-                } 
+                }
                 else
                 {
                     successHandler.SetSuccess(false, darkAi.LastAware);
@@ -611,6 +613,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
+
         // arrow indicators
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out var arrows))
         {
@@ -788,6 +791,28 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 environmentDecorations.Add(new RectangleDecoration(80, directionLength, (start, end), Colors.Orange, 0.15, offset).UsingRotationConnector(rotation));
             }
         }
+
+        // fulgor sphere (air missiles)
+        var fulgorSpheres = log.CombatData.GetMissileEventsBySkillIDs([FulgorSphere1, FulgorSphere2]);
+        environmentDecorations.AddNonHomingMissiles(log, fulgorSpheres, Colors.SkyBlue, 0.4, 50);
+
+        // roiling flames (fire missiles)
+        var roilingFlames = log.CombatData.GetMissileEventsBySkillID(RoilingFlames);
+        var roilingFlamesReflectable = log.CombatData.GetMissileEventsBySkillID(RoilingFlames);
+        environmentDecorations.AddNonHomingMissiles(log, roilingFlames, Colors.Red, 0.3, 50);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, roilingFlamesReflectable, Colors.Red, 0.3, Colors.Grey, 0.3, 50);
+
+        // torrential bolt (water missiles)
+        var torrentialBolts = log.CombatData.GetMissileEventsBySkillID(TorrentialBolt);
+        var torrentialBoltsReflectable = log.CombatData.GetMissileEventsBySkillID(TorrentialBoltDash);
+        environmentDecorations.AddNonHomingMissiles(log, torrentialBolts, Colors.MidTeal, 0.2, 180);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, torrentialBoltsReflectable, Colors.MidTeal, 0.3, Colors.Grey, 0.3, 50);
+
+        // focused wrath (dark missiles)
+        var focusedWraths = log.CombatData.GetMissileEventsBySkillID(FocusedWrath);
+        var focusedWrathsReflectable = log.CombatData.GetMissileEventsBySkillID(FocusedWrathDash);
+        environmentDecorations.AddNonHomingMissiles(log, focusedWraths, Colors.Magenta, 0.3, 50);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, focusedWrathsReflectable, Colors.Magenta, 0.3, Colors.Grey, 0.3, 50);
     }
 
     private static void AddScalingCircleDecorations(ParsedEvtcLog log, IEnumerable<EffectEvent> effects, long damageDuration, CombatReplayDecorationContainer environmentDecorations)
@@ -873,6 +898,21 @@ internal class AiKeeperOfThePeak : SunquaPeak
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
+        }
+    }
+
+    static internal void AddReflectableMissileDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long skill, Color color, double opacity, uint radius)
+    {
+        var missiles = log.CombatData.GetMissileEventsBySkillID(skill);
+        foreach (var missile in missiles)
+        {
+            CombatReplayDecorationContainer.AddNonHomingMissile(log, missile, (launch, lifespan, connector) =>
+            {
+                var decoration = launch.MaybeReflected
+                    ? new CircleDecoration(radius, lifespan, Colors.Grey, 0.3, connector)
+                    : new CircleDecoration(radius, lifespan, color, opacity, connector);
+                decorations.Add(decoration);
+            });
         }
     }
 }

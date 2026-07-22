@@ -73,7 +73,7 @@ public static class SkillIDs
     public const long SymbolOfBladesOrLesser = -54;
     public const long SymbolOfProtectionOrLesser = -55;
     public const long SymbolOfResolutionOrLesser = -56;
-    public const long SymbolOfResolutionOrLesserOrLuminousStaff= -57;
+    public const long SymbolOfResolutionOrLesserOrLuminousStaff = -57;
     public const long DhuumEtherealSealInteract = -58;
     public const long RelicOfTheCruelOverseer = -59;
     public const long UraBloodstoneShardPickUp = -60;
@@ -3604,7 +3604,7 @@ public static class SkillIDs
     public const long Enraged_100_strike_25_reduc = 61138;
     public const long OverwhelmingSorrowDetonate = 61168;
     public const long ElementalManipulationWater1 = 61172;
-    public const long TorrentialBolt2 = 61177;
+    public const long TorrentialBoltDash = 61177;
     public const long AchievementEligibilityDancingWithDemons = 61183;
     public const long Terrorstorm = 61184;
     public const long CallOfStorms = 61190;
@@ -3622,7 +3622,7 @@ public static class SkillIDs
     public const long ElementalManipulationFire2 = 61256;
     public const long EmpathicManipulation7 = 61260;
     public const long ElementalManipulationFire3 = 61271;
-    public const long RoilingFlames1 = 61273;
+    public const long RoilingFlames = 61273;
     public const long AiDarkModeStart = 61277;
     public const long AiDarkModeStartCN = 61279;
     public const long ElementalManipulationFire1 = 61279;
@@ -3636,7 +3636,7 @@ public static class SkillIDs
     public const long ElementalSweep3 = 61330;
     public const long FocusedWrath = 61344;
     public const long CallMeteorHit = 61348;
-    public const long TorrentialBolt1 = 61349;
+    public const long TorrentialBolt = 61349;
     public const long AquaJet = 61352;
     public const long AiHasDarkMode_SurgeOfDarkness = 61356;
     public const long AiHasDarkModeCN_SurgeOfDarkness = 61358;
@@ -3657,7 +3657,7 @@ public static class SkillIDs
     public const long OverwhelmingSorrowWindup = 61481;
     public const long ElementalSurge4 = 61486;
     public const long FulgorSphere1 = 61487;
-    public const long FocusedWrath2 = 61499;
+    public const long FocusedWrathDash = 61499;
     public const long FixatedFear1 = 61503;
     public const long ElementalSurge3 = 61505;
     public const long EmpathicManipulationFear = 61508;
@@ -3677,7 +3677,7 @@ public static class SkillIDs
     public const long EmpathicManipulationSorrowCN = 61571;
     public const long ElementalWhirl3 = 61573;
     public const long ElementalManipulationAir1 = 61574;
-    public const long RoilingFlames2 = 61582;
+    public const long RoilingFlamesDash = 61582;
     public const long ElementalSweep2 = 61590;
     public const long EmpathicManipulation8 = 61600;
     public const long EmpathicManipulationGuilt = 61602;
@@ -5686,7 +5686,7 @@ public static class SkillIDs
     public const long POV_RelicOfTheSacredGrounds = 80125;
     public const long KudasCrueltyStacksBuff = 80152;
     public const long TailWhipJuvenileRiverOtter = 80164;
-    public const long ScratchJuvenileRiverOtter= 80186;
+    public const long ScratchJuvenileRiverOtter = 80186;
     public const long ElderDracoPop = 80194;
     public const long Meltdown = 80215;
     public const long ShadowRefugeBuff = 80216;
