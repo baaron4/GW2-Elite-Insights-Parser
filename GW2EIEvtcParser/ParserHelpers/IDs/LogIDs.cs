@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser.LogLogic;
+﻿namespace GW2EIEvtcParser;
 
 internal static class LogIDs
 {
