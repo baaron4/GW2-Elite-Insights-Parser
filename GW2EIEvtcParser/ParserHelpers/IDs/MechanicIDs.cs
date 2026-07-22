@@ -62,43 +62,83 @@ public static class MechanicIDs
 
 
     #region COMMONS
-    public const int Mech_PlayerDead = CommonMask | 1;
-    public const int Mech_PlayerDowned = CommonMask | 2;
-    public const int Mech_PlayerUp = CommonMask | 3;
-    public const int Mech_PlayerRes = CommonMask | 4;
-    public const int Mech_PlayerDC = CommonMask | 5;
-    public const int Mech_PlayerSpawn = CommonMask | 6;
-    public const int Mech_PlayerKD = CommonMask | 7;
-    public const int Mech_PlayerKBP = CommonMask | 8;
-    public const int Mech_PlayerFloat = CommonMask | 9;
-    public const int Mech_PlayerLaunch = CommonMask | 10;
-    public const int Mech_PlayerLockOut = CommonMask | 11;
-    public const int Mech_PlayerFloatSinkWater = CommonMask | 12;
+    private static int _commonCount = 0;
+    public static readonly int Mech_PlayerDead = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerDowned = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerUp = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerRes = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerDC = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerSpawn = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerKD = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerKBP = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerFloat = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerLaunch = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerLockOut = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerFloatSinkWater = CommonMask | ++_commonCount;
     #endregion COMMONS
 
     #region FRACTALS
     #region KINFALL
-    public const int Mech_DeathlyRime = KinfallMask | 1;
-    public const int Mech_LifeFireApply = KinfallMask | 2;
-    public const int Mech_LifeFireRemove = KinfallMask | 3;
-    public const int Mech_VitreousSpiketHit = KinfallMask | 4;
-    public const int Mech_FaillingIceHit = KinfallMask | 5;
-    public const int Mech_FrozenTeethHit = KinfallMask | 6;
-    public const int Mech_LoftedCryOfFlashHit = KinfallMask | 7;
-    public const int Mech_TerrestrialCryOfFlashHit = KinfallMask | 8;
-    public const int Mech_GorefrostTarget = KinfallMask | 9;
-    public const int Mech_GorefrostHit = KinfallMask | 10;
-    public const int Mech_FreezingFanHit = KinfallMask | 11;
-    public const int Mech_LethalCoalescenceApply = KinfallMask | 12;
-    public const int Mech_WintryOrbHit = KinfallMask | 13;
-    public const int Mech_HailstormWhisperingShadowHit = KinfallMask | 14;
-    public const int Mech_EmpoweredWhsiperingShadow = KinfallMask | 15;
-    public const int Mech_ShatterstepLost = KinfallMask | 16;
-    public const int Mech_ShatterstepKept = KinfallMask | 17;
+    private static int _kinfallCount = 0;
+    public static readonly int Mech_DeathlyRime = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_LifeFireApply = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_LifeFireRemove = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_VitreousSpiketHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_FaillingIceHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_FrozenTeethHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_LoftedCryOfFlashHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_TerrestrialCryOfFlashHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_GorefrostTarget = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_GorefrostHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_FreezingFanHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_LethalCoalescenceApply = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_WintryOrbHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_HailstormWhisperingShadowHit = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_EmpoweredWhsiperingShadow = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_ShatterstepLost = KinfallMask | ++_kinfallCount;
+    public static readonly int Mech_ShatterstepKept = KinfallMask | ++_kinfallCount;
     #endregion KINFALL
+    #region NIGHTMARE
+    private static int _nightmareCount = 0;
+    public static readonly int Mech_CascadeOfTorment = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_BlastWave = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_TantrumMAMA = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_LeapMAMA = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_ToxicShoot = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_KnightJump = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_SweepingStrikes = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_MiasmaMAMA = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_GrenadeBarrage = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_BulletsMAMA = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_Extraction = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_HomingGrenades = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_KnightsGaze = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_NightmareDevastationMAMA = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_VileSpit = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_TailLashSiax = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_HallucinationSpawnedSiax = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionSiaxCastStart = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionSiaxCastEnd = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionSiaxBreakbarStart = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionSiaxBreakbarEnd = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_HallucinationSiaxFixated = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_LungeNightmare = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_UpswingEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_UpswingHallucinationNightmare = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_MiasmaEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionEnsolyssCastStart = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionEnsolyssCastEndFail = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionEnsolyssCastEndSuccess = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticExplosionEnsolyssHit = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_NightmareDevastationEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_TailLashEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_RampageEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_CausticGraspEnsolyss = NightmareMask | ++_nightmareCount;
+    public static readonly int Mech_TormentingBlastEnsolyss = NightmareMask | ++_nightmareCount;
+    #endregion NIGHTMARE
     #endregion FRACTALS
 
     #region CONVERGENCE
-    public const int Mech_EssenceCollected = ConvergenceMask | 1;
+    public static readonly int Mech_EssenceCollected = ConvergenceMask | 1;
     #endregion CONVERGENCE
 }

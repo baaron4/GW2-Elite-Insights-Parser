@@ -20,20 +20,22 @@ internal class Siax : Nightmare
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic(VileSpit, new (Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(TailLashSiax, new (Symbols.TriangleLeft,Colors.Yellow), "Tail.S", "Tail Lash Siax (half circle Knockback)","Tail Lash (Siax)", Sev1, 0),
-            new SpawnMechanic((int)TargetID.NightmareHallucinationSiax, new (Symbols.StarOpen,Colors.Black), "Hallu", "Nightmare Hallucination Spawn","Hallucination", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(VileSpit, Mech_VileSpit, new (Symbols.Circle,Colors.DarkGreen), new("Spit", "Vile Spit (green goo)","Poison Spit"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(TailLashSiax, Mech_TailLashSiax, new (Symbols.TriangleLeft,Colors.Yellow), new("Tail.S", "Tail Lash Siax (half circle Knockback)","Tail Lash (Siax)"), Sev1),
+            new MechanicGroup([
+                new SpawnMechanic((int)TargetID.NightmareHallucinationSiax, Mech_HallucinationSpawnedSiax, new (Symbols.StarOpen,Colors.Black), new("Hallu", "Nightmare Hallucination Spawn","Hallucination"), Sev2),
+                new PlayerDstBuffApplyMechanic(FixatedNightmare, Mech_HallucinationSiaxFixated, new (Symbols.StarOpen,Colors.Magenta), new("Fixate", "Fixated by Volatile Hallucination", "Fixated"), Sev1),
+            ]),
             new MechanicGroup(
                 [
-                    new EnemyCastStartMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new (Symbols.DiamondTall,Colors.Yellow), "Phase", "Phase Start","Phase", Sev3, 0),
-                    new EnemyCastEndMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new (Symbols.DiamondTall,Colors.Red), "Phase Fail", "Phase Fail (Failed to kill Echos in time)","Phase Fail", Sev0, 0)
+                    new EnemyCastStartMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], Mech_CausticExplosionSiaxCastStart, new (Symbols.DiamondTall,Colors.Yellow), new("Phase", "Phase Start","Phase"), Sev3),
+                    new EnemyCastEndMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], Mech_CausticExplosionSiaxCastEnd, new (Symbols.DiamondTall,Colors.Red), new("Phase Fail", "Phase Fail (Failed to kill Echos in time)","Phase Fail"), Sev0)
                         .UsingChecker((ce,log) => ce.ActualDuration >= 20649), //
-                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, new (Symbols.DiamondWide,Colors.DarkTeal), "CC.S", "Breakbar Start","Breakbar", Sev3, 0),
-                    new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, new (Symbols.DiamondWide,Colors.Red), "CC.S Fail", "Failed to CC in time","CC Fail", Sev0, 0)
+                    new EnemyCastStartMechanic(CausticExplosionSiaxBreakbar, Mech_CausticExplosionSiaxBreakbarStart, new (Symbols.DiamondWide,Colors.DarkTeal), new("CC.S", "Breakbar Start","Breakbar"), Sev3),
+                    new EnemyCastEndMechanic(CausticExplosionSiaxBreakbar, Mech_CausticExplosionSiaxBreakbarEnd, new (Symbols.DiamondWide,Colors.Red), new("CC.S Fail", "Failed to CC in time","CC Fail"), Sev0)
                         .UsingChecker( (ce,log) => ce.ActualDuration >= 15232),
                 ]
             ),
-            new PlayerDstBuffApplyMechanic(FixatedNightmare, new (Symbols.StarOpen,Colors.Magenta), "Fixate", "Fixated by Volatile Hallucination", "Fixated", Sev1, 0),
         ]);
     public Siax(int triggerID) : base(triggerID)
     {
