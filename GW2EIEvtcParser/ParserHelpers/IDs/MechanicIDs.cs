@@ -136,6 +136,52 @@ public static class MechanicIDs
     public static readonly int Mech_CausticGraspEnsolyss = NightmareMask | ++_nightmareCount;
     public static readonly int Mech_TormentingBlastEnsolyss = NightmareMask | ++_nightmareCount;
     #endregion NIGHTMARE
+    #region SHATTERED OBSERVATORY
+    private static int _shatteredCount = 0;
+    public static readonly int Mech_FixatedBloom = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_HitByEye = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CorporealReassingment = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CombustionRush = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_PunishingKick = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CranialCascade = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_RadiantFury = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_FocusedAnger = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_HorizonStrikeSkorvald = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CrimsonDawn = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SolarCyclone = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SkorvaldsIre = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_BloomExplode = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SpiralStrike = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_WaveOfMutilation = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_VaultArtsariiv = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SlamArtsariiv = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_TeleportLunge = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_AstralSurge = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_RedMarble = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SparkSpawn = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_HorizonStrikeArkk = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_HorizonStrikeArkkNormal = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SolarFury = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SolarDischarge = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SolarStomp = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_DiffractiveEdge = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_FocusedRage = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_StarburstCascade = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_OverheadSmashArkk = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_ExplodeArkk = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CosmicMeteor = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_ArkkBreakbarStart = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_ArkkBreakbarFail = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_ArkkBreakbarSuccess = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_OverheadSmashArkkArchDiviner = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_RollingChaos = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_CosmicStreaks = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_WhirlingDevastation = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_PullArkkGladiatorStart = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_PullArkkGladiatorFail = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_PullArkkGladiatorSuccess = ShatteredObservatoryMask | ++_shatteredCount;
+    public static readonly int Mech_SpinningCut = ShatteredObservatoryMask | ++_shatteredCount;
+    #endregion SHATTERED OBSERVATORY
     #endregion FRACTALS
 
     #region CONVERGENCE

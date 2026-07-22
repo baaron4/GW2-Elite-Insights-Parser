@@ -18,10 +18,10 @@ internal abstract class ShatteredObservatory : FractalLogic
     {
         LogCategoryInformation.SubCategory = SubLogCategory.ShatteredObservatory;
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstBuffApplyMechanic([ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], new (Symbols.StarOpen,Colors.Magenta), "Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate", Sev2, 0),
-            new PlayerDstBuffApplyMechanic(Fear, new (Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)", Sev0 , 0)
+            new PlayerDstBuffApplyMechanic([ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], Mech_FixatedBloom, new (Symbols.StarOpen,Colors.Magenta), new("Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate"), Sev2),
+            new PlayerDstBuffApplyMechanic(Fear, Mech_HitByEye, new (Symbols.SquareOpen,Colors.Red), new("Eye", "Hit by the Overhead Eye Fear","Eye (Fear)"), Sev0)
                 .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, new (Symbols.Diamond,Colors.Red), "Skull", "Exploding Skull mechanic application","Corporeal Reassignment", Sev0, 0),
+            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, Mech_CorporealReassingment, new (Symbols.Diamond,Colors.Red), new("Skull", "Exploding Skull mechanic application","Corporeal Reassignment"), Sev0),
             ])
         );
         LogID |= LogIDs.FractalMasks.ShatteredObservatoryMask;

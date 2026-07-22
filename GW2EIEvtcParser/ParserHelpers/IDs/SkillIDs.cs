@@ -2480,7 +2480,7 @@ public static class SkillIDs
     public const long NovaLaunchBuff = 38929;
     public const long VaultArtsariiv = 38977;
     public const long FixatedBloom4 = 38985;
-    public const long StarbustCascade1 = 38982;
+    public const long StarburstCascade1 = 38982;
     public const long HorizonStrikeArkk2 = 39001;
     public const long CosmicStreaks = 39021;
     public const long RedMarble1 = 39029;
@@ -2522,7 +2522,7 @@ public static class SkillIDs
     public const long HorizonStrikeSkorvald1 = 39507;
     public const long Warp = 39514;
     public const long MistChargedChop2 = 39521;
-    public const long StarbustCascade2 = 39523;
+    public const long StarburstCascade2 = 39523;
     public const long SkorvaldsIre = 39531;
     public const long CranialCascadeAnomaly = 39534;
     public const long FixatedBloom3 = 39558;

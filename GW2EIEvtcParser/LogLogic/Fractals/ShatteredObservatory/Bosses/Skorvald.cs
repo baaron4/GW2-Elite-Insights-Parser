@@ -22,24 +22,24 @@ internal class Skorvald : ShatteredObservatory
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], new (Symbols.TriangleLeft,Colors.Magenta), "Charge", "Combustion Rush","Charge", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], Mech_CombustionRush, new (Symbols.TriangleLeft,Colors.Magenta), new("Charge", "Combustion Rush","Charge"), Sev1),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], new (Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick", "Punishing Kick (Single purple Line, Add)","Kick (Add)", Sev2, 0),
-                new PlayerDstHealthDamageHitMechanic([CranialCascadeAnomaly,CranialCascade2], new (Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB", "Cranial Cascade (3 purple Line Knockback, Add)","Small Cone KB (Add)", Sev1, 0),
+                new PlayerDstHealthDamageHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], Mech_PunishingKick, new (Symbols.TriangleRightOpen,Colors.Magenta), new("Add Kick", "Punishing Kick (Single purple Line, Add)","Kick (Add)"), Sev2),
+                new PlayerDstHealthDamageHitMechanic([CranialCascadeAnomaly,CranialCascade2], Mech_CranialCascade, new (Symbols.TriangleRightOpen,Colors.Yellow), new("Add Cone KB", "Cranial Cascade (3 purple Line Knockback, Add)","Small Cone KB (Add)"), Sev1),
             ]),
-            new PlayerDstHealthDamageHitMechanic([RadiantFurySkorvald, RadiantFury2], new (Symbols.Octagon,Colors.Red), "Burn Circle", "Radiant Fury (expanding burn circles)","Expanding Circles", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(FocusedAnger, new (Symbols.TriangleDown,Colors.Orange), "Large Cone KB", "Focused Anger (Large Cone Overhead Crosshair Knockback)","Large Cone Knockback", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([RadiantFurySkorvald, RadiantFury2], Mech_RadiantFury, new (Symbols.Octagon,Colors.Red), new("Burn Circle", "Radiant Fury (expanding burn circles)","Expanding Circles"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(FocusedAnger, Mech_FocusedAnger, new (Symbols.TriangleDown,Colors.Orange), new("Large Cone KB", "Focused Anger (Large Cone Overhead Crosshair Knockback)","Large Cone Knockback"), Sev0),
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], new (Symbols.Circle,Colors.LightOrange), "Horizon Strike.S", "Horizon Strike (turning pizza slices during Skorvald)","Horizon Strike (Skorvald)", Sev1, 0), // 
-                    new PlayerDstHealthDamageHitMechanic(CrimsonDawn, new (Symbols.Circle,Colors.DarkRed), "Horizon Strike.S End", "Crimson Dawn (almost Full platform attack after Horizon Strike)","Horizon Strike (last)", Sev1, 0),
+                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], Mech_HorizonStrikeSkorvald, new (Symbols.Circle,Colors.LightOrange), new("Horizon Strike.S", "Horizon Strike (turning pizza slices during Skorvald)","Horizon Strike (Skorvald)"), Sev1), // 
+                    new PlayerDstHealthDamageHitMechanic(CrimsonDawn, Mech_CrimsonDawn, new (Symbols.Circle,Colors.DarkRed), new("Horizon Strike.S End", "Crimson Dawn (almost Full platform attack after Horizon Strike)","Horizon Strike (last)"), Sev1),
                 ]
             ),
-            new PlayerDstHealthDamageHitMechanic(SolarCyclone, new (Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone", "Solar Cyclone (Circling Knockback)","KB Cyclone", Sev0, 0),
-            new PlayerDstBuffApplyMechanic(SkorvaldsIre, new (Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire", "Skorvald's Fixate", Sev1,  0),
-            new PlayerDstHealthDamageHitMechanic(BloomExplode, new (Symbols.Circle,Colors.Yellow), "Bloom Expl", "Hit by Solar Bloom Explosion","Bloom Explosion", Sev0, 0), //shockwave, not damage? (damage is 50% max HP, not tracked)
-            new PlayerDstHealthDamageHitMechanic(SpiralStrike, new (Symbols.CircleOpen,Colors.DarkGreen), "Spiral", "Hit after Warp (Jump to Player with overhead bomb)","Spiral Strike", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(WaveOfMutilation, new (Symbols.TriangleSW,Colors.DarkGreen), "KB Jump", "Hit by KB Jump (player targeted)","Knockback jump", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(SolarCyclone, Mech_SolarCyclone, new (Symbols.BowtieOpen,Colors.DarkMagenta), new("Cyclone", "Solar Cyclone (Circling Knockback)","KB Cyclone"), Sev0),
+            new PlayerDstBuffApplyMechanic(SkorvaldsIre, Mech_SkorvaldsIre, new (Symbols.CircleOpenDot, Colors.Purple), new("Skor Fixate", "Fixated by Skorvald's Ire", "Skorvald's Fixate"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(BloomExplode, Mech_BloomExplode, new (Symbols.Circle,Colors.Yellow), new("Bloom Expl", "Hit by Solar Bloom Explosion","Bloom Explosion"), Sev0), //shockwave, not damage? (damage is 50% max HP, not tracked)
+            new PlayerDstHealthDamageHitMechanic(SpiralStrike, Mech_SpiralStrike, new (Symbols.CircleOpen,Colors.DarkGreen), new("Spiral", "Hit after Warp (Jump to Player with overhead bomb)","Spiral Strike"), Sev2),
+            new PlayerDstHealthDamageHitMechanic(WaveOfMutilation, Mech_WaveOfMutilation, new (Symbols.TriangleSW,Colors.DarkGreen), new("KB Jump", "Hit by KB Jump (player targeted)","Knockback jump"), Sev1),
         ]);
     public Skorvald(int triggerID) : base(triggerID)
     {
