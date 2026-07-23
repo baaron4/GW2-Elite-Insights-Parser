@@ -108,7 +108,7 @@
         },
         methods: {
             tableRound: function (value) {
-                return this.graphdata.damagemode == GraphType.Breakbar ? this.numberFormat1(value) : this.numberFormat0(value);
+                return this.graphdata.damagemode == GraphType.Breakbar ? this.numberFormater1(value) : this.numberFormater0(value);
             },
             sortBy: function (key, index) {
                 this.sortByBase(this.sortdata, key, index);

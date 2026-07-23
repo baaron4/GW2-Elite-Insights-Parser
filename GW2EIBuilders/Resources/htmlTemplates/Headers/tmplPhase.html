@@ -33,7 +33,7 @@
 <script>
     Vue.component("phase-component", {
         props: ["phases"],
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, numberComponent],
         template: `${template}`,
         computed: {
             phasesToUse: function() {
@@ -89,16 +89,16 @@
             },
             getPhaseTooltip: function(id) {
                 var phase = this.getPhaseData(id);
-                return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end;
+                return this.numberFormater3(phase.durationS) + ' seconds <br /> Start: ' + this.numberFormater3(phase.start) + 's<br /> End: ' + this.numberFormater3(phase.end) + 's';
             },
             getBreakbarPhaseTooltip: function(id) {
                 var phase = this.getPhaseData(id);
                 var target = this.getTargetData(phase.targets[0]);
                 var breakbarTaken = target.details.dmgDistributionsTaken[id].contributedBreakbarDamage;
                 return this.getPhaseTooltip(id) +
-                    '<br /> Breakbar Active at: ' + phase.breakbarStart +
-                    '<br /> Breakbar Damage: ' + numberFormater(breakbarTaken) +
-                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + numberFormater(phase.breakbarRecovered);
+                    '<br /> Breakbar Active at: ' + this.numberFormater3(phase.breakbarStart) +
+                    '<br /> Breakbar Damage: ' + this.numberFormater1(breakbarTaken) +
+                    '<br /> Breakbar Recovered (Regeneration + Soft CC): ' + this.numberFormater1(phase.breakbarRecovered);
             }
         }
     });

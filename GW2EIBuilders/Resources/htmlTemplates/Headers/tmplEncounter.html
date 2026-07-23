@@ -195,17 +195,17 @@
                 let res = "";
                 let linebreak = "";
                 if (showTotalHP) {
-                    res = "Total Health: " + numberFormater(target.health);
+                    res = "Total Health: " + this.numberFormater(target.health);
                     linebreak = "<br>";
                 }
                 if (hpLeft > 0 && barrierLeft > 0) {
-                    res += linebreak + 'Remaining:<br>Health: ' + numberFormater(hpLeft) + '<br>Barrier: ' + numberFormater(barrierLeft);
+                    res += linebreak + 'Remaining:<br>Health: ' + this.numberFormater(hpLeft) + '<br>Barrier: ' + this.numberFormater(barrierLeft);
                 }
                 else if (hpLeft > 0 && barrierLeft == 0) {
-                    res += linebreak + 'Remaining Health: ' + numberFormater(hpLeft);
+                    res += linebreak + 'Remaining Health: ' + this.numberFormater(hpLeft);
                 }
                 else if (barrierLeft > 0) {
-                    res += linebreak + 'Remaining Barrier: ' + numberFormater(barrierLeft);
+                    res += linebreak + 'Remaining Barrier: ' + this.numberFormater(barrierLeft);
                 }
                 return res.length > 0 ? res : null;
             },
@@ -223,12 +223,12 @@
                 }
                 const barrierLeft = hpBar && hpBarIsActive(hpBar) ? target.barrierLeftPercent : 0;
                 if ((hpLeft > minPercent && barrierLeft > 0) || (hpLeft == minPercent && barrierLeft > 0)) { // If only barrier is left, show 0 + x.y barrier
-                    return numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + " + " + this.percentFormater2(barrierLeft /100) + ")";
+                    return this.numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + " + " + this.percentFormater2(barrierLeft /100) + ")";
                 }
                 else if (hpLeft > minPercent && barrierLeft == 0) {
-                    return numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + ")";
+                    return this.numberFormater(health) + " HP (" + this.percentFormater2(hpLeft / 100) + ")";
                 }
-                return numberFormater(health) + " HP";
+                return this.numberFormater(health) + " HP";
             },
             fightModeColorClass: function (mode) {
                 switch (mode) {

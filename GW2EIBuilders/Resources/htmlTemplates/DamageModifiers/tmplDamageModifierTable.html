@@ -279,7 +279,7 @@
                 if (item[0] === 0) {
                     return null;
                 }
-                const hits = numberFormater(item[0]) + " out of " + numberFormater(item[1]) + " hits";
+                const hits = this.numberFormater(item[0]) + " out of " + this.numberFormater(item[1]) + " hits";
                 let res = hits;
                 if (!mod.isCounter) {
                     let percent;
@@ -297,11 +297,11 @@
                     }
                     gain += this.numberFormater0(item[2]);
                     if (mod.nonMultiplier) {
-                        gain += "<br>Total Damage: " + percentFormater(item[2] / item[3]);
+                        gain += "<br>Total Damage: " + this.percentFormater2(item[2] / item[3]);
                     }
                     res += "<br>" + gain;
                 } else if (item[2] > 0) {
-                    res += "<br> Damage During: " + numberFormater(item[2]);
+                    res += "<br> Damage During: " + this.numberFormater(item[2]);
                 }
                 return res;
             },

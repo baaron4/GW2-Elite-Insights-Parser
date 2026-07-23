@@ -26,8 +26,8 @@
                     <td :class="getPlayerBodyClass('Name')" class="text-left">{{row.player.name}}</td>
                     <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)"
                         v-show="isInPlayerColPage(index)"
-                        :data-original-title="mech[1] !== mech[0] ? numberFormater3(mech[1]) + ' times (multi hits)' : false">
-                        {{ (mech[0] ? numberFormater3(mech[0]) : '-') }}
+                        :data-original-title="mech[1] !== mech[0] ? numberFormater(mech[1]) + ' times (multi hits)' : false">
+                        {{ (mech[0] ? numberFormater(mech[0]) : '-') }}
                     </td>
                 </tr>
             </tbody>
@@ -56,8 +56,8 @@
                         class="stat-cell"
                         :class="getEnemyBodyClass('Data', index)"
                         v-show="isInEnemyColPage(index)"
-                        :data-original-title="mech[1] !== mech[0] ? numberFormater3(mech[1]) + ' times (multi hits)' : false">
-                        {{mech[0] ? numberFormater3(mech[0]) : '-'}}
+                        :data-original-title="mech[1] !== mech[0] ? numberFormater(mech[1]) + ' times (multi hits)' : false">
+                        {{mech[0] ? numberFormater(mech[0]) : '-'}}
                     </td>
                 </tr>
             </tbody>

@@ -211,7 +211,7 @@
             },
             getSumTooltip: function (index, row) {
                 const damage = this.getSumCell(index, row, false);
-                return numberFormater(damage) + ' damage';
+                return this.numberFormater(damage) + ' damage';
             },
             getSumCell: function (index, row, total) {
                 if (this.showDamage === total) {

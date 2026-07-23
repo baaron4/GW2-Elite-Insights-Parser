@@ -195,7 +195,7 @@
                 return selfContrib + (target ? " target" : " all");
             },
             getPlayerTooltip: function (value, index, row, sums, target, showHealingPowerContribution = false, showConversionContribution = false) {
-                var base = this.showHealing ? this.numberFormater0(value / this.phase.durationS) + ' per second' : numberFormater(value) + ' total';
+                var base = this.showHealing ? this.numberFormater0(value / this.phase.durationS) + ' per second' : this.numberFormater(value) + ' total';
                 var total = this.computeTotalContribution(index, row.hps, sums);
                 var group = this.computeGroupContribution(row.player.group, index, row.hps, sums);
 

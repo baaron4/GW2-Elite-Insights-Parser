@@ -130,23 +130,23 @@
                         }
                         if (val[1] !== val[0]) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent(buff.stacking, val[1] || 0) + " with overstack";
+                            res += this.formatNumberOrPercent3(buff.stacking, val[1] || 0) + " with overstack";
                         }
                         if (val[4] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent3(buff.stacking, val[4]) + " by extension";
+                            res += this.formatNumberOrPercent3(buff.stacking, val[4]) + " by extension";
                         }
                         if (val[2] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent3(buff.stacking, val[2]) + " wasted";
+                            res += this.formatNumberOrPercent3(buff.stacking, val[2]) + " wasted";
                         }
                         if (val[5] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent3(buff.stacking, val[5]) + " extended";
+                            res += this.formatNumberOrPercent3(buff.stacking, val[5]) + " extended";
                         }
                         if (val[3] > 0) {
                             res += res.length > 0 ? "<br>" : '';
-                            res += formatNumberOrPercent3(buff.stacking, val[3]) + " extended by unknown source";
+                            res += this.formatNumberOrPercent3(buff.stacking, val[3]) + " extended by unknown source";
                         }
                         return res.length > 0 ? res : false;
                     } else if (buff.stacking && val[1] > 0) {
@@ -165,7 +165,7 @@
                     force = this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0);
                 }
                 if (value > 0 || force) {
-                    return formatNumberOrPercent(buff.stacking, value);
+                    return this.formatNumberOrPercent3(buff.stacking, value);
                 }
                 return "-";
             }
