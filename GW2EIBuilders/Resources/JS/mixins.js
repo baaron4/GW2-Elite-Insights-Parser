@@ -40,7 +40,7 @@ var numberComponent = {
             if (isNaN(value) || !isFinite(value)) {
                 return 0;
             }
-            return value.toLocaleString('en', {
+            return value.toLocaleString(undefined, {
                 minimumFractionDigits,
                 maximumFractionDigits
             });
@@ -63,7 +63,7 @@ var numberComponent = {
             if (isNaN(value) || !isFinite(value)) {
                 return '0%';
             }
-            return value.toLocaleString('en', {
+            return value.toLocaleString(undefined, {
                 style: "percent",
                 minimumFractionDigits,
                 maximumFractionDigits
