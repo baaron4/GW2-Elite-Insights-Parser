@@ -31,36 +31,12 @@ public static class MechanicIDs
     private const int TheKeyOfAhdashimMask = RaidWingMask | 0x00070000;
     private const int MountBalriorMask = RaidWingMask | 0x00080000;
 
-    private const int NightmareMask = FractalMask | 0x00010000;
-    private const int ShatteredObservatoryMask = FractalMask | 0x00020000;
-    private const int SunquaPeakMask = FractalMask | 0x00030000;
-    private const int SilentSurfMask = FractalMask | 0x00040000;
-    private const int LonelyTowerMask = FractalMask | 0x00050000;
-    private const int KinfallMask = FractalMask | 0x00060000;
-
     private const int FestivalMask = RaidEncounterMask | 0x00010000;
     private const int IBSMask = RaidEncounterMask | 0x00020000;
     private const int EODMask = RaidEncounterMask | 0x00030000;
     private const int CoreMask = RaidEncounterMask | 0x00040000;
     private const int SotOMask = RaidEncounterMask | 0x00050000;
     private const int VoEMask = RaidEncounterMask | 0x00060000;
-
-    private const int SooWonMask = OpenWorldMask | 0x00010000;
-
-    private const int EternalBattlegroundsMask = WvWMask | 0x00010000;
-    private const int GreenAlpineBorderlandsMask = WvWMask | 0x00020000;
-    private const int BlueAlpineBorderlandsMask = WvWMask | 0x00030000;
-    private const int RedDesertBorderlandsMask = WvWMask | 0x00040000;
-    private const int ObsidianSanctumMask = WvWMask | 0x00050000;
-    private const int EdgeOfTheMistsMask = WvWMask | 0x00060000;
-    private const int ArmisticeBastionMask = WvWMask | 0x00070000;
-    private const int GildedHollowMask = WvWMask | 0x00080000;
-    private const int LostPrecipiceMask = WvWMask | 0x00090000;
-    private const int WindsweptHavenMask = WvWMask | 0x000A0000;
-    private const int IsleOfReflectionMask = WvWMask | 0x000B0000;
-
-    private const int OuterNayosConvMask = ConvergenceMask | 0x00010000;
-    private const int MountBalriorConvMask = ConvergenceMask | 0x00020000;
 
 
     #region COMMONS
@@ -80,6 +56,13 @@ public static class MechanicIDs
     #endregion COMMONS
 
     #region FRACTALS
+    private const int NightmareMask = FractalMask | 0x00010000;
+    private const int ShatteredObservatoryMask = FractalMask | 0x00020000;
+    private const int SunquaPeakMask = FractalMask | 0x00030000;
+    private const int SilentSurfMask = FractalMask | 0x00040000;
+    private const int LonelyTowerMask = FractalMask | 0x00050000;
+    private const int KinfallMask = FractalMask | 0x00060000;
+
     private static int _fractalCount = 0;
     public static readonly int Mech_FluxBombBuff = FractalMask | ++_fractalCount;
     public static readonly int Mech_FluxBombHit = FractalMask | ++_fractalCount;
@@ -192,14 +175,32 @@ public static class MechanicIDs
     public static readonly int Mech_PullArkkGladiatorSuccess = ShatteredObservatoryMask | ++_shatteredCount;
     public static readonly int Mech_SpinningCut = ShatteredObservatoryMask | ++_shatteredCount;
     #endregion SHATTERED OBSERVATORY
+    #region SILENT SURF
+    private static int _silentSurfCound = 0;
+    public static readonly int Mech_RendingStorm = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_RendingStormTarget = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_Harrowshot = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_ExtremeVulnApply = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_DreadVisageDeath = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_FrighteningSpeedDeath = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_KanaxaiExposedPlayer = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_KanaxaiFear = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_Phantasmagoria = ShatteredObservatoryMask | ++_silentSurfCound;
+    public static readonly int Mech_KanaxaiExposed = ShatteredObservatoryMask | ++_silentSurfCound;
+    #endregion SILENT SURF
     #endregion FRACTALS
 
     #region CONVERGENCE
+    private const int OuterNayosConvMask = ConvergenceMask | 0x00010000;
+    private const int MountBalriorConvMask = ConvergenceMask | 0x00020000;
+
     public static readonly int Mech_EssenceCollected = ConvergenceMask | 1;
     #endregion CONVERGENCE
 
     #region OPEN WORLD
     #region SOOWON
+    private const int SooWonMask = OpenWorldMask | 0x00010000;
+
     private static int _sooWonCount = 0;
     public static readonly int Mech_SooWonSlam = SooWonMask | ++_sooWonCount;
     public static readonly int Mech_SooWonAcidPool = SooWonMask | ++_sooWonCount;
@@ -221,6 +222,18 @@ public static class MechanicIDs
     #endregion OPEN WORLD
 
     #region WVW
+    private const int EternalBattlegroundsMask = WvWMask | 0x00010000;
+    private const int GreenAlpineBorderlandsMask = WvWMask | 0x00020000;
+    private const int BlueAlpineBorderlandsMask = WvWMask | 0x00030000;
+    private const int RedDesertBorderlandsMask = WvWMask | 0x00040000;
+    private const int ObsidianSanctumMask = WvWMask | 0x00050000;
+    private const int EdgeOfTheMistsMask = WvWMask | 0x00060000;
+    private const int ArmisticeBastionMask = WvWMask | 0x00070000;
+    private const int GildedHollowMask = WvWMask | 0x00080000;
+    private const int LostPrecipiceMask = WvWMask | 0x00090000;
+    private const int WindsweptHavenMask = WvWMask | 0x000A0000;
+    private const int IsleOfReflectionMask = WvWMask | 0x000B0000;
+
     private static int _wvwCount = 0;
     public static readonly int Mech_KillingBlowPlayer = WvWMask | ++_wvwCount;
     public static readonly int Mech_KillingBlowEnemy = WvWMask | ++_wvwCount;
