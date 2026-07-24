@@ -176,17 +176,17 @@ public static class MechanicIDs
     public static readonly int Mech_SpinningCut = ShatteredObservatoryMask | ++_shatteredCount;
     #endregion SHATTERED OBSERVATORY
     #region SILENT SURF
-    private static int _silentSurfCound = 0;
-    public static readonly int Mech_RendingStorm = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_RendingStormTarget = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_Harrowshot = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_ExtremeVulnApply = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_DreadVisageDeath = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_FrighteningSpeedDeath = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_KanaxaiExposedPlayer = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_KanaxaiFear = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_Phantasmagoria = ShatteredObservatoryMask | ++_silentSurfCound;
-    public static readonly int Mech_KanaxaiExposed = ShatteredObservatoryMask | ++_silentSurfCound;
+    private static int _silentSurfCount = 0;
+    public static readonly int Mech_RendingStorm = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_RendingStormTarget = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_Harrowshot = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_ExtremeVulnApply = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_DreadVisageDeath = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_FrighteningSpeedDeath = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_KanaxaiExposedPlayer = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_KanaxaiFear = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_Phantasmagoria = SilentSurfMask | ++_silentSurfCount;
+    public static readonly int Mech_KanaxaiExposed = SilentSurfMask | ++_silentSurfCount;
     #endregion SILENT SURF
     #endregion FRACTALS
 
