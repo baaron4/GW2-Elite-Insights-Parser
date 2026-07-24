@@ -188,6 +188,34 @@ public static class MechanicIDs
     public static readonly int Mech_Phantasmagoria = SilentSurfMask | ++_silentSurfCount;
     public static readonly int Mech_KanaxaiExposed = SilentSurfMask | ++_silentSurfCount;
     #endregion SILENT SURF
+    #region LONELY TOWER
+    private static int _lonelyTowerCount = 0;
+    public static readonly int Mech_DespairAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_EnvyAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_GluttonyAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_MaliceAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RageAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RegretAttunement = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_DespairEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_EnvyEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_GluttonyEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_MaliceEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RageEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RegretEmpowerment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RainOfDespair = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_WaveOfEnvy = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_Inhale = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_SpikeOfMalice = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_RageFissure = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_Consumed = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_CruelDetonation = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_WallOfTalons = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_PoolOfDraining = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_UnliddedEye = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_EyeOfJudgment = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_EparchBreakbar = LonelyTowerMask | ++_lonelyTowerCount;
+    public static readonly int Mech_EparchRegret = LonelyTowerMask | ++_lonelyTowerCount;
+    #endregion LONELY TOWER
     #endregion FRACTALS
 
     #region CONVERGENCE
