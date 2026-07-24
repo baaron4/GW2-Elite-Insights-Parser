@@ -16,20 +16,22 @@ internal class MAMA : Nightmare
 {
     internal readonly MechanicGroup Mechanics = new(
         [
-            new PlayerDstHealthDamageHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB", "Blastwave (Spinning Knockback)","KB Spin", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)","Dual Spin/Slams", Sev1, 700),
-            new PlayerDstHealthDamageHitMechanic(Leap, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump", "Leap (<33% only)","Leap", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic(ShootGreenBalls, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot", "Toxic Shoot (Green Bullets)","Toxic Shoot", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(ExplosiveImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump", "Explosive Impact (Knight Jump)","Knight Jump", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic(SweepingStrikes, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Sweep", "Swings (Many rapid front spins)","Sweeping Strikes", Sev1, 200),
-            new PlayerDstHealthDamageHitMechanic(NightmareMiasmaMAMA, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo.M", "Nightmare Miasma (Poison Puddle)","Poison Goo", Sev0, 700),
-            new PlayerDstHealthDamageHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage", "Grenade Barrage (Red Bullets with AoEs)","Ball Barrage", Sev1, 0),
-            new PlayerDstHealthDamageHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball", "Shoot (Direct Red Bullets)","Bullet", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull.K", "Extraction (Knight Pull Circle)","Knight Pull", Sev0, 0),
-            new PlayerDstHealthDamageHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades", "Homing Grenades","Homing Grenades", Sev2, 0),
-            new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", Sev1, 0),
-            new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble.M", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "KB", "Blastwave (Spinning Knockback)", "KB Spin", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)", "Dual Spin/Slams", Sev1, 700),
+            new PlayerDstHealthDamageHitMechanic(Leap, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Jump", "Leap (<33% only)", "Leap", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic(ShootGreenBalls, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Brown), "Shoot", "Toxic Shoot (Green Bullets)", "Toxic Shoot", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(ExplosiveImpact, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Knight Jump", "Explosive Impact (Knight Jump)", "Knight Jump", Sev1, 0),
+            new PlayerDstHealthDamageHitMechanic(SweepingStrikes, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Red), "Sweep", "Swings (Many rapid front spins)", "Sweeping Strikes", Sev1, 200),
+            new PlayerDstHealthDamageHitMechanic(NightmareMiasmaMAMA, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Magenta), "Goo.M", "Nightmare Miasma (Poison Puddle)", "Poison Goo", Sev0, 700),
+            new PlayerDstHealthDamageHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "Barrage", "Grenade Barrage (Red Bullets with AoEs)", "Ball Barrage", Sev1, 0),
+            new PlayerSrcHealthDamageHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Yellow), "Barrage Rfl.", "Hit reflected Grenade Barrage projectiles (Red Bullets with AoEs)", "Ball Barrage Reflect", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "Ball", "Shoot (Direct Red Bullets)", "Bullet", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightOrange), "Pull.K", "Extraction (Knight Pull Circle)", "Knight Pull", Sev0, 0),
+            new PlayerDstHealthDamageHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Red), "Grenades", "Homing Grenades", "Homing Grenades", Sev2, 0),
+            new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.LightPurple), "Daze", "Knight's Daze", "Daze", Sev1, 0),
+            new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Blue), "Bubble.M", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", Sev0, 0),
         ]);
+
     public MAMA(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -125,7 +127,7 @@ internal class MAMA : Nightmare
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -352,7 +354,7 @@ internal class MAMA : Nightmare
 
         // Grenade Barrage Orbs
         var grenadeBarrage = log.CombatData.GetMissileEventsBySkillIDs([GrenadeBarrage, GrenadeBarrage2]);
-        environmentDecorations.AddNonHomingMissiles(log, grenadeBarrage, Colors.Red, 0.4, 50);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, grenadeBarrage, Colors.Red, 0.4, Colors.Grey, 0.3, 50);
 
         // Shoot Orbs
         var shootRedOrbs = log.CombatData.GetMissileEventsBySkillIDs([ShootRedBalls, ShootRedBalls2]);

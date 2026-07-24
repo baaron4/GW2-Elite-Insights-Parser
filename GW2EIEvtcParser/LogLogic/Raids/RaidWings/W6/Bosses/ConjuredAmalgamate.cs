@@ -73,7 +73,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     private static readonly Vector3 BodyAttackTargetPos = new(-3325f, -12925f, -2451.05f);
     private static readonly Vector3 LeftArmAttackTargetPosForDamage = new(-4239.84f, -13354f, -2061.94f);
     private static readonly Vector3 LeftArmAttackTargetPosNoDamage = new(-2844.18f, -13942.6f, -2316.01f);
-    private static readonly Vector3 RightArmAttackTargetPosForDamage = new (-4321.68f, -12616.5f, -2061.94f);
+    private static readonly Vector3 RightArmAttackTargetPosForDamage = new(-4321.68f, -12616.5f, -2061.94f);
     private static readonly Vector3 RightArmAttackTargetPosNoDamage = new(-2900.12f, -11787.7f, -2391.01f);
 
     internal static void HandleCAAgents(AgentData agentData, List<CombatItem> combatData)
@@ -179,7 +179,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return [];
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -201,7 +201,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
@@ -210,7 +210,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     }
 
     internal static void CreateCustomSwordAgent(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {    
+    {
         var sword = agentData.AddCustomNPCAgent(long.MinValue, long.MinValue, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
         foreach (CombatItem c in combatData)
         {
@@ -459,7 +459,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         phases[0].AddTarget(ca, log);
         phases[0].AddTarget(leftArm, log, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(rightArm, log, PhaseData.TargetPriority.Blocking);
-        phases.AddRange(ComputePhases(log, ca, rightArm, leftArm, (EncounterPhaseData)phases[0], requirePhases));      
+        phases.AddRange(ComputePhases(log, ca, rightArm, leftArm, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -511,7 +511,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         // Sword Orbs
         foreach (MissileEvent missileEvent in swordOrbs)
         {
-            CombatReplayDecorationContainer.AddNonHomingMissile(log, missileEvent, (lifespan, connector) =>
+            CombatReplayDecorationContainer.AddNonHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
             {
                 environmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
                 environmentDecorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.White, 0.3, connector));
@@ -521,7 +521,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         // Shield Orbs
         foreach (MissileEvent missileEvent in shieldOrbs)
         {
-            CombatReplayDecorationContainer.AddNonHomingMissile(log, missileEvent, (lifespan, connector) =>
+            CombatReplayDecorationContainer.AddNonHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
             {
                 environmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
                 environmentDecorations.Add(new DoughnutDecoration(100, 125, lifespan, Colors.White, 0.3, connector));
