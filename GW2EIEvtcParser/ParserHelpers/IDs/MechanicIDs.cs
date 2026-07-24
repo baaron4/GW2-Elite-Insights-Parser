@@ -201,6 +201,22 @@ public static class MechanicIDs
     #region OPEN WORLD
     #region SOOWON
     private static int _sooWonCount = 0;
+    public static readonly int Mech_SooWonSlam = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonAcidPool = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonClawSlap = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonTailSlap = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonBite = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonWaveHalf = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonWaveFull = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonWisp = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonGreenFailed = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonBubble = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonWhirlpool = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonTailSpawn = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonTailKilled = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonTailDespawn = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonSideSwap = SooWonMask | ++_sooWonCount;
+    public static readonly int Mech_SooWonCC = SooWonMask | ++_sooWonCount;
     #endregion SOOWON
     #endregion OPEN WORLD
 

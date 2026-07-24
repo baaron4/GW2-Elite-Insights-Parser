@@ -20,32 +20,32 @@ internal class SooWon : OpenWorldLogic
     {
         MechanicList.Add(new MechanicGroup([
         
-        new PlayerDstHealthDamageHitMechanic(TsunamiSlamOW, new (Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", Sev1, 0),
-        new PlayerDstHealthDamageHitMechanic(VoidPurgeOW, new (Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", Sev1, 0),
-        new PlayerDstHealthDamageMechanic(ClawSlapOW, new (Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", Sev0, 0)
+        new PlayerDstHealthDamageHitMechanic(TsunamiSlamOW, Mech_SooWonSlam, new (Symbols.TriangleDown,Colors.DarkRed), new("Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam"), Sev1),
+        new PlayerDstHealthDamageHitMechanic(VoidPurgeOW, Mech_SooWonAcidPool, new (Symbols.Circle,Colors.DarkPurple), new("Acid", "Player took damage from an acid pool", "Acid Pool"), Sev1),
+        new PlayerDstHealthDamageMechanic(ClawSlapOW, Mech_SooWonClawSlap, new (Symbols.TriangleUp,Colors.Orange), new("Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap"), Sev0)
             .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
-        new PlayerDstHealthDamageHitMechanic(TailSlap, new (Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", Sev1, 0),
-        new PlayerDstHealthDamageHitMechanic(BiteOW, new (Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", Sev1, 0),
+        new PlayerDstHealthDamageHitMechanic(TailSlap, Mech_SooWonTailSlap, new (Symbols.Square,Colors.Orange),new( "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap"), Sev1),
+        new PlayerDstHealthDamageHitMechanic(BiteOW, Mech_SooWonBite, new (Symbols.Diamond,Colors.Orange), new("Bite", "Soo-Won bites half the platform while swapping sides", "Bite"), Sev1),
         new MechanicGroup([
 
-            new PlayerDstHealthDamageMechanic(NightmareDevastationOW1, new (Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", Sev0, 0),
-            new PlayerDstHealthDamageMechanic(NightmareDevastationOW2, new (Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", Sev0, 0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW1, Mech_SooWonWaveHalf, new (Symbols.Square,Colors.Purple), new("Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)"), Sev0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW2, Mech_SooWonWaveFull, new (Symbols.Square,Colors.DarkPurple), new("Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)"), Sev0),
         ]),
-        new PlayerDstBuffApplyMechanic(WispForm, new (Symbols.Circle,Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", Sev1, 0),
-        new PlayerDstHealthDamageMechanic(SeveredFromBody, new (Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", Sev0, 0).UsingChecker((de, log) => de.HasKilled),
+        new PlayerDstBuffApplyMechanic(WispForm, Mech_SooWonWisp, new (Symbols.Circle,Colors.Green), new("Wisp", "Wisp Form from standing in a green circle", "Wisp Form"), Sev1),
+        new PlayerDstHealthDamageMechanic(SeveredFromBody, Mech_SooWonGreenFailed, new (Symbols.Circle,Colors.Red), new("Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green"), Sev0).UsingChecker((de, log) => de.HasKilled),
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(Drown1, new (Symbols.Circle,Colors.LightBlue), "Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble", Sev1, 0),
-            new PlayerDstBuffApplyMechanic(Drown2, new (Symbols.Circle,Colors.DarkTeal), "Whirlpool", "Player was trapped in a whirlpool", "Whirlpool", Sev1, 0),
+            new PlayerDstBuffApplyMechanic(Drown1, Mech_SooWonBubble, new (Symbols.Circle,Colors.LightBlue), new("Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble"), Sev1),
+            new PlayerDstBuffApplyMechanic(Drown2, Mech_SooWonWhirlpool, new (Symbols.Circle,Colors.DarkTeal), new("Whirlpool", "Player was trapped in a whirlpool", "Whirlpool"), Sev1),
         ]),
         new MechanicGroup([
-            new EnemyDstBuffApplyMechanic(HardenedShell, new (Symbols.DiamondWide, Colors.DarkTeal), "Tail", "Soo-Won's Tail spawned", "Tail", Sev1, 0),
-            new EnemyDstBuffRemoveMechanic(HardenedShell, new (Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", Sev0, 0)
+            new EnemyDstBuffApplyMechanic(HardenedShell, Mech_SooWonTailSpawn, new (Symbols.DiamondWide, Colors.DarkTeal), new("Tail", "Soo-Won's Tail spawned", "Tail"), Sev1),
+            new EnemyDstBuffRemoveMechanic(HardenedShell, Mech_SooWonTailKilled, new (Symbols.DiamondWide, Colors.DarkGreen), new("Tail Killed", "Soo-Won's Tail killed", "Tail Killed"), Sev0)
                 .UsingChecker((bre, log) => !bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
-            new EnemyDstBuffRemoveMechanic(HardenedShell, new (Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", Sev0, 0)
+            new EnemyDstBuffRemoveMechanic(HardenedShell, Mech_SooWonTailDespawn, new (Symbols.DiamondWide, Colors.Yellow), new("Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned"), Sev0)
                 .UsingChecker((bre, log) => bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
         ]),
-        new EnemyDstBuffApplyMechanic(DamageImmunity1, new (Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", Sev2, 0),
-        new EnemyDstBuffApplyMechanic(OldExposed, new (Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", Sev0, 0)
+        new EnemyDstBuffApplyMechanic(DamageImmunity1, Mech_SooWonSideSwap, new (Symbols.Diamond, Colors.Pink), new("Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap"), Sev2),
+        new EnemyDstBuffApplyMechanic(OldExposed, Mech_SooWonCC, new (Symbols.DiamondTall, Colors.DarkGreen), new("CCed", "Breakbar successfully broken", "CCed"), Sev0)
             .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
         ]));
         Extension = "soowon";
