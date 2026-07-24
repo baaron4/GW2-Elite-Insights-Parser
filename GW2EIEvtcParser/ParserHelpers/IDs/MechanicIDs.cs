@@ -187,4 +187,10 @@ public static class MechanicIDs
     #region CONVERGENCE
     public static readonly int Mech_EssenceCollected = ConvergenceMask | 1;
     #endregion CONVERGENCE
+
+    #region WVW
+    private static int _wvwCount = 0;
+    public static readonly int Mech_KillingBlowPlayer = WvWMask | ++_wvwCount;
+    public static readonly int Mech_KillingBlowEnemy = WvWMask | ++_wvwCount;
+    #endregion WVW
 }
