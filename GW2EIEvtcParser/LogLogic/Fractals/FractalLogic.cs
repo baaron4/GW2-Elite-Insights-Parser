@@ -25,18 +25,18 @@ internal abstract class FractalLogic : LogLogic
             new MechanicGroup([
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(FluxBombBuff, new (Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", Sev2, 0),
-                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new (Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", Sev1, 0), // No longer tracking damage
+                        new PlayerDstBuffApplyMechanic(FluxBombBuff, Mech_FluxBombBuff, new (Symbols.Circle,Colors.Purple,10), new ("Flux", "Flux Bomb application","Flux Bomb"), Sev2),
+                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, Mech_FluxBombHit, new (Symbols.CircleOpen,Colors.Purple,10), new ("Flux dmg", "Flux Bomb hit","Flux Bomb dmg"), Sev1), // No longer tracking damage
                     ]
                 ),
-                new SpawnMechanic((int)TargetID.FractalVindicator, new (Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", Sev3, 0),
+                new SpawnMechanic((int)TargetID.FractalVindicator, Mech_FractalVindicator, new (Symbols.StarDiamondOpen,Colors.Black,10), new ("Vindicator", "Fractal Vindicator spawned","Vindicator spawn"), Sev3),
                 new MechanicGroup(
                     [
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", Sev2, 0),
-                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], new (Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", Sev2, 0),
-                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", Sev1, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, Mech_ToxicSicknessReceived, new (Symbols.TriangleUp, Colors.Pink, 10), new ("Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated"), Sev2),
+                        new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], Mech_ToxicSicknessApplied, new (Symbols.TriangleUpOpen, Colors.LightOrange, 10), new ("ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application"), Sev2),
+                        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, Mech_ToxicSicknessHitOther, new (Symbols.TriangleLeftOpen, Colors.LightOrange, 10), new ("ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player"), Sev1)
                             .UsingChecker((bae, log) => bae.To.IsPlayer),
-                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, new (Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", Sev1, 0)
+                        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, Mech_ToxicSicknessHitByOther, new (Symbols.TriangleRightOpen, Colors.LightOrange, 10), new ("ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player"), Sev1)
                             .UsingChecker((bae, log) => bae.By.IsPlayer),
                     ]
                 ),

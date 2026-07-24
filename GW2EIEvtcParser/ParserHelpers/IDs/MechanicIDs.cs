@@ -45,6 +45,8 @@ public static class MechanicIDs
     private const int SotOMask = RaidEncounterMask | 0x00050000;
     private const int VoEMask = RaidEncounterMask | 0x00060000;
 
+    private const int SooWonMask = OpenWorldMask | 0x00010000;
+
     private const int EternalBattlegroundsMask = WvWMask | 0x00010000;
     private const int GreenAlpineBorderlandsMask = WvWMask | 0x00020000;
     private const int BlueAlpineBorderlandsMask = WvWMask | 0x00030000;
@@ -78,6 +80,14 @@ public static class MechanicIDs
     #endregion COMMONS
 
     #region FRACTALS
+    private static int _fractalCount = 0;
+    public static readonly int Mech_FluxBombBuff = FractalMask | ++_fractalCount;
+    public static readonly int Mech_FluxBombHit = FractalMask | ++_fractalCount;
+    public static readonly int Mech_FractalVindicator = FractalMask | ++_fractalCount;
+    public static readonly int Mech_ToxicSicknessReceived = FractalMask | ++_fractalCount;
+    public static readonly int Mech_ToxicSicknessApplied = FractalMask | ++_fractalCount;
+    public static readonly int Mech_ToxicSicknessHitOther = FractalMask | ++_fractalCount;
+    public static readonly int Mech_ToxicSicknessHitByOther = FractalMask | ++_fractalCount;
     #region KINFALL
     private static int _kinfallCount = 0;
     public static readonly int Mech_DeathlyRime = KinfallMask | ++_kinfallCount;
@@ -187,6 +197,12 @@ public static class MechanicIDs
     #region CONVERGENCE
     public static readonly int Mech_EssenceCollected = ConvergenceMask | 1;
     #endregion CONVERGENCE
+
+    #region OPEN WORLD
+    #region SOOWON
+    private static int _sooWonCount = 0;
+    #endregion SOOWON
+    #endregion OPEN WORLD
 
     #region WVW
     private static int _wvwCount = 0;
