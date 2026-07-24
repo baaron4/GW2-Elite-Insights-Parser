@@ -216,6 +216,45 @@ public static class MechanicIDs
     public static readonly int Mech_EparchBreakbar = LonelyTowerMask | ++_lonelyTowerCount;
     public static readonly int Mech_EparchRegret = LonelyTowerMask | ++_lonelyTowerCount;
     #endregion LONELY TOWER
+    #region SUNQUA PEAK
+    private static int _sunquaPeakCount = 0;
+    public static readonly int Mech_ElementalWhirl = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_ElementalManipulationAir = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_FulgorSphere = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_VolatileWind = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_WindBurst = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_WindBurstNoStab = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CallOfStorms = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_WhirlwindShield = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_ElementalManipulationFire = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_RoilingFlames = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_VolatileFire = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CallMeteorSummon = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CallMeteorHit = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_FlameBurst = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_AiFirestorm = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_ElementalManipulationWater = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_TorrentialBolt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_VolatileWater = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_AquaticBurst = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_TidalBarrier = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_TidalBargain = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_TidalBargainDown = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulation = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_FocusedWrath = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_NegativeBurst = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_Terrorstorm = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CrushingGuilt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CrushingGuiltDown = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_FixatedByFear = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationFear = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationFearInterrupt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationSorrow = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationSorrowInterrupt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationGuilt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_EmpathicManipulationGuiltInterrupt = SunquaPeakMask | ++_sunquaPeakCount;
+    public static readonly int Mech_CacophonousMind = SunquaPeakMask | ++_sunquaPeakCount;
+    #endregion SUNQUA PEAK
     #endregion FRACTALS
 
     #region CONVERGENCE
