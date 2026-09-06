@@ -78,10 +78,10 @@ public partial class CombatData
 
     private readonly List<RewardEvent> _rewardEvents = [];
     // EXTENSIONS
-    public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
-    public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; }
-    public bool HasEXTHealing => EXTHealingCombatData != null;
-    public bool HasEXTBarrier => EXTBarrierCombatData != null;
+    public EXTHealingCombatData EXTHealingCombatData { get; internal set; } = new();
+    public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; } = new();
+    public bool HasEXTHealing => !EXTHealingCombatData.Empty;
+    public bool HasEXTBarrier => !EXTBarrierCombatData.Empty;
 
     internal readonly bool UseBuffInstanceSimulator = false;
 
