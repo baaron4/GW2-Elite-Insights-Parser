@@ -1273,4 +1273,59 @@ partial class CombatData
     }
 
     #endregion GADGET_CAPTURE
+
+    public IReadOnlyList<TimeCombatEvent> GetAllEvents()
+    {
+        var events = new List<TimeCombatEvent>();
+        var seen = new HashSet<TimeCombatEvent>();
+
+        void AddRange(IEnumerable<TimeCombatEvent> source)
+        {
+            foreach (var evt in source)
+            {
+                if (seen.Add(evt))
+                {
+                    events.Add(evt);
+                }
+            }
+        }
+
+        var sources = new IEnumerable<TimeCombatEvent>[]
+        {
+            _buffData.Values.SelectMany(x => x),
+            _damageData.Values.SelectMany(x => x),
+            _damageDataByID.Values.SelectMany(x => x),
+            _damageTakenData.Values.SelectMany(x => x),
+            _breakbarDamageData.Values.SelectMany(x => x),
+            _breakbarDamageDataByID.Values.SelectMany(x => x),
+            _breakbarDamageTakenData.Values.SelectMany(x => x),
+            _breakbarRecoveredData.Values.SelectMany(x => x),
+            _breakbarRecoveredDataByID.Values.SelectMany(x => x),
+            _crowControlData.Values.SelectMany(x => x),
+            _crowControlDataByID.Values.SelectMany(x => x),
+            _crowControlTakenData.Values.SelectMany(x => x),
+            _stunBreakData.Values.SelectMany(x => x),
+            _stunBreakReceivedData.Values.SelectMany(x => x),
+            _animatedCastData.Values.SelectMany(x => x),
+            _animatedCastDataByID.Values.SelectMany(x => x),
+            _instantCastData.Values.SelectMany(x => x),
+            _instantCastDataByID.Values.SelectMany(x => x),
+            _weaponSwapData.Values.SelectMany(x => x),
+            _emoteCastData.Values.SelectMany(x => x),
+            _emoteCastDataByEmoteID.Values.SelectMany(x => x),
+            _gadgetAnimationEventsByGadget.Values.SelectMany(x => x),
+            _gadgetAnimationEventsByToken.Values.SelectMany(x => x),
+            _gadgetInteractCastData.Values.SelectMany(x => x),
+            _gadgetInteractCastDataBySpeciesID.Values.SelectMany(x => x),
+            _gadgetInteractCastDataByGadget.Values.SelectMany(x => x),
+            _rewardEvents
+        };
+
+        foreach (var source in sources)
+        {
+            AddRange(source);
+        }
+
+        return events;
+    }
 }
