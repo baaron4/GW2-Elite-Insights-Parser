@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GW2EIEvtcParser;
 using GW2EIParserCommons;
 using static GW2EIParserCommons.ProgramHelper;
 
@@ -11,6 +12,7 @@ public sealed class ParserService : IDisposable
 {
     private readonly ProgramHelper _programHelper;
     public ProgramSettings Settings { get; }
+    public ParsedEvtcLog? ParsedLog => _programHelper.InspectLog;
 
     public ParserService(ProgramSettings settings)
     {
@@ -21,7 +23,7 @@ public sealed class ParserService : IDisposable
 
     public delegate void OnTaskRun();
 
-    public async Task ParseAsync(AvaloniaOperationController operation, OnTaskRun onTaskRun )
+    public async Task ParseAsync(AvaloniaOperationController operation, OnTaskRun onTaskRun)
     {
         var cancellationTokenSource = new CancellationTokenSource();
 
@@ -31,6 +33,23 @@ public sealed class ParserService : IDisposable
                 operation.ToRunState(cancellationTokenSource);
                 onTaskRun();
                 _programHelper.DoWork(operation);
+            }, cancellationTokenSource.Token);
+        }
+        finally
+        {
+            cancellationTokenSource.Dispose();
+        }
+    }
+
+    public async Task InspectAsync(InspectorOperationController operation, OnTaskRun onTaskRun)
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Run(() => {
+                onTaskRun();
+                _programHelper.Inspect(operation);
             }, cancellationTokenSource.Token);
         }
         finally

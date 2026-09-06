@@ -30,11 +30,12 @@ public partial class LogFileViewModel : ObservableObject
     [ObservableProperty]
     private OperationState state;
     public AvaloniaOperationController Operation { get; }
+    public InspectorOperationController InspectorOperation { get; }
     public event EventHandler? ParseRequested;
     public event EventHandler? ReParseRequested;
     public event EventHandler? PendingCancellationRequested;
     public event EventHandler? RemoveRequested;
-
+    public event EventHandler? InspectLogRequested;
 
     public bool IsRunning => Operation.IsRunning;
     public bool IsIdle => Operation.IsIdle;
@@ -44,6 +45,7 @@ public partial class LogFileViewModel : ObservableObject
     {
         inputFilePath = fullPath;
         Operation = new AvaloniaOperationController(inputFilePath, this);
+        InspectorOperation = new InspectorOperationController(inputFilePath);
         logStatus = Operation.Status;
         buttonText = Operation.ButtonText;
         reParseText = Operation.ReParseText;
@@ -103,6 +105,12 @@ public partial class LogFileViewModel : ObservableObject
     public void OpenTracesCommand()
     {
         OpenGeneratedFiles(Operation.OpenableLogTracesFiles);
+    }
+
+    [RelayCommand]
+    public void InspectLogCommand()
+    {
+        InspectLogRequested?.Invoke(this, EventArgs.Empty);
     }
 
     private void OpenGeneratedFiles(IReadOnlyList<string> paths)

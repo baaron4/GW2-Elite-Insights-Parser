@@ -49,6 +49,7 @@ public class SkillItem
     private readonly WeaponDescriptor? _weaponDescriptor;
     public bool IsWeaponSkill => _weaponDescriptor != null;
     internal readonly GW2APISkill? ApiSkill;
+    public GW2APISkill? ApiSkillInfo => ApiSkill;
     public bool CanHeal => ApiSkill != null && ApiSkill.Facts != null && ApiSkill.Facts.Any(x => x.Target == "Healing");
     private SkillInfoEvent? _skillInfo;
 

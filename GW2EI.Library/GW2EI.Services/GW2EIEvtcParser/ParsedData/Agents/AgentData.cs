@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class AgentData
 {
+    public IReadOnlyList<AgentItem> AllAgents => _allAgentsList;
 #if DEBUG
     public readonly List<AgentItem> _allAgentsList;
 #else

@@ -99,6 +99,7 @@ public sealed class ProgramHelper : IDisposable
 
     private CancellationTokenSource? RunningMemoryCheck = null;
     private bool GCExecuted = false;
+    public ParsedEvtcLog? InspectLog;
 
     public void Dispose()
     {
@@ -474,6 +475,48 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
+    public void Inspect(OperationController operation)
+    {
+        System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture =
+                new System.Globalization.CultureInfo("en-US");
+        operation.Reset();
+        try
+        {
+            operation.Start();
+            var fInfo = new FileInfo(operation.InputFile);
+
+            var parser = new EvtcParser(new EvtcParserSettings(
+                                            Settings.CustomTooShort,
+                                            Settings.CustomTooBig)
+            {
+                AnonymousPlayers = false,
+                SkipFailedTries = false,
+                ComputePhases = false,
+                ComputeCombatReplay = false,
+                ComputeDamageModifiers = false,
+                ParseExtensions = false,
+                ComputeBuff = false,
+                ComputeDamage = false,
+                ComputeCast = false,
+                ComputeMechanics = false,
+                DetailedWvWParse = false,
+            },
+                                        APIController);
+
+            //Process evtc here
+            InspectLog = parser.ParseLog(operation, fInfo, out var failureReason, !Settings.SingleThreaded && HasFormat());
+        }
+        catch (Exception ex)
+        {
+            throw new ProgramException(ex);
+        }
+        finally
+        {
+            operation.Stop();
+            Thread.CurrentThread.CurrentCulture = before;
+        }
+    }
     public void DoWork(OperationController operation)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;

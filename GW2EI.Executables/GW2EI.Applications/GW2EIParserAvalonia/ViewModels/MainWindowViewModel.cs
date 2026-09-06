@@ -46,7 +46,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     private bool logTracesVisible;
     [ObservableProperty]
     private string version = string.Empty;
-    private readonly ParserService _parserService;
+    public readonly ParserService _parserService;
     private readonly Queue<LogFileViewModel> _logQueue = new();
     private readonly IApplicationTrace _trace;
     private int _runningCount;
@@ -104,6 +104,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         logFileViewModel.ReParseRequested += LogFile_ParseRequested;
         logFileViewModel.PendingCancellationRequested += LogFile_PendingCancellationRequested;
         logFileViewModel.RemoveRequested += LogFile_RemoveRequested;
+        logFileViewModel.InspectLogRequested += LogFile_InspectLogRequested;
 
         LogFiles.Add(logFileViewModel);
         UpdateQueueStatus();
@@ -272,7 +273,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     private void QueueOrRunOperation(LogFileViewModel logFile)
     {
-
         if (!AnyRunning || (_parserService.ParseMultipleLogs() && _runningCount < _parserService.GetMaxParallelRunning()))
         {
             _ = RunOperationAsync(logFile);
@@ -395,6 +395,31 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ClearAllEnabled = LogFiles.Count > 0;
         ClearUncompletedEnabled = LogFiles.Any(x => x.State == OperationState.UnComplete);
         ParseEnabled = !AnyRunning && LogFiles.Count > 0;
+    }
+
+    private void LogFile_InspectLogRequested(object? sender, EventArgs e)
+    {
+        if (sender is LogFileViewModel logFile)
+        {
+            InspectorParse(logFile);
+        }
+    }
+
+    private async void InspectorParse(LogFileViewModel logFile)
+    {
+        try
+        {
+            await _parserService.InspectAsync(logFile.InspectorOperation, () =>
+            {
+                _trace.Add("Operation: Inspecting " + logFile.InputFilePath);
+            });
+        }
+        finally
+        {
+            var inspectorWindow = new InspectorWindow(_parserService.ParsedLog!, _trace);
+            inspectorWindow.Show();
+        }
+        
     }
 
     public async Task<string> SendAllToDiscordAsync()

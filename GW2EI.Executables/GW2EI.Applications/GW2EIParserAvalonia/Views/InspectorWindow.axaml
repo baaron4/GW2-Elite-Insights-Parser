@@ -1,0 +1,286 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="using:GW2EIParserAvalonia.ViewModels"
+        mc:Ignorable="d"
+        d:DesignWidth="1600"
+        d:DesignHeight="900"
+        x:Class="GW2EIParserAvalonia.InspectorWindow"
+        x:DataType="viewModels:InspectorViewModel"
+        Title="GW2 Elite Insights Parser - EVTC Inspector"
+        MinWidth="1000"
+        MinHeight="600">
+
+    <Grid>
+
+        <TabControl>
+
+            <!-- Combat Items -->
+            <TabItem Header="Combat Items">
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <TextBlock Text="Combat Items"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding CombatItemCount, StringFormat='{}{0:N0} items'}"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.7"/>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              x:CompileBindings="False"
+                              ItemsSource="{Binding CombatItems}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Extended"
+                              RowHeight="28">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Time"
+                                                Binding="{Binding Time}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Src Agent"
+                                                Binding="{Binding SrcAgent}"
+                                                Width="150"/>
+
+                            <DataGridTextColumn Header="Dst Agent"
+                                                Binding="{Binding DstAgent}"
+                                                Width="150"/>
+
+                            <DataGridTextColumn Header="Value"
+                                                Binding="{Binding Value}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Buff Dmg"
+                                                Binding="{Binding BuffDmg}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Overstack Value"
+                                                Binding="{Binding OverstackValue}"
+                                                Width="120"/>
+
+                            <DataGridTextColumn Header="Skill ID"
+                                                Binding="{Binding SkillID}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Src Inst ID"
+                                                Binding="{Binding SrcInstid}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Dst Inst ID"
+                                                Binding="{Binding DstInstid}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Src Master Inst ID"
+                                                Binding="{Binding SrcMasterInstid}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="Dst Master Inst ID"
+                                                Binding="{Binding DstMasterInstid}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="IFF Byte"
+                                                Binding="{Binding IFFByte}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="IFF"
+                                                Binding="{Binding IFF}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Buff"
+                                                Binding="{Binding IsBuff}"
+                                                Width="80"/>
+
+                            <DataGridTextColumn Header="Result"
+                                                Binding="{Binding Result}"
+                                                Width="80"/>
+
+                            <DataGridTextColumn Header="Activation Byte"
+                                                Binding="{Binding IsActivationByte}"
+                                                Width="120"/>
+
+                            <DataGridTextColumn Header="Activation"
+                                                Binding="{Binding IsActivation}"
+                                                Width="120"/>
+
+                            <DataGridTextColumn Header="Buff Remove Byte"
+                                                Binding="{Binding IsBuffRemoveByte}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="Buff Remove"
+                                                Binding="{Binding IsBuffRemove}"
+                                                Width="120"/>
+
+                            <DataGridTextColumn Header="Is Ninety"
+                                                Binding="{Binding IsNinety}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Is Fifty"
+                                                Binding="{Binding IsFifty}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Is Moving"
+                                                Binding="{Binding IsMoving}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="State Change"
+                                                Binding="{Binding IsStateChange}"
+                                                Width="130"/>
+
+                            <DataGridTextColumn Header="Is Flanking"
+                                                Binding="{Binding IsFlanking}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Shields"
+                                                Binding="{Binding IsShields}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Offcycle"
+                                                Binding="{Binding IsOffcycle}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Pad"
+                                                Binding="{Binding Pad}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Pad1"
+                                                Binding="{Binding Pad1}"
+                                                Width="70"/>
+
+                            <DataGridTextColumn Header="Pad2"
+                                                Binding="{Binding Pad2}"
+                                                Width="70"/>
+
+                            <DataGridTextColumn Header="Pad3"
+                                                Binding="{Binding Pad3}"
+                                                Width="70"/>
+
+                            <DataGridTextColumn Header="Pad4"
+                                                Binding="{Binding Pad4}"
+                                                Width="70"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Grid>
+
+            </TabItem>
+
+
+            <!-- Agents Data -->
+            <TabItem Header="Agents Data">
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <TextBlock Text="Agents Data"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding AgentCount, StringFormat='{}{0:N0} agents'}"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.7"/>
+
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              x:CompileBindings="False"
+                              ItemsSource="{Binding AgentsData}"
+                              AutoGenerateColumns="True"
+                              IsReadOnly="True"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Extended"
+                              RowHeight="28"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+            <!-- Skills Data -->
+            <TabItem Header="Skills Data">
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <TextBlock Text="Skills Data"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding SkillCount, StringFormat='{}{0:N0} skills'}"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.7"/>
+
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              x:CompileBindings="False"
+                              ItemsSource="{Binding SkillsData}"
+                              AutoGenerateColumns="True"
+                              IsReadOnly="True"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Extended"
+                              RowHeight="28"/>
+
+                </Grid>
+
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+
+</Window>
