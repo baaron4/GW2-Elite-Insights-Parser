@@ -195,6 +195,10 @@ public class Buff : IVersionable
 
     internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, BuffStackItemPool pool, bool forceNoId)
     {
+        if (!log.CombatData.HasExtraProcessing)
+        {
+            throw new InvalidOperationException("Buff simulator requires combat data with extra processing");
+        }
         BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
         int capacity = Capacity;
         if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity && buffInfoEvent.MaxStacks > 0)
