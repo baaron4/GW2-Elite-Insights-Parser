@@ -27,12 +27,11 @@ public sealed partial class MainWindow : Window, IDisposable
     public MainWindow()
     {
         InitializeComponent();
+        Closing += (sender, e) => Settings.Default.Save();
     }
 
-    public MainWindow(IApplicationTrace trace)
+    public MainWindow(IApplicationTrace trace) : this()
     {
-        InitializeComponent();
-
         _trace = trace;
 
         UpdateFileWatcher();
@@ -307,7 +306,6 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             _trace.Add("Updater: Update found, opening UI");
             Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
-            Settings.Default.Save();
             viewModel.UpdateVersionLabel(info.Value.UpdateAvailable);
 
             var updaterWindow = new UpdaterWindow(info.Value, _trace);
@@ -322,7 +320,6 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             _trace.Add("Updater: Up to date");
             Settings.Default.UpdateAvailable = false;
-            Settings.Default.Save();
             viewModel.UpdateVersionLabel(false);
 
             var messageWindow = new MessageWindow("Elite Insights is up to date.", _trace);
