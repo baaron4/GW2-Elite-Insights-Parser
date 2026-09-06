@@ -99,7 +99,6 @@ public sealed class ProgramHelper : IDisposable
 
     private CancellationTokenSource? RunningMemoryCheck = null;
     private bool GCExecuted = false;
-    public ParsedEvtcLog? InspectLog;
 
     public void Dispose()
     {
@@ -475,7 +474,7 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
-    public void Inspect(OperationController operation)
+    public ParsedEvtcLog? ParseLogForInspection(OperationController operation)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
         Thread.CurrentThread.CurrentCulture =
@@ -505,7 +504,10 @@ public sealed class ProgramHelper : IDisposable
                                         APIController);
 
             //Process evtc here
-            InspectLog = parser.ParseLog(operation, fInfo, out var failureReason, !Settings.SingleThreaded && HasFormat());
+            var inspectLog = parser.ParseLog(operation, fInfo, out var failureReason, false);
+            failureReason?.Throw();
+            operation.BasicMetaData = new OperationController.OperationBasicMetaData(inspectLog!);
+            return inspectLog;
         }
         catch (Exception ex)
         {
@@ -548,10 +550,7 @@ public sealed class ProgramHelper : IDisposable
 
             //Process evtc here
             ParsedEvtcLog? log = parser.ParseLog(operation, fInfo, out var failureReason, !Settings.SingleThreaded && HasFormat());
-            if (failureReason != null)
-            {
-                failureReason.Throw();
-            }
+            failureReason?.Throw();
             operation.BasicMetaData = new OperationController.OperationBasicMetaData(log!);
             string[] uploadStrings = UploadOperation(fInfo, log!, operation);
             if (uploadStrings[0].Contains("https"))

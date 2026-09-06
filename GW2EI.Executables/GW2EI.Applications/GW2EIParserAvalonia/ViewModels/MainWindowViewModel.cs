@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
 using GW2EIParserAvalonia.Services;
+using GW2EIParserAvalonia.Views;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 
@@ -46,7 +47,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     private bool logTracesVisible;
     [ObservableProperty]
     private string version = string.Empty;
-    public readonly ParserService _parserService;
+    private readonly ParserService _parserService;
     private readonly Queue<LogFileViewModel> _logQueue = new();
     private readonly IApplicationTrace _trace;
     private int _runningCount;
@@ -409,15 +410,23 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         try
         {
-            await _parserService.InspectAsync(logFile.InspectorOperation, () =>
+            await _parserService.InspectParseAsync(logFile.InspectorOperation, () =>
             {
                 _trace.Add("Operation: Inspecting " + logFile.InputFilePath);
             });
         }
         finally
         {
-            var inspectorWindow = new InspectorWindow(_parserService.ParsedLog!, _trace);
-            inspectorWindow.Show();
+            if (logFile.InspectorOperation.InspectLog != null)
+            {
+                var inspectorWindow = new InspectorWindow(logFile.InspectorOperation.InspectLog, _trace);
+                inspectorWindow.Show();
+            } 
+            else
+            {
+                var errorMessageWindow = new MessageWindow("Inspection not possible", _trace);
+                errorMessageWindow.Show();
+            }
         }
         
     }

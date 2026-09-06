@@ -12,7 +12,6 @@ public sealed class ParserService : IDisposable
 {
     private readonly ProgramHelper _programHelper;
     public ProgramSettings Settings { get; }
-    public ParsedEvtcLog? ParsedLog => _programHelper.InspectLog;
 
     public ParserService(ProgramSettings settings)
     {
@@ -41,16 +40,28 @@ public sealed class ParserService : IDisposable
         }
     }
 
-    public async Task InspectAsync(InspectorOperationController operation, OnTaskRun onTaskRun)
+    public async Task InspectParseAsync(InspectorOperationController operation, OnTaskRun onTaskRun)
     {
+        if (operation.InspectLog != null || operation.Errored)
+        {
+            return;
+        }
         var cancellationTokenSource = new CancellationTokenSource();
 
         try
         {
             await Task.Run(() => {
                 onTaskRun();
-                _programHelper.Inspect(operation);
-            }, cancellationTokenSource.Token);
+                operation.InspectLog = _programHelper.ParseLogForInspection(operation);
+            }, cancellationTokenSource.Token)
+                .ContinueWith(t => 
+                {
+                    if (t.IsFaulted)
+                    {
+                        operation.InspectLog = null;
+                        operation.Errored = true;
+                    }
+                }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         finally
         {
