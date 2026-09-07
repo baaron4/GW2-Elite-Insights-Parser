@@ -13,7 +13,6 @@ public class ParsedEvtcLog
     public readonly LogData LogData;
     public readonly AgentData AgentData;
     public readonly SkillData SkillData;
-    public readonly IReadOnlyList<CombatItem> CombatItems;
     public readonly CombatData CombatData;
     public readonly IReadOnlyList<Player> PlayerList;
     public readonly IReadOnlyList<SingleActor> Friendlies;
@@ -41,8 +40,6 @@ public class ParsedEvtcLog
         SkillData = skillData;
         ParserSettings = parserSettings;
         _operation = operation;
-
-        CombatItems = combatItems;
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
         CombatData = new CombatData(combatItems, LogData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings, apiController)

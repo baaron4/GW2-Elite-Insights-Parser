@@ -474,7 +474,7 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
-    public ParsedEvtcLog? ParseLogForInspection(OperationController operation)
+    public RawEvtcLog? ParseLogForInspection(OperationController operation)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
         Thread.CurrentThread.CurrentCulture =
@@ -487,26 +487,12 @@ public sealed class ProgramHelper : IDisposable
 
             var parser = new EvtcParser(new EvtcParserSettings(
                                             Settings.CustomTooShort,
-                                            Settings.CustomTooBig)
-            {
-                AnonymousPlayers = false,
-                SkipFailedTries = false,
-                ComputePhases = false,
-                ComputeCombatReplay = false,
-                ComputeDamageModifiers = false,
-                ParseExtensions = false,
-                ComputeBuff = false,
-                ComputeDamage = false,
-                ComputeCast = false,
-                ComputeMechanics = false,
-                DetailedWvWParse = false,
-            },
+                                            Settings.CustomTooBig),
                                         APIController);
 
             //Process evtc here
-            var inspectLog = parser.ParseLog(operation, fInfo, out var failureReason, false);
+            var inspectLog = parser.ParseRawLog(operation, fInfo, out var failureReason);
             failureReason?.Throw();
-            operation.BasicMetaData = new OperationController.OperationBasicMetaData(inspectLog!);
             return inspectLog;
         }
         catch (Exception ex)

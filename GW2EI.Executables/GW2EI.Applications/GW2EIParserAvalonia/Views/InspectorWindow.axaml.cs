@@ -14,7 +14,7 @@ public partial class InspectorWindow : Window
         InitializeComponent();
     }
 
-    public InspectorWindow(ParsedEvtcLog log, IApplicationTrace trace)
+    public InspectorWindow(RawEvtcLog log, IApplicationTrace trace)
     {
         _trace = trace;
 

@@ -16,7 +16,7 @@ public sealed class InspectorViewModel
     public int AgentCount => AgentsData.Count;
     public int SkillCount => SkillsData.Count;
 
-    public InspectorViewModel(ParsedEvtcLog log)
+    public InspectorViewModel(RawEvtcLog log)
     {
         CombatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
         AgentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).ToList();
