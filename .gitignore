@@ -278,3 +278,5 @@ __pycache__/
 
 # Ignore benchmarks logs
 /GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.zevtc
+/GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.evtc
+/GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.evtc.zip

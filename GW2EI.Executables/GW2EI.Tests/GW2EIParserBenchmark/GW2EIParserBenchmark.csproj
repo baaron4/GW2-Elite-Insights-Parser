@@ -8,15 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Content\MapList.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\SkillList.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\SpecList.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <Folder Include="TestFiles\" />
       <Content Include="TestFiles\**">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -29,9 +21,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIGW2API\GW2EIGW2API.csproj" />
     <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Services\GW2EIParserCommons\GW2EIParserCommons.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestFiles\" />
   </ItemGroup>
 </Project>
