@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
@@ -78,10 +79,10 @@ public partial class CombatData
 
     private readonly List<RewardEvent> _rewardEvents = [];
     // EXTENSIONS
-    public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
-    public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; }
-    public bool HasEXTHealing => EXTHealingCombatData != null;
-    public bool HasEXTBarrier => EXTBarrierCombatData != null;
+    public EXTHealingCombatData EXTHealingCombatData { get; internal set; } = new();
+    public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; } = new();
+    public bool HasEXTHealing => !EXTHealingCombatData.Empty;
+    public bool HasEXTBarrier => !EXTBarrierCombatData.Empty;
 
     internal readonly bool UseBuffInstanceSimulator = false;
 
@@ -95,6 +96,8 @@ public partial class CombatData
     public readonly bool HasGadgetInteractData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
+
+    public bool HasExtraProcessing { get; private set; }
 
     private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, LogData logData, EvtcVersionEvent evtcVersion)
     {
@@ -664,7 +667,6 @@ public partial class CombatData
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _buffDataBySrc = buffEvents.Where(x => x is not BuffExtensionEvent).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-        OffsetBuffExtensionEvents(evtcVersion);
         // damage events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Events");
         _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -689,11 +691,6 @@ public partial class CombatData
         {
             handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
         }
-        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting player specs and groups based on Enter Combat events");
-        logData.Logic.UpdatePlayersSpecAndGroup(players, this, logData);
-
-        operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
-        EIExtraEventProcess(skillData, agentData, logData, operation, evtcVersion);
 
 #if DEBUG
         foreach (var effectGUID in _metaDataEvents.EffectGUIDEventsByGUID.Keys)
@@ -706,6 +703,23 @@ public partial class CombatData
 #endif
     }
 
+    internal CombatData WithExtraProcessing(LogData logData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, EvtcVersionEvent evtcVersion)
+    {
+        if (HasExtraProcessing)
+        {
+            return this;
+        }
+        HasExtraProcessing = true;
+        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buff Extension Events");
+        OffsetBuffExtensionEvents(evtcVersion);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting player specs and groups based on Enter Combat events");
+        logData.Logic.UpdatePlayersSpecAndGroup(players, this, logData);
+
+        operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
+        EIExtraEventProcess(skillData, agentData, logData, operation, evtcVersion);
+        return this;
+    }
+
     internal void TryFindSrc(ParsedEvtcLog log)
     {
         foreach (var pair in _buffExtensionData)
@@ -714,6 +728,19 @@ public partial class CombatData
         }
     }
 
+    [MemberNotNull(nameof(_buffRemoveAllData))]
+    [MemberNotNull(nameof(_buffRemoveAllDataByIDBySrc))]
+    [MemberNotNull(nameof(_buffRemoveAllDataByIDByDst))]
+    [MemberNotNull(nameof(_buffRemoveSingleDataByIDByDst))]
+    [MemberNotNull(nameof(_buffDataByIDByDst))]
+    [MemberNotNull(nameof(_buffApplyData))]
+    [MemberNotNull(nameof(_buffApplyDataByDst))]
+    [MemberNotNull(nameof(_buffRemoveAllDataByDst))]
+    [MemberNotNull(nameof(_buffApplyDataByIDBySrc))]
+    [MemberNotNull(nameof(_buffApplyDataByIDByDst))]
+    [MemberNotNull(nameof(_buffRemoveAllDataBySrc))]
+    [MemberNotNull(nameof(_buffExtensionData))]
+    [MemberNotNull(nameof(_buffDataByInstanceID))]
     private void BuildBuffDependentContainers()
     {
         _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());

@@ -9,6 +9,7 @@ using Avalonia.Platform.Storage;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.ViewModels;
 using GW2EIParserCommons;
+using GW2EIParserCommons.Properties;
 
 namespace GW2EIParserAvalonia.Views;
 
@@ -19,11 +20,14 @@ public partial class SettingsWindow : Window
     public SettingsWindow()
     {
         InitializeComponent();
+        Closing += (sender, e) =>
+        {
+            Settings.Default.Save();
+        };
     }
 
-    public SettingsWindow(SettingsViewModel viewModel, IApplicationTrace trace)
+    public SettingsWindow(SettingsViewModel viewModel, IApplicationTrace trace) : this()
     {
-        InitializeComponent();
 
         DataContext = viewModel;
         _trace = trace;

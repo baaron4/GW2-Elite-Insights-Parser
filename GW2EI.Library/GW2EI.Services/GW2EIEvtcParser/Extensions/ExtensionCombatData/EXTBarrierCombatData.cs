@@ -8,6 +8,15 @@ public class EXTBarrierCombatData
     private readonly Dictionary<AgentItem, List<EXTBarrierEvent>> _barrierReceivedData;
     private readonly Dictionary<long, List<EXTBarrierEvent>> _barrierDataByID;
 
+    internal bool Empty => _barrierData.Count == 0;
+
+    internal EXTBarrierCombatData()
+    {
+        _barrierData = [];
+        _barrierReceivedData = [];
+        _barrierDataByID = [];
+    }
+
     internal EXTBarrierCombatData(Dictionary<AgentItem, List<EXTBarrierEvent>> barrierData, Dictionary<AgentItem, List<EXTBarrierEvent>> barrierReceivedData, Dictionary<long, List<EXTBarrierEvent>> barrierDataByID)
     {
         _barrierData = barrierData;

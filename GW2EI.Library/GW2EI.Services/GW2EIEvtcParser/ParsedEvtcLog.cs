@@ -45,7 +45,8 @@ public class ParsedEvtcLog
         CombatItems = combatItems;
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
-        CombatData = new CombatData(combatItems, LogData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings, apiController);
+        CombatData = new CombatData(combatItems, LogData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings, apiController)
+            .WithExtraProcessing(LogData, AgentData, SkillData, playerList, operation, evtcVersion);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Checking Log Status");
         LogData.ProcessLogStatus(CombatData, AgentData);
