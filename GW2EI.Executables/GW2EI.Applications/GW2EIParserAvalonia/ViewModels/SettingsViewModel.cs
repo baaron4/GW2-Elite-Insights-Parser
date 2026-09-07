@@ -264,8 +264,6 @@ public partial class SettingsViewModel : ObservableObject
 
         // Updater
         Settings.Default.UpdateAvailable = UpdateAvailable;
-
-        Settings.Default.Save();
     }
 
     public void ApplyToSettings()
