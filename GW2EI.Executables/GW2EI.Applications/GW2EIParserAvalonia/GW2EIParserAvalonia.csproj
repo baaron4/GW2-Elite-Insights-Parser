@@ -9,7 +9,7 @@
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
-    <OutputPath>..\GW2EI.bin\$(Configuration)\UI\</OutputPath>
+    <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
   </PropertyGroup>
