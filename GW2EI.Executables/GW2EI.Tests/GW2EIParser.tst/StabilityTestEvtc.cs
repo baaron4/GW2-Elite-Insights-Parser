@@ -29,6 +29,8 @@ public class StabilityTestEvtc
             FailedMessage = message;
         }
     }
+
+    private const string PathToFiles = "/../../GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/EvtcLogs";
     private static bool Loop(EVTCTestItem evtcTestItem)
     {
         try
@@ -85,7 +87,7 @@ public class StabilityTestEvtc
 
     private static void GenerateCrashData(List<EVTCTestItem> evtcTestItems, string type, bool copy)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/Crashes/";
 
         Directory.CreateDirectory(testLocation + "/Logs");
 
@@ -161,7 +163,7 @@ public class StabilityTestEvtc
     public void TestEvtc([Values(0, 1, 2, 3)] int startIndex)
     {
 
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -190,7 +192,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestEvtcZip([Values(0, 1, 2, 3)] int startIndex)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -219,7 +221,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestZevtc([Values(0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40)] int startIndex)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -249,7 +251,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestCrashed()
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/Crashes/Logs";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
