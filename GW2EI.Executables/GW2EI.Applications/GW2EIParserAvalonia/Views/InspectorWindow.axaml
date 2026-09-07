@@ -289,7 +289,15 @@
 
                     <TabItem Header="Events">
 
-                        <Grid ColumnDefinitions="500,*">
+                        <!--
+                        Layout:
+                        Column 0 = TreeView
+                        Column 1 = TreeView/Event splitter
+                        Column 2 = Event area
+                        -->
+                        <Grid ColumnDefinitions="500,5,*">
+
+                            <!-- Event type selector -->
 
                             <Border Grid.Column="0"
                                     BorderBrush="#444"
@@ -338,37 +346,130 @@
 
                             </Border>
 
-                            <DataGrid Grid.Column="1"
-                                      ItemsSource="{Binding VisibleEvents}"
-                                      AutoGenerateColumns="False"
-                                      IsReadOnly="True"
-                                      CanUserResizeColumns="True"
-                                      CanUserReorderColumns="True"
-                                      CanUserSortColumns="True"
-                                      GridLinesVisibility="All"
-                                      HeadersVisibility="Column"
-                                      HorizontalScrollBarVisibility="Auto"
-                                      VerticalScrollBarVisibility="Auto"
-                                      SelectionMode="Extended"
-                                      RowHeight="28">
+                            <!--
+                            Splitter between TreeView and Event DataGrid.
+                            Drag horizontally to resize the TreeView.
+                            -->
 
-                                <DataGrid.Columns>
+                            <GridSplitter Grid.Column="1"
+                                          ResizeDirection="Columns"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"/>
 
-                                    <DataGridTextColumn Header="Time"
-                                                        Binding="{Binding Time}"
-                                                        Width="120"/>
+                            <!-- Event list + selected event inspector -->
 
-                                    <DataGridTextColumn Header="Type"
-                                                        Binding="{Binding Type}"
-                                                        Width="300"/>
+                            <Grid Grid.Column="2"
+                                  ColumnDefinitions="*,5,400">
 
-                                </DataGrid.Columns>
+                                <!-- Event list -->
 
-                            </DataGrid>
+                                <DataGrid Grid.Column="0"
+                                          ItemsSource="{Binding VisibleEvents}"
+                                          SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                                          AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          CanUserResizeColumns="True"
+                                          CanUserReorderColumns="True"
+                                          CanUserSortColumns="True"
+                                          GridLinesVisibility="All"
+                                          HeadersVisibility="Column"
+                                          HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto"
+                                          SelectionMode="Single"
+                                          RowHeight="28">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Time"
+                                                            Binding="{Binding Time}"
+                                                            Width="100"/>
+
+                                        <DataGridTextColumn Header="Type"
+                                                            Binding="{Binding Type}"
+                                                            Width="*"/>
+
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+
+                                <!--
+                                Splitter between Event DataGrid and inspector.
+                                Drag horizontally to resize the inspector.
+                                -->
+
+                                <GridSplitter Grid.Column="1"
+                                              ResizeDirection="Columns"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"/>
+
+                                <!-- Selected event inspector -->
+
+                                <Border Grid.Column="2"
+                                        BorderBrush="#444"
+                                        BorderThickness="1,0,0,0"
+                                        Padding="10">
+
+                                    <Grid RowDefinitions="Auto,*">
+
+                                        <!-- Header -->
+
+                                        <Grid Grid.Row="0"
+                                              ColumnDefinitions="*,Auto"
+                                              Margin="0,0,0,10">
+
+                                            <TextBlock Text="{Binding SelectedEvent.Type}"
+                                                       FontSize="18"
+                                                       FontWeight="Bold"
+                                                       TextTrimming="CharacterEllipsis"/>
+
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding SelectedEvent.Time}"
+                                                       Opacity="0.7"
+                                                       Margin="10,0,0,0"/>
+
+                                        </Grid>
+
+                                        <!-- Properties -->
+
+                                        <TreeView Grid.Row="1"
+                                                  ItemsSource="{Binding SelectedEventProperties}">
+
+                                            <TreeView.ItemTemplate>
+
+                                                <TreeDataTemplate ItemsSource="{Binding Children}">
+
+                                                    <Grid ColumnDefinitions="180,130,*"
+                                                          MinHeight="24"
+                                                          Margin="2">
+
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   FontWeight="SemiBold"
+                                                                   VerticalAlignment="Center"
+                                                                   TextTrimming="CharacterEllipsis"/>
+
+                                                        <TextBlock Grid.Column="2"
+                                                                   Text="{Binding Value}"
+                                                                   VerticalAlignment="Center"
+                                                                   TextTrimming="CharacterEllipsis"/>
+
+                                                    </Grid>
+
+                                                </TreeDataTemplate>
+
+                                            </TreeView.ItemTemplate>
+
+                                        </TreeView>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </Grid>
 
                         </Grid>
 
                     </TabItem>
+
                 </TabControl>
 
             </TabItem>

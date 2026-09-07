@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIParserAvalonia.InspectorContent;
@@ -8,8 +9,11 @@ using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public sealed class InspectorViewModel
+public partial class InspectorViewModel : ObservableObject
 {
+    [ObservableProperty]
+    private EventModel? selectedEvent;
+
     private readonly IReadOnlyList<TimeCombatEvent> _allEvents;
     private readonly IReadOnlyList<object> _allNonTimeEvents;
 
@@ -20,6 +24,7 @@ public sealed class InspectorViewModel
     public IReadOnlyList<EventModel> Events { get; }
     public BulkObservableCollection<EventModel> VisibleEvents { get; } = [];
     public IReadOnlyList<EventTypeFilterNode> EventTypeFilterRoots { get; }
+    public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
 
     public int CombatItemCount => CombatItems.Count;
     public int AgentCount => AgentsData.Count;
@@ -58,5 +63,18 @@ public sealed class InspectorViewModel
                     root.IsEventVisible(eventModel.Event.GetType())));
 
         VisibleEvents.ReplaceRange(visibleEvents);
+    }
+
+    partial void OnSelectedEventChanged(EventModel? value)
+    {
+        if (value?.Event == null)
+        {
+            SelectedEventProperties.ReplaceRange([]);
+            return;
+        }
+
+        var properties = EventInspector.Inspect(value.Event);
+
+        SelectedEventProperties.ReplaceRange(properties);
     }
 }
