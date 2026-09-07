@@ -16,8 +16,8 @@ public class EvctParserBenchmark
         string testFilesPath = Path.Combine(AppContext.BaseDirectory, "TestFiles");
         if (Directory.Exists(testFilesPath))
         {
-            return Directory.EnumerateFiles(testFilesPath, "*.zevtc", SearchOption.TopDirectoryOnly);
-
+            IEnumerable<string> files = Directory.EnumerateFiles(testFilesPath, "*", SearchOption.TopDirectoryOnly);
+            return files.Where(SupportedFileFormats.IsSupportedFormat);
         }
 
         throw new Exception($"No files are present in {testFilesPath}");
