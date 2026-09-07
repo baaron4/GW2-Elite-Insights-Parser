@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.WvWHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class WvWObjectiveStatusEvent
+public class WvWObjectiveStatusEvent : NonTimeCombatEvent
 {
     public readonly int MapID;
     public readonly int ObjectiveID;

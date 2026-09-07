@@ -1279,7 +1279,7 @@ partial class CombatData
         var events = new List<TimeCombatEvent>();
         var seen = new HashSet<TimeCombatEvent>();
 
-        void AddRange<T>(IEnumerable<T> source) where T : TimeCombatEvent
+        void AddRange(IEnumerable<TimeCombatEvent> source)
         {
             foreach (var evt in source)
             {
@@ -1290,7 +1290,7 @@ partial class CombatData
             }
         }
 
-        void AddIndex<T>(IEnumerable<List<T>> index) where T : TimeCombatEvent
+        void AddIndex(IEnumerable<IEnumerable<TimeCombatEvent>> index)
         {
             AddRange(index.SelectMany(x => x));
         }
@@ -1424,20 +1424,20 @@ partial class CombatData
         return events;
     }
 
-    public IReadOnlyList<object> GetAllNonTimeCombatEvents()
+    public IReadOnlyList<NonTimeCombatEvent> GetAllNonTimeCombatEvents()
     {
-        var events = new List<object>();
-        var seen = new HashSet<object>();
+        var events = new List<NonTimeCombatEvent>();
+        var seen = new HashSet<NonTimeCombatEvent>();
 
-        void Add(object? evt)
+        void Add(NonTimeCombatEvent? evt)
         {
-            if (evt != null && evt is not TimeCombatEvent && seen.Add(evt))
+            if (evt != null && seen.Add(evt))
             {
                 events.Add(evt);
             }
         }
 
-        void AddRange<T>(IEnumerable<T> source)
+        void AddRange(IEnumerable<NonTimeCombatEvent> source)
         {
             foreach (var evt in source)
             {
@@ -1504,7 +1504,7 @@ partial class CombatData
 
         // ATTACK TARGETS
         AddRange(_metaDataEvents.AttackTargetEvents);
-        AddRange(_metaDataEvents.AttackTargetEventsBySrc.Values);
+        AddRange(_metaDataEvents.AttackTargetEventsBySrc.Values.SelectMany(x => x));
         AddRange(_metaDataEvents.AttackTargetEventByAttackTarget.Values);
 
         // TICKS

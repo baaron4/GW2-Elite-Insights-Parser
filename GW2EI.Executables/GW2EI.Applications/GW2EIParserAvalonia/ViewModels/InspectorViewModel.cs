@@ -15,7 +15,7 @@ public partial class InspectorViewModel : ObservableObject
     private EventModel? selectedEvent;
 
     private readonly IReadOnlyList<TimeCombatEvent> _allEvents;
-    private readonly IReadOnlyList<object> _allNonTimeEvents;
+    private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
 
     public IReadOnlyList<CombatItemModel> CombatItems { get; } = [];
     public IReadOnlyList<AgentDataModel> AgentsData { get; } = [];
