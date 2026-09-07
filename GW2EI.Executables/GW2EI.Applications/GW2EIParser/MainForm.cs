@@ -23,6 +23,8 @@ internal sealed partial class MainForm : Form
     private int _fileNameSorting = 0;
 
     private readonly ProgramHelper _programHelper;
+
+    private const string AssetName = "GW2EIWinForms.zip";
     private MainForm(ProgramHelper programHelper)
     {
         _programHelper = programHelper;
@@ -55,7 +57,7 @@ internal sealed partial class MainForm : Form
             Task.Factory.StartNew(async () =>
             {
                 List<string> traces = [];
-                Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+                Updater.UpdateInfo? info = await Updater.CheckForUpdate(AssetName, traces);
                 if (info != null)
                 {
                     Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
@@ -804,7 +806,7 @@ internal sealed partial class MainForm : Form
             var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             Settings.Default.UpdateLastChecked = time;
             List<string> traces = [];
-            Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EIWinForms.zip", traces);
+            Updater.UpdateInfo? info = await Updater.CheckForUpdate(AssetName, traces);
             traces.ForEach(x => AddTraceMessage("Updater: " + x));
 #if DEBUG
             var force = true;
