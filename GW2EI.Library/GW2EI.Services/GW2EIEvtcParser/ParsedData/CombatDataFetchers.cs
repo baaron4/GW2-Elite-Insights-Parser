@@ -1279,7 +1279,7 @@ partial class CombatData
         var events = new List<TimeCombatEvent>();
         var seen = new HashSet<TimeCombatEvent>();
 
-        void AddRange(IEnumerable<TimeCombatEvent> source)
+        void AddRange<T>(IEnumerable<T> source) where T : TimeCombatEvent
         {
             foreach (var evt in source)
             {
@@ -1290,41 +1290,226 @@ partial class CombatData
             }
         }
 
-        var sources = new IEnumerable<TimeCombatEvent>[]
+        void AddIndex<T>(IEnumerable<List<T>> index) where T : TimeCombatEvent
         {
-            _buffData.Values.SelectMany(x => x),
-            _damageData.Values.SelectMany(x => x),
-            _damageDataByID.Values.SelectMany(x => x),
-            _damageTakenData.Values.SelectMany(x => x),
-            _breakbarDamageData.Values.SelectMany(x => x),
-            _breakbarDamageDataByID.Values.SelectMany(x => x),
-            _breakbarDamageTakenData.Values.SelectMany(x => x),
-            _breakbarRecoveredData.Values.SelectMany(x => x),
-            _breakbarRecoveredDataByID.Values.SelectMany(x => x),
-            _crowControlData.Values.SelectMany(x => x),
-            _crowControlDataByID.Values.SelectMany(x => x),
-            _crowControlTakenData.Values.SelectMany(x => x),
-            _stunBreakData.Values.SelectMany(x => x),
-            _stunBreakReceivedData.Values.SelectMany(x => x),
-            _animatedCastData.Values.SelectMany(x => x),
-            _animatedCastDataByID.Values.SelectMany(x => x),
-            _instantCastData.Values.SelectMany(x => x),
-            _instantCastDataByID.Values.SelectMany(x => x),
-            _weaponSwapData.Values.SelectMany(x => x),
-            _emoteCastData.Values.SelectMany(x => x),
-            _emoteCastDataByEmoteID.Values.SelectMany(x => x),
-            _gadgetAnimationEventsByGadget.Values.SelectMany(x => x),
-            _gadgetAnimationEventsByToken.Values.SelectMany(x => x),
-            _gadgetInteractCastData.Values.SelectMany(x => x),
-            _gadgetInteractCastDataBySpeciesID.Values.SelectMany(x => x),
-            _gadgetInteractCastDataByGadget.Values.SelectMany(x => x),
-            _rewardEvents
-        };
-
-        foreach (var source in sources)
-        {
-            AddRange(source);
+            AddRange(index.SelectMany(x => x));
         }
+
+        // BUFFS
+        AddIndex(_buffData.Values);
+        AddIndex(_buffDataByDst.Values);
+        AddIndex(_buffDataBySrc.Values);
+        AddIndex(_buffDataByIDByDst.Values.SelectMany(x => x.Values));
+        AddIndex(_buffDataByInstanceID.Values.SelectMany(x => x.Values));
+
+        AddIndex(_buffApplyData.Values);
+        AddIndex(_buffApplyDataByDst.Values);
+        AddIndex(_buffApplyDataByIDBySrc.Values.SelectMany(x => x.Values));
+        AddIndex(_buffApplyDataByIDByDst.Values.SelectMany(x => x.Values));
+
+        AddIndex(_buffRemoveAllData.Values);
+        AddIndex(_buffRemoveAllDataByIDBySrc.Values.SelectMany(x => x.Values));
+        AddIndex(_buffRemoveAllDataByIDByDst.Values.SelectMany(x => x.Values));
+        AddIndex(_buffRemoveAllDataBySrc.Values);
+        AddIndex(_buffRemoveAllDataByDst.Values);
+
+        AddIndex(_buffRemoveSingleDataByIDByDst.Values.SelectMany(x => x.Values));
+
+        AddIndex(_buffExtensionData.Values);
+
+        // DAMAGE
+        AddIndex(_damageData.Values);
+        AddIndex(_damageDataByID.Values);
+        AddIndex(_damageTakenData.Values);
+
+        AddIndex(_breakbarDamageData.Values);
+        AddIndex(_breakbarDamageDataByID.Values);
+        AddIndex(_breakbarDamageTakenData.Values);
+        AddIndex(_breakbarRecoveredData.Values);
+        AddIndex(_breakbarRecoveredDataByID.Values);
+
+        // CROWD CONTROL
+        AddIndex(_crowControlData.Values);
+        AddIndex(_crowControlDataByID.Values);
+        AddIndex(_crowControlTakenData.Values);
+        AddIndex(_stunBreakData.Values);
+        AddIndex(_stunBreakReceivedData.Values);
+
+        // CAST
+        AddIndex(_animatedCastData.Values);
+        AddIndex(_animatedCastDataByID.Values);
+        AddIndex(_instantCastData.Values);
+        AddIndex(_instantCastDataByID.Values);
+        AddIndex(_weaponSwapData.Values);
+
+        // EMOTES
+        AddIndex(_emoteCastData.Values);
+        AddIndex(_emoteCastDataByEmoteID.Values);
+
+        // GADGET ANIMATION
+        AddIndex(_gadgetAnimationEventsByGadget.Values);
+        AddIndex(_gadgetAnimationEventsByToken.Values);
+
+        // GADGET INTERACTION
+        AddIndex(_gadgetInteractCastData.Values);
+        AddIndex(_gadgetInteractCastDataBySpeciesID.Values);
+        AddIndex(_gadgetInteractCastDataByGadget.Values);
+
+        // STATUS
+        AddIndex(_statusEvents.TargetableEventsBySrc.Values);
+        AddIndex(_statusEvents.VisibilityEventsBySrc.Values);
+
+        AddIndex(_statusEvents.AliveEvents.Values);
+        AddIndex(_statusEvents.DeadEvents.Values);
+        AddIndex(_statusEvents.DownEvents.Values);
+        AddIndex(_statusEvents.DespawnEvents.Values);
+        AddIndex(_statusEvents.SpawnEvents.Values);
+
+        AddIndex(_statusEvents.EnterCombatEvents.Values);
+        AddIndex(_statusEvents.ExitCombatEvents.Values);
+
+        // UPDATES
+        AddIndex(_statusEvents.HealthUpdateEvents.Values);
+        AddIndex(_statusEvents.BarrierUpdateEvents.Values);
+        AddIndex(_statusEvents.MaxHealthUpdateEvents.Values);
+        AddIndex(_statusEvents.MaxHealthUpdateEventsByMaxHP.Values);
+        AddIndex(_statusEvents.TeamChangeEvents.Values);
+
+        // BREAKBAR
+        AddIndex(_statusEvents.BreakbarStateEvents.Values);
+        AddIndex(_statusEvents.BreakbarPercentEvents.Values);
+
+        // MOVEMENT
+        AddIndex(_statusEvents.MovementEvents.Values);
+        AddIndex(_statusEvents.GliderEventsBySrc.Values);
+
+        // EFFECTS
+        AddIndex(_statusEvents.EffectEventsBySrc.Values);
+        AddIndex(_statusEvents.EffectEventsByDst.Values);
+        AddIndex(_statusEvents.EffectEventsByEffectID.Values);
+        AddIndex(_statusEvents.EffectEventsByTrackingID.Values);
+        AddIndex(_statusEvents.AgentEffectEventsByTrackingID.Values);
+        AddIndex(_statusEvents.GroundEffectEventsByTrackingID.Values);
+        AddRange(_statusEvents.EffectEvents);
+
+        // MARKERS
+        AddIndex(_statusEvents.MarkerEventsBySrc.Values);
+        AddIndex(_statusEvents.MarkerEventsByID.Values);
+        AddRange(_statusEvents.MarkerEvents);
+        AddIndex(_statusEvents.SquadMarkerEventsByIndex.Values);
+
+        // TRANSFORMATIONS
+        AddIndex(_statusEvents.TransformationEventsBySrc.Values);
+        AddIndex(_statusEvents.TransformationEventsByTransformationID.Values);
+
+        // LAST 90
+        AddIndex(_statusEvents.Last90BeforeDownEventsBySrc.Values);
+        AddRange(_statusEvents.Last90BeforeDownEvents);
+
+        // GADGET CAPTURE
+        AddIndex(_statusEvents.GadgetCaptureEventsBySrc.Values);
+        AddRange(_statusEvents.GadgetCaptureEvents);
+
+        // MISSILES
+        AddIndex(_statusEvents.MissileEventsBySrc.Values);
+        AddIndex(_statusEvents.MissileLaunchEventsByDst.Values);
+        AddIndex(_statusEvents.MissileDamagingEventsBySrc.Values);
+        AddIndex(_statusEvents.MissileEventsBySkillID.Values);
+        AddIndex(_statusEvents.MissileEventsByTrackingID.Values);
+        AddRange(_statusEvents.MissileEvents);
+
+        // REWARDS
+        AddRange(_rewardEvents);
+
+        return events;
+    }
+
+    public IReadOnlyList<object> GetAllNonTimeCombatEvents()
+    {
+        var events = new List<object>();
+        var seen = new HashSet<object>();
+
+        void Add(object? evt)
+        {
+            if (evt != null && evt is not TimeCombatEvent && seen.Add(evt))
+            {
+                events.Add(evt);
+            }
+        }
+
+        void AddRange<T>(IEnumerable<T> source)
+        {
+            foreach (var evt in source)
+            {
+                Add(evt);
+            }
+        }
+
+        // WvW
+        AddRange(_statusEvents.WvWObjectiveStatusEvents);
+
+        // BUILD / DATE
+        Add(_metaDataEvents.EvtcVersionEvent);
+        Add(_metaDataEvents.GW2BuildEvent);
+        Add(_metaDataEvents.InstanceStartEvent);
+        Add(_metaDataEvents.LogStartEvent);
+        AddRange(_metaDataEvents.SquadCombatStartEvents);
+        AddRange(_metaDataEvents.LogNPCUpdateEvents);
+        Add(_metaDataEvents.LogEndEvent);
+        AddRange(_metaDataEvents.SquadCombatEndEvents);
+
+        // MAP
+        Add(_metaDataEvents.MapIDEvent);
+        AddRange(_metaDataEvents.MapChangeEvents);
+        Add(_metaDataEvents.ShardEvent);
+        Add(_metaDataEvents.FractalScaleEvent);
+
+        // OTHER META
+        Add(_metaDataEvents.PointOfViewEvent);
+        Add(_metaDataEvents.LanguageEvent);
+        Add(_metaDataEvents.WvWTeamsEvent);
+
+        // GUILD
+        AddRange(_metaDataEvents.GuildEvents.Values.SelectMany(x => x));
+
+        // INFO
+        AddRange(_metaDataEvents.BuffInfoEvents.Values);
+        AddRange(_metaDataEvents.BuffInfoEventsByCategory.Values.SelectMany(x => x));
+        AddRange(_metaDataEvents.SkillInfoEvents.Values);
+
+        // ERRORS
+        AddRange(_metaDataEvents.ErrorEvents);
+
+        // GUID EVENTS
+        AddRange(_metaDataEvents.EffectGUIDEventsByEffectID.Values);
+        AddRange(_metaDataEvents.EffectGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.MarkerGUIDEventsByMarkerID.Values);
+        AddRange(_metaDataEvents.MarkerGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.SpeciesGUIDEventsBySpeciesID.Values);
+        AddRange(_metaDataEvents.SpeciesGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.SkillGUIDEventsBySkillID.Values);
+        AddRange(_metaDataEvents.SkillGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.EmoteGUIDEventsByEmoteID.Values);
+        AddRange(_metaDataEvents.EmoteGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.TeamGUIDEventsByTeamID.Values);
+        AddRange(_metaDataEvents.TeamGUIDEventsByGUID.Values);
+
+        AddRange(_metaDataEvents.TransformationGUIDEventsByTransformationID.Values);
+        AddRange(_metaDataEvents.TransformationGUIDEventsByGUID.Values);
+
+        // ATTACK TARGETS
+        AddRange(_metaDataEvents.AttackTargetEvents);
+        AddRange(_metaDataEvents.AttackTargetEventsBySrc.Values);
+        AddRange(_metaDataEvents.AttackTargetEventByAttackTarget.Values);
+
+        // TICKS
+        AddRange(_metaDataEvents.TickRateEvents);
+        AddRange(_metaDataEvents.TickEvents);
 
         return events;
     }

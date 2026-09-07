@@ -11,32 +11,38 @@ public sealed partial class EventTypeFilterNode : ObservableObject
 {
     [ObservableProperty]
     private bool? isChecked = true;
-
     [ObservableProperty]
     private bool isExpanded = true;
-
     private bool _isUpdatingHierarchy;
-
     private Dictionary<Type, EventTypeFilterNode>? _typeLookup;
-
-    public string Name => EventType.Name;
+    private readonly string? _displayName;
+    public string Name => _displayName ?? EventType.Name;
     public int Count { get; }
-    public bool IsSynthetic => Count < 0;
     public Type EventType { get; }
-
     public EventTypeFilterNode? Parent { get; set; }
-
     public ObservableCollection<EventTypeFilterNode> Children { get; } = [];
-
     public event EventHandler? FilterChanged;
 
-    public EventTypeFilterNode(Type type, int count)
+    public EventTypeFilterNode(Type type, int count, string? displayName = null)
     {
         EventType = type;
         Count = count;
+        _displayName = displayName;
+    }
+    internal void SetTypeLookup(Dictionary<Type, EventTypeFilterNode> lookup)
+    {
+        _typeLookup = lookup;
     }
 
-    public static EventTypeFilterNode Build(IReadOnlyList<TimeCombatEvent> events)
+    public static IReadOnlyList<EventTypeFilterNode> Build(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<object> nonTimeEvents)
+    {
+        var timeRoot = BuildTimeEvents(timeEvents);
+        var nonTimeRoot = BuildNonTimeEvents(nonTimeEvents);
+
+        return [timeRoot, nonTimeRoot];
+    }
+
+    private static EventTypeFilterNode BuildTimeEvents(IReadOnlyList<TimeCombatEvent> events)
     {
         var nodes = events
             .GroupBy(e => e.GetType())
@@ -48,7 +54,9 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             {
                 if (!nodes.ContainsKey(baseType))
                 {
-                    nodes.Add(baseType, new EventTypeFilterNode(baseType, -1));
+                    nodes.Add(
+                        baseType,
+                        new EventTypeFilterNode(baseType, -1));
                 }
             }
         }
@@ -75,7 +83,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         }
         else
         {
-            root = new EventTypeFilterNode(typeof(TimeCombatEvent), -1);
+            root = new EventTypeFilterNode(typeof(TimeCombatEvent), -1, "Time Combat Events");
 
             foreach (var child in roots)
             {
@@ -84,14 +92,35 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             }
         }
 
-        root._typeLookup = nodes;
+        root.SetTypeLookup(nodes);
+
+        return root;
+    }
+
+    private static EventTypeFilterNode BuildNonTimeEvents(IReadOnlyList<object> events)
+    {
+        var nodes = events
+            .GroupBy(e => e.GetType())
+            .Select(g => new EventTypeFilterNode(g.Key, g.Count()))
+            .ToList();
+
+        var root = new EventTypeFilterNode(typeof(object), -1, "Non-Time Combat Events");
+
+        foreach (var node in nodes)
+        {
+            node.Parent = root;
+            root.Children.Add(node);
+        }
+
+        var lookup = nodes.ToDictionary(x => x.EventType, x => x);
+        root.SetTypeLookup(lookup);
 
         return root;
     }
 
     public bool IsEventVisible(Type eventType)
     {
-        return GetRoot()._typeLookup?.TryGetValue(eventType, out var node) == true && node.IsChecked != false;
+        return _typeLookup?.TryGetValue(eventType, out var node) == true && node.IsChecked != false;
     }
 
     partial void OnIsCheckedChanged(bool? value)

@@ -289,7 +289,7 @@
 
                     <TabItem Header="Events">
 
-                        <Grid ColumnDefinitions="320,*">
+                        <Grid ColumnDefinitions="500,*">
 
                             <Border Grid.Column="0"
                                     BorderBrush="#444"
