@@ -1,5 +1,8 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 using GW2EIEvtcParser;
+using GW2EIParserAvalonia.InspectorContent;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.ViewModels;
 
@@ -21,5 +24,21 @@ public partial class InspectorWindow : Window
         InitializeComponent();
 
         DataContext = new InspectorViewModel(log);
+    }
+
+    private async void CopyGuid_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem || menuItem.CommandParameter is not ContentGUIDModel model)
+        {
+            return;
+        }
+
+        var clipboard = GetTopLevel(this)?.Clipboard;
+        if (clipboard is null)
+        {
+            return;
+        }
+
+        await clipboard.SetTextAsync(model.GUID.ToString());
     }
 }

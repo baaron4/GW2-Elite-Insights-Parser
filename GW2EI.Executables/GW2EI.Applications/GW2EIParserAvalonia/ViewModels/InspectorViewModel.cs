@@ -26,6 +26,13 @@ public partial class InspectorViewModel : ObservableObject
     public IReadOnlyList<EventTypeFilterNode> EventTypeFilterRoots { get; }
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
 
+    public IReadOnlyList<ContentGUIDModel> Effects { get; }
+    public IReadOnlyList<ContentGUIDModel> Markers { get; }
+    public IReadOnlyList<ContentGUIDModel> Species { get; }
+    public IReadOnlyList<ContentGUIDModel> Teams { get; }
+    public IReadOnlyList<ContentGUIDModel> Emotes { get; }
+    public IReadOnlyList<ContentGUIDModel> Transformations { get; }
+
     public int CombatItemCount => CombatItems.Count;
     public int AgentCount => AgentsData.Count;
     public int SkillCount => SkillsData.Count;
@@ -38,6 +45,14 @@ public partial class InspectorViewModel : ObservableObject
 
         _allEvents = log.CombatData.GetAllEvents();
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
+
+        var contentGUIDEvents = _allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
+        Effects = contentGUIDEvents.OfType<EffectGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
+        Markers = contentGUIDEvents.OfType<MarkerGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
+        Species = contentGUIDEvents.OfType<SpeciesGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
+        Teams = contentGUIDEvents.OfType<TeamGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
+        Emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
+        Transformations = contentGUIDEvents.OfType<TransformationGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
 
         Events = _allEvents.Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
         EventTypeFilterRoots = EventTypeFilterNode.Build(_allEvents, _allNonTimeEvents);
