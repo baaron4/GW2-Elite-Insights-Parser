@@ -29,7 +29,7 @@
                               Margin="8">
 
                             <Grid Grid.Row="0"
-                                  RowDefinitions="Auto,Auto"
+                                  RowDefinitions="Auto,Auto,Auto"
                                   ColumnDefinitions="Auto,*"
                                   Margin="0,0,0,8">
 
@@ -54,6 +54,18 @@
                                          Grid.Column="1"
                                          Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          PlaceholderText="Skill name"
+                                         Margin="0,4,0,0"/>
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           Text="GUID"
+                                           VerticalAlignment="Center"
+                                           Margin="0,4,8,0"/>
+
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="GUID"
                                          Margin="0,4,0,0"/>
 
                             </Grid>
@@ -453,7 +465,7 @@
 
                                 <DataGridTextColumn Header="GUID"
                                                     Binding="{Binding GUID}"
-                                                    Width="250">
+                                                    Width="350">
                                     <DataGridTextColumn.CellTheme>
                                         <ControlTheme TargetType="DataGridCell"
                                                       BasedOn="{StaticResource {x:Type DataGridCell}}">
@@ -563,7 +575,7 @@
 
                                 <DataGridTextColumn Header="GUID"
                                                     Binding="{Binding GUID}"
-                                                    Width="250">
+                                                    Width="350">
                                     <DataGridTextColumn.CellTheme>
                                         <ControlTheme TargetType="DataGridCell"
                                                       BasedOn="{StaticResource {x:Type DataGridCell}}">

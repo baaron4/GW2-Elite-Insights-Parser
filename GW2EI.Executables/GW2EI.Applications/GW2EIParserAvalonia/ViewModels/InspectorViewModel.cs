@@ -21,6 +21,8 @@ public partial class InspectorViewModel : ObservableObject
     private string? skillIdFilter;
     [ObservableProperty]
     private string? skillNameFilter;
+    [ObservableProperty]
+    private string? guidFilter;
 
     private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
@@ -85,24 +87,29 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnSkillIdFilterChanged(string? value)
     {
-        RefreshVisibleEvents(value, SkillNameFilter);
+        RefreshVisibleEvents(value, SkillNameFilter, GuidFilter);
     }
 
     partial void OnSkillNameFilterChanged(string? value)
     {
-        RefreshVisibleEvents(SkillIdFilter, value);
+        RefreshVisibleEvents(SkillIdFilter, value, GuidFilter);
+    }
+
+    partial void OnGuidFilterChanged(string? value)
+    {
+        RefreshVisibleEvents(SkillIdFilter, SkillNameFilter, value);
     }
 
     private void RefreshVisibleEvents()
     {
-        RefreshVisibleEvents(SkillIdFilter, SkillNameFilter);
+        RefreshVisibleEvents(SkillIdFilter, SkillNameFilter, GuidFilter);
     }
 
-    private void RefreshVisibleEvents(string? skillIdFilter, string? skillNameFilter)
+    private void RefreshVisibleEvents(string? skillIdFilter, string? skillNameFilter, string? guidFilter)
     {
         long? skillId = null;
 
-        if (!string.IsNullOrEmpty(skillIdFilter))
+        if (!string.IsNullOrWhiteSpace(skillIdFilter))
         {
             if (!long.TryParse(skillIdFilter, out var parsedSkillId))
             {
@@ -113,22 +120,20 @@ public partial class InspectorViewModel : ObservableObject
             skillId = parsedSkillId;
         }
 
-        bool hasSkillNameFilter = !string.IsNullOrEmpty(skillNameFilter);
+        bool hasSkillNameFilter = !string.IsNullOrWhiteSpace(skillNameFilter);
+        bool hasGuidFilter = !string.IsNullOrWhiteSpace(guidFilter);
 
         var visibleEvents = Events.Where(eventModel =>
         {
-            if (!EventTypeFilterRoots.Any(root => root.IsEventVisible(eventModel.Event.GetType())))
+            if (!EventTypeFilterRoots.Any(root =>
+                    root.IsEventVisible(eventModel.Event.GetType())))
             {
                 return false;
             }
 
-            if (skillId is null && !hasSkillNameFilter)
-            {
-                return true;
-            }
-
             long? eventSkillId = null;
             string? eventSkillName = null;
+            var eventGuids = new List<GUID>();
 
             switch (eventModel.Event)
             {
@@ -136,19 +141,24 @@ public partial class InspectorViewModel : ObservableObject
                     eventSkillId = castEvent.SkillID;
                     eventSkillName = castEvent.Skill.Name;
                     break;
+
                 case SkillEvent skillEvent:
                     eventSkillId = skillEvent.SkillID;
                     eventSkillName = skillEvent.Skill.Name;
                     break;
+
                 case BuffEvent buffEvent:
                     eventSkillId = buffEvent.BuffID;
                     eventSkillName = buffEvent.BuffSkill.Name;
                     break;
-            }
 
-            if (eventSkillId is null)
-            {
-                return false;
+                case IDToGUIDEvent guidEvent:
+                    eventGuids.Add(guidEvent.GUID);
+                    break;
+
+                case EffectEvent guidEffect:
+                    eventGuids.Add(guidEffect.GUIDEvent.GUID);
+                    break;
             }
 
             if (skillId is not null && eventSkillId != skillId)
@@ -156,7 +166,12 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (skillNameFilter is not null && eventSkillName?.Contains(skillNameFilter, StringComparison.OrdinalIgnoreCase) != true)
+            if (hasSkillNameFilter && eventSkillName?.Contains(skillNameFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            {
+                return false;
+            }
+
+            if (hasGuidFilter && !eventGuids.Any(guid => guid.ToString().Contains(guidFilter!, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
