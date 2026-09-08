@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace GW2EIParserWinForms.tst;
 
 [TestFixture]
-public class ParsingErrors
+internal class ParsingErrors
 {
     [TestCase("20231017-143845.zevtc", "Log is longer than 24h")]
     //TODO(Rennorb) This one doesn't throw? Only reports an error when run in the ui tool for some reason.

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8-windows</TargetFramework>
-        <LangVersion>12.0</LangVersion>
+        <LangVersion>latest</LangVersion>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -79,7 +79,7 @@
         <Content Include="Content\ArenaNet\LI.ico" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+        <PackageReference Include="System.Resources.Extensions" Version="10.0.11" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Services\GW2EIParserCommons\GW2EIParserCommons.csproj" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIGW2API\GW2EIGW2API.csproj" />
     </ItemGroup>

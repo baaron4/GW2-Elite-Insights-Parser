@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>12.0</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <Version>0.328.0.1</Version>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -49,7 +49,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.11" />
     </ItemGroup>
 
     <ItemGroup>

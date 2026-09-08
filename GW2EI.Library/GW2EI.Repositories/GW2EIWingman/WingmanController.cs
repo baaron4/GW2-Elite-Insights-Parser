@@ -214,7 +214,7 @@ public static class WingmanController
         var data = new Dictionary<string, string> {
             { "account", account },
         };
-        Func<HttpContent> contentCreator = () =>
+        HttpContent contentCreator()
         {
             var multiPartContent = new MultipartFormDataContent();
             var fileContent = new ByteArrayContent(fileBytes);
@@ -230,7 +230,7 @@ public static class WingmanController
                 multiPartContent.Add(content, pair.Key);
             }
             return multiPartContent;
-        };
+        }
 
         string? response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, null, HttpMethod.Post, contentCreator);
         return response != null && response != "False";
@@ -244,7 +244,7 @@ public static class WingmanController
         {
             traceHandler(requestName + " tentative");
             var webService = new Uri(@url);
-            using var requestMessage = new HttpRequestMessage(method, webService);
+            var requestMessage = new HttpRequestMessage(method, webService);
             requestMessage.Headers.ExpectContinue = false;
 
             if (content != null)
@@ -285,6 +285,10 @@ public static class WingmanController
             {
                 traceHandler(requestName + " tentaive failed");
                 traceHandler("Reason: " + e.Message);
+            }
+            finally
+            {
+                requestMessage.Dispose();
             }
         }
         return null;

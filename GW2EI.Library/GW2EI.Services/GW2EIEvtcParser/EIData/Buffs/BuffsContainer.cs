@@ -194,7 +194,7 @@ public class BuffsContainer
         //
         _buffSourceFinder = GetBuffSourceFinder(combatData, [.. BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)]);
         // Band aid for the stack type situation with fake inactive/infinite durations
-        if (combatData.HasStackIDs)
+        if (combatData.HasStackIDs && combatData.HasExtraProcessing)
         {
             var stackTypeBuffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss || x.StackType == BuffStackType.Stacking);
             foreach (Buff buff in stackTypeBuffs)

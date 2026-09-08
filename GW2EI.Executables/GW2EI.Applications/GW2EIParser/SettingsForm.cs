@@ -4,7 +4,7 @@ using GW2EIParserCommons.Properties;
 
 namespace GW2EIParserWinForms;
 
-public partial class SettingsForm : Form
+internal partial class SettingsForm : Form
 {
     public event EventHandler SettingsClosedEvent;
     public event EventHandler SettingsLoadedEvent;
@@ -128,18 +128,16 @@ public partial class SettingsForm : Form
     {
         try
         {
-            using (var fbd = new FolderBrowserDialog())
+            using var fbd = new FolderBrowserDialog();
+            if (!string.IsNullOrWhiteSpace(_programSettings.OutLocation) && Directory.Exists(_programSettings.OutLocation))
             {
-                if (!string.IsNullOrWhiteSpace(_programSettings.OutLocation) && Directory.Exists(_programSettings.OutLocation))
-                {
-                    fbd.ShowNewFolderButton = true;
-                    fbd.SelectedPath = _programSettings.OutLocation;
-                }
-                DialogResult result = fbd.ShowDialog();
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
-                {
-                    TxtCustomSaveLocation.Text = fbd.SelectedPath;
-                }
+                fbd.ShowNewFolderButton = true;
+                fbd.SelectedPath = _programSettings.OutLocation;
+            }
+            DialogResult result = fbd.ShowDialog();
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
+            {
+                TxtCustomSaveLocation.Text = fbd.SelectedPath;
             }
         }
         catch { }
@@ -336,20 +334,18 @@ public partial class SettingsForm : Form
                 path = null;
             }
 
-            using (var fbd = new FolderBrowserDialog())
-            {
-                fbd.ShowNewFolderButton = false;
-                fbd.SelectedPath = path;
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            fbd.ShowNewFolderButton = false;
+            fbd.SelectedPath = path;
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    Settings.Default.AutoAddPath = fbd.SelectedPath;
-                }
-                else
-                {
-                    ChkAutoAdd.Checked = false;
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                Settings.Default.AutoAddPath = fbd.SelectedPath;
+            }
+            else
+            {
+                ChkAutoAdd.Checked = false;
             }
         }
         Settings.Default.AutoAdd = ChkAutoAdd.Checked;
@@ -382,18 +378,16 @@ public partial class SettingsForm : Form
     private void BtnDumpSettingsClicked(object sender, EventArgs e)
     {
         string dump = CustomSettingsManager.DumpSettings();
-        using (var saveFile = new SaveFileDialog())
+        using var saveFile = new SaveFileDialog();
+        saveFile.Filter = "Conf file|*.conf";
+        saveFile.Title = "Save a Configuration file";
+        DialogResult result = saveFile.ShowDialog();
+        if (saveFile.FileName.Length > 0)
         {
-            saveFile.Filter = "Conf file|*.conf";
-            saveFile.Title = "Save a Configuration file";
-            DialogResult result = saveFile.ShowDialog();
-            if (saveFile.FileName.Length > 0)
-            {
-                var fs = (FileStream)saveFile.OpenFile();
-                byte[] settings = new UTF8Encoding(true).GetBytes(dump);
-                fs.Write(settings, 0, settings.Length);
-                fs.Close();
-            }
+            var fs = (FileStream)saveFile.OpenFile();
+            byte[] settings = new UTF8Encoding(true).GetBytes(dump);
+            fs.Write(settings, 0, settings.Length);
+            fs.Close();
         }
     }
 
@@ -495,18 +489,16 @@ public partial class SettingsForm : Form
     {
         try
         {
-            using (var fbd = new FolderBrowserDialog())
+            using var fbd = new FolderBrowserDialog();
+            if (!string.IsNullOrWhiteSpace(_programSettings.HtmlExternalScriptsPath) && Directory.Exists(_programSettings.HtmlExternalScriptsPath))
             {
-                if (!string.IsNullOrWhiteSpace(_programSettings.HtmlExternalScriptsPath) && Directory.Exists(_programSettings.HtmlExternalScriptsPath))
-                {
-                    fbd.ShowNewFolderButton = true;
-                    fbd.SelectedPath = _programSettings.HtmlExternalScriptsPath;
-                }
-                DialogResult result = fbd.ShowDialog();
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
-                {
-                    TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
-                }
+                fbd.ShowNewFolderButton = true;
+                fbd.SelectedPath = _programSettings.HtmlExternalScriptsPath;
+            }
+            DialogResult result = fbd.ShowDialog();
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath) && Directory.Exists(fbd.SelectedPath))
+            {
+                TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
             }
         }
         catch { }

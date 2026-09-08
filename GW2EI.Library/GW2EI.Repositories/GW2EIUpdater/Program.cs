@@ -24,6 +24,7 @@ internal static class Program
                     if (!process.WaitForExit(500))
                     {
                         process.Kill();
+                        process.WaitForExit();
                     }
                 }
                 catch
@@ -38,28 +39,57 @@ internal static class Program
             {
                 checker = Process.GetProcessesByName(processName);
             }
-            if (checker.Length == 0)
+            try
             {
-                //Now Create all of the directories
-                foreach (string dirPath in Directory.GetDirectories(localDirectory, "*", SearchOption.AllDirectories))
+                var maxTries = 10;
+                if (checker.Length == 0)
                 {
-                    Directory.CreateDirectory(dirPath.Replace(localDirectory, originDirectory));
-                }
+                    //Now Create all of the directories
+                    foreach (string dirPath in Directory.GetDirectories(localDirectory, "*", SearchOption.AllDirectories))
+                    {
+                        for (int i = 0; i < maxTries; i++)
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory(dirPath.Replace(localDirectory, originDirectory));
+                            }
+                            catch (IOException) when (i < maxTries - 1)
+                            {
+                                Thread.Sleep(100);
+                            }
+                        }
+                    }
 
-                //Copy all the files & Replaces any files with the same name
-                foreach (string newPath in Directory.GetFiles(localDirectory, "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(localDirectory, originDirectory), true);
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(localDirectory, "*.*", SearchOption.AllDirectories))
+                    {
+                        for (int i = 0; i < maxTries; i++)
+                        {
+                            try
+                            {
+                                File.Copy(newPath, newPath.Replace(localDirectory, originDirectory), true);
+                            }
+                            catch (IOException) when (i < maxTries - 1)
+                            {
+                                Thread.Sleep(100);
+                            }
+                        }
+                    }
                 }
+                // Start Elite Insights to finish the update
+                Process.Start(new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = Path.Combine(originDirectory, fullProcessName),
+                    Arguments = "",
+                });
             }
-
-            // Start Elite Insights to finish the update
-            Process.Start(new ProcessStartInfo
+            catch
             {
-                UseShellExecute = true,
-                FileName = Path.Combine(originDirectory, fullProcessName),
-                Arguments = "",
-            });
+                Console.WriteLine("Automatic update failed, please update the application manually.");
+                Console.WriteLine("Press any key to continue.");
+                _ = Console.ReadKey();
+            }
         }
 
         return 0;

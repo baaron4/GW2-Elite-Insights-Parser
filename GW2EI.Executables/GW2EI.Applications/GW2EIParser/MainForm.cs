@@ -23,6 +23,8 @@ internal sealed partial class MainForm : Form
     private int _fileNameSorting = 0;
 
     private readonly ProgramHelper _programHelper;
+
+    private const string AssetName = "GW2EIWinForms.zip";
     private MainForm(ProgramHelper programHelper)
     {
         _programHelper = programHelper;
@@ -55,7 +57,7 @@ internal sealed partial class MainForm : Form
             Task.Factory.StartNew(async () =>
             {
                 List<string> traces = [];
-                Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+                Updater.UpdateInfo? info = await Updater.CheckForUpdate(AssetName, traces);
                 if (info != null)
                 {
                     Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
@@ -713,17 +715,13 @@ internal sealed partial class MainForm : Form
         }
         if (!File.Exists(_traceFileName))
         {
-            using (StreamWriter sw = File.CreateText(_traceFileName))
-            {
-                sw.WriteLine(message);
-            }
+            using StreamWriter sw = File.CreateText(_traceFileName);
+            sw.WriteLine(message);
         }
         else
         {
-            using (StreamWriter sw = File.AppendText(_traceFileName))
-            {
-                sw.WriteLine(message);
-            }
+            using StreamWriter sw = File.AppendText(_traceFileName);
+            sw.WriteLine(message);
         }
     }
 
@@ -804,7 +802,7 @@ internal sealed partial class MainForm : Form
             var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             Settings.Default.UpdateLastChecked = time;
             List<string> traces = [];
-            Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EIWinForms.zip", traces);
+            Updater.UpdateInfo? info = await Updater.CheckForUpdate(AssetName, traces);
             traces.ForEach(x => AddTraceMessage("Updater: " + x));
 #if DEBUG
             var force = true;
@@ -816,6 +814,7 @@ internal sealed partial class MainForm : Form
                 if (info.Value.UpdateAvailable || force)
                 {
                     AddTraceMessage("Updater: Update found, opening UI");
+#pragma warning disable CA1849 // Call async methods when in an async method
                     Invoke(() => // Must run on UI thread
                     {
                         Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
@@ -825,6 +824,7 @@ internal sealed partial class MainForm : Form
                         updaterForm.UpdateTracesEvent += UpdateTracesWatcher;
                         updaterForm.ShowDialog(this);
                     });
+#pragma warning restore CA1849 // Call async methods when in an async method
                 }
                 else
                 {
