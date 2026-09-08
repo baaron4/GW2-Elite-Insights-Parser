@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>12.0</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>GW2EIGW2API</RootNamespace>
@@ -40,7 +40,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Text.Json" Version="8.0.5" />
+      <PackageReference Include="System.Text.Json" Version="10.0.11" />
     </ItemGroup>
 
 </Project>
