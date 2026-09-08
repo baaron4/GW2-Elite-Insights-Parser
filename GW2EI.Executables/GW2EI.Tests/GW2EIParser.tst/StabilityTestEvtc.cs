@@ -12,13 +12,13 @@ namespace GW2EIParserWinForms.tst;
 
 
 [TestFixture]
-public class StabilityTestEvtc
+internal class StabilityTestEvtc
 {
     internal sealed class EVTCTestItem
     {
         public readonly string File;
         public bool Failed { get; private set; }
-        public string FailedMessage { get; private set; }
+        public string? FailedMessage { get; private set; }
         public EVTCTestItem(string file)
         {
             File = file;
@@ -107,28 +107,22 @@ public class StabilityTestEvtc
                 {
                     File.Copy(evtcTestItem.File, testLocation + "Logs/" + evtcName, true);
                 }
-                dict[evtcName] = evtcTestItem.FailedMessage;
+                dict[evtcName] = evtcTestItem.FailedMessage ?? "";
             }
         }
 
-        using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
+        using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
+        using var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8);
+        var serializer = new JsonSerializer
         {
-            using (var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8))
-            {
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = TestHelper.DefaultJsonContractResolver
-                };
-                using (var writer = new JsonTextWriter(sw)
-                {
-                    Formatting = Formatting.Indented
-                })
-                {
-                    serializer.Serialize(writer, dict);
-                }
-            }
-        }
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = TestHelper.DefaultJsonContractResolver
+        };
+        using var writer = new JsonTextWriter(sw)
+        {
+            Formatting = Formatting.Indented
+        };
+        serializer.Serialize(writer, dict);
     }
 
 

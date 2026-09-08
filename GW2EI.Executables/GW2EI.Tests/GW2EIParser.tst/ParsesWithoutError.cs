@@ -6,7 +6,7 @@ using System.Collections;
 namespace GW2EIParserWinForms.tst.Generated;
 
 [TestFixtureSource(typeof(ParsesSuccessfully), nameof(GenerateTests))]
-public class ParsesSuccessfully
+internal class ParsesSuccessfully
 {
     public static IEnumerable GenerateTests => EnumerateRecursively("TestInput/ShouldParse");
 
@@ -32,7 +32,7 @@ public class ParsesSuccessfully
     }
 
 
-    string path;
+    private readonly string path;
     public ParsesSuccessfully(string path) => this.path = path;
 
     [Test]

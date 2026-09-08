@@ -54,7 +54,7 @@ public sealed partial class MainWindow : Window, IDisposable
 
         var window = new SettingsWindow(viewModel.SettingsViewModel, _trace);
         window.Show();
-        window.Closed += (object? sender, EventArgs e) => UpdateFileWatcher();
+        window.Closed += (sender, e) => UpdateFileWatcher();
     }
 
     private async void PopulateButton_Click(object? sender, RoutedEventArgs e)

@@ -46,11 +46,9 @@ internal class GW2SpecAPIController
         if (fi.Exists && fi.Length != 0)
         {
             Console.WriteLine("Reading SpecList");
-            using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var specList = JsonSerializer.Deserialize<List<GW2APISpec>>(reader, GW2APIUtilities.DeserializerSettings);
-                _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>(specList);
-            }
+            using var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            var specList = JsonSerializer.Deserialize<List<GW2APISpec>>(reader, GW2APIUtilities.DeserializerSettings);
+            _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>(specList);
         }
         else
         {

@@ -715,17 +715,13 @@ internal sealed partial class MainForm : Form
         }
         if (!File.Exists(_traceFileName))
         {
-            using (StreamWriter sw = File.CreateText(_traceFileName))
-            {
-                sw.WriteLine(message);
-            }
+            using StreamWriter sw = File.CreateText(_traceFileName);
+            sw.WriteLine(message);
         }
         else
         {
-            using (StreamWriter sw = File.AppendText(_traceFileName))
-            {
-                sw.WriteLine(message);
-            }
+            using StreamWriter sw = File.AppendText(_traceFileName);
+            sw.WriteLine(message);
         }
     }
 
@@ -818,6 +814,7 @@ internal sealed partial class MainForm : Form
                 if (info.Value.UpdateAvailable || force)
                 {
                     AddTraceMessage("Updater: Update found, opening UI");
+#pragma warning disable CA1849 // Call async methods when in an async method
                     Invoke(() => // Must run on UI thread
                     {
                         Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
@@ -827,6 +824,7 @@ internal sealed partial class MainForm : Form
                         updaterForm.UpdateTracesEvent += UpdateTracesWatcher;
                         updaterForm.ShowDialog(this);
                     });
+#pragma warning restore CA1849 // Call async methods when in an async method
                 }
                 else
                 {

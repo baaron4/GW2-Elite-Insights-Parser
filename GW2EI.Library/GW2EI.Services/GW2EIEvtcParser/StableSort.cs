@@ -1666,7 +1666,7 @@ public static unsafe class StableSort<T>
         {
             using var mem = new ArrayPoolReturner<T>(array.Length, Pool);
             var swap = mem.AsSpan();
-            if (swap == null) //TODO(Rennorb) 
+            if (swap.IsEmpty) //TODO(Rennorb) 
             {
                 quadsort(array, cmp);
                 return;

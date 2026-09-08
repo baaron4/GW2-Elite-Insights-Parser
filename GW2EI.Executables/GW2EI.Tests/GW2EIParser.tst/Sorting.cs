@@ -6,14 +6,14 @@ namespace GW2EIEvtcParser.tst.Internals;
 
 sealed class Sorting
 {
-    public sealed class TestEvent(long t, int order) : TimeCombatEvent(t)
+    internal sealed class TestEvent(long t, int order) : TimeCombatEvent(t)
     {
         public int Order = order;
 
         public override string ToString() => $"({Time} {Order})";
 
 
-        public sealed class Comparer : IComparer
+        internal sealed class Comparer : IComparer
         {
             public static readonly Comparer Instance = new();
             public int Compare(object? x, object? y)
@@ -195,7 +195,7 @@ sealed class Sort_Generated
     }
 
 
-    List<Sorting.TestEvent> data;
+    private readonly List<Sorting.TestEvent> data;
     public Sort_Generated(List<Sorting.TestEvent> data) => this.data = data;
 
     [Test]
