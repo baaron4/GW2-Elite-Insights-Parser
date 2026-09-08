@@ -25,46 +25,78 @@
                             BorderBrush="#444"
                             BorderThickness="0,0,1,0">
 
-                        <TreeView ItemsSource="{Binding EventTypeFilterRoots}">
+                        <Grid RowDefinitions="Auto,*"
+                              Margin="8">
 
-                            <TreeView.Styles>
+                            <Grid Grid.Row="0"
+                                  RowDefinitions="Auto,Auto"
+                                  ColumnDefinitions="Auto,*"
+                                  Margin="0,0,0,8">
 
-                                <Style Selector="TreeViewItem">
-                                    <Setter Property="IsExpanded"
-                                            Value="{Binding IsExpanded, Mode=TwoWay}"
-                                            x:CompileBindings="False"/>
-                                </Style>
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           Text="Skill ID"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,4"/>
 
-                            </TreeView.Styles>
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Text="{Binding SkillIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="Skill ID"/>
 
-                            <TreeView.ItemTemplate>
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           Text="Skill Name"
+                                           VerticalAlignment="Center"
+                                           Margin="0,4,8,0"/>
 
-                                <TreeDataTemplate ItemsSource="{Binding Children}">
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="Skill name"
+                                         Margin="0,4,0,0"/>
 
-                                    <Grid ColumnDefinitions="Auto,*,Auto"
-                                          Margin="2">
+                            </Grid>
 
-                                        <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                                  VerticalAlignment="Center"/>
+                            <TreeView Grid.Row="1"
+                                      ItemsSource="{Binding EventTypeFilterRoots}">
 
-                                        <TextBlock Grid.Column="1"
-                                                   Text="{Binding Name}"
-                                                   Margin="6,0"
-                                                   VerticalAlignment="Center"/>
+                                <TreeView.Styles>
+                                    <Style Selector="TreeViewItem">
+                                        <Setter Property="IsExpanded"
+                                                Value="{Binding IsExpanded, Mode=TwoWay}"
+                                                x:CompileBindings="False"/>
+                                    </Style>
+                                </TreeView.Styles>
 
-                                        <TextBlock Grid.Column="2"
-                                                   Text="{Binding Count}"
-                                                   Margin="8,0"
-                                                   Opacity="0.7"
-                                                   VerticalAlignment="Center"/>
+                                <TreeView.ItemTemplate>
+                                    <TreeDataTemplate ItemsSource="{Binding Children}">
 
-                                    </Grid>
+                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                              Margin="2">
 
-                                </TreeDataTemplate>
+                                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"/>
 
-                            </TreeView.ItemTemplate>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       Margin="6,0"
+                                                       VerticalAlignment="Center"/>
 
-                        </TreeView>
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding Count}"
+                                                       Margin="8,0"
+                                                       Opacity="0.7"
+                                                       VerticalAlignment="Center"/>
+
+                                        </Grid>
+
+                                    </TreeDataTemplate>
+                                </TreeView.ItemTemplate>
+
+                            </TreeView>
+
+                        </Grid>
 
                     </Border>
 

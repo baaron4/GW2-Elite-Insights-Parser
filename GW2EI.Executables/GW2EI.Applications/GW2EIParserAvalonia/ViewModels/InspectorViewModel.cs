@@ -17,6 +17,10 @@ public partial class InspectorViewModel : ObservableObject
     private AgentDataModel? selectedAgent;
     [ObservableProperty]
     private SkillDataModel? selectedSkill;
+    [ObservableProperty]
+    private string? skillIdFilter;
+    [ObservableProperty]
+    private string? skillNameFilter;
 
     private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
@@ -63,7 +67,7 @@ public partial class InspectorViewModel : ObservableObject
         Emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
         Transformations = contentGUIDEvents.OfType<TransformationGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
 
-        Events = _allTimeEvents.Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
+        Events = _allTimeEvents.OrderBy(x => x.Time).Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
         EventTypeFilterRoots = EventTypeFilterNode.Build(_allTimeEvents, _allNonTimeEvents);
 
         foreach (var root in EventTypeFilterRoots)
@@ -79,12 +83,86 @@ public partial class InspectorViewModel : ObservableObject
         RefreshVisibleEvents();
     }
 
+    partial void OnSkillIdFilterChanged(string? value)
+    {
+        RefreshVisibleEvents(value, SkillNameFilter);
+    }
+
+    partial void OnSkillNameFilterChanged(string? value)
+    {
+        RefreshVisibleEvents(SkillIdFilter, value);
+    }
+
     private void RefreshVisibleEvents()
     {
-        IEnumerable<EventModel> visibleEvents = Events
-            .Where(eventModel =>
-                EventTypeFilterRoots.Any(root =>
-                    root.IsEventVisible(eventModel.Event.GetType())));
+        RefreshVisibleEvents(SkillIdFilter, SkillNameFilter);
+    }
+
+    private void RefreshVisibleEvents(string? skillIdFilter, string? skillNameFilter)
+    {
+        long? skillId = null;
+
+        if (!string.IsNullOrEmpty(skillIdFilter))
+        {
+            if (!long.TryParse(skillIdFilter, out var parsedSkillId))
+            {
+                VisibleEvents.Clear();
+                return;
+            }
+
+            skillId = parsedSkillId;
+        }
+
+        bool hasSkillNameFilter = !string.IsNullOrEmpty(skillNameFilter);
+
+        var visibleEvents = Events.Where(eventModel =>
+        {
+            if (!EventTypeFilterRoots.Any(root => root.IsEventVisible(eventModel.Event.GetType())))
+            {
+                return false;
+            }
+
+            if (skillId is null && !hasSkillNameFilter)
+            {
+                return true;
+            }
+
+            long? eventSkillId = null;
+            string? eventSkillName = null;
+
+            switch (eventModel.Event)
+            {
+                case CastEvent castEvent:
+                    eventSkillId = castEvent.SkillID;
+                    eventSkillName = castEvent.Skill.Name;
+                    break;
+                case SkillEvent skillEvent:
+                    eventSkillId = skillEvent.SkillID;
+                    eventSkillName = skillEvent.Skill.Name;
+                    break;
+                case BuffEvent buffEvent:
+                    eventSkillId = buffEvent.BuffID;
+                    eventSkillName = buffEvent.BuffSkill.Name;
+                    break;
+            }
+
+            if (eventSkillId is null)
+            {
+                return false;
+            }
+
+            if (skillId is not null && eventSkillId != skillId)
+            {
+                return false;
+            }
+
+            if (skillNameFilter is not null && eventSkillName?.Contains(skillNameFilter, StringComparison.OrdinalIgnoreCase) != true)
+            {
+                return false;
+            }
+
+            return true;
+        });
 
         VisibleEvents.ReplaceRange(visibleEvents);
     }
