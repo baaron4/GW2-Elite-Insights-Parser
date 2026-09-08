@@ -1274,7 +1274,7 @@ partial class CombatData
 
     #endregion GADGET_CAPTURE
 
-    public IReadOnlyList<TimeCombatEvent> GetAllEvents()
+    public IReadOnlyList<TimeCombatEvent> GetAllTimeCombatEvents()
     {
         var events = new List<TimeCombatEvent>();
         var seen = new HashSet<TimeCombatEvent>();

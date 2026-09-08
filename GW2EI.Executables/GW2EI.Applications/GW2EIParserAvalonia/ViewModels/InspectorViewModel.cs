@@ -18,7 +18,7 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private SkillDataModel? selectedSkill;
 
-    private readonly IReadOnlyList<TimeCombatEvent> _allEvents;
+    private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
 
     public IReadOnlyList<CombatItemModel> CombatItems { get; } = [];
@@ -51,7 +51,7 @@ public partial class InspectorViewModel : ObservableObject
         AgentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).OrderBy(agent => agent.ID).ToList();
         SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList();
 
-        _allEvents = log.CombatData.GetAllEvents();
+        _allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
 
         var contentGUIDEvents = _allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
@@ -63,8 +63,8 @@ public partial class InspectorViewModel : ObservableObject
         Emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
         Transformations = contentGUIDEvents.OfType<TransformationGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
 
-        Events = _allEvents.Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
-        EventTypeFilterRoots = EventTypeFilterNode.Build(_allEvents, _allNonTimeEvents);
+        Events = _allTimeEvents.Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
+        EventTypeFilterRoots = EventTypeFilterNode.Build(_allTimeEvents, _allNonTimeEvents);
 
         foreach (var root in EventTypeFilterRoots)
         {
