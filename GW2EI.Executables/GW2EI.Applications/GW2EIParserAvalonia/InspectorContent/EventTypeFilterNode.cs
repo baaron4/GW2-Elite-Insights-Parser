@@ -17,7 +17,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
     private Dictionary<Type, EventTypeFilterNode>? _typeLookup;
     private readonly string? _displayName;
     public string Name => _displayName ?? EventType.Name;
-    public int Count { get; }
+    public int Count { get; private set; }
     public Type EventType { get; }
     public EventTypeFilterNode? Parent { get; set; }
     public ObservableCollection<EventTypeFilterNode> Children { get; } = [];
@@ -44,9 +44,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
 
     private static EventTypeFilterNode BuildTimeEvents(IReadOnlyList<TimeCombatEvent> events)
     {
-        var nodes = events
-            .GroupBy(e => e.GetType())
-            .ToDictionary(g => g.Key, g => new EventTypeFilterNode(g.Key, g.Count()));
+        var nodes = events.GroupBy(e => e.GetType()).ToDictionary(g => g.Key, g => new EventTypeFilterNode(g.Key, g.Count()));
 
         foreach (var node in nodes.Values.ToList())
         {
@@ -54,9 +52,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             {
                 if (!nodes.ContainsKey(baseType))
                 {
-                    nodes.Add(
-                        baseType,
-                        new EventTypeFilterNode(baseType, -1));
+                    nodes.Add(baseType, new EventTypeFilterNode(baseType, -1));
                 }
             }
         }
@@ -91,6 +87,8 @@ public sealed partial class EventTypeFilterNode : ObservableObject
                 root.Children.Add(child);
             }
         }
+
+        CalculateParentCounts(root);
 
         root.SetTypeLookup(nodes);
 
@@ -202,5 +200,16 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             yield return baseType;
             baseType = baseType.BaseType;
         }
+    }
+
+    private static int CalculateParentCounts(EventTypeFilterNode node)
+    {
+        if (node.Children.Count == 0)
+        {
+            return node.Count;
+        }
+
+        node.Count = node.Children.Sum(CalculateParentCounts);
+        return node.Count;
     }
 }
