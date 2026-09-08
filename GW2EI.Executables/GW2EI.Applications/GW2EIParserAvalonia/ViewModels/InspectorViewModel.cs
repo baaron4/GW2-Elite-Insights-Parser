@@ -13,6 +13,10 @@ public partial class InspectorViewModel : ObservableObject
 {
     [ObservableProperty]
     private EventModel? selectedEvent;
+    [ObservableProperty]
+    private AgentDataModel? selectedAgent;
+    [ObservableProperty]
+    private SkillDataModel? selectedSkill;
 
     private readonly IReadOnlyList<TimeCombatEvent> _allEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
@@ -24,7 +28,10 @@ public partial class InspectorViewModel : ObservableObject
     public IReadOnlyList<EventModel> Events { get; }
     public BulkObservableCollection<EventModel> VisibleEvents { get; } = [];
     public IReadOnlyList<EventTypeFilterNode> EventTypeFilterRoots { get; }
+
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
+    public BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
+    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
 
     public IReadOnlyList<ContentGUIDModel> Skills { get; }
     public IReadOnlyList<ContentGUIDModel> Effects { get; }
@@ -41,8 +48,8 @@ public partial class InspectorViewModel : ObservableObject
     public InspectorViewModel(RawEvtcLog log)
     {
         CombatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
-        AgentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).ToList();
-        SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).ToList();
+        AgentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).OrderBy(agent => agent.ID).ToList();
+        SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList();
 
         _allEvents = log.CombatData.GetAllEvents();
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
@@ -93,5 +100,29 @@ public partial class InspectorViewModel : ObservableObject
         var properties = EventInspector.Inspect(value.Event);
 
         SelectedEventProperties.ReplaceRange(properties);
+    }
+
+    partial void OnSelectedAgentChanged(AgentDataModel? value)
+    {
+        if (value?.AgentItem == null)
+        {
+            SelectedAgentProperties.ReplaceRange([]);
+            return;
+        }
+
+        var properties = EventInspector.Inspect(value.AgentItem);
+        SelectedAgentProperties.ReplaceRange(properties);
+    }
+
+    partial void OnSelectedSkillChanged(SkillDataModel? value)
+    {
+        if (value?.SkillItem == null)
+        {
+            SelectedSkillProperties.ReplaceRange([]);
+            return;
+        }
+
+        var properties = EventInspector.Inspect(value.SkillItem);
+        SelectedSkillProperties.ReplaceRange(properties);
     }
 }
