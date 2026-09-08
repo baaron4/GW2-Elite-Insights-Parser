@@ -3,43 +3,99 @@
     <BuildType Name="Debug" />
     <BuildType Name="NoRewards" />
     <BuildType Name="Release" />
+    <BuildType Name="Release-Linux" />
+    <BuildType Name="Release-MacOS" />
+    <BuildType Name="Release-MacOS-Arm" />
+    <BuildType Name="Release-Win" />
     <BuildType Name="Trace" />
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-    <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
   <Folder Name="/GW2EI.Library/" />
   <Folder Name="/GW2EI.Library/GW2EI.Models/">
-    <Project Path="GW2EI.Library/GW2EI.Models/GW2EIJSON/GW2EIJSON.csproj" />
+    <Project Path="GW2EI.Library/GW2EI.Models/GW2EIJSON/GW2EIJSON.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/GW2EI.Library/GW2EI.Repositories/">
-    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIDiscord/GW2EIDiscord.csproj" />
-    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIDPSReport/GW2EIDPSReport.csproj" />
-    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIGW2API/GW2EIGW2API.csproj" />
-    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIUpdater/GW2EIUpdater.csproj">
-      <BuildType Solution="NoRewards|*" Project="Debug" />
-      <BuildType Solution="Trace|*" Project="Debug" />
+    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIDiscord/GW2EIDiscord.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
     </Project>
-    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIWingman/GW2EIWingman.csproj" />
+    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIDPSReport/GW2EIDPSReport.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
+    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIGW2API/GW2EIGW2API.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
+    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIUpdater/GW2EIUpdater.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
+    <Project Path="GW2EI.Library/GW2EI.Repositories/GW2EIWingman/GW2EIWingman.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/GW2EI.Library/GW2EI.Services/">
-    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIBuilders/GW2EIBuilders.csproj" />
-    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIEvtcParser/GW2EIEvtcParser.csproj" />
-    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIParserCommons/GW2EIParserCommons.csproj" />
+    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIBuilders/GW2EIBuilders.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
+    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIEvtcParser/GW2EIEvtcParser.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
+    <Project Path="GW2EI.Library/GW2EI.Services/GW2EIParserCommons/GW2EIParserCommons.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/GW2EI.Executables/" />
   <Folder Name="/GW2EI.Executables/GW2EI.Applications/">
-    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParser/GW2EIParserWinForms.csproj" />
-    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia/GW2EIParserAvalonia.csproj">
-      <BuildType Solution="NoRewards|*" Project="Debug" />
-      <BuildType Solution="Trace|*" Project="Debug" />
+    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParser/GW2EIParserWinForms.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
     </Project>
-    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParserCLI/GW2EIParserCLI.csproj" />
+    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia/GW2EIParserAvalonia.csproj">
+    </Project>
+    <Project Path="GW2EI.Executables/GW2EI.Applications/GW2EIParserCLI/GW2EIParserCLI.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/GW2EI.Executables/GW2EI.Tests/">
-    <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/GW2EIParser.tst.csproj" />
+    <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/GW2EIParser.tst.csproj">
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>
