@@ -26,6 +26,7 @@ public partial class InspectorViewModel : ObservableObject
     public IReadOnlyList<EventTypeFilterNode> EventTypeFilterRoots { get; }
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
 
+    public IReadOnlyList<ContentGUIDModel> Skills { get; }
     public IReadOnlyList<ContentGUIDModel> Effects { get; }
     public IReadOnlyList<ContentGUIDModel> Markers { get; }
     public IReadOnlyList<ContentGUIDModel> Species { get; }
@@ -47,6 +48,7 @@ public partial class InspectorViewModel : ObservableObject
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
 
         var contentGUIDEvents = _allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
+        Skills = contentGUIDEvents    .OfType<SkillGUIDEvent>()    .Select(x => new ContentGUIDModel(x))    .ToList();
         Effects = contentGUIDEvents.OfType<EffectGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
         Markers = contentGUIDEvents.OfType<MarkerGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
         Species = contentGUIDEvents.OfType<SpeciesGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();

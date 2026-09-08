@@ -41,4 +41,20 @@ public partial class InspectorWindow : Window
 
         await clipboard.SetTextAsync(model.GUID.ToString());
     }
+
+    private async void CopyContentId_Click(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem || menuItem.CommandParameter is not ContentGUIDModel model)
+        {
+            return;
+        }
+
+        var clipboard = GetTopLevel(this)?.Clipboard;
+        if (clipboard is null)
+        {
+            return;
+        }
+
+        await clipboard.SetTextAsync(model.ContentID.ToString());
+    }
 }
