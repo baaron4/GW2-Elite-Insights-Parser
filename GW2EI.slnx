@@ -41,5 +41,9 @@
   </Folder>
   <Folder Name="/GW2EI.Executables/GW2EI.Tests/">
     <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/GW2EIParser.tst.csproj" />
+    <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/GW2EIParserBenchmark.csproj">
+      <BuildType Solution="NoRewards|*" Project="Debug" />
+      <BuildType Solution="Trace|*" Project="Debug" />
+    </Project>
   </Folder>
 </Solution>
