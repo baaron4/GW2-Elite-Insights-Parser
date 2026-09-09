@@ -317,14 +317,14 @@ public class AgentData
     {
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.StableSpecies))
         {
-            if (a.Master != null && froms.Any(a.Is))
+            if (a.Master != null && froms.Any(a.Master.Is))
             {
                 a.SetMaster(to);
             }
         }
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (a.Master != null && froms.Any(a.Is))
+            if (a.Master != null && froms.Any(a.Master.Is))
             {
                 a.SetMaster(to);
             }
