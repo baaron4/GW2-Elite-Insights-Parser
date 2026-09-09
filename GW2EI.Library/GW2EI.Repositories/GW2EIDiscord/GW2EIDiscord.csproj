@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>12.0</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
@@ -17,13 +17,24 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DefineConstants>DEBUG</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
         <DefineConstants>TRACING</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
         <DefineConstants>DEBUG</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -37,7 +48,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net.Webhook" Version="3.11.0" />
+        <PackageReference Include="Discord.Net.Webhook" Version="3.20.1" />
     </ItemGroup>
 
 </Project>

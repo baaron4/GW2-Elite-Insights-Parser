@@ -44,11 +44,9 @@ internal class GW2TraitAPIController
         if (fi.Exists && fi.Length != 0)
         {
             Console.WriteLine("Reading Traitlist");
-            using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var traitList = JsonSerializer.Deserialize<List<GW2APITrait>>(reader, GW2APIUtilities.DeserializerSettings);
-                _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
-            }
+            using var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            var traitList = JsonSerializer.Deserialize<List<GW2APITrait>>(reader, GW2APIUtilities.DeserializerSettings);
+            _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
         }
         else
         {

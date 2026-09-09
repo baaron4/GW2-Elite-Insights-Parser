@@ -46,17 +46,13 @@ public class HTMLBuilder
     private static string CompressAndBase64(string s)
     {
         byte[] bytes = Encoding.UTF8.GetBytes(s);
-        using (var msi = new MemoryStream(bytes))
+        using var msi = new MemoryStream(bytes);
+        using var mso = new MemoryStream();
+        using (var gs = new GZipStream(mso, CompressionMode.Compress))
         {
-            using (var mso = new MemoryStream())
-            {
-                using (var gs = new GZipStream(mso, CompressionMode.Compress))
-                {
-                    msi.CopyTo(gs);
-                }
-                return Convert.ToBase64String(mso.ToArray());
-            }
+            msi.CopyTo(gs);
         }
+        return Convert.ToBase64String(mso.ToArray());
     }
 
     public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, UploadResults uploadResults)
@@ -234,11 +230,9 @@ public class HTMLBuilder
 #endif
             try
             {
-                using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
-                {
-                    scriptWriter.Write(content);
-                }
+                using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+                using var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8);
+                scriptWriter.Write(content);
             }
             catch (IOException)
             {

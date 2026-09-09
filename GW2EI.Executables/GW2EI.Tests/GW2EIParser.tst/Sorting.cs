@@ -6,14 +6,14 @@ namespace GW2EIEvtcParser.tst.Internals;
 
 sealed class Sorting
 {
-    public sealed class TestEvent(long t, int order) : TimeCombatEvent(t)
+    internal sealed class TestEvent(long t, int order) : TimeCombatEvent(t)
     {
         public int Order = order;
 
         public override string ToString() => $"({Time} {Order})";
 
 
-        public sealed class Comparer : IComparer
+        internal sealed class Comparer : IComparer
         {
             public static readonly Comparer Instance = new();
             public int Compare(object? x, object? y)
@@ -160,7 +160,8 @@ sealed class Sorting
         }
         list.SortByTime();
 
-        CollectionAssert.IsOrdered(list, TestEvent.Comparer.Instance);
+
+        Assert.That(list, Is.Ordered.Using(TestEvent.Comparer.Instance));
     }
 
      [Test]
@@ -172,7 +173,7 @@ sealed class Sorting
         #endregion
         list.AsSpan().SortStable((a, b) => a.CompareTo(b));
 
-        CollectionAssert.IsOrdered(list);
+        Assert.That(list, Is.Ordered);
     }
 }
 
@@ -195,7 +196,7 @@ sealed class Sort_Generated
     }
 
 
-    List<Sorting.TestEvent> data;
+    private readonly List<Sorting.TestEvent> data;
     public Sort_Generated(List<Sorting.TestEvent> data) => this.data = data;
 
     [Test]
@@ -203,6 +204,6 @@ sealed class Sort_Generated
     {
         data.SortByTime();
 
-        CollectionAssert.IsOrdered(data, Sorting.TestEvent.Comparer.Instance, $"{data.Count} failed");
+        Assert.That(data, Is.Ordered.Using(Sorting.TestEvent.Comparer.Instance), $"{data.Count} failed");
     }
 }
