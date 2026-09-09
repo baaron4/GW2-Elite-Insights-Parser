@@ -68,10 +68,6 @@
         <ProjectReference Include="..\..\GW2EI.Repositories\GW2EIGW2API\GW2EIGW2API.csproj" />
         <ProjectReference Include="..\..\GW2EI.Repositories\GW2EIDiscord\GW2EIDiscord.csproj" />
         <ProjectReference Include="..\..\GW2EI.Repositories\GW2EIDPSReport\GW2EIDPSReport.csproj" />
-        <ProjectReference Include="..\..\GW2EI.Repositories\GW2EIUpdater\GW2EIUpdater.csproj">
-			<Private>false</Private>
-			<ExcludeAssets>runtime</ExcludeAssets>
-		</ProjectReference>
         <ProjectReference Include="..\..\GW2EI.Repositories\GW2EIWingman\GW2EIWingman.csproj" />
         <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
     </ItemGroup>
