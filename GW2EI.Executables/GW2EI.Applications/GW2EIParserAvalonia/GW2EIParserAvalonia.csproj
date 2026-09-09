@@ -8,8 +8,8 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>GuildWars2EliteInsights</AssemblyName>
-        <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI\</OutputPath>
+        <AssemblyName>GuildWars2EliteInsights-Avalonia</AssemblyName>
+        <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI-Avalonia\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
@@ -34,7 +34,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-MacOS-Arm' or '$(Configuration)' == 'Release-MacOS' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux'">
-        <OutputPath>..\..\..\GW2EI.bin\Release\UI-$(RuntimeIdentifier)\</OutputPath>
+        <OutputPath>..\..\..\GW2EI.bin\Release\UI-Avalonia-$(RuntimeIdentifier)\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -87,7 +87,7 @@
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <Authors>EliphasNUIT, Linkaaaa</Authors>
         <RepositoryUrl>https://github.com/baaron4/GW2-Elite-Insights-Parser</RepositoryUrl>
-        <PackageId>GuildWars2EliteInsights.GW2EIParser</PackageId>
+        <PackageId>GuildWars2EliteInsights.GW2EIParserAvalonia</PackageId>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
     </PropertyGroup>
 
