@@ -5,7 +5,7 @@ public class AttackTargetEvent : MetaDataEvent
     public readonly AgentItem Src;
     public readonly AgentItem AttackTarget;
 
-    private readonly bool Targetable;
+    public readonly bool Targetable;
 
     private IReadOnlyList<TargetableEvent>? _targetableEvents;
 
