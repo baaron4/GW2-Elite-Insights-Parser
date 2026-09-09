@@ -60,6 +60,15 @@
       <PlatformTarget>AnyCPU</PlatformTarget>
       <DefineConstants>TRACING</DefineConstants>
     </PropertyGroup>
+
+
+    <Target Name="RemovePdbFilesFromOutput" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(Configuration)' == 'Release'">
+        <ItemGroup>
+            <PdbFilesToDelete Include="$(TargetDir)**/*.pdb" />
+        </ItemGroup>
+        <Delete Files="@(PdbFilesToDelete)" />
+    </Target>
+
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <Authors>EliphasNUIT, Baaron</Authors>
