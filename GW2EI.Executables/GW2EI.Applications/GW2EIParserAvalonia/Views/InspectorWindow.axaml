@@ -277,10 +277,6 @@
                                                     Binding="{Binding Agent}"
                                                     Width="Auto"/>
 
-                                <DataGridTextColumn Header="Unique ID"
-                                                    Binding="{Binding UniqueID}"
-                                                    Width="Auto"/>
-
                                 <DataGridTextColumn Header="Spec"
                                                     Binding="{Binding Spec}"
                                                     Width="Auto"/>

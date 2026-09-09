@@ -147,13 +147,7 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnSelectedAgentChanged(AgentDataModel? value)
     {
-        if (value?.AgentItem == null)
-        {
-            SelectedAgentProperties.ReplaceRange([]);
-            return;
-        }
-
-        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value.AgentItem));
+        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value));
     }
 
     partial void OnSelectedSkillChanged(SkillDataModel? value)

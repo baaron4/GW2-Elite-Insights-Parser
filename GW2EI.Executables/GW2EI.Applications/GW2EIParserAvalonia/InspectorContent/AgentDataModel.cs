@@ -1,83 +1,59 @@
-﻿using GW2EIEvtcParser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.Models;
 
 public sealed class AgentDataModel
 {
-    public ulong Agent { get; }
-    public ushort InstID { get; }
-    public string Name { get; }
-    public int ID { get; }
-    public int UniqueID { get; }
-    public AgentItem.AgentType Type { get; }
-    public ParserHelper.Spec Spec { get; }
-    public ParserHelper.Spec BaseSpec { get; }
-    public string MasterName { get; }
-    public ushort MasterInstID { get; }
-    public long FirstAware { get; }
-    public long LastAware { get; }
-    public long HalfAware { get; }
-    public ushort Toughness { get; }
-    public ushort Healing { get; }
-    public ushort Condition { get; }
-    public ushort Concentration { get; }
-    public uint HitboxWidth { get; }
-    public uint HitboxHeight { get; }
-    public bool IsPlayer { get; }
-    public bool IsNPC { get; }
-    public bool IsFake { get; }
-    public bool IsUnknown { get; }
-    public bool IsEnglobedAgent { get; }
-    public bool IsEnglobingAgent { get; }
-    public bool IsNotInSquadFriendlyPlayer { get; }
-    public int MergeCount { get; }
-    public int RegroupedCount { get; }
-    public int EnglobedAgentCount { get; }
-    public string PositionAttachedAgentName { get; }
-    public AgentItem AgentItem { get; }
+    public ulong Agent => AgentItem.Agent;
+    public ushort InstID => AgentItem.InstID;
+    public string Name => AgentItem.Name;
+    public int ID => AgentItem.ID;
+    // This is EI Logic
+    //public int UniqueID => AgentItem.UniqueID;
+    public AgentItem.AgentType Type => AgentItem.Type;
+    public ParserHelper.Spec Spec => AgentItem.Spec;
+    public ParserHelper.Spec BaseSpec => AgentItem.BaseSpec;
+
+    public readonly AgentDataModel? Master;
+    public long FirstAware => AgentItem.FirstAware;
+    public long LastAware => AgentItem.LastAware;
+    public ushort Toughness => AgentItem.Toughness;
+    public ushort Healing => AgentItem.Healing;
+    public ushort Condition => AgentItem.Condition;
+    public ushort Concentration => AgentItem.Concentration;
+    // Height is defunct, it also never worked according to deltaconnected
+    public uint HitboxWidth => AgentItem.HitboxWidth;
+    public bool IsPlayer => AgentItem.IsPlayer;
+    public bool IsNPC => AgentItem.IsNPC;
+    public bool IsFake => AgentItem.IsFake;
+    public bool IsUnknown => AgentItem.IsUnknown;
+    public bool IsEnglobedAgent => AgentItem.IsEnglobedAgent;
+    public bool IsEnglobingAgent => AgentItem.IsEnglobingAgent;
+    public int EnglobedAgentCount => AgentItem.EnglobedAgentItems.Count;
+    public bool IsNotInSquadFriendlyPlayer => AgentItem.IsNotInSquadFriendlyPlayer;
+    public int MergeCount => AgentItem.Merges.Count;
+    public readonly List<AgentDataModel>? Merges;
+    public int RegroupedCount => AgentItem.Regrouped.Count;
+    public readonly List<AgentDataModel>? Regrouped;
+    private readonly AgentItem AgentItem;
 
     public AgentDataModel(AgentItem agent)
     {
         AgentItem = agent;
-
-        Agent = agent.Agent;
-        InstID = agent.InstID;
-        Name = agent.Name;
-        ID = agent.ID;
-        UniqueID = agent.UniqueID;
-        Type = agent.Type;
-
-        FirstAware = agent.FirstAware;
-        LastAware = agent.LastAware;
-        HalfAware = agent.HalfAware;
-
-        Spec = agent.GetSpecAtTime(FirstAware);
-        BaseSpec = agent.GetBaseSpecAtTime(FirstAware);
-
-        MasterName = agent.Master?.Name ?? string.Empty;
-        MasterInstID = agent.Master?.InstID ?? 0;
-
-        Toughness = agent.Toughness;
-        Healing = agent.Healing;
-        Condition = agent.Condition;
-        Concentration = agent.Concentration;
-
-        HitboxWidth = agent.HitboxWidth;
-        HitboxHeight = agent.HitboxHeight;
-
-        IsPlayer = agent.IsPlayer;
-        IsNPC = agent.IsNPC;
-        IsFake = agent.IsFake;
-        IsUnknown = agent.IsUnknown;
-        IsEnglobedAgent = agent.IsEnglobedAgent;
-        IsEnglobingAgent = agent.IsEnglobingAgent;
-        IsNotInSquadFriendlyPlayer = agent.IsNotInSquadFriendlyPlayer;
-
-        MergeCount = agent.Merges.Count;
-        RegroupedCount = agent.Regrouped.Count;
-        EnglobedAgentCount = agent.EnglobedAgentItems.Count;
-
-        PositionAttachedAgentName = agent.PositionAttachedAgentItem?.Name ?? string.Empty;
+        if (agent.Master != null)
+        {
+            Master = new AgentDataModel(agent.Master);
+        }
+        if (MergeCount > 0)
+        {
+            Merges = agent.Merges.Select(x => new AgentDataModel(x.Merged)).ToList();
+        }
+        if (RegroupedCount > 0)
+        {
+            Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged)).ToList();
+        }
     }
 }
