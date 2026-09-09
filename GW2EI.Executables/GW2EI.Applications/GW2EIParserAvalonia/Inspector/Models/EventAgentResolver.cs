@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Models;
 
 internal static class EventAgentResolver
 {

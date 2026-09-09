@@ -1,6 +1,6 @@
 ﻿using GW2EIParserAvalonia.Models;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Models;
 
 public sealed class AgentFilterItem
 {
