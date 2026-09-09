@@ -605,6 +605,8 @@ public abstract partial class SingleActor : Actor
         {
             CastEvents.AddRange(animationCastData);
             CastEvents.AddRange(instantCastData);
+            var jumpEvents = log.CombatData.GetJumpEvents(AgentItem);
+            CastEvents.AddRange(jumpEvents.Select(x => new AnimatedCastEvent(AgentItem, log.SkillData.Get(Jump), x.Time, x.LandingTime)).Where(x => x.ActualDuration > 0));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
                 if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillID == WeaponSwap)

@@ -9,6 +9,7 @@ public static class SkillItemOverrides
     internal static readonly Dictionary<long, string> OverridenSkillNames = new()
     {
         { WeaponSwap, "Weapon Swap" },
+        { Jump, "Jump" },
         { Resurrect, "Resurrect" },
         { Resurrect2, "Resurrect" },
         { Bandage, "Bandage" },
@@ -428,6 +429,7 @@ public static class SkillItemOverrides
     internal static readonly Dictionary<long, string> OverridenSkillIcons = new()
     {
         { WeaponSwap, SkillImages.WeaponSwap },
+        //{ Jump, SkillImages.Jump }, Icon for jumping?
         { WeaponStow, SkillImages.WeaponStow },
         { WeaponDraw, SkillImages.WeaponDraw },
         { Resurrect, SkillImages.Resurrect },
