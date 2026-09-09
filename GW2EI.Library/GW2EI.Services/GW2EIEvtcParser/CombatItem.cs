@@ -40,6 +40,8 @@ public class CombatItem
     public readonly byte Pad3;
     public readonly byte Pad4;
 
+    public int Build => _version.Build;
+
     public bool IsExtension => IsStateChange == StateChange.Extension || IsStateChange == StateChange.ExtensionCombat;
     public bool IsPosition => IsStateChange == StateChange.Position ||
             IsStateChange == StateChange.Teleport;
@@ -175,12 +177,12 @@ public class CombatItem
         return HasTime();
     }
 
-    internal bool IsDamageEvent()
+    public bool IsDamageEvent()
     {
         return IsDirectDamageEvent() || IsBuffDamageEvent();
     }
 
-    internal bool IsNonZeroDamageEvent()
+    public bool IsNonZeroDamageEvent()
     {
         if (IsDirectDamageEvent())
         {
@@ -211,7 +213,7 @@ public class CombatItem
         return IsNonZeroDamageEvent();
     }
 
-    internal bool IsDirectDamageEvent()
+    public bool IsDirectDamageEvent()
     {
         if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
         {
@@ -225,7 +227,7 @@ public class CombatItem
                     ;
     }
 
-    internal bool IsBuffDamageEvent()
+    public bool IsBuffDamageEvent()
     {
         if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
         {
@@ -329,12 +331,12 @@ public class CombatItem
         return DstIsAgent();
     }
 
-    internal bool IsBuffApplyOrRemoveEvent()
+    public bool IsBuffApplyOrRemoveEvent()
     {
         return IsBuffApplyEvent() || IsBuffRemoveEvent();
     }
 
-    internal bool IsBuffApplyEvent()
+    public bool IsBuffApplyEvent()
     {
         if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -345,7 +347,7 @@ public class CombatItem
             IsStateChange == StateChange.BuffInitial;
     }
 
-    internal bool IsBuffRemoveEvent()
+    public bool IsBuffRemoveEvent()
     {
         if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -354,7 +356,7 @@ public class CombatItem
         return IsStateChange == StateChange.Combat && IsActivation == Activation.None && IsBuffRemove != BuffRemove.None;
     }
 
-    internal bool IsBuffRemoveAllEvent()
+    public bool IsBuffRemoveAllEvent()
     {
         if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
@@ -399,12 +401,12 @@ public class CombatItem
         return false;
     }
 
-    internal bool IsCastEvent()
+    public bool IsCastEvent()
     {
         return IsStartCastEvent() || IsEndCastEvent();
     }
 
-    internal bool IsStartCastEvent()
+    public bool IsStartCastEvent()
     {
         if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
         {
@@ -417,7 +419,7 @@ public class CombatItem
         return IsActivation == Activation.Normal || IsActivation == Activation.Quickness;
     }
 
-    internal bool IsEndCastEvent()
+    public bool IsEndCastEvent()
     {
         if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
         {

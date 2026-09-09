@@ -107,7 +107,7 @@ internal class SpiritRace : SpiritVale
         if (position != null)
         {
             var initialPosition = new Vector3(-5669.139f, -7814.589f, -1138.749f);
-            return (position.GetPoint3D() - initialPosition).Length() > 10 ? LogData.StartStatus.Late : LogData.StartStatus.Normal;
+            return (position.Point3D - initialPosition).Length() > 10 ? LogData.StartStatus.Late : LogData.StartStatus.Normal;
         }
         // To investigate
         return LogData.StartStatus.Late;

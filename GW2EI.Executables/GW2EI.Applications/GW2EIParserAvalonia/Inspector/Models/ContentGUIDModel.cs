@@ -1,7 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Models;
 
 public sealed class ContentGUIDModel
 {

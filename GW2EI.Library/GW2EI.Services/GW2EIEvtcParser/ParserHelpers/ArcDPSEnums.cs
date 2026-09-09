@@ -345,7 +345,7 @@ public static class ArcDPSEnums
         GadgetCaptureOutlinePoint = 83,
         Tick = 84,
         Teleport = 85,
-        Jump = 86, // Ignore for now
+        Jump = 86,
         Unknown
     };
 

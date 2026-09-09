@@ -316,10 +316,6 @@
                                                     Binding="{Binding Agent}"
                                                     Width="Auto"/>
 
-                                <DataGridTextColumn Header="Unique ID"
-                                                    Binding="{Binding UniqueID}"
-                                                    Width="Auto"/>
-
                                 <DataGridTextColumn Header="Spec"
                                                     Binding="{Binding Spec}"
                                                     Width="Auto"/>
@@ -880,6 +876,10 @@
 
                         <DataGrid.Columns>
 
+                            <DataGridTextColumn Header="State Change"
+                                                Binding="{Binding IsStateChange}"
+                                                Width="230"/>
+
                             <DataGridTextColumn Header="Time"
                                                 Binding="{Binding Time}"
                                                 Width="200"/>
@@ -924,12 +924,12 @@
                                                 Binding="{Binding DstMasterInstid}"
                                                 Width="140"/>
 
-                            <DataGridTextColumn Header="IFF Byte"
-                                                Binding="{Binding IFFByte}"
-                                                Width="85"/>
-
                             <DataGridTextColumn Header="IFF"
                                                 Binding="{Binding IFF}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="IFF Enum"
+                                                Binding="{Binding IFFEnum}"
                                                 Width="100"/>
 
                             <DataGridTextColumn Header="Is Buff"
@@ -939,21 +939,25 @@
                             <DataGridTextColumn Header="Result"
                                                 Binding="{Binding Result}"
                                                 Width="85"/>
-
-                            <DataGridTextColumn Header="Activation Byte"
-                                                Binding="{Binding IsActivationByte}"
-                                                Width="125"/>
+                            
+                            <DataGridTextColumn Header="Result Enum"
+                                                Binding="{Binding ResultEnum}"
+                                                Width="85"/>
 
                             <DataGridTextColumn Header="Activation"
                                                 Binding="{Binding IsActivation}"
-                                                Width="105"/>
+                                                Width="125"/>
 
-                            <DataGridTextColumn Header="Buff Remove Byte"
-                                                Binding="{Binding IsBuffRemoveByte}"
-                                                Width="135"/>
+                            <DataGridTextColumn Header="Activation Enum"
+                                                Binding="{Binding IsActivationEnum}"
+                                                Width="105"/>
 
                             <DataGridTextColumn Header="Buff Remove"
                                                 Binding="{Binding IsBuffRemove}"
+                                                Width="135"/>
+
+                            <DataGridTextColumn Header="Buff Remove Enum"
+                                                Binding="{Binding IsBuffRemoveEnum}"
                                                 Width="110"/>
 
                             <DataGridTextColumn Header="Is Ninety"
@@ -967,10 +971,6 @@
                             <DataGridTextColumn Header="Is Moving"
                                                 Binding="{Binding IsMoving}"
                                                 Width="90"/>
-
-                            <DataGridTextColumn Header="State Change"
-                                                Binding="{Binding IsStateChange}"
-                                                Width="230"/>
 
                             <DataGridTextColumn Header="Is Flanking"
                                                 Binding="{Binding IsFlanking}"

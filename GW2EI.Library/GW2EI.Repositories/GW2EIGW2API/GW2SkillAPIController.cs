@@ -43,11 +43,9 @@ internal class GW2SkillAPIController
         if (fi.Exists && fi.Length != 0)
         {
             Console.WriteLine("Reading SkillList");
-            using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var skillList = JsonSerializer.Deserialize<List<GW2APISkill>>(reader, GW2APIUtilities.DeserializerSettings);
-                _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skillList);
-            }
+            using var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+            var skillList = JsonSerializer.Deserialize<List<GW2APISkill>>(reader, GW2APIUtilities.DeserializerSettings);
+            _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skillList);
         }
         else
         {

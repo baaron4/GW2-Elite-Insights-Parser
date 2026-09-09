@@ -1,34 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>GuildWars2EliteInsightsUpdater</AssemblyName>
-    <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
-    <PackageId>GuildWars2EliteInsights.GW2EIUpdater</PackageId>
-    <Company>GW2 Elite Insights</Company>
-    <Product>GW2 Elite Insights</Product>
-    <Authors>EliphasNUIT, Linka</Authors>
-    <Copyright>Copyright ©  2025</Copyright>
-      <RepositoryUrl>https://github.com/baaron4/GW2-Elite-Insights-Parser</RepositoryUrl>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>1.1.0</Version>
+        <AssemblyName>GuildWars2EliteInsightsUpdater</AssemblyName>
+        <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
+        <PackageId>GuildWars2EliteInsights.GW2EIUpdater</PackageId>
+        <Company>GW2 Elite Insights</Company>
+        <Product>GW2 Elite Insights</Product>
+        <Authors>EliphasNUIT, Linka</Authors>
+        <Copyright>Copyright ©  2025</Copyright>
+        <RepositoryUrl>https://github.com/baaron4/GW2-Elite-Insights-Parser</RepositoryUrl>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    </PropertyGroup>
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
-    
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="Content\ArenaNet\LI.ico" />
-  </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>DEBUG</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
+        <DefineConstants>DEBUG</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <DefineConstants>TRACING</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="Content\ArenaNet\LI.ico" />
+    </ItemGroup>
 
 </Project>

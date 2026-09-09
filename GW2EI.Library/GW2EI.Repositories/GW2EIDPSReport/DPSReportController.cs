@@ -31,7 +31,7 @@ public static class DPSReportController
 
     private class DPSReportUserTokenResponse
     {
-        public string UserToken { get; set; }
+        public string? UserToken { get; set; }
     }
     public class GetUploadsParameters
     {
@@ -208,7 +208,7 @@ public static class DPSReportController
     public static string GenerateUserToken(TraceHandler traceHandler)
     {
         DPSReportUserTokenResponse? responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", GetUserTokenURLs(), traceHandler);
-        return responseItem != null ? responseItem.UserToken : "";
+        return responseItem != null ? responseItem.UserToken ?? "" : "";
     }
     public static DPSReportUploadObject? GetUploadMetaDataWithID(string id, TraceHandler traceHandler)
     {

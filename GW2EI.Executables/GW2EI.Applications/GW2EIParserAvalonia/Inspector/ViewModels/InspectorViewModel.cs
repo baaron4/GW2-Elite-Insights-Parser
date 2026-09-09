@@ -4,7 +4,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIParserAvalonia.InspectorContent;
+using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.ViewModels;
@@ -37,7 +37,7 @@ public partial class InspectorViewModel : ObservableObject
 
     public IReadOnlyList<EventModel> Events { get; }
     public BulkObservableCollection<EventModel> VisibleEvents { get; } = [];
-    public IReadOnlyList<EventTypeFilterNode> EventTypeFilterRoots { get; }
+    public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
 
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
 
@@ -78,7 +78,7 @@ public partial class InspectorViewModel : ObservableObject
         Transformations = contentGUIDEvents.OfType<TransformationGUIDEvent>().Select(x => new ContentGUIDModel(x)).ToList();
 
         Events = _allTimeEvents.OrderBy(x => x.Time).Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
-        EventTypeFilterRoots = EventTypeFilterNode.Build(_allTimeEvents, _allNonTimeEvents);
+        EventTypeFilterRoots = EventTypeFilterNodeModel.Build(_allTimeEvents, _allNonTimeEvents);
 
         foreach (var root in EventTypeFilterRoots)
         {
@@ -165,13 +165,7 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnSelectedAgentChanged(AgentDataModel? value)
     {
-        if (value?.AgentItem == null)
-        {
-            SelectedAgentProperties.ReplaceRange([]);
-            return;
-        }
-
-        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value.AgentItem));
+        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value));
     }
 
     partial void OnSelectedSkillChanged(SkillDataModel? value)

@@ -146,7 +146,7 @@ internal class BanditTrio : SalvationPass
             var boxEnd = new Vector2(1000, -7200);
             var banditPositions = combatData.Where(x => x.IsPosition && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(TrashMobsToCheck))
                 .Select(x => new PositionEvent(x, agentData));
-            var banditsInBox = banditPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
+            var banditsInBox = banditPositions.Where(x => x.Time < startToUse + 10000 && x.Point2D.IsInBoundingBox(boxStart, boxEnd))
                 .Select(x => x.Src)
                 .ToHashSet();
             if (banditsInBox.Count > 0)

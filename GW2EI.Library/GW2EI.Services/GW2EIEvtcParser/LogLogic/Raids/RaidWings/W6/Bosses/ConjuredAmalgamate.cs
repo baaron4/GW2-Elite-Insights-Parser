@@ -91,7 +91,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             var attackTargetEvent = attackTargetEvents.First(x => position.Src.Is(x.AttackTarget));
             var atAgent = attackTargetEvent.AttackTarget;
             var agent = attackTargetEvent.Src;
-            var atPos = position.GetPoint3D();
+            var atPos = position.Point3D;
             if (agent.Type == AgentItem.AgentType.VolatileSpecies)
             {
                 if ((atPos - BodyAttackTargetPos).Length() < 5)
@@ -116,7 +116,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             var attackTargetEvent = attackTargetEvents.First(x => position.Src.Is(x.AttackTarget));
             var atAgent = attackTargetEvent.AttackTarget;
             var agent = attackTargetEvent.Src;
-            var atPos = position.GetPoint3D();
+            var atPos = position.Point3D;
             if (agent.IsSpecies(TargetID.CALeftArm) && (atPos - LeftArmAttackTargetPosForDamage).Length() < 5)
             {
                 atAgent.OverrideID(TargetID.CALeftArmAttackTarget, agentData);

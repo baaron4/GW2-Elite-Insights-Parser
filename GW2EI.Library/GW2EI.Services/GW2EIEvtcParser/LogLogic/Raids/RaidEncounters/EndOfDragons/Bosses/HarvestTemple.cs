@@ -373,7 +373,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         {
             return LogData.StartStatus.Late;
         }
-        var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 1e-6);
+        var firstNonZeroVelocity = combatData.GetMovementData(pushableOrb).OfType<VelocityEvent>().FirstOrDefault(x => x.Point3D.Length() > 1e-6);
         if (firstNonZeroVelocity == null)
         {
             return LogData.StartStatus.Late;
@@ -383,7 +383,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         {
             return LogData.StartStatus.Late;
         }
-        var position = firstPositionAfterVelocity.GetPoint3D();
+        var position = firstPositionAfterVelocity.Point3D;
         if ((position - new Vector3(610.87994f, -20372.885f, -15189.2f)).Length() > 50)
         {
             return LogData.StartStatus.Late;
@@ -577,7 +577,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     long curNorthBeamTime = int.MinValue;
                     foreach (var northBeam in agentData.GetStableSpeciesByID(TargetID.JormagMovingFrostBeamNorth))
                     {
-                        VelocityEvent? frostBeamMoveStartVelocity = combatData.GetMovementData(northBeam).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                        VelocityEvent? frostBeamMoveStartVelocity = combatData.GetMovementData(northBeam).OfType<VelocityEvent>().FirstOrDefault(x => x.Point3D.Length() > 0);
                         if (frostBeamMoveStartVelocity != null && frostBeamMoveStartVelocity.Time - curNorthBeamTime > 1000)
                         {
                             curNorthBeamTime = frostBeamMoveStartVelocity.Time;
@@ -588,7 +588,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     long curCenterBeamTime = int.MinValue;
                     foreach (var centerBeam in agentData.GetStableSpeciesByID(TargetID.JormagMovingFrostBeamCenter))
                     {
-                        VelocityEvent? frostBeamMoveStartVelocity = combatData.GetMovementData(centerBeam).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                        VelocityEvent? frostBeamMoveStartVelocity = combatData.GetMovementData(centerBeam).OfType<VelocityEvent>().FirstOrDefault(x => x.Point3D.Length() > 0);
                         if (frostBeamMoveStartVelocity != null && frostBeamMoveStartVelocity.Time - curCenterBeamTime > 1000)
                         {
                             curCenterBeamTime = frostBeamMoveStartVelocity.Time;
@@ -1798,7 +1798,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     foreach (AgentItem agent in beamAgents)
                     {
                         // Find the closest velocity change event
-                        VelocityEvent? frostBeamVelocity = log.CombatData.GetMovementData(agent).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                        VelocityEvent? frostBeamVelocity = log.CombatData.GetMovementData(agent).OfType<VelocityEvent>().FirstOrDefault(x => x.Point3D.Length() > 0);
                         if (frostBeamVelocity != null && frostBeamVelocity.Time > breath.Time)
                         {
                             beamAgentSpawnTime = Math.Min(beamAgentSpawnTime, frostBeamVelocity.Time);
@@ -1819,7 +1819,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             case (int)TargetID.JormagMovingFrostBeam:
             case (int)TargetID.JormagMovingFrostBeamNorth:
             case (int)TargetID.JormagMovingFrostBeamCenter:
-                VelocityEvent? frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                VelocityEvent? frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.Point3D.Length() > 0);
                 // Beams are immobile at spawn for around 3 seconds
                 if (frostBeamMoveStartVelocity != null)
                 {

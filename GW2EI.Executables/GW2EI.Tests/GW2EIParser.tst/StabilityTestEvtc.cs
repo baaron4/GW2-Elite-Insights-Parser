@@ -12,13 +12,13 @@ namespace GW2EIParserWinForms.tst;
 
 
 [TestFixture]
-public class StabilityTestEvtc
+internal class StabilityTestEvtc
 {
     internal sealed class EVTCTestItem
     {
         public readonly string File;
         public bool Failed { get; private set; }
-        public string FailedMessage { get; private set; }
+        public string? FailedMessage { get; private set; }
         public EVTCTestItem(string file)
         {
             File = file;
@@ -29,6 +29,8 @@ public class StabilityTestEvtc
             FailedMessage = message;
         }
     }
+
+    private const string PathToFiles = "/../../GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/EvtcLogs";
     private static bool Loop(EVTCTestItem evtcTestItem)
     {
         try
@@ -85,7 +87,7 @@ public class StabilityTestEvtc
 
     private static void GenerateCrashData(List<EVTCTestItem> evtcTestItems, string type, bool copy)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/Crashes/";
 
         Directory.CreateDirectory(testLocation + "/Logs");
 
@@ -105,28 +107,22 @@ public class StabilityTestEvtc
                 {
                     File.Copy(evtcTestItem.File, testLocation + "Logs/" + evtcName, true);
                 }
-                dict[evtcName] = evtcTestItem.FailedMessage;
+                dict[evtcName] = evtcTestItem.FailedMessage ?? "";
             }
         }
 
-        using (var fs = new FileStream(logName, FileMode.Create, FileAccess.Write))
+        using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
+        using var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8);
+        var serializer = new JsonSerializer
         {
-            using (var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8))
-            {
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = TestHelper.DefaultJsonContractResolver
-                };
-                using (var writer = new JsonTextWriter(sw)
-                {
-                    Formatting = Formatting.Indented
-                })
-                {
-                    serializer.Serialize(writer, dict);
-                }
-            }
-        }
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = TestHelper.DefaultJsonContractResolver
+        };
+        using var writer = new JsonTextWriter(sw)
+        {
+            Formatting = Formatting.Indented
+        };
+        serializer.Serialize(writer, dict);
     }
 
 
@@ -161,7 +157,7 @@ public class StabilityTestEvtc
     public void TestEvtc([Values(0, 1, 2, 3)] int startIndex)
     {
 
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -190,7 +186,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestEvtcZip([Values(0, 1, 2, 3)] int startIndex)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -219,7 +215,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestZevtc([Values(0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40)] int startIndex)
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/StabilityTest";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);
@@ -249,7 +245,7 @@ public class StabilityTestEvtc
     [Test]
     public void TestCrashed()
     {
-        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/Crashes/Logs";
+        string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + PathToFiles + "/Crashes/Logs";
         if (!Directory.Exists(testLocation))
         {
             Directory.CreateDirectory(testLocation);

@@ -242,7 +242,7 @@ internal class Escort : StrongholdOfTheFaithful
             if (combatData.HasMovementData)
             {
                 var glennaInitialPosition = new Vector2(9092.697f, 21477.2969f/*, -2946.81885f*/);
-                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && (pe.GetPointXY() - glennaInitialPosition).Length() < 100))
+                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && (pe.Point2D - glennaInitialPosition).Length() < 100))
                 {
                     return LogData.StartStatus.Late;
                 }
