@@ -15,7 +15,7 @@ public static class EventInspector
     private static readonly ConcurrentDictionary<Type, FieldInfo[]> FieldCache = new();
     private const int MaxDepth = 12;
     private const int MaxCollectionItems = 100;
-    private const BindingFlags MemberFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+    private const BindingFlags MemberFlags = BindingFlags.Instance | BindingFlags.Public;
 
     public static IReadOnlyList<EventPropertyModel> Inspect(object? instance)
     {
