@@ -101,7 +101,9 @@ public class GameplayStatistics
         foreach (CastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
         {
             long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
-            if (cl.Skill.IsAnimatedDodge(log.SkillData) || cl.SkillID == SkillIDs.Jump)
+            if (cl.Skill.IsAnimatedDodge(log.SkillData) || 
+                cl.SkillID == SkillIDs.Jumping || 
+                cl.SkillID == SkillIDs.Gliding)
             {
                 continue;
             }

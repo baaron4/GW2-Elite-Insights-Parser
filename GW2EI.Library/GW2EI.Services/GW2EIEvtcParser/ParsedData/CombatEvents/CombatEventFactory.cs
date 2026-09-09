@@ -446,6 +446,15 @@ partial class CombatData
                 break;
             case StateChange.Glider:
                 var gliderEvent = new GliderEvent(stateChangeEvent, agentData);
+
+                if (!gliderEvent.GliderDeployed && statusEvents.GliderEventsBySrc.TryGetValue(gliderEvent.Src, out var glidings))
+                {
+                    var last = glidings[^1];
+                    if (last.GliderDeployed && last.SetGliderClosed(gliderEvent))
+                    {
+                        break;
+                    }
+                }
                 Add(statusEvents.GliderEventsBySrc, gliderEvent.Src, gliderEvent);
                 break;
             case StateChange.StunBreak:

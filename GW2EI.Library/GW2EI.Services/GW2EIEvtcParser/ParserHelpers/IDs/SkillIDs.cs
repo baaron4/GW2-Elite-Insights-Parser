@@ -81,7 +81,8 @@ public static class SkillIDs
     public const long EchoOfTruthOrVoiceOfTruth = -62;
     public const long MindWrackOrMindWrackAmmo = -63;
     public const long SplitSecondOrSplitSecondAmmo = -64;
-    public const long Jump = -65;
+    public const long Jumping = -65;
+    public const long Gliding = -66;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

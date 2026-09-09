@@ -5,7 +5,7 @@ public class JumpEvent : StatusEvent
     public readonly bool OnLanding;
     public readonly byte SomethingBehaviorRelated;
 
-    public JumpEvent? Landing { get; private set; }
+    private JumpEvent? Landing;
 
     public long LandingTime => Landing?.Time ?? Time;
     internal JumpEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
