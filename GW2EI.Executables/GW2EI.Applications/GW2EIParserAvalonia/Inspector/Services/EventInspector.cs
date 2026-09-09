@@ -336,6 +336,11 @@ public static class EventInspector
             return string.Empty;
         }
 
+        if  (value.GetType().IsClass)
+        {
+            return value.GetType().Name;
+        }
+
         try
         {
             return value.ToString() ?? string.Empty;
