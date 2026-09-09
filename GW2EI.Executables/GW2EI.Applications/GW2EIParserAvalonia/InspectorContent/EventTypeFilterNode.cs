@@ -99,12 +99,9 @@ public sealed partial class EventTypeFilterNode : ObservableObject
 
     private static EventTypeFilterNode BuildNonTimeEvents(IReadOnlyList<object> events)
     {
-        var nodes = events
-            .GroupBy(e => e.GetType())
-            .Select(g => new EventTypeFilterNode(g.Key, g.Count()))
-            .ToList();
+        var nodes = events.GroupBy(e => e.GetType()).Select(g => new EventTypeFilterNode(g.Key, g.Count())).ToList();
 
-        var root = new EventTypeFilterNode(typeof(object), -1, "Non-Time Combat Events");
+        var root = new EventTypeFilterNode(typeof(object), nodes.Sum(x => x.Count), "Non-Time Combat Events");
 
         foreach (var node in nodes)
         {

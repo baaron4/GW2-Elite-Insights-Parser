@@ -84,8 +84,8 @@
                                 <TreeView.ItemTemplate>
                                     <TreeDataTemplate ItemsSource="{Binding Children}">
 
-                                        <Grid ColumnDefinitions="Auto,*,Auto"
-                                              Margin="2">
+                                        <Grid ColumnDefinitions="Auto,*,60"
+                                              Margin="2,2,16,2">
 
                                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
                                                       VerticalAlignment="Center"/>
@@ -93,11 +93,13 @@
                                             <TextBlock Grid.Column="1"
                                                        Text="{Binding Name}"
                                                        Margin="6,0"
-                                                       VerticalAlignment="Center"/>
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"/>
 
                                             <TextBlock Grid.Column="2"
                                                        Text="{Binding Count}"
-                                                       Margin="8,0"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,4,0"
                                                        Opacity="0.7"
                                                        VerticalAlignment="Center"/>
 
