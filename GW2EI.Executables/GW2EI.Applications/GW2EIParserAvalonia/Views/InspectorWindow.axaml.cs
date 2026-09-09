@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using GW2EIEvtcParser;
 using GW2EIParserAvalonia.InspectorContent;
 using GW2EIParserAvalonia.Services;
@@ -56,5 +57,16 @@ public partial class InspectorWindow : Window
         }
 
         await clipboard.SetTextAsync(model.ContentID.ToString());
+    }
+
+    private async void AgentFilter_GotFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is AutoCompleteBox autoCompleteBox)
+        {
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                autoCompleteBox.IsDropDownOpen = true;
+            });
+        }
     }
 }
