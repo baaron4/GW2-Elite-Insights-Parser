@@ -6,7 +6,7 @@ using GW2EIJSON;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIParserWinForms.tst;
+namespace GW2EIParser.tst;
 
 internal static class TestHelper
 {

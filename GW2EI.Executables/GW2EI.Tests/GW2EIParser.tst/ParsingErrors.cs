@@ -1,7 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using NUnit.Framework;
 
-namespace GW2EIParserWinForms.tst;
+namespace GW2EIParser.tst;
 
 [TestFixture]
 internal class ParsingErrors

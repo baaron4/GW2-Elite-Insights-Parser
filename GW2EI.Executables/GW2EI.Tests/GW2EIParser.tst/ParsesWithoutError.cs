@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using NUnit.Framework;
 using System.Collections;
 
-namespace GW2EIParserWinForms.tst.Generated;
+namespace GW2EIParser.tst.Generated;
 
 [TestFixtureSource(typeof(ParsesSuccessfully), nameof(GenerateTests))]
 internal class ParsesSuccessfully

@@ -8,7 +8,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 
 [assembly: CLSCompliant(false)]
-namespace GW2EIParserWinForms.tst;
+namespace GW2EIParser.tst;
 
 
 [TestFixture]
