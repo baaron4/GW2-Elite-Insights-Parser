@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Services;
 
 public sealed class BulkObservableCollection<T> : ObservableCollection<T>
 {

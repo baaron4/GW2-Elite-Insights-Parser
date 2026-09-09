@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using GW2EIParserAvalonia.Models;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Services;
 
 public static class EventInspector
 {

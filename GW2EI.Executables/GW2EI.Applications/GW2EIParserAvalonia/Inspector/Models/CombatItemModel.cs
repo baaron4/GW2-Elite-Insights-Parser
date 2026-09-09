@@ -1,7 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
-namespace GW2EIParserAvalonia.InspectorContent;
+namespace GW2EIParserAvalonia.Models;
 
 public sealed class CombatItemModel
 {

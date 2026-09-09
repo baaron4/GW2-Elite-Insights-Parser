@@ -113,7 +113,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIUpdater\GW2EIUpdater.csproj"/>
+        <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIUpdater\GW2EIUpdater.csproj" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Services\GW2EIParserCommons\GW2EIParserCommons.csproj" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIGW2API\GW2EIGW2API.csproj" />
     </ItemGroup>

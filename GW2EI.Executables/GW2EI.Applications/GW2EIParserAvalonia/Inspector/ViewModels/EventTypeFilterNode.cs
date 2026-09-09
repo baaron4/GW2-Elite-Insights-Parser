@@ -7,36 +7,36 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public sealed partial class EventTypeFilterNode : ObservableObject
+public sealed partial class EventTypeFilterNodeModel : ObservableObject
 {
     [ObservableProperty]
     private bool? isChecked = true;
     [ObservableProperty]
     private bool isExpanded = true;
     private bool _isUpdatingHierarchy;
-    private Dictionary<Type, EventTypeFilterNode>? _typeLookup;
+    private Dictionary<Type, EventTypeFilterNodeModel>? _typeLookup;
     private HashSet<Type>? _visibleTypes;
     private readonly string? _displayName;
     public string Name => _displayName ?? EventType.Name;
     public int Count { get; private set; }
     public Type EventType { get; }
-    public EventTypeFilterNode? Parent { get; set; }
-    public ObservableCollection<EventTypeFilterNode> Children { get; } = [];
+    public EventTypeFilterNodeModel? Parent { get; set; }
+    public ObservableCollection<EventTypeFilterNodeModel> Children { get; } = [];
     public event EventHandler? FilterChanged;
 
-    public EventTypeFilterNode(Type type, int count, string? displayName = null)
+    public EventTypeFilterNodeModel(Type type, int count, string? displayName = null)
     {
         EventType = type;
         Count = count;
         _displayName = displayName;
     }
-    internal void SetTypeLookup(Dictionary<Type, EventTypeFilterNode> lookup)
+    internal void SetTypeLookup(Dictionary<Type, EventTypeFilterNodeModel> lookup)
     {
         _typeLookup = lookup;
         UpdateVisibleTypes();
     }
 
-    public static IReadOnlyList<EventTypeFilterNode> Build(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<object> nonTimeEvents)
+    public static IReadOnlyList<EventTypeFilterNodeModel> Build(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<object> nonTimeEvents)
     {
         var timeRoot = BuildTimeEvents(timeEvents);
         var nonTimeRoot = BuildNonTimeEvents(nonTimeEvents);
@@ -44,9 +44,9 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         return [timeRoot, nonTimeRoot];
     }
 
-    private static EventTypeFilterNode BuildTimeEvents(IReadOnlyList<TimeCombatEvent> events)
+    private static EventTypeFilterNodeModel BuildTimeEvents(IReadOnlyList<TimeCombatEvent> events)
     {
-        var nodes = events.GroupBy(e => e.GetType()).ToDictionary(g => g.Key, g => new EventTypeFilterNode(g.Key, g.Count()));
+        var nodes = events.GroupBy(e => e.GetType()).ToDictionary(g => g.Key, g => new EventTypeFilterNodeModel(g.Key, g.Count()));
 
         foreach (var node in nodes.Values.ToList())
         {
@@ -54,7 +54,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             {
                 if (!nodes.ContainsKey(baseType))
                 {
-                    nodes.Add(baseType, new EventTypeFilterNode(baseType, -1));
+                    nodes.Add(baseType, new EventTypeFilterNodeModel(baseType, -1));
                 }
             }
         }
@@ -73,7 +73,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         }
 
         var roots = nodes.Values.Where(x => x.Parent == null).ToArray();
-        EventTypeFilterNode root;
+        EventTypeFilterNodeModel root;
 
         if (roots.Length == 1)
         {
@@ -81,7 +81,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         }
         else
         {
-            root = new EventTypeFilterNode(typeof(TimeCombatEvent), -1, "Time Combat Events");
+            root = new EventTypeFilterNodeModel(typeof(TimeCombatEvent), -1, "Time Combat Events");
 
             foreach (var child in roots)
             {
@@ -97,11 +97,11 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         return root;
     }
 
-    private static EventTypeFilterNode BuildNonTimeEvents(IReadOnlyList<object> events)
+    private static EventTypeFilterNodeModel BuildNonTimeEvents(IReadOnlyList<object> events)
     {
-        var nodes = events.GroupBy(e => e.GetType()).Select(g => new EventTypeFilterNode(g.Key, g.Count())).ToList();
+        var nodes = events.GroupBy(e => e.GetType()).Select(g => new EventTypeFilterNodeModel(g.Key, g.Count())).ToList();
 
-        var root = new EventTypeFilterNode(typeof(object), nodes.Sum(x => x.Count), "Non-Time Combat Events");
+        var root = new EventTypeFilterNodeModel(typeof(object), nodes.Sum(x => x.Count), "Non-Time Combat Events");
 
         foreach (var node in nodes)
         {
@@ -179,7 +179,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         }
     }
 
-    private EventTypeFilterNode GetRoot()
+    private EventTypeFilterNodeModel GetRoot()
     {
         var root = this;
 
@@ -202,7 +202,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
         }
     }
 
-    private static int CalculateParentCounts(EventTypeFilterNode node)
+    private static int CalculateParentCounts(EventTypeFilterNodeModel node)
     {
         if (node.Children.Count == 0)
         {
