@@ -4,34 +4,57 @@ namespace GW2EIParserAvalonia.Models;
 
 public sealed class SkillDataModel
 {
-    public long ID => _skill.ID;
-    public string Name => _skill.Name;
-    public string Icon => _skill.Icon;
-    public bool UnknownSkill => _skill.UnknownSkill;
-    public bool IsSwap => _skill.IsSwap;
-    public bool IsAnimatedDodge => _skill.IsAnimatedDodge(_skillData);
-    public bool IsDodge => _skill.IsDodge(_skillData);
-    public bool IsWeaponSkill => _skill.IsWeaponSkill;
-    public bool CanHeal => _skill.CanHeal;
-    public bool IsNotAccurate => _skillData.IsNotAccurate(_skill.ID);
-    public bool IsGearProc => _skillData.IsGearProc(_skill.ID);
-    public bool IsTraitProc => _skillData.IsTraitProc(_skill.ID);
-    public bool IsUnconditionalProc => _skillData.IsUnconditionalProc(_skill.ID);
-    public string ApiName => _skill.ApiSkill?.Name ?? string.Empty;
-    public string ApiIcon => _skill.ApiSkill?.Icon ?? string.Empty;
-    public string ApiType => _skill.ApiSkill?.Type ?? string.Empty;
-    public string ApiSlot => _skill.ApiSkill?.Slot ?? string.Empty;
-    public string ApiWeaponType => _skill.ApiSkill?.WeaponType ?? string.Empty;
-    public string ApiDescription => _skill.ApiSkill?.Description ?? string.Empty;
-    public string ApiProfessions => _skill.ApiSkill?.Professions != null ? string.Join(", ", _skill.ApiSkill.Professions) : string.Empty;
-    public string ApiCategories => _skill.ApiSkill?.Categories != null ? string.Join(", ", _skill.ApiSkill.Categories) : string.Empty;
-    public SkillItem SkillItem => _skill;
-    private readonly SkillItem _skill;
-    private readonly SkillData _skillData;
+    public long ID { get; }
+    public string Name { get; }
+    public string Icon { get; }
+    public bool UnknownSkill { get; }
+    public bool IsSwap { get; }
+    public bool IsAnimatedDodge { get; }
+    public bool IsDodge { get; }
+    public bool IsWeaponSkill { get; }
+    public bool CanHeal { get; }
+    public bool IsNotAccurate { get; }
+    public bool IsGearProc { get; }
+    public bool IsTraitProc { get; }
+    public bool IsUnconditionalProc { get; }
+
+    public string ApiName { get; }
+    public string ApiIcon { get; }
+    public string ApiType { get; }
+    public string ApiSlot { get; }
+    public string ApiWeaponType { get; }
+    public string ApiDescription { get; }
+    public string ApiProfessions { get; }
+    public string ApiCategories { get; }
+
+    public SkillItem SkillItem { get; }
 
     public SkillDataModel(SkillItem skill, SkillData skillData)
     {
-        _skill = skill;
-        _skillData = skillData;
+        SkillItem = skill;
+
+        ID = skill.ID;
+        Name = skill.Name;
+        Icon = skill.Icon;
+        UnknownSkill = skill.UnknownSkill;
+        IsSwap = skill.IsSwap;
+        IsAnimatedDodge = skill.IsAnimatedDodge(skillData);
+        IsDodge = skill.IsDodge(skillData);
+        IsWeaponSkill = skill.IsWeaponSkill;
+        CanHeal = skill.CanHeal;
+
+        IsNotAccurate = skillData.IsNotAccurate(skill.ID);
+        IsGearProc = skillData.IsGearProc(skill.ID);
+        IsTraitProc = skillData.IsTraitProc(skill.ID);
+        IsUnconditionalProc = skillData.IsUnconditionalProc(skill.ID);
+
+        ApiName = skill.ApiSkill?.Name ?? string.Empty;
+        ApiIcon = skill.ApiSkill?.Icon ?? string.Empty;
+        ApiType = skill.ApiSkill?.Type ?? string.Empty;
+        ApiSlot = skill.ApiSkill?.Slot ?? string.Empty;
+        ApiWeaponType = skill.ApiSkill?.WeaponType ?? string.Empty;
+        ApiDescription = skill.ApiSkill?.Description ?? string.Empty;
+        ApiProfessions = skill.ApiSkill?.Professions != null ? string.Join(", ", skill.ApiSkill.Professions) : string.Empty;
+        ApiCategories = skill.ApiSkill?.Categories != null ? string.Join(", ", skill.ApiSkill.Categories) : string.Empty;
     }
 }

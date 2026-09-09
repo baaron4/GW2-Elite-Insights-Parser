@@ -5,43 +5,79 @@ namespace GW2EIParserAvalonia.InspectorContent;
 
 public sealed class CombatItemModel
 {
-    public long Time => _item.Time;
-    public ulong SrcAgent => _item.SrcAgent;
-    public ulong DstAgent => _item.DstAgent;
-    public int Value => _item.Value;
-    public int BuffDmg => _item.BuffDmg;
-    public uint OverstackValue => _item.OverstackValue;
-    public uint SkillID => _item.SkillID;
-    public ushort SrcInstid => _item.SrcInstid;
-    public ushort DstInstid => _item.DstInstid;
-    public ushort SrcMasterInstid => _item.SrcMasterInstid;
-    public ushort DstMasterInstid => _item.DstMasterInstid;
-    public byte IFFByte => _item.IFFByte;
-    public IFF IFF => _item.IFF;
-    public byte IsBuff => _item.IsBuff;
-    public byte Result => _item.Result;
-    public byte IsActivationByte => _item.IsActivationByte;
-    public Activation IsActivation => _item.IsActivation;
-    public byte IsBuffRemoveByte => _item.IsBuffRemoveByte;
-    public BuffRemove IsBuffRemove => _item.IsBuffRemove;
-    public byte IsNinety => _item.IsNinety;
-    public byte IsFifty => _item.IsFifty;
-    public byte IsMoving => _item.IsMoving;
-    public StateChange IsStateChange => _item.IsStateChange;
-    public byte IsFlanking => _item.IsFlanking;
-    public byte IsShields => _item.IsShields;
-    public byte IsOffcycle => _item.IsOffcycle;
-    public uint Pad => _item.Pad;
-    public byte Pad1 => _item.Pad1;
-    public byte Pad2 => _item.Pad2;
-    public byte Pad3 => _item.Pad3;
-    public byte Pad4 => _item.Pad4;
-
-    private readonly CombatItem _item;
+    public long Time { get; }
+    public ulong SrcAgent { get; }
+    public ulong DstAgent { get; }
+    public int Value { get; }
+    public int BuffDmg { get; }
+    public uint OverstackValue { get; }
+    public uint SkillID { get; }
+    public ushort SrcInstid { get; }
+    public ushort DstInstid { get; }
+    public ushort SrcMasterInstid { get; }
+    public ushort DstMasterInstid { get; }
+    public byte IFFByte { get; }
+    public IFF IFF { get; }
+    public byte IsBuff { get; }
+    public byte Result { get; }
+    public byte IsActivationByte { get; }
+    public Activation IsActivation { get; }
+    public byte IsBuffRemoveByte { get; }
+    public BuffRemove IsBuffRemove { get; }
+    public byte IsNinety { get; }
+    public byte IsFifty { get; }
+    public byte IsMoving { get; }
+    public StateChange IsStateChange { get; }
+    public byte IsFlanking { get; }
+    public byte IsShields { get; }
+    public byte IsOffcycle { get; }
+    public uint Pad { get; }
+    public byte Pad1 { get; }
+    public byte Pad2 { get; }
+    public byte Pad3 { get; }
+    public byte Pad4 { get; }
 
     public CombatItemModel(CombatItem item)
     {
-        _item = item;
+        Time = item.Time;
+        SrcAgent = item.SrcAgent;
+        DstAgent = item.DstAgent;
+        Value = item.Value;
+        BuffDmg = item.BuffDmg;
+        OverstackValue = item.OverstackValue;
+        SkillID = item.SkillID;
+
+        SrcInstid = item.SrcInstid;
+        DstInstid = item.DstInstid;
+        SrcMasterInstid = item.SrcMasterInstid;
+        DstMasterInstid = item.DstMasterInstid;
+
+        IFFByte = item.IFFByte;
+        IFF = item.IFF;
+
+        IsBuff = item.IsBuff;
+        Result = item.Result;
+
+        IsActivationByte = item.IsActivationByte;
+        IsActivation = item.IsActivation;
+
+        IsBuffRemoveByte = item.IsBuffRemoveByte;
+        IsBuffRemove = item.IsBuffRemove;
+
+        IsNinety = item.IsNinety;
+        IsFifty = item.IsFifty;
+        IsMoving = item.IsMoving;
+
+        IsStateChange = item.IsStateChange;
+
+        IsFlanking = item.IsFlanking;
+        IsShields = item.IsShields;
+        IsOffcycle = item.IsOffcycle;
+
+        Pad = item.Pad;
+        Pad1 = item.Pad1;
+        Pad2 = item.Pad2;
+        Pad3 = item.Pad3;
+        Pad4 = item.Pad4;
     }
 }
-

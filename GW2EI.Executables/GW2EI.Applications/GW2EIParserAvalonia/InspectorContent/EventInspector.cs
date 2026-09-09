@@ -78,13 +78,18 @@ public static class EventInspector
                 continue;
             }
 
-            result.Add(CreateNode(property.Name, property.PropertyType, value, depth, visited));
+            result.Add(CreateNode(property.Name, value, depth, visited));
         }
     }
 
     private static void AddFields(List<EventPropertyModel> result, object instance, Type type, int depth, HashSet<object> visited)
     {
-        var existingNames = new HashSet<string>(result.Select(x => x.Name), StringComparer.Ordinal);
+        var existingNames = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var property in result)
+        {
+            existingNames.Add(property.Name);
+        }
 
         foreach (var field in GetAllFields(type))
         {
@@ -105,15 +110,15 @@ public static class EventInspector
                 continue;
             }
 
-            result.Add(CreateNode(field.Name, field.FieldType, value, depth, visited));
+            result.Add(CreateNode(field.Name, value, depth, visited));
         }
     }
 
-    private static EventPropertyModel CreateNode(string name, Type declaredType, object? value, int depth, HashSet<object> visited)
+    private static EventPropertyModel CreateNode(string name, object? value, int depth, HashSet<object> visited)
     {
         var node = new EventPropertyModel(name, FormatValue(value));
 
-        if (value == null || depth >= MaxDepth || IsSimpleType(value.GetType() ?? declaredType))
+        if (value == null || depth >= MaxDepth || IsSimpleType(value.GetType()))
         {
             return node;
         }
@@ -162,8 +167,7 @@ public static class EventInspector
                     break;
                 }
 
-                var itemType = item?.GetType() ?? typeof(object);
-                var child = CreateNode($"[{index}]", itemType, item, depth + 1, visited);
+                var child = CreateNode($"[{index}]", item, depth + 1, visited);
                 node.Children.Add(child);
                 index++;
             }

@@ -15,6 +15,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
     private bool isExpanded = true;
     private bool _isUpdatingHierarchy;
     private Dictionary<Type, EventTypeFilterNode>? _typeLookup;
+    private HashSet<Type>? _visibleTypes;
     private readonly string? _displayName;
     public string Name => _displayName ?? EventType.Name;
     public int Count { get; private set; }
@@ -32,6 +33,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
     internal void SetTypeLookup(Dictionary<Type, EventTypeFilterNode> lookup)
     {
         _typeLookup = lookup;
+        UpdateVisibleTypes();
     }
 
     public static IReadOnlyList<EventTypeFilterNode> Build(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<object> nonTimeEvents)
@@ -118,7 +120,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
 
     public bool IsEventVisible(Type eventType)
     {
-        return _typeLookup?.TryGetValue(eventType, out var node) == true && node.IsChecked != false;
+        return _visibleTypes?.Contains(eventType) == true;
     }
 
     partial void OnIsCheckedChanged(bool? value)
@@ -143,6 +145,7 @@ public sealed partial class EventTypeFilterNode : ObservableObject
             root._isUpdatingHierarchy = false;
         }
 
+        root.UpdateVisibleTypes();
         root.FilterChanged?.Invoke(root, EventArgs.Empty);
     }
 
@@ -211,5 +214,23 @@ public sealed partial class EventTypeFilterNode : ObservableObject
 
         node.Count = node.Children.Sum(CalculateParentCounts);
         return node.Count;
+    }
+
+    private void UpdateVisibleTypes()
+    {
+        if (_typeLookup == null)
+        {
+            return;
+        }
+
+        _visibleTypes = [];
+
+        foreach (var pair in _typeLookup)
+        {
+            if (pair.Value.IsChecked != false)
+            {
+                _visibleTypes.Add(pair.Key);
+            }
+        }
     }
 }
