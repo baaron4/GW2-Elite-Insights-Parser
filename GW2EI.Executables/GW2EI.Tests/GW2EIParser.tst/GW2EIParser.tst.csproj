@@ -9,7 +9,7 @@
         <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
         <IsCodedUITest>False</IsCodedUITest>
         <TestProjectType>UnitTest</TestProjectType>
-        <AssemblyTitle>EliteInsights</AssemblyTitle>
+        <AssemblyTitle>EliteInsights.tst</AssemblyTitle>
         <OutputPath>..\..\..\GW2EI.bin\$(Configuration).tst\</OutputPath>
         <Product>GW2 Elite Insights</Product>
         <RepositoryUrl>https://github.com/baaron4/GW2-Elite-Insights-Parser</RepositoryUrl>

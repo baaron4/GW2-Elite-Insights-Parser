@@ -92,8 +92,10 @@
   </Folder>
   <Folder Name="/GW2EI.Executables/GW2EI.Tests/">
     <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/GW2EIParserBenchmark.csproj">
-      <BuildType Solution="NoRewards|*" Project="Debug" />
-      <BuildType Solution="Trace|*" Project="Debug" />
+      <BuildType Solution="Release-Linux|*" Project="Release" />
+      <BuildType Solution="Release-MacOS-Arm|*" Project="Release" />
+      <BuildType Solution="Release-MacOS|*" Project="Release" />
+      <BuildType Solution="Release-Win|*" Project="Release" />
     </Project>
     <Project Path="GW2EI.Executables/GW2EI.Tests/GW2EIParser.tst/GW2EIParser.tst.csproj">
       <BuildType Solution="Release-Linux|*" Project="Release" />
