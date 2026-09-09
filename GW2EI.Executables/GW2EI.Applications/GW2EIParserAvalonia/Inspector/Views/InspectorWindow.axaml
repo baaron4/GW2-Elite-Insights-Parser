@@ -837,6 +837,10 @@
 
                         <DataGrid.Columns>
 
+                            <DataGridTextColumn Header="State Change"
+                                                Binding="{Binding IsStateChange}"
+                                                Width="230"/>
+
                             <DataGridTextColumn Header="Time"
                                                 Binding="{Binding Time}"
                                                 Width="200"/>
@@ -896,6 +900,10 @@
                             <DataGridTextColumn Header="Result"
                                                 Binding="{Binding Result}"
                                                 Width="85"/>
+                            
+                            <DataGridTextColumn Header="Result Enum"
+                                                Binding="{Binding ResultEnum}"
+                                                Width="85"/>
 
                             <DataGridTextColumn Header="Activation"
                                                 Binding="{Binding IsActivation}"
@@ -924,10 +932,6 @@
                             <DataGridTextColumn Header="Is Moving"
                                                 Binding="{Binding IsMoving}"
                                                 Width="90"/>
-
-                            <DataGridTextColumn Header="State Change"
-                                                Binding="{Binding IsStateChange}"
-                                                Width="230"/>
 
                             <DataGridTextColumn Header="Is Flanking"
                                                 Binding="{Binding IsFlanking}"

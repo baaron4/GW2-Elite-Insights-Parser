@@ -20,6 +20,13 @@ public sealed class CombatItemModel
     public IFF? IFFEnum => _combatItem.IsStateChange == StateChange.Combat ? _combatItem.IFF : null;
     public byte IsBuff => _combatItem.IsBuff;
     public byte Result => _combatItem.Result;
+    public object? ResultEnum => _combatItem.IsDamageEvent() ?
+            _combatItem.Build >= ArcDPSBuilds.ResultEnumRework ? 
+                GetDamageResult(_combatItem.Result) 
+                :
+                _combatItem.IsDirectDamageEvent() ? GetDamageResult(_combatItem.Result) : GetConditionResult(_combatItem.Result)
+            : 
+            null;
     public byte IsActivation => _combatItem.IsActivationByte;
     public Activation? IsActivationEnum => _combatItem.IsCastEvent() ? _combatItem.IsActivation : null;
     public byte IsBuffRemove => _combatItem.IsBuffRemoveByte;

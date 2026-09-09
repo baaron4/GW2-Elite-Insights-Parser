@@ -40,6 +40,8 @@ public class CombatItem
     public readonly byte Pad3;
     public readonly byte Pad4;
 
+    public int Build => _version.Build;
+
     public bool IsExtension => IsStateChange == StateChange.Extension || IsStateChange == StateChange.ExtensionCombat;
     public bool IsPosition => IsStateChange == StateChange.Position ||
             IsStateChange == StateChange.Teleport;
@@ -175,12 +177,12 @@ public class CombatItem
         return HasTime();
     }
 
-    internal bool IsDamageEvent()
+    public bool IsDamageEvent()
     {
         return IsDirectDamageEvent() || IsBuffDamageEvent();
     }
 
-    internal bool IsNonZeroDamageEvent()
+    public bool IsNonZeroDamageEvent()
     {
         if (IsDirectDamageEvent())
         {
@@ -211,7 +213,7 @@ public class CombatItem
         return IsNonZeroDamageEvent();
     }
 
-    internal bool IsDirectDamageEvent()
+    public bool IsDirectDamageEvent()
     {
         if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
         {
@@ -225,7 +227,7 @@ public class CombatItem
                     ;
     }
 
-    internal bool IsBuffDamageEvent()
+    public bool IsBuffDamageEvent()
     {
         if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
         {
