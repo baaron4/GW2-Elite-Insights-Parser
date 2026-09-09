@@ -649,9 +649,8 @@ partial class CombatData
                 if (jumpEvent.OnLanding && statusEvents.JumpEventsBySrc.TryGetValue(jumpEvent.Src, out var jumps))
                 {
                     var last = jumps[^1];
-                    if (!last.OnLanding)
+                    if (!last.OnLanding && last.SetLanding(jumpEvent))
                     {
-                        last.SetLanding(jumpEvent);
                         break;
                     }
                 }

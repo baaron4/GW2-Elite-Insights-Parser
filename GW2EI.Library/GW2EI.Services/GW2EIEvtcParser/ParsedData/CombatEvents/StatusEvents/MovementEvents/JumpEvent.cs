@@ -18,12 +18,14 @@ public class JumpEvent : StatusEvent
         SomethingBehaviorRelated = evtcItem.IsOffcycle;
     }
 
-    internal void SetLanding(JumpEvent landing)
+    internal bool SetLanding(JumpEvent landing)
     {
         if (Landing == null)
         {
             Landing = landing;
+            return true;
         }
+        return false;
     }
 
 }
