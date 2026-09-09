@@ -5,6 +5,8 @@ namespace GW2EIEvtcParser.ParsedData;
 public class VelocityEvent : MovementEvent
 {
 
+    public float Velocity => Point3D.Length();
+
     internal VelocityEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
     }

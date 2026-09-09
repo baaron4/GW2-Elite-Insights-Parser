@@ -5,6 +5,9 @@ namespace GW2EIEvtcParser.ParsedData;
 public class RotationEvent : MovementEvent
 {
 
+    public float AngleZ => Point3D.GetZRotationRadians();
+    public float AngleZDeg => Point3D.GetRoundedZRotationDeg();
+
     internal RotationEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
     }
