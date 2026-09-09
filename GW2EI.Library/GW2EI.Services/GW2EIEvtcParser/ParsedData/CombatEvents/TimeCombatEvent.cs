@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class TimeCombatEvent
+public abstract class TimeCombatEvent : CombatEvent
 {
     public long Time { get; protected set; }
 

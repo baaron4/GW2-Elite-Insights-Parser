@@ -80,7 +80,7 @@ internal class SpiritValeInstance : SpiritVale
                 long start = wallOfGhost.FirstAware;
                 foreach (var velocityEvent in log.CombatData.GetMovementData(wallOfGhost).OfType<VelocityEvent>())
                 {
-                    if (velocityEvent.GetPointXY().Length() > 0)
+                    if (velocityEvent.Point2D.Length() > 0)
                     {
                         start = velocityEvent.Time;
                         break;
@@ -149,7 +149,7 @@ internal class SpiritValeInstance : SpiritVale
                 {
                     foreach (var velocityEvent in log.CombatData.GetMovementData(wallOfGhosts).OfType<VelocityEvent>())
                     {
-                        if (velocityEvent.GetPointXY().Length() > 0)
+                        if (velocityEvent.Point2D.Length() > 0)
                         {
                             start = velocityEvent.Time;
                             break;

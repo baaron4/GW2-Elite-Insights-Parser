@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class TeleportEvent : MovementEvent
 {
-    private readonly uint SomethingBehaviorRelated1;
-    private readonly byte SomethingBehaviorRelated2;
+    public readonly uint SomethingBehaviorRelated1;
+    public readonly byte SomethingBehaviorRelated2;
     internal TeleportEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         SomethingBehaviorRelated1 = evtcItem.OverstackValue;

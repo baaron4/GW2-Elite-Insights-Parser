@@ -206,10 +206,31 @@
 
                     </DataGridTemplateColumn>
 
+                    <!-- Elapsed -->
                     <DataGridTextColumn
                         Header="Elapsed"
-                        Binding="{Binding Elapsed, StringFormat='\{0:#;-#;\}'}}"
+                        Binding="{Binding Elapsed, StringFormat='\{0:#;-#;\}'}"
                         Width="100" />
+
+                    <!-- Inspect -->
+
+                    <DataGridTemplateColumn
+                        Header="Inspect"
+                        Width="100">
+
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Content="Inspect"
+                                    Command="{Binding InspectLogCommand}"
+                                    Margin="3"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
 
                 </DataGrid.Columns>
 

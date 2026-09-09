@@ -272,7 +272,7 @@ internal class Qadim : MythwrightGambit
         if (combatData.HasMovementData)
         {
             var qadimInitialPosition = new Vector3(-9742.406f, 12075.2627f, -4731.031f);
-            var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
+            var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.Point3D);
             if (!positions.Any(x => (x - qadimInitialPosition).XY().Length() < 150))
             {
                 return LogData.StartStatus.Late;

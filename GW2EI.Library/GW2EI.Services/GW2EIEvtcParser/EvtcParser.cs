@@ -19,7 +19,7 @@ public class EvtcParser
 {
 
     //Main data storage after binary parse
-    private readonly EvtcParserSettings _parserSettings;
+    private EvtcParserSettings _parserSettings;
     private readonly GW2APIController _apiController;
 
     public EvtcParser(EvtcParserSettings parserSettings, GW2APIController apiController)
@@ -27,6 +27,114 @@ public class EvtcParser
         _apiController = apiController;
         _parserSettings = parserSettings;
     }
+
+    #region Raw Parse Method
+    /// <summary>
+    /// Parses the given log without any EI logic. <br></br>
+    /// On parsing failure, <see cref="ParsingFailureReason"/> will be filled with the reason of the failure and the method will return <see langword="null"/>.
+    /// </summary>
+    /// <param name="operation">Operation object bound to the UI.</param>
+    /// <param name="evtc">The path to the log to parse.</param>
+    /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
+    /// <returns>The <see cref="RawEvtcLog"/> log.</returns>
+    /// <exception cref="EvtcFileException"></exception>
+    public RawEvtcLog? ParseRawLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason)
+    {
+        parsingFailureReason = null;
+        try
+        {
+            if (!evtc.Exists)
+            {
+                throw new EvtcFileException("File " + evtc.FullName + " does not exist");
+            }
+            if (!SupportedFileFormats.IsSupportedFormat(evtc.Name))
+            {
+                throw new EvtcFileException("Not EVTC");
+            }
+            RawEvtcLog? evtcLog;
+            using var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            if (SupportedFileFormats.IsCompressedFormat(evtc.Name))
+            {
+                using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
+                if (arch.Entries.Count != 1)
+                {
+                    throw new EvtcFileException("Invalid Archive");
+                }
+
+                using Stream data = arch.Entries[0].Open();
+                using var ms = new MemoryStream();
+                data.CopyTo(ms);
+                operation.SetFileSize(ms.Length / (1024L * 1024L));
+                if (operation.FileSize > _parserSettings.TooBigLimit)
+                {
+                    throw new TooBigException(operation.FileSize, _parserSettings.TooBigLimit);
+                }
+                ms.Position = 0;
+                evtcLog = ParseRawLog(operation, ms, out parsingFailureReason);
+            }
+            else
+            {
+                operation.SetFileSize(evtc.Length / (1024L * 1024L));
+                if (operation.FileSize > _parserSettings.TooBigLimit)
+                {
+                    throw new TooBigException(operation.FileSize, _parserSettings.TooBigLimit);
+                }
+                evtcLog = ParseRawLog(operation, fs, out parsingFailureReason);
+            }
+            return evtcLog;
+        }
+        catch (Exception ex)
+        {
+            parsingFailureReason = new ParsingFailureReason(ex);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Parses the given log without any EI Logic. <br></br>
+    /// On parsing failure, <see cref="ParsingFailureReason"/> will be filled with the reason of the failure and the method will return <see langword="null"/>.
+    /// </summary>
+    /// <param name="operation">Operation object bound to the UI.</param>
+    /// <param name="evtcStream">The stream of the log.</param>
+    /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
+    /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
+    public RawEvtcLog? ParseRawLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason)
+    {
+        var oldSettings = _parserSettings;
+        _parserSettings = new EvtcParserSettings();
+        parsingFailureReason = null;
+        try
+        {
+            using BinaryReader reader = CreateReader(evtcStream);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing log data");
+            var (revision, id, evtcVersion) = ParseLogData(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
+            var agentsList = ParseAgentData(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
+            var skillData = ParseSkillData(reader, operation, evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
+            var (combatItems, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
+            var (logData, agentData, playerList) = CompleteAgentsAndLogData(operation, agentsList, combatItems, arcdpsAgentRedirection, enabledExtensions, logStartOffset, logEndTime, newID, evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
+            var log = new RawEvtcLog(evtcVersion, logData, agentData, skillData, combatItems, playerList, enabledExtensions, _parserSettings, _apiController, operation);
+            _parserSettings = oldSettings;
+            return log;
+        }
+        catch (Exception ex)
+        {
+            _parserSettings = oldSettings;
+#if DEBUG
+            Console.Error.WriteLine(ex);
+#endif
+
+            parsingFailureReason = new ParsingFailureReason(ex);
+            return null;
+        }
+    }
+
+    #endregion
 
     #region Main Parse Method
 

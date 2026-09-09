@@ -3,7 +3,7 @@
 public abstract class IDToGUIDEvent : MetaDataEvent
 {
     public readonly GUID GUID;
-    protected readonly long ContentID;
+    public readonly long ContentID;
 
     public bool IsValid => ContentID >= 0;
 

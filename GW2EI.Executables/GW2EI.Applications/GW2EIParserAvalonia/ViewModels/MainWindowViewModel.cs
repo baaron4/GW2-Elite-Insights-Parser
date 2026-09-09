@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
 using GW2EIParserAvalonia.Services;
+using GW2EIParserAvalonia.Views;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 
@@ -104,6 +105,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         logFileViewModel.ReParseRequested += LogFile_ParseRequested;
         logFileViewModel.PendingCancellationRequested += LogFile_PendingCancellationRequested;
         logFileViewModel.RemoveRequested += LogFile_RemoveRequested;
+        logFileViewModel.InspectLogRequested += LogFile_InspectLogRequested;
 
         LogFiles.Add(logFileViewModel);
         UpdateQueueStatus();
@@ -272,7 +274,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     private void QueueOrRunOperation(LogFileViewModel logFile)
     {
-
         if (!AnyRunning || (_parserService.ParseMultipleLogs() && _runningCount < _parserService.GetMaxParallelRunning()))
         {
             _ = RunOperationAsync(logFile);
@@ -395,6 +396,39 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ClearAllEnabled = LogFiles.Count > 0;
         ClearUncompletedEnabled = LogFiles.Any(x => x.State == OperationState.UnComplete);
         ParseEnabled = !AnyRunning && LogFiles.Count > 0;
+    }
+
+    private void LogFile_InspectLogRequested(object? sender, EventArgs e)
+    {
+        if (sender is LogFileViewModel logFile)
+        {
+            InspectorParse(logFile);
+        }
+    }
+
+    private async void InspectorParse(LogFileViewModel logFile)
+    {
+        try
+        {
+            await _parserService.InspectParseAsync(logFile.InspectorOperation, () =>
+            {
+                _trace.Add("Operation: Inspecting " + logFile.InputFilePath);
+            });
+        }
+        finally
+        {
+            if (logFile.InspectorOperation.InspectLog != null)
+            {
+                var inspectorWindow = new InspectorWindow(logFile.InspectorOperation.InspectLog, _trace);
+                inspectorWindow.Show();
+            } 
+            else
+            {
+                var errorMessageWindow = new MessageWindow("Inspection not possible", _trace);
+                errorMessageWindow.Show();
+            }
+        }
+        
     }
 
     public async Task<string> SendAllToDiscordAsync()

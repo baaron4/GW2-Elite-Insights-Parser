@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class MetaDataEvent
+public abstract class MetaDataEvent : NonTimeCombatEvent
 {
     internal MetaDataEvent(CombatItem evtcItem)
     {

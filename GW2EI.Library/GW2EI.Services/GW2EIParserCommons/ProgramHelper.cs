@@ -474,6 +474,37 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
+    public RawEvtcLog? ParseLogForInspection(OperationController operation)
+    {
+        System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture =
+                new System.Globalization.CultureInfo("en-US");
+        operation.Reset();
+        try
+        {
+            operation.Start();
+            var fInfo = new FileInfo(operation.InputFile);
+
+            var parser = new EvtcParser(new EvtcParserSettings(
+                                            Settings.CustomTooShort,
+                                            Settings.CustomTooBig),
+                                        APIController);
+
+            //Process evtc here
+            var inspectLog = parser.ParseRawLog(operation, fInfo, out var failureReason);
+            failureReason?.Throw();
+            return inspectLog;
+        }
+        catch (Exception ex)
+        {
+            throw new ProgramException(ex);
+        }
+        finally
+        {
+            operation.Stop();
+            Thread.CurrentThread.CurrentCulture = before;
+        }
+    }
     public void DoWork(OperationController operation)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
@@ -505,10 +536,7 @@ public sealed class ProgramHelper : IDisposable
 
             //Process evtc here
             ParsedEvtcLog? log = parser.ParseLog(operation, fInfo, out var failureReason, !Settings.SingleThreaded && HasFormat());
-            if (failureReason != null)
-            {
-                failureReason.Throw();
-            }
+            failureReason?.Throw();
             operation.BasicMetaData = new OperationController.OperationBasicMetaData(log!);
             string[] uploadStrings = UploadOperation(fInfo, log!, operation);
             if (uploadStrings[0].Contains("https"))

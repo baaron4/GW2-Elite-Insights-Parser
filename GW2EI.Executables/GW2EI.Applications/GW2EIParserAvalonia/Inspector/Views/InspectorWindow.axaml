@@ -1,0 +1,980 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="using:GW2EIParserAvalonia.ViewModels"
+        mc:Ignorable="d"
+        d:DesignWidth="1600"
+        d:DesignHeight="900"
+        x:Class="GW2EIParserAvalonia.InspectorWindow"
+        x:DataType="viewModels:InspectorViewModel"
+        Title="GW2 Elite Insights Parser - EVTC Inspector"
+        MinWidth="1000"
+        MinHeight="600"
+        WindowState="Maximized">
+
+    <Grid>
+
+        <TabControl>
+
+            <TabItem Header="Events">
+
+                <Grid ColumnDefinitions="3*,5,2*,5,5*">
+
+                    <Border Grid.Column="0"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,1,0">
+
+                        <Grid RowDefinitions="Auto,*"
+                              Margin="8">
+
+                            <Grid Grid.Row="0"
+                                  RowDefinitions="Auto,Auto,Auto"
+                                  ColumnDefinitions="Auto,*"
+                                  Margin="0,0,0,8">
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           Text="Skill ID"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,4"/>
+
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Text="{Binding SkillIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="Skill ID"/>
+
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           Text="Skill Name"
+                                           VerticalAlignment="Center"
+                                           Margin="0,4,8,0"/>
+
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="Skill name"
+                                         Margin="0,4,0,0"/>
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           Text="GUID"
+                                           VerticalAlignment="Center"
+                                           Margin="0,4,8,0"/>
+
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="GUID"
+                                         Margin="0,4,0,0"/>
+
+                            </Grid>
+
+                            <TreeView Grid.Row="1"
+                                      ItemsSource="{Binding EventTypeFilterRoots}">
+
+                                <TreeView.Styles>
+                                    <Style Selector="TreeViewItem">
+                                        <Setter Property="IsExpanded"
+                                                Value="{Binding IsExpanded, Mode=TwoWay}"
+                                                x:CompileBindings="False"/>
+                                    </Style>
+                                </TreeView.Styles>
+
+                                <TreeView.ItemTemplate>
+                                    <TreeDataTemplate ItemsSource="{Binding Children}">
+
+                                        <Grid ColumnDefinitions="Auto,*,60"
+                                              Margin="2,2,16,2">
+
+                                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"/>
+
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       Margin="6,0"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"/>
+
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding Count}"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,4,0"
+                                                       Opacity="0.7"
+                                                       VerticalAlignment="Center"/>
+
+                                        </Grid>
+
+                                    </TreeDataTemplate>
+                                </TreeView.ItemTemplate>
+
+                            </TreeView>
+
+                        </Grid>
+
+                    </Border>
+
+                    <!-- Splitter between TreeView and Event DataGrid -->
+
+                    <GridSplitter Grid.Column="1"
+                                  ResizeDirection="Columns"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"/>
+
+                    <!-- Event list -->
+
+                    <DataGrid Grid.Column="2"
+                              ItemsSource="{Binding VisibleEvents}"
+                              SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Single"
+                              RowHeight="28">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Time"
+                                                Binding="{Binding Time}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding Type}"
+                                                Width="*"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                    <!-- Splitter between Event DataGrid and inspector -->
+
+                    <GridSplitter Grid.Column="3"
+                                  ResizeDirection="Columns"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"/>
+
+                    <!-- Selected event inspector -->
+
+                    <Border Grid.Column="4"
+                            BorderBrush="#444"
+                            BorderThickness="1,0,0,0"
+                            Padding="10">
+
+                        <Grid RowDefinitions="Auto,*">
+
+                            <!-- Header -->
+
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,Auto"
+                                  Margin="0,0,0,10">
+
+                                <TextBlock Text="{Binding SelectedEvent.Type}"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           TextTrimming="CharacterEllipsis"/>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding SelectedEvent.Time}"
+                                           Opacity="0.7"
+                                           Margin="10,0,0,0"/>
+
+                            </Grid>
+
+                            <!-- Properties -->
+
+                            <TreeView Grid.Row="1"
+                                      ItemsSource="{Binding SelectedEventProperties}">
+
+                                <TreeView.ItemTemplate>
+
+                                    <TreeDataTemplate ItemsSource="{Binding Children}">
+
+                                        <Grid ColumnDefinitions="180,130,*"
+                                              MinHeight="24"
+                                              Margin="2">
+
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"/>
+
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding Value}"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"/>
+
+                                        </Grid>
+
+                                    </TreeDataTemplate>
+
+                                </TreeView.ItemTemplate>
+
+                            </TreeView>
+
+                        </Grid>
+
+                    </Border>
+
+                </Grid>
+
+            </TabItem>
+
+            <TabItem Header="Agents Data">
+                <Grid RowDefinitions="Auto,*">
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <TextBlock Text="{Binding AgentCount, StringFormat='{}{0:N0} agents'}"
+                                   FontSize="20"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,5,*">
+
+                        <DataGrid Grid.Column="0"
+                                  x:CompileBindings="False"
+                                  ItemsSource="{Binding AgentsData}"
+                                  SelectedItem="{Binding SelectedAgent, Mode=TwoWay}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Single"
+                                  RowHeight="28">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding ID}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Inst ID"
+                                                    Binding="{Binding InstID}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Name"
+                                                    Binding="{Binding Name}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Type"
+                                                    Binding="{Binding Type}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Agent"
+                                                    Binding="{Binding Agent}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Spec"
+                                                    Binding="{Binding Spec}"
+                                                    Width="Auto"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <GridSplitter Grid.Column="1"
+                                      ResizeDirection="Columns"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"/>
+
+                        <Border Grid.Column="2"
+                                BorderBrush="#444"
+                                BorderThickness="1,0,0,0"
+                                Padding="10">
+
+                            <Grid RowDefinitions="Auto,*">
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="*"
+                                      Margin="0,0,0,10">
+
+                                    <TextBlock Text="{Binding SelectedAgent.Name}"
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Grid>
+
+                                <TreeView Grid.Row="1"
+                                          ItemsSource="{Binding SelectedAgentProperties}">
+
+                                    <TreeView.ItemTemplate>
+                                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                                            <Grid ColumnDefinitions="180,130,*"
+                                                  MinHeight="24"
+                                                  Margin="2">
+
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis"/>
+
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Value}"
+                                                           VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </TreeDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Skills Data">
+                <Grid RowDefinitions="Auto,*">
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <TextBlock Text="{Binding SkillCount, StringFormat='{}{0:N0} skills'}"
+                                   FontSize="20"
+                                   VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,5,*">
+
+                        <DataGrid Grid.Column="0"
+                                  x:CompileBindings="False"
+                                  ItemsSource="{Binding SkillsData}"
+                                  SelectedItem="{Binding SelectedSkill, Mode=TwoWay}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Single"
+                                  RowHeight="28">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding ID}"
+                                                    Width="Auto"/>
+
+                                <DataGridTextColumn Header="Name"
+                                                    Binding="{Binding Name}"
+                                                    Width="Auto"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <GridSplitter Grid.Column="1"
+                                      ResizeDirection="Columns"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"/>
+
+                        <Border Grid.Column="2"
+                                BorderBrush="#444"
+                                BorderThickness="1,0,0,0"
+                                Padding="10">
+
+                            <Grid RowDefinitions="Auto,*">
+
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="*"
+                                      Margin="0,0,0,10">
+
+                                    <TextBlock Text="{Binding SelectedSkill.Name}"
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Grid>
+
+                                <TreeView Grid.Row="1"
+                                          ItemsSource="{Binding SelectedSkillProperties}">
+
+                                    <TreeView.ItemTemplate>
+                                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                                            <Grid ColumnDefinitions="180,130,*"
+                                                  MinHeight="24"
+                                                  Margin="2">
+
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis"/>
+
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Value}"
+                                                           VerticalAlignment="Center"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </TreeDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+
+                            </Grid>
+
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Content GUID">
+                <TabControl>
+
+                    <TabItem Header="Skills">
+                        <DataGrid ItemsSource="{Binding Skills}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Effects">
+                        <DataGrid ItemsSource="{Binding Effects}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="DefaultDuration"
+                                                    Binding="{Binding DefaultDuration}"
+                                                    Width="180"/>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Markers">
+                        <DataGrid ItemsSource="{Binding Markers}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridCheckBoxColumn Header="Commander Tag"
+                                                        Binding="{Binding IsCommanderTag}"
+                                                        Width="150"/>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Species">
+                        <DataGrid ItemsSource="{Binding Species}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Teams">
+                        <DataGrid ItemsSource="{Binding Teams}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Emotes">
+                        <DataGrid ItemsSource="{Binding Emotes}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <TabItem Header="Transformations">
+                        <DataGrid ItemsSource="{Binding Transformations}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  GridLinesVisibility="All"
+                                  HeadersVisibility="Column"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  SelectionMode="Extended"
+                                  RowHeight="28">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ContentID"
+                                                    Binding="{Binding ContentID}"
+                                                    Width="150">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Content ID"
+                                                              Click="CopyContentId_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="GUID"
+                                                    Binding="{Binding GUID}"
+                                                    Width="350">
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy GUID"
+                                                              Click="CopyGuid_Click"
+                                                              CommandParameter="{Binding}" />
+                                                </ContextMenu>
+                                            </Setter>
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                </TabControl>
+            </TabItem>
+
+            <TabItem Header="Combat Items">
+
+                <Grid RowDefinitions="Auto,*">
+
+                    <Border Grid.Row="0"
+                            Padding="12"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <TextBlock Text="{Binding CombatItemCount, StringFormat='{}{0:N0} items'}"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"/>
+
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              x:CompileBindings="False"
+                              ItemsSource="{Binding CombatItems}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="All"
+                              HeadersVisibility="Column"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              SelectionMode="Extended"
+                              RowHeight="28">
+
+                        <DataGrid.Resources>
+                            <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="State Change"
+                                                Binding="{Binding IsStateChange}"
+                                                Width="230"/>
+
+                            <DataGridTextColumn Header="Time"
+                                                Binding="{Binding Time}"
+                                                Width="200"/>
+
+                            <DataGridTextColumn Header="Src Agent"
+                                                Binding="{Binding SrcAgent}"
+                                                Width="200"/>
+
+                            <DataGridTextColumn Header="Dst Agent"
+                                                Binding="{Binding DstAgent}"
+                                                Width="200"/>
+
+                            <DataGridTextColumn Header="Value"
+                                                Binding="{Binding Value}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Buff Dmg"
+                                                Binding="{Binding BuffDmg}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Overstack Value"
+                                                Binding="{Binding OverstackValue}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Skill ID"
+                                                Binding="{Binding SkillID}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Src Inst ID"
+                                                Binding="{Binding SrcInstid}"
+                                                Width="95"/>
+
+                            <DataGridTextColumn Header="Dst Inst ID"
+                                                Binding="{Binding DstInstid}"
+                                                Width="95"/>
+
+                            <DataGridTextColumn Header="Src Master Inst ID"
+                                                Binding="{Binding SrcMasterInstid}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Dst Master Inst ID"
+                                                Binding="{Binding DstMasterInstid}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="IFF"
+                                                Binding="{Binding IFF}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="IFF Enum"
+                                                Binding="{Binding IFFEnum}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Buff"
+                                                Binding="{Binding IsBuff}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Result"
+                                                Binding="{Binding Result}"
+                                                Width="85"/>
+                            
+                            <DataGridTextColumn Header="Result Enum"
+                                                Binding="{Binding ResultEnum}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Activation"
+                                                Binding="{Binding IsActivation}"
+                                                Width="125"/>
+
+                            <DataGridTextColumn Header="Activation Enum"
+                                                Binding="{Binding IsActivationEnum}"
+                                                Width="105"/>
+
+                            <DataGridTextColumn Header="Buff Remove"
+                                                Binding="{Binding IsBuffRemove}"
+                                                Width="135"/>
+
+                            <DataGridTextColumn Header="Buff Remove Enum"
+                                                Binding="{Binding IsBuffRemoveEnum}"
+                                                Width="110"/>
+
+                            <DataGridTextColumn Header="Is Ninety"
+                                                Binding="{Binding IsNinety}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Is Fifty"
+                                                Binding="{Binding IsFifty}"
+                                                Width="85"/>
+
+                            <DataGridTextColumn Header="Is Moving"
+                                                Binding="{Binding IsMoving}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="Is Flanking"
+                                                Binding="{Binding IsFlanking}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Shields"
+                                                Binding="{Binding IsShields}"
+                                                Width="100"/>
+
+                            <DataGridTextColumn Header="Is Offcycle"
+                                                Binding="{Binding IsOffcycle}"
+                                                Width="105"/>
+
+                            <DataGridTextColumn Header="Pad"
+                                                Binding="{Binding Pad}"
+                                                Width="140"/>
+
+                            <DataGridTextColumn Header="Pad1"
+                                                Binding="{Binding Pad1}"
+                                                Width="75"/>
+
+                            <DataGridTextColumn Header="Pad2"
+                                                Binding="{Binding Pad2}"
+                                                Width="75"/>
+
+                            <DataGridTextColumn Header="Pad3"
+                                                Binding="{Binding Pad3}"
+                                                Width="75"/>
+
+                            <DataGridTextColumn Header="Pad4"
+                                                Binding="{Binding Pad4}"
+                                                Width="75"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </Grid>
+
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+
+</Window>

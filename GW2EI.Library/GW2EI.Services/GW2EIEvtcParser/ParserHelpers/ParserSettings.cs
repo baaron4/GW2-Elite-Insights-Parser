@@ -22,4 +22,21 @@ public class EvtcParserSettings
         TooShortLimit = Math.Max(tooShortLimit, ParserHelper.MinimumInCombatDuration);
         TooBigLimit = Math.Max(tooBigLimit, ParserHelper.MinimumFileSizeMB);
     }
+
+    internal EvtcParserSettings()
+    {
+        AnonymousPlayers = false;
+        SkipFailedTries = false;
+        ComputePhases = false;
+        ComputeCombatReplay = false;
+        ComputeDamageModifiers = false;
+        ComputeDamage = false;
+        ParseExtensions = true;
+        ComputeCast = false;
+        ComputeBuff = false;
+        ComputeMechanics = false;
+        DetailedWvWParse = true;
+        TooShortLimit = int.MinValue;
+        TooBigLimit = long.MaxValue;
+    }
 }

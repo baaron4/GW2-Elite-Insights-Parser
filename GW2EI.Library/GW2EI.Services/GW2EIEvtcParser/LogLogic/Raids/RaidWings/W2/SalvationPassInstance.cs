@@ -132,7 +132,7 @@ internal class SalvationPassInstance : SalvationPass
             long start = pack.Min(x => x.FirstAware);
             long end = pack.Max(x => x.LastAware);
             var success = false;
-            var banditsInBox = banditPositions.Where(x => x.Time < start + 10000 && x.Time > start && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
+            var banditsInBox = banditPositions.Where(x => x.Time < start + 10000 && x.Time > start && x.Point2D.IsInBoundingBox(boxStart, boxEnd))
                 .Select(x => x.Src)
                 .ToHashSet();
             if (banditsInBox.Count > 0)

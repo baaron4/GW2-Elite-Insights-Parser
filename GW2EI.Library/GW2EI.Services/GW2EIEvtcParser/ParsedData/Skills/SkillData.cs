@@ -4,6 +4,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillData
 {
+    public IReadOnlyCollection<SkillItem> AllSkills => _skills.Values;
     // Fields
     private readonly Dictionary<long, SkillItem> _skills = [];
     private readonly GW2EIGW2API.GW2APIController _apiController;
