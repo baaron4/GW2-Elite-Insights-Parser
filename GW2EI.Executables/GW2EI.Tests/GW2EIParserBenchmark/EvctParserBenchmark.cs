@@ -20,25 +20,25 @@ public class EvctParserBenchmark
             return files.Where(SupportedFileFormats.IsSupportedFormat);
         }
 
-        throw new Exception($"No files are present in {testFilesPath}");
+        throw new InvalidDataException($"No files are present in {testFilesPath}");
     }
 
-    public EvtcParser parser;
-    ParserController parserController = new TestOperationController();
+    public EvtcParser? Parser;
+    private readonly ParserController parserController = new TestOperationController();
 
     [GlobalSetup]
     public void Setup()
     {
         EvtcParserSettings parserSettings = new(0, 0);
         GW2APIController apiController = new("./Content/SkillList.json", "./Content/SpecList.json", "./Content/TraitList.json", "./Content/MapList.json");
-        parser = new EvtcParser(parserSettings, apiController);
+        Parser = new EvtcParser(parserSettings, apiController);
     }
 
     [Benchmark]
     public ParsedEvtcLog? ParseLog()
     {
         FileInfo fileInfo = new(_filePath);
-        ParsedEvtcLog? test = parser.ParseLog(parserController, fileInfo, out ParsingFailureReason? parsingFailureReasure);
+        ParsedEvtcLog? test = Parser?.ParseLog(parserController, fileInfo, out _);
         return test;
     }
 }
