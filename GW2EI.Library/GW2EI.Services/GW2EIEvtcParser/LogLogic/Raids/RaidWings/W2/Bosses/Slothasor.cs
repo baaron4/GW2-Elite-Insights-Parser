@@ -193,7 +193,7 @@ internal class Slothasor : SalvationPass
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && positionsDict.TryGetValue(x, out var agentPositions) && agentPositions.Any(x => (x.GetPointXY() - center).LengthSquared() < 6250000)) // 2500 squared
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && positionsDict.TryGetValue(x, out var agentPositions) && agentPositions.Any(x => (x.Point2D - center).LengthSquared() < 6250000)) // 2500 squared
             .ToList();
         if (mushroomAgents.Count > 0)
         {

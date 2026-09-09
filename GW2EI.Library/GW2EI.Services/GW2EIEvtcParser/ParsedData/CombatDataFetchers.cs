@@ -822,6 +822,10 @@ partial class CombatData
     {
         return GetTimeValueOrEmpty(_statusEvents.GliderEventsBySrc, src);
     }
+    public IReadOnlyList<JumpEvent> GetJumpEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.JumpEventsBySrc, src);
+    }
     #endregion MOVEMENTS
     #region EFFECTS
     public IReadOnlyList<EffectEvent> GetEffectEventsBySrc(AgentItem src)
@@ -1382,6 +1386,7 @@ partial class CombatData
         // MOVEMENT
         AddIndex(_statusEvents.MovementEvents.Values);
         AddIndex(_statusEvents.GliderEventsBySrc.Values);
+        AddIndex(_statusEvents.JumpEventsBySrc.Values);
 
         // EFFECTS
         AddIndex(_statusEvents.EffectEventsBySrc.Values);

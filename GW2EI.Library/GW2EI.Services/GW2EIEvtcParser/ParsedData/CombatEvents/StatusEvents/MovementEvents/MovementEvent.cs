@@ -9,6 +9,9 @@ public abstract class MovementEvent : StatusEvent
     private readonly ulong _dstAgent;
     private readonly int _value;
 
+    public Vector3 Point3D => UnpackMovementData(_dstAgent, _value);
+    public Vector2 Point2D => Point3D.XY();
+
     internal MovementEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         _dstAgent = evtcItem.DstAgent;
@@ -34,20 +37,7 @@ public abstract class MovementEvent : StatusEvent
     public ParametricPoint3D GetParametricPoint3D()
     {
         var p = UnpackMovementData(_dstAgent, _value); //TODO(Rennorb) @cleanup: use union for event data to not have to do this kind of stuff
-        return new ParametricPoint3D(p, Time);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector3 GetPoint3D()
-    {
-        return UnpackMovementData(_dstAgent, _value); //TODO(Rennorb) @cleanup: use union for event data to not have to do this kind of stuff
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public unsafe Vector2 GetPointXY()
-    {
-        var packedXY = _dstAgent;
-        return new(*(float*)&packedXY, *((float*)&packedXY + 1)); //TODO(Rennorb) @cleanup: use union for event data to not have to do this kind of stuff
+        return new ParametricPoint3D(Point3D, Time);
     }
 
     /// <summary>

@@ -644,6 +644,19 @@ partial class CombatData
             case StateChange.Tick:
                 metaDataEvents.TickEvents.Add(new TickEvent(stateChangeEvent));
                 break;
+            case StateChange.Jump:
+                var jumpEvent = new JumpEvent(stateChangeEvent, agentData);
+                if (jumpEvent.OnLanding && statusEvents.JumpEventsBySrc.TryGetValue(jumpEvent.Src, out var jumps))
+                {
+                    var last = jumps[^1];
+                    if (!last.OnLanding)
+                    {
+                        last.SetLanding(jumpEvent);
+                        break;
+                    }
+                }
+                Add(statusEvents.JumpEventsBySrc, jumpEvent.Src, jumpEvent);
+                break;
             default:
                 break;
         }

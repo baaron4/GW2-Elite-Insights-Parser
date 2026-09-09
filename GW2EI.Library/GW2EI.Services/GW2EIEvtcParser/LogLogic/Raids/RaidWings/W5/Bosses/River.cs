@@ -99,7 +99,7 @@ internal class River : HallOfChains
         if (combatData.HasMovementData)
         {
             var desminaEncounterStartPosition = new Vector2(-9239.706f, 635.445435f/*, -813.8115f*/);
-            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
+            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.Point3D);
             if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
             {
                 return LogData.StartStatus.Late;
