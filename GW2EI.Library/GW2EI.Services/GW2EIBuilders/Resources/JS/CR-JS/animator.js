@@ -326,7 +326,7 @@ class Animator {
         this.dragged = false;
         this.globalScale = 1.0;
         this.globalRotation = 0;
-        this.globalPos = null;
+        this.globalTranslation = null;
         // options
         if (options) {
             if (options.inchToPixel) {
@@ -924,6 +924,8 @@ class Animator {
         if (defaultViewpoint) {
             this._setScaleOnPoint(defaultViewpoint.s, 0, 0);
         }
+        this.globalTranslation = null;
+        this.globalRotation = 0;
         this.needBGUpdate = true;
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
@@ -1275,7 +1277,7 @@ class Animator {
 
             this._moveToSelected(ctx);
             if (!this.displaySettings.followSelected || !this.displaySettings.rotateSelected) {
-                this.globalPos = null;
+                this.globalTranslation = null;
                 this.globalRotation = 0;
             }
             // Background items commonly overlap so they need to be drawn in the correct order by height
@@ -1350,16 +1352,16 @@ class Animator {
                     const angle = rot != null ? ToRadians(rot + 90) : 0;
                     ctx.rotate(-angle);
                     this.globalRotation = -angle;
-                    this.globalPos = pos;
+                    this.globalTranslation = pos;
                 }
                 ctx.translate(-pos.x, -pos.y);
             }
         }
         // We need to restore orientation 
-        else if (this.globalPos) {
-            ctx.translate(this.globalPos.x, this.globalPos.y);
+        else if (this.globalTranslation) {
+            ctx.translate(this.globalTranslation.x, this.globalTranslation.y);
             ctx.rotate(-this.globalRotation);
-            ctx.translate(-this.globalPos.x, -this.globalPos.y);
+            ctx.translate(-this.globalTranslation.x, -this.globalTranslation.y);
         }
     }
     draw() {
