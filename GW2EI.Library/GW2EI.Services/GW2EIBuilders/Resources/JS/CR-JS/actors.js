@@ -238,7 +238,11 @@ class IconDrawable {
                 ctx.stroke();
             });
         } 
-        ctx.drawImage(this.getIcon(), pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(-animator.globalRotation);
+        ctx.drawImage(this.getIcon(), -halfSize, -halfSize, fullSize, fullSize); 
+        ctx.restore();
     }
 
     drawPicking() {

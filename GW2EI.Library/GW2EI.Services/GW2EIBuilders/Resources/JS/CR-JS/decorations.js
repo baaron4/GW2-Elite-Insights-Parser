@@ -498,7 +498,7 @@ class MechanicDrawable {
         return this.positionFetcher(this.connectedTo, this.master, this.start, this.end);
     }
 
-    moveContext(ctx, pos, rot) {
+    moveContext(ctx, pos, rot, useGlobalRotation = false) {
         const angle = ToRadians(rot);
         const offsetAngle = ToRadians(this.rotationOffset);
         const offset = this.getOffset();
@@ -506,6 +506,9 @@ class MechanicDrawable {
         ctx.translate(pos.x, pos.y);
         if (!offsetAfterRotation) {       
             ctx.translate(offset.x, offset.y);   
+        }
+        if (useGlobalRotation) {
+            ctx.rotate(-animator.globalRotation);
         }
         ctx.rotate(angle);
         if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.addToMaster) {
@@ -968,7 +971,7 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
         const progressPercent = this.computeProgress() / 100.0;
         const ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, rot);
+        this.moveContext(ctx, pos, rot, true);
         const secondaryOffset = this.getSecondaryOffset();
         if (secondaryOffset) {
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
@@ -1449,7 +1452,7 @@ class IconMechanicDrawable extends MechanicDrawable {
         
         const ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, rot);
+        this.moveContext(ctx, pos, rot, true);
         ctx.globalAlpha = this.getOpacity();
         const secondaryOffset = this.getSecondaryOffset();
         if (secondaryOffset) {        
@@ -1599,7 +1602,7 @@ class TextDrawable extends MechanicDrawable {
         pos.y += fontSize / 2;
         const ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, rot);     
+        this.moveContext(ctx, pos, rot, true);     
         const secondaryOffset = this.getSecondaryOffset();
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);

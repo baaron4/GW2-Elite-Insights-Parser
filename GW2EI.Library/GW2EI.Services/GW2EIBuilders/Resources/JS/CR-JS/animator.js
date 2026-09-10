@@ -292,7 +292,8 @@ class Animator {
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
             useActorHitboxWidth: false,
-            followSelected: false
+            followSelected: false,
+            rotateSelected: false
         };
         this.selectedExtraDecorations = null;
         // actors
@@ -324,6 +325,8 @@ class Animator {
         this.mouseDown = null;
         this.dragged = false;
         this.globalScale = 1.0;
+        this.globalRotation = 0;
+        this.globalPos = null;
         // options
         if (options) {
             if (options.inchToPixel) {
@@ -812,6 +815,12 @@ class Animator {
 
     toggleFollowSelected() {
         this.displaySettings.followSelected = !this.displaySettings.followSelected;
+        animateCanvas(noUpdateTime);
+    }
+
+    toggleRotateSelected() {
+        this.displaySettings.rotateSelected = !this.displaySettings.rotateSelected;
+        this.needBGUpdate = true;
         animateCanvas(noUpdateTime);
     }
 
@@ -1331,8 +1340,20 @@ class Animator {
                 const translateScale = 0.5 / resolutionMultiplier / this.globalScale
                 ctx.scale(this.globalScale * resolutionMultiplier, this.globalScale * resolutionMultiplier);
                 ctx.translate(this.mainCanvas.width * translateScale, this.mainCanvas.height * translateScale);
+                if (this.displaySettings.rotateSelected) {               
+                    const rot = this.selectedActor.getRotation();
+                    const angle = rot != null ? ToRadians(rot + 90) : 0;
+                    ctx.rotate(-angle);
+                    this.globalRotation = -angle;
+                }
                 ctx.translate(-pos.x, -pos.y);
             }
+        }
+        // We need to restore orientation 
+        else if (this.globalPos) {
+            ctx.translate(this.globalPos.x, this.globalPos.y);
+            ctx.rotate(-this.globalRotation);
+            ctx.translate(-this.globalPos.x, -this.globalPos.y);
         }
     }
     draw() {
@@ -1344,6 +1365,10 @@ class Animator {
         //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
+        if (!this.displaySettings.rotateSelected) {
+            this.globalPos = null;
+            this.globalRotation = 0;
+        }
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
             overheadAnimationIncrement *= -1;
         }

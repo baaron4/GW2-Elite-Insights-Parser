@@ -7,6 +7,11 @@
                     :checked="getAnimator().displaySettings.followSelected" v-on:change="getAnimator().toggleFollowSelected()">
                 <label class="form-check-label" for="followCheck">Follow Selected</label>
             </div>
+            <div class="form-check mb-2 mr-2" :data-original-title="'Viewpoint will  rotate with selected actor, as long as selected actor is drawn and Follow Selected is checked'">
+                <input type="checkbox" class="form-check-input" id="rotateSelected" 
+                    :checked="getAnimator().displaySettings.rotateSelected" v-on:change="getAnimator().toggleRotateSelected()">
+                <label class="form-check-label" for="rotateSelected">Rotate with Selected</label>
+            </div>
             <div class="form-check mb-2 mr-2" :data-original-title="'Selected player in green, group in blue'">
                 <input type="checkbox" class="form-check-input" id="subgroupCheck" 
                     :checked="getAnimator().displaySettings.highlightSelectedGroup" v-on:change="getAnimator().toggleHighlightSelectedGroup()">
