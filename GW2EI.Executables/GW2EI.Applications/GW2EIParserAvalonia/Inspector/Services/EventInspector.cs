@@ -331,8 +331,24 @@ public static class EventInspector
             return $"'{character}'";
         }
 
-        if (value is IEnumerable && value is not string)
+        if (value is IEnumerable enumerable && value is not string)
         {
+            foreach (var item in enumerable) 
+            {
+                if (item != null)
+                {
+                    var type = item.GetType();
+                    var baseType = type;
+                    while (baseType != null && !baseType.IsAssignableFrom(type))
+                    {
+                        baseType = baseType.BaseType;
+                    }
+                    if (baseType != null)
+                    {
+                        return $"Array of {baseType.Name}";
+                    }
+                }
+            }
             return string.Empty;
         }
 
