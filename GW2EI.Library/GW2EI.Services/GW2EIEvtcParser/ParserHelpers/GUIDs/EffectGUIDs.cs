@@ -914,6 +914,25 @@ public static class EffectGUIDs
     public static readonly GUID CascadeAoEIndicator3 = new("89CB4BCA7B012244B0864DFAD7E9F3AC");
     public static readonly GUID CascadeAoEIndicator4 = new("965355FD1C53F24085A9C422B8333780");
     public static readonly GUID CascadeAoEIndicator5 = new("F26A2240C0F1E24E81EAEFDE64EFA3BF");
+    // Whisper of Jormag
+    public static readonly GUID WhisperOfJormagSlitheringRimeAoE= new("A5EA88A91E5D7046A02680C02A74BD78"); // Src Whisper of Jormag - Duration 1500
+    public static readonly GUID WhisperOfJormagLethalCoalescence1 = new("26F7FBDCACAB0B469E5197573F464498"); // Src Unknown - Dst Player - Duration 7666
+    public static readonly GUID WhisperOfJormagLethalCoalescence2 = new("67FE1B8761FA434ABB92BBE74B23D810"); // Src Unknown - Dst Player - Duration 1166
+    public static readonly GUID WhisperOfJormagIceTempestIndicator = new("8AF9543C93387244BCBDCE072BCB00EF"); // Src Whisper of Jormag - Duration 1666
+    public static readonly GUID WhisperOfJormagIceShatterIndicator = new("CC04BC56CD569943834D8E0926CE6A1D"); // Src Whisper of Jormag - Duration 1500
+    public static readonly GUID WhisperOfJormagIceShatterDamage = new("C275F2514A6F7F4BBE572A390CB48002"); // Src Unknown - Duration 6200
+    public static readonly GUID WhisperOfJormagViciousSlamIndicator = new("53CB386AB343344597813AC58882E1EB"); // Src Whisper of Jormag - Duration 1500
+    public static readonly GUID WhisperOfJormagViciousSlamSpike = new("A064C2D2EDACF442B242D2C26CFAE9E5"); // Src Unknown - Duration 2366
+    public static readonly GUID WhisperOfJormagSpreadingIceIndicator = new("46384AC3188E5C4CAED3B11F6F7EFDED"); // Src Unknown - Duration 6666 - Target Player - Indicator with rotating spikes
+    public static readonly GUID WhisperOfJormagSpreadingIceRift = new("1D20051C53105243BD9DAB1750C82076"); // Src Unknown - Duration 1166 - Target Player - Small rift effect above the player
+    public static readonly GUID WhisperOfJormagFallingIceIndicator60 = new("1C1A58DA1688D74AB3E2B1FB01C99A8D"); // Src Unknown - Duration 1400
+    public static readonly GUID WhisperOfJormagFallingIceIndicator120 = new("511CEDED315A2043B275197342B5D278"); // Src Unknown - Duration 1400
+    public static readonly GUID WhisperOfJormagFallingIceIndicator180 = new("A54366270621E24BB4F763B93429E84C"); // Src Unknown - Duration 1400
+    public static readonly GUID WhisperOfJormagFallingIceSpike60 = new("7A3A5762FA9280469D2AFB94B820FA45"); // Src Unknown - Duration 4666
+    public static readonly GUID WhisperOfJormagFallingIceSpike120 = new("6B1B03BDF603B24883611AC590261CD1"); // Src Unknown - Duration 4666
+    public static readonly GUID WhisperOfJormagFallingIceSpike180 = new("AF83253BC1BE6040A608559805D37DF4"); // Src Unknown - Duration 4666
+    public static readonly GUID WhisperOfJormagIcySlashIcySliceIndicator = new("D1A24000E05A454EA8CA3D21D7770211"); // Src Whisper of Jormag - Duration 750
+    public static readonly GUID WhisperOfJormagIcySlashIcySliceIce = new("D6FA4F122531A746A67BF89C94572E7F"); // Src Whisper of Jormag - Duration 3000
     // Aetherblade Hideout
     public static readonly GUID AetherbladeHideoutKaleidoscopicChaosNM = new("C660211FCC31A54397A8F73BEC25EB73"); // Duration 5000 - Can have End Event
     public static readonly GUID AetherbladeHideoutKaleidoscopicChaosCM = new("BDF708225224C64183BA3CE2A609D37F"); // Duration 5000 - Can have End Event

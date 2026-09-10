@@ -609,7 +609,7 @@ internal static class EncounterBuffs
             new Buff("Whisper Teleport (Back)", WhisperTeleportBack, Source.EncounterSpecific, BuffClassification.Other, BuffImages.EmergencyWaypoint),
             new Buff("Frigid Vortex", FrigidVortexBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Chains of Frost (Active)", ChainsOfFrostActive, Source.EncounterSpecific, BuffClassification.Other, BuffImages.SoulBinder),
-            new Buff("Chains of Frost (Application)", ChainsOfFrostApplication, Source.EncounterSpecific, BuffClassification.Other, BuffImages.SoulBinder),
+            new Buff("Chains of Frost (Application)", ChainsOfFrostApplicationBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.SoulBinder),
             new Buff("Brain Freeze", BrainFreeze, Source.EncounterSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Frostbite),
             new Buff("Lethal Coalescence", LethalCoalescenceBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Achievement Eligibility: Reflections in the Ice", AchievementEligibilityReflectionsInTheIce, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
