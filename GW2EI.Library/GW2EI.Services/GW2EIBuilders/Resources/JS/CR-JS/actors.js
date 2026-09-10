@@ -139,8 +139,8 @@ class IconDrawable {
             pt.x = positionX;
             pt.y = positionY;
         }
-        pt.x = Math.round(10 * pt.x * animator.scale) / (10 * animator.scale);
-        pt.y = Math.round(10 * pt.y * animator.scale) / (10 * animator.scale);
+        pt.x = Math.round(10 * pt.x * animator.globalScale) / (10 * animator.globalScale);
+        pt.y = Math.round(10 * pt.y * animator.globalScale) / (10 * animator.globalScale);
         return pt;
     }
 
@@ -195,7 +195,7 @@ class IconDrawable {
         if (animator.displaySettings.useActorHitboxWidth && this.hitboxWidth > 0) {
             return this.hitboxWidth;
         } else {
-            return this.pixelSize / animator.scale;
+            return this.pixelSize / animator.globalScale;
         }
     }
 
@@ -214,13 +214,13 @@ class IconDrawable {
         const inSelectedGroup = this.inSelectedGroup();
         if (animator.displaySettings.highlightSelectedGroup && !isSelected && inSelectedGroup) {
             ctx.beginPath();
-            ctx.lineWidth = (2 / animator.scale).toString();
+            ctx.lineWidth = (2 / animator.globalScale).toString();
             ctx.strokeStyle = 'blue';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
         } else if (isSelected) {
             ctx.beginPath();
-            ctx.lineWidth = (4 / animator.scale).toString();
+            ctx.lineWidth = (4 / animator.globalScale).toString();
             ctx.strokeStyle = 'green';
             ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
             ctx.stroke();
@@ -232,7 +232,7 @@ class IconDrawable {
                     return;
                 }
                 ctx.beginPath();
-                ctx.lineWidth = (2 / animator.scale).toString();
+                ctx.lineWidth = (2 / animator.globalScale).toString();
                 ctx.strokeStyle = 'green';
                 ctx.arc(pos.x, pos.y, InchToPixel * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();

@@ -323,7 +323,7 @@ class Animator {
         // manipulation
         this.mouseDown = null;
         this.dragged = false;
-        this.scale = 1.0;
+        this.globalScale = 1.0;
         // options
         if (options) {
             if (options.inchToPixel) {
@@ -927,7 +927,7 @@ class Animator {
         ctx.translate(pt.x, pt.y);
         bgCtx.translate(pt.x, pt.y);
         ctx.scale(factor, factor);
-        if ((50 / (InchToPixel * this.scale) < 10)) {
+        if ((50 / (InchToPixel * this.globalScale) < 10)) {
             ctx.scale(1.0 / factor, 1.0 / factor);
             factor = 1.0;
         }
@@ -1077,7 +1077,7 @@ class Animator {
             xform = xform.scale(sx, sy);
             const xAxis = Math.sqrt(xform.a * xform.a + xform.b * xform.b);
             const yAxis = Math.sqrt(xform.c * xform.c + xform.d * xform.d);
-            _this.scale = Math.max(xAxis, yAxis) / resolutionMultiplier;
+            _this.globalScale = Math.max(xAxis, yAxis) / resolutionMultiplier;
             return scale.call(ctx, sx, sy);
         };
         
@@ -1186,7 +1186,7 @@ class Animator {
                     ctx.font = "bold " + fontSize + "px Comic Sans MS";
                     ctx.fillStyle = "#CC2200";
                     ctx.textAlign = "center";
-                    ctx.fillText((50 / (InchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+                    ctx.fillText((50 / (InchToPixel * this.globalScale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
                 }
                 ctx.restore();
             }
@@ -1328,9 +1328,10 @@ class Animator {
             const pos = this.selectedActor.getPosition();
             if (pos !== null) {
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.scale(this.scale * resolutionMultiplier, this.scale * resolutionMultiplier);
-                const translateScale = 0.5 / resolutionMultiplier / this.scale
-                ctx.translate(-pos.x + this.mainCanvas.width * translateScale, -pos.y + this.mainCanvas.height * translateScale);
+                const translateScale = 0.5 / resolutionMultiplier / this.globalScale
+                ctx.scale(this.globalScale * resolutionMultiplier, this.globalScale * resolutionMultiplier);
+                ctx.translate(this.mainCanvas.width * translateScale, this.mainCanvas.height * translateScale);
+                ctx.translate(-pos.x, -pos.y);
             }
         }
     }
