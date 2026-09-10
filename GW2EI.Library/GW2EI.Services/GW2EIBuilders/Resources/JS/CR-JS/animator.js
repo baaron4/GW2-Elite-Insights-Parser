@@ -815,6 +815,7 @@ class Animator {
 
     toggleFollowSelected() {
         this.displaySettings.followSelected = !this.displaySettings.followSelected;
+        this.needBGUpdate = true;
         animateCanvas(noUpdateTime);
     }
 
@@ -1273,6 +1274,10 @@ class Animator {
         {
 
             this._moveToSelected(ctx);
+            if (!this.displaySettings.followSelected || !this.displaySettings.rotateSelected) {
+                this.globalPos = null;
+                this.globalRotation = 0;
+            }
             // Background items commonly overlap so they need to be drawn in the correct order by height
             // This is sorted in reverse order because the z axis is inverted
             animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
@@ -1345,6 +1350,7 @@ class Animator {
                     const angle = rot != null ? ToRadians(rot + 90) : 0;
                     ctx.rotate(-angle);
                     this.globalRotation = -angle;
+                    this.globalPos = pos;
                 }
                 ctx.translate(-pos.x, -pos.y);
             }
@@ -1365,10 +1371,6 @@ class Animator {
         //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
-        if (!this.displaySettings.rotateSelected) {
-            this.globalPos = null;
-            this.globalRotation = 0;
-        }
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
             overheadAnimationIncrement *= -1;
         }
