@@ -235,8 +235,8 @@ internal class WhisperOfJormag : Bjora
                 foreach (MissileEvent missile in slitheringRime)
                 {
                     // Orb AoE radius is 80, the orb itself is visually slightly smaller
-                    replay.Decorations.AddNonHomingMissile(log, missile, Colors.LightBlue, 0.2, 50);
                     replay.Decorations.AddNonHomingMissile(log, missile, Colors.LightOrange, 0.2, 80);
+                    replay.Decorations.AddNonHomingMissile(log, missile, Colors.LightBlue, 0.2, 50);
                 }
 
                 // Ice Shatter - Triple orb projectile with big AoE - Indicator
