@@ -8,32 +8,40 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AssemblyName>GuildWars2EliteInsights-Avalonia</AssemblyName>
+        <AssemblyName>GuildWars2EliteInsights</AssemblyName>
         <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI-Avalonia\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
-        <Configurations>Debug;Release;Release-Win;Release-Linux;Release-MacOS;Release-MacOS-Arm</Configurations>
+        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64;linux-arm64</RuntimeIdentifiers>
+        <Configurations>Debug;Release;Release-Win;Release-Linux;Release-OSX;Release-OSX-Arm;Release-Linux-Arm</Configurations>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux'">
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <AssemblyName>GuildWars2EliteInsights-linux-x64</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Win'">
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <AssemblyName>GuildWars2EliteInsights-win-x64</AssemblyName>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Release-MacOS'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX'">
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <AssemblyName>GuildWars2EliteInsights-osx-x64</AssemblyName>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Release-MacOS-Arm'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX-Arm'">
         <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
+        <AssemblyName>GuildWars2EliteInsights-osx-arm64</AssemblyName>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Release-MacOS-Arm' or '$(Configuration)' == 'Release-MacOS' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux'">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm'">
+        <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+        <AssemblyName>GuildWars2EliteInsights-linux-arm64</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm' or '$(Configuration)' == 'Release-OSX' or '$(Configuration)' == 'Release-OSX-Arm' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux'">
         <OutputPath>..\..\..\GW2EI.bin\Release\UI-Avalonia-$(RuntimeIdentifier)\</OutputPath>
     </PropertyGroup>
 
@@ -47,7 +55,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-Win|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-Linux|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-MacOS|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-MacOS-Arm|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-Win|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-Linux|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-OSX|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-Linux-Arm|AnyCPU' or '$(Configuration)|$(Platform)'=='Release-OSX-Arm|AnyCPU'">
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -69,14 +77,17 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
-        <DefineConstants>$(DefineConstants);MACOS</DefineConstants>
+        <DefineConstants>$(DefineConstants);OSX</DefineConstants>
     </PropertyGroup>
-
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
-        <DefineConstants>$(DefineConstants);MACOS-ARM</DefineConstants>
+        <DefineConstants>$(DefineConstants);OSX_ARM</DefineConstants>
     </PropertyGroup>
 
-    <Target Name="RemovePdbFilesFromOutput" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux' Or '$(Configuration)' == 'Release-MacOS' Or '$(Configuration)' == 'Release-MacOS-Arm'">
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+        <DefineConstants>$(DefineConstants);LINUX_ARM</DefineConstants>
+    </PropertyGroup>
+
+    <Target Name="RemovePdbFilesFromOutput" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux' Or '$(Configuration)' == 'Release-OSX' Or '$(Configuration)' == 'Release-OSX-Arm' Or '$(Configuration)' == 'Release-Linux-Arm'">
         <ItemGroup>
             <PdbFilesToDelete Include="$(TargetDir)**/*.pdb" />
         </ItemGroup>

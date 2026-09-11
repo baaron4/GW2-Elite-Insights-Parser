@@ -10,7 +10,7 @@ public static class Updater
     /// <summary>
     /// Structure to store the update information.
     /// </summary>
-    public readonly struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string file, bool update)
+    public readonly struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string? file, bool update)
     {
         public readonly GitHubRelease Release = release;
         /// <summary>
@@ -32,7 +32,7 @@ public static class Updater
         /// <summary>
         /// Name of the file to download.
         /// </summary>
-        public readonly string FileName = file;
+        public readonly string? FileName = file;
         /// <summary>
         /// Wether a new Elite Insights update has been found or not.
         /// </summary>
@@ -71,7 +71,17 @@ public static class Updater
             var latestVersion = Version.Parse(version);
 
             // File download size
-            var asset = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)) ?? throw new InvalidOperationException("Asset could not be found");
+            var asset = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName));
+            if (asset == null)
+            {
+                return new UpdateInfo(
+                    latestRelease,
+                    (currentVersion ?? new Version(0, 0, 0, 0)).ToString(),
+                    latestVersion.ToString(),
+                    "0 MB",
+                    null,
+                    latestVersion > currentVersion);
+            }
             long size = asset.Size;
 
             return new UpdateInfo(
@@ -98,6 +108,11 @@ public static class Updater
         if (location == null)
         {
             traces.Add($"Download location does not exist");
+            return false;
+        }
+        if (info.FileName == null)
+        {
+            traces.Add($"File does not exist, please update manually");
             return false;
         }
         string folderPath = Path.Combine(location, "GW2EITemp");
