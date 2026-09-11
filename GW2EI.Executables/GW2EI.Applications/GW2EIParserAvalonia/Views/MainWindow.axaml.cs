@@ -313,6 +313,8 @@ public sealed partial class MainWindow : Window, IDisposable
         if (info is null)
         {
             _trace.Add("Updater: UpdateInfo is null");
+            var messageWindow = new MessageWindow("Update tentative failed, plase try again later or update manually.", _trace);
+            await messageWindow.ShowDialog(this);
             return;
         }
 
