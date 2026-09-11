@@ -18,6 +18,10 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private SkillDataModel? selectedSkill;
     [ObservableProperty]
+    private string? agentSearchText;
+    [ObservableProperty]
+    private AgentFilterItem? selectedAgentFilter;
+    [ObservableProperty]
     private string? skillIdFilter;
     [ObservableProperty]
     private string? skillNameFilter;
@@ -34,6 +38,8 @@ public partial class InspectorViewModel : ObservableObject
     public IReadOnlyList<EventModel> Events { get; }
     public BulkObservableCollection<EventModel> VisibleEvents { get; } = [];
     public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
+
+    public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
 
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
     public BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
@@ -56,6 +62,8 @@ public partial class InspectorViewModel : ObservableObject
         CombatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
         AgentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).OrderBy(agent => agent.ID).ToList();
         SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList();
+
+        AgentFilterItems = AgentsData.Select(agent => new AgentFilterItem(agent)).ToList();
 
         _allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
@@ -88,6 +96,10 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnGuidFilterChanged(string? value) => RefreshVisibleEvents();
 
+    partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => RefreshVisibleEvents();
+
+    partial void OnAgentSearchTextChanged(string? value) => OnPropertyChanged(nameof(FilteredAgentFilterItems));
+
     private void RefreshVisibleEvents()
     {
         long? skillId = null;
@@ -105,6 +117,7 @@ public partial class InspectorViewModel : ObservableObject
 
         bool hasSkillNameFilter = !string.IsNullOrWhiteSpace(SkillNameFilter);
         bool hasGuidFilter = !string.IsNullOrWhiteSpace(GuidFilter);
+        ulong? agentFilter = SelectedAgentFilter?.Agent;
 
         var visibleEvents = Events.Where(eventModel =>
         {
@@ -124,6 +137,11 @@ public partial class InspectorViewModel : ObservableObject
             }
 
             if (hasGuidFilter && eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            {
+                return false;
+            }
+
+            if (agentFilter is not null && !eventModel.AgentIds.Contains(agentFilter.Value))
             {
                 return false;
             }
@@ -165,4 +183,12 @@ public partial class InspectorViewModel : ObservableObject
     {
         return EventTypeFilterRoots.Any(root => root.IsEventVisible(eventType));
     }
+
+    public IEnumerable<AgentFilterItem> FilteredAgentFilterItems =>
+    string.IsNullOrWhiteSpace(AgentSearchText)
+        ? AgentFilterItems
+        : AgentFilterItems.Where(agent =>
+            agent.DisplayName.Contains(
+                AgentSearchText,
+                StringComparison.OrdinalIgnoreCase));
 }
