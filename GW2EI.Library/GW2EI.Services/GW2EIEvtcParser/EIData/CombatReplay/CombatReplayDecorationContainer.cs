@@ -653,6 +653,24 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add a missile going from a Point A to Point B, supports multi launches, uses CircleDecoration and adds a border
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    /// <param name="borderColor"></param>
+    /// <param name="borderOpacity"></param>
+    internal void AddNonHomingMissileWithBorder(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius, Color borderColor, double borderOpacity)
+    {
+        AddNonHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
+        {
+            AddWithBorder(new CircleDecoration(radius, lifespan, color, opacity, connector), borderColor, borderOpacity);
+        });
+    }
+
+    /// <summary>
     /// Add a missile going from a Point A to Point B, supports multi launches, uses IconDecorations
     /// </summary>
     /// <param name="log">Evtc log</param>

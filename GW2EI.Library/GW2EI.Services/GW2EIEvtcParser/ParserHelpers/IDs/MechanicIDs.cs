@@ -645,6 +645,8 @@ public static class MechanicIDs
     public static readonly int Mech_WhisperTPBack = IBSMask | ++_ibsCount;
     public static readonly int Mech_WhisperTPOut = IBSMask | ++_ibsCount;
     public static readonly int Mech_ViciousSlam = IBSMask | ++_ibsCount;
+    public static readonly int Mech_IcySlash = IBSMask | ++_ibsCount;
+    public static readonly int Mech_FallingIce = IBSMask | ++_ibsCount;
     #endregion IBS
 
     #region EOD
