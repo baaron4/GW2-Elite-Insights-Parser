@@ -12,6 +12,13 @@ public class ProgramSettings
     public bool UploadToDPSReports { get; set; } = false;
     public string? DPSReportUserToken { get; set; }
     public bool UploadToWingman { get; set; } = false;
+#if DEBUG
+#pragma warning disable CA1822 // Mark members as static
+    public bool UploadToWingmanInternal => false;
+#pragma warning restore CA1822 // Mark members as static
+#else
+    public bool UploadToWingmanInternal => UploadToWingman;
+#endif
     // Format
     public bool SaveOutCSV { get; set; } = false;
     public bool SaveOutHTML { get; set; } = true;
@@ -107,7 +114,7 @@ public class ProgramSettings
     public int GetMaxParallelRunning()
     {
         int count;
-        if (SendEmbedToWebhook || UploadToDPSReports || UploadToWingman)
+        if (SendEmbedToWebhook || UploadToDPSReports || UploadToWingmanInternal)
         {
             count = Math.Max(Environment.ProcessorCount / 2, 1);
         }

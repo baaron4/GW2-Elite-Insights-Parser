@@ -374,7 +374,7 @@ public sealed class ProgramHelper : IDisposable
             }
             */
         }
-        if (Settings.UploadToWingman)
+        if (Settings.UploadToWingmanInternal)
         {
             originalController.WingmanUploadTentative = true;
             if (originalLog.ParserSettings.AnonymousPlayers)
@@ -388,7 +388,6 @@ public sealed class ProgramHelper : IDisposable
 
                 if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.LogData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {
-#if !DEBUG
                     try
                     {
                         var expectedSettings = new EvtcParserSettings(Settings.CustomTooShort, Settings.CustomTooBig)
@@ -460,7 +459,6 @@ public sealed class ProgramHelper : IDisposable
                         originalController.WingmanUploadFailed = true;
                         originalController.UpdateProgressWithCancellationCheck("Wingman: Operation failed " + e.Message);
                     }
-#endif
                 }
                 else
                 {
