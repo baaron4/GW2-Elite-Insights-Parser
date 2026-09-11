@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="using:GW2EIParserAvalonia.ViewModels"
+        xmlns:inspectorContent="using:GW2EIParserAvalonia.Models"
         mc:Ignorable="d"
         d:DesignWidth="1600"
         d:DesignHeight="900"
@@ -29,7 +30,7 @@
                               Margin="8">
 
                             <Grid Grid.Row="0"
-                                  RowDefinitions="Auto,Auto,Auto"
+                                  RowDefinitions="Auto,Auto,Auto,Auto"
                                   ColumnDefinitions="Auto,*"
                                   Margin="0,0,0,8">
 
@@ -67,6 +68,44 @@
                                          Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          PlaceholderText="GUID"
                                          Margin="0,4,0,0"/>
+
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Text="Agent"
+                                    VerticalAlignment="Center"
+                                    Margin="0,4,8,0"/>
+
+                                <AutoCompleteBox
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding AgentFilterItems}"
+                                    SelectedItem="{Binding SelectedAgentFilter, Mode=TwoWay}"
+                                    ValueMemberBinding="{Binding DisplayName}"
+                                    FilterMode="Contains"
+                                    MinimumPrefixLength="0"
+                                    IsTextCompletionEnabled="False"
+                                    PlaceholderText="All agents"
+                                    Margin="0,4,0,0"
+                                    GotFocus="AgentFilter_GotFocus">
+
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate x:DataType="inspectorContent:AgentFilterItem">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    Text="{Binding Name}"
+                                                    TextTrimming="CharacterEllipsis"/>
+
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Text="{Binding InstID}"
+                                                    Margin="12,0,14,0"
+                                                    Opacity="0.7"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
 
                             </Grid>
 

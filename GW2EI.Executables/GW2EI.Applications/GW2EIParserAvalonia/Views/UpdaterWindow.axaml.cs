@@ -55,7 +55,7 @@ public partial class UpdaterWindow : Window
                 _trace.Add("Updater: " + trace);
             }
 
-            var messageWindow = new MessageWindow("Update Failed.", _trace);
+            var messageWindow = new MessageWindow("Update Failed. Please update manually.", _trace);
 
             await messageWindow.ShowDialog(this);
         }

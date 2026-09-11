@@ -54,7 +54,7 @@ partial class UpdaterForm : Form
         else
         {
             UpdateTracesEvent(traces, null);
-            MessageBox.Show(this, "Update Failed.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, "Update Failed. Please update manually.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 

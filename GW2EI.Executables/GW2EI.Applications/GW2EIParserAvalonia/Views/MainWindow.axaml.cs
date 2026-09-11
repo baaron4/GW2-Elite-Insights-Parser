@@ -24,7 +24,19 @@ public sealed partial class MainWindow : Window, IDisposable
     private FileSystemWatcher? _logFileWatcher;
     private readonly IApplicationTrace _trace = null!;
 
-    private const string AssetName = "GW2EI.zip";
+#if WINDOWS
+    private const string AssetName = "GW2EI-win-x64.zip";
+#elif OSX
+    private const string AssetName = "GW2EI-osx-x64.zip";
+#elif OSX_Arm
+    private const string AssetName = "GW2EI-osx-arm64.zip";
+#elif LINUX_ARM
+    private const string AssetName = "GW2EI-linux-arm64.zip";
+#elif LINUX
+    private const string AssetName = "GW2EI-linux-x64.zip";
+#else
+    private const string AssetName = "GW2EI-all.zip";
+#endif
 
     public MainWindow()
     {
