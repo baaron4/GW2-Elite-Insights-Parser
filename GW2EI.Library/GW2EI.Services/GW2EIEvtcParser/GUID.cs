@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace GW2EIEvtcParser;
 
 [StructLayout(LayoutKind.Sequential, Pack = 8)]
-public readonly struct GUID : IEquatable<GUID>
+public readonly struct GUID : IEquatable<GUID>, IComparable<GUID>
 {
 	//NOTE(Rennorb): Could also use `fixed readonly byte bytes[16];`,
 	// but this makes the comparison easy and I have not experimented with how MemoryExtensions.SequenceEquals performs compared to two long comparisons, since its a fixed length.
@@ -75,9 +75,19 @@ public readonly struct GUID : IEquatable<GUID>
 		{
 			return Convert.ToBase64String(new ReadOnlySpan<byte>(ptr, 16));
 		}
-	}
+    }
 
-	public readonly bool Equals(GUID other) => first8 == other.first8 && last8 == other.last8;
+    public int CompareTo(GUID other)
+    {
+        int firstCompare = first8.CompareTo(other.first8);
+        if (firstCompare == 0)
+        {
+            return last8.CompareTo(other.last8);
+        }
+        return firstCompare;
+    }
+
+    public readonly bool Equals(GUID other) => first8 == other.first8 && last8 == other.last8;
 	public readonly bool Equals(ulong otherFirst8, ulong otherLast8) => first8 == otherFirst8 && last8 == otherLast8;
 	public override readonly bool Equals(object? obj) => obj is GUID other && Equals(other);
 	public static bool operator==(in GUID l, in GUID r) => l.Equals(r);
@@ -86,4 +96,24 @@ public readonly struct GUID : IEquatable<GUID>
 	public override readonly int GetHashCode() => HashCode.Combine(first8.GetHashCode(), last8.GetHashCode());
 
 	public override readonly string ToString() => ToHex();
+
+    public static bool operator <(GUID left, GUID right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(GUID left, GUID right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(GUID left, GUID right)
+    {
+        return left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(GUID left, GUID right)
+    {
+        return left.CompareTo(right) >= 0;
+    }
 }
