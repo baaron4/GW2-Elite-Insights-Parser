@@ -84,10 +84,7 @@ public sealed class ProgramHelper : IDisposable
     public readonly ProgramSettings Settings;
     private readonly Version ParserVersion;
 
-#pragma warning disable CA1823 // Avoid unused private fields
-    // Used in RELEASE for wingman
     private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
-#pragma warning restore CA1823 // Avoid unused private fields
 
     public static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
     public static readonly string MapAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/MapList.json";
