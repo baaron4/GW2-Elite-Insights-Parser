@@ -1422,7 +1422,6 @@ partial class CombatData
 
         // MISSILES
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileEventsBySrc.Values);
-        FillFromManyRangeUnique(events, seen, _statusEvents.MissileLaunchEventsByDst.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileDamagingEventsBySrc.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileEventsBySkillID.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileEventsByTrackingID.Values);
