@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using GW2EIEvtcParser;
 using GW2EIParserAvalonia.Models;
 using GW2EIParserAvalonia.Services;
@@ -16,15 +18,36 @@ public partial class InspectorWindow : Window
     public InspectorWindow()
     {
         InitializeComponent();
+
+        CombatEventsTreeView.AddHandler(
+            PointerPressedEvent,
+            OnEventFilterNodePressed,
+            RoutingStrategies.Tunnel
+         );
     }
 
-    public InspectorWindow(RawEvtcLog log, IApplicationTrace trace)
+    public InspectorWindow(RawEvtcLog log, IApplicationTrace trace) : this()
     {
         _trace = trace;
 
-        InitializeComponent();
-
         DataContext = new InspectorViewModel(log);
+    }
+
+    private void OnEventFilterNodePressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (DataContext is not InspectorViewModel inspectorViewModel)
+        {
+            return;
+        }
+        if (sender is TreeView treeView && e.Source is Avalonia.Visual visual && e.GetCurrentPoint(treeView).Properties.IsRightButtonPressed)
+        {
+            var treeViewItem = visual.FindAncestorOfType<TreeViewItem>();
+            if (treeViewItem?.DataContext is EventTypeFilterNodeModel selectedItem)
+            {
+                inspectorViewModel.UncheckAllRoots();
+                selectedItem.IsChecked = true;
+            }
+        }
     }
 
     private async void CopyGuid_Click(object? sender, RoutedEventArgs e)

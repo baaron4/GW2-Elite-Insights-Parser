@@ -109,8 +109,11 @@
 
                             </Grid>
 
-                            <TreeView Grid.Row="1"
-                                      ItemsSource="{Binding EventTypeFilterRoots}">
+                            <TreeView
+                                      x:Name="CombatEventsTreeView"
+                                      Grid.Row="1"
+                                      ItemsSource="{Binding EventTypeFilterRoots}"
+                                      PointerPressed="OnEventFilterNodePressed">
 
                                 <TreeView.Styles>
                                     <Style Selector="TreeViewItem">

@@ -108,6 +108,14 @@ public partial class InspectorViewModel : ObservableObject
         RefreshVisibleContentGUIDs();
     }
 
+    internal void UncheckAllRoots()
+    {
+        foreach (var root in EventTypeFilterRoots)
+        {
+            root.IsChecked = false;
+        }
+    }
+
     private void OnFilterChanged(object? sender, EventArgs e) => RefreshVisibleEvents();
 
     partial void OnSkillIdFilterChanged(string? value) => RefreshVisibleEvents();
