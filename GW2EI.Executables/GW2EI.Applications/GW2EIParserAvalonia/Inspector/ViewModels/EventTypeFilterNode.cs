@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.ViewModels;
@@ -36,15 +37,16 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
         UpdateVisibleTypes();
     }
 
-    public static IReadOnlyList<EventTypeFilterNodeModel> Build(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<object> nonTimeEvents)
+    public static IReadOnlyList<EventTypeFilterNodeModel> BuildRoots(IReadOnlyList<TimeCombatEvent> timeEvents, IReadOnlyList<NonTimeCombatEvent> nonTimeEvents, IReadOnlyList<EXTHealingExtensionEvent> healingExtensionEvents)
     {
-        var timeRoot = BuildTimeEvents(timeEvents);
-        var nonTimeRoot = BuildNonTimeEvents(nonTimeEvents);
+        var timeRoot = BuildCombatEvents(timeEvents, typeof(TimeCombatEvent), "Time Combat Events");
+        var nonTimeRoot = BuildCombatEvents(nonTimeEvents, typeof(NonTimeCombatEvent), "Non Time Combat Events");
+        var healingExtensionRoot = BuildCombatEvents(healingExtensionEvents, typeof(EXTHealingExtensionEvent), "Healing Extension Combat Events");
 
-        return [timeRoot, nonTimeRoot];
+        return [timeRoot, nonTimeRoot, healingExtensionRoot];
     }
 
-    private static EventTypeFilterNodeModel BuildTimeEvents(IReadOnlyList<TimeCombatEvent> events)
+    private static EventTypeFilterNodeModel BuildCombatEvents(IReadOnlyList<CombatEvent> events, Type breakAtType, string title)
     {
         var nodes = events.GroupBy(e => e.GetType()).ToDictionary(g => g.Key, g => new EventTypeFilterNodeModel(g.Key, g.Count()));
 
@@ -54,7 +56,11 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
             {
                 if (!nodes.ContainsKey(baseType))
                 {
-                    nodes.Add(baseType, new EventTypeFilterNodeModel(baseType, -1));
+                    nodes.Add(baseType, new EventTypeFilterNodeModel(baseType, -1, baseType == breakAtType ? title : null));
+                }
+                if (baseType == breakAtType)
+                {
+                    break;
                 }
             }
         }
@@ -81,7 +87,7 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
         }
         else
         {
-            root = new EventTypeFilterNodeModel(typeof(TimeCombatEvent), -1, "Time Combat Events");
+            root = new EventTypeFilterNodeModel(breakAtType, -1, title);
 
             foreach (var child in roots)
             {
@@ -93,24 +99,6 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
         CalculateParentCounts(root);
 
         root.SetTypeLookup(nodes);
-
-        return root;
-    }
-
-    private static EventTypeFilterNodeModel BuildNonTimeEvents(IReadOnlyList<object> events)
-    {
-        var nodes = events.GroupBy(e => e.GetType()).Select(g => new EventTypeFilterNodeModel(g.Key, g.Count())).ToList();
-
-        var root = new EventTypeFilterNodeModel(typeof(object), nodes.Sum(x => x.Count), "Non-Time Combat Events");
-
-        foreach (var node in nodes)
-        {
-            node.Parent = root;
-            root.Children.Add(node);
-        }
-
-        var lookup = nodes.ToDictionary(x => x.EventType, x => x);
-        root.SetTypeLookup(lookup);
 
         return root;
     }

@@ -37,4 +37,14 @@ public class EXTBarrierCombatData
     {
         return _barrierDataByID.GetValueOrEmpty(key);
     }
+    public IReadOnlyList<TimeCombatEvent> GetAllTimeCombatEvents()
+    {
+        var events = new List<CombatEvent>();
+        var seen = new HashSet<CombatEvent>();
+
+        CombatData.FillFromManyRangeUnique(events, seen, _barrierData.Values);
+        CombatData.FillFromManyRangeUnique(events, seen, _barrierReceivedData.Values);
+
+        return events.OfType<TimeCombatEvent>().ToList();
+    }
 }

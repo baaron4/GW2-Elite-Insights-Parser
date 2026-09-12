@@ -80,4 +80,15 @@ public class EXTHealingCombatData
         return GetHealingType(buff.ID, log);
     }
 
+    public IReadOnlyList<TimeCombatEvent> GetAllTimeCombatEvents()
+    {
+        var events = new List<CombatEvent>();
+        var seen = new HashSet<CombatEvent>();
+
+        CombatData.FillFromManyRangeUnique(events, seen, _healData.Values);
+        CombatData.FillFromManyRangeUnique(events, seen, _healReceivedData.Values);
+
+        return events.OfType<TimeCombatEvent>().ToList();
+    }
+
 }

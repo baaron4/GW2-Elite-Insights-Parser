@@ -6,6 +6,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.Models;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
@@ -38,6 +39,7 @@ public partial class InspectorViewModel : ObservableObject
 
     private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
+    private readonly IReadOnlyList<EXTHealingExtensionEvent> _allHealingExtensionEvents;
 
     public IReadOnlyList<CombatItemModel> CombatItems { get; } = [];
     public IReadOnlyList<AgentDataModel> AgentsData { get; } = [];
@@ -83,6 +85,7 @@ public partial class InspectorViewModel : ObservableObject
 
         _allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
         _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
+        _allHealingExtensionEvents = log.CombatData.GetAllHealingExtensionCombatEvents();
 
         var contentGUIDEvents = _allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
         Skills = contentGUIDEvents.OfType<SkillGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(skill => skill.ContentID).ToList();
@@ -93,8 +96,8 @@ public partial class InspectorViewModel : ObservableObject
         Emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(emote => emote.ContentID).ToList();
         Transformations = contentGUIDEvents.OfType<TransformationGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(transformation => transformation.ContentID).ToList();
 
-        Events = _allTimeEvents.OrderBy(x => x.Time).Cast<object>().Concat(_allNonTimeEvents).Select(x => new EventModel(x)).ToList();
-        EventTypeFilterRoots = EventTypeFilterNodeModel.Build(_allTimeEvents, _allNonTimeEvents);
+        Events = _allTimeEvents.OrderBy(x => x.Time).Cast<CombatEvent>().Concat(_allNonTimeEvents).Concat(_allHealingExtensionEvents).Select(x => new EventModel(x)).ToList();
+        EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(_allTimeEvents, _allNonTimeEvents, _allHealingExtensionEvents);
 
         foreach (var root in EventTypeFilterRoots)
         {
