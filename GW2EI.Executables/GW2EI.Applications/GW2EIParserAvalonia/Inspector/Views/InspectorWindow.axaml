@@ -467,374 +467,427 @@
             </TabItem>
 
             <TabItem Header="Content GUID">
-                <TabControl>
+                <Grid RowDefinitions="Auto,*">
 
-                    <TabItem Header="Skills">
-                        <DataGrid ItemsSource="{Binding Skills}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                    <Border Grid.Row="0"
+                            Padding="8"
+                            BorderBrush="#444"
+                            BorderThickness="0,0,0,1">
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                        <Grid ColumnDefinitions="Auto,*,Auto,*">
 
-                    <TabItem Header="Effects">
-                        <DataGrid ItemsSource="{Binding Effects}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                            <TextBlock Grid.Column="0"
+                                       Text="Content ID"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
 
-                                <DataGridTextColumn Header="DefaultDuration"
-                                                    Binding="{Binding DefaultDuration}"
-                                                    Width="180"/>
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding ContentIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     PlaceholderText="Content ID"/>
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                            <TextBlock Grid.Column="2"
+                                       Text="GUID"
+                                       VerticalAlignment="Center"
+                                       Margin="16,0,8,0"/>
 
-                    <TabItem Header="Markers">
-                        <DataGrid ItemsSource="{Binding Markers}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                            <TextBox Grid.Column="3"
+                                     Text="{Binding ContentGuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     PlaceholderText="GUID"/>
 
-                                <DataGridCheckBoxColumn Header="Commander Tag"
-                                                        Binding="{Binding IsCommanderTag}"
-                                                        Width="150"/>
+                        </Grid>
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                    </Border>
 
-                    <TabItem Header="Species">
-                        <DataGrid ItemsSource="{Binding Species}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                    <TabControl Grid.Row="1">
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                        <TabItem Header="Effects">
+                            <DataGrid ItemsSource="{Binding VisibleEffects}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
 
-                    <TabItem Header="Teams">
-                        <DataGrid ItemsSource="{Binding Teams}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                                <DataGrid.Columns>
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
 
-                    <TabItem Header="Emotes">
-                        <DataGrid ItemsSource="{Binding Emotes}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                                    <DataGridTextColumn Header="DefaultDuration"
+                                                        Binding="{Binding DefaultDuration}"
+                                                        Width="180"/>
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
 
-                    <TabItem Header="Transformations">
-                        <DataGrid ItemsSource="{Binding Transformations}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserResizeColumns="True"
-                                  CanUserReorderColumns="True"
-                                  CanUserSortColumns="True"
-                                  GridLinesVisibility="All"
-                                  HeadersVisibility="Column"
-                                  HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Auto"
-                                  SelectionMode="Extended"
-                                  RowHeight="28">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ContentID"
-                                                    Binding="{Binding ContentID}"
-                                                    Width="150">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy Content ID"
-                                                              Click="CopyContentId_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
 
-                                <DataGridTextColumn Header="GUID"
-                                                    Binding="{Binding GUID}"
-                                                    Width="350">
-                                    <DataGridTextColumn.CellTheme>
-                                        <ControlTheme TargetType="DataGridCell"
-                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="ContextMenu">
-                                                <ContextMenu>
-                                                    <MenuItem Header="Copy GUID"
-                                                              Click="CopyGuid_Click"
-                                                              CommandParameter="{Binding}" />
-                                                </ContextMenu>
-                                            </Setter>
-                                        </ControlTheme>
-                                    </DataGridTextColumn.CellTheme>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                        <TabItem Header="Markers">
+                            <DataGrid ItemsSource="{Binding VisibleMarkers}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
 
-                </TabControl>
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridCheckBoxColumn Header="Commander Tag"
+                                                            Binding="{Binding IsCommanderTag}"
+                                                            Width="150"/>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                        <TabItem Header="Emotes">
+                            <DataGrid ItemsSource="{Binding VisibleEmotes}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                        <TabItem Header="Skills">
+                            <DataGrid ItemsSource="{Binding VisibleSkills}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                        <TabItem Header="Species">
+                            <DataGrid ItemsSource="{Binding VisibleSpecies}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                        <TabItem Header="Teams">
+                            <DataGrid ItemsSource="{Binding VisibleTeams}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                        <TabItem Header="Transformations">
+                            <DataGrid ItemsSource="{Binding VisibleTransformations}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserResizeColumns="True"
+                                      CanUserReorderColumns="True"
+                                      CanUserSortColumns="True"
+                                      GridLinesVisibility="All"
+                                      HeadersVisibility="Column"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionMode="Extended"
+                                      RowHeight="28">
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="ContentID"
+                                                        Binding="{Binding ContentID}"
+                                                        Width="150">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Content ID"
+                                                                  Click="CopyContentId_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="GUID"
+                                                        Binding="{Binding GUID}"
+                                                        Width="350">
+                                        <DataGridTextColumn.CellTheme>
+                                            <ControlTheme TargetType="DataGridCell"
+                                                          BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="ContextMenu">
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy GUID"
+                                                                  Click="CopyGuid_Click"
+                                                                  CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Setter>
+                                            </ControlTheme>
+                                        </DataGridTextColumn.CellTheme>
+                                    </DataGridTextColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+
+                    </TabControl>
+                </Grid>
             </TabItem>
 
             <TabItem Header="Combat Items">
@@ -939,7 +992,7 @@
                             <DataGridTextColumn Header="Result"
                                                 Binding="{Binding Result}"
                                                 Width="85"/>
-                            
+
                             <DataGridTextColumn Header="Result Enum"
                                                 Binding="{Binding ResultEnum}"
                                                 Width="85"/>

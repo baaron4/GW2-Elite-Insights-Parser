@@ -46,7 +46,7 @@ internal class WhisperOfJormag : Bjora
                 new PlayerDstBuffRemoveMechanic(WhisperTeleportBack, Mech_WhisperTPBack, new (Symbols.Circle, Colors.LightBlue), new ("TP In", "Teleported back to the arena", "Teleport Back"), Sev2, 500),
                 new PlayerDstBuffRemoveMechanic(WhisperTeleportOut, Mech_WhisperTPOut, new (Symbols.CircleOpen, Colors.LightBlue), new ("TP Out", "Teleported outside of the arena", "Teleport Out"), Sev2, 500),
             ]),
-            new PlayerDstHealthDamageHitMechanic([FallingIce1, FallingIce2, FallingIce3], Mech_FallingIce, new (Symbols.Circle, Colors.LightBlue), new ("FallIce", "Hit by Falling Ice", "Falling Ice"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([FallingIce1, FallingIce2, FallingIce3], Mech_FallingIce, new (Symbols.CircleOpenDot, Colors.LightBlue), new ("FallIce", "Hit by Falling Ice", "Falling Ice"), Sev0),
             new EnemyCastStartMechanic([ViciousSlam1, ViciousSlam2], Mech_ViciousSlam, new (Symbols.TriangleUp, Colors.White),  new ("Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)"), Sev1, 150),
         ])
         );
