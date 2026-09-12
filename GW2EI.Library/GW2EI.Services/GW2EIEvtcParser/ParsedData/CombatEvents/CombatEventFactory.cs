@@ -601,13 +601,13 @@ partial class CombatData
                 break;
             case StateChange.GadgetAnimation:
                 var gadgetAnimation = new GadgetAnimationEvent(stateChangeEvent, agentData);
-                if (_gadgetAnimationEventsByGadget.TryGetValue(gadgetAnimation.Gadget, out var animations))
+                if (_gadgetAnimationEventsByGadget.TryGetValue(gadgetAnimation.Src, out var animations))
                 {
                     var last = animations[^1];
                     last.SetNext(gadgetAnimation);
                 }
                 Add(_gadgetAnimationEventsByToken, gadgetAnimation.AnimationToken, gadgetAnimation);
-                Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Gadget, gadgetAnimation);
+                Add(_gadgetAnimationEventsByGadget, gadgetAnimation.Src, gadgetAnimation);
                 break;
             case StateChange.EffectMissileCreate:
                 // Ignore for now
@@ -742,14 +742,14 @@ partial class CombatData
     {
         if (evtcVersion.Build < ArcDPSBuilds.EmoteAndGadgetInteractionAdded)
         {
-            return new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd);
+            return new AnimatedSkillCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd);
         }
         return id switch
         {
             SkillIDs.ArcDPSGenericEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGenericGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             SkillIDs.ArcDPSGenericPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
-            _ => new AnimatedCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            _ => new AnimatedSkillCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }
 

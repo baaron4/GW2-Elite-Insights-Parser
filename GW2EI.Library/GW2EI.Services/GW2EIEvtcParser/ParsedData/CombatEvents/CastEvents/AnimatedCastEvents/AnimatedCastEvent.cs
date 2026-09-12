@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class AnimatedCastEvent : CastEvent
+public abstract class AnimatedCastEvent : CastEvent
 {
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;
@@ -52,7 +52,7 @@ public class AnimatedCastEvent : CastEvent
     }
 
     protected const float PositionConvertConstant = 10.0f;
-    internal AnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"), agentData, skillData)
+    protected AnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"), agentData, skillData)
     {
         // Start is present
         if (startItem != null)
@@ -135,7 +135,7 @@ public class AnimatedCastEvent : CastEvent
     }
 
     // Custom
-    internal AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur) : base(start, skill, caster)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur) : base(start, skill, caster)
     {
         ActualDuration = (int)dur;
         ExpectedDuration = ActualDuration;
@@ -144,7 +144,7 @@ public class AnimatedCastEvent : CastEvent
         SavedDuration = 0;
     }
 
-    internal AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
     {
         EffectTarget = effectTarget;
     }

@@ -606,9 +606,9 @@ public abstract partial class SingleActor : Actor
             CastEvents.AddRange(animationCastData);
             CastEvents.AddRange(instantCastData);
             var jumpEvents = log.CombatData.GetJumpEvents(AgentItem);
-            CastEvents.AddRange(jumpEvents.Select(x => new AnimatedCastEvent(AgentItem, log.SkillData.Get(Jumping), x.Time, x.LandingTime - x.Time)).Where(x => x.ActualDuration > 0));
+            CastEvents.AddRange(jumpEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(Jumping), x.Time, x.LandingTime - x.Time)).Where(x => x.ActualDuration > 0));
             var gliderEvents = log.CombatData.GetGliderEvents(AgentItem);
-            CastEvents.AddRange(gliderEvents.Select(x => new AnimatedCastEvent(AgentItem, log.SkillData.Get(Gliding), x.Time, x.GliderClosedTime - x.Time)).Where(x => x.ActualDuration > 0));
+            CastEvents.AddRange(gliderEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(Gliding), x.Time, x.GliderClosedTime - x.Time)).Where(x => x.ActualDuration > 0));
             foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
             {
                 if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillID == WeaponSwap)

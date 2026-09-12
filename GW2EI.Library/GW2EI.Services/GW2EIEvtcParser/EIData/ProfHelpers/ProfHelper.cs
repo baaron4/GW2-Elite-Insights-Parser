@@ -870,7 +870,7 @@ internal static class ProfHelper
             {
                 if (checker == null || checker(events, effectEvent, combatData, skillData))
                 {
-                    res.Add(new AnimatedCastEvent(actor, skill, effectEvent.Time + startOffset, castDuration));
+                    res.Add(new AnimatedSkillCastEvent(actor, skill, effectEvent.Time + startOffset, castDuration));
                 }
             }
         }
@@ -892,7 +892,7 @@ internal static class ProfHelper
 
         for (int i = 0; i < minCount; i++)
         {
-            res.Add(new AnimatedCastEvent(applies[i].To, skill, applies[i].Time, removals[i].Time - applies[i].Time));
+            res.Add(new AnimatedSkillCastEvent(applies[i].To, skill, applies[i].Time, removals[i].Time - applies[i].Time));
         }
 
         return res;
@@ -905,7 +905,7 @@ internal static class ProfHelper
             return [ ];
         }
 
-        return buffs.Select(bae => new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
+        return buffs.Select(bae => new AnimatedSkillCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
     }
 
     internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, long buffID)
