@@ -108,11 +108,11 @@ public partial class InspectorViewModel : ObservableObject
         RefreshVisibleContentGUIDs();
     }
 
-    internal void UncheckAllRoots()
+    internal void SetCheckStateOnAllRoots(bool state)
     {
         foreach (var root in EventTypeFilterRoots)
         {
-            root.IsChecked = false;
+            root.IsChecked = state;
         }
     }
 

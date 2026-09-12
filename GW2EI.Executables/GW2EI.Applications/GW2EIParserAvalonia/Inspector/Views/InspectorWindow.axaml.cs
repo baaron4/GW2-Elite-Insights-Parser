@@ -44,8 +44,9 @@ public partial class InspectorWindow : Window
             var treeViewItem = visual.FindAncestorOfType<TreeViewItem>();
             if (treeViewItem?.DataContext is EventTypeFilterNodeModel selectedItem)
             {
-                inspectorViewModel.UncheckAllRoots();
-                selectedItem.IsChecked = true;
+                var isChecked = selectedItem.IsChecked ?? false;
+                inspectorViewModel.SetCheckStateOnAllRoots(isChecked);
+                selectedItem.IsChecked = !isChecked;
             }
         }
     }
