@@ -19,26 +19,21 @@
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux'">
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <AssemblyName>GuildWars2EliteInsights-linux-x64</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Win'">
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-        <AssemblyName>GuildWars2EliteInsights-win-x64</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX'">
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
-        <AssemblyName>GuildWars2EliteInsights-osx-x64</AssemblyName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX-Arm'">
         <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
-        <AssemblyName>GuildWars2EliteInsights-osx-arm64</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm'">
         <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
-        <AssemblyName>GuildWars2EliteInsights-linux-arm64</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm' or '$(Configuration)' == 'Release-OSX' or '$(Configuration)' == 'Release-OSX-Arm' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux'">

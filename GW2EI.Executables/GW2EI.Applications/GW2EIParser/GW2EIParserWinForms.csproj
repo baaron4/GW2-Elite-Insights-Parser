@@ -35,7 +35,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 
-        <AssemblyName>GuildWars2EliteInsights-WinForms</AssemblyName>
+        <AssemblyName>GuildWars2EliteInsights</AssemblyName>
         <OutputType>WinExe</OutputType>
         <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI-WinForms\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
