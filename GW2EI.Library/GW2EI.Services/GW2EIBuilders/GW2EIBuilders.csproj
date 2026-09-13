@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
-        <Version>0.83.0</Version>
+        <Version>0.84.0</Version>
         <IsPackable>true</IsPackable>
         <PackageId>GuildWars2EliteInsights.GW2EIBuilders</PackageId>
         <Company>GW2 Elite Insights</Company>

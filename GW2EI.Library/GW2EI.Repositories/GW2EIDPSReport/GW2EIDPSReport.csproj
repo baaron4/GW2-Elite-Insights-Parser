@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
-        <Version>7.0.3</Version>
+        <Version>7.1.0</Version>
         <PackageId>GuildWars2EliteInsights.GW2EIDPSReport</PackageId>
         <Authors>EliphasNUIT</Authors>
         <Company>GW2 Elite Insights</Company>
