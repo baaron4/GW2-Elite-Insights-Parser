@@ -141,7 +141,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
         if (effectIDToGUIDs.Any())
         {
-            CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUIDWrapper(x.SrcAgent, x.DstAgent).GUID == EffectGUIDs.CAArmSmash);
+            CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => EffectGUIDs.CAArmSmash.Equals(x.SrcAgent, x.DstAgent));
             if (armSmashGUID != null)
             {
                 CombatItem? firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
