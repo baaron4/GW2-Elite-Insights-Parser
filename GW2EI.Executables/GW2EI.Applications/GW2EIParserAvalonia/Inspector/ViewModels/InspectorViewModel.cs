@@ -144,7 +144,11 @@ public partial class InspectorViewModel : ObservableObject
         }
 
         bool hasSkillNameFilter = !string.IsNullOrWhiteSpace(SkillNameFilter);
+
+        GUID exactGuid = default;
         bool hasGuidFilter = !string.IsNullOrWhiteSpace(GuidFilter);
+        bool hasExactGuidFilter = hasGuidFilter && GuidFilter!.Length == 32 && GUID.TryParse(GuidFilter, out exactGuid);
+
         ulong? agentFilter = SelectedAgentFilter?.Agent;
 
         var visibleEvents = Events.Where(eventModel =>
@@ -164,9 +168,12 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (hasGuidFilter && eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            if (hasGuidFilter)
             {
-                return false;
+                if (hasExactGuidFilter || eventModel.Guid != exactGuid || !eventModel.Guid.ToString().Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
             }
 
             if (agentFilter is not null && !eventModel.AgentIds.Contains(agentFilter.Value))
@@ -247,7 +254,7 @@ public partial class InspectorViewModel : ObservableObject
             return true;
         });
     }
-    
+
     public IEnumerable<AgentFilterItem> FilteredAgentFilterItems =>
     string.IsNullOrWhiteSpace(AgentSearchText)
         ? AgentFilterItems
