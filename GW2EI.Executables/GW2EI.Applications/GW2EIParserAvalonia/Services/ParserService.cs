@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GW2EIEvtcParser;
+using GW2EIDiscord;
 using GW2EIParserCommons;
 using static GW2EIParserCommons.ProgramHelper;
 
@@ -91,6 +91,20 @@ public sealed class ParserService : IDisposable
 
     public string HandleBatchedDiscordEmbed(List<ulong> ids, List<OperationController> operations, BatchedDiscordTraceHandler traceHandler)
     {
+        foreach (ulong id in ids)
+        {
+            traceHandler("Discord: deleting existing message " + id);
+            try
+            {
+                WebhookController.DeleteMessage(_programHelper.Settings.WebhookURL, id, out string message);
+                traceHandler("Discord: deleted existing message " + message);
+            }
+            catch (Exception ex)
+            {
+                traceHandler("Discord: couldn't deleted existing message " + ex.Message);
+            }
+        }
+        ids.Clear();
         return _programHelper.HandleBatchedDiscordEmbed(ids, operations, traceHandler);
     }
 
