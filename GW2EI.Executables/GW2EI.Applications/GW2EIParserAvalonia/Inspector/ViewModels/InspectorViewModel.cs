@@ -29,6 +29,8 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private string? skillNameFilter;
     [ObservableProperty]
+    private string? guidIdFilter;
+    [ObservableProperty]
     private string? guidFilter;
 
     // Content GUID tab filters
@@ -124,6 +126,8 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnGuidFilterChanged(string? value) => RefreshVisibleEvents();
 
+    partial void OnGuidIdFilterChanged(string? value) => RefreshVisibleEvents();
+
     partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => RefreshVisibleEvents();
 
     partial void OnAgentSearchTextChanged(string? value) => OnPropertyChanged(nameof(FilteredAgentFilterItems));
@@ -159,6 +163,11 @@ public partial class InspectorViewModel : ObservableObject
             }
 
             if (hasSkillNameFilter && eventModel.SkillName?.Contains(SkillNameFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            {
+                return false;
+            }
+
+            if (!ContentIDFilter(eventModel.ContentID, GuidIdFilter))
             {
                 return false;
             }
@@ -228,11 +237,9 @@ public partial class InspectorViewModel : ObservableObject
 
     private IEnumerable<ContentGUIDModel> FilterContentGUIDs(IEnumerable<ContentGUIDModel> source)
     {
-        bool hasContentIdFilter = !string.IsNullOrWhiteSpace(ContentIdFilter);
-
         return source.Where(model =>
         {
-            if (hasContentIdFilter && !model.ContentID.ToString().Contains(ContentIdFilter!, StringComparison.OrdinalIgnoreCase))
+            if (!ContentIDFilter(model.ContentID, ContentIdFilter))
             {
                 return false;
             }
@@ -244,6 +251,15 @@ public partial class InspectorViewModel : ObservableObject
 
             return true;
         });
+    }
+
+    private static bool ContentIDFilter(long contentId, string? filter)
+    {
+        if (!string.IsNullOrWhiteSpace(filter) && !contentId.ToString().Contains(filter!, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return true;
     }
 
     private static bool GUIDFilter(GUID guid, string? filter)

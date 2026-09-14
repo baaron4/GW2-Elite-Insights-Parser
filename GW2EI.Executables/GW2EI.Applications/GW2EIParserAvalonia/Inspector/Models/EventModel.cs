@@ -15,7 +15,7 @@ public sealed class EventModel
     public long? SkillId { get; }
     public string? SkillName { get; }
     public GUID Guid { get; }
-
+    public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
 
     public EventModel(object @event)
@@ -47,10 +47,12 @@ public sealed class EventModel
 
             case IDToGUIDEvent guid:
                 Guid = guid.GUID;
+                ContentID = guid.ContentID;
                 break;
 
             case EffectEvent effect:
                 Guid = effect.GUIDEvent.GUID;
+                ContentID = effect.GUIDEvent.ContentID;
                 break;
         }
 

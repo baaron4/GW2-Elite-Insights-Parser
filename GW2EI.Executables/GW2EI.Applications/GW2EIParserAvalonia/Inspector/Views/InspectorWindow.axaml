@@ -63,12 +63,26 @@
                                            VerticalAlignment="Center"
                                            Margin="0,4,8,0"/>
 
-                                <TextBox Grid.Row="2"
-                                         Grid.Column="1"
-                                         Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="GUID"
-                                         MaxLength="32"
-                                         Margin="0,4,0,0"/>
+                                <Grid Grid.Row="2"
+                                      Grid.Column="1"
+                                      ColumnDefinitions="3*,Auto,1*"
+                                      Margin="0,4,0,0">
+
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="GUID"
+                                             MaxLength="32"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="ID"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0,8,0"/>
+
+                                    <TextBox Grid.Column="2"
+                                             Text="{Binding GuidIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="Content ID"/>
+
+                                </Grid>
 
                                 <TextBlock
                                     Grid.Row="3"
@@ -111,10 +125,10 @@
                             </Grid>
 
                             <TreeView
-                                      x:Name="CombatEventsTreeView"
-                                      Grid.Row="1"
-                                      ItemsSource="{Binding EventTypeFilterRoots}"
-                                      PointerPressed="OnEventFilterNodePressed">
+                                x:Name="CombatEventsTreeView"
+                                Grid.Row="1"
+                                ItemsSource="{Binding EventTypeFilterRoots}"
+                                PointerPressed="OnEventFilterNodePressed">
 
                                 <TreeView.Styles>
                                     <Style Selector="TreeViewItem">
