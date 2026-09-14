@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace GW2EIEvtcParser;
 
 [StructLayout(LayoutKind.Sequential, Pack = 8)]
-public readonly partial struct GUID : IEquatable<GUID>, IComparable<GUID>
+public readonly struct GUID : IEquatable<GUID>, IComparable<GUID>
 {
 	//NOTE(Rennorb): Could also use `fixed readonly byte bytes[16];`,
 	// but this makes the comparison easy and I have not experimented with how MemoryExtensions.SequenceEquals performs compared to two long comparisons, since its a fixed length.
