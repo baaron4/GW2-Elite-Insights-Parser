@@ -43,12 +43,12 @@ public abstract class EffectEvent : StatusEvent
     /// </summary>
     protected long TrackingID;
     /// <summary>
-    /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
+    /// Id of the created visual effect. Match to stable Guid with <see cref="EffectGUIDEvent"/>.
     /// </summary>
     public readonly long EffectID;
 
     /// <summary>
-    /// GUID event of the effect
+    /// Guid event of the effect
     /// </summary>
     public readonly EffectGUIDEvent GUIDEvent = EffectGUIDEvent.DummyEffectGUID;
 
@@ -176,7 +176,7 @@ public abstract class EffectEvent : StatusEvent
     /// </summary>
     /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, GUID secondaryEffect)
+    public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, Guid secondaryEffect)
     {
         long start = Time;
         long end = start + Duration;
@@ -198,7 +198,7 @@ public abstract class EffectEvent : StatusEvent
     /// </summary>
     /// <param name="secondaryEffects"><see cref="EffectGUIDs"/> of the secondary effects.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffects(ParsedEvtcLog log, GUID[] secondaryEffects)
+    public (long start, long end) ComputeLifespanWithSecondaryEffects(ParsedEvtcLog log, Guid[] secondaryEffects)
     {
         long start = Time;
         long end = start + Duration;
@@ -220,7 +220,7 @@ public abstract class EffectEvent : StatusEvent
     /// </summary>
     /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, GUID secondaryEffect)
+    public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, Guid secondaryEffect)
     {
         long start = Time;
         long end = start + Duration;
@@ -241,7 +241,7 @@ public abstract class EffectEvent : StatusEvent
     /// Checks the matching effects Src and Position.
     /// </summary>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, GUID secondaryEffect, double minDistance = 1e-6)
+    public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, Guid secondaryEffect, double minDistance = 1e-6)
     {
         long start = Time;
         long end = start + Duration;

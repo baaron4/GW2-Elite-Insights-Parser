@@ -2,14 +2,14 @@
 
 public abstract class IDToGUIDEvent : MetaDataEvent
 {
-    public readonly GUID GUID;
+    public readonly Guid GUID;
     public readonly long ContentID;
 
     public bool IsValid => ContentID >= 0;
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        GUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
+        GUID = new GUIDWrapper(evtcItem.SrcAgent, evtcItem.DstAgent).GUID;
         ContentID = evtcItem.SkillID;
     }
 

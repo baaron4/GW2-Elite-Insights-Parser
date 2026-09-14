@@ -614,7 +614,7 @@ internal static class MesmerHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out var mentalCollapses))
         {
-            var mapping = new Dictionary<GUID, (long duration, uint radius)>
+            var mapping = new Dictionary<Guid, (long duration, uint radius)>
             {
                 { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
                 { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },

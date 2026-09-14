@@ -879,7 +879,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             PutridDeluge
         ];
         var usefulMissileEvents = combatData.Where(x => x.IsStateChange == StateChange.MissileCreate && usefulMissileIDs.Contains(x.SkillID)).GroupBy(x => x.SkillID).ToDictionary(x => (long)x.Key, x => x.ToList());
-        HashSet<GUID> usefulEffectGUIDs =
+        HashSet<Guid> usefulEffectGUIDs =
         [
             EffectGUIDs.HarvestTemplePrimordusLavaSlamHitIndicator,
             EffectGUIDs.HarvestTemplePrimordusJawsOfDestructionIndicator,
