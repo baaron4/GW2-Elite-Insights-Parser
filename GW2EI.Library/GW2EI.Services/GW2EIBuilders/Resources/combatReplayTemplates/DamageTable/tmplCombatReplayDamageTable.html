@@ -1,11 +1,11 @@
 <template>
     <div>
         <div v-if="rowPageCount > 0" style="width:25px;">
-            <table-scroll-component :min="0" :max="rowPageCount" :width="'230px'" :height="'10px'" :transform="colPageCount > 0 ? 'translate(-100px, 210px) rotate(90deg)' : 'translate(-100px, 185px) rotate(90deg)' " :pagestructure="rowStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="rowPageCount" :width="'230px'" :height="'10px'" :transform="colPageCount > 0 ? 'translate(-100px, 220px) rotate(90deg)' : 'translate(-100px, 205px) rotate(90deg)' " :pagestructure="rowStructure"></table-scroll-component>
         </div>
-
+        
         <table-scroll-component v-if="colPageCount > 0" :min="0" :max="colPageCount" :width="'200px'" :height="'10px'" :transform="'translateX(390px)'" :pagestructure="colStructure" />
-        <table class="table table-sm table-striped table-hover border rounded border-dark" cellspacing="0" width="100%" :id="tableid">
+        <table class="table table-sm table-striped table-hover border rounded border-dark" cellspacing="0" width="100%" :id="tableid" :style="tableStyle">
             <thead>
                 <tr>
                     <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
@@ -156,6 +156,13 @@
             },
             rowPageCount: function() {
                 return this.tableData.rows.length - this.rowStructure.perpage;
+            },
+            tableStyle: function() {
+                const res = {
+                    width: this.rowPageCount > 0 ? '570px' : null,
+                    'margin-left': this.rowPageCount > 0 ? '30px' : null,
+                };
+                return res;
             },
             tableid: function () {
                 return "combat-replay-dps-table";

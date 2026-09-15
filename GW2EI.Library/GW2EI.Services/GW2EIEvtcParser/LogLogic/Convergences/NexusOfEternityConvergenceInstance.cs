@@ -27,10 +27,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        var crMap = new CombatReplayMap((1800, 2000),
-             (-15360, -15360, 15360, 15360)); // TODO Fix values
-        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayOuterNayos, crMap));
-        return crMap;
+        return base.GetCombatMapInternal(log, arenaDecorations, parentMap);
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
