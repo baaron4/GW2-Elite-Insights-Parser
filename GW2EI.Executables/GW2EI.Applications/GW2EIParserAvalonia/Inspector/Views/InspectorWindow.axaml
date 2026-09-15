@@ -169,9 +169,10 @@
                     <!-- Event list -->
 
                     <DataGrid Grid.Column="2"
-                              ItemsSource="{Binding VisibleEvents}"
+                              ItemsSource="{Binding CombatEventsView}"
                               SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
                               AutoGenerateColumns="False"
+                              x:CompileBindings="False"
                               IsReadOnly="True"
                               CanUserResizeColumns="True"
                               CanUserReorderColumns="True"

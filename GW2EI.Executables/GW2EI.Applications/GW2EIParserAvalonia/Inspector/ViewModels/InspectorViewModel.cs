@@ -13,40 +13,115 @@ namespace GW2EIParserAvalonia.ViewModels;
 
 public partial class InspectorViewModel : ObservableObject
 {
+    #region COMBAT EVENTS
     [ObservableProperty]
     private EventModel? selectedEvent;
-    [ObservableProperty]
-    private SkillDataModel? selectedSkill;
+    partial void OnSelectedEventChanged(EventModel? value)
+    {
+        if (value?.Event == null)
+        {
+            SelectedEventProperties.ReplaceRange([]);
+            return;
+        }
+
+        SelectedEventProperties.ReplaceRange(EventInspector.Inspect(value.Event));
+    }
+
     [ObservableProperty]
     private string? skillIdFilter;
+    partial void OnSkillIdFilterChanged(string? value) => CombatEventsView.Refresh();
     [ObservableProperty]
     private string? skillNameFilter;
+    partial void OnSkillNameFilterChanged(string? value) => CombatEventsView.Refresh();
     [ObservableProperty]
     private string? guidFilter;
+    partial void OnGuidFilterChanged(string? value) => CombatEventsView.Refresh();
     // Events tab filters
     [ObservableProperty]
     private string? agentSearchText;
+
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
     [ObservableProperty]
     private AgentFilterItem? selectedAgentFilter;
 
-    private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
-    private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
-    private readonly IReadOnlyList<EXTHealingExtensionEvent> _allHealingExtensionEvents;
-    public IReadOnlyList<SkillDataModel> SkillsData { get; } = [];
+    partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => CombatEventsView.Refresh();
 
-    public IReadOnlyList<EventModel> Events { get; }
-    public BulkObservableCollection<EventModel> VisibleEvents { get; } = [];
+    public DataGridCollectionView CombatEventsView { get; }
+
+    private void OnFilterChanged(object? sender, EventArgs e) => CombatEventsView.Refresh();
+    private bool FilterCombatEvents(object item)
+    {
+        if (item is not EventModel eventModel)
+        {
+            return false;
+        }
+        if (!IsEventTypeVisible(eventModel.Event.GetType()))
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(SkillIdFilter) && 
+            !long.TryParse(SkillIdFilter, out var parsedSkillId) &&
+            eventModel.SkillId != parsedSkillId)
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(SkillNameFilter) && 
+            eventModel.SkillName?.Contains(SkillNameFilter!, StringComparison.OrdinalIgnoreCase) != true)
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(GuidFilter) && 
+            eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
+        {
+            return false;
+        }
+
+        if (SelectedAgentFilter?.Agent is not null && !
+            eventModel.AgentIds.Contains(SelectedAgentFilter.Agent))
+        {
+            return false;
+        }
+        return true;
+    }
+
     public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
+    private bool IsEventTypeVisible(Type eventType)
+    {
+        return EventTypeFilterRoots.Any(root => root.IsEventVisible(eventType));
+    }
 
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
-    public BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
+
+    #endregion COMBAT EVENTS
+
+    #region SKILLS
+    [ObservableProperty]
+    private SkillDataModel? selectedSkill;
+    partial void OnSelectedSkillChanged(SkillDataModel? value)
+    {
+        if (value?.SkillItem == null)
+        {
+            SelectedSkillProperties.ReplaceRange([]);
+            return;
+        }
+
+        SelectedSkillProperties.ReplaceRange(EventInspector.Inspect(value.SkillItem));
+    }
+    public IReadOnlyList<SkillDataModel> SkillsData { get; } = [];
+    public int SkillCount => SkillsData.Count;
     public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
+    #endregion
 
     #region AGENTS
 
     [ObservableProperty]
     private AgentDataModel? selectedAgent;
+    partial void OnSelectedAgentChanged(AgentDataModel? value)
+    {
+        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value));
+    }
     public DataGridCollectionView AgentsDataView { get; }
     [ObservableProperty]
     private string? agentSpeciesFilter;
@@ -74,7 +149,6 @@ public partial class InspectorViewModel : ObservableObject
         {
             return false;
         }
-
 
         if (!string.IsNullOrWhiteSpace(AgentSpeciesFilter) && 
             int.TryParse(AgentSpeciesFilter, out var id) && 
@@ -114,6 +188,7 @@ public partial class InspectorViewModel : ObservableObject
     }
 
     public int AgentCount => AgentsDataView.Count;
+    public BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
 
     #endregion AGENTS
 
@@ -168,7 +243,6 @@ public partial class InspectorViewModel : ObservableObject
     }
 
     #endregion GUIDS
-    public int SkillCount => SkillsData.Count;
 
     #region COMBAT ITEMS
 
@@ -216,11 +290,11 @@ public partial class InspectorViewModel : ObservableObject
         #endregion AGENTS
         SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList();
 
-        _allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
-        _allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
-        _allHealingExtensionEvents = log.CombatData.GetAllHealingExtensionCombatEvents();
+        var allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
+        var allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
+        var allHealingExtensionEvents = log.CombatData.GetAllHealingExtensionCombatEvents();
         #region GUIDS
-        var contentGUIDEvents = _allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
+        var contentGUIDEvents = allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
 
         var skills = contentGUIDEvents.OfType<SkillGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(skill => skill.ContentID);
         SkillGUIDsView = new(skills)
@@ -264,15 +338,21 @@ public partial class InspectorViewModel : ObservableObject
             Filter = FilterContentGUIDs
         };
         #endregion GUIDS
-        Events = _allTimeEvents.OrderBy(x => x.Time).Cast<CombatEvent>().Concat(_allNonTimeEvents).Concat(_allHealingExtensionEvents.OrderBy(x => x.Time)).Select(x => new EventModel(x)).ToList();
-        EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(_allTimeEvents, _allNonTimeEvents, _allHealingExtensionEvents);
 
+        EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(allTimeEvents, allNonTimeEvents, allHealingExtensionEvents);
+        CombatEventsView = new(allTimeEvents
+            .OrderBy(x => x.Time)
+            .Cast<CombatEvent>()
+            .Concat(allNonTimeEvents)
+            .Concat(allHealingExtensionEvents.OrderBy(x => x.Time))
+            .Select(x => new EventModel(x)))
+        {
+            Filter = FilterCombatEvents
+        };
         foreach (var root in EventTypeFilterRoots)
         {
             root.FilterChanged += OnFilterChanged;
         }
-
-        RefreshVisibleEvents();
     }
 
     internal void SetCheckStateOnAllRoots(bool state)
@@ -281,99 +361,5 @@ public partial class InspectorViewModel : ObservableObject
         {
             root.IsChecked = state;
         }
-    }
-
-    private void OnFilterChanged(object? sender, EventArgs e) => RefreshVisibleEvents();
-
-    partial void OnSkillIdFilterChanged(string? value) => RefreshVisibleEvents();
-
-    partial void OnSkillNameFilterChanged(string? value) => RefreshVisibleEvents();
-
-    partial void OnGuidFilterChanged(string? value) => RefreshVisibleEvents();
-
-    partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => RefreshVisibleEvents();
-
-    private void RefreshVisibleEvents()
-    {
-        long? skillId = null;
-
-        if (!string.IsNullOrWhiteSpace(SkillIdFilter))
-        {
-            if (!long.TryParse(SkillIdFilter, out var parsedSkillId))
-            {
-                VisibleEvents.Clear();
-                return;
-            }
-
-            skillId = parsedSkillId;
-        }
-
-        bool hasSkillNameFilter = !string.IsNullOrWhiteSpace(SkillNameFilter);
-        bool hasGuidFilter = !string.IsNullOrWhiteSpace(GuidFilter);
-        ulong? agentFilter = SelectedAgentFilter?.Agent;
-
-        var visibleEvents = Events.Where(eventModel =>
-        {
-            if (!IsEventTypeVisible(eventModel.Event.GetType()))
-            {
-                return false;
-            }
-
-            if (skillId is not null && eventModel.SkillId != skillId)
-            {
-                return false;
-            }
-
-            if (hasSkillNameFilter && eventModel.SkillName?.Contains(SkillNameFilter!, StringComparison.OrdinalIgnoreCase) != true)
-            {
-                return false;
-            }
-
-            if (hasGuidFilter && eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
-            {
-                return false;
-            }
-
-            if (agentFilter is not null && !eventModel.AgentIds.Contains(agentFilter.Value))
-            {
-                return false;
-            }
-
-            return true;
-        });
-
-        VisibleEvents.ReplaceRange(visibleEvents);
-    }
-
-    partial void OnSelectedEventChanged(EventModel? value)
-    {
-        if (value?.Event == null)
-        {
-            SelectedEventProperties.ReplaceRange([]);
-            return;
-        }
-
-        SelectedEventProperties.ReplaceRange(EventInspector.Inspect(value.Event));
-    }
-
-    partial void OnSelectedAgentChanged(AgentDataModel? value)
-    {
-        SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value));
-    }
-
-    partial void OnSelectedSkillChanged(SkillDataModel? value)
-    {
-        if (value?.SkillItem == null)
-        {
-            SelectedSkillProperties.ReplaceRange([]);
-            return;
-        }
-
-        SelectedSkillProperties.ReplaceRange(EventInspector.Inspect(value.SkillItem));
-    }
-
-    private bool IsEventTypeVisible(Type eventType)
-    {
-        return EventTypeFilterRoots.Any(root => root.IsEventVisible(eventType));
     }
 }
