@@ -76,7 +76,7 @@ public partial class InspectorViewModel : ObservableObject
         }
 
         if (!string.IsNullOrWhiteSpace(GuidIdFilter) && 
-            !long.TryParse(GuidIdFilter, out var parsedContentID) && 
+            long.TryParse(GuidIdFilter, out var parsedContentID) && 
             eventModel.ContentID != parsedContentID)
         {
             return false;
@@ -251,7 +251,7 @@ public partial class InspectorViewModel : ObservableObject
         }
 
         if (!string.IsNullOrWhiteSpace(ContentIdFilter) &&
-            !long.TryParse(ContentIdFilter, out var parsedContentID) &&
+            long.TryParse(ContentIdFilter, out var parsedContentID) &&
             evt.ContentID != parsedContentID)
         {
             return false;
