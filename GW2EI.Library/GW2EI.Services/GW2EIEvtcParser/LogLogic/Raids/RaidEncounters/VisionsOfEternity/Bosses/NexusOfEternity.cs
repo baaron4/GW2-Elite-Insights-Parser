@@ -56,6 +56,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return
         [
+            TargetID.NexusOfEternityVloxx,
         ];
     }
 
@@ -94,11 +95,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        NPC? noeBoss = null;
+        var noeBoss = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
         var phases = GetInitialPhase(log);
         var fullFightPhase = (EncounterPhaseData)phases[0];
         fullFightPhase.AddTarget(noeBoss, log);
-        phases.AddRange(ComputePhases(log, noeBoss!, Targets, fullFightPhase, requirePhases));
+        phases.AddRange(ComputePhases(log, noeBoss, Targets, fullFightPhase, requirePhases));
         return phases;
     }
 

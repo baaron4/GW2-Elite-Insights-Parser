@@ -579,7 +579,7 @@ public static class SpeciesIDs
         EliteCrocodilianRazortooth = 27655,
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
-        NexusOfEternityBoss = 28106,
+        NexusOfEternityVloxx = 28106,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,

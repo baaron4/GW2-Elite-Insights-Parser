@@ -31,6 +31,14 @@ public sealed class EventModel
 
         switch (@event)
         {
+            case BuffInfoEvent buffInfo:
+                SkillId = buffInfo.BuffID;
+                SkillName = buffInfo.BuffSkill.Name;
+                break;
+            case SkillInfoEvent skillInfo:
+                SkillId = skillInfo.SkillID;
+                SkillName = skillInfo.Skill.Name;
+                break;
             case CastEvent cast:
                 SkillId = cast.SkillID;
                 SkillName = cast.Skill.Name;
