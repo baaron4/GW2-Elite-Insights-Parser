@@ -70,5 +70,6 @@ internal static class LogIDs
     {
         public const long OuterNayosMask = 0x000100;
         public const long MountBalriorMask = 0x000200;
+        public const long NexusOfEternityConvergenceMask = 0x000300;
     }
 }

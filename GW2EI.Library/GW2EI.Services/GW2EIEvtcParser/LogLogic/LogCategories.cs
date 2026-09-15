@@ -61,6 +61,7 @@ public class LogCategories
         //
         OuterNayosConvergence,
         MountBalriorConvergence,
+        NexusOfEternityConvergence,
         //
         UnknownEncounter,
         Unknown
