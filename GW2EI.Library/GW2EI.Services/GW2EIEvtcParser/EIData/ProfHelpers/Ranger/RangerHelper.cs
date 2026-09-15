@@ -137,6 +137,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileJanthiriBee,
         (int)MinionID.JuvenileRiverOtter,
+        (int)MinionID.JuvenileLeyLineBat,
     }
     .Union(JuvenileFelinePetIDs)
     .Union(JuvenileAvianPetIDs)
@@ -374,6 +375,7 @@ internal static class RangerHelper
         new MinionCommandCastFinder(BloodthirstyCharge, MinionID.JuvenileWallow),
         new MinionCommandCastFinder(HeadToss, MinionID.JuvenileRockGazelle),
         new MinionCommandCastFinder(InnocentDisplayJuvenileRiverOtter, MinionID.JuvenileRiverOtter),
+        new MinionCommandCastFinder(JuvenileLeyLineBatCommandSkill, MinionID.JuvenileLeyLineBat),
         new MinionCommandCastFinder(FeedingFrenzy, MinionID.JuvenileShark),
         new MinionCommandCastFinder(HunkerDown_Turtle, MinionID.JuvenileSiegeTurtle),
         new MinionCommandCastFinder(SmokeCloud, MinionID.JuvenileSmokescale),

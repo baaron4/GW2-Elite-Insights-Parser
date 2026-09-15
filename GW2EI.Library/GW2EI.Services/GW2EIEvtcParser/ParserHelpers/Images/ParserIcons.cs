@@ -592,6 +592,7 @@ internal static class ParserIcons
     private const string MinionJuvenileJanthiriBee = "https://i.imgur.com/WymxKGX.png";
     private const string MinionJuvenileRaptorSwiftwing = "https://i.imgur.com/F33rSgz.png";
     private const string MinionJuvenileRiverOtter = "https://i.imgur.com/3la7Fjc.png";
+    private const string MinionJuvenileLeyLineBat = "";
     private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
     private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
     private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -1567,6 +1568,7 @@ internal static class ParserIcons
         { MinionID.JuvenileJanthiriBee, MinionJuvenileJanthiriBee },
         { MinionID.JuvenileRaptorSwiftwing, MinionJuvenileRaptorSwiftwing },
         { MinionID.JuvenileRiverOtter, MinionJuvenileRiverOtter},
+        { MinionID.JuvenileLeyLineBat, MinionJuvenileLeyLineBat},
         { MinionID.BloodFiend, MinionBloodFiend },
         { MinionID.BoneFiend, MinionBoneFiend },
         { MinionID.FleshGolem, MinionFleshGolem },
