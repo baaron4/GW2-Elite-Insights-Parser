@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="using:GW2EIParserAvalonia.ViewModels"
         xmlns:inspectorContent="using:GW2EIParserAvalonia.Models"
+        xmlns:vm="clr-namespace:GW2EIParserAvalonia.ViewModels"
         mc:Ignorable="d"
         d:DesignWidth="1600"
         d:DesignHeight="900"
@@ -12,7 +13,8 @@
         Title="GW2 Elite Insights Parser - EVTC Inspector"
         MinWidth="1000"
         MinHeight="600"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        x:Name="InspectorView">
 
     <Grid>
 
@@ -80,6 +82,7 @@
                                     Grid.Row="3"
                                     Grid.Column="1"
                                     ItemsSource="{Binding AgentFilterItems}"
+                                    x:CompileBindings="False"
                                     SelectedItem="{Binding SelectedAgentFilter, Mode=TwoWay}"
                                     ValueMemberBinding="{Binding DisplayName}"
                                     FilterMode="Contains"
@@ -284,7 +287,7 @@
 
                         <DataGrid Grid.Column="0"
                                   x:CompileBindings="False"
-                                  ItemsSource="{Binding AgentsData}"
+                                  ItemsSource="{Binding AgentsDataView}"
                                   SelectedItem="{Binding SelectedAgent, Mode=TwoWay}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
@@ -299,29 +302,88 @@
                                   RowHeight="28">
 
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID"
+                                <DataGridTextColumn
                                                     Binding="{Binding ID}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="ID" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpeciesFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        PlaceholderText="Filter Species..."
+                                                         />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
 
                                 <DataGridTextColumn Header="Inst ID"
                                                     Binding="{Binding InstID}"
                                                     Width="Auto"/>
 
-                                <DataGridTextColumn Header="Name"
+                                <DataGridTextColumn
                                                     Binding="{Binding Name}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Name" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        PlaceholderText="Filter Name..."
+                                                         />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
 
                                 <DataGridTextColumn Header="Type"
                                                     Binding="{Binding Type}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Type" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        PlaceholderText="Filter Type..."
+                                                         />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
 
                                 <DataGridTextColumn Header="Agent"
                                                     Binding="{Binding Agent}"
                                                     Width="Auto"/>
 
-                                <DataGridTextColumn Header="Spec"
+                                <DataGridTextColumn
                                                     Binding="{Binding Spec}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Spec" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        PlaceholderText="Filter Spec..."
+                                                         />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn
+                                                    Binding="{Binding BaseSpec}"
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Base Spec" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentBaseSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        PlaceholderText="Filter Base Spec..."
+                                                         />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -504,8 +566,9 @@
                     <TabControl Grid.Row="1">
 
                         <TabItem Header="Effects">
-                            <DataGrid ItemsSource="{Binding VisibleEffects}"
+                            <DataGrid ItemsSource="{Binding EffectGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -562,8 +625,9 @@
                         </TabItem>
 
                         <TabItem Header="Markers">
-                            <DataGrid ItemsSource="{Binding VisibleMarkers}"
+                            <DataGrid ItemsSource="{Binding MarkerGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -620,8 +684,9 @@
                         </TabItem>
 
                         <TabItem Header="Emotes">
-                            <DataGrid ItemsSource="{Binding VisibleEmotes}"
+                            <DataGrid ItemsSource="{Binding EmoteGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -674,8 +739,9 @@
                         </TabItem>
 
                         <TabItem Header="Skills">
-                            <DataGrid ItemsSource="{Binding VisibleSkills}"
+                            <DataGrid ItemsSource="{Binding SkillGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -728,8 +794,9 @@
                         </TabItem>
 
                         <TabItem Header="Species">
-                            <DataGrid ItemsSource="{Binding VisibleSpecies}"
+                            <DataGrid ItemsSource="{Binding SpeciesGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -782,8 +849,9 @@
                         </TabItem>
 
                         <TabItem Header="Teams">
-                            <DataGrid ItemsSource="{Binding VisibleTeams}"
+                            <DataGrid ItemsSource="{Binding TeamGUIDsView}"
                                       AutoGenerateColumns="False"
+                                      x:CompileBindings="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
                                       CanUserReorderColumns="True"
@@ -836,7 +904,8 @@
                         </TabItem>
 
                         <TabItem Header="Transformations">
-                            <DataGrid ItemsSource="{Binding VisibleTransformations}"
+                            <DataGrid ItemsSource="{Binding TransformationGUIDsView}"
+                                      x:CompileBindings="False"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
                                       CanUserResizeColumns="True"
@@ -913,7 +982,7 @@
 
                     <DataGrid Grid.Row="1"
                               x:CompileBindings="False"
-                              ItemsSource="{Binding CombatItems}"
+                              ItemsSource="{Binding CombatItemsView}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               CanUserResizeColumns="True"
@@ -932,9 +1001,20 @@
 
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn Header="State Change"
+                            <DataGridTextColumn 
                                                 Binding="{Binding IsStateChange}"
-                                                Width="230"/>
+                                                Width="230">
+                                <DataGridTextColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="State Change" />
+                                            <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).StateChangeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     PlaceholderText="Filter State Change..."
+                                                     Width="220" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTextColumn.HeaderTemplate>
+                            </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Time"
                                                 Binding="{Binding Time}"
