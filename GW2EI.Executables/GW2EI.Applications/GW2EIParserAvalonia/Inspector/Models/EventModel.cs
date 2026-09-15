@@ -15,7 +15,7 @@ public sealed class EventModel
     public long? SkillId { get; }
     public string? SkillName { get; }
     internal Guid GUIDStruct { get; }
-    public string Guid => GUIDStruct.ToString("N").ToUpperInvariant();
+    public string GUID => GUIDStruct.ToString("N").ToUpperInvariant();
     public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
 
