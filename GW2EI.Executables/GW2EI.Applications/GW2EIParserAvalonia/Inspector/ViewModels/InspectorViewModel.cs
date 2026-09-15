@@ -50,39 +50,24 @@ public partial class InspectorViewModel : ObservableObject
     public DataGridCollectionView AgentsDataView { get; }
     [ObservableProperty]
     private string? agentSpeciesFilter;
-    partial void OnAgentSpeciesFilterChanged(string? value)
+    private void RefreshAgentsDataView()
     {
         AgentsDataView.Refresh();
         OnPropertyChanged(nameof(AgentCount));
     }
+    partial void OnAgentSpeciesFilterChanged(string? value) => RefreshAgentsDataView();
     [ObservableProperty]
     private string? agentNameFilter;
-    partial void OnAgentNameFilterChanged(string? value)
-    {
-        AgentsDataView.Refresh();
-        OnPropertyChanged(nameof(AgentCount));
-    }
+    partial void OnAgentNameFilterChanged(string? value) => RefreshAgentsDataView();
     [ObservableProperty]
     private string? agentTypeFilter;
-    partial void OnAgentTypeFilterChanged(string? value)
-    {
-        AgentsDataView.Refresh();
-        OnPropertyChanged(nameof(AgentCount));
-    }
+    partial void OnAgentTypeFilterChanged(string? value) => RefreshAgentsDataView();
     [ObservableProperty]
     private string? agentSpecFilter;
-    partial void OnAgentSpecFilterChanged(string? value)
-    {
-        AgentsDataView.Refresh();
-        OnPropertyChanged(nameof(AgentCount));
-    }
+    partial void OnAgentSpecFilterChanged(string? value) => RefreshAgentsDataView();
     [ObservableProperty]
     private string? agentBaseSpecFilter;
-    partial void OnAgentBaseSpecFilterChanged(string? value)
-    {
-        AgentsDataView.Refresh();
-        OnPropertyChanged(nameof(AgentCount));
-    }
+    partial void OnAgentBaseSpecFilterChanged(string? value) => RefreshAgentsDataView();
     private bool FilterAgentModels(object item)
     {
         if (item is not AgentDataModel agent)
