@@ -292,6 +292,7 @@ public class CombatItem
             || IsStateChange == StateChange.GadgetCaptureOutlineHide
             || IsStateChange == StateChange.GadgetCaptureOutlinePoint
             || IsStateChange == StateChange.Jump
+            || IsStateChange == StateChange.GadgetModelInfo
             ;
     }
 

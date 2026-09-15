@@ -385,6 +385,16 @@ partial class CombatData
     {
         return _metaDataEvents.SkillInfoEvents.GetValueOrDefault(skillID);
     }
+
+    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.GadgetModelInfoEventsBySrc, src);
+    }
+    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(string model)
+    {
+        return _statusEvents.GadgetModelInfoEventsByModel.GetValueOrEmpty(model);
+    }
+
     #endregion INFO
     #region LAST90
     public IReadOnlyList<Last90BeforeDownEvent> GetLast90BeforeDownEvents()
@@ -1426,6 +1436,10 @@ partial class CombatData
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileEventsBySkillID.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.MissileEventsByTrackingID.Values);
         FillFromRangeUnique(events, seen, _statusEvents.MissileEvents);
+
+        // GADGET MODEL INFO
+        FillFromManyRangeUnique(events, seen, _statusEvents.GadgetModelInfoEventsBySrc.Values);
+        FillFromManyRangeUnique(events, seen, _statusEvents.GadgetModelInfoEventsByModel.Values);
 
         // REWARDS
         FillFromRangeUnique(events, seen, _rewardEvents);

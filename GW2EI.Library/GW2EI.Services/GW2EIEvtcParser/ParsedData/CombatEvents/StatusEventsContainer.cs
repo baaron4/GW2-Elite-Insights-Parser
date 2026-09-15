@@ -33,6 +33,9 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<JumpEvent>> JumpEventsBySrc = [];
 
+    public readonly Dictionary<AgentItem, List<GadgetModelInfoEvent>> GadgetModelInfoEventsBySrc = [];
+    public readonly Dictionary<string, List<GadgetModelInfoEvent>> GadgetModelInfoEventsByModel = [];
+
     public readonly List<EffectEvent> EffectEvents = [];
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsBySrc = [];
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsByDst = [];

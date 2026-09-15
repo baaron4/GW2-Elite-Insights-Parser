@@ -346,6 +346,7 @@ public static class ArcDPSEnums
         Tick = 84,
         Teleport = 85,
         Jump = 86,
+        GadgetModelInfo = 87,
         Unknown
     };
 
