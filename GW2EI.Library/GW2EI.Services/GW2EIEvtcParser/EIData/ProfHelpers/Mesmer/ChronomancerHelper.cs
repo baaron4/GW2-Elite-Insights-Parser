@@ -133,7 +133,7 @@ internal static class ChronomancerHelper
             {
                 boonGivingShatters = [];
             }
-            var skillDict = new Dictionary<GUID, SkillItem>()
+            var skillDict = new Dictionary<Guid, SkillItem>()
             {
                 { EffectGUIDs.ChronomancerSplitSecond, skillData.Get(SplitSecondOrSplitSecondAmmo)},
                 { EffectGUIDs.ChronomancerRewinder, skillData.Get(Rewinder)},

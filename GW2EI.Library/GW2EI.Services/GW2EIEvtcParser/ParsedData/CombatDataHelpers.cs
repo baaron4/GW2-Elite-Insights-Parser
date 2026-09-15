@@ -55,7 +55,7 @@ partial class CombatData
             .Any();
     }
 
-    public bool HasRelatedEffect(GUID effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasRelatedEffect(Guid effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out var effectEvents))
         {
@@ -64,7 +64,7 @@ partial class CombatData
         return false;
     }
 
-    public bool HasRelatedEffectDst(GUID effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasRelatedEffectDst(Guid effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         if (TryGetEffectEventsByDstWithGUID(agent, effectGUID, out var effectEvents))
         {

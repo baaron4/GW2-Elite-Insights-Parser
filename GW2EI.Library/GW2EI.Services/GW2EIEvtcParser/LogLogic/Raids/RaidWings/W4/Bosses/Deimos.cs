@@ -881,7 +881,7 @@ internal class Deimos : BastionOfThePenitent
     /// <param name="log">The log.</param>
     /// <param name="guid">Effect GUID of the different oil sizes.</param>
     /// <param name="radius">Radius of the oil, 200 to 1000.</param>
-    private static void AddRapidDecayDecoration(ParsedEvtcLog log, GUID guid, uint radius, CombatReplayDecorationContainer environmentDecorations)
+    private static void AddRapidDecayDecoration(ParsedEvtcLog log, Guid guid, uint radius, CombatReplayDecorationContainer environmentDecorations)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rapidDecay))
         {

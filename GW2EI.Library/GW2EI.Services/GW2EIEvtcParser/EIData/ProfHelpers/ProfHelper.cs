@@ -854,7 +854,7 @@ internal static class ProfHelper
     /// </summary>
     /// <param name="actor">actor who is the source of the effect</param>
     /// <param name="startOffset">offset to be applied to the time value of the effect</param>
-    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
+    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, Guid effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
     {
         var res = new List<AnimatedCastEvent>();
         if (combatData.GetAnimatedCastData(skillID).Count > 0)

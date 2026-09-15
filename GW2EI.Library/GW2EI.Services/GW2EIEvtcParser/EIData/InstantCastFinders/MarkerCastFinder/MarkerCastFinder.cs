@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class MarkerCastFinder : CheckedCastFinder<MarkerEvent>
 {
     protected bool Minions = false;
-    private readonly GUID _markerGUID;
+    private readonly Guid _markerGUID;
     private int _speciesID = 0;
 
     public MarkerCastFinder WithMinions()
@@ -25,7 +25,7 @@ internal class MarkerCastFinder : CheckedCastFinder<MarkerEvent>
         return markerEvent.Src;
     }
 
-    public MarkerCastFinder(long skillID, GUID markerGUID) : base(skillID)
+    public MarkerCastFinder(long skillID, Guid markerGUID) : base(skillID)
     {
         UsingNotAccurate();
         UsingEnable((combatData) => combatData.HasMarkerData);

@@ -192,7 +192,7 @@ internal class Qadim : MythwrightGambit
         var qadimLampMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
+                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent, true))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (qadimLampMarkerGUID != null)

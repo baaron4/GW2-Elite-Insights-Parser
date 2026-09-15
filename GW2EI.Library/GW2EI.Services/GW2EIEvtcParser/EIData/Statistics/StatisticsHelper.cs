@@ -172,7 +172,7 @@ public class StatisticsHelper
     //Positions for group
     private List<ParametricPoint3D?>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
-    private List<(AgentItem p, GenericSegment<GUID> state)>? _commanderStates = null;
+    private List<(AgentItem p, GenericSegment<Guid> state)>? _commanderStates = null;
 
     /// <summary> Returns a list of center positions of the squad which are null in places where all players are dead or disconnected. One entry for each polling. </summary>
     public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)
@@ -188,10 +188,10 @@ public class StatisticsHelper
         return _stackCommanderPositions;
     }
 
-    /// <summary> Returns a list of commander states for the squad. Segment contains timeframe during which agent was commander and the marker GUID 
+    /// <summary> Returns a list of commander states for the squad. Segment contains timeframe during which agent was commander and the marker Guid 
     /// List is ordered by state.Start. Segments should not overlap.
     /// </summary>
-    public IReadOnlyList<(AgentItem p, GenericSegment<GUID> state)> GetCommanderStates(ParsedEvtcLog log)
+    public IReadOnlyList<(AgentItem p, GenericSegment<Guid> state)> GetCommanderStates(ParsedEvtcLog log)
     {
         _commanderStates ??= CalculateCommanderStates(log);
         return _commanderStates;
@@ -305,15 +305,15 @@ public class StatisticsHelper
         return commanderPositions;
     }
 
-    private static List<(AgentItem p, GenericSegment<GUID> state)> CalculateCommanderStates(ParsedEvtcLog log)
+    private static List<(AgentItem p, GenericSegment<Guid> state)> CalculateCommanderStates(ParsedEvtcLog log)
     {
         var useGUIDs = log.LogMetadata.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
-        var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
+        var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<Guid>>>(log.PlayerList.Count);
         var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
         foreach (var player in relevantPlayers)
         {
             IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
-            var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
+            var commanderMarkerStates = new List<GenericSegment<Guid>>(markerEvents.Count);
             foreach (MarkerEvent markerEvent in markerEvents)
             {
                 MarkerGUIDEvent marker = markerEvent.GUIDEvent!;
@@ -340,7 +340,7 @@ public class StatisticsHelper
                 statesByPlayer[player] = commanderMarkerStates;
             }
         }
-        var states = new List<(AgentItem p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
+        var states = new List<(AgentItem p, GenericSegment<Guid> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
         foreach (var (player, state) in statesByPlayer)
         {
             foreach (var segment in state)
@@ -350,7 +350,7 @@ public class StatisticsHelper
         }
         states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
 
-        List<(AgentItem p, GenericSegment<GUID> state)> commanderStates = new(states.Count);
+        List<(AgentItem p, GenericSegment<Guid> state)> commanderStates = new(states.Count);
         if (states.Count == 0)
         {
             return commanderStates;

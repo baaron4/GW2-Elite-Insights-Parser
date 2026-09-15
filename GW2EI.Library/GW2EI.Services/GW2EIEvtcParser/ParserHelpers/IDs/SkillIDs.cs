@@ -5718,5 +5718,8 @@ public static class SkillIDs
     public const long RiteOfTheGreatDwarfVersedInStone = 80245;
     public const long CascadingCorruptionStackBuff = 80279;
     #endregion
+    #region TODO
+    public const long JuvenileLeyLineBatCommandSkill = 999999;
+    #endregion TODO
 
 }

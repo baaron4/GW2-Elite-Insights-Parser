@@ -247,7 +247,7 @@ public class CombatReplay
     private static uint DebugRadius = 100;
     private static uint DebugOpeningAngle = 120;
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
-    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
             .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end)
@@ -349,7 +349,7 @@ public class CombatReplay
         }
     }
 
-    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0)
@@ -403,7 +403,7 @@ public class CombatReplay
 
     }
 
-    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0)
@@ -456,7 +456,7 @@ public class CombatReplay
         }
     }
 
-    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end && x.EffectID > 0)

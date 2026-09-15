@@ -34,6 +34,9 @@ public partial class InspectorViewModel : ObservableObject
     private string? skillNameFilter;
     partial void OnSkillNameFilterChanged(string? value) => CombatEventsView.Refresh();
     [ObservableProperty]
+    private string? guidIdFilter;
+    partial void OnGuidIdFilterChanged(string? value) => CombatEventsView.Refresh();
+    [ObservableProperty]
     private string? guidFilter;
     partial void OnGuidFilterChanged(string? value) => CombatEventsView.Refresh();
     // Events tab filters
@@ -72,8 +75,16 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
+        if (!string.IsNullOrWhiteSpace(GuidIdFilter) && 
+            !long.TryParse(GuidIdFilter, out var parsedContentID) && 
+            eventModel.ContentID != parsedContentID)
+        {
+            return false;
+        }
+
         if (!string.IsNullOrWhiteSpace(GuidFilter) && 
-            eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            ((Guid.TryParse(GuidFilter, out var parsedGuid) && eventModel.GUIDStruct != parsedGuid) ||
+            (eventModel.GUID.Contains(GuidFilter, StringComparison.OrdinalIgnoreCase) != true)))
         {
             return false;
         }
@@ -239,12 +250,16 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(ContentIdFilter) && !evt.ContentID.ToString().Contains(ContentIdFilter, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(ContentIdFilter) &&
+            !long.TryParse(ContentIdFilter, out var parsedContentID) &&
+            evt.ContentID != parsedContentID)
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(ContentGuidFilter) && !evt.GUID.ToString().Contains(ContentGuidFilter, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(GuidFilter) &&
+            ((Guid.TryParse(GuidFilter, out var parsedGuid) && evt.GUIDStruct != parsedGuid) ||
+            (evt.GUID.Contains(GuidFilter, StringComparison.OrdinalIgnoreCase) != true)))
         {
             return false;
         }

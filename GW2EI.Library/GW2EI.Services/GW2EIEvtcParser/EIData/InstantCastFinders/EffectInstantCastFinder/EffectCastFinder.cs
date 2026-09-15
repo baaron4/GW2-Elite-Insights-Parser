@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
     protected bool Minions = false;
-    private readonly GUID _effectGUID;
+    private readonly Guid _effectGUID;
     private int _speciesID = 0;
 
     public EffectCastFinder WithMinions()
@@ -35,7 +35,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return effectEvent.Dst;
     }
 
-    public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)
+    public EffectCastFinder(long skillID, Guid effectGUID) : base(skillID)
     {
         UsingNotAccurate();
         UsingEnable((combatData) => combatData.HasEffectData);
@@ -137,7 +137,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectSameSrcChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectSameSrcChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -149,7 +149,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         });
         return this;
     }
-    internal EffectCastFinder UsingSecondaryEffectInvertedSrcChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectInvertedSrcChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -162,7 +162,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectSameSrcInvertedTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectSameSrcInvertedTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -175,7 +175,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectInvertedSrcInvertedTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectInvertedSrcInvertedTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -188,7 +188,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectSameSrcSameTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectSameSrcSameTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -201,7 +201,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectInvertedSrcSameTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectInvertedSrcSameTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -214,7 +214,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectSameSrcChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectSameSrcChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -227,7 +227,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectSameSrcCheckerOnSamePosition(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectSameSrcCheckerOnSamePosition(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -239,7 +239,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         });
         return this;
     }
-    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -252,7 +252,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectSameSrcInvertedTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectSameSrcInvertedTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -265,7 +265,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcInvertedTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcInvertedTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -278,7 +278,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectSameSrcSameTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectSameSrcSameTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
@@ -291,7 +291,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcSameTypeChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingNoSecondaryEffectInvertedSrcSameTypeChecker(Guid effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {

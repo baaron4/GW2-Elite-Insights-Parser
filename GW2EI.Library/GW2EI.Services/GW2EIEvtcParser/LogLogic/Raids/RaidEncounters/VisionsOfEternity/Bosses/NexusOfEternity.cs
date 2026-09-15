@@ -29,7 +29,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     public NexusOfEternity(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
-        Icon = EncounterIconGuardiansGlade;
+        Icon = EncounterIconNexusOfEternity;
         Extension = "noe";
         GenericFallBackMethod = FallBackMethod.None;
         LogCategoryInformation.InSubCategoryOrder = 1;

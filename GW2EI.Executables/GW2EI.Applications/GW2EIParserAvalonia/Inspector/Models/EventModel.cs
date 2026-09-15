@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIParserAvalonia.Services;
 
@@ -13,8 +14,9 @@ public sealed class EventModel
 
     public long? SkillId { get; }
     public string? SkillName { get; }
-    public string? Guid { get; }
-
+    internal Guid GUIDStruct { get; }
+    public string Guid => GUIDStruct.ToString("N").ToUpperInvariant();
+    public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
 
     public EventModel(object @event)
@@ -45,11 +47,13 @@ public sealed class EventModel
                 break;
 
             case IDToGUIDEvent guid:
-                Guid = guid.GUID.ToString();
+                GUIDStruct = guid.GetGUIDStruct();
+                ContentID = guid.ContentID;
                 break;
 
             case EffectEvent effect:
-                Guid = effect.GUIDEvent.GUID.ToString();
+                GUIDStruct = effect.GUIDEvent.GetGUIDStruct();
+                ContentID = effect.GUIDEvent.ContentID;
                 break;
         }
 

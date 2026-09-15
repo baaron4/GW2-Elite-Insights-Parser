@@ -697,7 +697,7 @@ public partial class CombatData
         {
             if (!TryGetEffectEventsByGUID(effectGUID, out var effectEvents))
             {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Found orphan GUID: " + effectGUID.ToHex());
+                operation.UpdateProgressWithCancellationCheck("Parsing: Found orphan GUID: " + effectGUID.ToString("N"));
             }
         }
 #endif

@@ -2,15 +2,21 @@
 
 public abstract class IDToGUIDEvent : MetaDataEvent
 {
-    public readonly GUID GUID;
+    internal readonly Guid GUID;
+    public string GUIDString => GUID.ToString("N").ToUpperInvariant();
     public readonly long ContentID;
 
     public bool IsValid => ContentID >= 0;
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        GUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
+        GUID = new GUIDWrapper(evtcItem.SrcAgent, evtcItem.DstAgent, true).GUID;
         ContentID = evtcItem.SkillID;
+    }
+
+    public Guid GetGUIDStruct()
+    {
+        return GUID;
     }
 
     protected IDToGUIDEvent() : base()

@@ -23,7 +23,7 @@ internal class EffectCastFinderByDst : EffectCastFinder
     }
 #endif
 
-    public EffectCastFinderByDst(long skillID, GUID effectGUID) : base(skillID, effectGUID)
+    public EffectCastFinderByDst(long skillID, Guid effectGUID) : base(skillID, effectGUID)
     {
     }
 }
