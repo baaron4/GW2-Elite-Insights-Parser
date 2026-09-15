@@ -178,7 +178,7 @@ partial class CombatData
                 }
                 else
                 {
-                    buffInfoEvent = new BuffInfoEvent(stateChangeEvent, evtcVersion);
+                    buffInfoEvent = new BuffInfoEvent(stateChangeEvent, skillData, evtcVersion);
                     metaDataEvents.BuffInfoEvents[stateChangeEvent.SkillID] = buffInfoEvent;
                 }
                 if (stateChangeEvent.IsStateChange == StateChange.BuffInfo)
@@ -201,7 +201,7 @@ partial class CombatData
                 }
                 else
                 {
-                    skillInfoEvent = new SkillInfoEvent(stateChangeEvent);
+                    skillInfoEvent = new SkillInfoEvent(stateChangeEvent, skillData);
                     metaDataEvents.SkillInfoEvents[stateChangeEvent.SkillID] = skillInfoEvent;
                 }
                 break;

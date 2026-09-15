@@ -4,7 +4,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class BuffInfoEvent : MetaDataEvent
 {
-    public readonly long BuffID;
+    public readonly SkillItem BuffSkill;
+    public long BuffID => BuffSkill.ID;
 
     public bool ProbablyInvul { get; private set; }
 
@@ -23,9 +24,9 @@ public class BuffInfoEvent : MetaDataEvent
     public uint DurationCap { get; private set; }
     public readonly List<BuffFormula> Formulas = [];
 
-    internal BuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
+    internal BuffInfoEvent(CombatItem evtcItem, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
-        BuffID = evtcItem.SkillID;
+        BuffSkill = skillData.Get(evtcItem.SkillID);
         CompleteBuffInfoEvent(evtcItem, evtcVersion);
     }
 
