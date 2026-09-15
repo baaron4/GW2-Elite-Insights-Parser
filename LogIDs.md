@@ -180,6 +180,8 @@ Temple of Febe: 0x040502
 
 Guardian's Glade: 0x040601
 
+Nexus of Eternity: 0x040602
+
 0xXXXX1X indicates a full instance log.
 
 ## Open World
