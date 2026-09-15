@@ -23,14 +23,12 @@ public partial class InspectorViewModel : ObservableObject
     private string? skillNameFilter;
     [ObservableProperty]
     private string? guidFilter;
-    #region AGENT EVENTS
     // Events tab filters
     [ObservableProperty]
     private string? agentSearchText;
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
     [ObservableProperty]
     private AgentFilterItem? selectedAgentFilter;
-    #endregion AGENT EVENTS
 
     private readonly IReadOnlyList<TimeCombatEvent> _allTimeEvents;
     private readonly IReadOnlyList<NonTimeCombatEvent> _allNonTimeEvents;
