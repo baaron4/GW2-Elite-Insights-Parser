@@ -112,6 +112,9 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
                 case MountBalriorPublicConvergence:
                 case MountBalriorPrivateConvergence:
                     return new MountBalriorConvergenceInstance(GenericTriggerID);
+                case NexusOfEternityPublicConvergence:
+                case NexusOfEternityPrivateConvergence:
+                    return new NexusOfEternityConvergenceInstance(GenericTriggerID);
             }
         }
         return base.AdjustLogic(agentData, combatData, parserSettings);
