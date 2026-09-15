@@ -14,7 +14,8 @@ public sealed class EventModel
 
     public long? SkillId { get; }
     public string? SkillName { get; }
-    public Guid Guid { get; }
+    internal Guid GUIDStruct { get; }
+    public string Guid => GUIDStruct.ToString("N").ToUpperInvariant();
     public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
 
@@ -46,12 +47,12 @@ public sealed class EventModel
                 break;
 
             case IDToGUIDEvent guid:
-                Guid = guid.GUID;
+                GUIDStruct = guid.GetGUIDStruct();
                 ContentID = guid.ContentID;
                 break;
 
             case EffectEvent effect:
-                Guid = effect.GUIDEvent.GUID;
+                GUIDStruct = effect.GUIDEvent.GetGUIDStruct();
                 ContentID = effect.GUIDEvent.ContentID;
                 break;
         }

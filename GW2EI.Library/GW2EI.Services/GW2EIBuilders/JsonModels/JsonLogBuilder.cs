@@ -125,7 +125,7 @@ internal static class JsonLogBuilder
     {
         var teamDesc = new TeamDesc
         {
-            GUID = teamGUID.GUID.ToString("N"),
+            GUID = teamGUID.GUIDString,
         };
         return teamDesc;
     }

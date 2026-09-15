@@ -172,7 +172,7 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (!GUIDFilter(eventModel.Guid, GuidFilter))
+            if (!GUIDFilter(eventModel.GUIDStruct, GuidFilter))
             {
                 return false;
             }
@@ -244,7 +244,7 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (!GUIDFilter(model.GUID, ContentGuidFilter))
+            if (!GUIDFilter(model.GUIDStruct, ContentGuidFilter))
             {
                 return false;
             }
@@ -266,11 +266,11 @@ public partial class InspectorViewModel : ObservableObject
     {
         Guid exactGuid = default;
         bool hasGuidFilter = !string.IsNullOrWhiteSpace(filter);
-        bool hasExactGuidFilter = hasGuidFilter && filter!.Length == 36 && Guid.TryParse(filter, out exactGuid);
+        bool hasExactGuidFilter = hasGuidFilter && filter!.Length == 32 && Guid.TryParse(filter, out exactGuid);
 
         if (hasGuidFilter)
         {
-            if (hasExactGuidFilter && guid != exactGuid || !guid.ToString().Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            if ((hasExactGuidFilter && guid != exactGuid) || !guid.ToString("N").ToUpperInvariant().Contains(filter!, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
