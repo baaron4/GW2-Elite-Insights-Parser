@@ -29,6 +29,8 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private string? skillNameFilter;
     [ObservableProperty]
+    private string? guidIdFilter;
+    [ObservableProperty]
     private string? guidFilter;
 
     // Content GUID tab filters
@@ -124,6 +126,8 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnGuidFilterChanged(string? value) => RefreshVisibleEvents();
 
+    partial void OnGuidIdFilterChanged(string? value) => RefreshVisibleEvents();
+
     partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => RefreshVisibleEvents();
 
     partial void OnAgentSearchTextChanged(string? value) => OnPropertyChanged(nameof(FilteredAgentFilterItems));
@@ -144,7 +148,6 @@ public partial class InspectorViewModel : ObservableObject
         }
 
         bool hasSkillNameFilter = !string.IsNullOrWhiteSpace(SkillNameFilter);
-        bool hasGuidFilter = !string.IsNullOrWhiteSpace(GuidFilter);
         ulong? agentFilter = SelectedAgentFilter?.Agent;
 
         var visibleEvents = Events.Where(eventModel =>
@@ -164,7 +167,12 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (hasGuidFilter && eventModel.Guid?.Contains(GuidFilter!, StringComparison.OrdinalIgnoreCase) != true)
+            if (!ContentIDFilter(eventModel.ContentID, GuidIdFilter))
+            {
+                return false;
+            }
+
+            if (!GUIDFilter(eventModel.GUIDStruct, GuidFilter))
             {
                 return false;
             }
@@ -218,28 +226,25 @@ public partial class InspectorViewModel : ObservableObject
 
     private void RefreshVisibleContentGUIDs()
     {
-        bool hasContentIdFilter = !string.IsNullOrWhiteSpace(ContentIdFilter);
-        bool hasGuidFilter = !string.IsNullOrWhiteSpace(ContentGuidFilter);
-
-        VisibleSkills.ReplaceRange(FilterContentGUIDs(Skills, hasContentIdFilter, hasGuidFilter));
-        VisibleEffects.ReplaceRange(FilterContentGUIDs(Effects, hasContentIdFilter, hasGuidFilter));
-        VisibleMarkers.ReplaceRange(FilterContentGUIDs(Markers, hasContentIdFilter, hasGuidFilter));
-        VisibleSpecies.ReplaceRange(FilterContentGUIDs(Species, hasContentIdFilter, hasGuidFilter));
-        VisibleTeams.ReplaceRange(FilterContentGUIDs(Teams, hasContentIdFilter, hasGuidFilter));
-        VisibleEmotes.ReplaceRange(FilterContentGUIDs(Emotes, hasContentIdFilter, hasGuidFilter));
-        VisibleTransformations.ReplaceRange(FilterContentGUIDs(Transformations, hasContentIdFilter, hasGuidFilter));
+        VisibleSkills.ReplaceRange(FilterContentGUIDs(Skills));
+        VisibleEffects.ReplaceRange(FilterContentGUIDs(Effects));
+        VisibleMarkers.ReplaceRange(FilterContentGUIDs(Markers));
+        VisibleSpecies.ReplaceRange(FilterContentGUIDs(Species));
+        VisibleTeams.ReplaceRange(FilterContentGUIDs(Teams));
+        VisibleEmotes.ReplaceRange(FilterContentGUIDs(Emotes));
+        VisibleTransformations.ReplaceRange(FilterContentGUIDs(Transformations));
     }
 
-    private IEnumerable<ContentGUIDModel> FilterContentGUIDs(IEnumerable<ContentGUIDModel> source, bool hasContentIdFilter, bool hasGuidFilter)
+    private IEnumerable<ContentGUIDModel> FilterContentGUIDs(IEnumerable<ContentGUIDModel> source)
     {
         return source.Where(model =>
         {
-            if (hasContentIdFilter && !model.ContentID.ToString().Contains(ContentIdFilter!, StringComparison.OrdinalIgnoreCase))
+            if (!ContentIDFilter(model.ContentID, ContentIdFilter))
             {
                 return false;
             }
 
-            if (hasGuidFilter && !model.GUID.ToString().Contains(ContentGuidFilter!, StringComparison.OrdinalIgnoreCase))
+            if (!GUIDFilter(model.GUIDStruct, ContentGuidFilter))
             {
                 return false;
             }
@@ -247,7 +252,33 @@ public partial class InspectorViewModel : ObservableObject
             return true;
         });
     }
-    
+
+    private static bool ContentIDFilter(long contentId, string? filter)
+    {
+        if (!string.IsNullOrWhiteSpace(filter) && !contentId.ToString().Contains(filter!, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private static bool GUIDFilter(Guid guid, string? filter)
+    {
+        Guid exactGuid = default;
+        bool hasGuidFilter = !string.IsNullOrWhiteSpace(filter);
+        bool hasExactGuidFilter = hasGuidFilter && filter!.Length == 32 && Guid.TryParse(filter, out exactGuid);
+
+        if (hasGuidFilter)
+        {
+            if ((hasExactGuidFilter && guid != exactGuid) || !guid.ToString("N").ToUpperInvariant().Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public IEnumerable<AgentFilterItem> FilteredAgentFilterItems =>
     string.IsNullOrWhiteSpace(AgentSearchText)
         ? AgentFilterItems

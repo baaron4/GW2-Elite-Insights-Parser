@@ -2,7 +2,8 @@
 
 public abstract class IDToGUIDEvent : MetaDataEvent
 {
-    public readonly Guid GUID;
+    internal readonly Guid GUID;
+    public string GUIDString => GUID.ToString("N").ToUpperInvariant();
     public readonly long ContentID;
 
     public bool IsValid => ContentID >= 0;
@@ -11,6 +12,11 @@ public abstract class IDToGUIDEvent : MetaDataEvent
     {
         GUID = new GUIDWrapper(evtcItem.SrcAgent, evtcItem.DstAgent, true).GUID;
         ContentID = evtcItem.SkillID;
+    }
+
+    public Guid GetGUIDStruct()
+    {
+        return GUID;
     }
 
     protected IDToGUIDEvent() : base()

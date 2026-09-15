@@ -30,54 +30,71 @@
                               Margin="8">
 
                             <Grid Grid.Row="0"
-                                  RowDefinitions="Auto,Auto,Auto,Auto"
+                                  RowDefinitions="Auto,Auto,Auto"
                                   ColumnDefinitions="Auto,*"
                                   Margin="0,0,0,8">
 
                                 <TextBlock Grid.Row="0"
                                            Grid.Column="0"
-                                           Text="Skill ID"
+                                           Text="Skill"
                                            VerticalAlignment="Center"
                                            Margin="0,0,8,4"/>
 
-                                <TextBox Grid.Row="0"
-                                         Grid.Column="1"
-                                         Text="{Binding SkillIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="Skill ID"/>
+                                <Grid Grid.Row="0"
+                                      Grid.Column="1"
+                                      ColumnDefinitions="3*,Auto,1*">
+
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="Skill name"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="ID"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0,8,0"/>
+
+                                    <TextBox Grid.Column="2"
+                                             Text="{Binding SkillIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="Skill ID"/>
+
+                                </Grid>
 
                                 <TextBlock Grid.Row="1"
-                                           Grid.Column="0"
-                                           Text="Skill Name"
-                                           VerticalAlignment="Center"
-                                           Margin="0,4,8,0"/>
-
-                                <TextBox Grid.Row="1"
-                                         Grid.Column="1"
-                                         Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="Skill name"
-                                         Margin="0,4,0,0"/>
-
-                                <TextBlock Grid.Row="2"
                                            Grid.Column="0"
                                            Text="GUID"
                                            VerticalAlignment="Center"
                                            Margin="0,4,8,0"/>
 
-                                <TextBox Grid.Row="2"
-                                         Grid.Column="1"
-                                         Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="GUID"
-                                         Margin="0,4,0,0"/>
+                                <Grid Grid.Row="1"
+                                      Grid.Column="1"
+                                      ColumnDefinitions="3*,Auto,1*"
+                                      Margin="0,4,0,0">
+
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="GUID"
+                                             MaxLength="32"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="ID"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0,8,0"/>
+
+                                    <TextBox Grid.Column="2"
+                                             Text="{Binding GuidIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             PlaceholderText="Content ID"/>
+
+                                </Grid>
 
                                 <TextBlock
-                                    Grid.Row="3"
+                                    Grid.Row="2"
                                     Grid.Column="0"
                                     Text="Agent"
                                     VerticalAlignment="Center"
                                     Margin="0,4,8,0"/>
 
                                 <AutoCompleteBox
-                                    Grid.Row="3"
+                                    Grid.Row="2"
                                     Grid.Column="1"
                                     ItemsSource="{Binding AgentFilterItems}"
                                     SelectedItem="{Binding SelectedAgentFilter, Mode=TwoWay}"
@@ -110,10 +127,10 @@
                             </Grid>
 
                             <TreeView
-                                      x:Name="CombatEventsTreeView"
-                                      Grid.Row="1"
-                                      ItemsSource="{Binding EventTypeFilterRoots}"
-                                      PointerPressed="OnEventFilterNodePressed">
+                                x:Name="CombatEventsTreeView"
+                                Grid.Row="1"
+                                ItemsSource="{Binding EventTypeFilterRoots}"
+                                PointerPressed="OnEventFilterNodePressed">
 
                                 <TreeView.Styles>
                                     <Style Selector="TreeViewItem">
@@ -495,7 +512,8 @@
 
                             <TextBox Grid.Column="3"
                                      Text="{Binding ContentGuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     PlaceholderText="GUID"/>
+                                     PlaceholderText="GUID"
+                                     MaxLength="32"/>
 
                         </Grid>
 

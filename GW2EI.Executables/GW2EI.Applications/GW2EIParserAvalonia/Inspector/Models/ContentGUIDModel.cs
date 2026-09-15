@@ -7,7 +7,8 @@ namespace GW2EIParserAvalonia.Models;
 public sealed class ContentGUIDModel
 {
     public long ContentID => _event.ContentID;
-    public Guid GUID => _event.GUID;
+    public string GUID => _event.GUIDString;
+    internal Guid GUIDStruct => _event.GetGUIDStruct();
     public float DefaultDuration => _event is EffectGUIDEvent effect ? effect.DefaultDuration : 0;
     public bool IsCommanderTag => _event is MarkerGUIDEvent marker && marker.IsCommanderTag;
 
