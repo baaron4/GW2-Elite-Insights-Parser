@@ -75,16 +75,12 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(GuidIdFilter) && 
-            long.TryParse(GuidIdFilter, out var parsedContentID) && 
-            eventModel.ContentID != parsedContentID)
+        if (ContentIDFilter(eventModel.ContentID, GuidIdFilter))
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(GuidFilter) && 
-            ((Guid.TryParse(GuidFilter, out var parsedGuid) && eventModel.GUIDStruct != parsedGuid) ||
-            (eventModel.GUID.Contains(GuidFilter, StringComparison.OrdinalIgnoreCase) != true)))
+        if (GUIDFilter(eventModel.GUIDStruct, eventModel.GUID, GuidFilter))
         {
             return false;
         }
@@ -249,17 +245,12 @@ public partial class InspectorViewModel : ObservableObject
         {
             return false;
         }
-
-        if (!string.IsNullOrWhiteSpace(ContentIdFilter) &&
-            long.TryParse(ContentIdFilter, out var parsedContentID) &&
-            evt.ContentID != parsedContentID)
+        if (ContentIDFilter(evt.ContentID, ContentIdFilter))
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(GuidFilter) &&
-            ((Guid.TryParse(GuidFilter, out var parsedGuid) && evt.GUIDStruct != parsedGuid) ||
-            (evt.GUID.Contains(GuidFilter, StringComparison.OrdinalIgnoreCase) != true)))
+        if (GUIDFilter(evt.GUIDStruct, evt.GUID, ContentGuidFilter))
         {
             return false;
         }
@@ -380,6 +371,20 @@ public partial class InspectorViewModel : ObservableObject
         {
             root.FilterChanged += OnFilterChanged;
         }
+    }
+
+    private static bool GUIDFilter(Guid GUIDStruct, string GUIDStrine, string? filterValue)
+    {
+        return !string.IsNullOrWhiteSpace(filterValue) &&
+            ((Guid.TryParse(filterValue, out var parsedGuid) && GUIDStruct != parsedGuid) ||
+            (GUIDStrine.Contains(filterValue, StringComparison.OrdinalIgnoreCase) != true));
+    }
+
+    private static bool ContentIDFilter(long contentID, string? filterValue)
+    {
+        return !string.IsNullOrWhiteSpace(filterValue) &&
+            long.TryParse(filterValue, out var parsedContentID) &&
+            contentID != parsedContentID;
     }
 
     internal void SetCheckStateOnAllRoots(bool state)
