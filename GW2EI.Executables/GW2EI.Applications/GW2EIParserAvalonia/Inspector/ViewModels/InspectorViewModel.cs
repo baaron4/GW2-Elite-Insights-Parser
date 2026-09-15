@@ -150,7 +150,7 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private string? contentGuidFilter;
 
-    partial void OnContentIdFilterChanged(string? value) 
+    private void RefreshGUIDViews()
     {
         SkillGUIDsView.Refresh();
         EffectGUIDsView.Refresh();
@@ -161,16 +161,9 @@ public partial class InspectorViewModel : ObservableObject
         TransformationGUIDsView.Refresh();
     }
 
-    partial void OnContentGuidFilterChanged(string? value)
-    {
-        SkillGUIDsView.Refresh();
-        EffectGUIDsView.Refresh();
-        MarkerGUIDsView.Refresh();
-        SpeciesGUIDsView.Refresh();
-        TeamGUIDsView.Refresh();
-        EmoteGUIDsView.Refresh();
-        TransformationGUIDsView.Refresh();
-    }
+    partial void OnContentIdFilterChanged(string? value) => RefreshGUIDViews();
+
+    partial void OnContentGuidFilterChanged(string? value) => RefreshGUIDViews();
 
     private bool FilterContentGUIDs(object item)
     {
