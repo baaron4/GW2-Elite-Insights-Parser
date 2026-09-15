@@ -551,12 +551,12 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         }
 
         // Crushing Regret (Green) End
-        var crushingRegretEnds = new List<(GUID GUID, Color Color)>()
+        var crushingRegretEnds = new List<(Guid GUID, Color Color)>()
         {
             (EffectGUIDs.TempleOfFebeGreenSuccess, Colors.Green),
             (EffectGUIDs.TempleOfFebeGreenFailure, Colors.DarkRed)
         };
-        foreach ((GUID guid, Color color) in crushingRegretEnds)
+        foreach ((Guid guid, Color color) in crushingRegretEnds)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out var crushingRegrets))
             {

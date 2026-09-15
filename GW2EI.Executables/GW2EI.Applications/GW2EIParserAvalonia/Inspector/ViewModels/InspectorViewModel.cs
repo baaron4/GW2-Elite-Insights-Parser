@@ -262,11 +262,11 @@ public partial class InspectorViewModel : ObservableObject
         return true;
     }
 
-    private static bool GUIDFilter(GUID guid, string? filter)
+    private static bool GUIDFilter(Guid guid, string? filter)
     {
-        GUID exactGuid = default;
+        Guid exactGuid = default;
         bool hasGuidFilter = !string.IsNullOrWhiteSpace(filter);
-        bool hasExactGuidFilter = hasGuidFilter && filter!.Length == 32 && GUID.TryParse(filter, out exactGuid);
+        bool hasExactGuidFilter = hasGuidFilter && filter!.Length == 32 && Guid.TryParse(filter, out exactGuid);
 
         if (hasGuidFilter)
         {

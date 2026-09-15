@@ -21,7 +21,7 @@ internal abstract class Nightmare : FractalLogic
         ]));
     }
 
-    protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID guid, uint innerRadius, uint outerRadius)
+    protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Guid guid, uint innerRadius, uint outerRadius)
     {
         int duration = 1000;
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var cascadeOfTorment))

@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 public class Player : PlayerActor
 {
 
-    private List<GenericSegment<GUID>>? CommanderStates = null;
+    private List<GenericSegment<Guid>>? CommanderStates = null;
     private bool _squadless = false;
     private List<AchievementEligibilityEvent>? _achievementEligibilityEvents = null;
     // Constructors
@@ -98,7 +98,7 @@ public class Player : PlayerActor
     /// 
     /// The value of the segment is the GUID of the specific commander tag.
     /// </summary>
-    public IReadOnlyList<GenericSegment<GUID>> GetCommanderStates(ParsedEvtcLog log)
+    public IReadOnlyList<GenericSegment<Guid>> GetCommanderStates(ParsedEvtcLog log)
     {
         if (CommanderStates == null)
         {

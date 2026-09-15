@@ -14,7 +14,7 @@ public sealed class EventModel
 
     public long? SkillId { get; }
     public string? SkillName { get; }
-    public GUID Guid { get; }
+    public Guid Guid { get; }
     public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
 

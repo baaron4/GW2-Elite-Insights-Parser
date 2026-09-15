@@ -578,6 +578,8 @@ public static class SpeciesIDs
         GuardiansGladeTornado = 27654,
         EliteCrocodilianRazortooth = 27655,
         CursedArtifact_NPC = 27663,
+        // - Nexus of Eternity
+        NexusOfEternityBoss = 28106,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
@@ -963,6 +965,7 @@ public static class SpeciesIDs
         JuvenileJanthiriBee = 26851,
         JuvenileRaptorSwiftwing = 27259,
         JuvenileRiverOtter = 27687,
+        JuvenileLeyLineBat = 999999,
         // Guardian Weapon Summons
         BowOfTruth = 6383,
         HammerOfWisdom = 5791,

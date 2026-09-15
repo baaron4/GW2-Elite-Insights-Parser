@@ -167,6 +167,7 @@ internal static class LogImages
     internal const string EncounterIconCosmicObservatory = "https://i.imgur.com/v6vjRsH.png";
     internal const string EncounterIconTempleOfFebe = "https://i.imgur.com/1cGN1UT.png";
     internal const string EncounterIconGuardiansGlade = "https://i.imgur.com/7O8666G.png";
+    internal const string EncounterIconNexusOfEternity = "";
 
     // Combat Replay Maps
     internal const string CombatReplayFreezie = "";
@@ -249,6 +250,7 @@ internal static class LogImages
     #region CONVERGENCES
     // Instance Icons
     internal const string InstanceIconOuterNayos = "https://i.imgur.com/CRqdnan.png";
+    internal const string InstanceIconNexusOfEternity = "";
 
     // Combat Replay Maps
     internal const string CombatReplayOuterNayos = "https://i.imgur.com/UFueycy.jpeg";

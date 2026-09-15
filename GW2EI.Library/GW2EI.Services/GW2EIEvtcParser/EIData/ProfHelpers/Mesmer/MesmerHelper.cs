@@ -231,10 +231,8 @@ internal static class MesmerHelper
             .WithBuilds(GW2Builds.November2023Balance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnActorDamageModifier(Mod_CompoundingPowerStrike, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
-        new BuffOnActorDamageModifier(Mod_CompoundingPowerCondition, CompoundingPower, "Compounding Power", "1% per stack after creating an illusion", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "1% per stack after creating an illusion", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse), // undocumented, strike was also reduced to 1% in pve
         // - Phantasmal Force
         new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
             .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsPhantasm(x.ReferenceAgentItem)))
@@ -614,7 +612,7 @@ internal static class MesmerHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out var mentalCollapses))
         {
-            var mapping = new Dictionary<GUID, (long duration, uint radius)>
+            var mapping = new Dictionary<Guid, (long duration, uint radius)>
             {
                 { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
                 { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
