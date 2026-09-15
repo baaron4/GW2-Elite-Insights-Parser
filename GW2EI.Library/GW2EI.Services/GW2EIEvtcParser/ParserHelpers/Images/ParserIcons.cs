@@ -1665,9 +1665,9 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Translates a Squad Marker GUID to the corresponding icon.
+    /// Translates a Squad Marker Guid to the corresponding icon.
     /// </summary>
-    public static readonly IReadOnlyDictionary<GUID, string> SquadMarkerToIcon = new Dictionary<GUID, string>()
+    public static readonly IReadOnlyDictionary<Guid, string> SquadMarkerToIcon = new Dictionary<Guid, string>()
     {
         { MarkerGUIDs.ArrowOverhead, ArrowSquadMarkerOverhead },
         { MarkerGUIDs.CircleOverhead, CircleSquadMarkerOverhead },
@@ -1696,9 +1696,9 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Translates a Commander/Catmander Tag GUID to the corresponding icon.
+    /// Translates a Commander/Catmander Tag Guid to the corresponding icon.
     /// </summary>
-    public static readonly IReadOnlyDictionary<GUID, string> CommanderTagToIcon = new Dictionary<GUID, string>()
+    public static readonly IReadOnlyDictionary<Guid, string> CommanderTagToIcon = new Dictionary<Guid, string>()
     {
         { MarkerGUIDs.RedCommanderTag, RedCommanderTagOverhead },
         { MarkerGUIDs.OrangeCommanderTag, OrangeCommanderTagOverhead },

@@ -344,7 +344,7 @@ internal class WhisperOfJormag : Bjora
         }
 
         // Falling Ice - Indicator and Spike
-        List<(GUID indicatorGUID, GUID spikeGUID, uint radius)> fallingIces = [
+        List<(Guid indicatorGUID, Guid spikeGUID, uint radius)> fallingIces = [
             (EffectGUIDs.WhisperOfJormagFallingIceIndicator60, EffectGUIDs.WhisperOfJormagFallingIceSpike60, 60),
             (EffectGUIDs.WhisperOfJormagFallingIceIndicator120, EffectGUIDs.WhisperOfJormagFallingIceSpike120, 120),
             (EffectGUIDs.WhisperOfJormagFallingIceIndicator180, EffectGUIDs.WhisperOfJormagFallingIceSpike180, 180),
@@ -370,7 +370,7 @@ internal class WhisperOfJormag : Bjora
         }
     }
 
-    private static void AddFallingIceDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID indicatorGUID, GUID spikeGUID, uint radius)
+    private static void AddFallingIceDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Guid indicatorGUID, Guid spikeGUID, uint radius)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(indicatorGUID, out var fallingIceIndicators))
         {

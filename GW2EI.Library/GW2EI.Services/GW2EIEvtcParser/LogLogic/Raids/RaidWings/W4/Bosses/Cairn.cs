@@ -122,7 +122,7 @@ internal class Cairn : BastionOfThePenitent
         {SpatialManipulationInitial, 3300},
     };
 
-    private static void AddGreenDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Span<GUID> greenGUIDs)
+    private static void AddGreenDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, Span<Guid> greenGUIDs)
     {
         if (log.CombatData.TryGetEffectEventsByGUIDs(greenGUIDs, out var greenEffects))
         {
