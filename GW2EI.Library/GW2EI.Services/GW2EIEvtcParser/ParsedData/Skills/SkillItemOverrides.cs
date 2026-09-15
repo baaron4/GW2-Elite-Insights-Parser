@@ -157,6 +157,7 @@ public static class SkillItemOverrides
         { HarmoniousHarpAfterimage, "Harmonious Harp (Afterimage)" },
         { MindWrackOrMindWrackAmmo, "Mind Wrack" },
         { SplitSecondOrSplitSecondAmmo, "Split Second" },
+        { MirageMirrorShatter, "Mirage Mirror Shatter" },
         #endregion Mesmer
         #region Necromancer
         { DesertEmpowerment, "Desert Empowerment" },
@@ -794,6 +795,7 @@ public static class SkillItemOverrides
             { HarmoniousHarpAfterimage, SkillImages.HarmoniousHarp },
             { MindWrackOrMindWrackAmmo, SkillImages.MindWrack },
             { SplitSecondOrSplitSecondAmmo, SkillImages.SplitSecond },
+            { MirageMirrorShatter, SkillImages.MirageCloak },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },

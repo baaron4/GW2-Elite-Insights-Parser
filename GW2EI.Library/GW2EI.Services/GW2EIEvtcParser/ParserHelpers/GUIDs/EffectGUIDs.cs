@@ -118,6 +118,7 @@ public static class EffectGUIDs
     public static readonly Guid ChronomancerGravityWellExplosion = new("E0D03976A4BC034E8ABFBBECCC828932"); // 1 second after final pulse
     public static readonly Guid MirageCloak = new("4C7A5E148F7FD642B34EE4996DDCBBAB");
     public static readonly Guid MirageMirror = new("1370CDF5F2061445A656A1D77C37A55C"); // Has dynamic end time
+    public static readonly Guid MirageMirrorShatter = new("3256B6507DF3104C985E23F7236F52CB");
     public static readonly Guid MirageJaunt = new("3A5A38C26A1FFB438EAD734F3ED42E5E"); // Src Mirage, Dst Mirage
     public static readonly Guid MirageJauntConflict1 = new("B6557C336041B24FA7CC198B6EBDAD9A"); // Src Mirage, Dst Mirage - used with e.g. jaunt & axes of symmetry
     public static readonly Guid MirageJauntConflict2 = new("D7A05478BA0E164396EB90C037DCCF42"); // Src Mirage, Dst Mirage - used with e.g. jaunt, axes of symmetry, illusionary ambush

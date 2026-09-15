@@ -63,7 +63,7 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
         if (!string.IsNullOrWhiteSpace(SkillIdFilter) && 
-            !long.TryParse(SkillIdFilter, out var parsedSkillId) &&
+            long.TryParse(SkillIdFilter, out var parsedSkillId) &&
             eventModel.SkillId != parsedSkillId)
         {
             return false;
