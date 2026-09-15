@@ -171,7 +171,7 @@ internal class BanditTrio : SalvationPass
         var cageMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.BanditTrioCageMarker.Equals(x.SrcAgent, x.DstAgent))
+                MarkerGUIDs.BanditTrioCageMarker.Equals(x.SrcAgent, x.DstAgent, true))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (cageMarkerGUID != null)

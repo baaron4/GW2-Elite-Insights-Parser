@@ -899,7 +899,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         var usefulEffectEvents = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
-                usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent)))
+                usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent, true)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .DistinctBy(x => x.EffectID)
             .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.EffectID)))
@@ -1195,7 +1195,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         var greenFailSuccGUIDs = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
-                (EffectGUIDs.HarvestTempleFailedGreen.Equals(x.SrcAgent, x.DstAgent) || EffectGUIDs.HarvestTempleSuccessGreen.Equals(x.SrcAgent, x.DstAgent) || EffectGUIDs.HarvestTempleGreen.Equals(x.SrcAgent, x.DstAgent)))
+                (EffectGUIDs.HarvestTempleFailedGreen.Equals(x.SrcAgent, x.DstAgent, true) || EffectGUIDs.HarvestTempleSuccessGreen.Equals(x.SrcAgent, x.DstAgent, true) || EffectGUIDs.HarvestTempleGreen.Equals(x.SrcAgent, x.DstAgent, true)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion));
         Dictionary<TargetID, AgentItem> greenAgents = new(16);
         Dictionary<long, EffectGUIDEvent> dummyEffectGUIDs = [];

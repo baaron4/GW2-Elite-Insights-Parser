@@ -204,7 +204,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var titanGeyserMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
+                MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent, true))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (titanGeyserMarkerGUID != null)
@@ -223,7 +223,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var toxicEffectGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
-                (EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent) || EffectGUIDs.UraToxicGeyserSpawnCM.Equals(x.SrcAgent, x.DstAgent)))
+                (EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent, true) || EffectGUIDs.UraToxicGeyserSpawnCM.Equals(x.SrcAgent, x.DstAgent, true)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (toxicEffectGUID != null)
@@ -266,7 +266,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var bloodstoneShardMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.UraBloodstoneShardMarker.Equals(x.SrcAgent, x.DstAgent))
+                MarkerGUIDs.UraBloodstoneShardMarker.Equals(x.SrcAgent, x.DstAgent, true))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (bloodstoneShardMarkerGUID != null)

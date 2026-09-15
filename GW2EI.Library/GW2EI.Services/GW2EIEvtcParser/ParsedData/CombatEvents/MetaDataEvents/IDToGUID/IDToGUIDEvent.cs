@@ -9,7 +9,7 @@ public abstract class IDToGUIDEvent : MetaDataEvent
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        GUID = new GUIDWrapper(evtcItem.SrcAgent, evtcItem.DstAgent).GUID;
+        GUID = new GUIDWrapper(evtcItem.SrcAgent, evtcItem.DstAgent, true).GUID;
         ContentID = evtcItem.SkillID;
     }
 

@@ -131,7 +131,7 @@ internal class Artsariiv : ShatteredObservatory
         var artsariivMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.ArtsariivTripleLaserEyeMarker.Equals(x.SrcAgent, x.DstAgent))
+                MarkerGUIDs.ArtsariivTripleLaserEyeMarker.Equals(x.SrcAgent, x.DstAgent, true))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (artsariivMarkerGUID != null)
