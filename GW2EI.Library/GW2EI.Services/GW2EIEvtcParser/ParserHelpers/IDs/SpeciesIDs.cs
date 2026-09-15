@@ -578,6 +578,8 @@ public static class SpeciesIDs
         GuardiansGladeTornado = 27654,
         EliteCrocodilianRazortooth = 27655,
         CursedArtifact_NPC = 27663,
+        // - Nexus of Eternity
+        NexusOfEternityBoss = 28106,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
