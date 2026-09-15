@@ -455,7 +455,7 @@
 
                         <DataGrid Grid.Column="0"
                                   x:CompileBindings="False"
-                                  ItemsSource="{Binding SkillsData}"
+                                  ItemsSource="{Binding SkillsDataView}"
                                   SelectedItem="{Binding SelectedSkill, Mode=TwoWay}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"

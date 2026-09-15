@@ -109,9 +109,18 @@ public partial class InspectorViewModel : ObservableObject
 
         SelectedSkillProperties.ReplaceRange(EventInspector.Inspect(value.SkillItem));
     }
-    public IReadOnlyList<SkillDataModel> SkillsData { get; } = [];
-    public int SkillCount => SkillsData.Count;
-    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
+    public DataGridCollectionView SkillsDataView { get; }
+    public int SkillCount => SkillsDataView.Count;
+    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = []; 
+    private bool FilterSkillDataModels(object item)
+    {
+        if (item is not SkillDataModel skillData)
+        {
+            return false;
+        }
+
+        return true;
+    }
     #endregion
 
     #region AGENTS
@@ -288,7 +297,10 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
-        SkillsData = log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList();
+        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID))
+        {
+            Filter = FilterSkillDataModels
+        };
 
         var allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
         var allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
