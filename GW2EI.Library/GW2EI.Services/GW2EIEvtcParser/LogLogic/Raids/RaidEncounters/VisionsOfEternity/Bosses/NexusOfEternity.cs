@@ -58,6 +58,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return
         [
             TargetID.NexusOfEternityVloxx,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.SomethingCosmicPiercer,
+            TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionCosmicBulwark,
+            TargetID.ChampionCosmicSunderer,
         ];
     }
 
@@ -65,6 +71,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return
         [
+            TargetID.EliteCosmicPiercer,
+            TargetID.EliteCosmicBulwark,
         ];
     }
 
