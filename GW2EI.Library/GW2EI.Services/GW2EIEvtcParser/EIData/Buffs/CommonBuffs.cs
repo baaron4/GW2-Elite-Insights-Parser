@@ -230,6 +230,9 @@ internal static class CommonBuffs
         new Buff("Relic of the Director", RelicOfTheDirector, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheDirector),
         new Buff("Kuda's Cruelty (Stacks)", KudasCrueltyStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfTheCruelOverseer),
         new Buff("Kuda's Cruelty (Modifier)", KudasCrueltyModifierBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheCruelOverseer),
+        new Buff("Vloxx's Vision (Stacks)", VloxxsVisionStackBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 8, BuffClassification.Gear, ItemImages.RelicOfTheVisionary),
+        new Buff("Vloxx's Vision (Modifier)", VloxxsVisionDamageModBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheVisionary),
+        new Buff("Tyrant's Fury", TyrantsFuryBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, ItemImages.RelicOfTheLastTyrant),
     ];
 
 }

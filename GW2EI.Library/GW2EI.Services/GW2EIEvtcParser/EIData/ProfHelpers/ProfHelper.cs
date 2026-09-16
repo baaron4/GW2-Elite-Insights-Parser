@@ -115,6 +115,20 @@ internal static class ProfHelper
         #region Relics
         new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new DamageCastFinder(RelicOfTheLastTyrantDamage, RelicOfTheLastTyrantDamage)
+            .UsingChecker((hde, combatData, agentData, skillData) => {
+                // When the effect procs, it is on the target of the damage
+                // The Src of the effect is the target
+                // The Dst of the effect is unknown
+                if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheLastTyrant, out var effects))
+                {
+                    if (effects.FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant) != null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand)
@@ -236,6 +250,8 @@ internal static class ProfHelper
         new BuffGainCastFinder(RelicOfTheCruelOverseer, KudasCrueltyModifierBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheDirector, RelicOfTheDirector)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(VloxxsVisionDamageModBuff, VloxxsVisionDamageModBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         #endregion Relics
         #region Mounts

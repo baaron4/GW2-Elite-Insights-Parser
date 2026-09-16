@@ -84,6 +84,8 @@ internal static class GearDamageModifiers
         //
         new DamageLogDamageModifier(Mod_RelicOfTheEagle,"Relic of the Eagle", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.RelicOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2025W8CMReleaseAndNewCoreRelics),
+        new BuffOnActorDamageModifier(Mod_VloxxsVision, VloxxsVisionDamageModBuff, "Vloxx's Vision", "+10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheVisionary, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_VloxxsVision, VloxxsVisionDamageModBuff, "Vloxx's Vision", "+15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheVisionary, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -110,5 +112,6 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
         new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-7% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheCurator, Protection, "Relic of the Curator", "-20% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheCurator, DamageModifierMode.All)
     ];
 }
