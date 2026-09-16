@@ -84,6 +84,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
+        phases[0].AddTargets(Targets.Where(x => !x.IsSpecies(TargetID.Instance)), log);
         return phases;
     }
 }
