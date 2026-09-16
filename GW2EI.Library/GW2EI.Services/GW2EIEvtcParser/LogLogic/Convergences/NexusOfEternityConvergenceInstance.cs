@@ -34,6 +34,33 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         return
         [
+            TargetID.NexusOfEternityConvergenceVloxx,
+            TargetID.WaterElemental,
+            TargetID.MegaDestroyer,
+        ];
+    }
+
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        return [
+            TargetID.CosmicBulwark1,
+            TargetID.CosmicBulwark2,
+            TargetID.CosmicBulwark3,
+            TargetID.CosmicBulwark4,
+            TargetID.CosmicPiercer1,
+            TargetID.CosmicPiercer2,
+            TargetID.CosmicPiercer3,
+            TargetID.CosmicPiercer4,
+            TargetID.CosmicPiercer5,
+            TargetID.CosmicSunderer1,
+            TargetID.CosmicSunderer2,
+            TargetID.CosmicSunderer3,
+            TargetID.ScarabSwarm,
+            TargetID.FleshReaver,
+            TargetID.ShadowImp,
+            TargetID.Aatxe,
+            TargetID.IceElementalConv,
+            TargetID.Shade,
         ];
     }
 
@@ -57,6 +84,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
+        phases[0].AddTargets(Targets.Where(x => !x.IsSpecies(TargetID.Instance)), log);
         return phases;
     }
 }

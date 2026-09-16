@@ -30,7 +30,7 @@ internal class Slothasor : SalvationPass
             new PlayerDstBuffApplyMechanic(MagicTransformation, Mech_MagicTransformation, new (Symbols.Hexagram,Colors.Teal), new("Slub", "Magic Transformation (Ate Magic Mushroom)","Slub Transform"), Sev1)
                     .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)), 
             //new Mechanic(Nauseated, "Nauseated", ParseEnum.BossIDS.Slothasor, new ("diamond-tall-open",Colors.LightPurple), new("Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new PlayerDstBuffApplyMechanic(FixatedSlothasor, Mech_SlothFixated, new (Symbols.Star,Colors.Magenta), new("Fixate", "Fixated by Slothasor","Fixated"), Sev1),
+            new PlayerDstBuffApplyMechanic(FixatedTimed, Mech_SlothFixated, new (Symbols.Star,Colors.Magenta), new("Fixate", "Fixated by Slothasor","Fixated"), Sev1),
             new PlayerDstHealthDamageHitMechanic([ToxicCloud1, ToxicCloud2], Mech_ToxicCloud, new (Symbols.PentagonOpen,Colors.DarkGreen), new("Floor", "Toxic Cloud (stood in green floor poison)","Toxic Floor"), Sev3),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Fear, Mech_BreakbarFear, new (Symbols.SquareOpen,Colors.Red), new("Fear", "Hit by fear after breakbar","Feared"), Sev3)
@@ -376,7 +376,7 @@ internal class Slothasor : SalvationPass
             replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
         }
         // Fixated
-        var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor).Where(x => x.Value > 0);
+        var fixatedSloth = p.GetBuffStatus(log, FixatedTimed).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSloth)
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, Colors.FixationPurple.WithAlpha(0.3).ToString(), new AgentConnector(p)));

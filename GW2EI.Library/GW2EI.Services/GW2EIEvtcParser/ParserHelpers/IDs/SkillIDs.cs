@@ -2124,7 +2124,7 @@ public static class SkillIDs
     public const long SporeRelease = 34482;
     public const long Nauseated = 34496;
     public const long VolatileAura = 34505;
-    public const long FixatedSlothasor = 34508;
+    public const long FixatedTimed = 34508;
     public const long ShieldAbomination = 34510;
     public const long ZealousBenediction = 34511;
     public const long Toss = 34513;
@@ -5722,7 +5722,9 @@ public static class SkillIDs
     public const long POV_RelicOfTheCuratorGearBuff = 80445;
     public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
     public const long VloxxsVisionStackBuff = 80855;
+    public const long EchoingOutburst = 80908;
     public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
+    public const long EmpoweredNexusOfEternity = 81002;
     public const long RelicOfTheLastTyrantDamage = 81068;
     public const long POV_RelicOfTheLanternGearBuff = 81019;
     public const long POV_RelicOfTheVisionaryGearBuff = 81191;
@@ -5730,7 +5732,6 @@ public static class SkillIDs
     public const long VloxxsVisionDamageModBuff = 81232;
     #endregion
     #region TODO
-    public const long JuvenileLeyLineBatCommandSkill = 999999;
     #endregion TODO
 
 }

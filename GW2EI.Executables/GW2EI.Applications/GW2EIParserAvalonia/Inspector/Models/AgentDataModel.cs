@@ -33,6 +33,8 @@ public sealed class AgentDataModel
     public bool IsEnglobedAgent => _agentItem.IsEnglobedAgent;
     public bool IsEnglobingAgent => _agentItem.IsEnglobingAgent;
     public int EnglobedAgentCount => _agentItem.EnglobedAgentItems.Count;
+    public readonly List<AgentDataModel>? EnglobedAgents;
+    public readonly AgentDataModel? EnglobingAgent;
     public bool IsNotInSquadFriendlyPlayer => _agentItem.IsNotInSquadFriendlyPlayer;
     public int MergeCount => _agentItem.Merges.Count;
     public readonly List<AgentDataModel>? Merges;
@@ -46,6 +48,14 @@ public sealed class AgentDataModel
         if (agent.Master != null)
         {
             Master = new AgentDataModel(agent.Master);
+        }
+        if (agent.IsEnglobingAgent)
+        {
+            EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x)).ToList();
+        }
+        if (agent.IsEnglobedAgent)
+        {
+            EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem);
         }
         if (MergeCount > 0)
         {
