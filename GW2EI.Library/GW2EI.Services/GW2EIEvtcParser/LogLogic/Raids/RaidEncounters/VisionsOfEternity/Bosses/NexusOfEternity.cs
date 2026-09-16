@@ -70,6 +70,17 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericLogOffset(logData);
+
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            var fixation = combatData.FirstOrDefault(x => (x.IsBuffApplyEvent() || x.IsBuffRemoveAllEvent()) && x.SkillID == FixatedTimed);
+            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            if (fixation != null && fixation.IsBuffApplyEvent())
+            {
+                startToUse = Math.Min(startToUse, fixation.Time);
+            }
+        }
         return startToUse;
     }
 
@@ -110,8 +121,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        var genericStatus = base.GetLogStartStatus(combatData, agentData, logData);
-        return genericStatus;
+        var fixationApply = combatData.GetBuffApplyData(FixatedTimed).FirstOrDefault();
+        var fixationRemove = combatData.GetBuffRemoveAllData(FixatedTimed).FirstOrDefault();
+        if (fixationApply == null || fixationApply.Time >= fixationRemove?.Time - ServerDelayConstant)
+        {
+            return LogData.StartStatus.Late;
+        }
+        return base.GetLogStartStatus(combatData, agentData, logData);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)

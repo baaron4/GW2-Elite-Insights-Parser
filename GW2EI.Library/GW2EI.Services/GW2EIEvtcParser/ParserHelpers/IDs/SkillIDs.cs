@@ -2124,7 +2124,7 @@ public static class SkillIDs
     public const long SporeRelease = 34482;
     public const long Nauseated = 34496;
     public const long VolatileAura = 34505;
-    public const long FixatedSlothasor = 34508;
+    public const long FixatedTimed = 34508;
     public const long ShieldAbomination = 34510;
     public const long ZealousBenediction = 34511;
     public const long Toss = 34513;
@@ -5718,6 +5718,7 @@ public static class SkillIDs
     public const long UnshakableMountainBarrier = 80234;
     public const long RiteOfTheGreatDwarfVersedInStone = 80245;
     public const long CascadingCorruptionStackBuff = 80279;
+    public const long EmpoweredNexusOfEternity = 81002;
     #endregion
     #region TODO
     public const long JuvenileLeyLineBatCommandSkill = 999999;

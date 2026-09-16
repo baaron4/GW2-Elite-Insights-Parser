@@ -156,7 +156,7 @@ internal static class EncounterBuffs
             new Buff("Narcolepsy", NarcolepsyBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Nauseated", Nauseated, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Nauseated),
             new Buff("Magic Transformation", MagicTransformation, Source.EncounterSpecific, BuffClassification.Other, BuffImages.MagicTransformation),
-            new Buff("Fixated (Slothasor)", FixatedSlothasor, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Slothasor)", FixatedTimed, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Volatile Poison", VolatilePoisonBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.VolatilePoison),
             new Buff("Slippery Slubling", SlipperySlubling, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Trio
@@ -760,6 +760,8 @@ internal static class EncounterBuffs
             new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             new Buff("Achievement Eligibility: Surefooted", AchievementEligibilitySurefooted, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: See You Later, Alligator", AchievementEligibilitySeeYouLaterAlligator, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Nexus of Eternity         
+            new Buff("Empowered (Nexus of Eternity)", EmpoweredNexusOfEternity, Source.EncounterSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             // Convergences
             // - Outer Nayos
             new Buff("Unstable Attunement (SotO)", UnstableAttunementSotO, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.DebilitatingVoid),
