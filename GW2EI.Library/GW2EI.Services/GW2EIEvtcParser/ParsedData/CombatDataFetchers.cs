@@ -390,7 +390,7 @@ partial class CombatData
     {
         return GetTimeValueOrEmpty(_statusEvents.GadgetModelInfoEventsBySrc, src);
     }
-    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(string model)
+    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(ulong model)
     {
         return _statusEvents.GadgetModelInfoEventsByModel.GetValueOrEmpty(model);
     }

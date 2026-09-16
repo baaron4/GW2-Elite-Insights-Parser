@@ -34,6 +34,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         GenericFallBackMethod = FallBackMethod.None;
         LogCategoryInformation.InSubCategoryOrder = 1;
         LogID |= 0x000002;
+        ChestID = ChestID.GrandRaidVloxxChest;
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
@@ -74,11 +75,16 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var fixation = combatData.FirstOrDefault(x => (x.IsBuffApplyEvent() || x.IsBuffRemoveAllEvent()) && x.SkillID == FixatedTimed);
-            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
-            if (fixation != null && fixation.IsBuffApplyEvent())
+            var vloxx = agentData.GetAgent(logStartNPCUpdate.DstAgent, logStartNPCUpdate.Time);
+            if (!vloxx.IsSpecies(TargetID.NexusOfEternityVloxx))
             {
-                startToUse = Math.Min(startToUse, fixation.Time);
+                throw new MissingKeyActorsException("Vloxx not found");
+            }
+            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            var targetable = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Targetable && x.SrcMatchesAgent(vloxx) && x.DstAgent > 0);
+            if (targetable != null)
+            {
+                startToUse = Math.Min(startToUse, targetable.Time);
             }
         }
         return startToUse;
@@ -86,6 +92,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        FindChestGadgets([
+            (ChestID.GrandRaidVloxxChest, GrandRaidChestVloxxPosition, 100),
+        ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
@@ -106,33 +115,17 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        var noeBoss = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
         var phases = GetInitialPhase(log);
         var fullFightPhase = (EncounterPhaseData)phases[0];
-        fullFightPhase.AddTarget(noeBoss, log);
-        phases.AddRange(ComputePhases(log, noeBoss, Targets, fullFightPhase, requirePhases));
+        fullFightPhase.AddTarget(vloxx, log);
+        phases.AddRange(ComputePhases(log, vloxx, Targets, fullFightPhase, requirePhases));
         return phases;
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         return LogData.Mode.Normal;
-    }
-
-    internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
-    {
-        var fixationApply = combatData.GetBuffApplyData(FixatedTimed).FirstOrDefault();
-        var fixationRemove = combatData.GetBuffRemoveAllData(FixatedTimed).FirstOrDefault();
-        if (fixationApply == null || fixationApply.Time >= fixationRemove?.Time - ServerDelayConstant)
-        {
-            return LogData.StartStatus.Late;
-        }
-        return base.GetLogStartStatus(combatData, agentData, logData);
-    }
-
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
-    {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents, successHandler);
     }
 
 

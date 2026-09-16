@@ -1119,6 +1119,7 @@ public static class SpeciesIDs
     internal static readonly Vector3 UrasChestPosition = new(4925.35f, 10724.1f, -10632.8f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
     internal static readonly Vector3 GrandRaidChestKelaPosition = new(-20832.9f, 12552.2f, -1698.32f);
+    internal static readonly Vector3 GrandRaidChestVloxxPosition = new(12235.8f, 15330.4f, -12399.7f);
 
     public enum ChestID : int
     {
@@ -1150,6 +1151,7 @@ public static class SpeciesIDs
         UrasChest = SpeciesIDs.UrasChest,
         GrandStrikeHarvestTempleChest = SpeciesIDs.GrandStrikeHarvestTempleChest,
         GrandRaidKelaChest = SpeciesIDs.GrandRaidKelaChest,
+        GrandRaidVloxxChest = SpeciesIDs.GrandRaidVloxxChest,
 
         None = int.MaxValue,
     };
@@ -1299,6 +1301,7 @@ public static class SpeciesIDs
     private const int ReactorArkk = -126;
     private const int ElectrocutedAreaArkk = -127;
     private const int TileArkk = -128;
+    private const int GrandRaidVloxxChest = -129;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
