@@ -1,5 +1,43 @@
 "use strict";
 
+const formatterCache = {
+    zeroZero: new Intl.NumberFormat(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }),
+    zeroOne: new Intl.NumberFormat(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 1
+    }),
+    zeroTwo: new Intl.NumberFormat(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    zeroThree: new Intl.NumberFormat(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3
+    }),
+    percentZeroZero: new Intl.NumberFormat(undefined, {
+        style: "percent",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }),
+    percentZeroOne: new Intl.NumberFormat(undefined, {
+        style: "percent",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 1
+    }),
+    percentZeroTwo: new Intl.NumberFormat(undefined, {
+        style: "percent",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    percentZeroThree: new Intl.NumberFormat(undefined, {
+        style: "percent",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3
+    }),
+}
 
 var numberComponent = {
     methods: {
@@ -46,20 +84,31 @@ var numberComponent = {
             });
         },
         numberFormater0: function (value) {
-            return this.numberFormater(value, 0, 0);
+            if (isNaN(value) || !isFinite(value)) {
+                return 0;
+            }
+            return formatterCache.zeroZero.format(value);
         },
         numberFormater1: function (value) {
-            return this.numberFormater(value, 0, 1);
+            if (isNaN(value) || !isFinite(value)) {
+                return 0;
+            }
+            return formatterCache.zeroOne.format(value);
         },
         numberFormater2: function (value) {
-            return this.numberFormater(value, 0, 2);
+            if (isNaN(value) || !isFinite(value)) {
+                return 0;
+            }
+            return formatterCache.zeroTwo.format(value);
         },
         numberFormater3: function (value) {
-            return this.numberFormater(value, 0, 3);
+            if (isNaN(value) || !isFinite(value)) {
+                return 0;
+            }
+            return formatterCache.zeroThree.format(value);
         },
 
         percentFormater: function(value, minimumFractionDigits, maximumFractionDigits) {
-
             if (isNaN(value) || !isFinite(value)) {
                 return '0%';
             }
@@ -70,22 +119,34 @@ var numberComponent = {
             });
         },
         percentFormater0: function (value) {
-            return this.percentFormater(value, 0, 0);
+            if (isNaN(value) || !isFinite(value)) {
+                return '0%';
+            }
+            return formatterCache.percentZeroZero.format(value);
         },
         percentFormater1: function (value) {
-            return this.percentFormater(value, 0, 1);
+            if (isNaN(value) || !isFinite(value)) {
+                return '0%';
+            }
+            return formatterCache.percentZeroOne.format(value);
         },
         percentFormater2: function (value) {
-            return this.percentFormater(value, 0, 2);
+            if (isNaN(value) || !isFinite(value)) {
+                return '0%';
+            }
+            return formatterCache.percentZeroTwo.format(value);
         },
         percentFormater3: function (value) {
-            return this.percentFormater(value, 0, 3);
+            if (isNaN(value) || !isFinite(value)) {
+                return '0%';
+            }
+            return formatterCache.percentZeroThree.format(value);
         },
 
         formatNumberOrPercent3: function(isNumber, value) {
             return isNumber
-                ? this.numberFormater(value, 0, 3)
-                : this.percentFormater(value / 100, 0, 3);
+                ? this.numberFormater3(value)
+                : this.percentFormater3(value / 100);
         }
     }
 };
