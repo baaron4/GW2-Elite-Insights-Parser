@@ -112,6 +112,6 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
         new BuffOnActorDamageModifier(Mod_RelicOfTheDoyen, Resolution, "Relic of the Doyen", "-7% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheDoyen, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.May2026NewRelicsAndOtter),
-        new BuffOnActorDamageModifier(Mod_RelicOfTheCurator, Protection, "Relic of the Curator", "-20% (not stacking with similar damage mods)", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheCurator, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RelicOfTheCurator, Protection, "Relic of the Curator", "-20% (not stacking with similar damage mods)", DamageSource.Incoming, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheCurator, DamageModifierMode.All)
     ];
 }
