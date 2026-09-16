@@ -251,7 +251,7 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheDirector, RelicOfTheDirector)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new BuffGiveCastFinder(VloxxsVisionDamageModBuff, VloxxsVisionDamageModBuff)
+        new BuffGainCastFinder(VloxxsVisionDamageModBuff, VloxxsVisionDamageModBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         #endregion Relics
         #region Mounts
