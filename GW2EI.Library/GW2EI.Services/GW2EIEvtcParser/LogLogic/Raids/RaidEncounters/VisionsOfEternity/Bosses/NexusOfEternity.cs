@@ -65,7 +65,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkYellow), new MechanicDescription("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev0),
         new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_Empowered, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Red), new MechanicDescription("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
         new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), new MechanicDescription("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev0),
-        new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Grey), new MechanicDescription("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev0),
+        new MechanicGroup([
+            new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.GreenishYellow), new MechanicDescription("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev0),
+            new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Green), new MechanicDescription("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
+        ]),
     ]);
 
     public NexusOfEternity(int triggerID) : base(triggerID)

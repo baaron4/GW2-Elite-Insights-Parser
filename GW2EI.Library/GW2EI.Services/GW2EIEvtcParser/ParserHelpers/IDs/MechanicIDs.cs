@@ -954,6 +954,7 @@ public static class MechanicIDs
     public static readonly int Mech_Empowered = VoEMask | ++_voeCount;
     public static readonly int Mech_DamageImmunity = VoEMask | ++_voeCount;
     public static readonly int Mech_Ascension = VoEMask | ++_voeCount;
+    public static readonly int Mech_AscensionRemove = VoEMask | ++_voeCount;
     #endregion VOE
 
     #endregion RAID ENCOUNTERS
