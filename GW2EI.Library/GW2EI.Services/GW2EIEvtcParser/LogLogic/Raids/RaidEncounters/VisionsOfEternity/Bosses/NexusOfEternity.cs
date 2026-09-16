@@ -146,6 +146,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             (ChestID.GrandRaidVloxxChest, GrandRaidChestVloxxPosition, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+
+        RenameAdds(Targets);
     }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
@@ -243,6 +245,40 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+
+    private static void RenameAdds(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor actor in targets)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.ChampionCosmicBulwark:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionCosmicPiercer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionCosmicSunderer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionAspectOfTheSpear:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionAspectOfTheStaff:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicBulwark:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicPiercer:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+                case (int)TargetID.SomethingCosmicPiercer:
+                    //actor.OverrideName("" + actor.Character);
+                    break;
+            }
         }
     }
 }
