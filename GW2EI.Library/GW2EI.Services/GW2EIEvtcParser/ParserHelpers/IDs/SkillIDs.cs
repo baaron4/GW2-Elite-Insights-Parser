@@ -5736,7 +5736,7 @@ public static class SkillIDs
     public const long VisionsOfEternity2 = 80591;
     public const long DamageImmunity = 80608;
     public const long JudgmentOfEternity2 = 80629;
-    public const long SurroundingCurse1 = 80653;
+    public const long SurroundingCurse1 = 80653; // doesn't do damage? hp%?
     public const long ThousandStrikes2 = 80709;
     public const long CosmicCharge1 = 80717;
     public const long EternalReflection2 = 80726;
