@@ -155,6 +155,10 @@ internal static class ItemImages
     public const string RelicOfTheCruelOverseer = "https://render.guildwars2.com/file/AECE9B16DE04F756C501743BA863B00A377CE70B/3770710.png";
     public const string RelicOfGaldra = "https://render.guildwars2.com/file/CE07976D4420779EC0082AFE06B73F3AA6AE2348/3770713.png";
     public const string RelicOfTheDoyen = "https://render.guildwars2.com/file/EF797D16D0D211064031129135C864311856CDB1/3770712.png";
+    public const string RelicOfTheVisionary = "";
+    public const string RelicOfTheLastTyrant = "";
+    public const string RelicOfTheEternalAlchemy = "";
+    public const string RelicOfTheCurator = "";
     #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";

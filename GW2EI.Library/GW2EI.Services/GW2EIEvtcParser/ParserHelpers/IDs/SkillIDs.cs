@@ -5718,8 +5718,18 @@ public static class SkillIDs
     public const long UnshakableMountainBarrier = 80234;
     public const long RiteOfTheGreatDwarfVersedInStone = 80245;
     public const long CascadingCorruptionStackBuff = 80279;
+    public const long POV_RelicOfTheTyrianHeroGearBuff = 80334;
+    public const long POV_RelicOfTheCuratorGearBuff = 80445;
+    public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
+    public const long VloxxsVisionStackBuff = 80855;
     public const long EchoingOutburst = 80908;
+    public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
     public const long EmpoweredNexusOfEternity = 81002;
+    public const long RelicOfTheLastTyrantDamage = 81068;
+    public const long POV_RelicOfTheLanternGearBuff = 81019;
+    public const long POV_RelicOfTheVisionaryGearBuff = 81191;
+    public const long TyrantsFuryBuff = 81192;
+    public const long VloxxsVisionDamageModBuff = 81232;
     #endregion
     #region TODO
     #endregion TODO

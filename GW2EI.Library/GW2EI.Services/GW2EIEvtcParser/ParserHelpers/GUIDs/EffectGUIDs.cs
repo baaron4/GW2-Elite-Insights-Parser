@@ -64,6 +64,7 @@ public static class EffectGUIDs
     public static readonly Guid RelicOfTheNauticalBeastGround1 = new("B44BAD999BEB2D4DB284745895B42BDD"); // Ground effect, duration 566
     public static readonly Guid RelicOfTheNauticalBeastGround2 = new("10D6B2D42D39254FB866CE86D27D36AD"); // Ground effect, duration 2000
     public static readonly Guid RelicOfTheNauticalBeastAgent = new("40818C8E9CC6EF4388C2821FCC26A9EC"); // Around Src == Dst, duration 0
+    public static readonly Guid RelicOfTheLastTyrant = new("5AFA5E4656724A4DB4B226A71D4CB62D"); // Src is target (not player), Dst is unknown, happens on Src but is ground effect, default duration 2000
     #endregion
 
     #region Mesmer
