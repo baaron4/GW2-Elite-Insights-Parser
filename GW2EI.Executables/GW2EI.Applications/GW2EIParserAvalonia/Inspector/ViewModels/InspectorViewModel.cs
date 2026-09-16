@@ -27,18 +27,27 @@ public partial class InspectorViewModel : ObservableObject
         SelectedEventProperties.ReplaceRange(EventInspector.Inspect(value.Event));
     }
 
+    private void CombatEventsViewRefresh(object? oldValue, object? newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        CombatEventsView.Refresh();
+    }
+
     [ObservableProperty]
     private string? skillIdFilter;
-    partial void OnSkillIdFilterChanged(string? value) => CombatEventsView.Refresh();
+    partial void OnSkillIdFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
     [ObservableProperty]
     private string? skillNameFilter;
-    partial void OnSkillNameFilterChanged(string? value) => CombatEventsView.Refresh();
+    partial void OnSkillNameFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
     [ObservableProperty]
     private string? guidIdFilter;
-    partial void OnGuidIdFilterChanged(string? value) => CombatEventsView.Refresh();
+    partial void OnGuidIdFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
     [ObservableProperty]
     private string? guidFilter;
-    partial void OnGuidFilterChanged(string? value) => CombatEventsView.Refresh();
+    partial void OnGuidFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
     // Events tab filters
     [ObservableProperty]
     private string? agentSearchText;
@@ -47,11 +56,19 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private AgentFilterItem? selectedAgentFilter;
 
-    partial void OnSelectedAgentFilterChanged(AgentFilterItem? value) => CombatEventsView.Refresh();
+    partial void OnSelectedAgentFilterChanged(AgentFilterItem? oldValue, AgentFilterItem? newValue) => CombatEventsViewRefresh(oldValue, newValue);
 
     public DataGridCollectionView CombatEventsView { get; }
 
-    private void OnFilterChanged(object? sender, EventArgs e) => CombatEventsView.Refresh();
+    private bool MassFilterChanging = false;
+    private void OnFilterChanged(object? sender, EventArgs e)
+    {
+        if (MassFilterChanging)
+        {
+            return;
+        }
+        CombatEventsView.Refresh();
+    }
     private bool FilterCombatEvents(object item)
     {
         if (item is not EventModel eventModel)
@@ -141,24 +158,28 @@ public partial class InspectorViewModel : ObservableObject
     public DataGridCollectionView AgentsDataView { get; }
     [ObservableProperty]
     private string? agentSpeciesFilter;
-    private void RefreshAgentsDataView()
+    private void RefreshAgentsDataView(string? oldValue, string? newValue)
     {
+        if (newValue == oldValue)
+        {
+            return;
+        }
         AgentsDataView.Refresh();
         OnPropertyChanged(nameof(AgentCount));
     }
-    partial void OnAgentSpeciesFilterChanged(string? value) => RefreshAgentsDataView();
+    partial void OnAgentSpeciesFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
     private string? agentNameFilter;
-    partial void OnAgentNameFilterChanged(string? value) => RefreshAgentsDataView();
+    partial void OnAgentNameFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
     private string? agentTypeFilter;
-    partial void OnAgentTypeFilterChanged(string? value) => RefreshAgentsDataView();
+    partial void OnAgentTypeFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
     private string? agentSpecFilter;
-    partial void OnAgentSpecFilterChanged(string? value) => RefreshAgentsDataView();
+    partial void OnAgentSpecFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
     private string? agentBaseSpecFilter;
-    partial void OnAgentBaseSpecFilterChanged(string? value) => RefreshAgentsDataView();
+    partial void OnAgentBaseSpecFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     private bool FilterAgentModels(object item)
     {
         if (item is not AgentDataModel agent)
@@ -224,8 +245,12 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private string? contentGuidFilter;
 
-    private void RefreshGUIDViews()
+    private void RefreshGUIDViews(string? oldValue, string? newValue)
     {
+        if (oldValue == newValue)
+        {
+            return;
+        }
         SkillGUIDsView.Refresh();
         EffectGUIDsView.Refresh();
         MarkerGUIDsView.Refresh();
@@ -235,9 +260,9 @@ public partial class InspectorViewModel : ObservableObject
         TransformationGUIDsView.Refresh();
     }
 
-    partial void OnContentIdFilterChanged(string? value) => RefreshGUIDViews();
+    partial void OnContentIdFilterChanged(string? oldValue, string? newValue) => RefreshGUIDViews(oldValue, newValue);
 
-    partial void OnContentGuidFilterChanged(string? value) => RefreshGUIDViews();
+    partial void OnContentGuidFilterChanged(string? oldValue, string? newValue) => RefreshGUIDViews(oldValue, newValue);
 
     private bool FilterContentGUIDs(object item)
     {
@@ -266,7 +291,11 @@ public partial class InspectorViewModel : ObservableObject
 
     [ObservableProperty]
     private string? stateChangeFilter;
-    partial void OnStateChangeFilterChanged(string? value) { 
+    partial void OnStateChangeFilterChanged(string? oldValue, string? newValue) { 
+        if (oldValue == newValue)
+        {
+            return;
+        }
         CombatItemsView.Refresh();
     }
 
@@ -389,9 +418,11 @@ public partial class InspectorViewModel : ObservableObject
 
     internal void SetCheckStateOnAllRoots(bool state)
     {
+        MassFilterChanging = true;
         foreach (var root in EventTypeFilterRoots)
         {
             root.IsChecked = state;
         }
+        MassFilterChanging = false;
     }
 }
