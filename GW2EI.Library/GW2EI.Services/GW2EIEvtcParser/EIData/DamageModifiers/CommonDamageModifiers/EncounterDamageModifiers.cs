@@ -127,6 +127,9 @@ internal static class EncounterDamageModifiers
         new CounterOnFoeDamageModifier(Mod_RisingPressureInvul, RisingPressure, "Rising Pressure (invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.RisingPressure, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) => !VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5)),
 
+        new BuffOnFoeDamageModifier(Mod_EmpoweredNexusOfEternity, EmpoweredNexusOfEternity, "Empowered (Nexus of Eternity)", "-1% per stack, stacks additively with Vulnerability", DamageSource.All, -1.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster),
+
         new BuffOnFoeDamageModifier(Mod_UnstrippableProtection, ProtectionUnstrippable, "Protection (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Protection, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Mod_UnstrippableResolution, ResolutionUnstrippable, "Resolution (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Resolution, DamageModifierMode.PvE),
         // Enrages
@@ -172,6 +175,7 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(Mod_BrothersUnited, BrothersUnited, "Brothers United", "50%", DamageSource.Incoming, 50, DamageType.Strike, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.BrothersUnited, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Mod_RisingPressure, RisingPressure, "Rising Pressure", "5% per stack", DamageSource.Incoming, 5, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.RisingPressure, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ShreddedArmor, ShreddedArmor, "Shredded Armor", "20% per stack", DamageSource.Incoming, 20, DamageType.Strike, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.Vulnerability, DamageModifierMode.PvE),
+        new BuffOnFoeDamageModifier(Mod_EmpoweredNexusOfEternity, EmpoweredNexusOfEternity, "Empowered (Nexus of Eternity)", "5% per stack", DamageSource.Incoming, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE),
         // Enrages
         new BuffOnFoeDamageModifier(Mod_Enraged_out100, [Enraged_100_strike, Enraged_100_strike_25_reduc], "Enraged (100% strike)", "100%", DamageSource.Incoming, 100.0, DamageType.Strike, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Mod_Enraged_outAll200, Enraged_200, "Enraged (200%)", "200%", DamageSource.Incoming, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.EncounterSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
