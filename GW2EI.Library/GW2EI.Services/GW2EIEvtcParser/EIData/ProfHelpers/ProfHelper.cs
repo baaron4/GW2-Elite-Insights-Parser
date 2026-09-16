@@ -116,19 +116,11 @@ internal static class ProfHelper
         new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new DamageCastFinder(RelicOfTheLastTyrantDamage, RelicOfTheLastTyrantDamage)
-            .UsingChecker((hde, combatData, agentData, skillData) => {
-                // When the effect procs, it is on the target of the damage
-                // The Src of the effect is the target
-                // The Dst of the effect is unknown
-                if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheLastTyrant, out var effects))
-                {
-                    if (effects.FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant) != null)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }),
+            .UsingChecker((hde, combatData, agentData, skillData) => 
+            {
+                return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant && x.RemovedStacks == 5) != null;
+            })
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfTheFirebrand, RelicOfTheFirebrand)
