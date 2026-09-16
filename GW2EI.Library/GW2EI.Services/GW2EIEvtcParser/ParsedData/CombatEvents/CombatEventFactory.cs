@@ -669,6 +669,7 @@ partial class CombatData
                 var gadgetModelInfoEvent = new GadgetModelInfoEvent(stateChangeEvent, agentData);
                 Add(statusEvents.GadgetModelInfoEventsBySrc, gadgetModelInfoEvent.Src, gadgetModelInfoEvent);
                 Add(statusEvents.GadgetModelInfoEventsByModel, gadgetModelInfoEvent.Model, gadgetModelInfoEvent);
+                Add(statusEvents.GadgetModelInfoEventsByPropID, gadgetModelInfoEvent.PropID, gadgetModelInfoEvent);
                 break;
             default:
                 break;

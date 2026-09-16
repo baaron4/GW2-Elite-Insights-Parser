@@ -390,9 +390,13 @@ partial class CombatData
     {
         return GetTimeValueOrEmpty(_statusEvents.GadgetModelInfoEventsBySrc, src);
     }
-    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(ulong model)
+    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEventsByModel(ulong model)
     {
         return _statusEvents.GadgetModelInfoEventsByModel.GetValueOrEmpty(model);
+    }
+    public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEventsByPropID(ulong propID)
+    {
+        return _statusEvents.GadgetModelInfoEventsByPropID.GetValueOrEmpty(propID);
     }
 
     #endregion INFO
