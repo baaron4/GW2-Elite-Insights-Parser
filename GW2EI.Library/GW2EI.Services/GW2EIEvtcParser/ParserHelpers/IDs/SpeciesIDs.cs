@@ -802,7 +802,7 @@ public static class SpeciesIDs
         ShadowImp = 28102,
         Aatxe = 27884,
         WaterElemental = 27894,
-        MegaDestroyer = 27976,
+        Megadestroyer = 27976,
         IceElementalConv = 27991,
         Shade = 27969,
         #endregion CONVERGENCES
