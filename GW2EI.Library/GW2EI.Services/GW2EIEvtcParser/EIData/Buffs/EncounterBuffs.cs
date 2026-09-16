@@ -156,7 +156,7 @@ internal static class EncounterBuffs
             new Buff("Narcolepsy", NarcolepsyBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Nauseated", Nauseated, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Nauseated),
             new Buff("Magic Transformation", MagicTransformation, Source.EncounterSpecific, BuffClassification.Other, BuffImages.MagicTransformation),
-            new Buff("Fixated (Slothasor)", FixatedTimed, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Timed)", FixatedTimed, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Volatile Poison", VolatilePoisonBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.VolatilePoison),
             new Buff("Slippery Slubling", SlipperySlubling, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Trio
