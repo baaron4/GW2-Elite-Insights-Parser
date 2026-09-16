@@ -27,8 +27,21 @@ public partial class InspectorViewModel : ObservableObject
         SelectedEventProperties.ReplaceRange(EventInspector.Inspect(value.Event));
     }
 
-    private void CombatEventsViewRefresh(object? oldValue, object? newValue)
+    private void CombatEventsViewRefresh(string? oldValue, string? newValue)
     {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        CombatEventsView.Refresh();
+    }
+    internal bool AgentSelectFilterDropdownTriggered = false;
+    private void CombatEventsViewRefresh(AgentFilterItem? oldValue, AgentFilterItem? newValue)
+    {
+        if (AgentSelectFilterDropdownTriggered)
+        {
+            return;
+        }
         if (oldValue == newValue)
         {
             return;
