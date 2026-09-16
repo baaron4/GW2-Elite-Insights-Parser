@@ -5718,10 +5718,10 @@ public static class SkillIDs
     public const long UnshakableMountainBarrier = 80234;
     public const long RiteOfTheGreatDwarfVersedInStone = 80245;
     public const long CascadingCorruptionStackBuff = 80279;
+    public const long EchoingOutburst = 80908;
     public const long EmpoweredNexusOfEternity = 81002;
     #endregion
     #region TODO
-    public const long JuvenileLeyLineBatCommandSkill = 999999;
     #endregion TODO
 
 }
