@@ -42,20 +42,23 @@ public sealed class AgentDataModel
     public readonly List<AgentDataModel>? Regrouped;
     private readonly AgentItem _agentItem;
 
-    public AgentDataModel(AgentItem agent)
+    public AgentDataModel(AgentItem agent, bool skipEnglobing = false)
     {
         _agentItem = agent;
         if (agent.Master != null)
         {
             Master = new AgentDataModel(agent.Master);
         }
-        if (agent.IsEnglobingAgent)
+        if (!skipEnglobing)
         {
-            EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x)).ToList();
-        }
-        if (agent.IsEnglobedAgent)
-        {
-            EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem);
+            if (agent.IsEnglobingAgent)
+            {
+                EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x, true)).ToList();
+            }
+            if (agent.IsEnglobedAgent)
+            {
+                EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem, true);
+            }
         }
         if (MergeCount > 0)
         {
