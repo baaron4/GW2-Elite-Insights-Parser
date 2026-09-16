@@ -783,6 +783,28 @@ public static class SpeciesIDs
         ReegTheBlighterConv = 26842,
         DecimaTheStormsingerConv = 26720,
         UraTheSteamshriekerConv = 27017,
+        // - Nexus of Eternity
+        NexusOfEternityConvergenceVloxx = 28077,
+        CosmicBulwark1 = 27897,
+        CosmicPiercer1 = 27900,
+        CosmicPiercer2 = 27929,
+        CosmicBulwark2 = 27934,
+        CosmicPiercer3 = 27958,
+        CosmicSunderer1 = 28011,
+        CosmicPiercer4 = 28056,
+        CosmicBulwark3 = 28065,
+        CosmicSunderer2 = 28075,
+        CosmicBulwark4 = 28093,
+        CosmicSunderer3 = 28095,
+        CosmicPiercer5 = 28097,
+        ScarabSwarm = 28014,
+        FleshReaver = 28044,
+        ShadowImp = 28102,
+        Aatxe = 27884,
+        WaterElemental = 27894,
+        MegaDestroyer = 27976,
+        IceElementalConv = 27991,
+        Shade = 27969,
         #endregion CONVERGENCES
     };
 
