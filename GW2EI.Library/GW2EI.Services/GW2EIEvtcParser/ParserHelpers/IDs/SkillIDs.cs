@@ -5729,6 +5729,7 @@ public static class SkillIDs
     public const long SurroundingCurse = 80484;
     public const long EchoingAttack = 80510;
     public const long CosmicCharge = 80512;
+    public const long Smash = 80536;
     public const long EternalReflection = 80547;
     public const long ThousandStrikes1 = 80555;
     public const long SliceThroughReality = 80585;

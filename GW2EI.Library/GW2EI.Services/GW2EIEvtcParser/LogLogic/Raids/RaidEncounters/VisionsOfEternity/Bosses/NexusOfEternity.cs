@@ -106,13 +106,41 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kela, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<SubPhasePhaseData>(1);
+        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
+
+        List<TargetID> champions =
+        [
+            TargetID.ChampionCosmicBulwark,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.ChampionCosmicSunderer,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheStaff,
+            // TargetID.SomethingCosmicPiercer,
+        ];
+
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int index = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
+            {
+                phase.Name = "Split " + (index) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, champions, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(vloxx, log);
+            }
+        }
+
         return phases;
     }
 

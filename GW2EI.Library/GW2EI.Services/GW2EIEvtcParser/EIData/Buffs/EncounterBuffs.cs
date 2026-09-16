@@ -762,6 +762,8 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: See You Later, Alligator", AchievementEligibilitySeeYouLaterAlligator, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Nexus of Eternity         
             new Buff("Empowered (Nexus of Eternity)", EmpoweredNexusOfEternity, Source.EncounterSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
+            new Buff("Ascension", Ascension, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.AchievementEffect), // TODO Update icon
+            new Buff("Damage Immunity", DamageImmunity, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect), // TODO Update icon
             // Convergences
             // - Outer Nayos
             new Buff("Unstable Attunement (SotO)", UnstableAttunementSotO, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.DebilitatingVoid),
