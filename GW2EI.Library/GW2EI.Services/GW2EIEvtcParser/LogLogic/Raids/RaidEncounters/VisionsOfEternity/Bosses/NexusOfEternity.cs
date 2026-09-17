@@ -119,8 +119,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.EliteCosmicPiercer,
             TargetID.EliteCosmicBulwark,
-            TargetID.AspectOfTheSpear,
-            TargetID.AspectOfTheStaff,
         ];
     }
 
