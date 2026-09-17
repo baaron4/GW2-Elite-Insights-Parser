@@ -244,6 +244,7 @@ internal static class ParserIcons
     private const string Zojja = "https://i.imgur.com/9iSzaTe.png";
     private const string WhisperingShadow = "https://i.imgur.com/ncmbsdG.png";
     private const string KelaSeneschalOfWaves = "https://i.imgur.com/wSpjlSf.png";
+    private const string Vloxx = "https://i.imgur.com/9ZVp5ZH.png";
     #endregion
 
     #region Trash
@@ -1404,6 +1405,7 @@ internal static class ParserIcons
         { TargetID.GuardiansGladeTornado, TrashSmallJumpyTornado },
         { TargetID.LightThief, LightThief },
         { TargetID.EtherealSeal, EtherealSeal },
+        { TargetID.NexusOfEternityVloxx, Vloxx },
     };
 
     /// <summary>

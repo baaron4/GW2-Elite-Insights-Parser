@@ -63,13 +63,13 @@ public class MechanicData
                 }
             }
             {
-                if (!errorMechanicID.TryGetValue(m.ID, out var mech))
+                if (errorMechanicID.TryGetValue(m.ID, out var mech))
                 {
-                    errorMechanicID.Add(m.ID, m);
+                    throw new InvalidDataException($"{m.FullName} ({m.ID}) id collides with {mech.FullName} ({mech.ID})");
                 }
                 else
                 {
-                    throw new InvalidDataException(m.ID + " is not a unique ID");
+                    errorMechanicID.Add(m.ID, m);
                 }
             }
         }

@@ -928,6 +928,33 @@ public static class MechanicIDs
     public static readonly int Mech_AtePlayer = VoEMask | ++_voeCount;
     public static readonly int Mech_PlayerEaten = VoEMask | ++_voeCount;
     public static readonly int Mech_TankEaten = VoEMask | ++_voeCount;
+    public static readonly int Mech_AnnihilatingOrb = VoEMask | ++_voeCount;
+    public static readonly int Mech_AnnihilatingOrb2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_JudgmentOfEternity = VoEMask | ++_voeCount;
+    public static readonly int Mech_DivisionEternal = VoEMask | ++_voeCount;
+    public static readonly int Mech_SurroundingCurse = VoEMask | ++_voeCount;
+    public static readonly int Mech_SurroundingCurse2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_CosmicCharge = VoEMask | ++_voeCount;
+    public static readonly int Mech_CosmicCharge2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_ThousandStrikes = VoEMask | ++_voeCount;
+    public static readonly int Mech_ThousandStrikes2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_SliceThroughReality = VoEMask | ++_voeCount;
+    public static readonly int Mech_VisionsOfEternity = VoEMask | ++_voeCount;
+    public static readonly int Mech_VisionsOfEternity2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_ProbabilityDistribution = VoEMask | ++_voeCount;
+    public static readonly int Mech_RagingStorm = VoEMask | ++_voeCount;
+    public static readonly int Mech_RagingStorm2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_ExcisionExtremis = VoEMask | ++_voeCount;
+    public static readonly int Mech_Worldpiercer = VoEMask | ++_voeCount;
+    public static readonly int Mech_Worldpiercer2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_AscensionsSacrifice = VoEMask | ++_voeCount;
+    public static readonly int Mech_EternalReflection = VoEMask | ++_voeCount;
+    public static readonly int Mech_EternalReflection2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_EchoingBlade = VoEMask | ++_voeCount;
+    public static readonly int Mech_Empowered = VoEMask | ++_voeCount;
+    public static readonly int Mech_DamageImmunity = VoEMask | ++_voeCount;
+    public static readonly int Mech_Ascension = VoEMask | ++_voeCount;
+    public static readonly int Mech_AscensionRemove = VoEMask | ++_voeCount;
     #endregion VOE
 
     #endregion RAID ENCOUNTERS
