@@ -32,8 +32,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         false
                     )
         ]),
-        new PlayerDstHealthDamageHitMechanic([JudgmentOfEternity1, JudgmentOfEternity2], Mech_JudgmentOfEternity, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkMagenta), new MechanicDescription("JudgEter.H", "Hit by Judgment of Eternity", "Judgment of Eternity Hit"), Sev0),
-        new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), new MechanicDescription("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
@@ -75,7 +73,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic(WorldpiercerBarrierDropping, Mech_Worldpiercer, new (Symbols.Diamond, Colors.FluoOrange), new ("Worldpier.H", "Hit by Worldpiercer (Vloxx)", "Worldpiercer Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic(Worldpiercer2, Mech_Worldpiercer2, new (Symbols.Diamond, Colors.LightBlue), new ("Worldpier2.H", "Hit by Worldpiercer (Add?)", "Worldpiercer Hit (Add?)"), Sev0),
         ]),
-        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new MechanicPlotlySetting(Symbols.CrossOpen, Colors.DarkerLime), new MechanicDescription("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(EternalReflectionVloxx, Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection (Vloxx)", "Eternal Reflection Hit (Vloxx)"), Sev2),
             new PlayerDstHealthDamageHitMechanic([EternalReflection, EternalReflection1, EternalReflection2], Mech_EternalReflection2, new (Symbols.DiamondTall, Colors.DesaturatedPink), new ("EterRefl2.H", "Hit by Eternal Reflection (Add?)", "Eternal Reflection Hit (Add?)"), Sev2),
