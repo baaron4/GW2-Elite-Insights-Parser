@@ -332,7 +332,7 @@ public partial class InspectorViewModel : ObservableObject
 
     public InspectorViewModel(RawEvtcLog log)
     {
-        var combatItems = log.CombatItems.Select(item => new CombatItemModel(item));
+        var combatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
         CombatItemsView = new(combatItems)
         {
             Filter = FilterCombatItems
@@ -345,7 +345,7 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
-        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID))
+        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
         };
@@ -356,37 +356,37 @@ public partial class InspectorViewModel : ObservableObject
         #region GUIDS
         var contentGUIDEvents = allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
 
-        var skills = contentGUIDEvents.OfType<SkillGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(skill => skill.ContentID);
+        var skills = contentGUIDEvents.OfType<SkillGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(skill => skill.ContentID).ToList();
         SkillGUIDsView = new(skills)
         {
             Filter = FilterContentGUIDs
         };
 
-        var effects = contentGUIDEvents.OfType<EffectGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(effect => effect.ContentID);
+        var effects = contentGUIDEvents.OfType<EffectGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(effect => effect.ContentID).ToList();
         EffectGUIDsView = new(effects)
         {
             Filter = FilterContentGUIDs
         };
 
-        var markers = contentGUIDEvents.OfType<MarkerGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(marker => marker.ContentID);
+        var markers = contentGUIDEvents.OfType<MarkerGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(marker => marker.ContentID).ToList();
         MarkerGUIDsView = new(markers)
         {
             Filter = FilterContentGUIDs
         };
 
-        var species = contentGUIDEvents.OfType<SpeciesGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(species => species.ContentID);
+        var species = contentGUIDEvents.OfType<SpeciesGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(species => species.ContentID).ToList();
         SpeciesGUIDsView = new(species)
         {
             Filter = FilterContentGUIDs
         };
 
-        var teams = contentGUIDEvents.OfType<TeamGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(team => team.ContentID);
+        var teams = contentGUIDEvents.OfType<TeamGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(team => team.ContentID).ToList();
         TeamGUIDsView = new(teams)
         {
             Filter = FilterContentGUIDs
         };
 
-        var emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(emote => emote.ContentID);
+        var emotes = contentGUIDEvents.OfType<EmoteGUIDEvent>().Select(x => new ContentGUIDModel(x)).OrderBy(emote => emote.ContentID).ToList();
         EmoteGUIDsView = new(emotes)
         {
             Filter = FilterContentGUIDs
@@ -401,11 +401,12 @@ public partial class InspectorViewModel : ObservableObject
 
         EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(allTimeEvents, allNonTimeEvents, allHealingExtensionEvents);
         CombatEventsView = new(allTimeEvents
+            .Concat(allHealingExtensionEvents)
             .OrderBy(x => x.Time)
             .Cast<CombatEvent>()
             .Concat(allNonTimeEvents)
-            .Concat(allHealingExtensionEvents.OrderBy(x => x.Time))
-            .Select(x => new EventModel(x)))
+            .Select(x => new EventModel(x))
+            .ToList())
         {
             Filter = FilterCombatEvents
         };
