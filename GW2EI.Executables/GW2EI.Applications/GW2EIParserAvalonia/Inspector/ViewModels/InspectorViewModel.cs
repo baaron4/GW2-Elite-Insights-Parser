@@ -202,10 +202,33 @@ public partial class InspectorViewModel : ObservableObject
 
         SelectedSkillProperties.ReplaceRange(EventInspector.Inspect(value.SkillItem));
     }
+    [ObservableProperty]
+    private string? skillDataNameFilter;
+    partial void OnSkillDataNameFilterChanged(string? oldValue, string? newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        SkillsDataView.Refresh();
+    }
     public DataGridCollectionView SkillsDataView { get; }
     public int SkillCount => SkillsDataView.Count;
-    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
-    private bool FilterSkillDataModels(object item) => item is SkillDataModel;
+    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = []; 
+    private bool FilterSkillDataModels(object item)
+    {
+        if (item is not SkillDataModel skillData)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(SkillDataNameFilter) &&
+            skillData.Name?.Contains(SkillDataNameFilter, StringComparison.OrdinalIgnoreCase) != true)
+        {
+            return false;
+        }
+
+        return true;
+    }
     #endregion
 
     #region AGENTS
@@ -375,7 +398,7 @@ public partial class InspectorViewModel : ObservableObject
 
     #endregion COMBAT ITEMS
 
-    public InspectorViewModel(RawEvtcLog log)
+    public InspectorViewModel(EvtcLog log)
     {
         #region COMBAT ITEMS
         var combatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
@@ -393,9 +416,7 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
-
-        #region SKILLS
-        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList())
+        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData, log.CombatData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
         };

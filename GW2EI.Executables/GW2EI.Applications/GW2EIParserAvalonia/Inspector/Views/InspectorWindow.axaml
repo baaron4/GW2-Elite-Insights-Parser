@@ -491,9 +491,19 @@
                                                     Binding="{Binding ID}"
                                                     Width="Auto"/>
 
-                                <DataGridTextColumn Header="Name"
+                                <DataGridTextColumn
                                                     Binding="{Binding Name}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Name" />
+                                                <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).SkillDataNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="Filter Skill Name..." />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
 
