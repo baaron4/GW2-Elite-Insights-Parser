@@ -25,49 +25,70 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal readonly MechanicGroup Mechanics = new([
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([AnnihilatingOrb1, AnnihilatingOrb2], Mech_AnnihilatingOrb, new MechanicPlotlySetting(Symbols.Circle, Colors.Black), new MechanicDescription("AnnOrb.H", "Hit by Annihilating Orb (Vloxx)", "Annihilating Orb Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(AnnihilatingOrb3, Mech_AnnihilatingOrb2, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), new MechanicDescription("AnnOrb2.H", "Hit by Annihilating Orb (Add?)", "Annihilating Orb Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([AnnihilatingOrbVloxx, AnnihilatingOrbCosmicAdd], Mech_AnnihilatingOrb, new (Symbols.Circle, Colors.Black), new ("AnnOrb.H", "Hit by Annihilating Orb", "Annihilating Orb Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(AnnihilatingOrbTPShockwave, Mech_AnnihilatingOrbShockwave, new (Symbols.Circle, Colors.Blue), new ("AnnOrb.Shck.H", "Hit by Annihilating Orb Shockwave", "Annihilating Orb Shockwave Hit"), Sev1)
+                    .WithStabilitySubMechanic(
+                        new SubMechanic(Mech_AnnihilatingOrbShockwaveNoStab, new (Symbols.Circle,Colors.Green), new("AnnOrb.Shck.KD", "Hit by Annihilating Orb Shockwave without stability", "Annihilating Orb Shockwave Hit no stab"), Sev0),
+                        false
+                    )
         ]),
         new PlayerDstHealthDamageHitMechanic([JudgmentOfEternity1, JudgmentOfEternity2], Mech_JudgmentOfEternity, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkMagenta), new MechanicDescription("JudgEter.H", "Hit by Judgment of Eternity", "Judgment of Eternity Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), new MechanicDescription("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(SurroundingCurse, Mech_SurroundingCurse, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Teal), new MechanicDescription("SurrCur.H", "Hit by Surrounding Curse (Vloxx)", "Surrounding Curse Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(SurroundingCurse2, Mech_SurroundingCurse2, new MechanicPlotlySetting(Symbols.CircleCross, Colors.White), new MechanicDescription("SurrCur2.H", "Hit by Surrounding Curse (Add?)", "Surrounding Curse Hit (Add?)"), Sev0),
+            new MechanicGroup([
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
+                new PlayerDstHealthDamageHitMechanic(JudgmentOfEternityGreenFailDamage, Mech_JudgmentOfEternity, new (Symbols.Bowtie, Colors.DarkMagenta), new ("JudgEter.H", "Hit by Judgment of Eternity (3-people green failed)", "Judgment of Eternity Hit"), Sev0),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CosmicCharge, Mech_CosmicCharge, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Teal), new MechanicDescription("CosmChar.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([CosmicCharge1, CosmicCharge2], Mech_CosmicCharge2, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), new MechanicDescription("CosmChar2.H", "Hit by Cosmic Charge (Add?)", "Cosmic Charge Hit (Add?)"), Sev0),
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity2PeopleGreenSelect, Mech_NexusOfEternity2GreenSelect, new(Symbols.DiamondOpen, Colors.Chocolate), new("2Green.Slct", "Selected for 2-people green", "2-people green select"), Sev1),
+                new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrifice, new (Symbols.Diamond, Colors.   Chocolate), new ("AscSac.H", "Hit by Ascension's Sacrifice (2-people green failed)", "Ascension's Sacrifice Hit"), Sev0),
+        ]),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikes1, Mech_ThousandStrikes, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightPink), new MechanicDescription("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikes2, Mech_ThousandStrikes2, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Orange), new MechanicDescription("ThouStr2.H", "Hit by Thousand Strikes (Add?)", "Thousand Strikes Hit (Add?)"), Sev0),
+            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternitySpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + puddle drop", "Spread + puddle"), Sev1),
         ]),
-        new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkBlue), new MechanicDescription("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(VisionsOfEternity2, Mech_VisionsOfEternity, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightBlue), new MechanicDescription("VisEter.H", "Hit by Visions of Eternity (Vloxx)", "Visions of Eternity Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity3], Mech_VisionsOfEternity2, new MechanicPlotlySetting(Symbols.CircleX, Colors.Lime), new MechanicDescription("VisEter2.H", "Hit by Visions of Eternity (Add?)", "Visions of Eternity Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(SurroundingCurse, Mech_SurroundingCurse, new (Symbols.CircleCross, Colors.Teal), new ("SurrCur.H", "Hit by Surrounding Curse (Vloxx)", "Surrounding Curse Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(SurroundingCurse2, Mech_SurroundingCurse2, new (Symbols.CircleCross, Colors.White), new ("SurrCur2.H", "Hit by Surrounding Curse (Add?)", "Surrounding Curse Hit (Add?)"), Sev0),
         ]),
-        new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Sand), new MechanicDescription("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([RagingStorm, RagingStorm2], Mech_RagingStorm, new MechanicPlotlySetting(Symbols.Cross, Colors.RedBrownish), new MechanicDescription("RagStor.H", "Hit by Raging Storm (Vloxx)", "Raging Storm Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(RagingStorm1, Mech_RagingStorm2, new MechanicPlotlySetting(Symbols.Cross, Colors.LightRed), new MechanicDescription("RagStor2.H", "Hit by Raging Storm (Add?)", "Raging Storm Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(CosmicCharge, Mech_CosmicCharge, new (Symbols.CircleCrossOpen, Colors.Teal), new ("CosmChar.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([CosmicCharge1, CosmicCharge2], Mech_CosmicCharge2, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar2.H", "Hit by Cosmic Charge (Add?)", "Cosmic Charge Hit (Add?)"), Sev0),
+        ]),
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikes1, Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikes2, Mech_ThousandStrikes2, new (Symbols.CircleOpen, Colors.Orange), new ("ThouStr2.H", "Hit by Thousand Strikes (Add?)", "Thousand Strikes Hit (Add?)"), Sev0),
+        ]),
+        new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(VisionsOfEternity2, Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity (Vloxx)", "Visions of Eternity Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity3], Mech_VisionsOfEternity2, new (Symbols.CircleX, Colors.Lime), new ("VisEter2.H", "Hit by Visions of Eternity (Add?)", "Visions of Eternity Hit (Add?)"), Sev0),
+        ]),
+        new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic([RagingStorm, RagingStorm2], Mech_RagingStorm, new (Symbols.Cross, Colors.RedBrownish), new ("RagStor.H", "Hit by Raging Storm (Vloxx)", "Raging Storm Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(RagingStorm1, Mech_RagingStorm2, new (Symbols.Cross, Colors.LightRed), new ("RagStor2.H", "Hit by Raging Storm (Add?)", "Raging Storm Hit (Add?)"), Sev0),
+        ]),
+        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(WorldpiercerBarrierDropping, Mech_Worldpiercer, new (Symbols.Diamond, Colors.FluoOrange), new ("Worldpier.H", "Hit by Worldpiercer (Vloxx)", "Worldpiercer Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(Worldpiercer2, Mech_Worldpiercer2, new (Symbols.Diamond, Colors.LightBlue), new ("Worldpier2.H", "Hit by Worldpiercer (Add?)", "Worldpiercer Hit (Add?)"), Sev0),
         ]),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new MechanicPlotlySetting(Symbols.CrossOpen, Colors.DarkerLime), new MechanicDescription("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(Worldpiercer1, Mech_Worldpiercer, new MechanicPlotlySetting(Symbols.Diamond, Colors.FluoOrange), new MechanicDescription("Worldpier.H", "Hit by Worldpiercer (Vloxx)", "Worldpiercer Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(Worldpiercer2, Mech_Worldpiercer2, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), new MechanicDescription("Worldpier2.H", "Hit by Worldpiercer (Add?)", "Worldpiercer Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(EternalReflection3, Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection (Vloxx)", "Eternal Reflection Hit (Vloxx)"), Sev2),
+            new PlayerDstHealthDamageHitMechanic([EternalReflection, EternalReflection1, EternalReflection2], Mech_EternalReflection2, new (Symbols.DiamondTall, Colors.DesaturatedPink), new ("EterRefl2.H", "Hit by Eternal Reflection (Add?)", "Eternal Reflection Hit (Add?)"), Sev2),
         ]),
-        new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrifice, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Chocolate), new MechanicDescription("AscSac.H", "Hit by Ascension's Sacrifice", "Ascension's Sacrifice Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(EternalReflection3, Mech_EternalReflection, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkMagenta), new MechanicDescription("EterRefl.H", "Hit by Eternal Reflection (Vloxx)", "Eternal Reflection Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([EternalReflection, EternalReflection1, EternalReflection2], Mech_EternalReflection2, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DesaturatedPink), new MechanicDescription("EterRefl2.H", "Hit by Eternal Reflection (Add?)", "Eternal Reflection Hit (Add?)"), Sev0),
+            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new (Symbols.DiamondWide, Colors.Red), new ("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
         ]),
-        new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkYellow), new MechanicDescription("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev0),
-        new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_Empowered, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Red), new MechanicDescription("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
-        new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), new MechanicDescription("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev0),
+        new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new (Symbols.Hexagon, Colors.LightBlue), new ("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
         new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.GreenishYellow), new MechanicDescription("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev0),
-            new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Green), new MechanicDescription("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
+            new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new (Symbols.HexagonOpen, Colors.GreenishYellow), new ("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev1),
+            new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new (Symbols.HexagonOpen, Colors.Green), new ("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
         ]),
     ]);
 
@@ -161,7 +182,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
         var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
 
-        List<TargetID> champions =
+        var champions = targets.Where(x => x.IsAnySpecies(
         [
             TargetID.ChampionCosmicBulwark,
             TargetID.ChampionCosmicPiercer,
@@ -169,7 +190,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.ChampionAspectOfTheSpear,
             TargetID.ChampionAspectOfTheStaff,
             // TargetID.SomethingCosmicPiercer,
-        ];
+        ])).ToList();
 
         for (int i = 0; i < phases.Count; i++)
         {
@@ -179,7 +200,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             if (index % 2 == 0)
             {
                 phase.Name = "Split " + (index) / 2;
-                AddTargetsToPhaseAndFit(phase, targets, champions, log);
+                phase.AddTargets(champions, log);
+                phase.AddTarget(vloxx, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
@@ -193,7 +215,16 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return [];
+        return new Dictionary<TargetID, int>() 
+        {
+            { TargetID.NexusOfEternityVloxx, 0},
+            {TargetID.ChampionCosmicPiercer, 1},
+            {TargetID.SomethingCosmicPiercer, 1},
+            {TargetID.ChampionAspectOfTheStaff, 1},
+            {TargetID.ChampionAspectOfTheSpear, 1},
+            {TargetID.ChampionCosmicBulwark, 1},
+            {TargetID.ChampionCosmicSunderer, 1}
+        };
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

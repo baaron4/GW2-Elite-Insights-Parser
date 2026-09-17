@@ -5720,7 +5720,7 @@ public static class SkillIDs
     public const long CascadingCorruptionStackBuff = 80279;
     public const long EternalReflection1 = 80304;
     public const long POV_RelicOfTheTyrianHeroGearBuff = 80334;
-    public const long AnnihilatingOrb1 = 80323;
+    public const long AnnihilatingOrbVloxx = 80323;
     public const long Ascension = 80368;
     public const long JudgmentOfEternity1 = 80378;
     public const long VisionsOfEternity1 = 80420;
@@ -5729,14 +5729,17 @@ public static class SkillIDs
     public const long SurroundingCurse = 80484;
     public const long EchoingAttack = 80510;
     public const long CosmicCharge = 80512;
+    public const long VloxxMissibleToBeIdentified = 80520;
     public const long Smash = 80536;
+    public const long NexusOfEternity3GreenFailBuff = 80536;
     public const long EternalReflection = 80547;
     public const long ThousandStrikes1 = 80555;
     public const long SliceThroughReality = 80585;
     public const long VisionsOfEternity2 = 80591;
     public const long DamageImmunity = 80608;
-    public const long JudgmentOfEternity2 = 80629;
+    public const long JudgmentOfEternityGreenFailDamage = 80629;
     public const long SurroundingCurse1 = 80653; // doesn't do damage? hp%?
+    public const long NexusOfEternity3GreenSelect = 80681;
     public const long ThousandStrikes2 = 80709;
     public const long CosmicCharge1 = 80717;
     public const long EternalReflection2 = 80726;
@@ -5748,8 +5751,9 @@ public static class SkillIDs
     public const long ExcisionExtremis1 = 80901;
     public const long EchoingOutburst = 80908;
     public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
-    public const long Worldpiercer1 = 80916;
+    public const long WorldpiercerBarrierDropping = 80916;
     public const long AncoraStrike = 80940;
+    public const long NexusOfEternity2GreenSelect = 80951;
     public const long RagingStorm1 = 80965;
     public const long EmpoweredNexusOfEternity = 81002;
     public const long Worldpiercer2 = 81015;
@@ -5764,9 +5768,9 @@ public static class SkillIDs
     public const long EternalReflection3 = 81209;
     public const long SurroundingCurse2 = 81230;
     public const long VloxxsVisionDamageModBuff = 81232;
-    public const long AnnihilatingOrb2 = 81238;
+    public const long AnnihilatingOrbTPShockwave = 81238;
     public const long EchoingBlade = 81271;
-    public const long AnnihilatingOrb3 = 81273;
+    public const long AnnihilatingOrbCosmicAdd = 81273;
     #endregion
     #region TODO
     #endregion TODO

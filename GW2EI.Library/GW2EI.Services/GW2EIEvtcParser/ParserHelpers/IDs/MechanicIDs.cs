@@ -929,7 +929,9 @@ public static class MechanicIDs
     public static readonly int Mech_PlayerEaten = VoEMask | ++_voeCount;
     public static readonly int Mech_TankEaten = VoEMask | ++_voeCount;
     public static readonly int Mech_AnnihilatingOrb = VoEMask | ++_voeCount;
-    public static readonly int Mech_AnnihilatingOrb2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_AnnihilatingOrbShockwave = VoEMask | ++_voeCount;
+    public static readonly int Mech_AnnihilatingOrbShockwaveNoStab = VoEMask | ++_voeCount;
+    public static readonly int Mech_NexusOfEternity3GreenSelect = VoEMask | ++_voeCount;
     public static readonly int Mech_JudgmentOfEternity = VoEMask | ++_voeCount;
     public static readonly int Mech_DivisionEternal = VoEMask | ++_voeCount;
     public static readonly int Mech_SurroundingCurse = VoEMask | ++_voeCount;
@@ -947,14 +949,17 @@ public static class MechanicIDs
     public static readonly int Mech_ExcisionExtremis = VoEMask | ++_voeCount;
     public static readonly int Mech_Worldpiercer = VoEMask | ++_voeCount;
     public static readonly int Mech_Worldpiercer2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_NexusOfEternity2GreenSelect = VoEMask | ++_voeCount;
     public static readonly int Mech_AscensionsSacrifice = VoEMask | ++_voeCount;
     public static readonly int Mech_EternalReflection = VoEMask | ++_voeCount;
     public static readonly int Mech_EternalReflection2 = VoEMask | ++_voeCount;
     public static readonly int Mech_EchoingBlade = VoEMask | ++_voeCount;
-    public static readonly int Mech_Empowered = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxEmpowered = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxEmpoweredRemoved = VoEMask | ++_voeCount;
     public static readonly int Mech_DamageImmunity = VoEMask | ++_voeCount;
     public static readonly int Mech_Ascension = VoEMask | ++_voeCount;
     public static readonly int Mech_AscensionRemove = VoEMask | ++_voeCount;
+    public static readonly int Mech_NexusOfEternitySpreadAndPuddleSelect = VoEMask | ++_voeCount;
     #endregion VOE
 
     #endregion RAID ENCOUNTERS

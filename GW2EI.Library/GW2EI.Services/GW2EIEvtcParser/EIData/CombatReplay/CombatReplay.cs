@@ -513,22 +513,22 @@ public class CombatReplay
 
     #region DEBUG MISSILES
     private static uint DebugMissileRadius = 40;
-    internal static void DebugMissiles(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugMissiles(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownMissiles, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEventsBySrc(actor.AgentItem)
-            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && !knownMissiles.Contains(x.SkillID));
         decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
-    internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownMissiles, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
-            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && !knownMissiles.Contains(x.SkillID));
         decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
-    internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownMissiles, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
-            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.GetFinalMaster().IsNPC);
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && !knownMissiles.Contains(x.SkillID) && x.Src.GetFinalMaster().IsNPC);
         decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
     #endregion DEBUG MISSILES

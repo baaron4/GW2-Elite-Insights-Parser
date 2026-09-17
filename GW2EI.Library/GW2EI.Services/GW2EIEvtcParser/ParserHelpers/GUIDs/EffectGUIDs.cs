@@ -1128,5 +1128,12 @@ public static class EffectGUIDs
     public static readonly Guid GuardiansGaleSandBorder = new("826CD8C2ECB37243BC86C7556C977FA7"); // red ring, owned by executor of waves or sand kela, duration 3500 or 19998000 (bug?)
     public static readonly Guid GuardiansGaleLightningStrikeIndicator = new("CE91D2D4CD6C4141B3977FA70FFE05BB"); // owned by kela, duration 1200
     public static readonly Guid GuardiansGaleLightningStrikeHit = new("67F798DBCB84984AA21C3FAF663B47D7"); // owned by kela, default duration 1000
+    // Nexus of Eternity
+    public static readonly Guid NexusOfEternity3PeopleGreenSelect = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // src vloxx, dst player, duration 8000
+    public static readonly Guid NexusOfEternity2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
+    public static readonly Guid NexusOfEternitySpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
+    public static readonly Guid NexusOfEternityDroppedPuddle = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
+    public static readonly Guid NexusOfEternityLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
+    public static readonly Guid NexusOfEternityCosmicChargeTrailAoE = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000, has also dynamic end
     #endregion Raid Encounters
 }
