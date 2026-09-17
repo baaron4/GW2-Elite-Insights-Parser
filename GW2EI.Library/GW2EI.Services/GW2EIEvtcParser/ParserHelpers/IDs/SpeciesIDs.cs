@@ -588,6 +588,8 @@ public static class SpeciesIDs
         EliteCosmicBulwark = 28065,
         ChampionCosmicBulwark = 27934,
         ChampionCosmicSunderer = 27933,
+        AspectOfTheStaff = 28017,
+        AspectOfTheSpear = 28033,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,

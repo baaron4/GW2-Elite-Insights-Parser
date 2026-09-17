@@ -51,18 +51,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic(SurroundingCurse2, Mech_SurroundingCurse2, new (Symbols.CircleCross, Colors.White), new ("SurrCur2.H", "Hit by Surrounding Curse (Add?)", "Surrounding Curse Hit (Add?)"), Sev0),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CosmicChargeVloxx, Mech_CosmicChargeVloxx, new (Symbols.CircleCrossOpen, Colors.Teal), new ("CosmChar.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([CosmicCharge1, CosmicCharge2], Mech_CosmicCharge2, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar2.H", "Hit by Cosmic Charge (Add?)", "Cosmic Charge Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(CosmicChargeVloxx, Mech_CosmicChargeVloxx, new (Symbols.CircleCrossOpen, Colors.Teal), new ("CosmCharV.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([CosmicChargeBulwark, CosmicChargeAspectOfTheSpear], Mech_CosmicChargeAdd, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmCharA.H", "Hit by Cosmic Charge (Add)", "Cosmic Charge Hit (Add)"), Sev1),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikesVloxx, Mech_ThousandStrikesVloxx, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikes2, Mech_ThousandStrikes2, new (Symbols.CircleOpen, Colors.Orange), new ("ThouStr2.H", "Hit by Thousand Strikes (Add?)", "Thousand Strikes Hit (Add?)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikesVloxx, Mech_ThousandStrikesVloxx, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStrV.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev2),
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikesAspectOfTheSpear, Mech_ThousandStrikesSpear, new (Symbols.CircleOpen, Colors.Orange), new ("ThouStrS.H", "Hit by Thousand Strikes (Spear)", "Thousand Strikes Hit (Spear)"), Sev2),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
-        new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(VisionsOfEternityVloxx, Mech_VisionsOfEternityVloxx, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity (Vloxx)", "Visions of Eternity Hit (Vloxx)"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity3], Mech_VisionsOfEternity2, new (Symbols.CircleX, Colors.Lime), new ("VisEter2.H", "Hit by Visions of Eternity (Add?)", "Visions of Eternity Hit (Add?)"), Sev0),
-        ]),
+        new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity2,  VisionsOfEternity3], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic([RagingStorm, RagingStorm2], Mech_RagingStorm, new (Symbols.Cross, Colors.RedBrownish), new ("RagStor.H", "Hit by Raging Storm (Vloxx)", "Raging Storm Hit (Vloxx)"), Sev0),

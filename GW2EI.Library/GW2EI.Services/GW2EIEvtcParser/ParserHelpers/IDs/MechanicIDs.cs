@@ -937,12 +937,11 @@ public static class MechanicIDs
     public static readonly int Mech_SurroundingCurseVloxx = VoEMask | ++_voeCount;
     public static readonly int Mech_SurroundingCurse2 = VoEMask | ++_voeCount;
     public static readonly int Mech_CosmicChargeVloxx = VoEMask | ++_voeCount;
-    public static readonly int Mech_CosmicCharge2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_CosmicChargeAdd = VoEMask | ++_voeCount;
     public static readonly int Mech_ThousandStrikesVloxx = VoEMask | ++_voeCount;
-    public static readonly int Mech_ThousandStrikes2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_ThousandStrikesSpear = VoEMask | ++_voeCount;
     public static readonly int Mech_SliceThroughReality = VoEMask | ++_voeCount;
-    public static readonly int Mech_VisionsOfEternityVloxx = VoEMask | ++_voeCount;
-    public static readonly int Mech_VisionsOfEternity2 = VoEMask | ++_voeCount;
+    public static readonly int Mech_VisionsOfEternity = VoEMask | ++_voeCount;
     public static readonly int Mech_ProbabilityDistribution = VoEMask | ++_voeCount;
     public static readonly int Mech_RagingStorm = VoEMask | ++_voeCount;
     public static readonly int Mech_RagingStorm2 = VoEMask | ++_voeCount;
