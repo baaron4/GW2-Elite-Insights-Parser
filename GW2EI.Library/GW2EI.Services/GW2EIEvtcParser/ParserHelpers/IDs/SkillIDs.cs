@@ -5733,7 +5733,7 @@ public static class SkillIDs
     public const long Smash = 80536;
     public const long NexusOfEternity3GreenFailBuff = 80536;
     public const long EternalReflection = 80547;
-    public const long ThousandStrikes1 = 80555;
+    public const long ThousandStrikesVloxx = 80555;
     public const long SliceThroughReality = 80585;
     public const long VisionsOfEternity2 = 80591;
     public const long DamageImmunity = 80608;
@@ -5765,7 +5765,7 @@ public static class SkillIDs
     public const long RagingStorm2 = 81176;
     public const long POV_RelicOfTheVisionaryGearBuff = 81191;
     public const long TyrantsFuryBuff = 81192;
-    public const long EternalReflection3 = 81209;
+    public const long EternalReflectionVloxx = 81209;
     public const long SurroundingCurse2 = 81230;
     public const long VloxxsVisionDamageModBuff = 81232;
     public const long AnnihilatingOrbTPShockwave = 81238;

@@ -57,7 +57,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic([CosmicCharge1, CosmicCharge2], Mech_CosmicCharge2, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar2.H", "Hit by Cosmic Charge (Add?)", "Cosmic Charge Hit (Add?)"), Sev0),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikes1, Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikesVloxx, Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic(ThousandStrikes2, Mech_ThousandStrikes2, new (Symbols.CircleOpen, Colors.Orange), new ("ThouStr2.H", "Hit by Thousand Strikes (Add?)", "Thousand Strikes Hit (Add?)"), Sev0),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
@@ -77,7 +77,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         ]),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new MechanicPlotlySetting(Symbols.CrossOpen, Colors.DarkerLime), new MechanicDescription("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(EternalReflection3, Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection (Vloxx)", "Eternal Reflection Hit (Vloxx)"), Sev2),
+            new PlayerDstHealthDamageHitMechanic(EternalReflectionVloxx, Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection (Vloxx)", "Eternal Reflection Hit (Vloxx)"), Sev2),
             new PlayerDstHealthDamageHitMechanic([EternalReflection, EternalReflection1, EternalReflection2], Mech_EternalReflection2, new (Symbols.DiamondTall, Colors.DesaturatedPink), new ("EterRefl2.H", "Hit by Eternal Reflection (Add?)", "Eternal Reflection Hit (Add?)"), Sev2),
         ]),
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
