@@ -15,7 +15,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -24,6 +24,52 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 {
 
     internal readonly MechanicGroup Mechanics = new([
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic([AnnihilatingOrbVloxx, AnnihilatingOrbCosmicPiercer], Mech_AnnihilatingOrb, new (Symbols.Circle, Colors.Black), new ("AnnOrb.H", "Hit by Annihilating Orb", "Annihilating Orb Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(AnnihilatingOrbTPShockwave, Mech_AnnihilatingOrbShockwave, new (Symbols.Circle, Colors.Blue), new ("AnnOrb.Shck.H", "Hit by Annihilating Orb Shockwave", "Annihilating Orb Shockwave Hit"), Sev1)
+                    .WithStabilitySubMechanic(
+                        new SubMechanic(Mech_AnnihilatingOrbShockwaveNoStab, new (Symbols.Circle,Colors.Green), new("AnnOrb.Shck.KD", "Hit by Annihilating Orb Shockwave without stability", "Annihilating Orb Shockwave Hit no stab"), Sev0),
+                        false
+                    )
+        ]),
+        new MechanicGroup([
+            new MechanicGroup([
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
+                new PlayerDstHealthDamageHitMechanic(JudgmentOfEternityGreenFailDamage, Mech_JudgmentOfEternity, new (Symbols.Bowtie, Colors.DarkMagenta), new ("JudgEter.H", "Hit by Judgment of Eternity (3-people green failed)", "Judgment of Eternity Hit"), Sev0),
+            ]),
+            new MechanicGroup([
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity2PeopleGreenSelect, Mech_NexusOfEternity2GreenSelect, new(Symbols.DiamondOpen, Colors.Chocolate), new("2Green.Slct", "Selected for 2-people green", "2-people green select"), Sev1),
+                new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrifice, new (Symbols.Diamond, Colors.   Chocolate), new ("AscSac.H", "Hit by Ascension's Sacrifice (2-people green failed)", "Ascension's Sacrifice Hit"), Sev0),
+            ]),
+        ]),
+        new MechanicGroup([
+            // TODO add mechanics regarding getting hit by puddles
+            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternitySpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + puddle drop", "Spread + puddle"), Sev1),
+        ]),
+        new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity2,  VisionsOfEternity3], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
+        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
+
+        new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic([SurroundingCurseAspectOfTheStaff, SurroundingCurseVloxx], Mech_SurroundingCurse, new (Symbols.CircleCross, Colors.Teal), new ("SurrCur.H", "Hit by Surrounding Curse", "Surrounding Curse Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([CosmicChargeVloxx, CosmicChargeBulwark, CosmicChargeAspectOfTheSpear], Mech_CosmicCharge, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar.H", "Hit by Cosmic Charge", "Cosmic Charge Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([ThousandStrikesAspectOfTheSpear, ThousandStrikesVloxx], Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes", "Thousand Strikes Hit"), Sev2),
+            new PlayerDstHealthDamageHitMechanic([RagingStormCosmicBulwark, RagingStormVloxx, RagingStormVloxx2], Mech_RagingStorm, new (Symbols.Cross, Colors.RedBrownish), new ("RagStor.H", "Hit by Raging Storm", "Raging Storm Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([WorldpiercerCosmicBullwark, WorldpiercerVloxx], Mech_Worldpiercer, new (Symbols.Diamond, Colors.FluoOrange), new ("WorldpierV.H", "Hit by Worldpiercer", "Worldpiercer Hit"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionCosmicPiercerChamp, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerElite], Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection", "Eternal Reflection Hit"), Sev2),
+        ]),
+        new MechanicGroup([
+            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new (Symbols.DiamondWide, Colors.Red), new ("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
+        ]),
+        new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new (Symbols.Hexagon, Colors.LightBlue), new ("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
+        new MechanicGroup([
+            new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new (Symbols.HexagonOpen, Colors.GreenishYellow), new ("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev1),
+            new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new (Symbols.HexagonOpen, Colors.Green), new ("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
+        ]),
     ]);
 
     public NexusOfEternity(int triggerID) : base(triggerID)
@@ -58,6 +104,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return
         [
             TargetID.NexusOfEternityVloxx,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.SomethingCosmicPiercer,
+            TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionCosmicBulwark,
+            TargetID.ChampionCosmicSunderer,
         ];
     }
 
@@ -65,6 +117,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return
         [
+            TargetID.EliteCosmicPiercer,
+            TargetID.EliteCosmicBulwark,
         ];
     }
 
@@ -96,21 +150,61 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             (ChestID.GrandRaidVloxxChest, GrandRaidChestVloxxPosition, 100),
         ], agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+
+        RenameAdds(Targets);
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kela, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
             return [];
         }
-        var phases = new List<SubPhasePhaseData>(1);
+        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
+
+        var champions = targets.Where(x => x.IsAnySpecies(
+        [
+            TargetID.ChampionCosmicBulwark,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.ChampionCosmicSunderer,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheStaff,
+            // TargetID.SomethingCosmicPiercer,
+        ])).ToList();
+
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int index = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
+            {
+                phase.Name = "Split " + (index) / 2;
+                phase.AddTargets(champions, log);
+                phase.AddTarget(vloxx, log, PhaseData.TargetPriority.NonBlocking);
+            }
+            else
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(vloxx, log);
+            }
+        }
+
         return phases;
     }
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return [];
+        return new Dictionary<TargetID, int>() 
+        {
+            { TargetID.NexusOfEternityVloxx, 0},
+            {TargetID.ChampionCosmicPiercer, 1},
+            {TargetID.SomethingCosmicPiercer, 1},
+            {TargetID.ChampionAspectOfTheStaff, 1},
+            {TargetID.ChampionAspectOfTheSpear, 1},
+            {TargetID.ChampionCosmicBulwark, 1},
+            {TargetID.ChampionCosmicSunderer, 1}
+        };
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -135,7 +229,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
-        
+
     }
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -165,6 +259,40 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+
+    private static void RenameAdds(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor actor in targets)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.ChampionCosmicBulwark:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionCosmicPiercer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionCosmicSunderer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionAspectOfTheSpear:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.ChampionAspectOfTheStaff:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicBulwark:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicPiercer:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+                case (int)TargetID.SomethingCosmicPiercer:
+                    //actor.OverrideName("" + actor.Character);
+                    break;
+            }
         }
     }
 }

@@ -58,6 +58,10 @@ public abstract class EffectEvent : StatusEvent
     internal long DynamicEndTime = long.MinValue;
 
     internal bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
+    /// <summary>
+    /// Duration of the effect in milliseconds, equal to <see cref="Duration"/> no end event.
+    /// </summary>
+    public long DynamicDuration => HasDynamicEndTime ? DynamicEndTime - Time : Duration;
 
     /// <summary>
     /// Duration of the effect in milliseconds.

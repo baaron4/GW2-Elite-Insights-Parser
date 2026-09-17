@@ -580,6 +580,14 @@ public static class SpeciesIDs
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
         NexusOfEternityVloxx = 28106,
+        EliteCosmicPiercer = 27929,
+        ChampionCosmicPiercer = 27958,
+        SomethingCosmicPiercer = 28056,
+        ChampionAspectOfTheStaff = 28017,
+        ChampionAspectOfTheSpear = 28033,
+        EliteCosmicBulwark = 28065,
+        ChampionCosmicBulwark = 27934,
+        ChampionCosmicSunderer = 27933,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,

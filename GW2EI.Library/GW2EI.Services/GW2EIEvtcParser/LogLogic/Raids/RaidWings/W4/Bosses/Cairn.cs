@@ -22,11 +22,11 @@ internal class Cairn : BastionOfThePenitent
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulationInitial, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulationFastTrigger], Mech_SpatialManipulation, new (Symbols.Circle,Colors.DarkGreen), new("Std.Green", "Stood in Green Spatial Manipulation Field","Green"), Sev2)
                     .WithStabilitySubMechanic(
-                        new SubMechanic(Mech_SpatialManipulationNoStab, new (Symbols.Circle,Colors.Green), new("Green.C", "Green Spatial Manipulation Field (lift)","Green (lift)"), Sev2),
+                        new SubMechanic(Mech_SpatialManipulationNoStab, new (Symbols.Circle,Colors.Green), new("Green.C", "Green Spatial Manipulation Field (lift)","Green (lift)"), Sev0),
                         false
                     )
                     .WithStabilitySubMechanic(
-                        new SubMechanic(Mech_SpatialManipulationStab, new (Symbols.CircleOpen,Colors.Green), new("Stab.Green.C", "Green Spatial Manipulation Field while affected by stability","Stabilized Green"), Sev0),
+                        new SubMechanic(Mech_SpatialManipulationStab, new (Symbols.CircleOpen,Colors.Green), new("Stab.Green.C", "Green Spatial Manipulation Field while affected by stability","Stabilized Green"), Sev2),
                         true
                     )
                     .UsingIgnored()

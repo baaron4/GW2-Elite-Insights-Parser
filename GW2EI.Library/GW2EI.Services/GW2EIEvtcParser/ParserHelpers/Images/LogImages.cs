@@ -167,7 +167,7 @@ internal static class LogImages
     internal const string EncounterIconCosmicObservatory = "https://i.imgur.com/v6vjRsH.png";
     internal const string EncounterIconTempleOfFebe = "https://i.imgur.com/1cGN1UT.png";
     internal const string EncounterIconGuardiansGlade = "https://i.imgur.com/7O8666G.png";
-    internal const string EncounterIconNexusOfEternity = "";
+    internal const string EncounterIconNexusOfEternity = "https://i.imgur.com/V8R8mrF.png";
 
     // Combat Replay Maps
     internal const string CombatReplayFreezie = "";
