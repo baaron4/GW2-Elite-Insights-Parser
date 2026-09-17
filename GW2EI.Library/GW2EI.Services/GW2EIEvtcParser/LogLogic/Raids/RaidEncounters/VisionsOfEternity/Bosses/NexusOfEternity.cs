@@ -195,9 +195,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>() 
+        return new Dictionary<TargetID, int>()
         {
-            { TargetID.NexusOfEternityVloxx, 0},
+            {TargetID.NexusOfEternityVloxx, 0},
             {TargetID.ChampionCosmicPiercer, 1},
             {TargetID.SomethingCosmicPiercer, 1},
             {TargetID.ChampionAspectOfTheStaff, 1},
@@ -230,12 +230,80 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
 
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternity3PeopleGreenSelect, out var greens))
+        {
+            foreach (var effect in greens)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
+                var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end, true);
+                replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize3Overhead);
+            }
+        }
+
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternity2PeopleGreenSelect, out var greens2))
+        {
+            foreach (var effect in greens2)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end, true);
+                replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize2Overhead);
+            }
+        }
+
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternitySpreadAndPuddleDrop, out var spread))
+        {
+            foreach (var effect in spread)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p.AgentItem));
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
+            }
+        }
     }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
+
+        switch (target.ID)
+        {
+            case (int)TargetID.NexusOfEternityVloxx:
+                {
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
+                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
+
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDroppedPuddleIndicator, out var puddlesIndicators))
+                    {
+                        foreach (var effect in puddlesIndicators)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                            var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
+                        }
+                    }
+                }
+                break;
+            case (int)TargetID.ChampionAspectOfTheStaff:
+                {
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
+                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
+                }
+                break;
+            case (int)TargetID.ChampionCosmicPiercer:
+                {
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
+                }
+                break;
+            case (int)TargetID.EliteCosmicPiercer:
+                {
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
+                }
+                break;
         }
     }
 
@@ -292,6 +360,40 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 case (int)TargetID.SomethingCosmicPiercer:
                     //actor.OverrideName("" + actor.Character);
                     break;
+            }
+        }
+    }
+
+    private static void AddEternalReflectionSurroundingCurse(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, long[] ids)
+    {
+        var missiles = log.CombatData.GetMissileEventsBySrcBySkillIDs(agent, ids);
+        foreach (MissileEvent missile in missiles)
+        {
+            replay.Decorations.AddNonHomingMissileWithBorder(log, missile, Colors.Yellow, 0.3, 20, Colors.DarkPurpleBlue, 0.3);
+        }
+    }
+
+    private static void AddSurroundingCurseAoe(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternitySurroundingCurseIndicator, out var surrCurseIndicators))
+        {
+            foreach (var effect in surrCurseIndicators)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3500);
+                var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
+            }
+        }
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseExplosions, out var surrCurseDamage))
+        {
+            foreach (var effect in surrCurseDamage)
+            {
+                // Duration is 2666, for the replay it's way too long
+                // Override it to 250 for a brief visual
+                (long start, long end) lifespan = (effect.Time, effect.Time + 250);
+                var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
             }
         }
     }

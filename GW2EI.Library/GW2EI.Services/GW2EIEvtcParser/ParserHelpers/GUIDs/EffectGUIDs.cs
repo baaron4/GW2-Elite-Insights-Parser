@@ -1136,8 +1136,8 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityDroppedPuddleExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
     public static readonly Guid NexusOfEternityLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
     public static readonly Guid NexusOfEternityCosmicChargeTrailAoEAndDroppedPuddle = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
-    public static readonly Guid NexusOfEternityMissileShowerIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
-    public static readonly Guid NexusOfEternityMissileShowerExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666
+    public static readonly Guid NexusOfEternitySurroundingCurseIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
+    public static readonly Guid NexusOfEternitySurroundingCurseExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666
     public static readonly Guid NexusOfEternitySingleMissileBombardementIndicator = new("D11320204E28E643A48469AA8E4845BA"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityCosmicExplosionAoE = new("A8AA7A32731DBF4AB2301495C89624A6"); // src vloxx, duration 1666
     public static readonly Guid NexusOfEternityTPIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
