@@ -1406,6 +1406,7 @@ internal static class ParserIcons
         { TargetID.LightThief, LightThief },
         { TargetID.EtherealSeal, EtherealSeal },
         { TargetID.NexusOfEternityVloxx, Vloxx },
+        { TargetID.NexusOfEternityConvergenceVloxx, Vloxx },
     };
 
     /// <summary>
