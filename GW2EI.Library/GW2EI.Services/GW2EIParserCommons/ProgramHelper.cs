@@ -469,7 +469,7 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
-    public RawEvtcLog? ParseLogForInspection(OperationController operation)
+    public EvtcLog? ParseLogForInspection(OperationController operation, bool raw = true)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
         Thread.CurrentThread.CurrentCulture =
@@ -482,11 +482,24 @@ public sealed class ProgramHelper : IDisposable
 
             var parser = new EvtcParser(new EvtcParserSettings(
                                             Settings.CustomTooShort,
-                                            Settings.CustomTooBig),
+                                            Settings.CustomTooBig)
+                                            {
+                                                AnonymousPlayers = false,
+                                                SkipFailedTries = false,
+                                                ComputePhases = false,
+                                                ComputeCombatReplay = false,
+                                                ComputeDamageModifiers = false,
+                                                ComputeDamage = false,
+                                                ParseExtensions = true,
+                                                ComputeCast = false,
+                                                ComputeBuff = false,
+                                                ComputeMechanics = false,
+                                                DetailedWvWParse = true,
+                                            },
                                         APIController);
 
             //Process evtc here
-            var inspectLog = parser.ParseRawLog(operation, fInfo, out var failureReason);
+            EvtcLog? inspectLog = raw ? parser.ParseRawLog(operation, fInfo, out var failureReason) : parser.ParseLog(operation, fInfo, out failureReason, false);
             failureReason?.Throw();
             return inspectLog;
         }
