@@ -1132,8 +1132,20 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternity3PeopleGreenSelect = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // src vloxx, dst player, duration 8000
     public static readonly Guid NexusOfEternity2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
     public static readonly Guid NexusOfEternitySpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
-    public static readonly Guid NexusOfEternityDroppedPuddle = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
+    public static readonly Guid NexusOfEternityDroppedPuddleIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
+    public static readonly Guid NexusOfEternityDroppedPuddleExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
     public static readonly Guid NexusOfEternityLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
-    public static readonly Guid NexusOfEternityCosmicChargeTrailAoE = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000, has also dynamic end
+    public static readonly Guid NexusOfEternityCosmicChargeTrailAoEAndDroppedPuddle = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
+    public static readonly Guid NexusOfEternityMissileShowerIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
+    public static readonly Guid NexusOfEternityMissileShowerExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666
+    public static readonly Guid NexusOfEternitySingleMissileBombardementIndicator = new("D11320204E28E643A48469AA8E4845BA"); // src vloxx, duration 3000
+    public static readonly Guid NexusOfEternityCosmicExplosionAoE = new("A8AA7A32731DBF4AB2301495C89624A6"); // src vloxx, duration 1666
+    public static readonly Guid NexusOfEternityTPIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
+    public static readonly Guid NexusOfEternityPostTPRedAoE = new("51A65F90A99E2043ACB54EEA4EC494F0"); // src teleporter, duration 5000
+    public static readonly Guid NexusOfEternityPostTPBlueShield = new("D21FF557B9F363429E4B42E57362E31D"); // src teleporter, duration 5000, could be inverted with NexusOfEternityPostTPRedAoE
+    public static readonly Guid NexusOfEternityVloxxSwordSwingIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx, duration 1500
+    public static readonly Guid NexusOfEternityVloxxSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
+    public static readonly Guid NexusOfEternityVloxxLargeRangedSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833
+    public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end
     #endregion Raid Encounters
 }

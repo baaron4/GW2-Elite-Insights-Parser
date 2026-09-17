@@ -47,20 +47,20 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         ]),
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(SurroundingCurse, Mech_SurroundingCurse, new (Symbols.CircleCross, Colors.Teal), new ("SurrCur.H", "Hit by Surrounding Curse (Vloxx)", "Surrounding Curse Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(SurroundingCurseVloxx, Mech_SurroundingCurseVloxx, new (Symbols.CircleCross, Colors.Teal), new ("SurrCur.H", "Hit by Surrounding Curse (Vloxx)", "Surrounding Curse Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic(SurroundingCurse2, Mech_SurroundingCurse2, new (Symbols.CircleCross, Colors.White), new ("SurrCur2.H", "Hit by Surrounding Curse (Add?)", "Surrounding Curse Hit (Add?)"), Sev0),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(CosmicCharge, Mech_CosmicCharge, new (Symbols.CircleCrossOpen, Colors.Teal), new ("CosmChar.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(CosmicChargeVloxx, Mech_CosmicChargeVloxx, new (Symbols.CircleCrossOpen, Colors.Teal), new ("CosmChar.H", "Hit by Cosmic Charge (Vloxx)", "Cosmic Charge Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic([CosmicCharge1, CosmicCharge2], Mech_CosmicCharge2, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar2.H", "Hit by Cosmic Charge (Add?)", "Cosmic Charge Hit (Add?)"), Sev0),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(ThousandStrikesVloxx, Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(ThousandStrikesVloxx, Mech_ThousandStrikesVloxx, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes (Vloxx)", "Thousand Strikes Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic(ThousandStrikes2, Mech_ThousandStrikes2, new (Symbols.CircleOpen, Colors.Orange), new ("ThouStr2.H", "Hit by Thousand Strikes (Add?)", "Thousand Strikes Hit (Add?)"), Sev0),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(VisionsOfEternity2, Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity (Vloxx)", "Visions of Eternity Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(VisionsOfEternityVloxx, Mech_VisionsOfEternityVloxx, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity (Vloxx)", "Visions of Eternity Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity3], Mech_VisionsOfEternity2, new (Symbols.CircleX, Colors.Lime), new ("VisEter2.H", "Hit by Visions of Eternity (Add?)", "Visions of Eternity Hit (Add?)"), Sev0),
         ]),
         new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
@@ -70,7 +70,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         ]),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(WorldpiercerBarrierDropping, Mech_Worldpiercer, new (Symbols.Diamond, Colors.FluoOrange), new ("Worldpier.H", "Hit by Worldpiercer (Vloxx)", "Worldpiercer Hit (Vloxx)"), Sev0),
+            new PlayerDstHealthDamageHitMechanic(WorldpiercerVloxx, Mech_WorldpiercerVloxx, new (Symbols.Diamond, Colors.FluoOrange), new ("Worldpier.H", "Hit by Worldpiercer (Vloxx)", "Worldpiercer Hit (Vloxx)"), Sev0),
             new PlayerDstHealthDamageHitMechanic(Worldpiercer2, Mech_Worldpiercer2, new (Symbols.Diamond, Colors.LightBlue), new ("Worldpier2.H", "Hit by Worldpiercer (Add?)", "Worldpiercer Hit (Add?)"), Sev0),
         ]),
         new MechanicGroup([
