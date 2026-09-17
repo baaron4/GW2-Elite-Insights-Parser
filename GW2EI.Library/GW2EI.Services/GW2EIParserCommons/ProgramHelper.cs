@@ -354,7 +354,7 @@ public sealed class ProgramHelper : IDisposable
             originalLog.ParserSettings.AnonymousPlayers,
             originalLog.ParserSettings.DetailedWvWParse);
             uploadresult[0] = response != null ? response.Permalink ?? "Upload process failed" : "Upload process failed";
-            originalController.DPSReportUploadFailed = response != null && response.Permalink != null;
+            originalController.DPSReportUploadFailed = !(response != null && response.Permalink != null);
             originalController.UpdateProgressWithCancellationCheck("DPSReport: " + uploadresult[0]);
             /*
             if (Properties.Settings.Default.UploadToWingman)
