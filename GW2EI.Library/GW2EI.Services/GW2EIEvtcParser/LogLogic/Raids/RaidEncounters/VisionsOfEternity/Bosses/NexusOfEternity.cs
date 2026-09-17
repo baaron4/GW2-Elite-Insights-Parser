@@ -34,17 +34,17 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         ]),
         new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityJudgmentOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(JudgmentOfEternityGreenFailDamage, Mech_JudgmentOfEternity, new (Symbols.Bowtie, Colors.DarkMagenta), new ("JudgEter.H", "Hit by Judgment of Eternity (3-people green failed)", "Judgment of Eternity Hit"), Sev0),
             ]),
             new MechanicGroup([
-                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity2PeopleGreenSelect, Mech_NexusOfEternity2GreenSelect, new(Symbols.DiamondOpen, Colors.Chocolate), new("2Green.Slct", "Selected for 2-people green", "2-people green select"), Sev1),
+                new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, Mech_NexusOfEternity2GreenSelect, new(Symbols.DiamondOpen, Colors.Chocolate), new("2Green.Slct", "Selected for 2-people green", "2-people green select"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrifice, new (Symbols.Diamond, Colors.   Chocolate), new ("AscSac.H", "Hit by Ascension's Sacrifice (2-people green failed)", "Ascension's Sacrifice Hit"), Sev0),
             ]),
         ]),
         new MechanicGroup([
             // TODO add mechanics regarding getting hit by puddles
-            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternitySpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + puddle drop", "Spread + puddle"), Sev1),
+            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + puddle drop", "Spread + puddle"), Sev1),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
@@ -230,9 +230,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
 
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternity3PeopleGreenSelect, out var greens))
+        // Judgment of Eternity - Greens (3 people)
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityJudgmentOfEternity3PeopleGreenSelect, out var judgmentOfEternity))
         {
-            foreach (var effect in greens)
+            foreach (var effect in judgmentOfEternity)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
                 var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
@@ -241,9 +242,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             }
         }
 
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternity2PeopleGreenSelect, out var greens2))
+        // Ascension's Sacrifice - Greens (2 people)
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, out var ascensionsSacrifice))
         {
-            foreach (var effect in greens2)
+            foreach (var effect in ascensionsSacrifice)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                 var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
@@ -252,9 +254,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             }
         }
 
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternitySpreadAndPuddleDrop, out var spread))
+        // Probability Distribution - Spread AoE
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, out var probabilityDistribution))
         {
-            foreach (var effect in spread)
+            foreach (var effect in probabilityDistribution)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                 var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p.AgentItem));
@@ -277,7 +280,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                     AddSurroundingCurseAoe(log, replay, target.AgentItem);
 
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDroppedPuddleIndicator, out var puddlesIndicators))
+                    // Probability Distribution - Damage field
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
                     {
                         foreach (var effect in puddlesIndicators)
                         {
@@ -286,12 +290,49 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
                         }
                     }
+
+                    // Cosmic Charge & Probability Distribution
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
+                    {
+                        foreach (var effect in puddles)
+                        {
+                            // duration 10000 for trail, 12000 for puddle
+                            // scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
+                            uint radius = (uint)(effect.Duration == 10000 ? 160 : 280);
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                            var circle = new CircleDecoration(radius, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Visions of Eternity - Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityVisionsOfEternityIndicator, out var voeIndicator))
+                    {
+                        foreach (var effect in voeIndicator)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
+                            var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                        }
+                    }
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
                 {
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
                     AddSurroundingCurseAoe(log, replay, target.AgentItem);
+                }
+                break;
+            case (int)TargetID.ChampionAspectOfTheSpear:
+                {
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
+                    {
+                        foreach (var effect in puddles)
+                        {
+                            // duration 5000
+                            // TODO figure out which skill is this effect from for the spear
+                        }
+                    }
                 }
                 break;
             case (int)TargetID.ChampionCosmicPiercer:
@@ -375,6 +416,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     private static void AddSurroundingCurseAoe(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
     {
+        // Surrounding Curse - Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternitySurroundingCurseIndicator, out var surrCurseIndicators))
         {
             foreach (var effect in surrCurseIndicators)
@@ -385,6 +427,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             }
         }
 
+        // Surrounding Curse - Explosion
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseExplosions, out var surrCurseDamage))
         {
             foreach (var effect in surrCurseDamage)

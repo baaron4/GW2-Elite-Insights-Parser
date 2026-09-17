@@ -1129,13 +1129,13 @@ public static class EffectGUIDs
     public static readonly Guid GuardiansGaleLightningStrikeIndicator = new("CE91D2D4CD6C4141B3977FA70FFE05BB"); // owned by kela, duration 1200
     public static readonly Guid GuardiansGaleLightningStrikeHit = new("67F798DBCB84984AA21C3FAF663B47D7"); // owned by kela, default duration 1000
     // Nexus of Eternity
-    public static readonly Guid NexusOfEternity3PeopleGreenSelect = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // src vloxx, dst player, duration 8000
-    public static readonly Guid NexusOfEternity2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
-    public static readonly Guid NexusOfEternitySpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
-    public static readonly Guid NexusOfEternityDroppedPuddleIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
-    public static readonly Guid NexusOfEternityDroppedPuddleExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
+    public static readonly Guid NexusOfEternityJudgmentOfEternity3PeopleGreenSelect = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // src vloxx, dst player, duration 8000
+    public static readonly Guid NexusOfEternityAscensionsSacrifice2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
+    public static readonly Guid NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
+    public static readonly Guid NexusOfEternityProbabilityDistributionIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
+    public static readonly Guid NexusOfEternityProbabilityDistributionVisionsOfEternityExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
     public static readonly Guid NexusOfEternityLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
-    public static readonly Guid NexusOfEternityCosmicChargeTrailAoEAndDroppedPuddle = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
+    public static readonly Guid NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE = new ("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
     public static readonly Guid NexusOfEternitySurroundingCurseIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
     public static readonly Guid NexusOfEternitySurroundingCurseExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666
     public static readonly Guid NexusOfEternitySingleMissileBombardementIndicator = new("D11320204E28E643A48469AA8E4845BA"); // src vloxx, duration 3000
@@ -1146,7 +1146,8 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityVloxxSwordSwingIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx, duration 1500
     public static readonly Guid NexusOfEternityVloxxSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
     public static readonly Guid NexusOfEternityVloxxLargeRangedSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833
-    public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end
+    public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end // TODO VERIFY THIS
+    public static readonly Guid NexusOfEternityVisionsOfEternityIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D");
     public static readonly Guid NexusOfEternityVloxxHostilePortAndSuckAoE = new("BA8654BD3D252C4B9A170EE404FBEA15"); // src vloxx, duration 10000, has dynamic end, could be just an indicator
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoE = new("75E4C35E80D662409DAB0EF479E6999D"); // src bulwark, duration 10000, has dynamic end
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoEOverlap = new("4CAB3D628991C04DB59D2F65EC986A77"); // src bulwark, duration 10000, has dynamic end
