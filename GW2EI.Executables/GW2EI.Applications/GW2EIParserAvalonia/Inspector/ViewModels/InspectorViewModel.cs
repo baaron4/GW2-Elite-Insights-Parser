@@ -345,7 +345,7 @@ public partial class InspectorViewModel : ObservableObject
 
     #endregion COMBAT ITEMS
 
-    public InspectorViewModel(RawEvtcLog log)
+    public InspectorViewModel(EvtcLog log)
     {
         var combatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
         CombatItemsView = new(combatItems)
@@ -360,7 +360,7 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
-        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList())
+        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData, log.CombatData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
         };

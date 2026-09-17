@@ -29,7 +29,11 @@ public sealed class SkillDataModel
 
     public SkillItem SkillItem { get; }
 
-    public SkillDataModel(SkillItem skill, SkillData skillData)
+    public bool IsBuff { get; }
+
+    public bool IsCastSkill { get; }
+
+    public SkillDataModel(SkillItem skill, SkillData skillData, CombatData combatData)
     {
         SkillItem = skill;
 
@@ -56,5 +60,8 @@ public sealed class SkillDataModel
         ApiDescription = skill.ApiSkill?.Description ?? string.Empty;
         ApiProfessions = skill.ApiSkill?.Professions != null ? string.Join(", ", skill.ApiSkill.Professions) : string.Empty;
         ApiCategories = skill.ApiSkill?.Categories != null ? string.Join(", ", skill.ApiSkill.Categories) : string.Empty;
+
+        IsBuff = combatData.GetBuffInfoEvent(ID) != null;
+        IsCastSkill = combatData.GetSkillInfoEvent(ID) != null;
     }
 }
