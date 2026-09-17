@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIParserAvalonia.Services;
 
@@ -11,18 +10,21 @@ public sealed class EventModel
     public object Event { get; }
     public long? Time { get; }
     public string Type { get; }
-
+    public Type EventType { get; }
     public long? SkillId { get; }
     public string? SkillName { get; }
     internal Guid GUIDStruct { get; }
-    public string GUID => GUIDStruct.ToString("N").ToUpperInvariant();
+    public string GUID { get; }
     public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
+
+    internal int SourceIndex { get; set; }
 
     public EventModel(object @event)
     {
         Event = @event;
-        Type = @event.GetType().Name;
+        EventType = @event.GetType();
+        Type = EventType.Name;
 
         if (@event is TimeCombatEvent timeEvent)
         {
@@ -65,6 +67,7 @@ public sealed class EventModel
                 break;
         }
 
+        GUID = GUIDStruct.ToString("N").ToUpperInvariant();
         AgentIds = EventAgentResolver.Resolve(@event);
     }
 }

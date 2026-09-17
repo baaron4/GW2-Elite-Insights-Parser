@@ -17,6 +17,7 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
     private bool _isUpdatingHierarchy;
     private Dictionary<Type, EventTypeFilterNodeModel>? _typeLookup;
     private HashSet<Type>? _visibleTypes;
+    internal IReadOnlySet<Type> VisibleTypes => _visibleTypes ?? [];
     private readonly string? _displayName;
     public string Name => _displayName ?? EventType.Name;
     public int Count { get; private set; }
@@ -101,11 +102,6 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
         root.SetTypeLookup(nodes);
 
         return root;
-    }
-
-    public bool IsEventVisible(Type eventType)
-    {
-        return _visibleTypes?.Contains(eventType) == true;
     }
 
     partial void OnIsCheckedChanged(bool? value)
@@ -208,7 +204,8 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
             return;
         }
 
-        _visibleTypes = [];
+        _visibleTypes ??= [];
+        _visibleTypes.Clear();
 
         foreach (var pair in _typeLookup)
         {

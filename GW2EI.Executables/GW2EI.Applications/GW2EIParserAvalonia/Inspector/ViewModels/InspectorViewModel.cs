@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.Models;
-using GW2EIEvtcParser.Extensions;
-using Avalonia.Collections;
+using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
@@ -71,35 +70,42 @@ public partial class InspectorViewModel : ObservableObject
 
     partial void OnSelectedAgentFilterChanged(AgentFilterItem? oldValue, AgentFilterItem? newValue) => CombatEventsViewRefresh(oldValue, newValue);
 
+    public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
+    public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
     public DataGridCollectionView CombatEventsView { get; }
-
+    private readonly List<EventModel> _allCombatEvents;
+    private readonly Dictionary<Type, List<EventModel>> _combatEventsByType;
+    private readonly BulkObservableCollection<EventModel> _visibleCombatEvents = [];
+    private readonly HashSet<Type> _visibleEventTypes = [];
+    private readonly record struct EventTypeMergeCursor(List<EventModel> Events, int Index);
     private bool MassFilterChanging = false;
+
     private void OnFilterChanged(object? sender, EventArgs e)
     {
         if (MassFilterChanging)
         {
             return;
         }
-        CombatEventsView.Refresh();
+
+        UpdateVisibleEventTypes();
+        UpdateVisibleCombatEvents();
     }
+
     private bool FilterCombatEvents(object item)
     {
         if (item is not EventModel eventModel)
         {
             return false;
         }
-        if (!IsEventTypeVisible(eventModel.Event.GetType()))
-        {
-            return false;
-        }
-        if (!string.IsNullOrWhiteSpace(SkillIdFilter) && 
+
+        if (!string.IsNullOrWhiteSpace(SkillIdFilter) &&
             long.TryParse(SkillIdFilter, out var parsedSkillId) &&
             eventModel.SkillId != parsedSkillId)
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(SkillNameFilter) && 
+        if (!string.IsNullOrWhiteSpace(SkillNameFilter) &&
             eventModel.SkillName?.Contains(SkillNameFilter!, StringComparison.OrdinalIgnoreCase) != true)
         {
             return false;
@@ -123,13 +129,63 @@ public partial class InspectorViewModel : ObservableObject
         return true;
     }
 
-    public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
-    private bool IsEventTypeVisible(Type eventType)
+    private void UpdateVisibleEventTypes()
     {
-        return EventTypeFilterRoots.Any(root => root.IsEventVisible(eventType));
+        _visibleEventTypes.Clear();
+
+        foreach (var root in EventTypeFilterRoots)
+        {
+            _visibleEventTypes.UnionWith(root.VisibleTypes);
+        }
     }
 
-    public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
+    private void UpdateVisibleCombatEvents()
+    {
+        if (_visibleEventTypes.Count == 0)
+        {
+            _visibleCombatEvents.ReplaceRange([]);
+            return;
+        }
+
+        if (_visibleEventTypes.Count == _combatEventsByType.Count)
+        {
+            _visibleCombatEvents.ReplaceRange(_allCombatEvents);
+            return;
+        }
+
+        var queue = new PriorityQueue<EventTypeMergeCursor, int>();
+
+        foreach (var type in _visibleEventTypes)
+        {
+            if (!_combatEventsByType.TryGetValue(type, out var events) || events.Count == 0)
+            {
+                continue;
+            }
+
+            queue.Enqueue(new EventTypeMergeCursor(events, 0), events[0].SourceIndex);
+        }
+
+        var visibleEvents = new List<EventModel>();
+
+        while (queue.Count > 0)
+        {
+            var cursor = queue.Dequeue();
+
+            var eventModel = cursor.Events[cursor.Index];
+            visibleEvents.Add(eventModel);
+
+            var nextIndex = cursor.Index + 1;
+
+            if (nextIndex < cursor.Events.Count)
+            {
+                var nextEvent = cursor.Events[nextIndex];
+
+                queue.Enqueue(new EventTypeMergeCursor(cursor.Events, nextIndex), nextEvent.SourceIndex);
+            }
+        }
+
+        _visibleCombatEvents.ReplaceRange(visibleEvents);
+    }
 
     #endregion COMBAT EVENTS
 
@@ -148,16 +204,8 @@ public partial class InspectorViewModel : ObservableObject
     }
     public DataGridCollectionView SkillsDataView { get; }
     public int SkillCount => SkillsDataView.Count;
-    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = []; 
-    private bool FilterSkillDataModels(object item)
-    {
-        if (item is not SkillDataModel skillData)
-        {
-            return false;
-        }
-
-        return true;
-    }
+    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
+    private bool FilterSkillDataModels(object item) => item is SkillDataModel;
     #endregion
 
     #region AGENTS
@@ -200,36 +248,32 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(AgentSpeciesFilter) && 
-            int.TryParse(AgentSpeciesFilter, out var id) && 
-            agent.ID != id)
+        if (!string.IsNullOrWhiteSpace(AgentSpeciesFilter) &&
+            !agent.ID.ToString().Contains(AgentSpeciesFilter, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(AgentNameFilter) && 
+        if (!string.IsNullOrWhiteSpace(AgentNameFilter) &&
             !agent.Name.Contains(AgentNameFilter, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
         if (!string.IsNullOrWhiteSpace(AgentTypeFilter) &&
-            Enum.TryParse<AgentItem.AgentType>(AgentTypeFilter, true, out var type) &&
-            agent.Type != type)
+            !agent.Type.ToString().Contains(AgentTypeFilter, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
         if (!string.IsNullOrWhiteSpace(AgentSpecFilter) &&
-            Enum.TryParse<ParserHelper.Spec>(AgentTypeFilter, true, out var spec) &&
-            agent.Spec != spec)
+            !agent.Spec.ToString().Contains(AgentSpecFilter, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
         if (!string.IsNullOrWhiteSpace(AgentBaseSpecFilter) &&
-            Enum.TryParse<ParserHelper.Spec>(AgentBaseSpecFilter, true, out var baseSpec) &&
-            agent.BaseSpec != baseSpec)
+            !agent.BaseSpec.ToString().Contains(AgentBaseSpecFilter, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
@@ -304,7 +348,8 @@ public partial class InspectorViewModel : ObservableObject
 
     [ObservableProperty]
     private string? stateChangeFilter;
-    partial void OnStateChangeFilterChanged(string? oldValue, string? newValue) { 
+    partial void OnStateChangeFilterChanged(string? oldValue, string? newValue)
+    {
         if (oldValue == newValue)
         {
             return;
@@ -318,13 +363,13 @@ public partial class InspectorViewModel : ObservableObject
         {
             return false;
         }
-        if (Enum.TryParse<ArcDPSEnums.StateChange>(StateChangeFilter, true, out var stateChange))
+
+        if (!string.IsNullOrWhiteSpace(StateChangeFilter) &&
+            !combatItem.IsStateChange.ToString().Contains(StateChangeFilter, StringComparison.OrdinalIgnoreCase))
         {
-            if (stateChange != combatItem.IsStateChange)
-            {
-                return false;
-            }
+            return false;
         }
+
         return true;
     }
 
@@ -332,11 +377,14 @@ public partial class InspectorViewModel : ObservableObject
 
     public InspectorViewModel(RawEvtcLog log)
     {
+        #region COMBAT ITEMS
         var combatItems = log.CombatItems.Select(item => new CombatItemModel(item)).ToList();
         CombatItemsView = new(combatItems)
         {
             Filter = FilterCombatItems
         };
+        #endregion COMBAT ITEMS
+
         #region AGENTS
         var agentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).OrderBy(agent => agent.ID).ToList();
         AgentsDataView = new(agentsData)
@@ -345,14 +393,18 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
+
+        #region SKILLS
         SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
         };
+        #endregion SKILLS
 
         var allTimeEvents = log.CombatData.GetAllTimeCombatEvents();
         var allNonTimeEvents = log.CombatData.GetAllNonTimeCombatEvents();
         var allHealingExtensionEvents = log.CombatData.GetAllHealingExtensionCombatEvents();
+
         #region GUIDS
         var contentGUIDEvents = allNonTimeEvents.OfType<IDToGUIDEvent>().Where(x => x.IsValid).ToList();
 
@@ -400,13 +452,26 @@ public partial class InspectorViewModel : ObservableObject
         #endregion GUIDS
 
         EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(allTimeEvents, allNonTimeEvents, allHealingExtensionEvents);
-        CombatEventsView = new(allTimeEvents
-            .Concat(allHealingExtensionEvents)
+        var eventModels = allTimeEvents
             .OrderBy(x => x.Time)
             .Cast<CombatEvent>()
             .Concat(allNonTimeEvents)
+            .Concat(allHealingExtensionEvents.OrderBy(x => x.Time))
             .Select(x => new EventModel(x))
-            .ToList())
+            .ToList();
+
+        for (var i = 0; i < eventModels.Count; i++)
+        {
+            eventModels[i].SourceIndex = i;
+        }
+
+        _allCombatEvents = eventModels;
+        _combatEventsByType = eventModels
+            .GroupBy(x => x.EventType)
+            .ToDictionary(group => group.Key, group => group.ToList());
+        _visibleCombatEvents.ReplaceRange(_allCombatEvents);
+
+        CombatEventsView = new DataGridCollectionView(_visibleCombatEvents)
         {
             Filter = FilterCombatEvents
         };
@@ -416,27 +481,44 @@ public partial class InspectorViewModel : ObservableObject
         }
     }
 
-    private static bool GUIDFilter(Guid GUIDStruct, string GUIDStrine, string? filterValue)
+    private static bool GUIDFilter(Guid GUIDStruct, string GUIDString, string? filterValue)
     {
-        return !string.IsNullOrWhiteSpace(filterValue) &&
-            ((Guid.TryParse(filterValue, out var parsedGuid) && GUIDStruct != parsedGuid) ||
-            (GUIDStrine.Contains(filterValue, StringComparison.OrdinalIgnoreCase) != true));
+        if (string.IsNullOrWhiteSpace(filterValue))
+        {
+            return false;
+        }
+
+        if (Guid.TryParse(filterValue, out var parsedGuid))
+        {
+            return GUIDStruct != parsedGuid;
+        }
+
+        return !GUIDString.Contains(filterValue, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool ContentIDFilter(long contentID, string? filterValue)
     {
         return !string.IsNullOrWhiteSpace(filterValue) &&
-            long.TryParse(filterValue, out var parsedContentID) &&
-            contentID != parsedContentID;
+            !contentID.ToString().Contains(filterValue, StringComparison.OrdinalIgnoreCase);
     }
 
     internal void SetCheckStateOnAllRoots(bool state)
     {
         MassFilterChanging = true;
-        foreach (var root in EventTypeFilterRoots)
+
+        try
         {
-            root.IsChecked = state;
+            foreach (var root in EventTypeFilterRoots)
+            {
+                root.IsChecked = state;
+            }
         }
-        MassFilterChanging = false;
+        finally
+        {
+            MassFilterChanging = false;
+        }
+
+        UpdateVisibleEventTypes();
+        UpdateVisibleCombatEvents();
     }
 }
