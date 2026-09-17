@@ -416,6 +416,8 @@ public partial class InspectorViewModel : ObservableObject
         };
         AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
+
+        #region  SKILLS
         SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData, log.CombatData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
@@ -474,10 +476,10 @@ public partial class InspectorViewModel : ObservableObject
 
         EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(allTimeEvents, allNonTimeEvents, allHealingExtensionEvents);
         var eventModels = allTimeEvents
+            .Concat(allHealingExtensionEvents)
             .OrderBy(x => x.Time)
             .Cast<CombatEvent>()
             .Concat(allNonTimeEvents)
-            .Concat(allHealingExtensionEvents.OrderBy(x => x.Time))
             .Select(x => new EventModel(x))
             .ToList();
 
