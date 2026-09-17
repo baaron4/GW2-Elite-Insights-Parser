@@ -1148,5 +1148,8 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityVloxxLargeRangedSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833
     public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end
     public static readonly Guid NexusOfEternityVloxxHostilePortAndSuckAoE = new("BA8654BD3D252C4B9A170EE404FBEA15"); // src vloxx, duration 10000, has dynamic end, could be just an indicator
+    public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoE = new("75E4C35E80D662409DAB0EF479E6999D"); // src bulwark, duration 10000, has dynamic end
+    public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoEOverlap = new("4CAB3D628991C04DB59D2F65EC986A77"); // src bulwark, duration 10000, has dynamic end
+    public static readonly Guid NexusOfEternityChampionCosmicSundererNonIdentifiedAoE = new("F2485AEE8C0CE64D90AFE149D9C88C86");
     #endregion Raid Encounters
 }

@@ -247,11 +247,15 @@ public class CombatReplay
     private static uint DebugRadius = 100;
     private static uint DebugOpeningAngle = 120;
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
-    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, bool ignorePlayerSrc, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
             .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.GUID) && x.Time >= start && x.Time <= end)
             .ToList();
+        if (ignorePlayerSrc)
+        {
+            effectEventsOnAgent.RemoveAll(x => x.Src.GetFinalMaster().IsPlayer);
+        }
         var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsOnAgentDistinct = effectGUIDsOnAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in effectEventsOnAgent)

@@ -36,11 +36,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new MechanicGroup([
                 new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity3PeopleGreenSelect, Mech_NexusOfEternity3GreenSelect, new(Symbols.BowtieOpen, Colors.DarkMagenta), new("3Green.Slct", "Selected for 3-people green", "3-people green select"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(JudgmentOfEternityGreenFailDamage, Mech_JudgmentOfEternity, new (Symbols.Bowtie, Colors.DarkMagenta), new ("JudgEter.H", "Hit by Judgment of Eternity (3-people green failed)", "Judgment of Eternity Hit"), Sev0),
-        ]),
-        new MechanicGroup([
+            ]),
+            new MechanicGroup([
                 new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternity2PeopleGreenSelect, Mech_NexusOfEternity2GreenSelect, new(Symbols.DiamondOpen, Colors.Chocolate), new("2Green.Slct", "Selected for 2-people green", "2-people green select"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrifice, new (Symbols.Diamond, Colors.   Chocolate), new ("AscSac.H", "Hit by Ascension's Sacrifice (2-people green failed)", "Ascension's Sacrifice Hit"), Sev0),
-        ]),
+            ]),
         ]),
         new MechanicGroup([
             // TODO add mechanics regarding getting hit by puddles
