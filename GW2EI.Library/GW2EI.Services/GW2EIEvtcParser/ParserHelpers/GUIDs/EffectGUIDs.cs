@@ -1134,7 +1134,8 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
     public static readonly Guid NexusOfEternityProbabilityDistributionIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityProbabilityDistributionVisionsOfEternityExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
-    public static readonly Guid NexusOfEternityLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
+    public static readonly Guid NexusOfEternityWorldpiercerLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
+    public static readonly Guid NexusOfEternityWorldpiercerIndicator = new("635554D77C7C5C4E81367013B99A14BB"); // src vloxx, duration 2666, singular effect for all 3 beams
     public static readonly Guid NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE = new ("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
     public static readonly Guid NexusOfEternitySurroundingCurseIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
     public static readonly Guid NexusOfEternitySurroundingCurseExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666

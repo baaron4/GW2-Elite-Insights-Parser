@@ -280,7 +280,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                     AddSurroundingCurseAoe(log, replay, target.AgentItem);
 
-                    // Probability Distribution - Damage field
+                    // Probability Distribution - Placed AoE indicator
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
                     {
                         foreach (var effect in puddlesIndicators)
@@ -291,7 +291,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         }
                     }
 
-                    // Cosmic Charge & Probability Distribution
+                    // Cosmic Charge & Probability Distribution - Damage field
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
                     {
                         foreach (var effect in puddles)
@@ -313,6 +313,29 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
                             var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                        }
+                    }
+
+                    // Worldpiercer - Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerIndicator, out var worldpiercerIndicator))
+                    {
+                        foreach (var effect in worldpiercerIndicator)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 2666);
+                            var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new (1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                            replay.Decorations.Add(line);
+                        }
+                    }
+
+                    // Worldpiercer - Barrier
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerLineBarrier, out var worldpiercerBarrier))
+                    {
+                        foreach (var effect in worldpiercerBarrier)
+                        {
+                            // Up to 10 segments if it doesn't hit the arena border
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                            var line = new RectangleDecoration(365, 10, lifespan, Colors.LightBlue, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                            replay.Decorations.Add(line);
                         }
                     }
                 }
