@@ -85,8 +85,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        return base.GetCombatMapInternal(log, arenaDecorations, parentMap);
+        var crMap = new CombatReplayMap(
+            (1800, 1800),
+            (9718, 12826, 14718, 17826));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNexusOfEternity, crMap, parentMap);
+        return crMap;
     }
+    
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return
