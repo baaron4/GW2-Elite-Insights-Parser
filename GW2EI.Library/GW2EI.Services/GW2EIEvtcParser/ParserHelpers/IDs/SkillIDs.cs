@@ -5721,12 +5721,14 @@ public static class SkillIDs
     public const long EternalReflectionAspectOfTheStaff = 80304;
     public const long POV_RelicOfTheTyrianHeroGearBuff = 80334;
     public const long AnnihilatingOrbVloxx = 80323;
+    public const long Determined80356 = 80356;
     public const long Ascension = 80368;
     public const long JudgmentOfEternity1 = 80378;
     public const long VisionsOfEternity1 = 80420;
     public const long POV_RelicOfTheCuratorGearBuff = 80445;
     public const long DivisionEternal = 80483;
     public const long SurroundingCurseVloxx = 80484;
+    public const long CoveredInScarabs = 80509;
     public const long EchoingAttack = 80510;
     public const long CosmicChargeVloxx = 80512;
     public const long VloxxMissibleToBeIdentified = 80520;
@@ -5736,6 +5738,7 @@ public static class SkillIDs
     public const long ThousandStrikesVloxx = 80555;
     public const long SliceThroughReality = 80585;
     public const long VisionsOfEternity2 = 80591;
+    public const long PowerOfAncora = 80598;
     public const long DamageImmunity = 80608;
     public const long JudgmentOfEternityGreenFailDamage = 80629;
     public const long SurroundingCurseCast = 80653; // doesn't do damage? hp%?
@@ -5753,12 +5756,14 @@ public static class SkillIDs
     public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
     public const long WorldpiercerVloxx = 80916;
     public const long AncoraStrike = 80940;
+    public const long CoveredInScarabs2 = 80948;
     public const long NexusOfEternity2GreenSelect = 80951;
     public const long RagingStormCosmicBulwark = 80965;
     public const long EmpoweredNexusOfEternity = 81002;
     public const long WorldpiercerCosmicBullwark = 81015;
     public const long VisionsOfEternity3 = 81017;
     public const long ExcisionExtremis2 = 81053;
+    public const long InquestDisguise = 81067;
     public const long RelicOfTheLastTyrantDamage = 81068;
     public const long POV_RelicOfTheLanternGearBuff = 81019;
     public const long AscensionsSacrifice = 81076;
@@ -5771,6 +5776,7 @@ public static class SkillIDs
     public const long AnnihilatingOrbTPShockwave = 81238;
     public const long EchoingBlade = 81271;
     public const long AnnihilatingOrbCosmicPiercer = 81273;
+    public const long WizardsBlessingVoE = 81287;
     #endregion
     #region TODO
     #endregion TODO
