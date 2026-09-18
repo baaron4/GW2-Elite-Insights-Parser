@@ -322,7 +322,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         foreach (var effect in worldpiercerIndicator)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2666);
-                            var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new (1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                            var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new(1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
                             replay.Decorations.Add(line);
                         }
                     }
@@ -338,6 +338,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             replay.Decorations.Add(line);
                         }
                     }
+
+                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                    AddEchoingBladeExcisionExtremisSwords(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
+                    AddEchoingBladeExcisionExtremisSwords(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisSwordSwing, 500);
+
+                    var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
+                    replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
@@ -366,6 +373,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicPiercer:
                 {
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
+                }
+                break;
+            case (int)TargetID.ChampionCosmicSunderer:
+                {
+                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                    // TODO find and add Extremis hit effect
                 }
                 break;
         }
@@ -460,6 +473,44 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespan = (effect.Time, effect.Time + 250);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
+            }
+        }
+    }
+
+    private static void AddEchoingBladeExcisionExtremisIndicators(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator, out var echoingBladeIndicator))
+        {
+            foreach (var effect in echoingBladeIndicator)
+            {
+                uint radius = 600;
+                // Duration 1500 - Scale 3.0 - Echoing Blade - 600 radius - Vloxx
+                // Duration 2500 - Scale 2.5 - Excision Extremis - 500 radius - Vloxx
+                // Duration 1500 - Scale 2.0 - Excision - 400 radius - Sunderer
+                if (effect.Duration == 2500 && effect.Src.IsSpecies(TargetID.NexusOfEternityVloxx))
+                {
+                    radius = 500;
+                }
+                else if (effect.Duration == 1500 && effect.Src.IsSpecies(TargetID.ChampionCosmicSunderer))
+                {
+                    radius = 400;
+                }
+                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                var pie = (PieDecoration)new PieDecoration(radius, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
+            }
+        }
+    }
+
+    private static void AddEchoingBladeExcisionExtremisSwords(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, Guid guid, uint radius)
+    {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, guid, out var swords))
+        {
+            foreach (var effect in swords)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
+                var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z, 180));
+                replay.Decorations.Add(line);
             }
         }
     }

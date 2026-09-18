@@ -1144,9 +1144,9 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityTPIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
     public static readonly Guid NexusOfEternityPostTPRedAoE = new("51A65F90A99E2043ACB54EEA4EC494F0"); // src teleporter, duration 5000
     public static readonly Guid NexusOfEternityPostTPBlueShield = new("D21FF557B9F363429E4B42E57362E31D"); // src teleporter, duration 5000, could be inverted with NexusOfEternityPostTPRedAoE
-    public static readonly Guid NexusOfEternityVloxxSwordSwingIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx, duration 1500
-    public static readonly Guid NexusOfEternityVloxxSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
-    public static readonly Guid NexusOfEternityVloxxLargeRangedSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833
+    public static readonly Guid NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx and sunderer, duration 1500/2500, echoing blade, excision extremis, excision
+    public static readonly Guid NexusOfEternityVloxxEchoingBladeSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
+    public static readonly Guid NexusOfEternityVloxxExcisionExtremisSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833
     public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end // TODO VERIFY THIS
     public static readonly Guid NexusOfEternityVisionsOfEternityIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D");
     public static readonly Guid NexusOfEternityVloxxHostilePortAndSuckAoE = new("BA8654BD3D252C4B9A170EE404FBEA15"); // src vloxx, duration 10000, has dynamic end, could be just an indicator
