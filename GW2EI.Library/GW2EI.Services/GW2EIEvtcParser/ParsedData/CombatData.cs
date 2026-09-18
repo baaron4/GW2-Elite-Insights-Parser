@@ -624,8 +624,8 @@ public partial class CombatData
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
 
-        operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
-        skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
+        skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
         List<AnimatedCastEvent> animatedCastData = CreateCastEvents(evtcVersion, castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);

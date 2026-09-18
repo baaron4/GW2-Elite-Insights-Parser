@@ -579,7 +579,7 @@ public static class SpeciesIDs
         EliteCrocodilianRazortooth = 27655,
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
-        NexusOfEternityVloxx = 28106,
+        Vloxx = 28106,
         EliteCosmicPiercer = 27929,
         ChampionCosmicPiercer = 27958,
         SomethingCosmicPiercer = 28056,
@@ -786,13 +786,13 @@ public static class SpeciesIDs
         ZojjaNayos = 25874,
         ZojjasAstralProjection = 26112,
         // - Mount Balrior
-        GreerTheBlightbringerConv = 26889,
-        GreeTheBingerConv = 26881,
-        ReegTheBlighterConv = 26842,
-        DecimaTheStormsingerConv = 26720,
-        UraTheSteamshriekerConv = 27017,
+        GreerConv = 26889,
+        GreeConv = 26881,
+        ReegConv = 26842,
+        DecimaConv = 26720,
+        UraConv = 27017,
         // - Nexus of Eternity
-        NexusOfEternityConvergenceVloxx = 28077,
+        VloxxConv = 28077,
         CosmicBulwark1 = 27897,
         CosmicPiercer1 = 27900,
         CosmicPiercer2 = 27929,

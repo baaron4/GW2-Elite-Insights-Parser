@@ -20,6 +20,12 @@ namespace GW2EIParserCommons;
 
 public sealed class ProgramHelper : IDisposable
 {
+    public enum InspectionMode
+    {
+        EI = 0,
+        Raw = 1,
+        RawWithEIPreProcess = 2,
+    }
 
     public ProgramHelper(Version parserVersion, ProgramSettings settings)
     {
@@ -354,7 +360,7 @@ public sealed class ProgramHelper : IDisposable
             originalLog.ParserSettings.AnonymousPlayers,
             originalLog.ParserSettings.DetailedWvWParse);
             uploadresult[0] = response != null ? response.Permalink ?? "Upload process failed" : "Upload process failed";
-            originalController.DPSReportUploadFailed = response != null && response.Permalink != null;
+            originalController.DPSReportUploadFailed = !(response != null && response.Permalink != null);
             originalController.UpdateProgressWithCancellationCheck("DPSReport: " + uploadresult[0]);
             /*
             if (Properties.Settings.Default.UploadToWingman)
@@ -469,7 +475,7 @@ public sealed class ProgramHelper : IDisposable
         return uploadresult;
     }
     #endregion UPLOAD
-    public EvtcLog? ParseLogForInspection(OperationController operation, bool raw = true)
+    public EvtcLog? ParseLogForInspection(OperationController operation, InspectionMode inspectMode)
     {
         System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
         Thread.CurrentThread.CurrentCulture =
@@ -497,9 +503,21 @@ public sealed class ProgramHelper : IDisposable
                                                 DetailedWvWParse = true,
                                             },
                                         APIController);
-
-            //Process evtc here
-            EvtcLog? inspectLog = raw ? parser.ParseRawLog(operation, fInfo, out var failureReason) : parser.ParseLog(operation, fInfo, out failureReason, false);
+            EvtcLog? inspectLog;
+            ParsingFailureReason? failureReason;
+            switch (inspectMode)
+            {
+                case InspectionMode.Raw:
+                default:
+                    inspectLog = parser.ParseRawLog(operation, fInfo, out failureReason, false);
+                    break;
+                case InspectionMode.EI:
+                    inspectLog = parser.ParseLog(operation, fInfo, out failureReason, false);
+                    break;
+                case InspectionMode.RawWithEIPreProcess:
+                    inspectLog = parser.ParseRawLog(operation, fInfo, out failureReason, true);
+                    break;
+            }
             failureReason?.Throw();
             return inspectLog;
         }

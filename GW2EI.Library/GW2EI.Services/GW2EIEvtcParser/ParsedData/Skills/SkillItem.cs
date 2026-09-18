@@ -50,7 +50,8 @@ public class SkillItem
     public bool IsWeaponSkill => _weaponDescriptor != null;
     public readonly GW2APISkill? ApiSkill;
     public bool CanHeal => ApiSkill != null && ApiSkill.Facts != null && ApiSkill.Facts.Any(x => x.Target == "Healing");
-    private SkillInfoEvent? _skillInfo;
+    public SkillInfoEvent? SkillInfo { get; private set; }
+    public BuffInfoEvent? BuffInfo { get; private set; }
 
     internal const string DefaultName = "UNKNOWN";
 
@@ -175,7 +176,15 @@ public class SkillItem
     {
         if (ID == skillInfo.SkillID)
         {
-            _skillInfo = skillInfo;
+            SkillInfo = skillInfo;
+        }
+    }
+
+    internal void AttachBuffInfoEvent(BuffInfoEvent buffInfo)
+    {
+        if (ID == buffInfo.BuffID)
+        {
+            BuffInfo = buffInfo;
         }
     }
 }

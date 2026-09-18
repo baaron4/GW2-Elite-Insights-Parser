@@ -68,9 +68,9 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        MergeVloxxes(agentData.GetStableSpeciesByID(TargetID.NexusOfEternityConvergenceVloxx), agentData, combatData, extensions, evtcVersion);
+        MergeVloxxes(agentData.GetStableSpeciesByID(TargetID.VloxxConv), agentData, combatData, extensions, evtcVersion);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityConvergenceVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         AdjustVloxHP(vloxx, vloxx.AgentItem.Merges.Count > 0);
     }
 
@@ -83,7 +83,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         return
         [
-            TargetID.NexusOfEternityConvergenceVloxx,
+            TargetID.VloxxConv,
             TargetID.IceElementalConv,
             TargetID.WaterElemental,
             TargetID.Megadestroyer,
@@ -155,7 +155,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         var phases = GetInitialPhase(log);
         var instancePhase = (InstancePhaseData)phases[0];
 
-        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityConvergenceVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         instancePhase.AddTarget(vloxx, log);
         var determinedApplies = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, vloxx.AgentItem);
         var determinedRemoves = log.CombatData.GetBuffRemoveAllDataByIDByDst(Determined762, vloxx.AgentItem);
@@ -176,7 +176,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         fullPhase.AddTarget(vloxx, log);
         phases.Add(fullPhase);
 
-        phases[0].AddTargets(Targets.Where(x => !x.IsAnySpecies([TargetID.NexusOfEternityConvergenceVloxx, TargetID.Instance])), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => !x.IsAnySpecies([TargetID.VloxxConv, TargetID.Instance])), log, PhaseData.TargetPriority.Blocking);
 
         // Check if additional encounter phases are needed for some npcs
 

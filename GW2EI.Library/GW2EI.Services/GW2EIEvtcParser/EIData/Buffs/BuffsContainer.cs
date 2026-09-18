@@ -17,86 +17,9 @@ public class BuffsContainer
 
     private readonly BuffSourceFinder _buffSourceFinder;
 
-
     internal BuffsContainer(CombatData combatData, SkillData skillData, ParserController operation)
     {
-        var AllBuffs = new List<IReadOnlyList<Buff>>()
-        {
-            CommonBuffs.Boons,
-            CommonBuffs.Conditions,
-            CommonBuffs.Commons,
-            CommonBuffs.Gear,
-            FoodBuffs.NormalFoods,
-            FoodBuffs.AscendedFood,
-            FoodBuffs.FoodProcs,
-            UtilityBuffs.Utilities,
-            UtilityBuffs.SlayingPotions,
-            UtilityBuffs.Writs,
-            UtilityBuffs.OtherConsumables,
-            UtilityBuffs.UtilityProcs,
-            EncounterBuffs.EncounterSpecific,
-            EncounterBuffs.FractalInstabilities,
-            WvWBuffs.Commons,
-            //
-            RevenantHelper.Buffs,
-            HeraldHelper.Buffs,
-            RenegadeHelper.Buffs,
-            VindicatorHelper.Buffs,
-            ConduitHelper.Buffs,
-            //
-            WarriorHelper.Buffs,
-            BerserkerHelper.Buffs,
-            SpellbreakerHelper.Buffs,
-            BladeswornHelper.Buffs,
-            ParagonHelper.Buffs,
-            //
-            GuardianHelper.Buffs,
-            DragonhunterHelper.Buffs,
-            FirebrandHelper.Buffs,
-            WillbenderHelper.Buffs,
-            LuminaryHelper.Buffs,
-            //
-            RangerHelper.Buffs,
-            DruidHelper.Buffs,
-            SoulbeastHelper.Buffs,
-            UntamedHelper.Buffs,
-            GaleshotHelper.Buffs,
-            //
-            ThiefHelper.Buffs,
-            DaredevilHelper.Buffs,
-            DeadeyeHelper.Buffs,
-            SpecterHelper.Buffs,
-            AntiquaryHelper.Buffs,
-            //
-            EngineerHelper.Buffs,
-            ScrapperHelper.Buffs,
-            HolosmithHelper.Buffs,
-            MechanistHelper.Buffs,
-            AmalgamHelper.Buffs,
-            //
-            MesmerHelper.Buffs,
-            ChronomancerHelper.Buffs,
-            MirageHelper.Buffs,
-            VirtuosoHelper.Buffs,
-            TroubadourHelper.Buffs,
-            //
-            NecromancerHelper.Buffs,
-            ReaperHelper.Buffs,
-            ScourgeHelper.Buffs,
-            HarbingerHelper.Buffs,
-            RitualistHelper.Buffs,
-            //
-            ElementalistHelper.Buffs,
-            TempestHelper.Buffs,
-            WeaverHelper.Buffs,
-            CatalystHelper.Buffs,
-            EvokerHelper.Buffs,
-        };
-        List<Buff> currentBuffs = [];
-        foreach (IReadOnlyList<Buff> buffs in AllBuffs)
-        {
-            currentBuffs.AddRange(buffs.Where(x => x.Available(combatData)));
-        }
+        var currentBuffs = GetCurrentBuffs(combatData);
         _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
         {
             if (x.Count() > 1)
@@ -251,6 +174,88 @@ public class BuffsContainer
                 }
             }
         }
+    }
+
+    internal static List<Buff> GetCurrentBuffs(CombatData combatData)
+    {
+        var AllBuffs = new List<IReadOnlyList<Buff>>()
+        {
+            CommonBuffs.Boons,
+            CommonBuffs.Conditions,
+            CommonBuffs.Commons,
+            CommonBuffs.Gear,
+            FoodBuffs.NormalFoods,
+            FoodBuffs.AscendedFood,
+            FoodBuffs.FoodProcs,
+            UtilityBuffs.Utilities,
+            UtilityBuffs.SlayingPotions,
+            UtilityBuffs.Writs,
+            UtilityBuffs.OtherConsumables,
+            UtilityBuffs.UtilityProcs,
+            EncounterBuffs.EncounterSpecific,
+            EncounterBuffs.FractalInstabilities,
+            WvWBuffs.Commons,
+            //
+            RevenantHelper.Buffs,
+            HeraldHelper.Buffs,
+            RenegadeHelper.Buffs,
+            VindicatorHelper.Buffs,
+            ConduitHelper.Buffs,
+            //
+            WarriorHelper.Buffs,
+            BerserkerHelper.Buffs,
+            SpellbreakerHelper.Buffs,
+            BladeswornHelper.Buffs,
+            ParagonHelper.Buffs,
+            //
+            GuardianHelper.Buffs,
+            DragonhunterHelper.Buffs,
+            FirebrandHelper.Buffs,
+            WillbenderHelper.Buffs,
+            LuminaryHelper.Buffs,
+            //
+            RangerHelper.Buffs,
+            DruidHelper.Buffs,
+            SoulbeastHelper.Buffs,
+            UntamedHelper.Buffs,
+            GaleshotHelper.Buffs,
+            //
+            ThiefHelper.Buffs,
+            DaredevilHelper.Buffs,
+            DeadeyeHelper.Buffs,
+            SpecterHelper.Buffs,
+            AntiquaryHelper.Buffs,
+            //
+            EngineerHelper.Buffs,
+            ScrapperHelper.Buffs,
+            HolosmithHelper.Buffs,
+            MechanistHelper.Buffs,
+            AmalgamHelper.Buffs,
+            //
+            MesmerHelper.Buffs,
+            ChronomancerHelper.Buffs,
+            MirageHelper.Buffs,
+            VirtuosoHelper.Buffs,
+            TroubadourHelper.Buffs,
+            //
+            NecromancerHelper.Buffs,
+            ReaperHelper.Buffs,
+            ScourgeHelper.Buffs,
+            HarbingerHelper.Buffs,
+            RitualistHelper.Buffs,
+            //
+            ElementalistHelper.Buffs,
+            TempestHelper.Buffs,
+            WeaverHelper.Buffs,
+            CatalystHelper.Buffs,
+            EvokerHelper.Buffs,
+        };
+        List<Buff> currentBuffs = [];
+        foreach (IReadOnlyList<Buff> buffs in AllBuffs)
+        {
+            currentBuffs.AddRange(buffs.Where(x => x.Available(combatData)));
+        }
+        return currentBuffs;
     }
 
     public bool TryGetBuffByName(string name, out Buff? buff)

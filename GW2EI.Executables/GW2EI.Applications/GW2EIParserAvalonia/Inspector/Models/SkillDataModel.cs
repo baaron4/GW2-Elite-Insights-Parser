@@ -61,7 +61,7 @@ public sealed class SkillDataModel
         ApiProfessions = skill.ApiSkill?.Professions != null ? string.Join(", ", skill.ApiSkill.Professions) : string.Empty;
         ApiCategories = skill.ApiSkill?.Categories != null ? string.Join(", ", skill.ApiSkill.Categories) : string.Empty;
 
-        IsBuff = combatData.GetBuffInfoEvent(ID) != null;
-        IsCastSkill = combatData.GetSkillInfoEvent(ID) != null;
+        IsBuff = skill.BuffInfo != null;
+        IsCastSkill = skill.SkillInfo != null;
     }
 }
