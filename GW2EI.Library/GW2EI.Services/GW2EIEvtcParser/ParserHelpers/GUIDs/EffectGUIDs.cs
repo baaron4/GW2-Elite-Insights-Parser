@@ -1155,6 +1155,7 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end // TODO VERIFY THIS
     public static readonly Guid NexusOfEternityVisionsOfEternityIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D");
     public static readonly Guid NexusOfEternitySliceThroughRealityPortAndSuckAoE = new("BA8654BD3D252C4B9A170EE404FBEA15"); // src vloxx, duration 10000, has dynamic end, could be just an indicator
+    public static readonly Guid NexusOfEternityThousandStrikesIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // src vloxx / spear, duration 4000 / 2500
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoE = new("75E4C35E80D662409DAB0EF479E6999D"); // src bulwark, duration 10000, has dynamic end
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoEOverlap = new("4CAB3D628991C04DB59D2F65EC986A77"); // src bulwark, duration 10000, has dynamic end
     public static readonly Guid NexusOfEternityChampionCosmicSundererNonIdentifiedAoE = new("F2485AEE8C0CE64D90AFE149D9C88C86");

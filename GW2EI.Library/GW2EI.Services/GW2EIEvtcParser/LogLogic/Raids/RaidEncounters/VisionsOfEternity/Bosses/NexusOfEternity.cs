@@ -394,16 +394,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
                         foreach (var orb in orbs)
                         {
-                            var endAoE = redAoEs.FirstOrDefault(x => x.Time >= orb.Time && x.Time <= orb.Time + 5000);
-                            if (endAoE == null)
-                            {
-                                continue;
-                            }
                             CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
                             {
                                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
                                 replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
-                            }, endAoE.Time);
+                            });
                         }
 
                         foreach (var effect in redAoEs)
@@ -449,10 +444,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                                 // Suction animation
                                 long time = entry.Time;
                                 int animDuration = 500;
-                                for (int z = 0; z < 10; z++)
+                                for (int y = 0; y < 10; y++)
                                 {
                                     float rotation = 0f;
-                                    for (int y = 0; y <= 16; y++)
+                                    for (int z = 0; z <= 16; z++)
                                     {
                                         (long start, long end) lifespanAnim = (time, time + 500);
                                         float angle = rotation * (float)Math.PI / 180f;
@@ -469,6 +464,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             }
                         }
                     }
+
+                    AddThousandStrikes(log, replay, target.AgentItem, 1650, ThousandStrikesVloxx);
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
@@ -479,6 +476,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 break;
             case (int)TargetID.ChampionAspectOfTheSpear:
                 {
+                    AddThousandStrikes(log, replay, target.AgentItem, 1150, ThousandStrikesAspectOfTheSpear);
+
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
                     {
                         foreach (var effect in puddles)
@@ -638,6 +637,29 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
                 var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 180, -180));
                 replay.Decorations.Add(line);
+            }
+        }
+    }
+
+    private static void AddThousandStrikes(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, uint radius, long skill)
+    {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityThousandStrikesIndicator, out var thousandStrikesIndicators))
+        {
+            var thousandStrikes = log.CombatData.GetMissileEventsBySkillID(skill);
+
+            foreach (var orb in thousandStrikes)
+            {
+                replay.Decorations.AddNonHomingMissile(log, orb, Colors.LightBlue, 0.3, 20);
+            }
+
+            foreach (var effect in thousandStrikesIndicators)
+            {
+                // Base radius 100
+                // Duration 4000 - Scale 16.5 - Vloxx
+                // Duration 2500 - Scale 11.5 - Spear
+                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
             }
         }
     }
