@@ -262,7 +262,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.AddTetherByEffectGUID(effect, Colors.Yellow, 0.4, (lifespan.start + 500, lifespan.end));
             }
         }
-        
+
         // Probability Distribution - Spread AoE
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, out var probabilityDistribution))
         {
@@ -349,7 +349,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             replay.Decorations.Add(line);
                         }
                     }
-                    
+
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
                     AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
                     AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
@@ -404,7 +404,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                                 replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
                             }, endAoE.Time);
                         }
-                        
+
                         foreach (var effect in redAoEs)
                         {
                             lifespan = effect.ComputeLifespan(log, 5000);
@@ -426,6 +426,46 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             lifespan = effect.ComputeLifespan(log, 3000);
                             var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                             replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
+                        }
+                    }
+
+                    // Slice Through Reality - Teleport AoE
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
+                    {
+                        for (int i = 0; i <= tp.Count - 1; i = i + 2)
+                        {
+                            var entry = tp[i];
+                            var exit = tp[i + 1];
+                            if (entry != null && exit != null && exit.Time > entry.Time && exit.Time < entry.Time + 3000)
+                            {
+                                (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
+                                (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
+                                var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
+                                replay.Decorations.Add(entryCircle);
+                                var exitCircle = new CircleDecoration(220, lifespanExit, Colors.LightOrange, 0.2, new PositionConnector(exit.Position));
+                                replay.Decorations.Add(exitCircle);
+
+                                // Suction animation
+                                long time = entry.Time;
+                                int animDuration = 500;
+                                for (int z = 0; z < 10; z++)
+                                {
+                                    float rotation = 0f;
+                                    for (int y = 0; y <= 16; y++)
+                                    {
+                                        (long start, long end) lifespanAnim = (time, time + 500);
+                                        float angle = rotation * (float)Math.PI / 180f;
+                                        var direction = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0);
+                                        var initialPosition = new ParametricPoint3D(entry.Position + direction * 200f, time);
+                                        var finalPosition = new ParametricPoint3D(entry.Position, time + animDuration);
+                                        var connector = new InterpolationConnector([initialPosition, finalPosition]).WithOffset(new(1000, 0, 0), true);
+                                        var rect = new RectangleDecoration(100, 20, lifespanAnim, Colors.Yellow, 0.3, connector).UsingRotationConnector(new AngleConnector(rotation));
+                                        replay.Decorations.Add(rect);
+                                        rotation += 22.5f;
+                                    }
+                                    time += 1000;
+                                }
+                            }
                         }
                     }
                 }
@@ -595,7 +635,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             foreach (var effect in swords)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
-                var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z -180, -180));
+                var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 180, -180));
                 replay.Decorations.Add(line);
             }
         }
