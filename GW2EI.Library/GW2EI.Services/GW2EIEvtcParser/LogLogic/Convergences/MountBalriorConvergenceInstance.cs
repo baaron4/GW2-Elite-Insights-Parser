@@ -144,6 +144,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         if (addReegAndGree)
         {
             var subTitans = Targets.Where(x => x.IsAnySpecies([TargetID.GreeConv, TargetID.ReegConv])).ToList();
+            fullPhase.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
             phase1.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
             phase2.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
             phase3.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
