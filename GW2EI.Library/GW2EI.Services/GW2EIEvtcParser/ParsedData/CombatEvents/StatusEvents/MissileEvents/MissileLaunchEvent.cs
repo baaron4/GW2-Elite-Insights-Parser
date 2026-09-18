@@ -105,6 +105,23 @@ public class MissileLaunchEvent : TimeCombatEvent
     /// <summary>
     /// Assumes that the missile goes from LaunchPosition to TargetPosition
     /// </summary>
+    /// <returns></returns>
+    public long GetExpectedEndTime()
+    {
+        // To be verified
+        if ((Missile.Flag1 & 1) == 0)
+        {
+            return (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed);
+        }
+        else
+        {
+            return (long)((TargetPosition - LaunchPosition).Length() / Speed);
+        }
+    }
+
+    /// <summary>
+    /// Assumes that the missile goes from LaunchPosition to TargetPosition
+    /// </summary>
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <returns></returns>
