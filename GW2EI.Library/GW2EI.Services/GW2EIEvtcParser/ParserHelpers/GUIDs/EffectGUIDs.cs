@@ -1130,6 +1130,7 @@ public static class EffectGUIDs
     public static readonly Guid GuardiansGaleLightningStrikeHit = new("67F798DBCB84984AA21C3FAF663B47D7"); // owned by kela, default duration 1000
     // Nexus of Eternity
     public static readonly Guid NexusOfEternityJudgmentOfEternity3PeopleGreenSelect = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // src vloxx, dst player, duration 8000
+    public static readonly Guid NexusOfEternityJudgmentOfEternity3PeopleGreenFail = new("092F93A0CCA8EA48B54594EF6A2683B7"); // duration 2666
     public static readonly Guid NexusOfEternityAscensionsSacrifice2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
     public static readonly Guid NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
     public static readonly Guid NexusOfEternityProbabilityDistributionIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
@@ -1141,9 +1142,12 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternitySurroundingCurseExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666
     public static readonly Guid NexusOfEternitySingleMissileBombardementIndicator = new("D11320204E28E643A48469AA8E4845BA"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityCosmicExplosionAoE = new("A8AA7A32731DBF4AB2301495C89624A6"); // src vloxx, duration 1666
-    public static readonly Guid NexusOfEternityTPIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
+    public static readonly Guid NexusOfEternityAnnihilatingOrbArrowIndicator = new("1A262BDD265422439BE245BB67D374F5");
+    public static readonly Guid NexusOfEternityAnnihilatingOrbTeleportRingsIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
     public static readonly Guid NexusOfEternityPostTPRedAoE = new("51A65F90A99E2043ACB54EEA4EC494F0"); // src teleporter, duration 5000
     public static readonly Guid NexusOfEternityPostTPBlueShield = new("D21FF557B9F363429E4B42E57362E31D"); // src teleporter, duration 5000, could be inverted with NexusOfEternityPostTPRedAoE
+    public static readonly Guid NexusOfEternityPossibleShockwave1 = new("29E4FF27335CD045962342511841CBCA"); // duration 3333
+    public static readonly Guid NexusOfEternityPossibleShockwave2 = new("71D5D17395B8834086033B0F0AF245E4"); // duration 3033
     public static readonly Guid NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx and sunderer, duration 1500/2500, echoing blade, excision extremis, excision
     public static readonly Guid NexusOfEternityVloxxEchoingBladeSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
     public static readonly Guid NexusOfEternityVloxxExcisionExtremisSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833

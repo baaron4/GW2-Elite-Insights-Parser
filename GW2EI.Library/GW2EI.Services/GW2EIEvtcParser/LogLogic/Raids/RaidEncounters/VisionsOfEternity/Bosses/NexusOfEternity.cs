@@ -230,6 +230,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
 
+        var fixated = p.GetBuffStatus(log, FixatedTimed).Where(x => x.Value > 0);
+        foreach (Segment seg in fixated)
+        {
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+        }
+
         // Judgment of Eternity - Greens (3 people)
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityJudgmentOfEternity3PeopleGreenSelect, out var judgmentOfEternity))
         {
@@ -273,6 +279,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputeNPCCombatReplayActors(target, log, replay);
         }
 
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.NexusOfEternityVloxx:
@@ -285,7 +293,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     {
                         foreach (var effect in puddlesIndicators)
                         {
-                            (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                            lifespan = effect.ComputeLifespan(log, 3000);
                             var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
                         }
@@ -299,7 +307,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             // duration 10000 for trail, 12000 for puddle
                             // scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
                             uint radius = (uint)(effect.Duration == 10000 ? 160 : 280);
-                            (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                            lifespan = effect.ComputeLifespan(log, effect.Duration);
                             var circle = new CircleDecoration(radius, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(circle);
                         }
@@ -310,7 +318,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     {
                         foreach (var effect in voeIndicator)
                         {
-                            (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
+                            lifespan = effect.ComputeLifespan(log, 8000);
                             var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.AddWithGrowing(circle, lifespan.end);
                         }
@@ -321,7 +329,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     {
                         foreach (var effect in worldpiercerIndicator)
                         {
-                            (long start, long end) lifespan = effect.ComputeLifespan(log, 2666);
+                            lifespan = effect.ComputeLifespan(log, 2666);
                             var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new(1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
                             replay.Decorations.Add(line);
                         }
@@ -333,7 +341,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         foreach (var effect in worldpiercerBarrier)
                         {
                             // Up to 10 segments if it doesn't hit the arena border
-                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                            lifespan = effect.ComputeDynamicLifespan(log, 10000);
                             var line = new RectangleDecoration(365, 10, lifespan, Colors.LightBlue, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                             replay.Decorations.Add(line);
                         }
@@ -345,6 +353,63 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
                     var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
                     replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
+
+                    // Annihilating Orb - Arrow indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbArrowIndicator, out var arrows))
+                    {
+                        foreach (var effect in arrows)
+                        {
+                            lifespan = effect.ComputeLifespan(log, 6000);
+                            var line = new RectangleDecoration(1850, 100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new(925, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                            replay.Decorations.Add(line);
+                        }
+                    }
+
+                    // Annihilating Orb - Warnings rings for the teleport location
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbTeleportRingsIndicator, out var tpRings))
+                    {
+                        foreach (var effect in tpRings)
+                        {
+                            lifespan = effect.ComputeLifespan(log, 4000);
+                            int pulseCycle = 1000;
+                            (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                replay.Decorations.AddShockwave(new PositionConnector(effect.Position), pulse, Colors.LightOrange, 0.2, 1200);
+                                pulse.start = pulse.end;
+                                pulse.end = pulse.start + pulseCycle;
+                            }
+                        }
+                    }
+
+                    // TODO Fix ending
+                    var orb = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
+                    replay.Decorations.AddNonHomingMissiles(log, orb, Colors.Blue, 0.2, 240);
+                    replay.Decorations.AddNonHomingMissiles(log, orb, Colors.Red, 0.3, 180);
+
+                    // Annihilating Orb - End red AoE
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityPostTPRedAoE, out var redAoE))
+                    {
+                        foreach (var effect in redAoE)
+                        {
+                            lifespan = effect.ComputeLifespan(log, 5000);
+                            var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                            var barrier = new CircleDecoration(240, lifespan, Colors.Blue, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(barrier);
+                        }
+                    }
+
+                    // Annhilating Orb - Shockwave
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityPossibleShockwave1, out var shockwaves))
+                    {
+                        foreach (EffectEvent effect in shockwaves)
+                        {
+                            uint radius = 1200; // Assumed radius
+                            lifespan = (effect.Time, effect.Time + 3333);
+                            replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, radius);
+                        }
+                    }
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
