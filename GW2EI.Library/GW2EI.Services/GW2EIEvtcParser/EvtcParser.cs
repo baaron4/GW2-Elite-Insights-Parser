@@ -38,7 +38,7 @@ public class EvtcParser
     /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
     /// <returns>The <see cref="RawEvtcLog"/> log.</returns>
     /// <exception cref="EvtcFileException"></exception>
-    public RawEvtcLog? ParseRawLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason)
+    public RawEvtcLog? ParseRawLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool useEIPreProcess)
     {
         parsingFailureReason = null;
         try
@@ -70,7 +70,7 @@ public class EvtcParser
                     throw new TooBigException(operation.FileSize, _parserSettings.TooBigLimit);
                 }
                 ms.Position = 0;
-                evtcLog = ParseRawLog(operation, ms, out parsingFailureReason);
+                evtcLog = ParseRawLog(operation, ms, out parsingFailureReason, useEIPreProcess);
             }
             else
             {
@@ -79,7 +79,7 @@ public class EvtcParser
                 {
                     throw new TooBigException(operation.FileSize, _parserSettings.TooBigLimit);
                 }
-                evtcLog = ParseRawLog(operation, fs, out parsingFailureReason);
+                evtcLog = ParseRawLog(operation, fs, out parsingFailureReason, useEIPreProcess);
             }
             return evtcLog;
         }
@@ -98,7 +98,7 @@ public class EvtcParser
     /// <param name="evtcStream">The stream of the log.</param>
     /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
     /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
-    public RawEvtcLog? ParseRawLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason)
+    public RawEvtcLog? ParseRawLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool useEIPreProcess)
     {
         var oldSettings = _parserSettings;
         _parserSettings = new EvtcParserSettings();
@@ -117,6 +117,11 @@ public class EvtcParser
             var (combatItems, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
             var (logData, agentData, playerList) = CompleteAgentsAndLogData(operation, agentsList, combatItems, arcdpsAgentRedirection, enabledExtensions, logStartOffset, logEndTime, newID, evtcVersion);
+            if (useEIPreProcess)
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
+                PreProcessEvtcData(operation, logData, agentData, combatItems, enabledExtensions, evtcVersion, gw2Build);
+            }
             operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
             var log = new RawEvtcLog(evtcVersion, logData, agentData, skillData, combatItems, playerList, enabledExtensions, _parserSettings, _apiController, operation);
             _parserSettings = oldSettings;
