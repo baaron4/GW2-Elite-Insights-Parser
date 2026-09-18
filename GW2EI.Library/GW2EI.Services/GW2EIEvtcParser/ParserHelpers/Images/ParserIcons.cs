@@ -1405,7 +1405,7 @@ internal static class ParserIcons
         { TargetID.GuardiansGladeTornado, TrashSmallJumpyTornado },
         { TargetID.LightThief, TrashLightThief },
         { TargetID.EtherealSeal, EtherealSeal },
-        { TargetID.Vloxx, TargetVloxx },
+        { TargetID.NexusOfEternityVloxx, TargetVloxx },
         { TargetID.VloxxConv, TargetVloxx },
     };
 

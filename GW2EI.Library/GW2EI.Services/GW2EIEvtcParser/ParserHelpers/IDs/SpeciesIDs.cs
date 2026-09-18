@@ -579,7 +579,7 @@ public static class SpeciesIDs
         EliteCrocodilianRazortooth = 27655,
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
-        Vloxx = 28106,
+        NexusOfEternityVloxx = 28106,
         EliteCosmicPiercer = 27929,
         ChampionCosmicPiercer = 27958,
         SomethingCosmicPiercer = 28056,
