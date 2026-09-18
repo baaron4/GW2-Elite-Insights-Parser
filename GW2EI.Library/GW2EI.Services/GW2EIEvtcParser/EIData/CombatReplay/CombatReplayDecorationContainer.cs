@@ -625,6 +625,30 @@ internal class CombatReplayDecorationContainer
     internal delegate void MissileDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector);
     internal delegate void MissileRotatingDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
 
+    private static void AddNonHomingLaunch(MissileEvent missileEvent, int i, long end, MissileDecorationHandler handler)
+    {
+        var launchEvents = missileEvent.LaunchEvents;
+        var launch = launchEvents[i];
+        (long start, long end) trajectoryLifeSpan;
+        if (i == launchEvents.Count - 1)
+        {
+            trajectoryLifeSpan = (launch.Time, end);
+            if (missileEvent.RemoveEvent == null)
+            {
+                trajectoryLifeSpan.end = Math.Min(end, launch.Time + (long)((launch.TargetPosition - launch.LaunchPosition).Length() / launch.Speed));
+            }
+        }
+        else
+        {
+            trajectoryLifeSpan = (launch.Time, launchEvents[i + 1].Time);
+        }
+        handler(launch, trajectoryLifeSpan, new InterpolationConnector([
+                    new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                        launch.GetFinalPosition(trajectoryLifeSpan)
+                ],
+                Connector.InterpolationMethod.Linear));
+    }
+
     /// <summary>
     /// Add a missile going from a Point A to Point B, supports multi launches
     /// </summary>
@@ -638,13 +662,7 @@ internal class CombatReplayDecorationContainer
         var launchEvents = missileEvent.LaunchEvents;
         for (int i = 0; i < launchEvents.Count; i++)
         {
-            var launch = launchEvents[i];
-            (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
-            handler(launch, trajectoryLifeSpan, new InterpolationConnector([
-                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
-                        launch.GetFinalPosition(trajectoryLifeSpan)
-                    ],
-                    Connector.InterpolationMethod.Linear));
+            AddNonHomingLaunch(missileEvent, i, end, handler);
         }
     }
 
@@ -774,11 +792,7 @@ internal class CombatReplayDecorationContainer
             }
             else
             {
-                handler(launch, trajectoryLifeSpan, new InterpolationConnector([
-                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
-                        launch.GetFinalPosition(trajectoryLifeSpan)
-                    ],
-                    Connector.InterpolationMethod.Linear));
+                AddNonHomingLaunch(missileEvent, i, end, handler);
             }
         }
     }
