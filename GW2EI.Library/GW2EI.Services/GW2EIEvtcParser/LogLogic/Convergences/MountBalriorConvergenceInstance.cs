@@ -22,23 +22,23 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
-        var mainBoss = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv]));
+        var mainBoss = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaConv, TargetID.GreerConv, TargetID.UraConv]));
         var name = "Convergence: Mount Balrior";
         if (mainBoss != null)
         {
             switch (mainBoss.ID)
             {
-                case (int)TargetID.GreerTheBlightbringerConv:
+                case (int)TargetID.GreerConv:
                     LogID |= 0x000001;
                     name += " - Greer";
                     Extension += "greer";
                     break;
-                case (int)TargetID.DecimaTheStormsingerConv:
+                case (int)TargetID.DecimaConv:
                     LogID |= 0x000002;
                     name += " - Decima";
                     Extension += "dec";
                     break;
-                case (int)TargetID.UraTheSteamshriekerConv:
+                case (int)TargetID.UraConv:
                     LogID |= 0x000003;
                     name += " - Ura";
                     Extension += "ura";
@@ -62,11 +62,11 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     {
         return
         [
-            TargetID.GreerTheBlightbringerConv,
-            TargetID.GreeTheBingerConv,
-            TargetID.ReegTheBlighterConv,
-            TargetID.DecimaTheStormsingerConv,
-            TargetID.UraTheSteamshriekerConv,
+            TargetID.GreerConv,
+            TargetID.GreeConv,
+            TargetID.ReegConv,
+            TargetID.DecimaConv,
+            TargetID.UraConv,
         ];
     }
 
@@ -83,8 +83,8 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv])), log);
-        var target = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv]));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.DecimaConv, TargetID.GreerConv, TargetID.UraConv])), log);
+        var target = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaConv, TargetID.GreerConv, TargetID.UraConv]));
         if (target == null)
         {
             return phases;
@@ -94,17 +94,19 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         // Full Fight Phase
         string phaseName = "";
         string icon = "";
+        bool addReegAndGree = false;
         switch (target.ID)
         {
-            case (int)TargetID.DecimaTheStormsingerConv:
+            case (int)TargetID.DecimaConv:
                 phaseName = "Full Decima";
                 icon = EncounterIconDecima;
                 break;
-            case (int)TargetID.GreerTheBlightbringerConv:
+            case (int)TargetID.GreerConv:
                 phaseName = "Full Greer";
                 icon = EncounterIconGreer;
+                addReegAndGree = true;
                 break;
-            case (int)TargetID.UraTheSteamshriekerConv:
+            case (int)TargetID.UraConv:
                 phaseName = "Full Ura";
                 icon = EncounterIconUra;
                 break;
@@ -139,6 +141,15 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         phase2.AddTarget(target, log);
         phase3.AddTarget(target, log);
         phase4.AddTarget(target, log);
+        if (addReegAndGree)
+        {
+            var subTitans = Targets.Where(x => x.IsAnySpecies([TargetID.GreeConv, TargetID.ReegConv])).ToList();
+            fullPhase.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+            phase1.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+            phase2.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+            phase3.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+            phase4.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+        }
         warclaw1.AddTarget(target, log);
         warclaw2.AddTarget(target, log);
         warclaw3.AddTarget(target, log);
@@ -152,7 +163,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     {
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
-        SingleActor? ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.UraTheSteamshriekerConv));
+        SingleActor? ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.UraConv));
         ura?.OverrideName("Ura, the Steamshrieker");
     }
 }

@@ -52,7 +52,7 @@ public sealed class ParserService : IDisposable
         {
             await Task.Run(() => {
                 onTaskRun();
-                operation.InspectLog = _programHelper.ParseLogForInspection(operation);
+                operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
             }, cancellationTokenSource.Token)
                 .ContinueWith(t => 
                 {

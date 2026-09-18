@@ -257,7 +257,7 @@ public class LogData
                         return new TempleOfFebe(id);
                     case TargetID.KelaSeneschalOfWaves:
                         return new GuardiansGlade(id);
-                    case TargetID.NexusOfEternityVloxx:
+                    case TargetID.Vloxx:
                         return new NexusOfEternity(id);
                     // Fractals
                     case TargetID.MAMA:

@@ -103,7 +103,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return
         [
-            TargetID.NexusOfEternityVloxx,
+            TargetID.Vloxx,
             TargetID.ChampionCosmicPiercer,
             TargetID.SomethingCosmicPiercer,
             TargetID.ChampionAspectOfTheStaff,
@@ -130,7 +130,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (logStartNPCUpdate != null)
         {
             var vloxx = agentData.GetAgent(logStartNPCUpdate.DstAgent, logStartNPCUpdate.Time);
-            if (!vloxx.IsSpecies(TargetID.NexusOfEternityVloxx))
+            if (!vloxx.IsSpecies(TargetID.Vloxx))
             {
                 throw new MissingKeyActorsException("Vloxx not found");
             }
@@ -152,6 +152,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
         RenameAdds(Targets);
+        RenameAdds(TrashMobs);
     }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
@@ -197,7 +198,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return new Dictionary<TargetID, int>()
         {
-            {TargetID.NexusOfEternityVloxx, 0},
+            {TargetID.Vloxx, 0},
             {TargetID.ChampionCosmicPiercer, 1},
             {TargetID.SomethingCosmicPiercer, 1},
             {TargetID.ChampionAspectOfTheStaff, 1},
@@ -209,7 +210,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
         var phases = GetInitialPhase(log);
         var fullFightPhase = (EncounterPhaseData)phases[0];
         fullFightPhase.AddTarget(vloxx, log);
@@ -490,9 +491,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void RenameAdds(IReadOnlyList<SingleActor> targets)
+    private static void RenameAdds(IReadOnlyList<SingleActor> actors)
     {
-        foreach (SingleActor actor in targets)
+        foreach (SingleActor actor in actors)
         {
             switch (actor.ID)
             {
