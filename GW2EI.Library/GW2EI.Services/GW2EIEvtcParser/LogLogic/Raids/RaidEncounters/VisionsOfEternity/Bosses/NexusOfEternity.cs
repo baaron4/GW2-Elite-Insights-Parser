@@ -152,6 +152,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
         RenameAdds(Targets);
+        RenameAdds(TrashMobs);
     }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
@@ -262,9 +263,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void RenameAdds(IReadOnlyList<SingleActor> targets)
+    private static void RenameAdds(IReadOnlyList<SingleActor> actors)
     {
-        foreach (SingleActor actor in targets)
+        foreach (SingleActor actor in actors)
         {
             switch (actor.ID)
             {
