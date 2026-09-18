@@ -187,6 +187,7 @@ internal static class LogImages
     internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/mODYp42.png";
     internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
     internal const string CombatReplayGuardiansGlade = "https://i.imgur.com/Eg0LxdA.png";
+    internal const string CombatReplayNexusOfEternity = "https://i.imgur.com/YFmuDeA.png";
 
     #endregion RAID ENCOUNTERS
 
