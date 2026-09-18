@@ -257,9 +257,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
                 replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end, true);
                 replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize2Overhead);
+
+                // Chain - Appears 500ms after the green, duration 4500 - The buff applied is POV only
+                replay.Decorations.AddTetherByEffectGUID(effect, Colors.Yellow, 0.4, (lifespan.start + 500, lifespan.end));
             }
         }
-
+        
         // Probability Distribution - Spread AoE
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, out var probabilityDistribution))
         {
@@ -346,11 +349,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             replay.Decorations.Add(line);
                         }
                     }
-
+                    
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddEchoingBladeExcisionExtremisSwords(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
-                    AddEchoingBladeExcisionExtremisSwords(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisSwordSwing, 500);
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
 
+                    // Echoing Blade - Red AoEs with spinning sword - Reflectable
                     var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
                     replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
 
@@ -366,9 +370,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
 
                     // Annihilating Orb - Warnings rings for the teleport location
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbTeleportRingsIndicator, out var tpRings))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbTeleportRingsIndicator, out var rings))
                     {
-                        foreach (var effect in tpRings)
+                        foreach (var effect in rings)
                         {
                             lifespan = effect.ComputeLifespan(log, 4000);
                             int pulseCycle = 1000;
@@ -382,32 +386,46 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         }
                     }
 
-                    // TODO Fix ending
-                    var orb = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
-                    replay.Decorations.AddNonHomingMissiles(log, orb, Colors.Blue, 0.2, 240);
-                    replay.Decorations.AddNonHomingMissiles(log, orb, Colors.Red, 0.3, 180);
-
                     // Annihilating Orb - End red AoE
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityPostTPRedAoE, out var redAoE))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbPostTeleportRedAoE, out var redAoEs))
                     {
-                        foreach (var effect in redAoE)
+                        var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
+
+                        foreach (var orb in orbs)
+                        {
+                            var endAoE = redAoEs.FirstOrDefault(x => x.Time >= orb.Time && x.Time <= orb.Time + 5000);
+                            if (endAoE == null)
+                            {
+                                continue;
+                            }
+                            CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
+                            {
+                                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
+                                replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
+                            }, endAoE.Time);
+                        }
+                        
+                        foreach (var effect in redAoEs)
                         {
                             lifespan = effect.ComputeLifespan(log, 5000);
-                            var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(circle);
                             var barrier = new CircleDecoration(240, lifespan, Colors.Blue, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(barrier);
+                            var doughnut = new DoughnutDecoration(240, 300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)); // Doughnut for better color representation
+                            replay.Decorations.Add(doughnut);
+                            // Shockwave - Don't see it as a separated effect
+                            lifespan = (effect.Time, effect.Time + 3333);
+                            replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, 1850); // Extends to the original position of Vloxx
                         }
                     }
 
-                    // Annhilating Orb - Shockwave
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityPossibleShockwave1, out var shockwaves))
+                    // Division Eternal - Big rectangle
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
                     {
-                        foreach (EffectEvent effect in shockwaves)
+                        foreach (var effect in divisionEternals)
                         {
-                            uint radius = 1200; // Assumed radius
-                            lifespan = (effect.Time, effect.Time + 3333);
-                            replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, radius);
+                            lifespan = effect.ComputeLifespan(log, 3000);
+                            var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                            replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
                         }
                     }
                 }
@@ -567,14 +585,17 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddEchoingBladeExcisionExtremisSwords(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, Guid guid, uint radius)
+    /// <summary>
+    /// Used by Echoing Blade, Excision Extremis, Division Eternal
+    /// </summary>
+    private static void AddSwordSwings(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, Guid guid, uint radius)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, guid, out var swords))
         {
             foreach (var effect in swords)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
-                var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z, 180));
+                var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z -180, -180));
                 replay.Decorations.Add(line);
             }
         }

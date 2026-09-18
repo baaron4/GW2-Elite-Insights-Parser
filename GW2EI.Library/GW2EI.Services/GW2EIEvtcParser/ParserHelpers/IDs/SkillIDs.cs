@@ -5730,6 +5730,7 @@ public static class SkillIDs
     public const long EchoingAttack = 80510;
     public const long CosmicChargeVloxx = 80512;
     public const long VloxxMissibleToBeIdentified = 80520;
+    public const long POV_AscensionsSacrificeChain = 80529;
     public const long Smash = 80536;
     public const long NexusOfEternity3GreenFailBuff = 80536;
     public const long EternalReflectionCosmicPiercerChamp = 80547;
@@ -5753,7 +5754,7 @@ public static class SkillIDs
     public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
     public const long WorldpiercerVloxx = 80916;
     public const long AncoraStrike = 80940;
-    public const long NexusOfEternity2GreenSelect = 80951;
+    public const long AscensionsSacrifice2GreenSelect = 80951;
     public const long RagingStormCosmicBulwark = 80965;
     public const long EmpoweredNexusOfEternity = 81002;
     public const long WorldpiercerCosmicBullwark = 81015;
