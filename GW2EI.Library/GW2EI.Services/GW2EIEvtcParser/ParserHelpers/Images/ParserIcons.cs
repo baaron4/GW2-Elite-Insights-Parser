@@ -1505,6 +1505,7 @@ internal static class ParserIcons
         { MinionID.StormSpirit, MinionStormSpirit },
         { MinionID.WaterSpirit, MinionWaterSpirit },
         { MinionID.SpiritOfNatureRenewal, MinionSpiritOfNatureRenewal },
+        { MinionID.SpiritOfNatureTBC, MinionSpiritOfNatureRenewal },
         { MinionID.JuvenileAlpineWolf, MinionJuvenileAlpineWolf },
         { MinionID.JuvenileArctodus, MinionJuvenileArctodus },
         { MinionID.JuvenileArmorFish, MinionJuvenileArmorFish },
