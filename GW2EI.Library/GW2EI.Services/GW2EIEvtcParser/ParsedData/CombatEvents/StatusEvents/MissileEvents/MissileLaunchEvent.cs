@@ -111,11 +111,11 @@ public class MissileLaunchEvent : TimeCombatEvent
         // To be verified
         if ((Missile.Flag1 & 1) == 0)
         {
-            return (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed);
+            return (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
         }
         else
         {
-            return (long)((TargetPosition - LaunchPosition).Length() / Speed);
+            return (long)((TargetPosition - LaunchPosition).Length() / Speed) + Time;
         }
     }
 
