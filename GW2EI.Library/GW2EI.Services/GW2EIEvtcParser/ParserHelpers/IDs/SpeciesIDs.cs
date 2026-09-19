@@ -588,6 +588,7 @@ public static class SpeciesIDs
         EliteCosmicBulwark = 28065,
         ChampionCosmicBulwark = 27934,
         ChampionCosmicSunderer = 27933,
+        AscensionOrb = SpeciesIDs.AscensionOrb,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
@@ -1310,6 +1311,7 @@ public static class SpeciesIDs
     private const int ElectrocutedAreaArkk = -127;
     private const int TileArkk = -128;
     private const int GrandRaidVloxxChest = -129;
+    private const int AscensionOrb = -130;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

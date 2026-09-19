@@ -119,6 +119,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.EliteCosmicPiercer,
             TargetID.EliteCosmicBulwark,
+            TargetID.AscensionOrb,
         ];
     }
 
@@ -149,6 +150,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         FindChestGadgets([
             (ChestID.GrandRaidVloxxChest, GrandRaidChestVloxxPosition, 100),
         ], agentData, combatData);
+
+        AscensionOrbStabilization(agentData, combatData);
+
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
         RenameAdds(Targets);
@@ -547,7 +551,23 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    internal static void AscensionOrbStabilization(AgentData agentData, List<CombatItem> combatData)
+    {
+        var candidates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
+            .Distinct()
+            .ToList();
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            candidates[i].OverrideID(TargetID.AscensionOrb, agentData);
+            candidates[i].OverrideName("Ascension Orb " + i + 1);
+        }
+    }
+
+    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
     {
         foreach (SingleActor actor in actors)
         {
