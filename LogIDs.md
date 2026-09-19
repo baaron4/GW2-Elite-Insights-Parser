@@ -262,3 +262,7 @@ Greer, the Blightbringer: 0x090201
 Decima, the Stormsinger: 0x090202
 
 Ura, the Steamshrieker: 0x090203
+
+### Nexus of Eternity
+
+Vloxx: 0x090300

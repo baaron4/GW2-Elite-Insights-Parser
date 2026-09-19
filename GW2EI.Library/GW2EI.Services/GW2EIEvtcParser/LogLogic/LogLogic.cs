@@ -430,14 +430,16 @@ public abstract class LogLogic
         List<PhaseData> phases = GetInitialPhase(log);
         if (IsInstance)
         {
-            var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration);
-            if (targets.Any())
+            var instancePhase = (InstancePhaseData)phases[0];
+            var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration).ToList();
+            if (targets.Count > 0)
             {
-                AddEncounterPhasesPerTarget(log, phases, targets);
+                instancePhase.AddTargets(targets, log);
+                AddEncounterPhasesPerTarget(log, phases, targets, instancePhase);
             }
             else
             {
-                phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
+                instancePhase.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
             }
         } 
         else

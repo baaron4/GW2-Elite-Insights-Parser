@@ -584,23 +584,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             switch (actor.ID)
             {
                 case (int)TargetID.ChampionCosmicBulwark:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
                 case (int)TargetID.ChampionCosmicPiercer:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
                 case (int)TargetID.ChampionCosmicSunderer:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
                 case (int)TargetID.ChampionAspectOfTheSpear:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
                 case (int)TargetID.ChampionAspectOfTheStaff:
                     actor.OverrideName("Champion " + actor.Character);
                     break;
                 case (int)TargetID.EliteCosmicBulwark:
-                    actor.OverrideName("Elite " + actor.Character);
-                    break;
                 case (int)TargetID.EliteCosmicPiercer:
                     actor.OverrideName("Elite " + actor.Character);
                     break;

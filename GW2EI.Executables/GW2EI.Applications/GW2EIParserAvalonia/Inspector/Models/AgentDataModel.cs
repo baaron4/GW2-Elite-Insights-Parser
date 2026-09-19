@@ -62,7 +62,7 @@ public sealed class AgentDataModel
         }
         if (MergeCount > 0)
         {
-            Merges = agent.Merges.Select(x => new AgentDataModel(x.Merged)).ToList();
+            Merges = agent.Merges.Where(x => x.Merged != agent).Select(x => new AgentDataModel(x.Merged)).ToList();
         }
         if (RegroupedCount > 0)
         {

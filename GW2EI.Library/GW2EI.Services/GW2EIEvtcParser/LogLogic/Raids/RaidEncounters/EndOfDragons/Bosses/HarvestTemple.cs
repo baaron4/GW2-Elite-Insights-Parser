@@ -1786,7 +1786,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     {
                         var beamAoE = new CircleDecoration(160, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
-                    }, Math.Min(log.LogData.LogEnd, target.LastAware));
+                    });
                 }
                 // Frost Beam - Non-NPC sets
                 var breathOfJormag = log.CombatData.GetMissileEventsBySkillID(BreathOfJormagSouth);
@@ -1813,7 +1813,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     {
                         var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
-                    }, end);
+                    });
                 }
                 break;
             case (int)TargetID.JormagMovingFrostBeam:

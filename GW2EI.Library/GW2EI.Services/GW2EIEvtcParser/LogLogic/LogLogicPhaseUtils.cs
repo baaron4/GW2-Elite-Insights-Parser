@@ -8,9 +8,8 @@ namespace GW2EIEvtcParser.LogLogic;
 internal static class LogLogicPhaseUtils
 {
 
-    internal static void AddEncounterPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    internal static void AddEncounterPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IReadOnlyList<SingleActor> targets, InstancePhaseData instancePhase)
     {
-        phases[0].AddTargets(targets, log);
         foreach (SingleActor target in targets)
         {
             long start = target.FirstAware;
@@ -33,7 +32,7 @@ internal static class LogLogicPhaseUtils
             }
             var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.Mode.Normal, log.LogData.Logic.LogID);
             phase.AddTarget(target, log);
-            phase.AddParentPhase(phases[0]);
+            phase.AddParentPhase(instancePhase);
             phases.Add(phase);
         }
     }

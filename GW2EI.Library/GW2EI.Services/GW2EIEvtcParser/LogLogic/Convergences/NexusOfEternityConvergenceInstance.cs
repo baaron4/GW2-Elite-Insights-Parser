@@ -18,7 +18,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         LogCategoryInformation.SubCategory = SubLogCategory.NexusOfEternityConvergence;
         LogID |= LogIDs.ConvergenceMasks.NexusOfEternityConvergenceMask;
-        Icon = InstanceIconNexusOfEternity;
+        Icon = InstanceIconNexusOfEternityConvergence;
         Extension = "noeconv";
     }
 
@@ -66,12 +66,40 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         }
     }
 
+
+
+    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    {
+        foreach (SingleActor actor in actors)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.ScarabQueen:
+                    actor.OverrideName("Champion " + actor.Character + " Queen");
+                    break;
+                case (int)TargetID.ChampionWaterElemental:
+                case (int)TargetID.ChampionIceElemental:
+                case (int)TargetID.ChampionAatxe:
+                case (int)TargetID.ChampionCosmicBulwark:
+                case (int)TargetID.ChampionCosmicPiercer:
+                case (int)TargetID.ChampionCosmicSunderer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicBulwark:
+                case (int)TargetID.EliteCosmicPiercer:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         MergeVloxxes(agentData.GetStableSpeciesByID(TargetID.VloxxConv), agentData, combatData, extensions, evtcVersion);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         AdjustVloxHP(vloxx, vloxx.AgentItem.Merges.Count > 0);
+        RenameAdds(TrashMobs);
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
@@ -84,9 +112,11 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         return
         [
             TargetID.VloxxConv,
-            TargetID.IceElementalConv,
-            TargetID.WaterElemental,
+            TargetID.ChampionIceElemental,
+            TargetID.ChampionWaterElemental,
             TargetID.Megadestroyer,
+            TargetID.ScarabQueen,
+            TargetID.ChampionAatxe,
         ];
     }
 
@@ -94,22 +124,81 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         return [
             TargetID.CosmicBulwark1,
-            TargetID.CosmicBulwark2,
-            TargetID.CosmicBulwark3,
+            // Center
+            TargetID.ChampionCosmicBulwark,
+            TargetID.EliteCosmicBulwark,
             TargetID.CosmicBulwark4,
             TargetID.CosmicPiercer1,
-            TargetID.CosmicPiercer2,
-            TargetID.CosmicPiercer3,
-            TargetID.CosmicPiercer4,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.EliteCosmicPiercer,
+            TargetID.SomethingCosmicPiercer,
             TargetID.CosmicPiercer5,
             TargetID.CosmicSunderer1,
             TargetID.CosmicSunderer2,
             TargetID.CosmicSunderer3,
-            TargetID.ScarabSwarm,
+            // Scarab
+            TargetID.ScarabSwarmConv,
+            // Underworld
             TargetID.FleshReaver,
             TargetID.ShadowImp,
+            TargetID.ShadeConv,
             TargetID.Aatxe,
-            TargetID.Shade,
+            // Ice
+            TargetID.IceElemental2,
+            TargetID.IceElemental3,
+            // Dominion
+            TargetID.DominionEngineer,
+            TargetID.DominionIgniter,
+            TargetID.DominionDuelist,
+            TargetID.DominionSentinel,
+            TargetID.BloodLegionBlademaster2,
+            TargetID.DominionBlademaster,
+            TargetID.DominionSentinel2,
+            TargetID.DominionEngineer2,
+            TargetID.DominionSolider,
+            TargetID.DominionFireSHamar,
+            TargetID.DominionSoldier2,
+            TargetID.DominionDuelist2,
+            TargetID.BloodLegionDuelist,
+            TargetID.DominionShadow,
+            TargetID.DominionScout,
+            TargetID.DominionBlademaster2,
+            TargetID.DominionSoldier3,
+            TargetID.DominionMarksman,
+            TargetID.BloodLegionSoldier,
+            TargetID.BloodLegionDuelist3,
+            TargetID.DominionSentinel3,
+            TargetID.DominionSmokeShaman,
+            TargetID.DominionSpy,
+            TargetID.DominionSoldier,
+            TargetID.DominionMarksman2,
+            TargetID.DominionBladestorm2,
+            TargetID.DominionBladeMaster,
+            TargetID.FrostLegionShaman,
+            // Destroyers
+            TargetID.DetroyerTroll,
+            TargetID.DetroyerHarpy,
+            TargetID.DestroyerCrab,
+            TargetID.DestroyerTroll2,
+            TargetID.DestroyerCrabling,
+            TargetID.DestroyerHarpy2,
+            TargetID.DestroyerCrab2,
+            // Titans
+            TargetID.RotStrider,
+            TargetID.SentientConduit,
+            TargetID.LucidBoulder,
+            TargetID.RotStrider2 ,
+            TargetID.BlightedBeast,
+            TargetID.RotStrider3,
+            TargetID.LucidBoulder2,
+            TargetID.SentientConduit2,
+            TargetID.RotStrider4,
+            TargetID.BlightedBeast2,
+            TargetID.LucidBoulder3,
+            TargetID.BlightedBeast3,
+            TargetID.LiminalConduit,
+            TargetID.Ventshot,
+            TargetID.Fumaroller,
         ];
     }
 
@@ -127,27 +216,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
 
     internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.InstancePrivacyMode.Private;
-    }
-
-    private static void AddPerTargetEncounterPhase(ParsedEvtcLog log, SingleActor? target, List<PhaseData> phases, string phaseName, string phaseIcon, InstancePhaseData instancePhase, bool requirePhases)
-    {
-        if (target == null)
-        {
-            return;
-        }
-        var start = target.FirstAware;
-        var end = target.LastAware;
-        var dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-        var success = false;
-        if (dead != null)
-        {
-            end = dead.Time;
-            success = true;
-        }
-        var phase = new EncounterPhaseData(start, end, phaseName, success, phaseIcon, LogData.Mode.Normal, LogData.StartStatus.Normal, log.LogData).WithParentPhase(instancePhase);
-        phase.AddTarget(target, log);
-        phases.Add(phase);
+        return combatData.GetMapIDEvent()?.MapID == MapIDs.NexusOfEternityPublicConvergence ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -172,13 +241,13 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
                 }
             }
         }
-        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, vloxx.FirstAware), Math.Min(fullEnd, log.LogData.LogEnd), "Full Vloxx", Icon).WithParentPhase(phases[0]);
+        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, vloxx.FirstAware), Math.Min(fullEnd, log.LogData.LogEnd), "Full Vloxx", EncounterIconNexusOfEternity).WithParentPhase(instancePhase);
         fullPhase.AddTarget(vloxx, log);
         phases.Add(fullPhase);
 
-        phases[0].AddTargets(Targets.Where(x => !x.IsAnySpecies([TargetID.VloxxConv, TargetID.Instance])), log, PhaseData.TargetPriority.Blocking);
-
-        // Check if additional encounter phases are needed for some npcs
+        var blockingTargets = Targets.Where(x => !x.IsAnySpecies([TargetID.VloxxConv, TargetID.Instance])).ToList();
+        instancePhase.AddTargets(blockingTargets, log, PhaseData.TargetPriority.Blocking);
+        // TODO detect rift entering to create encounter phases + add specific blocking targets to them
 
         if (!requirePhases)
         {

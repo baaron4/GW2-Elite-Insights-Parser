@@ -157,7 +157,10 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        AddEncounterPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration));
+        var instancePhase = (InstancePhaseData)phases[0];
+        var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration).ToList();
+        instancePhase.AddTargets(targets, log);
+        AddEncounterPhasesPerTarget(log, phases, targets, (InstancePhaseData)phases[0]);
         return phases;
     }
 

@@ -580,13 +580,13 @@ public static class SpeciesIDs
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
         Vloxx = 28106,
-        EliteCosmicPiercer = 27929,
-        ChampionCosmicPiercer = 27958,
-        SomethingCosmicPiercer = 28056, // Spawned for 2 seconds in one log, might be challenge/legendary mode npc
+        EliteCosmicPiercer = 27929, // Also in convergence
+        ChampionCosmicPiercer = 27958, // Also in convergence
+        SomethingCosmicPiercer = 28056, // Also in convergence - Spawned for 2 seconds in one raid encounter log, might be challenge/legendary mode npc
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
-        EliteCosmicBulwark = 28065,
-        ChampionCosmicBulwark = 27934,
+        EliteCosmicBulwark = 28065, // Also in convergence
+        ChampionCosmicBulwark = 27934, // Also in convergence
         ChampionCosmicSunderer = 27933,
         AscensionOrb = SpeciesIDs.AscensionOrb,
         #endregion RAID ENCOUNTERS
@@ -794,26 +794,87 @@ public static class SpeciesIDs
         UraConv = 27017,
         // - Nexus of Eternity
         VloxxConv = 28077,
+        // Center
         CosmicBulwark1 = 27897,
         CosmicPiercer1 = 27900,
-        CosmicPiercer2 = 27929,
-        CosmicBulwark2 = 27934,
-        CosmicPiercer3 = 27958,
         CosmicSunderer1 = 28011,
-        CosmicPiercer4 = 28056,
-        CosmicBulwark3 = 28065,
         CosmicSunderer2 = 28075,
         CosmicBulwark4 = 28093,
         CosmicSunderer3 = 28095,
         CosmicPiercer5 = 28097,
-        ScarabSwarm = 28014,
+        // Underworld
         FleshReaver = 28044,
         ShadowImp = 28102,
-        Aatxe = 27884,
-        WaterElemental = 27894,
+        ChampionAatxe = 27884,
+        Aatxe = 28050,
+        ShadeConv = 27969,
+        // TODO
+        // Water
+        ChampionWaterElemental = 27894,
+        // Ice
+        IceElemental2 = 26066,
+        IceElemental3 = 26514,
+        ChampionIceElemental = 27991,
+        // Scarab Plague
+        ScarabQueen = 27924,
+        ScarabSwarmConv = 28014,
+        // Dominion
+        DominionEngineer = 22835,
+        DominionIgniter = 22869,
+        DominionDuelist = 22879,
+        DominionSentinel = 22880,
+        BloodLegionBlademaster2 = 22887,
+        DominionBlademaster = 22890,
+        DominionSentinel2 = 22891,
+        DominionEngineer2 = 22893,
+        DominionSolider = 22899,
+        DominionFireSHamar = 22904,
+        DominionSoldier2 = 22907,
+        DominionDuelist2 = 22908,
+        BloodLegionDuelist = 22913,
+        DominionShadow = 22943,
+        DominionScout = 22946,
+        DominionBlademaster2 = 22964,
+        DominionSoldier3 = 22988,
+        DominionMarksman = 22998,
+        BloodLegionSoldier = 23031,
+        BloodLegionDuelist3 = 23032,
+        DominionSentinel3 = 23039,
+        DominionSmokeShaman = 23058,
+        DominionSpy = 23061,
+        DominionSoldier = 23074,
+        DominionMarksman2 = 23096,
+        DominionBladestorm2 = 23102,
+        DominionBladeMaster = 23104,
+        FrostLegionShaman = 23228,
+        // Destroyers
         Megadestroyer = 27976,
-        IceElementalConv = 27991,
-        Shade = 27969,
+        DetroyerTroll = 23121,
+        DetroyerHarpy = 23123,
+        DestroyerCrab = 23125,
+        DestroyerTroll2 = 23132,
+        DestroyerCrabling = 23160,
+        DestroyerHarpy2 = 23173,
+        DestroyerCrab2 = 23178,
+        // Titans
+        RotStrider = 26290,
+        SentientConduit = 26297,
+        LucidBoulder = 26327,
+        RotStrider2 = 26459,
+        BlightedBeast = 26466,
+        RotStrider3 = 26483,
+        LucidBoulder2 = 26536,
+        SentientConduit2 = 26543,
+        RotStrider4 = 26563,
+        BlightedBeast2 = 26583,
+        LucidBoulder3 = 26595,
+        BlightedBeast3 = 26636,
+        LiminalConduit = 26649,
+        Ventshot = 26697,
+        Fumaroller = 26729,
+        // Kryptis TODO
+
+
         #endregion CONVERGENCES
     };
 
@@ -929,6 +990,7 @@ public static class SpeciesIDs
         StormSpirit = 6371,
         WaterSpirit = 12778,
         SpiritOfNatureRenewal = 6649,
+        SpiritOfNatureTBC = 27947,
         // Ranger Pets
         JuvenileJungleStalker = 3827,
         JuvenileKrytanDrakehound = 4425,

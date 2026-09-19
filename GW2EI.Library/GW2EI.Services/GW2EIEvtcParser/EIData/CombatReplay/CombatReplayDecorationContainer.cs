@@ -635,7 +635,7 @@ internal class CombatReplayDecorationContainer
             trajectoryLifeSpan = (launch.Time, end);
             if (missileEvent.RemoveEvent == null)
             {
-                trajectoryLifeSpan.end = Math.Min(end, launch.Time + (long)((launch.TargetPosition - launch.LaunchPosition).Length() / launch.Speed));
+                trajectoryLifeSpan.end = launch.GetExpectedEndTime();
             }
         }
         else
@@ -656,9 +656,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="missileEvent"></param>
     /// <param name="handler">Handler that will create the decoration</param>
     /// <param name="endOverride"></param>
-    internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler, long? endOverride = null)
+    internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? (endOverride.HasValue ? Math.Min(endOverride.Value, log.LogData.LogEnd) : log.LogData.LogEnd);
+        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
         var launchEvents = missileEvent.LaunchEvents;
         for (int i = 0; i < launchEvents.Count; i++)
         {
@@ -726,7 +726,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="useTargetOrientation"></param>
     internal static void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, float angleOffset, MissileRotatingDecorationHandler handler, bool useTargetOrientation = false)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
         var launchEvents = missileEvent.LaunchEvents;
         for (int i = 0; i < launchEvents.Count; i++)
         {
@@ -780,7 +780,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="handler"></param>
     internal static void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
         var launchEvents = missileEvent.LaunchEvents;
         for (int i = 0; i < launchEvents.Count; i++)
         {

@@ -250,7 +250,7 @@ internal static class LogImages
     #region CONVERGENCES
     // Instance Icons
     internal const string InstanceIconOuterNayos = "https://i.imgur.com/CRqdnan.png";
-    internal const string InstanceIconNexusOfEternity = "";
+    internal const string InstanceIconNexusOfEternityConvergence = "https://i.imgur.com/JRvuzIa.png";
 
     // Combat Replay Maps
     internal const string CombatReplayOuterNayos = "https://i.imgur.com/UFueycy.jpeg";

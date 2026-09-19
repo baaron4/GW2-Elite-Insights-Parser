@@ -76,7 +76,7 @@ public static class MapIDs
     public const int OuterNayosPrivateConvergence = 1527;
     public const int MountBalriorPublicConvergence = 1571;
     public const int MountBalriorPrivateConvergence = 1562;
-    public const int NexusOfEternityPublicConvergence = 99999;
+    public const int NexusOfEternityPublicConvergence = 1627;
     public const int NexusOfEternityPrivateConvergence = 1629;
     #endregion
     #region Story
