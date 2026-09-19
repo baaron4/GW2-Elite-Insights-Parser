@@ -92,6 +92,8 @@ For every input, CLI will consistently output a JSON like object, preceded by "P
 
 -__wingmanUploadFailed__: boolean, if true, wingman accepted the file but the upload failed.
 
+-__elapsed__: integer, time spent processing in milliseconds.
+
 
 ### For UI
 
