@@ -6,7 +6,7 @@ public class GadgetAnimationEvent : StatusEvent
 
     public GadgetAnimationEvent? Next { get; private set; }
 
-    public long? LoopEnd => Next?.Time;
+    public long LoopEnd => Next?.Time ?? Src.LastAware;
 
     internal GadgetAnimationEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

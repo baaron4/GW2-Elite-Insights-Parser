@@ -1,10 +1,12 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace GW2EIEvtcParser.ParsedData;
 
 public class Token : IEquatable<Token>
 {
     public readonly ulong Data;
+
+    public string DataString => ToString();
 
     private const ulong LetterMask = ulong.MaxValue >> (64 - DigitShift);
 

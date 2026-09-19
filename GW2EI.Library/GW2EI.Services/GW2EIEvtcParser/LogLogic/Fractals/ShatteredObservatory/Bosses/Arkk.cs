@@ -461,7 +461,7 @@ internal class Arkk : ShatteredObservatory
                 {
                     if (anim.AnimationToken == areas)
                     {
-                        var lifespan = (anim.Time, anim.LoopEnd ?? log.LogData.LogEnd);
+                        var lifespan = (anim.Time, anim.LoopEnd);
                         environmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotation));
                     }
                 }
@@ -478,7 +478,7 @@ internal class Arkk : ShatteredObservatory
             {
                 foreach (var anim in log.CombatData.GetGadgetAnimationData(tile))
                 {
-                    var lifespan = (anim.Time, anim.LoopEnd ?? log.LogData.LogEnd);
+                    var lifespan = (anim.Time, anim.LoopEnd);
                     Color color;
                     if (anim.AnimationToken == warning)
                     {

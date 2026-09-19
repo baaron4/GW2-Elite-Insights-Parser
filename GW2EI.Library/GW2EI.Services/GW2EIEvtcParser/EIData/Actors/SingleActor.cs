@@ -378,6 +378,20 @@ public abstract partial class SingleActor : Actor
                 replay.Hidden.Add(new(invisibleStart, Math.Min(visibilityEvent.Time, LastAware)));
             }
         }
+        var gadgetAnimationEvents = log.CombatData.GetGadgetAnimationData(AgentItem);
+        if (gadgetAnimationEvents.Count > 0)
+        {
+            // TODO find more hide related tokens
+            var offToken = new Token("off");
+            var offngoneToken = new Token("offngone");
+            foreach (var gadgetAnimationEvent in gadgetAnimationEvents)
+            {
+                if (gadgetAnimationEvent.AnimationToken == offToken || gadgetAnimationEvent.AnimationToken == offngoneToken)
+                {
+                    replay.Hidden.Add(new(gadgetAnimationEvent.Time, gadgetAnimationEvent.LoopEnd));
+                }
+            }
+        }
     }
 
     [MemberNotNull(nameof(CombatReplay))]
