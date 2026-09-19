@@ -102,7 +102,8 @@ public class GameplayStatistics
         {
             long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
             if (cl.Skill.IsAnimatedDodge(log.SkillData) || 
-                cl.SkillID == SkillIDs.Jumping || 
+                cl.SkillID == SkillIDs.Jumping ||
+                cl.SkillID == SkillIDs.FlyTo ||
                 cl.SkillID == SkillIDs.Gliding)
             {
                 continue;

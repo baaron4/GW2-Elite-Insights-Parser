@@ -10,6 +10,7 @@ public static class SkillItemOverrides
     {
         { WeaponSwap, "Weapon Swap" },
         { Jumping, "Jumping" },
+        { FlyTo, "Fly To" },
         { Gliding, "Gliding" },
         { Resurrect, "Resurrect" },
         { Resurrect2, "Resurrect" },

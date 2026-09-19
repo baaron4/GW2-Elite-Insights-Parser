@@ -84,6 +84,7 @@ public static class SkillIDs
     public const long Jumping = -65;
     public const long Gliding = -66;
     public const long MirageMirrorShatter = -67;
+    public const long FlyTo = -68;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

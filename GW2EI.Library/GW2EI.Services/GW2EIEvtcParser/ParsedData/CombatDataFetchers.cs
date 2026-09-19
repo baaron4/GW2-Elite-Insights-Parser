@@ -841,6 +841,10 @@ partial class CombatData
     {
         return GetTimeValueOrEmpty(_statusEvents.JumpEventsBySrc, src);
     }
+    public IReadOnlyList<FlyToEvent> GetFlyToEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.FlyToEventsBySrc, src);
+    }
     #endregion MOVEMENTS
     #region EFFECTS
     public IReadOnlyList<EffectEvent> GetEffectEventsBySrc(AgentItem src)
@@ -1406,6 +1410,7 @@ partial class CombatData
         FillFromManyRangeUnique(events, seen, _statusEvents.MovementEvents.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.GliderEventsBySrc.Values);
         FillFromManyRangeUnique(events, seen, _statusEvents.JumpEventsBySrc.Values);
+        FillFromManyRangeUnique(events, seen, _statusEvents.FlyToEventsBySrc.Values);
 
         // EFFECTS
         FillFromManyRangeUnique(events, seen, _statusEvents.EffectEventsBySrc.Values);

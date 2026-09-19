@@ -671,6 +671,18 @@ partial class CombatData
                 Add(statusEvents.GadgetModelInfoEventsByModel, gadgetModelInfoEvent.Model, gadgetModelInfoEvent);
                 Add(statusEvents.GadgetModelInfoEventsByPropID, gadgetModelInfoEvent.PropID, gadgetModelInfoEvent);
                 break;
+            case StateChange.FlyTo:
+                var flyToEvent = new FlyToEvent(stateChangeEvent, agentData);
+                if (flyToEvent.OnLanding && statusEvents.FlyToEventsBySrc.TryGetValue(flyToEvent.Src, out var flyTos))
+                {
+                    var last = flyTos[^1];
+                    if (!last.OnLanding && last.SetLanding(flyToEvent))
+                    {
+                        break;
+                    }
+                }
+                Add(statusEvents.FlyToEventsBySrc, flyToEvent.Src, flyToEvent);
+                break;
             default:
                 break;
         }

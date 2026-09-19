@@ -33,6 +33,8 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<JumpEvent>> JumpEventsBySrc = [];
 
+    public readonly Dictionary<AgentItem, List<FlyToEvent>> FlyToEventsBySrc = [];
+
     public readonly Dictionary<AgentItem, List<GadgetModelInfoEvent>> GadgetModelInfoEventsBySrc = [];
     public readonly Dictionary<ulong, List<GadgetModelInfoEvent>> GadgetModelInfoEventsByModel = [];
     public readonly Dictionary<ulong, List<GadgetModelInfoEvent>> GadgetModelInfoEventsByPropID = [];
