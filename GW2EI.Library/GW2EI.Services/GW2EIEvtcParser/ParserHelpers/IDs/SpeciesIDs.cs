@@ -802,13 +802,14 @@ public static class SpeciesIDs
         CosmicSunderer3 = 28095,
         CosmicPiercer5 = 28097,
         // Underworld
-        FleshReaverConv = 28044,
-        ShadowImpConv = 28102,
-        AatxeConv = 27884,
+        FleshReaver = 28044,
+        ShadowImp = 28102,
+        ChampionAatxe = 27884,
+        Aatxe = 28050,
         ShadeConv = 27969,
         // TODO
         // Water
-        WaterElementalConv = 27894,
+        ChampionWaterElemental = 27894,
         // Ice
         IceElemental2 = 26066,
         IceElemental3 = 26514,

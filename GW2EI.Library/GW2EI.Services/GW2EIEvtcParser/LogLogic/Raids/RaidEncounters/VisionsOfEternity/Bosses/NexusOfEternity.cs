@@ -263,7 +263,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    private static void RenameAdds(IReadOnlyList<SingleActor> actors)
     {
         foreach (SingleActor actor in actors)
         {

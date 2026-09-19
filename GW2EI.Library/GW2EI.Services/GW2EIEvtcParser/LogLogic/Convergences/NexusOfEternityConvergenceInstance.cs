@@ -66,13 +66,40 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         }
     }
 
+
+
+    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    {
+        foreach (SingleActor actor in actors)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.ScarabQueen:
+                    actor.OverrideName("Champion " + actor.Character + " Queen");
+                    break;
+                case (int)TargetID.ChampionWaterElemental:
+                case (int)TargetID.ChampionIceElemental:
+                case (int)TargetID.ChampionAatxe:
+                case (int)TargetID.ChampionCosmicBulwark:
+                case (int)TargetID.ChampionCosmicPiercer:
+                case (int)TargetID.ChampionCosmicSunderer:
+                    actor.OverrideName("Champion " + actor.Character);
+                    break;
+                case (int)TargetID.EliteCosmicBulwark:
+                case (int)TargetID.EliteCosmicPiercer:
+                    actor.OverrideName("Elite " + actor.Character);
+                    break;
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         MergeVloxxes(agentData.GetStableSpeciesByID(TargetID.VloxxConv), agentData, combatData, extensions, evtcVersion);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         AdjustVloxHP(vloxx, vloxx.AgentItem.Merges.Count > 0);
-        NexusOfEternity.RenameAdds(TrashMobs);
+        RenameAdds(TrashMobs);
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
@@ -86,10 +113,10 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         [
             TargetID.VloxxConv,
             TargetID.ChampionIceElemental,
-            TargetID.WaterElementalConv,
+            TargetID.ChampionWaterElemental,
             TargetID.Megadestroyer,
             TargetID.ScarabQueen,
-            TargetID.AatxeConv,
+            TargetID.ChampionAatxe,
         ];
     }
 
@@ -97,6 +124,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         return [
             TargetID.CosmicBulwark1,
+            // Center
             TargetID.ChampionCosmicBulwark,
             TargetID.EliteCosmicBulwark,
             TargetID.CosmicBulwark4,
@@ -108,10 +136,14 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             TargetID.CosmicSunderer1,
             TargetID.CosmicSunderer2,
             TargetID.CosmicSunderer3,
+            // Scarab
             TargetID.ScarabSwarmConv,
-            TargetID.FleshReaverConv,
-            TargetID.ShadowImpConv,
+            // Underworld
+            TargetID.FleshReaver,
+            TargetID.ShadowImp,
             TargetID.ShadeConv,
+            TargetID.Aatxe,
+            // Ice
             TargetID.IceElemental2,
             TargetID.IceElemental3,
             // Dominion
