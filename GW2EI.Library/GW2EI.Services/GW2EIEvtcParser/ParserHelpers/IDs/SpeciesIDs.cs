@@ -801,17 +801,18 @@ public static class SpeciesIDs
         CosmicBulwark4 = 28093,
         CosmicSunderer3 = 28095,
         CosmicPiercer5 = 28097,
-        //
+        // Underworld
         FleshReaverConv = 28044,
         ShadowImpConv = 28102,
         AatxeConv = 27884,
+        ShadeConv = 27969,
+        // TODO
+        // Water
         WaterElementalConv = 27894,
         // Ice
         IceElemental2 = 26066,
         IceElemental3 = 26514,
         ChampionIceElemental = 27991,
-
-        ShadeConv = 27969,
         // Scarab Plague
         ScarabQueen = 27924,
         ScarabSwarmConv = 28014,
@@ -869,6 +870,7 @@ public static class SpeciesIDs
         LiminalConduit = 26649,
         Ventshot = 26697,
         Fumaroller = 26729,
+        // Kryptis TODO
 
 
         #endregion CONVERGENCES

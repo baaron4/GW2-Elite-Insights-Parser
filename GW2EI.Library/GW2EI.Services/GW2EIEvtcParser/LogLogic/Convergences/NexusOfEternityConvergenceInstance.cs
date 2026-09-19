@@ -89,6 +89,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             TargetID.WaterElementalConv,
             TargetID.Megadestroyer,
             TargetID.ScarabQueen,
+            TargetID.AatxeConv,
         ];
     }
 
@@ -110,7 +111,6 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             TargetID.ScarabSwarmConv,
             TargetID.FleshReaverConv,
             TargetID.ShadowImpConv,
-            TargetID.AatxeConv,
             TargetID.ShadeConv,
             TargetID.IceElemental2,
             TargetID.IceElemental3,
@@ -187,26 +187,6 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         return combatData.GetMapIDEvent()?.MapID == MapIDs.NexusOfEternityPublicConvergence ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
-    private static void AddPerTargetEncounterPhase(ParsedEvtcLog log, SingleActor? target, List<PhaseData> phases, string phaseName, string phaseIcon, InstancePhaseData instancePhase, bool requirePhases)
-    {
-        if (target == null)
-        {
-            return;
-        }
-        var start = target.FirstAware;
-        var end = target.LastAware;
-        var dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-        var success = false;
-        if (dead != null)
-        {
-            end = dead.Time;
-            success = true;
-        }
-        var phase = new EncounterPhaseData(start, end, phaseName, success, phaseIcon, LogData.Mode.Normal, LogData.StartStatus.Normal, log.LogData).WithParentPhase(instancePhase);
-        phase.AddTarget(target, log);
-        phases.Add(phase);
-    }
-
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
@@ -233,9 +213,9 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         fullPhase.AddTarget(vloxx, log);
         phases.Add(fullPhase);
 
-        phases[0].AddTargets(Targets.Where(x => !x.IsAnySpecies([TargetID.VloxxConv, TargetID.Instance])), log, PhaseData.TargetPriority.Blocking);
-
-        // Check if additional encounter phases are needed for some npcs
+        var blockingTargets = Targets.Where(x => !x.IsAnySpecies([TargetID.VloxxConv, TargetID.Instance])).ToList();
+        instancePhase.AddTargets(blockingTargets, log, PhaseData.TargetPriority.Blocking);
+        // TODO detect rift entering to create encounter phases + add specific blocking targets to them
 
         if (!requirePhases)
         {
