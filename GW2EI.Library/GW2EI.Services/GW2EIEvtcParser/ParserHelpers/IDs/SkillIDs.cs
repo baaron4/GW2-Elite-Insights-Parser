@@ -5724,7 +5724,7 @@ public static class SkillIDs
     public const long Determined80356 = 80356;
     public const long Ascension = 80368;
     public const long JudgmentOfEternity1 = 80378;
-    public const long VisionsOfEternity1 = 80420;
+    public const long VisionsOfEternityInStaff = 80420;
     public const long POV_RelicOfTheCuratorGearBuff = 80445;
     public const long DivisionEternal = 80483;
     public const long SurroundingCurseVloxx = 80484;
@@ -5738,7 +5738,7 @@ public static class SkillIDs
     public const long EternalReflectionCosmicPiercerChamp = 80547;
     public const long ThousandStrikesVloxx = 80555;
     public const long SliceThroughReality = 80585;
-    public const long VisionsOfEternity2 = 80591;
+    public const long VisionsOfEternityInSword = 80591;
     public const long PowerOfAncora = 80598;
     public const long DamageImmunity = 80608;
     public const long JudgmentOfEternityGreenFailDamage = 80629;
@@ -5763,7 +5763,7 @@ public static class SkillIDs
     public const long RagingStormCosmicBulwark = 80965;
     public const long EmpoweredNexusOfEternity = 81002;
     public const long WorldpiercerCosmicBullwark = 81015;
-    public const long VisionsOfEternity3 = 81017;
+    public const long VisionsOfEternityInSpear = 81017;
     public const long ExcisionExtremis2 = 81053;
     public const long InquestDisguise = 81067;
     public const long RelicOfTheLastTyrantDamage = 81068;
