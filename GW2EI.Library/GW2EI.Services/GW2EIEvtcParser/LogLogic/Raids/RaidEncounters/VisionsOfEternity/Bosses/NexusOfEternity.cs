@@ -482,7 +482,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                                     var initialPosition = new ParametricPoint3D(entry.Position + direction * 200f, time);
                                     var finalPosition = new ParametricPoint3D(entry.Position, time + animDuration);
                                     var connector = new InterpolationConnector([initialPosition, finalPosition]).WithOffset(new(1000, 0, 0), true);
-                                    var rect = new RectangleDecoration(100, 20, lifespanAnim, Colors.Yellow, 0.3, connector).UsingRotationConnector(new AngleConnector(rotation));
+                                    var rect = new RectangleDecoration(150, 20, lifespanAnim, Colors.DarkYellow, 0.6, connector).UsingRotationConnector(new AngleConnector(rotation));
                                     replay.Decorations.Add(rect);
                                     rotation += 22.5f;
                                 }
@@ -498,7 +498,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
                 // Ascension - Orbs spawned from Vloxx after defiance bar is broken
                 var ascension = log.CombatData.GetMissileEventsBySkillID(VloxxAscensionOrb);
-                replay.Decorations.AddNonHomingMissiles(log, ascension, Colors.LightPurple, 0.4, 100);
+                replay.Decorations.AddNonHomingMissiles(log, ascension, Colors.DarkPurple, 0.3, 100);
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
