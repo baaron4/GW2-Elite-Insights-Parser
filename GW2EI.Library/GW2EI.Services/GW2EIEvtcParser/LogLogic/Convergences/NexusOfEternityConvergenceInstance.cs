@@ -173,7 +173,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             TargetID.DominionSoldier,
             TargetID.DominionMarksman2,
             TargetID.DominionBladestorm2,
-            TargetID.DominionBladeMaster,
+            TargetID.DominionBlademaster3,
             TargetID.FrostLegionShaman,
             // Destroyers
             TargetID.DetroyerTroll,
