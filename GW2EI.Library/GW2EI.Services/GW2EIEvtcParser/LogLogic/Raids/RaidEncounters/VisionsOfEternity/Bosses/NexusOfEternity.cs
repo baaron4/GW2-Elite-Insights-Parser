@@ -48,7 +48,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
-        new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity2,  VisionsOfEternity3], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
+        new PlayerDstHealthDamageHitMechanic([VisionsOfEternityInStaff, VisionsOfEternityInSword,  VisionsOfEternityInSpear], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(Excision, Mech_Excision, new (Symbols.Square, Colors.DarkPurpleBlue), new MechanicDescription("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
@@ -313,7 +313,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         {
                             // duration 10000 for trail, 12000 for puddle
                             // scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
-                            uint radius = (uint)(effect.Duration == 10000 ? 160 : 280);
+                        uint radius = (uint)(effect.Scale * 160);
                             lifespan = effect.ComputeLifespan(log, effect.Duration);
                             var circle = new CircleDecoration(radius, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(circle);
@@ -476,7 +476,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                     AddSurroundingCurseAoe(log, replay, target.AgentItem);
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddThousandStrikes(log, replay, target.AgentItem, 1650, ThousandStrikesVloxx);
+                AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
                     AddRagingStorm(log, replay, target.AgentItem);
                     // Swords last - above other decorations
                     AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
@@ -491,7 +491,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 break;
             case (int)TargetID.ChampionAspectOfTheSpear:
                 {
-                    AddThousandStrikes(log, replay, target.AgentItem, 1150, ThousandStrikesAspectOfTheSpear);
+                AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesAspectOfTheSpear);
 
                     // Cosmic Charge
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
@@ -649,18 +649,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in echoingBladeIndicator)
             {
-                uint radius = 600;
+                // Base radius 200
                 // Duration 1500 - Scale 3.0 - Echoing Blade - 600 radius - Vloxx
                 // Duration 2500 - Scale 2.5 - Excision Extremis - 500 radius - Vloxx
                 // Duration 1500 - Scale 2.0 - Excision - 400 radius - Sunderer
-                if (effect.Duration == 2500 && effect.Src.IsSpecies(TargetID.Vloxx))
-                {
-                    radius = 500;
-                }
-                else if (effect.Duration == 1500 && effect.Src.IsSpecies(TargetID.ChampionCosmicSunderer))
-                {
-                    radius = 400;
-                }
+                uint radius = (uint)(200 * effect.Scale);
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
@@ -684,7 +677,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddThousandStrikes(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, uint radius, long skill)
+    private static void AddThousandStrikes(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, long skill)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityThousandStrikesIndicator, out var thousandStrikesIndicators))
         {
@@ -693,6 +686,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Base radius 100
                 // Duration 4000 - Scale 16.5 - Vloxx
                 // Duration 2500 - Scale 11.5 - Spear
+                uint radius = (uint)(100 * effect.Scale);
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
@@ -711,10 +705,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         // Champion Bulwark - 1500 duration - Scale 1.5
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityRagingStormIndicator, out var ragingStorm))
         {
-            var duration = agent.IsSpecies(TargetID.Vloxx) ? 3000 : 1500;
             foreach (var effect in ragingStorm)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var circle = new CircleDecoration(150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
             }
