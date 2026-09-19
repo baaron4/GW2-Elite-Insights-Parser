@@ -323,6 +323,18 @@ internal class CombatReplayDecorationContainer
         AddTethers(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
     }
 
+    internal void AddTetherByEffectGUID(EffectEvent effect, Color color, double opacity, (long start, long end) lifespan)
+    {
+        AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(true), lifespan);
+    }
+
+    internal void AddTetherByEffectGUID(EffectEvent effect, string color, (long start, long end) lifespan)
+    {
+        if (!effect.IsAroundDst) { return; }
+
+        AddTether(lifespan.start, lifespan.end, effect.Dst, effect.Src, color);
+    }
+
     /// <summary>
     /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="EffectEvent"/>.
     /// </summary>
@@ -360,7 +372,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the tether decoration.</param>
     /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
     /// <param name="overrideDuration">Wether to override the duration or not.</param>
-    internal void AddTethersByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
+    internal void AddTetherByEffectGUID(ParsedEvtcLog log, EffectEvent effect, Color color, double opacity, int duration = 0, bool overrideDuration = false)
     {
         AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(true), duration, overrideDuration);
     }
