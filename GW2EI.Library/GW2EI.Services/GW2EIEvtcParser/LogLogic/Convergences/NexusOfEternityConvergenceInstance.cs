@@ -128,7 +128,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
 
     internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.InstancePrivacyMode.Private;
+        return combatData.GetMapIDEvent()?.MapID == MapIDs.NexusOfEternityPublicConvergence ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     private static void AddPerTargetEncounterPhase(ParsedEvtcLog log, SingleActor? target, List<PhaseData> phases, string phaseName, string phaseIcon, InstancePhaseData instancePhase, bool requirePhases)
