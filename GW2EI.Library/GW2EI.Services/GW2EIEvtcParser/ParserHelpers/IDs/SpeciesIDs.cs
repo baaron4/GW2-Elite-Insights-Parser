@@ -582,7 +582,7 @@ public static class SpeciesIDs
         NexusOfEternityVloxx = 28106,
         EliteCosmicPiercer = 27929,
         ChampionCosmicPiercer = 27958,
-        SomethingCosmicPiercer = 28056,
+        SomethingCosmicPiercer = 28056, // Spawned for 2 seconds in one log, might be challenge/legendary mode npc
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
         EliteCosmicBulwark = 28065,

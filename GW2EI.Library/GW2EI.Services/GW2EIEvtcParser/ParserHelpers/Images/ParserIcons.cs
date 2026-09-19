@@ -480,6 +480,8 @@ internal static class ParserIcons
     private const string TrashDownedCrocodilianRazortooth = "https://i.imgur.com/v3Z6ZvX.png";
     private const string TrashLightThief = "https://i.imgur.com/qJZ9arr.png";
     private const string EtherealSeal = "https://i.imgur.com/9alXwPm.png";
+    private const string TrashCosmicPiercer = "https://i.imgur.com/KzX7NGO.png";
+    private const string TrashCosmicSunderer = "https://i.imgur.com/4Lf41yG.png";
     #endregion
 
     #region Minion
@@ -1407,6 +1409,10 @@ internal static class ParserIcons
         { TargetID.EtherealSeal, EtherealSeal },
         { TargetID.NexusOfEternityVloxx, TargetVloxx },
         { TargetID.VloxxConv, TargetVloxx },
+        { TargetID.EliteCosmicPiercer, TrashCosmicPiercer },
+        { TargetID.ChampionCosmicPiercer, TrashCosmicPiercer },
+        { TargetID.SomethingCosmicPiercer, TrashCosmicPiercer },
+        { TargetID.ChampionCosmicSunderer, TrashCosmicSunderer },
     };
 
     /// <summary>
