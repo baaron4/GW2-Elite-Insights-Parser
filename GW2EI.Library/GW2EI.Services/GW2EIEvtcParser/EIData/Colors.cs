@@ -87,6 +87,7 @@ internal static class Colors
     public static Color DarkPink = new(128, 0, 75);
     public static Color Magenta = new(255, 0, 255);
     public static Color DarkMagenta = new(128, 0, 128);
+    public static Color Lilla = new(200, 162, 200);
     public static Color Blue = new(0, 0, 255);
     public static Color SlightlyDarkBlue = new(0, 0, 180);
     public static Color CobaltBlue = new(0, 50, 180);

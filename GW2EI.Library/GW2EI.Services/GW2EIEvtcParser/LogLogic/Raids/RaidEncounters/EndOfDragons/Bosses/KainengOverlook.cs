@@ -328,7 +328,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 lifespan = (effect.Time, effect.Time + correctedDuration);
 
                 // Tether Sniper to Player
-                replay.Decorations.AddTethersByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
+                replay.Decorations.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
 
                 // Circle around the player
                 replay.Decorations.Add(new CircleDecoration(500, lifespan, Colors.Red, 0.2, new AgentConnector(p)).UsingFilled(false));

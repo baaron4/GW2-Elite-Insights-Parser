@@ -582,12 +582,13 @@ public static class SpeciesIDs
         Vloxx = 28106,
         EliteCosmicPiercer = 27929, // Also in convergence
         ChampionCosmicPiercer = 27958, // Also in convergence
-        SomethingCosmicPiercer = 28056, // Also in convergence
+        SomethingCosmicPiercer = 28056, // Also in convergence - Spawned for 2 seconds in one raid encounter log, might be challenge/legendary mode npc
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
         EliteCosmicBulwark = 28065, // Also in convergence
         ChampionCosmicBulwark = 27934, // Also in convergence
         ChampionCosmicSunderer = 27933,
+        AscensionOrb = SpeciesIDs.AscensionOrb,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
@@ -1372,6 +1373,7 @@ public static class SpeciesIDs
     private const int ElectrocutedAreaArkk = -127;
     private const int TileArkk = -128;
     private const int GrandRaidVloxxChest = -129;
+    private const int AscensionOrb = -130;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
