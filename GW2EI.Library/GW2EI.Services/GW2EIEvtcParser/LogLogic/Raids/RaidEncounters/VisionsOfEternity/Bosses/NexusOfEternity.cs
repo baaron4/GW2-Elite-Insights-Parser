@@ -103,7 +103,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return
         [
-            TargetID.NexusOfEternityVloxx,
+            TargetID.Vloxx,
             TargetID.ChampionCosmicPiercer,
             TargetID.SomethingCosmicPiercer,
             TargetID.ChampionAspectOfTheStaff,
@@ -131,7 +131,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (logStartNPCUpdate != null)
         {
             var vloxx = agentData.GetAgent(logStartNPCUpdate.DstAgent, logStartNPCUpdate.Time);
-            if (!vloxx.IsSpecies(TargetID.NexusOfEternityVloxx))
+            if (!vloxx.IsSpecies(TargetID.Vloxx))
             {
                 throw new MissingKeyActorsException("Vloxx not found");
             }
@@ -202,7 +202,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         return new Dictionary<TargetID, int>()
         {
-            {TargetID.NexusOfEternityVloxx, 0},
+            {TargetID.Vloxx, 0},
             {TargetID.ChampionCosmicPiercer, 1},
             {TargetID.SomethingCosmicPiercer, 1},
             {TargetID.ChampionAspectOfTheStaff, 1},
@@ -214,7 +214,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.NexusOfEternityVloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
         var phases = GetInitialPhase(log);
         var fullFightPhase = (EncounterPhaseData)phases[0];
         fullFightPhase.AddTarget(vloxx, log);
@@ -292,7 +292,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
         switch (target.ID)
         {
-            case (int)TargetID.NexusOfEternityVloxx:
+            case (int)TargetID.Vloxx:
                 {
                     // Probability Distribution - Placed AoE indicator
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
@@ -487,40 +487,50 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     AddThousandStrikes(log, replay, target.AgentItem, 1150, ThousandStrikesAspectOfTheSpear);
 
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
+                    // Cosmic Charge
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
                     {
                         foreach (var effect in puddles)
                         {
-                            // duration 5000
-                            // TODO figure out which skill is this effect from for the spear
+                            // duration 5000 - scale 1.0
+                            lifespan = effect.ComputeLifespan(log, effect.Duration);
+                            var circle = new CircleDecoration(160, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
                         }
                     }
-                }
-                break;
-            case (int)TargetID.ChampionCosmicPiercer:
-                {
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
                 }
                 break;
             case (int)TargetID.EliteCosmicPiercer:
                 {
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
+                    AddAnnhilatingOrbCosmicPiercer(log, replay);
+                }
+                break;
+            case (int)TargetID.ChampionCosmicPiercer:
+                {
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
+                    AddAnnhilatingOrbCosmicPiercer(log, replay);
+                }
+                break;
+            case (int)TargetID.EliteCosmicBulwark:
+                {
+                    // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
+                    AddRagingStorm(log, replay, target.AgentItem);
+                    AddWorldpiercer(log, replay, target.AgentItem);
+                }
+                break;
+            case (int)TargetID.ChampionCosmicBulwark:
+                {
+                    // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
+                    AddRagingStorm(log, replay, target.AgentItem);
+                    AddWorldpiercer(log, replay, target.AgentItem);
                 }
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
                 {
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    // TODO find and add Extremis hit effect
-                }
-                break;
-            case (int)TargetID.EliteCosmicBulwark:
-                {
-                    AddRagingStorm(log, replay, target.AgentItem);
-                }
-                break;
-            case (int)TargetID.ChampionCosmicBulwark:
-                {
-                    AddRagingStorm(log, replay, target.AgentItem);
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackSwordSwing, 400);
+                    // TODO Find what Excision is
                 }
                 break;
             default:
@@ -648,7 +658,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Duration 1500 - Scale 3.0 - Echoing Blade - 600 radius - Vloxx
                 // Duration 2500 - Scale 2.5 - Excision Extremis - 500 radius - Vloxx
                 // Duration 1500 - Scale 2.0 - Excision - 400 radius - Sunderer
-                if (effect.Duration == 2500 && effect.Src.IsSpecies(TargetID.NexusOfEternityVloxx))
+                if (effect.Duration == 2500 && effect.Src.IsSpecies(TargetID.Vloxx))
                 {
                     radius = 500;
                 }
@@ -706,11 +716,62 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         // Champion Bulwark - 1500 duration - Scale 1.5
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityRagingStormIndicator, out var ragingStorm))
         {
-            var duration = agent.IsSpecies(TargetID.NexusOfEternityVloxx) ? 3000 : 1500;
+            var duration = agent.IsSpecies(TargetID.Vloxx) ? 3000 : 1500;
             foreach (var effect in ragingStorm)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
+            }
+        }
+    }
+
+    private static void AddAnnhilatingOrbCosmicPiercer(ParsedEvtcLog log, CombatReplay replay)
+    {
+        var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbCosmicPiercer);
+        replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.LightBlue, 0.1, 240);
+    }
+
+    /// <summary>
+    /// Elite Cosmic Bulwark and Champion Cosmic Bulwark
+    /// </summary>
+    private static void AddWorldpiercer(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        (long start, long end) lifespan;
+
+        // Worldpiercer - Arrow
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(agent, EffectGUIDs.NexusOfEternityCosmicBulwarkWorldpiercerArrowIndicator, out var arrows))
+        {
+            foreach (var effect in arrows)
+            {
+                if (agent.TryGetCurrentFacingDirection(log, effect.Time, out var facing))
+                {
+                    lifespan = effect.ComputeLifespan(log, 5000);
+                    var offset = new Vector3(700, 0, 0);
+                    var arrow = new RectangleDecoration(1400, 100, lifespan, Colors.LightOrange, 0.2, new AgentConnector(agent).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facing.Value));
+                    replay.Decorations.Add(arrow);
+                }
+            }
+        }
+
+        // Worldpiercer - Puddle
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityCosmicBulwarkWorldpiercerAoE, out var bluePuddle))
+        {
+            foreach (var effect in bluePuddle)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 8000);
+                var circle = new CircleDecoration(180, lifespan, Colors.CobaltBlue, 0.4, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
+            }
+        }
+
+        // Worldpiercer - Red ring - Using a separated effect because the AoE might deal damage for 10s instead of 8s
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityCosmicBulwarkWorldpiercerAoE, out var redRing))
+        {
+            foreach (var effect in redRing)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                var circle = new DoughnutDecoration(175, 180, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
             }
         }
