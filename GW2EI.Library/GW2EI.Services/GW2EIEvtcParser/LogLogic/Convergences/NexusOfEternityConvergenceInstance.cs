@@ -72,6 +72,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         AdjustVloxHP(vloxx, vloxx.AgentItem.Merges.Count > 0);
+        NexusOfEternity.RenameAdds(TrashMobs);
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
@@ -94,13 +95,13 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         return [
             TargetID.CosmicBulwark1,
-            TargetID.CosmicBulwark2,
-            TargetID.CosmicBulwark3,
+            TargetID.ChampionCosmicBulwark,
+            TargetID.EliteCosmicBulwark,
             TargetID.CosmicBulwark4,
             TargetID.CosmicPiercer1,
-            TargetID.CosmicPiercer2,
-            TargetID.CosmicPiercer3,
-            TargetID.CosmicPiercer4,
+            TargetID.ChampionCosmicPiercer,
+            TargetID.EliteCosmicPiercer,
+            TargetID.SomethingCosmicPiercer,
             TargetID.CosmicPiercer5,
             TargetID.CosmicSunderer1,
             TargetID.CosmicSunderer2,

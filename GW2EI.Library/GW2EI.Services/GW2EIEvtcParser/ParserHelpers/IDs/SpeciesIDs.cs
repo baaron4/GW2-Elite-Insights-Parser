@@ -580,13 +580,13 @@ public static class SpeciesIDs
         CursedArtifact_NPC = 27663,
         // - Nexus of Eternity
         Vloxx = 28106,
-        EliteCosmicPiercer = 27929,
-        ChampionCosmicPiercer = 27958,
-        SomethingCosmicPiercer = 28056,
+        EliteCosmicPiercer = 27929, // Also in convergence
+        ChampionCosmicPiercer = 27958, // Also in convergence
+        SomethingCosmicPiercer = 28056, // Also in convergence
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
-        EliteCosmicBulwark = 28065,
-        ChampionCosmicBulwark = 27934,
+        EliteCosmicBulwark = 28065, // Also in convergence
+        ChampionCosmicBulwark = 27934, // Also in convergence
         ChampionCosmicSunderer = 27933,
         #endregion RAID ENCOUNTERS
         #region FRACTALS
@@ -795,12 +795,7 @@ public static class SpeciesIDs
         VloxxConv = 28077,
         CosmicBulwark1 = 27897,
         CosmicPiercer1 = 27900,
-        CosmicPiercer2 = 27929,
-        CosmicBulwark2 = 27934,
-        CosmicPiercer3 = 27958,
         CosmicSunderer1 = 28011,
-        CosmicPiercer4 = 28056,
-        CosmicBulwark3 = 28065,
         CosmicSunderer2 = 28075,
         CosmicBulwark4 = 28093,
         CosmicSunderer3 = 28095,
