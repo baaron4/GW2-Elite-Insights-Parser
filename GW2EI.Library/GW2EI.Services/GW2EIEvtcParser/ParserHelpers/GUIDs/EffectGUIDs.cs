@@ -1159,5 +1159,6 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoE = new("75E4C35E80D662409DAB0EF479E6999D"); // src bulwark, duration 10000, has dynamic end
     public static readonly Guid NexusOfEternityChampionCosmicBulwarkNonIdentifiedAoEOverlap = new("4CAB3D628991C04DB59D2F65EC986A77"); // src bulwark, duration 10000, has dynamic end
     public static readonly Guid NexusOfEternityChampionCosmicSundererNonIdentifiedAoE = new("F2485AEE8C0CE64D90AFE149D9C88C86");
+    public static readonly Guid NexusOfEternityYellowSparkEffect = new("F1FD4312181FEF43B99242554FFCD76D"); // src unknown, duration 1750, has dynamic end, happens when ascension orb spawns but also in other occasions
     #endregion Raid Encounters
 }

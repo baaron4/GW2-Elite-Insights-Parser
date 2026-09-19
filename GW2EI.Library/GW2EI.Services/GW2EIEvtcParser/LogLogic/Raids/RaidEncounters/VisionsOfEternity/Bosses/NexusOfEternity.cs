@@ -231,6 +231,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
 
+        // Fixation
         var fixated = p.GetBuffStatus(log, FixatedTimed).Where(x => x.Value > 0);
         foreach (Segment seg in fixated)
         {
@@ -289,9 +290,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             case (int)TargetID.NexusOfEternityVloxx:
                 {
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
-                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
-
                     // Probability Distribution - Placed AoE indicator
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
                     {
@@ -351,14 +349,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         }
                     }
 
-                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
-
-                    // Echoing Blade - Red AoEs with spinning sword - Reflectable
-                    var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
-                    replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
-
                     // Annihilating Orb - Arrow indicator
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbArrowIndicator, out var arrows))
                     {
@@ -387,20 +377,20 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         }
                     }
 
+                    // Annihilating Orb - Moving orb
+                    var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
+                    foreach (var orb in orbs)
+                    {
+                        CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
+                        {
+                            replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
+                            replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
+                        });
+                    }
+
                     // Annihilating Orb - End red AoE
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbPostTeleportRedAoE, out var redAoEs))
                     {
-                        var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
-
-                        foreach (var orb in orbs)
-                        {
-                            CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
-                            {
-                                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
-                                replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
-                            });
-                        }
-
                         foreach (var effect in redAoEs)
                         {
                             lifespan = effect.ComputeLifespan(log, 5000);
@@ -465,8 +455,22 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         }
                     }
 
+                    // Echoing Blade - Red AoEs with spinning sword - Reflectable
+                    var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
+                    replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
+
+                    // Ascension - Orbs spawned from Vloxx after defiance bar is broken
+                    var ascension = log.CombatData.GetMissileEventsBySkillID(VloxxAscensionOrb);
+                    replay.Decorations.AddNonHomingMissiles(log, ascension, Colors.LightPurple, 0.4, 100);
+
+                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
+                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
+                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
                     AddThousandStrikes(log, replay, target.AgentItem, 1650, ThousandStrikesVloxx);
                     AddRagingStorm(log, replay, target.AgentItem);
+                    // Swords last - above other decorations
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
@@ -659,13 +663,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityThousandStrikesIndicator, out var thousandStrikesIndicators))
         {
-            var thousandStrikes = log.CombatData.GetMissileEventsBySkillID(skill);
-
-            foreach (var orb in thousandStrikes)
-            {
-                replay.Decorations.AddNonHomingMissile(log, orb, Colors.LightBlue, 0.3, 20);
-            }
-
             foreach (var effect in thousandStrikesIndicators)
             {
                 // Base radius 100
@@ -675,6 +672,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
             }
+
+            // Decoration above indicator
+            var thousandStrikes = log.CombatData.GetMissileEventsBySkillID(skill);
+            replay.Decorations.AddNonHomingMissiles(log, thousandStrikes, Colors.LightBlue, 0.3, 20);
         }
     }
 

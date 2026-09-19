@@ -5731,7 +5731,7 @@ public static class SkillIDs
     public const long CoveredInScarabs = 80509;
     public const long EchoingAttack = 80510;
     public const long CosmicChargeVloxx = 80512;
-    public const long VloxxMissibleToBeIdentified = 80520;
+    public const long VloxxAscensionOrb = 80520;
     public const long POV_AscensionsSacrificeChain = 80529;
     public const long Smash = 80536;
     public const long NexusOfEternity3GreenFailBuff = 80536;
