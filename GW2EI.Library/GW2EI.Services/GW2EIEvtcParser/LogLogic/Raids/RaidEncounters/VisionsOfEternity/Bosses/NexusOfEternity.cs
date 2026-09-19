@@ -168,13 +168,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.ChampionAspectOfTheStaff,
             // TargetID.SomethingCosmicPiercer,
         ])).ToList();
-        encounterPhase.AddTargets(aspectChampions, log, PhaseData.TargetPriority.NonBlocking);
-        if (!requirePhases)
-        {
-            return [];
-        }
-        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
-
         var cosmicChamps = targets.Where(x => x.IsAnySpecies(
         [
             TargetID.ChampionCosmicBulwark,
@@ -182,6 +175,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.ChampionCosmicSunderer,
             // TargetID.SomethingCosmicPiercer,
         ])).ToList();
+        encounterPhase.AddTargets(aspectChampions, log, PhaseData.TargetPriority.NonBlocking);
+        encounterPhase.AddTargets(cosmicChamps, log, PhaseData.TargetPriority.Blocking);
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
         var cosmicElites = targets.Where(x => x.IsAnySpecies(
         [
             TargetID.EliteCosmicBulwark,
@@ -226,12 +226,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             {TargetID.Vloxx, 0},
             {TargetID.ChampionCosmicPiercer, 1},
             {TargetID.SomethingCosmicPiercer, 1},
-            {TargetID.ChampionAspectOfTheStaff, 1},
-            {TargetID.ChampionAspectOfTheSpear, 1},
             {TargetID.ChampionCosmicBulwark, 1},
             {TargetID.ChampionCosmicSunderer, 1},
             {TargetID.EliteCosmicPiercer, 2},
-            {TargetID.EliteCosmicBulwark, 2}
+            {TargetID.EliteCosmicBulwark, 2},
+            {TargetID.ChampionAspectOfTheStaff, 3},
+            {TargetID.ChampionAspectOfTheSpear, 3},
         };
     }
 
