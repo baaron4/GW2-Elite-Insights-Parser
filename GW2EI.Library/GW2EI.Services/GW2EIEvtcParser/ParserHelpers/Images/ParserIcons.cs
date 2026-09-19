@@ -483,6 +483,8 @@ internal static class ParserIcons
     private const string TrashCosmicPiercer = "https://i.imgur.com/KzX7NGO.png";
     private const string TrashCosmicSunderer = "https://i.imgur.com/4Lf41yG.png";
     private const string TrashAscensionOrb = "https://i.imgur.com/HabikUq.png";
+    private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
+    private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
     #endregion
 
     #region Minion
@@ -1415,6 +1417,8 @@ internal static class ParserIcons
         { TargetID.SomethingCosmicPiercer, TrashCosmicPiercer },
         { TargetID.ChampionCosmicSunderer, TrashCosmicSunderer },
         { TargetID.AscensionOrb, TrashAscensionOrb },
+        { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
+        { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
     };
 
     /// <summary>
