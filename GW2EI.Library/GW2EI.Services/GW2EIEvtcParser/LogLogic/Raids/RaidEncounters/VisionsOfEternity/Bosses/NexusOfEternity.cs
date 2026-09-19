@@ -50,6 +50,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic([VisionsOfEternity1, VisionsOfEternity2,  VisionsOfEternity3], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic(Excision, Mech_Excision, new (Symbols.Square, Colors.DarkPurpleBlue), new MechanicDescription("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
 
@@ -492,7 +493,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     {
                         foreach (var effect in puddles)
                         {
-                            // duration 5000 - scale 1.0
+                            // Duration 5000 - scale 1.0
                             lifespan = effect.ComputeLifespan(log, effect.Duration);
                             var circle = new CircleDecoration(160, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(circle);
@@ -529,8 +530,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.ChampionCosmicSunderer:
                 {
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackSwordSwing, 400);
-                    // TODO Find what Excision is
+                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing, 400);
                 }
                 break;
             default:
@@ -568,12 +568,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16)
             .Distinct()
-            .ToList();
+            .ToHashSet();
 
-        for (int i = 0; i < candidates.Count; i++)
+        foreach (var orb in candidates)
         {
-            candidates[i].OverrideID(TargetID.AscensionOrb, agentData);
-            candidates[i].OverrideName("Ascension Orb " + i + 1);
+            orb.OverrideID(TargetID.AscensionOrb, agentData);
+            orb.OverrideName("Ascension Orb");
         }
     }
 

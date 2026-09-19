@@ -5747,6 +5747,7 @@ public static class SkillIDs
     public const long ThousandStrikesAspectOfTheSpear = 80709;
     public const long CosmicChargeBulwark = 80717;
     public const long EternalReflectionCosmicPiercerElite = 80726;
+    public const long Excision = 80732;
     public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
     public const long ProbabilityDistribution = 80809;
     public const long RagingStormVloxx = 80810;

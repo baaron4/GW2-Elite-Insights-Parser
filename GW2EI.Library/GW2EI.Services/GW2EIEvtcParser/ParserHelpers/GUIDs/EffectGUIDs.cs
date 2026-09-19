@@ -1151,7 +1151,7 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx and sunderer, duration 1500/2500, echoing blade, excision extremis, echoing attack
     public static readonly Guid NexusOfEternityVloxxEchoingBladeSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
     public static readonly Guid NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833, echoing blade, excision extremis, division eternal
-    public static readonly Guid NexusOfEternityChampionSundererEchoingAttackSwordSwing = new("F2485AEE8C0CE64D90AFE149D9C88C86"); // src sunderer, duration 833, echoing attack
+    public static readonly Guid NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing = new("F2485AEE8C0CE64D90AFE149D9C88C86"); // src sunderer, duration 833, echoing attack, excision
     public static readonly Guid NexusOfEternityDivisionEternalIndicator = new("5614D57DBA8E1B43A97EB03D904D5B89"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end // TODO VERIFY THIS
     public static readonly Guid NexusOfEternityVisionsOfEternityIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D");
@@ -1160,7 +1160,7 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityCosmicBulwarkWorldpiercerArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // src bulwark, duration 566, is around dst
     public static readonly Guid NexusOfEternityCosmicBulwarkWorldpiercerAoE = new("75E4C35E80D662409DAB0EF479E6999D"); // src bulwark, duration 8000, has dynamic end
     public static readonly Guid NexusOfEternityCosmicBulwarkWorldpiercerAoERedRing = new("4CAB3D628991C04DB59D2F65EC986A77"); // src bulwark, duration 10000, has dynamic end
-    public static readonly Guid NexusOfEternityChampionCosmicSundererNonIdentifiedAoE = new("F2485AEE8C0CE64D90AFE149D9C88C86");
+    public static readonly Guid NexusOfEternityChampionCosmicSundererExcisionBlackOrb = new("F2485AEE8C0CE64D90AFE149D9C88C86");
     public static readonly Guid NexusOfEternityYellowSparkEffect = new("F1FD4312181FEF43B99242554FFCD76D"); // src unknown, duration 1750, has dynamic end, happens when ascension orb spawns but also in other occasions
     #endregion Raid Encounters
 }
