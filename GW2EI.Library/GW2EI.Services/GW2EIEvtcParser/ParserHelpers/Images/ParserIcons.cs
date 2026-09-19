@@ -482,6 +482,7 @@ internal static class ParserIcons
     private const string EtherealSeal = "https://i.imgur.com/9alXwPm.png";
     private const string TrashCosmicPiercer = "https://i.imgur.com/KzX7NGO.png";
     private const string TrashCosmicSunderer = "https://i.imgur.com/4Lf41yG.png";
+    private const string TrashCosmicBulwark = "https://i.imgur.com/ljAqMsj.png";
     private const string TrashAscensionOrb = "https://i.imgur.com/HabikUq.png";
     private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
     private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
@@ -1416,6 +1417,8 @@ internal static class ParserIcons
         { TargetID.ChampionCosmicPiercer, TrashCosmicPiercer },
         { TargetID.SomethingCosmicPiercer, TrashCosmicPiercer },
         { TargetID.ChampionCosmicSunderer, TrashCosmicSunderer },
+        { TargetID.EliteCosmicBulwark, TrashCosmicBulwark },
+        { TargetID.ChampionCosmicBulwark, TrashCosmicBulwark },
         { TargetID.AscensionOrb, TrashAscensionOrb },
         { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
