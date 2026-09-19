@@ -18,7 +18,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
     {
         LogCategoryInformation.SubCategory = SubLogCategory.NexusOfEternityConvergence;
         LogID |= LogIDs.ConvergenceMasks.NexusOfEternityConvergenceMask;
-        Icon = InstanceIconNexusOfEternity;
+        Icon = InstanceIconNexusOfEternityConvergence;
         Extension = "noeconv";
     }
 
@@ -229,7 +229,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
                 }
             }
         }
-        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, vloxx.FirstAware), Math.Min(fullEnd, log.LogData.LogEnd), "Full Vloxx", Icon).WithParentPhase(phases[0]);
+        var fullPhase = log.LogData.CreateEncounterPhase(Math.Max(log.LogData.LogStart, vloxx.FirstAware), Math.Min(fullEnd, log.LogData.LogEnd), "Full Vloxx", EncounterIconNexusOfEternity).WithParentPhase(instancePhase);
         fullPhase.AddTarget(vloxx, log);
         phases.Add(fullPhase);
 
