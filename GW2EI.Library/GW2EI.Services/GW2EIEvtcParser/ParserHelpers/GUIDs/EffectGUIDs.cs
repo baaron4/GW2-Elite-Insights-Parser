@@ -1144,7 +1144,7 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityCosmicExplosionAoE = new("A8AA7A32731DBF4AB2301495C89624A6"); // src vloxx, duration 1666
     public static readonly Guid NexusOfEternityAnnihilatingOrbArrowIndicator = new("1A262BDD265422439BE245BB67D374F5");
     public static readonly Guid NexusOfEternityAnnihilatingOrbTeleportRingsIndicator = new("EE7B17875C502A499B2DCA60C3A44602"); // src teleporter, duration 4000
-    public static readonly Guid NexusOfEternityAnnihilatingOrbPostTeleportRedAoE = new("51A65F90A99E2043ACB54EEA4EC494F0"); // src teleporter, duration 5000
+    public static readonly Guid NexusOfEternityBlueShield = new("51A65F90A99E2043ACB54EEA4EC494F0"); // src teleporter, duration 5000
     public static readonly Guid NexusOfEternityAnnihilatingOrbPostTeleportBlueShield = new("D21FF557B9F363429E4B42E57362E31D"); // src teleporter, duration 5000, could be inverted with NexusOfEternityPostTPRedAoE
     //public static readonly Guid NexusOfEternityUndefined1 = new("29E4FF27335CD045962342511841CBCA"); // duration 3333
     //public static readonly Guid NexusOfEternityUndefined2 = new("71D5D17395B8834086033B0F0AF245E4"); // duration 3033

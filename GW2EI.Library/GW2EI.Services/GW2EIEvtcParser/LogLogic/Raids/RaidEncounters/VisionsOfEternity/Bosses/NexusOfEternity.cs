@@ -393,14 +393,18 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         });
                     }
 
-                    // Annihilating Orb - End red AoE
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbPostTeleportRedAoE, out var redAoEs))
+                // Blue shield effect, combine with Red AoE + shockwave when no VisionsOfEternity cast
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityBlueShield, out var blueShields))
                     {
-                        foreach (var effect in redAoEs)
+                    var visionsOfEternityCast = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == VisionsOfEternityInStaff || x.SkillID == VisionsOfEternityInSword || x.SkillID == VisionsOfEternityInSpear).ToList();
+                    foreach (var effect in blueShields)
                         {
-                            lifespan = effect.ComputeLifespan(log, 5000);
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
                             var barrier = new CircleDecoration(240, lifespan, Colors.Blue, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(barrier);
+                        
+                        if (!visionsOfEternityCast.Any(x => x.IntersectsActualCastWindow(effect.Time)))
+                        {
                             var doughnut = new DoughnutDecoration(240, 300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)); // Doughnut for better color representation
                             replay.Decorations.Add(doughnut);
                             // Shockwave - Don't see it as a separated effect
@@ -408,6 +412,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, 1850); // Extends to the original position of Vloxx
                         }
                     }
+                }
 
                     // Division Eternal - Big rectangle
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
