@@ -466,6 +466,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
 
                     AddThousandStrikes(log, replay, target.AgentItem, 1650, ThousandStrikesVloxx);
+                    AddRagingStorm(log, replay, target.AgentItem);
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
@@ -503,6 +504,18 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
                     // TODO find and add Extremis hit effect
                 }
+                break;
+            case (int)TargetID.EliteCosmicBulwark:
+                {
+                    AddRagingStorm(log, replay, target.AgentItem);
+                }
+                break;
+            case (int)TargetID.ChampionCosmicBulwark:
+                {
+                    AddRagingStorm(log, replay, target.AgentItem);
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -587,12 +600,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
 
         // Surrounding Curse - Explosion
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseExplosions, out var surrCurseDamage))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseRagingStormExplosions, out var surrCurseDamage))
         {
             foreach (var effect in surrCurseDamage)
             {
                 // Duration is 2666, for the replay it's way too long
                 // Override it to 250 for a brief visual
+                // Conflicts with Raging Storm which is 150 radius
                 (long start, long end) lifespan = (effect.Time, effect.Time + 250);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
@@ -660,6 +674,23 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
+            }
+        }
+    }
+
+    private static void AddRagingStorm(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        // Vloxx - 3000 duration - Scale 1.5
+        // Elite Bulwark - 1500 duration - Scale 1.5
+        // Champion Bulwark - 1500 duration - Scale 1.5
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityRagingStormIndicator, out var ragingStorm))
+        {
+            var duration = agent.IsSpecies(TargetID.NexusOfEternityVloxx) ? 3000 : 1500;
+            foreach (var effect in ragingStorm)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                var circle = new CircleDecoration(150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
             }
         }
     }
