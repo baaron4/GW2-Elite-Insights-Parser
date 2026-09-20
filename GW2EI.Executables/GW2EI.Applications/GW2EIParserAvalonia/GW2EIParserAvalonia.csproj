@@ -9,7 +9,7 @@
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AssemblyName>GuildWars2EliteInsights</AssemblyName>
-        <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\UI-Avalonia\</OutputPath>
+        <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\GW2EI\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
@@ -37,7 +37,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm' or '$(Configuration)' == 'Release-OSX' or '$(Configuration)' == 'Release-OSX-Arm' Or '$(Configuration)' == 'Release-Win' Or '$(Configuration)' == 'Release-Linux'">
-        <OutputPath>..\..\..\GW2EI.bin\Release\UI-Avalonia-$(RuntimeIdentifier)\</OutputPath>
+        <OutputPath>..\..\..\GW2EI.bin\Release\GW2EI-$(RuntimeIdentifier)\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
