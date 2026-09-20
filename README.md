@@ -65,8 +65,8 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 
 ## UI Usage
 <div style="display: flex;">
-   <img src="./docs/Images/EILook.png" width="50%">
-   <img src="./docs/Images/EILookDark.png" width="50%">
+   <img src="./docs/Images/EILook.png" width="49.5%">
+   <img src="./docs/Images/EILookDark.png" width="49.5%">
 </div>
 <br>
 
@@ -405,7 +405,7 @@ With this panel you can customize the display further by adding range indicators
 
 <div style="display: flex; gap: 16px;">
    <img src="./docs/Images/playersAndTargetsCR.png" width="60%">
-   <img src="./docs/Images/playersBuffCR.png" width="31.5%">
+   <img src="./docs/Images/playersBuffCR.png" width="31.75%">
 </div>
 <br/>
 
@@ -466,13 +466,13 @@ Contains every event that occured during the encounter, can be filtered by a spe
 
 <img src="./docs/Images/inspectorAgentsData.png" width="60%">
 
-Contains information about every agent in the encounter: players, minions, npcs, mobs, etc...
+Contains information about every agent in the encounter: players, minions, npcs, mobs, etc..., can be filtered by ID, Name, Type, Spec and Base Spec.
 
 
 ### Skills data
 <img src="./docs/Images/inspectorSkillsData.png" width="60%">
 
-Contains metadata information about every skill that was used in the encounter.
+Contains metadata information about every skill that was used in the encounter, can be filtered by Name.
 
 ### Content GUID
 <img src="./docs/Images/inspectorContentGUID.png" width="60%">
@@ -482,7 +482,7 @@ Contains their ContentID and GUID for different types of events, can be filtered
 ### Combat Items
 <img src="./docs/Images/inspectorCombatItems.png" width="60%">
 
-Table containing detailed information about every combat event that happened in the encounter.
+Table containing detailed information about every combat event that happened in the encounter, can be filtered by State Change.
 
 
 ## Contributors
