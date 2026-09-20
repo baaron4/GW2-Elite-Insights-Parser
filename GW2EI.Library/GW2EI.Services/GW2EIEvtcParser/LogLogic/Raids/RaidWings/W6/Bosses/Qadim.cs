@@ -557,6 +557,7 @@ internal class Qadim : MythwrightGambit
     }
 
     private const float HiddenOpacity = 0.1f;
+    private const float Warningpacity = 0.7f;
     private const float VisibleOpacity = 1f;
     private const float NoOpacity = -1f;
     private static void AnimatePlateforms(ParsedEvtcLog log, CombatReplay replay, SingleActor plateform, List<ParametricPoint1D> opacities, AgentItem? qadimAgent)
@@ -1030,9 +1031,33 @@ internal class Qadim : MythwrightGambit
                     return;
                 }
                 var opacities = new List<ParametricPoint1D> { new(VisibleOpacity, target.FirstAware) };
-                foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))
+                var gadgetAnimationData = log.CombatData.GetGadgetAnimationData(target.AgentItem);
+                if (gadgetAnimationData.Count > 0)
                 {
-                    AnimatePlateforms(log, replay, target, opacities, qadimAgent);
+                    var destroyToken = new Token("destroy");
+                    var warningToken = new Token("warning");
+                    foreach (var gadgetAnimation in gadgetAnimationData)
+                    {
+                        if (gadgetAnimation.AnimationToken == destroyToken)
+                        {
+                            opacities.Add(new(HiddenOpacity, gadgetAnimation.Time));
+                        }
+                        else if (gadgetAnimation.AnimationToken == warningToken)
+                        {
+                            opacities.Add(new(Warningpacity, gadgetAnimation.Time));
+                        }
+                        else
+                        {
+                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
+                        }
+                    }
+                } 
+                else
+                {
+                    foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))
+                    {
+                        AnimatePlateforms(log, replay, target, opacities, qadimAgent);
+                    }
                 }
                 var platformDecoration = new BackgroundIconDecoration(
                     ParserIcons.QadimPlatform, 0, 2247, 
