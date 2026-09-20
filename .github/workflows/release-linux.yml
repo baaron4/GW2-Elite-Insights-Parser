@@ -24,6 +24,9 @@ jobs:
           mkdir -p dist
           dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist /p:CreateDeb=true /p:CreateRpm=true
 
+      - name: Verify Output Files
+        run: ls -la ./dist
+
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
