@@ -106,6 +106,15 @@ partial class CombatData
                 if (needStart && c is BuffApplyEvent)
                 {
                     needStart = false;
+                    if (filtered.Count > 0)
+                    {
+                        var prev = filtered[^1];
+                        if (c.Time - prev.Time < ServerDelayConstant)
+                        {
+                            filtered.Remove(prev);
+                            continue;
+                        }
+                    }
                     filtered.Add(c);
                 }
                 else if (!needStart && c is BuffRemoveAllEvent)
