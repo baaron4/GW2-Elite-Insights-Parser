@@ -92,6 +92,8 @@ For every input, CLI will consistently output a JSON like object, preceded by "P
 
 -__wingmanUploadFailed__: boolean, if true, wingman accepted the file but the upload failed.
 
+-__elapsed__: integer, time spent processing in milliseconds.
+
 
 ### For UI
 
@@ -179,10 +181,6 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__IndentJSON__: if true, generated json logs will be indented instead of being on a single line.
 
--__SaveOutXML__: if true, xml logs will be generated.
-
--__IndentXML__: if true, generated xml logs will be indented instead of being on a single line.
-
 -__CompressRaw__: if true, xml and json logs will be compressed.
 
 -__RawTimelineArrays__: if true, xml and json logs will contain graph related data.
@@ -211,20 +209,20 @@ For a more detailed look, please check [this guide](https://snowcrows.com/guides
 
 ### Header
 
-<img src="./docs/Images/header.PNG" width="60%" height="60%">
-
+<img src="./docs/Images/header.png" width="60%" height="60%">
+  
 The header shows you the status of the fight and lets you swap themes and modules. There are three modules available: Statistics, Combat Replay and Healing Statistics.
 
 ### Footer
 
-<img src="./docs/Images/footer.PNG" width="60%" height="60%">
+<img src="./docs/Images/footer.png" width="60%" height="60%">
 
 On the footer you'll find meta data regarding the log and the parser.
 
 ### Statistics
 #### Navigation
 
-<img src="./docs/Images/selection.PNG" width="60%" height="60%" >
+<img src="./docs/Images/selection.png" width="60%" height="60%" >
 
 This panel is where the main navigation of the Statistics module will happen, you can select targets, players, phases and components. 
 
@@ -233,7 +231,7 @@ The target selection will impact what you'll observe on every panel that has a "
 On players, you can observe gear related scores (between 0 and 10, please check "question mark" for a detailed explanation on how this value is computed), used weapons and the commander tag (if applicable).
 
 #### General Stats
-<img src="./docs/Images/general.PNG" width="60%" height="60%">
+<img src="./docs/Images/general.png" width="60%" height="60%">
 
 On general stats you can see macro statistics regarding incoming/outgoing damage and player behavior:
 - "Damage Stats" contains outgoing damage related information.
@@ -244,7 +242,7 @@ On general stats you can see macro statistics regarding incoming/outgoing damage
 
 #### Buffs
 
-<img src="./docs/Images/buff.PNG" width="60%" height="60%">
+<img src="./docs/Images/buff.png" width="60%" height="60%">
 
 This component will show you buff uptimes, ordered by categories, and generation information for each player.
 
@@ -252,7 +250,7 @@ On generation tables, please check the "question mark" above for a detailed expl
 
 #### Damage Modifiers
 
-<img src="./docs/Images/damageMods.PNG" width="60%" height="60%">
+<img src="./docs/Images/damageMods.png" width="60%" height="60%">
 
 This component contains damage modifiers, ordered by categories.
 
@@ -264,7 +262,7 @@ Please note that it is not possible to check traits or gear which means that Eli
 
 #### Mechanics
 
-<img src="./docs/Images/mechanics.PNG" width="60%" height="60%">
+<img src="./docs/Images/mechanics.png" width="60%" height="60%">
 
 A very straightforward component that contains a summary of important fight specific mechanics.
 
@@ -272,7 +270,7 @@ Depending on the nature of the mechanic, the column can be considered just as in
 
 #### Graph
 
-<img src="./docs/Images/graph.PNG" width="60%" height="60%">
+<img src="./docs/Images/graph.png" width="60%" height="60%">
 
 Damage graph that also contains enemy health, enemy breakbar and fight mechanics information. The graph is fully interactive and can be exported. Shown damage can also be customized:
 - The time interval in between the information is computed
@@ -281,25 +279,40 @@ Damage graph that also contains enemy health, enemy breakbar and fight mechanics
    - DPS in [x - interval / 2, x + interval / 2].
    - Cumulative damage in [x - interval, x].
 
+#### Rotations
+
+<img src="./docs/Images/rotations.png" width="60%" height="60%">
+
+This component displays each players rotation based on the timeline of the fight, it also highlights the different phases of the encounter and you can zoom in on a specific section simply by left clicking and dragging to either side.
+
+Hovering over any of the skills will display:
+- Name
+- Timestamp 
+- Duration
+
 #### Targets Summary
 
-<img src="./docs/Images/targets.PNG" width="60%" height="60%">
+<img src="./docs/Images/targets.png" width="60%" height="60%">
 
 This component focuses on the selected target:
 - Outgoing damage distribution per skill for the target and its minions.
 - Incoming damage distribution per skill.
 - Graph that contains outgoing damage, health, breakbar, rotation and buff presences. The graph is fully interactive and can be exported. Damage related customizations on the main graph are also applicable here.
+- The same graph as above but filtered to a specific player
+- Customizable simple rotation component for a tidier look on skill ordering.
 - Buff status contains condition and boon uptimes on the boss. For conditions, it is also possible to see generation done by each player.
 
 #### Player Summary
 
-<img src="./docs/Images/players.PNG" width="60%" height="60%">
+<img src="./docs/Images/players.png" width="60%" height="60%">
 
-This component focuses on the selected target:
+This component focuses on the selected target in the selected phase:
 - Outgoing damage distribution per skill for the player and their minions.
-- Incoming damage distribution per skill.
-- Customizable simple rotation component for a tidier look on skill ordering.
+- Incoming damage distribution per skill for the player and their minions.
 - Graph that contains outgoing damage, health, rotation and buff presences. Information related to targets' health and breakbar can also be displayed. The graph is fully interactive and can be exported. Damage related customizations on the main graph are also applicable here.
+- Boon uptimes and volumes for the player.
+- Customizable simple rotation component for a tidier look on skill ordering.
+- Advanced rotation for the player, you can zoom in on a specific 60 second section simply by left clicking and dragging to either side.
 - Information on the consumables used by the player.
 - A succession of small graphs that details incoming damage before each death.
 
@@ -307,7 +320,7 @@ This component focuses on the selected target:
 
 #### Main Display
 
-<img src="./docs/Images/mainCR.PNG" width="60%" height="60%">
+<img src="./docs/Images/mainCR.png" width="60%" height="60%">
 
 The main display is where the animation happens.
 
@@ -317,18 +330,20 @@ The display supports two manipulations: Pan and Zoom.
 
 #### Damage Table
 
-<img src="./docs/Images/damageCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/damageCR.png" width="30%" height="30%">
 
 Displays damage/DPS in real time. The picture says it all.
 
 #### Selection
 
-<img src="./docs/Images/selectionCR.PNG" width="45%" height="45%">
+<img src="./docs/Images/selectionCR.png" width="45%" height="45%">
 
 Allows to display or remove specific information from the Combat Replay such as:
+- Follow selected player
 - Group highlights
 - Secondary NPCs
 - Mechanics
+- Markers
 - Player Skills
 - Use in-game hitbox sizes
 - Show all minions
@@ -342,35 +357,32 @@ Player skills displayed are categorised in the following groups:
 - Cleanse: condition removal skill
 - Strip: boon removal skill
 - Portal: a portal skill such as Mesmer's Open Portal, Scourge's Sand Swell, Thief's Shadow Portal, etc...
+- CC: crowd control Skill
 
 #### Indicators
 
-<img src="./docs/Images/indicatorCR.PNG" width="45%" height="45%">
+<img src="./docs/Images/indicatorCR.png" width="45%" height="45%">
 
 With this panel you can customize the display further by adding range indicators and cone indicators on the selected player.
 
-#### Players
+#### Players & Targets
 
-<img src="./docs/Images/playersCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/playersAndTargetsCR.png" width="30%" height="30%">
 
-<img src="./docs/Images/playersBuffCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/playersBuffCR.png" width="30%" height="30%">
 
-This component lets you select a specific player. Once a player is selected, they will appear with a green square around on the main display.
+This component lets you interact with Players and Targets.
 
-If "Highlight Selected Group" is checked, players on the same group as the selected player will have a blue square around them.
+Once a player or target is selected, they will appear with a green square around on the main display.
 
-You can observe the status of the currently active players:
+When selecting a player if "Highlight Selected Group" is checked, players on the same group will have a blue square around them.
+
+For players we can observe:
 - Health and Barrier
 - Present buff/debuffs
 - Skill casts
 
-#### Targets
-
-<img src="./docs/Images/targetsCR.PNG" width="30%" height="30%">
-
-This component lets you select a specific target. Once a target is selected, they will appear with a green square around on the main display.
-
-On this component you can observe the status of the currently active targets:
+For targets we can observe:
 - Health and Barrier
 - Breakbar state and select a breakbar phase
 - Present buff/debuffs
@@ -378,7 +390,7 @@ On this component you can observe the status of the currently active targets:
 
 #### Mechanics
 
-<img src="./docs/Images/mechanicsCR.PNG" width="30%" height="30%">
+<img src="./docs/Images/mechanicsCR.png" width="30%" height="30%">
 
 With this table, you can directly jump on the timestamp of a specific mechanic.
 
