@@ -184,9 +184,7 @@ internal class BanditTrio : SalvationPass
                 .Distinct();
             foreach (var cage in cages)
             {
-                long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
-                long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
-                AgentItem encounterCage = AgentManipulationHelper.CreateEnglobedAgentInInterval(cage, agentData, expectedStart, expectedEnd);
+                AgentItem encounterCage = AgentManipulationHelper.CreateEnglobedAgentInInterval(cage, agentData, minFirstAware, maxLastAware);
                 encounterCage.OverrideID(TargetID.Cage, agentData);
             }
         } 
@@ -195,9 +193,7 @@ internal class BanditTrio : SalvationPass
             var cages = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 238).Distinct();
             foreach (var cage in cages)
             {
-                long expectedStart = Math.Max(minFirstAware, cage.FirstAware);
-                long expectedEnd = Math.Min(maxLastAware, cage.LastAware);
-                AgentItem encounterCage = AgentManipulationHelper.CreateEnglobedAgentInInterval(cage, agentData, expectedStart, expectedEnd);
+                AgentItem encounterCage = AgentManipulationHelper.CreateEnglobedAgentInInterval(cage, agentData, minFirstAware, maxLastAware);
                 encounterCage.OverrideID(TargetID.Cage, agentData);
             }
         }
@@ -205,9 +201,7 @@ internal class BanditTrio : SalvationPass
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) <= 1 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
-            long expectedStart = Math.Max(minFirstAware, bomb.FirstAware);
-            long expectedEnd = Math.Min(maxLastAware, bomb.LastAware);
-            AgentItem encounterBomb = AgentManipulationHelper.CreateEnglobedAgentInInterval(bomb, agentData, expectedStart, expectedEnd);
+            AgentItem encounterBomb = AgentManipulationHelper.CreateEnglobedAgentInInterval(bomb, agentData, minFirstAware, maxLastAware);
             encounterBomb.OverrideID(TargetID.Bombs, agentData);
         }
     }

@@ -299,7 +299,6 @@ internal class Deimos : BastionOfThePenitent
         var shackledPrisoners = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.ID > 0).Distinct();
         foreach (var shackledPrisoner in shackledPrisoners)
         {
-            long expectedStart = Math.Max(shackledPrisoner.FirstAware, minFirstAware);
             var encounterShackledPrisoner = AgentManipulationHelper.CreateEnglobedAgentInInterval(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
             encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
         }
