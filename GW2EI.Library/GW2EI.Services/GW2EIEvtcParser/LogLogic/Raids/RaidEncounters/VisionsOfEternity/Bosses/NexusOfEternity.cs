@@ -542,13 +542,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicPiercer:
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
-                AddAnnhilatingOrbCosmicPiercer(log, replay);
+                AddCosmicPiercerAnnhilatingOrb(log, replay);
 
                 break;
             case (int)TargetID.ChampionCosmicPiercer:
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
-                AddAnnhilatingOrbCosmicPiercer(log, replay);
+                AddCosmicPiercerAnnhilatingOrb(log, replay);
 
                 break;
             case (int)TargetID.EliteCosmicBulwark:
@@ -756,7 +756,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         replay.Decorations.AddNonHomingMissiles(log, ragingStorm, Colors.MidTeal, 0.5, 20);
     }
 
-    private static void AddAnnhilatingOrbCosmicPiercer(ParsedEvtcLog log, CombatReplay replay)
+    private static void AddCosmicPiercerAnnhilatingOrb(ParsedEvtcLog log, CombatReplay replay)
     {
         var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbCosmicPiercer);
         replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.LightBlue, 0.1, 240);
