@@ -19,6 +19,8 @@
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux'">
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <CreateDeb>true</CreateDeb>
+        <CreateRpm>true</CreateRpm>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Win'">
@@ -30,6 +32,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX-Arm'">
         <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
+        <CreateDeb>true</CreateDeb>
+        <CreateRpm>true</CreateRpm>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm'">

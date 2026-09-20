@@ -8,6 +8,8 @@ on:
 jobs:
   build-linux-installers:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +27,8 @@ jobs:
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          draft: true
           files: |
             **/*.deb
             **/*.rpm
+          fail_on_unmatched_files: true
