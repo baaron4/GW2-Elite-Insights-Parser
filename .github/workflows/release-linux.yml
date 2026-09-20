@@ -43,7 +43,6 @@ jobs:
       - name: Build Application & Packages for arm64
         run: |
           cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
-          mkdir -p dist-arm
 
           dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux-Arm -o ./staging/usr/share/GW2EI-linux-arm64
 
