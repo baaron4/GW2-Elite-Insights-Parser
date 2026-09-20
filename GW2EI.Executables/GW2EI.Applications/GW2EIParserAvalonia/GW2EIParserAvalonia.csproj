@@ -19,8 +19,6 @@
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux'">
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <CreateDeb>true</CreateDeb>
-        <CreateRpm>true</CreateRpm>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Win'">
@@ -32,8 +30,6 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release-OSX-Arm'">
         <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
-        <CreateDeb>true</CreateDeb>
-        <CreateRpm>true</CreateRpm>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release-Linux-Arm'">
@@ -126,7 +122,6 @@
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIUpdater\GW2EIUpdater.csproj" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Services\GW2EIParserCommons\GW2EIParserCommons.csproj" />
         <ProjectReference Include="..\..\..\GW2EI.Library\GW2EI.Repositories\GW2EIGW2API\GW2EIGW2API.csproj" />
-        <PackageReference Include="Packaging.Targets" Version="0.1.232" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>

@@ -18,11 +18,22 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Install FPM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev rpm
+          sudo gem install fpm
+
       - name: Build Application & Packages
         run: |
           cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
           mkdir -p dist
-          dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist /p:CreateDeb=true /p:CreateRpm=true
+          dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./staging/usr/share/UI-Avalonia-linux-x64
+
+          fpm -s dir -t deb -n UI-Avalonia-linux-x64 -C ./staging .
+          fpm -s dir -t rpm -n UI-Avalonia-linux-x64 -C ./staging .
+
+          mv *.deb *.rpm ./dist/
 
       - name: Verify Output Files
         run: |      
