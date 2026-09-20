@@ -76,7 +76,7 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 
 3. Click `Open` when parsing done.
 
-You can change the settings at any time using the Settings window.
+You can use the Settings window to modify the parser output. The settings changes will not be applied to logs already parsing.
 
 ## Console Usage
 
@@ -460,7 +460,7 @@ The table columns can be sorted and resized and selecting a row and using `Ctrl 
 ### Events
 <img src="./docs/Images/inspectorEvents.png" width="60%">
 
-Contains every event that occured during the encounter, can be filtered by a specific `Skill ID`, `Skill Name`, `GUID`, `Agent` and you can select which event types you would like to include/exclude from the table with the event tree.
+Contains every event that occured during the encounter, can be filtered by a specific Skill, content GUID or Agent and you can select which event types you would like to include/exclude from the table with the event tree. You can click an event in the list to inspect its content.
 
 ### Agents data
 
