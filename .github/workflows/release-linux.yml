@@ -30,8 +30,8 @@ jobs:
           mkdir -p dist
           dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./staging/usr/share/UI-Avalonia-linux-x64
 
-          fpm -s dir -t deb -n UI-Avalonia-linux-x64 -C ./staging .
-          fpm -s dir -t rpm -n UI-Avalonia-linux-x64 -C ./staging .
+          fpm -s dir -t deb -n UI-Avalonia-linux-x64 -p UI-Avalonia-linux-x64_amd64.deb -C ./staging .
+          fpm -s dir -t rpm -n UI-Avalonia-linux-x64 -p UI-Avalonia-linux-x64.x86_64.rpm -C ./staging .
 
           mv *.deb *.rpm ./dist/
 
