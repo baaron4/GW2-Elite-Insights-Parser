@@ -2,7 +2,14 @@ name: Release Linux-arm64 Packages
 
 on:
   release:
-    types: [published, created, edited]
+    types: [published]
+
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Target Release Tag'
+        required: true
+        type: string
 
 jobs:
   build-linux-installers:
