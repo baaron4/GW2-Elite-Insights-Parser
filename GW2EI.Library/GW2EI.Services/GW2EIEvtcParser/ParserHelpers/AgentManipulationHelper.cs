@@ -542,10 +542,8 @@ public static class AgentManipulationHelper
     /// <returns></returns>
     internal static AgentItem CreateEnglobedAgentInInterval(AgentItem originalAgent, AgentData agentData, long expectedStart, long expectedEnd)
     {
-        if (expectedStart < originalAgent.FirstAware || expectedEnd > originalAgent.LastAware)
-        {
-            throw new InvalidOperationException("CreateEnglobedAgentInInterval: agent must be within expected aware times");
-        }
+        expectedStart = Math.Max(originalAgent.FirstAware, expectedStart);
+        expectedEnd = Math.Min(expectedEnd, originalAgent.LastAware);
         AgentItem newAgentItem;
         if (expectedStart != originalAgent.FirstAware || expectedEnd != originalAgent.LastAware)
         {
