@@ -23,8 +23,9 @@ jobs:
 
       - name: Build Application & Packages
         run: |
-          dotnet deb publish GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia/GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
-          dotnet rpm publish GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia/GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
+          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
+          dotnet deb publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
+          dotnet rpm publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
 
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v1
