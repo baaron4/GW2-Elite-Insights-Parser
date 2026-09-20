@@ -414,7 +414,7 @@ public partial class InspectorViewModel : ObservableObject
         {
             Filter = FilterAgentModels
         };
-        AgentFilterItems = agentsData.Select(agent => new AgentFilterItem(agent)).ToList();
+        AgentFilterItems = agentsData.Where(x => !x.IsEnglobedAgent).Select(agent => new AgentFilterItem(agent)).ToList();
         #endregion AGENTS
 
         #region  SKILLS
