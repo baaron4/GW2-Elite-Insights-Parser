@@ -117,6 +117,10 @@ public static class AgentManipulationHelper
             (x) => x.IsStateChange == StateChange.BarrierUpdate,
             (x) => x.IsStateChange == StateChange.Targetable,
             (x) => x.IsStateChange == StateChange.StealthChange,
+            (x) => x.IsStateChange == StateChange.GadgetAnimation,
+            (x) => x.IsStateChange == StateChange.GadgetModelInfo,
+            (x) => x.IsStateChange == StateChange.GadgetNameVisible,
+            (x) => x.IsStateChange == StateChange.Transformation,
             (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
             (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
         };
