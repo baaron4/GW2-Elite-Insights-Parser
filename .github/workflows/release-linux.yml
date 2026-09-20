@@ -16,16 +16,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install Packaging Tools
-        run: |
-          dotnet tool install -g dotnet-deb
-          dotnet tool install -g dotnet-rpm
-
       - name: Build Application & Packages
         run: |
           cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
-          dotnet deb publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
-          dotnet rpm publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist
+          mkdir -p dist
+          dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./dist /p:CreateDeb=true /p:CreateRpm=true
 
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v1
