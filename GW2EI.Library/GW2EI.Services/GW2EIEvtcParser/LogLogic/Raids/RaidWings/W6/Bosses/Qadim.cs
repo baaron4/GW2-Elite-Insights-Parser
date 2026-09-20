@@ -557,7 +557,6 @@ internal class Qadim : MythwrightGambit
     }
 
     private const float HiddenOpacity = 0.1f;
-    private const float Warningpacity = 0.7f;
     private const float VisibleOpacity = 1f;
     private const float NoOpacity = -1f;
     private static void AnimatePlateforms(ParsedEvtcLog log, CombatReplay replay, SingleActor plateform, List<ParametricPoint1D> opacities, AgentItem? qadimAgent)
@@ -1044,7 +1043,8 @@ internal class Qadim : MythwrightGambit
                         }
                         else if (gadgetAnimation.AnimationToken == warningToken)
                         {
-                            opacities.Add(new(Warningpacity, gadgetAnimation.Time));
+                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
+                            replay.Decorations.Add(new CircleDecoration(500, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(gadgetAnimation.LoopEnd));
                         }
                         else
                         {
