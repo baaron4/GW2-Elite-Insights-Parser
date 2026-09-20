@@ -807,8 +807,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
         // torrential bolt (water missiles)
         var torrentialBolts = log.CombatData.GetMissileEventsBySkillID(TorrentialBolt);
         var torrentialBoltsReflectable = log.CombatData.GetMissileEventsBySkillID(TorrentialBoltDash);
-        environmentDecorations.AddNonHomingMissiles(log, torrentialBolts, Colors.MidTeal, 0.2, 180);
-        environmentDecorations.AddReflectableNonHomingMissiles(log, torrentialBoltsReflectable, Colors.MidTeal, 0.3, Colors.Grey, 0.3, 50);
+        environmentDecorations.AddNonHomingMissiles(log, torrentialBolts, Colors.LightTeal, 0.2, 180);
+        environmentDecorations.AddReflectableNonHomingMissiles(log, torrentialBoltsReflectable, Colors.LightTeal, 0.3, Colors.Grey, 0.3, 50);
 
         // focused wrath (dark missiles)
         var focusedWraths = log.CombatData.GetMissileEventsBySkillID(FocusedWrath);

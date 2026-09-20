@@ -338,11 +338,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     {
                         foreach (var effect in puddles)
                         {
-                            // duration 10000 for trail, 12000 for puddle
-                            // scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
+                            // Duration 10000 for trail, 12000 for puddle
+                            // Scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
                             uint radius = (uint)(effect.Scale * 160);
                             lifespan = effect.ComputeLifespan(log, effect.Duration);
-                            var circle = new CircleDecoration(radius, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(radius, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
                             replay.Decorations.Add(circle);
                         }
                     }
@@ -504,6 +504,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     var worldpiercer = log.CombatData.GetMissileEventsBySkillID(WorldpiercerVloxx);
                     replay.Decorations.AddNonHomingMissiles(log, worldpiercer, Colors.CobaltBlue, 0.4, 100);
 
+                    // Raging Storm - Missile
+                    AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
+
                     AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                     AddSurroundingCurseAoe(log, replay, target.AgentItem);
                     AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
@@ -531,7 +534,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         {
                             // Duration 5000 - scale 1.0
                             lifespan = effect.ComputeLifespan(log, effect.Duration);
-                            var circle = new CircleDecoration(160, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
+                            var circle = new CircleDecoration(160, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
                             replay.Decorations.Add(circle);
                         }
                     }
@@ -743,6 +746,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.Add(circle);
             }
         }
+
+        AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+    }
+
+    private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, long[] ids)
+    {
+        // The missile in game is quite long and comes vertically, in the replay it disappears before hitting the AoE
+        var ragingStorm = log.CombatData.GetMissileEventsBySkillIDs(ids);
+        replay.Decorations.AddNonHomingMissiles(log, ragingStorm, Colors.MidTeal, 0.5, 20);
     }
 
     private static void AddAnnhilatingOrbCosmicPiercer(ParsedEvtcLog log, CombatReplay replay)
