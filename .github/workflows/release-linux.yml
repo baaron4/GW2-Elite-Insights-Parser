@@ -23,8 +23,8 @@ jobs:
 
       - name: Build Application & Packages
         run: |
-          dotnet deb publish -c Release-Linux
-          dotnet rpm publish -c Release-Linux
+          dotnet deb publish . -c Release-Linux -o ./dist
+          dotnet rpm publish . -c Release-Linux -o ./dist
 
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v1
