@@ -134,7 +134,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                         case SpinningNebulaCentral:
                         case SpinningNebulaWithTeleport:
                             lifespan = (cast.Time, cast.Time + cast.ActualDuration);
-                            replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.MidTeal, 0.2, new AgentConnector(target)), lifespan.end);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightTeal, 0.2, new AgentConnector(target)), lifespan.end);
                             break;
                         // Shooting Stars - Green Arrow
                         case ShootingStars:
@@ -334,7 +334,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 
         // Spinning Nebula - Projectiles
         var spinningNebula = log.CombatData.GetMissileEventsBySkillIDs([SpinningNebulaCentral, SpinningNebulaWithTeleport]);
-        environmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.MidTeal, 0.4, 20);
+        environmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.LightTeal, 0.4, 20);
 
         // Charging Constellation - Numbers Projectiles
         var chargingConstellation = log.CombatData.GetMissileEventsBySkillID(ChargingConstellationDamage);
