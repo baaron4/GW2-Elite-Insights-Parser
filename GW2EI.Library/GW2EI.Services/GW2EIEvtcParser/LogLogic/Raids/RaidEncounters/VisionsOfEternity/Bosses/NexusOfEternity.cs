@@ -321,256 +321,256 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         switch (target.ID)
         {
             case (int)TargetID.Vloxx:
+
+                // Probability Distribution - Placed AoE indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
                 {
-                    // Probability Distribution - Placed AoE indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
+                    foreach (var effect in puddlesIndicators)
                     {
-                        foreach (var effect in puddlesIndicators)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 3000);
-                            var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
-                        }
+                        lifespan = effect.ComputeLifespan(log, 3000);
+                        var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
                     }
-
-                    // Cosmic Charge & Probability Distribution - Damage field
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
-                    {
-                        foreach (var effect in puddles)
-                        {
-                            // Duration 10000 for trail, 12000 for puddle
-                            // Scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
-                            uint radius = (uint)(effect.Scale * 160);
-                            lifespan = effect.ComputeLifespan(log, effect.Duration);
-                            var circle = new CircleDecoration(radius, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(circle);
-                        }
-                    }
-
-                    // Visions of Eternity - Indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityVisionsOfEternityIndicator, out var voeIndicator))
-                    {
-                        foreach (var effect in voeIndicator)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 8000);
-                            var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.AddWithGrowing(circle, lifespan.end);
-                        }
-                    }
-
-                    // Worldpiercer - Indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerIndicator, out var worldpiercerIndicator))
-                    {
-                        foreach (var effect in worldpiercerIndicator)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 2666);
-                            var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new(1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
-                            replay.Decorations.Add(line);
-                        }
-                    }
-
-                    // Worldpiercer - Barrier
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerLineBarrier, out var worldpiercerBarrier))
-                    {
-                        foreach (var effect in worldpiercerBarrier)
-                        {
-                            // Up to 10 segments if it doesn't hit the arena border
-                            lifespan = effect.ComputeDynamicLifespan(log, 10000);
-                            var line = new RectangleDecoration(365, 10, lifespan, Colors.LightBlue, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
-                            replay.Decorations.Add(line);
-                        }
-                    }
-
-                    // Annihilating Orb - Arrow indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbArrowIndicator, out var arrows))
-                    {
-                        foreach (var effect in arrows)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 6000);
-                            var line = new RectangleDecoration(1850, 100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new(925, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
-                            replay.Decorations.Add(line);
-                        }
-                    }
-
-                    // Annihilating Orb - Warnings rings for the teleport location
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbTeleportRingsIndicator, out var rings))
-                    {
-                        foreach (var effect in rings)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 4000);
-                            int pulseCycle = 1000;
-                            (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
-                            for (int i = 0; i < 4; i++)
-                            {
-                                replay.Decorations.AddShockwave(new PositionConnector(effect.Position), pulse, Colors.LightOrange, 0.2, 1200);
-                                pulse.start = pulse.end;
-                                pulse.end = pulse.start + pulseCycle;
-                            }
-                        }
-                    }
-
-                    // Annihilating Orb - Moving orb
-                    var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
-                    foreach (var orb in orbs)
-                    {
-                        CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
-                        {
-                            replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
-                            replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
-                        });
-                    }
-
-                    // Blue shield effect, combine with Red AoE + shockwave when no VisionsOfEternity cast
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityBlueShield, out var blueShields))
-                    {
-                        var visionsOfEternityCast = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == VisionsOfEternityInStaff || x.SkillID == VisionsOfEternityInSword || x.SkillID == VisionsOfEternityInSpear).ToList();
-                        foreach (var effect in blueShields)
-                        {
-                            lifespan = effect.ComputeLifespan(log, effect.Duration);
-                            var barrier = new CircleDecoration(240, lifespan, Colors.Blue, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(barrier);
-
-                            if (!visionsOfEternityCast.Any(x => x.IntersectsActualCastWindow(effect.Time)))
-                            {
-                                var doughnut = new DoughnutDecoration(240, 300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)); // Doughnut for better color representation
-                                replay.Decorations.Add(doughnut);
-                                // Shockwave - Don't see it as a separated effect
-                                lifespan = (effect.Time, effect.Time + 3333);
-                                replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, 1850); // Extends to the original position of Vloxx
-                            }
-                        }
-                    }
-
-                    // Division Eternal - Big rectangle
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
-                    {
-                        foreach (var effect in divisionEternals)
-                        {
-                            lifespan = effect.ComputeLifespan(log, 3000);
-                            var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
-                            replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
-                        }
-                    }
-
-                    // Slice Through Reality - Teleport AoE
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
-                    {
-                        for (int i = 0; i <= tp.Count - 1; i = i + 2)
-                        {
-                            var entry = tp[i];
-                            var exit = tp[i + 1];
-                            if (entry != null && exit != null && exit.Time > entry.Time && exit.Time < entry.Time + 3000)
-                            {
-                                (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
-                                (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
-                                var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
-                                replay.Decorations.Add(entryCircle);
-                                var exitCircle = new CircleDecoration(220, lifespanExit, Colors.LightOrange, 0.2, new PositionConnector(exit.Position));
-                                replay.Decorations.Add(exitCircle);
-
-                                // Suction animation
-                                long time = entry.Time;
-                                int animDuration = 500;
-                                for (int y = 0; y < 10; y++)
-                                {
-                                    float rotation = 0f;
-                                    for (int z = 0; z <= 16; z++)
-                                    {
-                                        (long start, long end) lifespanAnim = (time, time + 500);
-                                        float angle = rotation * (float)Math.PI / 180f;
-                                        var direction = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0);
-                                        var initialPosition = new ParametricPoint3D(entry.Position + direction * 200f, time);
-                                        var finalPosition = new ParametricPoint3D(entry.Position, time + animDuration);
-                                        var connector = new InterpolationConnector([initialPosition, finalPosition]).WithOffset(new(1000, 0, 0), true);
-                                        var rect = new RectangleDecoration(150, 20, lifespanAnim, Colors.DarkYellow, 0.6, connector).UsingRotationConnector(new AngleConnector(rotation));
-                                        replay.Decorations.Add(rect);
-                                        rotation += 22.5f;
-                                    }
-                                    time += 1000;
-                                }
-                            }
-                        }
-                    }
-
-                    // Echoing Blade - Red AoEs with spinning sword - Reflectable
-                    var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
-                    replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
-
-                    // Ascension - Orbs spawned from Vloxx after defiance bar is broken
-                    var ascension = log.CombatData.GetMissileEventsBySkillID(VloxxAscensionOrb);
-                    replay.Decorations.AddNonHomingMissiles(log, ascension, Colors.DarkPurple, 0.3, 100);
-
-                    // Worldpiercer - Missile
-                    var worldpiercer = log.CombatData.GetMissileEventsBySkillID(WorldpiercerVloxx);
-                    replay.Decorations.AddNonHomingMissiles(log, worldpiercer, Colors.CobaltBlue, 0.4, 100);
-
-                    // Raging Storm - Missile
-                    AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
-
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
-                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
-                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
-                    AddRagingStorm(log, replay, target.AgentItem);
-                    // Swords last - above other decorations
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
                 }
+
+                // Cosmic Charge & Probability Distribution - Damage field
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var vloxxPuddles))
+                {
+                    foreach (var effect in vloxxPuddles)
+                    {
+                        // Duration 10000 for trail, 12000 for puddle
+                        // Scale 1.0 for trail, 1.7 for puddle, roughly 160 and 280 radius
+                        uint radius = (uint)(effect.Scale * 160);
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        var circle = new CircleDecoration(radius, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
+                    }
+                }
+
+                // Visions of Eternity - Indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityVisionsOfEternityIndicator, out var voeIndicator))
+                {
+                    foreach (var effect in voeIndicator)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 8000);
+                        var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                    }
+                }
+
+                // Worldpiercer - Indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerIndicator, out var worldpiercerIndicator))
+                {
+                    foreach (var effect in worldpiercerIndicator)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2666);
+                        var line = new RectangleDecoration(3650, 100, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position).WithOffset(new(1825, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                        replay.Decorations.Add(line);
+                    }
+                }
+
+                // Worldpiercer - Barrier
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityWorldpiercerLineBarrier, out var worldpiercerBarrier))
+                {
+                    foreach (var effect in worldpiercerBarrier)
+                    {
+                        // Up to 10 segments if it doesn't hit the arena border
+                        lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                        var line = new RectangleDecoration(365, 10, lifespan, Colors.LightBlue, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                        replay.Decorations.Add(line);
+                    }
+                }
+
+                // Annihilating Orb - Arrow indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbArrowIndicator, out var arrows))
+                {
+                    foreach (var effect in arrows)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 6000);
+                        var line = new RectangleDecoration(1850, 100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new(925, 0, 0), true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                        replay.Decorations.Add(line);
+                    }
+                }
+
+                // Annihilating Orb - Warnings rings for the teleport location
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityAnnihilatingOrbTeleportRingsIndicator, out var rings))
+                {
+                    foreach (var effect in rings)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 4000);
+                        int pulseCycle = 1000;
+                        (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            replay.Decorations.AddShockwave(new PositionConnector(effect.Position), pulse, Colors.LightOrange, 0.2, 1200);
+                            pulse.start = pulse.end;
+                            pulse.end = pulse.start + pulseCycle;
+                        }
+                    }
+                }
+
+                // Annihilating Orb - Moving orb
+                var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbVloxx);
+                foreach (var orb in orbs)
+                {
+                    CombatReplayDecorationContainer.AddNonHomingMissile(log, orb, (launch, lifespan, connector) =>
+                    {
+                        replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.2, connector));
+                        replay.Decorations.Add(new DoughnutDecoration(180, 240, lifespan, Colors.Red, 0.3, connector));
+                    });
+                }
+
+                // Blue shield effect, combine with Red AoE + shockwave when no VisionsOfEternity cast
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityBlueShield, out var blueShields))
+                {
+                    var visionsOfEternityCast = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == VisionsOfEternityInStaff || x.SkillID == VisionsOfEternityInSword || x.SkillID == VisionsOfEternityInSpear).ToList();
+                    foreach (var effect in blueShields)
+                    {
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        var barrier = new CircleDecoration(240, lifespan, Colors.Blue, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(barrier);
+
+                        if (!visionsOfEternityCast.Any(x => x.IntersectsActualCastWindow(effect.Time)))
+                        {
+                            var doughnut = new DoughnutDecoration(240, 300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)); // Doughnut for better color representation
+                            replay.Decorations.Add(doughnut);
+                            // Shockwave - Don't see it as a separated effect
+                            lifespan = (effect.Time, effect.Time + 3333);
+                            replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.6, 1850); // Extends to the original position of Vloxx
+                        }
+                    }
+                }
+
+                // Division Eternal - Big rectangle
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
+                {
+                    foreach (var effect in divisionEternals)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 3000);
+                        var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                        replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
+                    }
+                }
+
+                // Slice Through Reality - Teleport AoE
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
+                {
+                    for (int i = 0; i <= tp.Count - 1; i = i + 2)
+                    {
+                        var entry = tp[i];
+                        var exit = tp[i + 1];
+                        if (entry != null && exit != null && exit.Time > entry.Time && exit.Time < entry.Time + 3000)
+                        {
+                            (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
+                            (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
+                            var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
+                            replay.Decorations.Add(entryCircle);
+                            var exitCircle = new CircleDecoration(220, lifespanExit, Colors.LightOrange, 0.2, new PositionConnector(exit.Position));
+                            replay.Decorations.Add(exitCircle);
+
+                            // Suction animation
+                            long time = entry.Time;
+                            int animDuration = 500;
+                            for (int y = 0; y < 10; y++)
+                            {
+                                float rotation = 0f;
+                                for (int z = 0; z <= 16; z++)
+                                {
+                                    (long start, long end) lifespanAnim = (time, time + 500);
+                                    float angle = rotation * (float)Math.PI / 180f;
+                                    var direction = new Vector3((float)Math.Cos(angle), (float)Math.Sin(angle), 0);
+                                    var initialPosition = new ParametricPoint3D(entry.Position + direction * 200f, time);
+                                    var finalPosition = new ParametricPoint3D(entry.Position, time + animDuration);
+                                    var connector = new InterpolationConnector([initialPosition, finalPosition]).WithOffset(new(1000, 0, 0), true);
+                                    var rect = new RectangleDecoration(150, 20, lifespanAnim, Colors.DarkYellow, 0.6, connector).UsingRotationConnector(new AngleConnector(rotation));
+                                    replay.Decorations.Add(rect);
+                                    rotation += 22.5f;
+                                }
+                                time += 1000;
+                            }
+                        }
+                    }
+                }
+
+                // Echoing Blade - Red AoEs with spinning sword - Reflectable
+                var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
+                replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
+
+                // Ascension - Orbs spawned from Vloxx after defiance bar is broken
+                var ascension = log.CombatData.GetMissileEventsBySkillID(VloxxAscensionOrb);
+                replay.Decorations.AddNonHomingMissiles(log, ascension, Colors.DarkPurple, 0.3, 100);
+
+                // Worldpiercer - Missile
+                var worldpiercer = log.CombatData.GetMissileEventsBySkillID(WorldpiercerVloxx);
+                replay.Decorations.AddNonHomingMissiles(log, worldpiercer, Colors.CobaltBlue, 0.4, 100);
+
+                // Raging Storm - Missile
+                AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
+
+                AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
+                AddSurroundingCurseAoe(log, replay, target.AgentItem);
+                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
+                AddRagingStorm(log, replay, target.AgentItem);
+                // Swords last - above other decorations
+                AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
+                AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
+
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
-                {
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
-                    AddSurroundingCurseAoe(log, replay, target.AgentItem);
-                }
+
+                AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
+                AddSurroundingCurseAoe(log, replay, target.AgentItem);
+
                 break;
             case (int)TargetID.ChampionAspectOfTheSpear:
-                {
-                    AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesAspectOfTheSpear);
 
-                    // Cosmic Charge
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var puddles))
+                AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesAspectOfTheSpear);
+
+                // Cosmic Charge
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE, out var spearPuddles))
+                {
+                    foreach (var effect in spearPuddles)
                     {
-                        foreach (var effect in puddles)
-                        {
-                            // Duration 5000 - scale 1.0
-                            lifespan = effect.ComputeLifespan(log, effect.Duration);
-                            var circle = new CircleDecoration(160, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(circle);
-                        }
+                        // Duration 5000 - scale 1.0
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        var circle = new CircleDecoration(160, lifespan, Colors.DarkBlue, 0.4, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
                     }
                 }
+
                 break;
             case (int)TargetID.EliteCosmicPiercer:
-                {
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
-                    AddAnnhilatingOrbCosmicPiercer(log, replay);
-                }
+
+                AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
+                AddAnnhilatingOrbCosmicPiercer(log, replay);
+
                 break;
             case (int)TargetID.ChampionCosmicPiercer:
-                {
-                    AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
-                    AddAnnhilatingOrbCosmicPiercer(log, replay);
-                }
+
+                AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
+                AddAnnhilatingOrbCosmicPiercer(log, replay);
+
                 break;
             case (int)TargetID.EliteCosmicBulwark:
-                {
-                    // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
-                    AddRagingStorm(log, replay, target.AgentItem);
-                    AddWorldpiercer(log, replay, target.AgentItem);
-                }
+
+                // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
+                AddRagingStorm(log, replay, target.AgentItem);
+                AddWorldpiercer(log, replay, target.AgentItem);
+
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
-                {
-                    // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
-                    AddRagingStorm(log, replay, target.AgentItem);
-                    AddWorldpiercer(log, replay, target.AgentItem);
-                }
+
+                // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
+                AddRagingStorm(log, replay, target.AgentItem);
+                AddWorldpiercer(log, replay, target.AgentItem);
+
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
-                {
-                    AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
-                    AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing, 400);
-                }
+
+                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing, 400);
+
                 break;
             default:
                 break;
