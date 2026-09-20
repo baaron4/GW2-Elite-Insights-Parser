@@ -731,7 +731,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(koPhases, testReflexesEligibilityEvents, evt.Time, Ach_TestReflexes, p);
                 }
@@ -749,7 +749,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     var koPhase = koPhases.FirstOrDefault(x => x.InInterval(evt.Time));
                     if (koPhase != null && koPhase.Success)

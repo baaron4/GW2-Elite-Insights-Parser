@@ -396,7 +396,7 @@ internal class Sabir : TheKeyOfAhdashim
             var damageData = log.CombatData.GetDamageData(Electrospark);
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(sabirPhases, chargedWindsEligibilityEvents, evt.Time, Ach_ChargedWinds, p);
                 }
