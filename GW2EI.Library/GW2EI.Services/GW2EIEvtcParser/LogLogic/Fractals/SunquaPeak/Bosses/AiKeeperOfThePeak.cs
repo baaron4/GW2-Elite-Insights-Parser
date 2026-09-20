@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -214,11 +214,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     CombatItem? invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemoveAllEvent() && x.SrcMatchesAgent(aiAgent) && x.Value > Determined895DurationCheckForSuccess);
                     long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
 
-                    AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.DarkAiKeeperOfThePeak, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    darkAiAgent.SetEnglobingAgentItem(aiAgent, agentData);
+                    var darkAiAgent = AgentManipulationHelper.CreateEnglobedAgentInInterval(aiAgent, agentData, elementalLastAwareTime + 1, aiAgent.LastAware);
+                    darkAiAgent.OverrideID(TargetID.DarkAiKeeperOfThePeak, agentData);
 
-                    AgentItem elAiAgent = agentData.AddCustomNPCAgent(aiAgent.FirstAware, elementalLastAwareTime, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    elAiAgent.SetEnglobingAgentItem(aiAgent, agentData);
+                    var elAiAgent = AgentManipulationHelper.CreateEnglobedAgentInInterval(aiAgent, agentData, aiAgent.FirstAware, elementalLastAwareTime);
+                    elAiAgent.OverrideID(TargetID.AiKeeperOfThePeak, agentData);
 
                     aiAgent.OverrideID(TargetID.Parent_AiKeeperOfThePeak, agentData);
                 }

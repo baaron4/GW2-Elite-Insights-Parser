@@ -300,7 +300,7 @@ internal class Deimos : BastionOfThePenitent
         foreach (var shackledPrisoner in shackledPrisoners)
         {
             long expectedStart = Math.Max(shackledPrisoner.FirstAware, minFirstAware);
-            var encounterShackledPrisoner = AgentManipulationHelper.CreateAgentInIntervalAndDummiesAround(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
+            var encounterShackledPrisoner = AgentManipulationHelper.CreateEnglobedAgentInInterval(shackledPrisoner, agentData, minFirstAware, shackledPrisoner.LastAware);
             encounterShackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
         }
     }
