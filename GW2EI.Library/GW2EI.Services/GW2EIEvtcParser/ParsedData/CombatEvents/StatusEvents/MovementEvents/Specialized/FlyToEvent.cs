@@ -21,9 +21,8 @@ public class FlyToEvent : StatusEvent
         if (OnLanding)
         {
             Landing = this;
-        }// Vectors
-        var vectorBytes = new ByteBuffer(stackalloc byte[6 * sizeof(short)]);
-        // 2 
+        }
+        var vectorBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);
         vectorBytes.PushNative(evtcItem.DstAgent);
         unsafe
         {
@@ -35,7 +34,7 @@ public class FlyToEvent : StatusEvent
                         vectorShorts[1] * ConvertConstant,
                         vectorShorts[2] * ConvertConstant
                     );
-                Speed = vectorShorts[4] * ConvertConstant;
+                Speed = vectorShorts[3] * ConvertConstant;
             }
         }
     }
