@@ -24,14 +24,26 @@ jobs:
           sudo apt-get install -y ruby ruby-dev rpm
           sudo gem install fpm
 
-      - name: Build Application & Packages
+      - name: Build Application & Packages for linux64
         run: |
           cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
           mkdir -p dist
+
           dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./staging/usr/share/GW2EI-linux-x64
 
           fpm -s dir -t deb -n GW2EI-linux-x64 -a amd64 -p GW2EI-linux-x64_amd64.deb -C ./staging .
           fpm -s dir -t rpm -n GW2EI-linux-x64 -a x86_64 -p GW2EI-linux-x64.x86_64.rpm -C ./staging .
+
+          mv *.deb *.rpm ./dist/
+
+      - name: Clean Staging Directory
+        if: always()
+        run: rm -rf staging
+
+      - name: Build Application & Packages for arm64
+        run: |
+          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
+          mkdir -p dist-arm
 
           dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux-Arm -o ./staging/usr/share/GW2EI-linux-arm64
 
