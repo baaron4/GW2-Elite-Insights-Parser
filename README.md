@@ -37,8 +37,7 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 #### Windows
 1. Download the appropriate version zip file for your OS and architecture from the [latest release](https://github.com/baaron4/GW2-Elite-Insights-Parser/releases/latest). Don't forget to check regularly to stay updated or simply click `Check EI Updates` (we have a channel that notifies new releases on our discord).
 2. Extract all files anywhere you like.
-3. Optionally add it to the PATH
-4. Launch `GuildWars2EliteInsights.exe`
+3. Launch `GuildWars2EliteInsights.exe`.
 
 > [!NOTE]
 > ArcDPS EVTC log files are located by default at `"C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"`.
@@ -61,7 +60,7 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 ### CLI
 1. Download `GW2EICLI.zip` from the [latest release](https://github.com/baaron4/GW2-Elite-Insights-Parser/releases/latest).
 2. Extract all files anywhere you like.
-
+3. Optionally add it to the PATH of your OS.
 
 ## UI Usage
 <div style="display: flex;">
