@@ -1,9 +1,8 @@
-name: Release Linux Packages
+name: Release Linux-x64 Packages
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published, created, edited]
 
 jobs:
   build-linux-installers:
@@ -42,9 +41,9 @@ jobs:
           ls -la ./dist
 
       - name: Upload .deb and .rpm to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          tag_name: ${{ github.event.release.tag_name }}
           files: |
             **/*.deb
             **/*.rpm
