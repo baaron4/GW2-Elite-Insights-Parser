@@ -1058,7 +1058,7 @@ public static class SpeciesIDs
         JuvenileJanthiriBee = 26851,
         JuvenileRaptorSwiftwing = 27259,
         JuvenileRiverOtter = 27687,
-        JuvenileLeyLineBat = 28082,
+        JuvenileLeyVampireBat = 28082,
         // Guardian Weapon Summons
         BowOfTruth = 6383,
         HammerOfWisdom = 5791,
