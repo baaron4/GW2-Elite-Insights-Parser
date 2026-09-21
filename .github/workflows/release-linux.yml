@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Target Release Tag'
+        description: "Target Release Tag"
         required: true
         type: string
 
@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
 
       - name: Install FPM
         run: |
@@ -32,20 +32,17 @@ jobs:
 
       - name: Build Application & Packages for linux64
         run: |
-          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
-          mkdir -p dist
+          dotnet publish GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia/GW2EIParserAvalonia.csproj \
+          -c Release-Linux \
+          -o ./packaging/usr/lib/elite-insights
 
-          dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux -o ./staging/usr/share/GW2EI-linux-x64
+          cd ./packaging
 
-          fpm -s dir -t deb -n GW2EI-linux-x64 -a amd64 -p GW2EI-linux-x64_amd64.deb -C ./staging .
-          fpm -s dir -t rpm -n GW2EI-linux-x64 -a x86_64 -p GW2EI-linux-x64.x86_64.rpm -C ./staging .
-
-          mv *.deb *.rpm ./dist/
+          fpm -t deb -a amd64 -p GW2EI-linux_amd64.deb
+          fpm -t rpm -a x86_64 -p GW2EI-linux.x86_64.rpm
 
       - name: Verify Output Files
-        run: |      
-          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
-          ls -la ./dist
+        run: ls -lh ./packaging
 
       - name: Upload .deb and .rpm to GitHub Release
         uses: softprops/action-gh-release@v2
