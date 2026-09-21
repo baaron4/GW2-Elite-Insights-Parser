@@ -1,0 +1,57 @@
+name: Release Linux-arm64 Packages
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Target Release Tag'
+        required: true
+        type: string
+
+jobs:
+  build-linux-installers:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install FPM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-dev rpm
+          sudo gem install fpm
+          
+      - name: Build Application & Packages for arm64
+        run: |
+          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
+          mkdir -p dist
+
+          dotnet publish GW2EIParserAvalonia.csproj -c Release-Linux-Arm -o ./staging/usr/share/GW2EI-linux-arm64
+
+          fpm -s dir -t deb -n GW2EI-linux-arm64 -a arm64 -p GW2EI-linux-arm64_arm64.deb -C ./staging .
+          fpm -s dir -t rpm -n GW2EI-linux-arm64 -a aarch64 -p GW2EI-linux-arm64.aarch64.rpm -C ./staging .
+
+          mv *.deb *.rpm ./dist/
+
+      - name: Verify Output Files
+        run: |      
+          cd GW2EI.Executables/GW2EI.Applications/GW2EIParserAvalonia
+          ls -la ./dist
+
+      - name: Upload .deb and .rpm to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            **/*.deb
+            **/*.rpm
+          fail_on_unmatched_files: true

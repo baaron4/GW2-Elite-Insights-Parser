@@ -43,15 +43,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             ]),
         ]),
         new MechanicGroup([
-            // TODO add mechanics regarding getting hit by puddles
-            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + puddle drop", "Spread + puddle"), Sev1),
+            new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, Mech_NexusOfEternitySpreadAndPuddleSelect, new(Symbols.Diamond, Colors.Orange), new("Pddl.Drp", "Selected for spread + Probability Distribution drop", "Spread + Probability Distribution"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev1),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic([VisionsOfEternityInStaff, VisionsOfEternityInSword,  VisionsOfEternityInSpear], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(Excision, Mech_Excision, new (Symbols.Square, Colors.DarkPurpleBlue), new MechanicDescription("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
-        new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
 
         new MechanicGroup([
@@ -543,27 +542,27 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicPiercer:
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
-                AddAnnhilatingOrbCosmicPiercer(log, replay);
+                AddCosmicPiercerAnnhilatingOrb(log, replay);
 
                 break;
             case (int)TargetID.ChampionCosmicPiercer:
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
-                AddAnnhilatingOrbCosmicPiercer(log, replay);
+                AddCosmicPiercerAnnhilatingOrb(log, replay);
 
                 break;
             case (int)TargetID.EliteCosmicBulwark:
 
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddWorldpiercer(log, replay, target.AgentItem);
+                AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
 
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
 
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddWorldpiercer(log, replay, target.AgentItem);
+                AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
 
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
@@ -757,7 +756,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         replay.Decorations.AddNonHomingMissiles(log, ragingStorm, Colors.MidTeal, 0.5, 20);
     }
 
-    private static void AddAnnhilatingOrbCosmicPiercer(ParsedEvtcLog log, CombatReplay replay)
+    private static void AddCosmicPiercerAnnhilatingOrb(ParsedEvtcLog log, CombatReplay replay)
     {
         var orbs = log.CombatData.GetMissileEventsBySkillID(AnnihilatingOrbCosmicPiercer);
         replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.LightBlue, 0.1, 240);
@@ -766,7 +765,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     /// <summary>
     /// Elite Cosmic Bulwark and Champion Cosmic Bulwark
     /// </summary>
-    private static void AddWorldpiercer(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    private static void AddCosmicBulwarkWorldpiercer(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
     {
         (long start, long end) lifespan;
 
