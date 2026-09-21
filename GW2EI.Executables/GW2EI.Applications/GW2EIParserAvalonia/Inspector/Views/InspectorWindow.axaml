@@ -95,37 +95,56 @@
                                     VerticalAlignment="Center"
                                     Margin="0,4,8,0"/>
 
-                                <AutoCompleteBox
+                                <Grid
                                     Grid.Row="2"
                                     Grid.Column="1"
-                                    ItemsSource="{Binding AgentFilterItems}"
-                                    x:CompileBindings="False"
-                                    SelectedItem="{Binding SelectedAgentFilter, Mode=TwoWay}"
-                                    ValueMemberBinding="{Binding DisplayName}"
-                                    FilterMode="Contains"
-                                    MinimumPrefixLength="0"
-                                    IsTextCompletionEnabled="False"
-                                    PlaceholderText="All agents"
-                                    Margin="0,4,0,0"
-                                    GotFocus="AgentFilter_GotFocus">
+                                    ColumnDefinitions="*,Auto,Auto"
+                                    Margin="0,4,0,0">
 
-                                    <AutoCompleteBox.ItemTemplate>
-                                        <DataTemplate x:DataType="inspectorContent:AgentFilterItem">
-                                            <Grid ColumnDefinitions="*,Auto">
-                                                <TextBlock
-                                                    Grid.Column="0"
-                                                    Text="{Binding Name}"
-                                                    TextTrimming="CharacterEllipsis"/>
+                                    <AutoCompleteBox
+                                        Grid.Column="0"
+                                        ItemsSource="{Binding AgentFilterItems}"
+                                        x:CompileBindings="False"
+                                        SelectedItem="{Binding SelectedAgentFilter, Mode=TwoWay}"
+                                        ValueMemberBinding="{Binding DisplayName}"
+                                        FilterMode="Contains"
+                                        MinimumPrefixLength="0"
+                                        IsTextCompletionEnabled="False"
+                                        PlaceholderText="All agents"
+                                        GotFocus="AgentFilter_GotFocus">
 
-                                                <TextBlock
-                                                    Grid.Column="1"
-                                                    Text="{Binding InstID}"
-                                                    Margin="12,0,14,0"
-                                                    Opacity="0.7"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </AutoCompleteBox.ItemTemplate>
-                                </AutoCompleteBox>
+                                        <AutoCompleteBox.ItemTemplate>
+                                            <DataTemplate x:DataType="inspectorContent:AgentFilterItem">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBlock
+                                                        Grid.Column="0"
+                                                        Text="{Binding Name}"
+                                                        TextTrimming="CharacterEllipsis"/>
+
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        Text="{Binding InstID}"
+                                                        Margin="12,0,14,0"
+                                                        Opacity="0.7"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </AutoCompleteBox.ItemTemplate>
+
+                                    </AutoCompleteBox>
+
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Text="BY"
+                                        VerticalAlignment="Center"
+                                        Margin="12,0,8,0"/>
+
+                                    <ComboBox
+                                        Grid.Column="2"
+                                        ItemsSource="{Binding AgentFilterRoles}"
+                                        SelectedItem="{Binding SelectedAgentFilterRole, Mode=TwoWay}"
+                                        Width="110"/>
+
+                                </Grid>
 
                             </Grid>
 
@@ -321,14 +340,14 @@
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn
-                                                    Binding="{Binding ID}"
-                                                    Width="Auto">
+                                    Binding="{Binding ID}"
+                                    Width="Auto">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="ID" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpeciesFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        PlaceholderText="Filter Species..."
+                                                         PlaceholderText="Filter Species..."
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -340,14 +359,14 @@
                                                     Width="Auto"/>
 
                                 <DataGridTextColumn
-                                                    Binding="{Binding Name}"
-                                                    Width="Auto">
+                                    Binding="{Binding Name}"
+                                    Width="Auto">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Name" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        PlaceholderText="Filter Name..."
+                                                         PlaceholderText="Filter Name..."
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -362,7 +381,7 @@
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Type" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        PlaceholderText="Filter Type..."
+                                                         PlaceholderText="Filter Type..."
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -374,14 +393,14 @@
                                                     Width="Auto"/>
 
                                 <DataGridTextColumn
-                                                    Binding="{Binding Spec}"
-                                                    Width="Auto">
+                                    Binding="{Binding Spec}"
+                                    Width="Auto">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Spec" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        PlaceholderText="Filter Spec..."
+                                                         PlaceholderText="Filter Spec..."
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -389,14 +408,14 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn
-                                                    Binding="{Binding BaseSpec}"
-                                                    Width="Auto">
+                                    Binding="{Binding BaseSpec}"
+                                    Width="Auto">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Base Spec" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentBaseSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        PlaceholderText="Filter Base Spec..."
+                                                         PlaceholderText="Filter Base Spec..."
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -492,8 +511,8 @@
                                                     Width="Auto"/>
 
                                 <DataGridTextColumn
-                                                    Binding="{Binding Name}"
-                                                    Width="Auto">
+                                    Binding="{Binding Name}"
+                                    Width="Auto">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
@@ -1030,9 +1049,9 @@
 
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn 
-                                                Binding="{Binding IsStateChange}"
-                                                Width="230">
+                            <DataGridTextColumn
+                                Binding="{Binding IsStateChange}"
+                                Width="230">
                                 <DataGridTextColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <StackPanel Spacing="4">

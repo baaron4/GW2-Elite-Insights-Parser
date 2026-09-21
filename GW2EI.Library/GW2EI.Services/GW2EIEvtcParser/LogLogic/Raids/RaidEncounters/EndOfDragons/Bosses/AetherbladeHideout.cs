@@ -612,7 +612,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 phases.Add(maiTrinPhase);
 
                 // Candidate phases
-                var maiPhases = GetSubPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, false);
+                var maiPhases = GetSubPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, ServerDelayConstant, false);
                 List<PhaseData> candidateMainPhases = [];
                 List<PhaseData> candidateSplitPhases = [];
                 for (int i = 0; i < maiPhases.Count; i++)

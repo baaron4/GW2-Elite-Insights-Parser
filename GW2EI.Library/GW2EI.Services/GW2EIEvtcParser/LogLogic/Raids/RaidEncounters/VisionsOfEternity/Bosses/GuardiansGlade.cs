@@ -233,7 +233,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var burrowOrAmbushCast = kelaCasts.Where(x => x.SkillID == KelaBurrow || x.SkillID == KelaAmbush1 || x.SkillID == KelaAmbush2).ToList();
         var kelaNonStormRelatedCast = kelaCasts.Where(x => x.SkillID != KelaBurrow && x.SkillID != KelaAmbush1 && x.SkillID != KelaAmbush2 && x.SkillID != log.SkillData.DodgeID && x.ActualDuration > ServerDelayConstant).ToList();
         // Candidate phases
-        var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, false);
+        var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, ServerDelayConstant, false);
         List<SubPhasePhaseData> candidateMainPhases = [];
         List<SubPhasePhaseData> candidateStormPhases = [];
         for (int i = 0; i < kelaPhases.Count; i++)

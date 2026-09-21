@@ -185,7 +185,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             return [];
         }
-        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End);
+        var phases = GetSubPhasesByInvul(log, DamageImmunity, vloxx, true, true, encounterPhase.Start, encounterPhase.End, 4000);
         var cosmicElites = targets.Where(x => x.IsAnySpecies(
         [
             TargetID.EliteCosmicBulwark,

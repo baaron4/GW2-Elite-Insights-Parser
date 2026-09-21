@@ -89,10 +89,10 @@ internal static class LogLogicPhaseUtils
         return phases;
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
         long last = start;
-        var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
+        var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true, minThresholdBetweenGainAndLoss)
             .Where(x => x.Time >= 0)
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
@@ -127,14 +127,14 @@ internal static class LogLogicPhaseUtils
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
-        return GetSubPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end, filterSmallPhases);
+        return GetSubPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end, minThresholdBetweenGainAndLoss, filterSmallPhases);
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
-        return GetSubPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
+        return GetSubPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, minThresholdBetweenGainAndLoss, filterSmallPhases);
     }
 
 

@@ -114,9 +114,24 @@ internal static class LogLogicUtils
         }
         return new("Missing confusion damage");
     }
-    internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
+    internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
     {
-        return CombatData.GetBuffApplyRemoveSequence(combatData.GetBuffDataByIDByDst(buffID, target), target, beginWithApply, addDummyRemoveAllEventAtEnd);
+        return CombatData.GetBuffApplyRemoveSequence(combatData.GetBuffDataByIDByDst(buffID, target), target, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return buffIDs.SelectMany(buffID => GetBuffApplyRemoveSequence(combatData, buffID, target, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss));
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
     }
 
     internal static List<List<BuffEvent>> GetBuffApplyRemoveSequencePerInstanceID(CombatData combatData, long buffID, AgentItem target, bool addDummyRemoveAllEventAtEnd)
@@ -159,21 +174,6 @@ internal static class LogLogicUtils
             filtered.Add(instanceSequence);
         }
         return filtered;
-    }
-
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
-    }
-
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return buffIDs.SelectMany(buffID => GetBuffApplyRemoveSequence(combatData, buffID, target, beginWithApply, addDummyRemoveAllEventAtEnd));
-    }
-
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
     }
 
     internal static bool AtLeastOnePlayerAlive(CombatData combatData, LogData logData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
