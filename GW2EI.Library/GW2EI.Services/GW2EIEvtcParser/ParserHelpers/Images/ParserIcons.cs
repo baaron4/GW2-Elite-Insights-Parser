@@ -1050,6 +1050,8 @@ internal static class ParserIcons
         { TargetID.Bombs, TrashBombs },
         { TargetID.Tornado, TrashTornado },
         { TargetID.Jade, TrashJade },
+        { TargetID.MursaatOverseerSpikes, NoImage },
+        { TargetID.MursaatOverseerClaimArea, NoImage },
         { TargetID.AngryZommoros, TrashAngryChillZommoros },
         { TargetID.ChillZommoros, TrashAngryChillZommoros },
         { TargetID.AncientInvokedHydra, TrashAncientInvokedHydra },
