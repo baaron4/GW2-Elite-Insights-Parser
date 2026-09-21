@@ -280,3 +280,8 @@ __pycache__/
 /GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.zevtc
 /GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.evtc
 /GW2EI.Executables/GW2EI.Tests/GW2EIParserBenchmark/TestFiles/*.evtc.zip
+
+# Packaging for linux
+packaging/usr/lib/elite-insights/
+*.deb
+*.rpm
