@@ -196,6 +196,13 @@ internal class Adina : TheKeyOfAhdashim
         ];
     }
 
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        return [
+            TargetID.AdinaPlateform
+        ];
+    }
+
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
@@ -424,6 +431,11 @@ internal class Adina : TheKeyOfAhdashim
                 var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);
                 replay.Decorations.AddNonHomingMissiles(log, boulderBarrages, Colors.Red, 0.4, 30);
                 break;
+            case (int)TargetID.AdinaPlateform:
+                var tst = log.CombatData.GetGadgetAnimationData(target.AgentItem);
+                var plateform = new RegularPolygonDecoration(60, 6, (target.FirstAware, target.LastAware), Colors.Brown, 0.1, new AgentConnector(target));
+                replay.Decorations.Add(plateform);
+                break;
             default:
                 break;
         }
@@ -522,92 +534,101 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        string mainPhase1;
-        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
-        }      
-        else
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1;
-        }
+        
         var crMap = new CombatReplayMap(
                         (866, 1000),
                         (13860, -2678, 15951, -268));
-        //
-        try
+        if (log.AgentData.GetStableSpeciesByID(TargetID.AdinaPlateform).Count > 0 && log.CombatData.HasGadgetAnimData)
         {
-            var allPhases = log.LogData.GetPhases(log);
-            var adinaPhases = log.LogData.GetEncounterPhases(log, LogID);
-            var splitPhasesMap = new List<string>()
+            AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNoImage, crMap, parentMap);
+        }
+        else
+        {
+            string mainPhase1;
+            if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
             {
-                    CombatReplayAdinaSplitPhase1,
-                    CombatReplayAdinaSplitPhase2,
-                    CombatReplayAdinaSplitPhase3,
-            };
-            var mainPhasesMap = new List<string>()
+                mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
+            }
+            else
             {
-                    mainPhase1,
-                    CombatReplayAdinaMainPhase2,
-                    CombatReplayAdinaMainPhase3,
-                    CombatReplayAdinaMainPhase4
-            };
-            var subPhases = allPhases.OfType<SubPhasePhaseData>().Where(x => !x.BreakbarPhase);
-            long start = log.LogData.LogStart;
-            foreach (var adinaPhase in adinaPhases)
-            {
-                var crMaps = new List<string>();
-                int mainPhaseIndex = 0;
-                int splitPhaseIndex = 0;
-                var phases = subPhases.Where(x => x.EncounterPhase == adinaPhase).ToList();
-                var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
-                for (int i = 0; i < phases.Count; i++)
+                mainPhase1 = CombatReplayAdinaMainPhase1;
+
+                //
+                try
                 {
-                    PhaseData phaseData = phases[i];
-                    long end = phaseData.End;
-                    if (i < phases.Count - 1)
+                    var allPhases = log.LogData.GetPhases(log);
+                    var adinaPhases = log.LogData.GetEncounterPhases(log, LogID);
+                    var splitPhasesMap = new List<string>()
                     {
-                        end = phases[i + 1].Start;
-                    }
-                    if (mainPhases.Contains(phaseData))
+                            CombatReplayAdinaSplitPhase1,
+                            CombatReplayAdinaSplitPhase2,
+                            CombatReplayAdinaSplitPhase3,
+                    };
+                    var mainPhasesMap = new List<string>()
                     {
-                        if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
+                            mainPhase1,
+                            CombatReplayAdinaMainPhase2,
+                            CombatReplayAdinaMainPhase3,
+                            CombatReplayAdinaMainPhase4
+                    };
+                    var subPhases = allPhases.OfType<SubPhasePhaseData>().Where(x => !x.BreakbarPhase);
+                    long start = log.LogData.LogStart;
+                    foreach (var adinaPhase in adinaPhases)
+                    {
+                        var crMaps = new List<string>();
+                        int mainPhaseIndex = 0;
+                        int splitPhaseIndex = 0;
+                        var phases = subPhases.Where(x => x.EncounterPhase == adinaPhase).ToList();
+                        var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
+                        for (int i = 0; i < phases.Count; i++)
                         {
-                            splitPhaseIndex++;
+                            PhaseData phaseData = phases[i];
+                            long end = phaseData.End;
+                            if (i < phases.Count - 1)
+                            {
+                                end = phases[i + 1].Start;
+                            }
+                            if (mainPhases.Contains(phaseData))
+                            {
+                                if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
+                                {
+                                    splitPhaseIndex++;
+                                }
+                                var url = mainPhasesMap[mainPhaseIndex++];
+                                arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                                crMaps.Add(url);
+                            }
+                            else
+                            {
+                                if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
+                                {
+                                    mainPhaseIndex++;
+                                }
+                                var url = splitPhasesMap[splitPhaseIndex++];
+                                arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                                crMaps.Add(url);
+                            }
+                            start = end;
                         }
-                        var url = mainPhasesMap[mainPhaseIndex++];
-                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
-                        crMaps.Add(url);
+                    }
+                    if (!adinaPhases.Any())
+                    {
+                        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
                     }
                     else
                     {
-                        if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
-                        {
-                            mainPhaseIndex++;
-                        }
-                        var url = splitPhasesMap[splitPhaseIndex++];
-                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
-                        crMaps.Add(url);
+                        arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
                     }
-                    start = end;
+                    if (parentMap != null)
+                    {
+                        AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
+                    }
+                }
+                catch (Exception)
+                {
+                    log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
                 }
             }
-            if (!adinaPhases.Any())
-            {
-                arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
-            } 
-            else
-            {
-                arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
-            }
-            if (parentMap != null)
-            {
-                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
-            }
-        }
-        catch (Exception)
-        {
-            log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
         }
         //
         return crMap;

@@ -1168,6 +1168,7 @@ internal static class ParserIcons
         { TargetID.DragonEnergyOrb, GenericEnemyIcon },
         { TargetID.HandOfErosion, TrashHandOfErosion },
         { TargetID.HandOfEruption, TrashHandOfEruption },
+        { TargetID.AdinaPlateform, NoImage },
         { TargetID.VoltaicWisp, TrashVoltaicWisp },
         { TargetID.ParalyzingWisp, TrashParalyzingWisp },
         { TargetID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
