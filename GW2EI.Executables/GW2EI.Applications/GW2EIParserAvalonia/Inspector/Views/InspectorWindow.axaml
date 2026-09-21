@@ -165,7 +165,7 @@
                                 <TreeView.ItemTemplate>
                                     <TreeDataTemplate ItemsSource="{Binding Children}">
 
-                                        <Grid ColumnDefinitions="Auto,*,60"
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
                                               Margin="2,2,16,2">
 
                                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
@@ -178,10 +178,18 @@
                                                        TextTrimming="CharacterEllipsis"/>
 
                                             <TextBlock Grid.Column="2"
-                                                       Text="{Binding Count}"
+                                                       Text="{Binding FilteredCount}"
+                                                       IsVisible="{Binding ShowFilteredCount}"
                                                        HorizontalAlignment="Right"
-                                                       Margin="0,0,4,0"
+                                                       Margin="8,0,4,0"
                                                        Opacity="0.7"
+                                                       VerticalAlignment="Center"/>
+
+                                            <TextBlock Grid.Column="3"
+                                                       Text="{Binding TotalCount}"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="4,0,4,0"
+                                                       Opacity="0.5"
                                                        VerticalAlignment="Center"/>
 
                                         </Grid>
