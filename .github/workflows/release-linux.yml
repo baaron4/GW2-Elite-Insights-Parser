@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,8 +40,8 @@ jobs:
 
           cd ./packaging
 
-          fpm -t deb -a amd64 -p GW2EI-linux_amd64.deb
-          fpm -t rpm -a x86_64 -p GW2EI-linux.x86_64.rpm
+          fpm -t deb -a amd64 -p GW2EI-linux_amd64.deb -v "$RELEASE_TAG"
+          fpm -t rpm -a x86_64 -p GW2EI-linux.x86_64.rpm -v "$RELEASE_TAG"
 
       - name: Verify Output Files
         run: ls -lh ./packaging
