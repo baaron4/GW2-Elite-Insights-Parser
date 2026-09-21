@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIParserAvalonia.Services;
+using static GW2EIParserAvalonia.Services.EventAgentResolver;
 
 namespace GW2EIParserAvalonia.Models;
 
@@ -17,7 +17,8 @@ public sealed class EventModel
     public string GUID { get; }
     public long ContentID { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
-
+    public IReadOnlySet<ulong> SourceAgentIds { get; }
+    public IReadOnlySet<ulong> DestinationAgentIds { get; }
     internal int SourceIndex { get; set; }
 
     public EventModel(object @event)
@@ -72,6 +73,10 @@ public sealed class EventModel
         }
 
         GUID = GUIDStruct.ToString("N").ToUpperInvariant();
-        AgentIds = EventAgentResolver.Resolve(@event);
+        var agentResolution = ResolveDetailed(@event);
+
+        AgentIds = agentResolution.All;
+        SourceAgentIds = agentResolution.Source;
+        DestinationAgentIds = agentResolution.Destination;
     }
 }
