@@ -46,8 +46,8 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 There are `.deb` and `.rpm` packages available for Debian and Fedora based distros, .NET8.0 will be installed automatically, simply download the package of your choice and double click it to install.
 
 For Arch users updates must be done via your AUR package manager:
-- Desktop: `elite-insights` run it with `elite-insights` 
-- CLI: `elite-insights-cli` run it with `ei`
+- Desktop: `elite-insights-bin` run it with `elite-insights` 
+- CLI: `elite-insights-cli-bin` run it with `ei`
 
 These are instructions for the `.zip`:
 1. Follow steps 1 & 2 from above
