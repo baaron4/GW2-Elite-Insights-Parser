@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GW2 Elite Insights
+Comment=Analyze arcdps combat logs from Guild Wars 2
+Exec=elite-insights
+Icon=elite-insights
+Terminal=false
+Type=Application
+Categories=Utility;Game;
