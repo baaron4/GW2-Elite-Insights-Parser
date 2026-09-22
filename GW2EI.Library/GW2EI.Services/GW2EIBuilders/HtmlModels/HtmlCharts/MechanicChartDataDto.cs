@@ -45,7 +45,8 @@ internal class MechanicChartDataDto
         {
             var targetIndex = new Dictionary<SingleActor, int>(phase.Targets.Count);
             int p = 0;
-            foreach (var pair in phase.Targets) {
+            foreach (var pair in phase.Targets)
+            {
                 targetIndex.Add(pair.Key, p++);
                 res.Add([]);
             }
@@ -59,7 +60,7 @@ internal class MechanicChartDataDto
                 }
                 else
                 {
-                    res[^1].Add([time, ml.Actor.Character, ml.Actor.UniqueID ]);
+                    res[^1].Add([time, ml.Actor.Character, ml.Actor.UniqueID]);
                 }
             }
         }

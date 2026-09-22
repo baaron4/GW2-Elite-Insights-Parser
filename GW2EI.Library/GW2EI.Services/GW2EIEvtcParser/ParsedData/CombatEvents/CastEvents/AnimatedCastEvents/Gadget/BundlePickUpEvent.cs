@@ -4,7 +4,7 @@ public class BundlePickUpEvent : AnimatedCastEvent
 {
     public readonly long BundleID;
     public AgentItem BundleGadget => EffectTarget;
-    internal BundlePickUpEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
+    internal BundlePickUpEvent(CombatItem? startItem, AgentData agentData, SkillData skillData,
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         // Break the link

@@ -1,5 +1,4 @@
 ﻿using GW2EIParserCommons;
-using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIParserWinForms.MainForm;
 
 namespace GW2EIParserWinForms;
@@ -52,7 +51,7 @@ internal sealed class FormOperationController : OperationController
 
     protected override void ThrowIfCanceled()
     {
-        if ( _cancelTokenSource.IsCancellationRequested)
+        if (_cancelTokenSource.IsCancellationRequested)
         {
             _cancelTokenSource.Token.ThrowIfCancellationRequested();
         }
@@ -90,7 +89,7 @@ internal sealed class FormOperationController : OperationController
             State = OperationState.Parsing;
             ToCancelState();
             return;
-        } 
+        }
         else if (State == OperationState.RemoveFromQueueAndClear)
         {
             State = OperationState.Parsing;
@@ -111,7 +110,7 @@ internal sealed class FormOperationController : OperationController
             State = OperationState.Cancelling;
             ButtonText = "Cancelling";
             _cancelTokenSource.Cancel();
-        } 
+        }
         else if (State == OperationState.Queued)
         {
             State = OperationState.RemoveFromQueue;
@@ -126,7 +125,7 @@ internal sealed class FormOperationController : OperationController
         {
             ToCancelState();
             State = OperationState.ClearOnCancel;
-        } 
+        }
         else if (State == OperationState.Queued)
         {
             ToCancelState();

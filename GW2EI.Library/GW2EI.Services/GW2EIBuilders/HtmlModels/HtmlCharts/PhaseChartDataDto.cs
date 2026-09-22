@@ -33,7 +33,7 @@ internal class PhaseChartDataDto
                     TargetsHealthStatesForCR.Add([]);
                     TargetsBreakbarPercentStatesForCR.Add(null);
                     TargetsBarrierStatesForCR.Add(null);
-                } 
+                }
                 else
                 {
                     TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));

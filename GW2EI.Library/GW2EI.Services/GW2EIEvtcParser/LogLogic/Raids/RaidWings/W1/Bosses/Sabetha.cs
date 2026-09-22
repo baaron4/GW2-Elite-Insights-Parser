@@ -5,14 +5,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -84,11 +83,11 @@ internal class Sabetha : SpiritVale
         {
             if (missileEvents.Count > 0)
             {
-                if (!missileEvents.Any(x => x.SrcMatchesAgent(heavyBombCandidate) && x.SkillID == HeavyBombMissile) )
+                if (!missileEvents.Any(x => x.SrcMatchesAgent(heavyBombCandidate) && x.SkillID == HeavyBombMissile))
                 {
                     continue;
                 }
-            } 
+            }
             else if (heavyBombCandidate.HitboxHeight != 300 && heavyBombCandidate.HitboxWidth != 2)
             {
                 continue;
@@ -166,7 +165,7 @@ internal class Sabetha : SpiritVale
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -433,8 +432,8 @@ internal class Sabetha : SpiritVale
         { (int)TargetID.Kernan, "Kernan" },
         { (int)TargetID.Karde, "Karde" },
         { (int)TargetID.Knuckles, "Knuckles" }
-    }; 
-    
+    };
+
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)

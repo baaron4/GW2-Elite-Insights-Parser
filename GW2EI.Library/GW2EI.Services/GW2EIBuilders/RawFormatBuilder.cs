@@ -1,7 +1,7 @@
-﻿using GW2EIBuilders.JsonModels;
+﻿using System.Text.Json;
+using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIJSON;
-using System.Text.Json;
 
 namespace GW2EIBuilders;
 

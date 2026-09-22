@@ -420,7 +420,7 @@ internal static class WeaverHelper
         }*/
         HashSet<long>? major = null;
         HashSet<long>? minor = null;
-        if (buffApplies.Count == 1 && _basicAttunements.Contains(buffApplies[0].BuffID)) 
+        if (buffApplies.Count == 1 && _basicAttunements.Contains(buffApplies[0].BuffID))
         {
             return _basicToDualTranslation[buffApplies[0].BuffID];
         }

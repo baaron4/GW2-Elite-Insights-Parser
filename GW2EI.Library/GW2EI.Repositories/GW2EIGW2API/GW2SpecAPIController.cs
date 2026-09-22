@@ -31,7 +31,7 @@ internal class GW2SpecAPIController
         fcreate.Close();
 
         List<GW2APISpec> specList = GetGW2APISpecs();
-        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
             JsonSerializer.Serialize(writer, specList, GW2APIUtilities.SerializerSettings);
         }

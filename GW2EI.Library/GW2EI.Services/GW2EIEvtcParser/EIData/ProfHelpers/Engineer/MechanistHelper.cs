@@ -111,7 +111,7 @@ internal static class MechanistHelper
     [
         (int)MinionID.JadeMech,
     ];
-    
+
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

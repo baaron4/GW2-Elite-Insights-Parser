@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonDerivedType(typeof(ArenaDecorationMetadataDescription))]
 public abstract class CombatReplayMetadataDescription : CombatReplayDescription
 {
-    internal CombatReplayMetadataDescription() 
+    internal CombatReplayMetadataDescription()
     {
     }
 }

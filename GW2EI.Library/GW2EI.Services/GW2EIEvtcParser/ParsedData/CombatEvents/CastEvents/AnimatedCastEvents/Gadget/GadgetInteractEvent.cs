@@ -7,7 +7,7 @@ public class GadgetInteractEvent : AnimatedCastEvent
 
     public AgentItem Gadget => EffectTarget;
 
-    internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, 
+    internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData,
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         if (startItem != null && startItem.IsStateChange != StateChange.AnimationStart)

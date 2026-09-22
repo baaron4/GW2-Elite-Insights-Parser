@@ -25,7 +25,7 @@ internal class ParsingErrors
         var parser = new EvtcParser(TestHelper.ParserSettings, TestHelper.APIController);
 
         var file = new FileInfo("TestInput/Broken/" + logFile);
-        if(!file.Exists)
+        if (!file.Exists)
         {
             Assert.Inconclusive($"Required file ({file}) does not exist.");
             return;

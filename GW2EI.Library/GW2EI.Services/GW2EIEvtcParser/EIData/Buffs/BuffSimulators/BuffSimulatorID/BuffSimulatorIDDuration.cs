@@ -15,7 +15,7 @@ internal class BuffSimulatorIDDuration : BuffSimulatorID
     public override void Activate(uint stackID)
     {
         _activeStack?.Disable();
-        
+
         _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
         if (_activeStack == null)
         {

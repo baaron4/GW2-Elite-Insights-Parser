@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemIntensity : BuffSimulationItemStack
 {
-    private readonly List<RegroupedStack> RegroupedStacks; 
+    private readonly List<RegroupedStack> RegroupedStacks;
 
     private class RegroupedStack
     {
@@ -43,7 +43,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
             var stack = pair.Item;
             stack.OverrideEnd(end);
 
-            if(stack.Duration > maxDur) { maxDur = stack.Duration; }
+            if (stack.Duration > maxDur) { maxDur = stack.Duration; }
         }
         End = Start + maxDur;
     }

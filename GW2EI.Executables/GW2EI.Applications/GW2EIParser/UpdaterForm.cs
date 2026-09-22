@@ -6,7 +6,7 @@ namespace GW2EIParserWinForms;
 
 partial class UpdaterForm : Form
 {
-    private readonly Updater.UpdateInfo _info = new ();
+    private readonly Updater.UpdateInfo _info = new();
 
     public event EventHandler UpdateStartedEvent;
     public event EventHandler UpdateTracesEvent;

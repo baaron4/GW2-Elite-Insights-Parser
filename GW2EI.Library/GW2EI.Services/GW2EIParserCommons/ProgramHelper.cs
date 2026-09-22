@@ -4,7 +4,6 @@ using System.Text;
 using Discord;
 using GW2EIBuilders;
 using GW2EIDiscord;
-using GW2EIWingman;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
 using GW2EIEvtcParser;
@@ -13,6 +12,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIParserCommons.Exceptions;
+using GW2EIWingman;
 using Tracing;
 
 [assembly: CLSCompliant(false)]
@@ -165,12 +165,12 @@ public sealed class ProgramHelper : IDisposable
                         // First try a garbage collection, if we fall here again in 500ms, kill
                         GCExecuted = true;
                         GC.Collect();
-                    } 
+                    }
                     else
                     {
                         Environment.Exit(2);
                     }
-                } 
+                }
                 else
                 {
                     GCExecuted = false;
@@ -384,7 +384,7 @@ public sealed class ProgramHelper : IDisposable
             {
                 originalController.WingmanUploadRefused = true;
                 originalController.UpdateProgressWithCancellationCheck("Wingman: players and accounts have been anonymized, log not supported");
-            } 
+            }
             else
             {
                 string accName = originalLog.LogMetadata.PoV != null ? originalLog.LogMetadata.PoVAccount : "-";
@@ -489,19 +489,19 @@ public sealed class ProgramHelper : IDisposable
             var parser = new EvtcParser(new EvtcParserSettings(
                                             Settings.CustomTooShort,
                                             Settings.CustomTooBig)
-                                            {
-                                                AnonymousPlayers = false,
-                                                SkipFailedTries = false,
-                                                ComputePhases = false,
-                                                ComputeCombatReplay = false,
-                                                ComputeDamageModifiers = false,
-                                                ComputeDamage = false,
-                                                ParseExtensions = true,
-                                                ComputeCast = false,
-                                                ComputeBuff = false,
-                                                ComputeMechanics = false,
-                                                DetailedWvWParse = true,
-                                            },
+            {
+                AnonymousPlayers = false,
+                SkipFailedTries = false,
+                ComputePhases = false,
+                ComputeCombatReplay = false,
+                ComputeDamageModifiers = false,
+                ComputeDamage = false,
+                ParseExtensions = true,
+                ComputeCast = false,
+                ComputeBuff = false,
+                ComputeMechanics = false,
+                DetailedWvWParse = true,
+            },
                                         APIController);
             EvtcLog? inspectLog;
             ParsingFailureReason? failureReason;
@@ -581,7 +581,7 @@ public sealed class ProgramHelper : IDisposable
                         operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
                     }
                 }
-            } 
+            }
             //Creating File
             GenerateFiles(log!, operation, uploadStrings, fInfo);
         }

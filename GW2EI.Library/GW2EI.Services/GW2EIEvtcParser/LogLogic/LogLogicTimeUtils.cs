@@ -19,7 +19,7 @@ internal static class LogLogicTimeUtils
             if (mapLeaveEvent != null)
             {
                 return mapLeaveEvent.Time;
-            }           
+            }
         }
         return logData.LogEnd;
     }

@@ -57,15 +57,15 @@ public class Player : PlayerActor
 
     internal override (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
     {
-        return (type) switch 
+        return (type) switch
         {
             BuffEnum.Group =>
                 BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, this, start, end),
-            BuffEnum.OffGroup => 
+            BuffEnum.OffGroup =>
                 BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group != Group), log, this, start, end),
             BuffEnum.Squad =>
                 BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, this, start, end),
-            _ =>  BuffStatistics.GetBuffsForSelf(log, this, start, end),
+            _ => BuffStatistics.GetBuffsForSelf(log, this, start, end),
         };
     }
 
@@ -121,7 +121,7 @@ public class Player : PlayerActor
     public IReadOnlyList<Segment> GetCommanderStatesNoTagValues(ParsedEvtcLog log)
     {
         var commanderStates = GetCommanderStates(log);
-        if(commanderStates.Count == 0) { return [ ]; }
+        if (commanderStates.Count == 0) { return []; }
 
         var result = new List<Segment>();
         Segment last = commanderStates[0].WithOtherType<double>();

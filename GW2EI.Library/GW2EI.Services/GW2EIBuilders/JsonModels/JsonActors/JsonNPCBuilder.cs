@@ -68,7 +68,7 @@ internal static class JsonNPCBuilder
                     Health = hpValue,
                 });
             }
-        } 
+        }
         else
         {
             jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeftPercent);

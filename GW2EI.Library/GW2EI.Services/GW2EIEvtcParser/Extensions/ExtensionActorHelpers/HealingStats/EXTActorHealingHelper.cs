@@ -117,7 +117,7 @@ public abstract class EXTActorHealingHelper
     {
         if (!_typedHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
-            healEventsPerPhasePerTarget = new (GetAgentItemForCachingSrc(), log);
+            healEventsPerPhasePerTarget = new(GetAgentItemForCachingSrc(), log);
             _typedHealEvents[healingType] = healEventsPerPhasePerTarget;
         }
         if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
@@ -133,7 +133,7 @@ public abstract class EXTActorHealingHelper
     {
         if (!_typedIncomingHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
-            healEventsPerPhasePerTarget = new (GetAgentItemForCachingSrc(), log);
+            healEventsPerPhasePerTarget = new(GetAgentItemForCachingSrc(), log);
             _typedIncomingHealEvents[healingType] = healEventsPerPhasePerTarget;
         }
         if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))

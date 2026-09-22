@@ -40,11 +40,11 @@ internal class BuffDto : IDItemDto
                 }
             }
             Description = "";
-            for (var i = 0; i < descriptions.Count; i ++)
+            for (var i = 0; i < descriptions.Count; i++)
             {
                 Description += descriptions[i] + (i < descriptions.Count - 1 ? "<br>" : "");
             }
-        } 
+        }
         else
         {
             Description = "ID: " + buff.ID;

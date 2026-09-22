@@ -34,7 +34,7 @@ public class SquadMarkerEvent : StatusEvent
     internal void SetEndTime(long endTime)
     {
         //Debug.Assert(!EndNotSet); TODO(Rennorb): this trips 20240609-201008.zevtc 20240609-203221.zevtc, keep the check below
-        if(!EndNotSet)
+        if (!EndNotSet)
         {
             return;
         }

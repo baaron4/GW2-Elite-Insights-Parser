@@ -18,7 +18,7 @@ public class ParametricPoint2D(in Vector2 vector, long time)
     {
         public override ParametricPoint2D? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if(!reader.Read() || reader.TokenType != JsonTokenType.StartObject)
+            if (!reader.Read() || reader.TokenType != JsonTokenType.StartObject)
             {
                 throw new JsonException($"Failed to read {nameof(ParametricPoint2D)}");
             }
@@ -28,10 +28,10 @@ public class ParametricPoint2D(in Vector2 vector, long time)
 
 
             Span<char> buffer = stackalloc char[8];
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var len = reader.CopyString(buffer);
-                switch(buffer[..len])
+                switch (buffer[..len])
                 {
                     case "X": v.X = reader.GetSingle(); break;
                     case "Y": v.Y = reader.GetSingle(); break;

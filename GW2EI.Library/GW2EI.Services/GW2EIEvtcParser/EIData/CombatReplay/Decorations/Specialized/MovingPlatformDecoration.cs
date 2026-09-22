@@ -49,6 +49,6 @@ internal class MovingPlatformDecoration : BackgroundDecoration
 
     public void AddPosition(float x, float y, float z, float angle, float opacity, long time)
     {
-        DecorationRenderingData.Positions.Add((x ,y , z, angle, opacity, time));
+        DecorationRenderingData.Positions.Add((x, y, z, angle, opacity, time));
     }
 }

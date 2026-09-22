@@ -12,8 +12,8 @@ public class HTMLSettings
     public readonly string? ExternalHtmlScriptsCdn;
     public bool CompressJson { get; init; } = true;
 
-    public HTMLSettings() 
-    { 
+    public HTMLSettings()
+    {
     }
 
     public HTMLSettings(string? externalHTMLScriptsPath, string? externalHTMLScriptsCdn)

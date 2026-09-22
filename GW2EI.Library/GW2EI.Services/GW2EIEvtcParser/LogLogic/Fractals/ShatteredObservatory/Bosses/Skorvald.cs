@@ -5,16 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -94,7 +93,7 @@ internal class Skorvald : ShatteredObservatory
         phases[0].AddTarget(skorvald, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(FluxAnomalies)), log, PhaseData.TargetPriority.Blocking);
         phases.AddRange(ComputePhases(log, skorvald, Targets, (EncounterPhaseData)phases[0], requirePhases));
-        
+
         return phases;
     }
 
@@ -238,7 +237,7 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -486,7 +485,7 @@ internal class Skorvald : ShatteredObservatory
                             lifespan = (cast.Time, cast.Time + castDuration);
                             (long start, long end) lifespanShockwave2 = (lifespan.end, lifespan.end + 2250);
                             replay.Decorations.AddWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
-                            
+
                             // Nightmare Discharge Shockwave
                             replay.Decorations.AddShockwave(new AgentConnector(target), lifespanShockwave2, Colors.Yellow, 0.3, 1200);
                             break;

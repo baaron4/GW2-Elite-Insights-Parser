@@ -6,16 +6,15 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -125,7 +124,7 @@ internal class UraTheSteamshrieker : MountBalrior
     }
 
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -148,7 +147,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return 
+        return
         [
             TargetID.SulfuricGeyser,
             TargetID.TitanspawnGeyser,
@@ -653,10 +652,10 @@ internal class UraTheSteamshrieker : MountBalrior
 
                             (long start, long end) lifespanIndicator = (startIndicator, ComputeEndCastTimeByBuffApplication(log, target, Stun, startIndicator, durationIndicator));
                             (long start, long end) lifespanJet = effect.ComputeLifespan(log, 3000);
-                            
+
                             var indicator = new CircleDecoration(225, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                             var jet = new CircleDecoration(225, lifespanJet, Colors.LightBlue, 0.2, new PositionConnector(effect.Position));
-                            
+
                             replay.Decorations.AddWithGrowing(indicator, growing);
                             replay.Decorations.Add(jet);
                         }
@@ -670,7 +669,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
 
                 // Blue Tether - Applies Rising Pressure to targets - Skill ID is 75295
-                IEnumerable<AbstractBuffApplyEvent> tethers = log.CombatData.GetBuffApplyData(RisingPressure).Where(x => 
+                IEnumerable<AbstractBuffApplyEvent> tethers = log.CombatData.GetBuffApplyData(RisingPressure).Where(x =>
                     x is BuffApplyEvent &&
                     x.By.Is(target.AgentItem) &&
                     !x.To.Is(target.AgentItem));

@@ -439,7 +439,7 @@ internal static class RevenantHelper
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlot, out var abyssalBlots))
         {
             var skillCC = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot, SkillModeCategory.CC);
-            var skillDamage= new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot);
+            var skillDamage = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot);
             foreach (EffectEvent effect in abyssalBlots)
             {
                 (long start, long end) = effect.ComputeLifespan(log, 3000);

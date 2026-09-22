@@ -38,8 +38,8 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
-        simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, 
-            _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), 
+        simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance,
+            _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss),
             OverridenRegenDuration, OverridenRegenInstance);
     }
 

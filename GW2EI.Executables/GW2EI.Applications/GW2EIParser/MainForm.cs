@@ -198,7 +198,7 @@ internal sealed partial class MainForm : Form
                     }
                     _RunNextOperation();
                 }, TaskScheduler.FromCurrentSynchronizationContext());
-        } 
+        }
         catch
         {
             cancelTokenSource.Dispose();
@@ -307,7 +307,7 @@ internal sealed partial class MainForm : Form
             if (operation.IsRunning)
             {
                 operation.ToCancelState();
-            } 
+            }
             else if (operation.IsIdleOrPending && operations.Contains(operation))
             {
                 operation.ToReadyState();
@@ -833,7 +833,7 @@ internal sealed partial class MainForm : Form
                     VersionLabelUpdate(Application.ProductVersion, false);
                     MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            } 
+            }
             else
             {
                 MessageBox.Show(this, "Update tentative failed, plase try again later or update manually.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);

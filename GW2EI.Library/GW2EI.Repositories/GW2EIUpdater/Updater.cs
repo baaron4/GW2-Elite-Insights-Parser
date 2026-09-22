@@ -86,7 +86,7 @@ public static class Updater
 
             return new UpdateInfo(
                 latestRelease,
-                (currentVersion ?? new Version(0, 0 , 0 , 0)).ToString(),
+                (currentVersion ?? new Version(0, 0, 0, 0)).ToString(),
                 latestVersion.ToString(),
                 $"{size / (1024.0 * 1024.0):F2} MB",
                 fileName,

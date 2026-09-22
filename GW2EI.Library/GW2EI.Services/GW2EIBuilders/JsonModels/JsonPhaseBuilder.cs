@@ -29,7 +29,7 @@ internal static class JsonPhaseBuilder
             if (pair.Value.IsPrioritary(PhaseData.TargetPriority.Blocking))
             {
                 targets.Add(tarIndex);
-            } 
+            }
             else
             {
                 secondaryTargets.Add(tarIndex);
@@ -47,7 +47,7 @@ internal static class JsonPhaseBuilder
         jsPhase.Targets = targets;
         jsPhase.SecondaryTargets = secondaryTargets;
         jsPhase.TargetPriorities = targetPriorities;
-        switch(phase.Type)
+        switch (phase.Type)
         {
             case PhaseData.PhaseType.SubPhase:
             case PhaseData.PhaseType.TimeFrame:
@@ -94,7 +94,7 @@ internal static class JsonPhaseBuilder
             {
                 jsPhase.SubPhases = subPhases;
             }
-        } 
+        }
         else
         {
             jsPhase.BreakbarRecovered = ((BreakbarPhaseData)phase).BreakbarRecovered;

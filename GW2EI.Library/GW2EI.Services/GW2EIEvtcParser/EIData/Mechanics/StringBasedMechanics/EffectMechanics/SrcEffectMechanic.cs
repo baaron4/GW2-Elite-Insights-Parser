@@ -16,7 +16,7 @@ internal abstract class SrcEffectMechanic : EffectMechanic
         return effectEvt.Src;
     }
 
-    public SrcEffectMechanic(Guid effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([ effect ], id, plotlySetting, description, severity, internalCoolDown)
+    public SrcEffectMechanic(Guid effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([effect], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

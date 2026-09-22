@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text;
-using GW2EIWingman.WingmanUploadJsons;
 using System.Text.Json;
+using GW2EIWingman.WingmanUploadJsons;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIWingman;
@@ -275,7 +275,7 @@ public static class WingmanController
             catch (AggregateException agg)
             {
                 traceHandler(requestName + " tentative failed");
-                traceHandler("Main reason: " + agg.Message);         
+                traceHandler("Main reason: " + agg.Message);
                 foreach (Exception e in agg.InnerExceptions)
                 {
                     traceHandler(requestName + " tentaive failed - sub message - " + e.Message);

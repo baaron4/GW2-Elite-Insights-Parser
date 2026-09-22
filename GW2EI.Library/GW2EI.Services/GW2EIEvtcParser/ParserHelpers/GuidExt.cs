@@ -22,7 +22,7 @@ public readonly struct GUIDWrapper
         if (!reverseEndian)
         {
             ZeroToEight = first8;
-        } 
+        }
         else
         {
             first8 = BinaryPrimitives.ReverseEndianness(first8);

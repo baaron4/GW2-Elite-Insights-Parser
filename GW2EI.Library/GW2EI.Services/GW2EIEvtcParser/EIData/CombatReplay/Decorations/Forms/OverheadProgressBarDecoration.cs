@@ -16,7 +16,7 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
 
         public override string GetSignature()
         {
-            return "OProg" + Color + Width + Height.ToString()  + SecondaryColor + PixelWidth + PixelHeight.ToString();
+            return "OProg" + Color + Width + Height.ToString() + SecondaryColor + PixelWidth + PixelHeight.ToString();
         }
         public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
@@ -51,8 +51,8 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
         ) : base(
             new OverheadProgressBarDecorationMetadata(
-                color, 
-                secondaryColor, 
+                color,
+                secondaryColor,
                 Math.Min(Math.Max((uint)(connectedTo.Agent.HitboxWidth), 80), 500),
                 pixelWidth),
             new OverheadProgressBarDecorationRenderingData(lifespan, progress, connectedTo)

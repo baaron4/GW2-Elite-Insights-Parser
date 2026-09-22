@@ -28,7 +28,8 @@ public sealed class ParserService : IDisposable
 
         try
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 operation.ToRunState(cancellationTokenSource);
                 onTaskRun();
                 _programHelper.DoWork(operation);
@@ -50,11 +51,12 @@ public sealed class ParserService : IDisposable
 
         try
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 onTaskRun();
                 operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
             }, cancellationTokenSource.Token)
-                .ContinueWith(t => 
+                .ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {

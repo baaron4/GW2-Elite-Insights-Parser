@@ -31,7 +31,7 @@ internal class GW2MapAPIController
         fcreate.Close();
 
         var mapList = GetGW2APIMaps();
-        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
             JsonSerializer.Serialize(writer, mapList, GW2APIUtilities.SerializerSettings);
         }

@@ -242,7 +242,7 @@ public static class AgentManipulationHelper
                 }
             }
         }
-        list.Sort((x,y) => x.start.CompareTo(y.start));
+        list.Sort((x, y) => x.start.CompareTo(y.start));
         var previousPlayerAgent = originalPlayer;
         var firstSplit = true;
         previousSpec = player.Spec;
@@ -353,7 +353,7 @@ public static class AgentManipulationHelper
                         if (curAgent.CouldBeEqual(previousAgent) && curStateTime == previousStateTime && !curAgent.GetFinalMaster().IsPlayer)
                         {
                             agentToRegroup.Add(curAgent);
-                        } 
+                        }
                         else
                         {
                             if (agentToRegroup.Count > 1)
@@ -370,7 +370,7 @@ public static class AgentManipulationHelper
                         RegroupAgents(agentData, agentToRegroup, srcCombatDataDict, dstCombatDataDict, toAdd, toRemove);
                     }
                 }
-            } 
+            }
             else
             {
                 long distanceThreshold = 4980; // 5000 - 20

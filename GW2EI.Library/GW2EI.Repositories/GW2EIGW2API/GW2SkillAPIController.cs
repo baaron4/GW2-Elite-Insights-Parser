@@ -29,7 +29,7 @@ internal class GW2SkillAPIController
         fcreate.Close();
 
         List<GW2APISkill> skills = GetGW2APISkills();
-        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
             JsonSerializer.Serialize(writer, skills, GW2APIUtilities.SerializerSettings);
         }

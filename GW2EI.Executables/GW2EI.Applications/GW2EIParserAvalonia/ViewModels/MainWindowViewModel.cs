@@ -423,14 +423,14 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
             {
                 var inspectorWindow = new InspectorWindow(logFile.InspectorOperation.InspectLog, _trace);
                 inspectorWindow.Show();
-            } 
+            }
             else
             {
                 var errorMessageWindow = new MessageWindow("Inspection not possible", _trace);
                 errorMessageWindow.Show();
             }
         }
-        
+
     }
 
     public async Task<string> SendAllToDiscordAsync()

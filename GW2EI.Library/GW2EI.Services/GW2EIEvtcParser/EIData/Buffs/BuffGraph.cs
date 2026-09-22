@@ -39,7 +39,7 @@ public class BuffGraph
         {
             return new Segment(long.MinValue, long.MaxValue, 0);
         }
-        
+
         int foundIndex = Values.BinarySearchSegments(time, 0, Values.Count - 1);
         if (foundIndex >= 0)
         {

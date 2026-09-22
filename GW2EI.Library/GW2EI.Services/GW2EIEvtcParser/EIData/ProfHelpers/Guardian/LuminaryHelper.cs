@@ -145,7 +145,7 @@ internal static class LuminaryHelper
                     if (weaponSwap.Time - radiantForgeWeaponCast.Time < ServerDelayConstant)
                     {
                         weaponSwap.FlagAsSpecialBundleSwap();
-                    } 
+                    }
                     else
                     {
                         weaponSwapIndex = i;
@@ -170,9 +170,9 @@ internal static class LuminaryHelper
 
             var symbolOfResolutionSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution);
             var lesserSymbolfOfResolutionSkill = new SkillModeDescriptor(player, Spec.Guardian, LesserSymbolOfResolution);
-            
+
             var luminousStaffSkill = new SkillModeDescriptor(player, Spec.Guardian, LuminousStaff);
-            
+
             var luminousStaffOrSymbolOfResolutionOrLesserSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesserOrLuminousStaff);
             var symbolOfResolutionOrLesserSkill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfResolutionOrLesser);
 
@@ -221,14 +221,14 @@ internal static class LuminaryHelper
                 }
                 foreach (var pair in candidateMainSymbols)
                 {
-                    SkillModeDescriptor skill = pair.Value.Count == 1 ? 
-                        (pair.Key.SkillID == SymbolOfWrath_SymbolOfResolution ? symbolOfResolutionSkill : luminousStaffSkill) 
-                        : 
+                    SkillModeDescriptor skill = pair.Value.Count == 1 ?
+                        (pair.Key.SkillID == SymbolOfWrath_SymbolOfResolution ? symbolOfResolutionSkill : luminousStaffSkill)
+                        :
                         luminousStaffOrSymbolOfResolutionOrLesserSkill
                     ;
                     var icon = skill.SkillID == SymbolOfWrath_SymbolOfResolution ?
-                        EffectImages.EffectSymbolOfResolution 
-                        : (skill.SkillID == LuminousStaff ? 
+                        EffectImages.EffectSymbolOfResolution
+                        : (skill.SkillID == LuminousStaff ?
                             EffectImages.EffectLuminousStaff
                             :
                             EffectImages.EffectSymbolOfResolutionOrLuminousStaff

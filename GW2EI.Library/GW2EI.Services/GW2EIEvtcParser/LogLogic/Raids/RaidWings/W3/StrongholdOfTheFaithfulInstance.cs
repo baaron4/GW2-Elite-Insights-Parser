@@ -88,7 +88,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 mainPhase.AddTargets(mcLeods, log);
             }
         }
-        
+
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
@@ -112,7 +112,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 if (prevStatue == null)
                 {
                     currentPack.Add(statue);
-                } 
+                }
                 else
                 {
                     if (statue.FirstAware > prevStatue.LastAware)
@@ -170,14 +170,14 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         var fakeXeras = log.AgentData.GetStableSpeciesByID(TargetID.FakeXera);
         var xeras = log.AgentData.GetStableSpeciesByID(TargetID.Xera);
         var chest = log.AgentData.GetStableSpeciesByID(_xera.ChestID).FirstOrDefault();
-        for (int i = 0; i < fakeXeras.Count; i++) 
+        for (int i = 0; i < fakeXeras.Count; i++)
         {
             var fakeXera = fakeXeras[i];
             AgentItem? xera = null;
             if (i < fakeXeras.Count - 1)
             {
-                xera = xeras.FirstOrDefault(x => x.FirstAware >= fakeXera.LastAware && x.FirstAware < fakeXeras[i + 1].FirstAware );
-            } 
+                xera = xeras.FirstOrDefault(x => x.FirstAware >= fakeXera.LastAware && x.FirstAware < fakeXeras[i + 1].FirstAware);
+            }
             else
             {
                 xera = xeras.FirstOrDefault(x => x.FirstAware >= fakeXera.LastAware);
@@ -206,13 +206,13 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     success = true;
                     end = chest.FirstAware;
                 }
-            } 
+            }
             else
             {
                 if (i < fakeXeras.Count - 1)
                 {
                     end = fakeXeras[i + 1].FirstAware - 500;
-                } 
+                }
                 else
                 {
                     end = log.LogData.LogEnd;

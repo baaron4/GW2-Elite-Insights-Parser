@@ -60,7 +60,7 @@ partial class SingleActor
             var allBuffApplies = log.CombatData.GetBuffApplyDataByDst(AgentItem);
             PresentApplyOnBuffIDs = [.. allBuffApplies.Select(x => x.BuffID)];
         }
-        _buffApplyByIDAccelerator ??= new (AgentItem, log);
+        _buffApplyByIDAccelerator ??= new(AgentItem, log);
         var creditedByAgentItem = creditedBy?.AgentItem;
         if (!_buffApplyByIDAccelerator.TryGetValue(start, end, creditedByAgentItem, out var dict))
         {
@@ -147,7 +147,7 @@ partial class SingleActor
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem);
             PresentRemovedByBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        _buffRemoveAllByByIDAccelerator ??= new (AgentItem, log);
+        _buffRemoveAllByByIDAccelerator ??= new(AgentItem, log);
         var removedFromAgentItem = removedFrom?.AgentItem;
         if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFromAgentItem, out var dict))
         {
@@ -165,13 +165,13 @@ partial class SingleActor
                     {
                         dict[pair.Key] = pair.Value.Where(x => x.Time >= removedFrom.FirstAware && x.Time <= removedFrom.LastAware).ToList();
                     }
-                } 
+                }
                 else
                 {
                     dict = [];
                 }
                 _buffRemoveAllByByIDAccelerator.Set(start, end, removedFromAgentItem, dict);
-            } 
+            }
             else
             {
                 if (!(_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFromAgentItem, out dict)))
@@ -242,7 +242,7 @@ partial class SingleActor
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem);
             PresentRemovedFromBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        _buffRemoveAllFromByIDAccelerator ??= new (AgentItem, log);
+        _buffRemoveAllFromByIDAccelerator ??= new(AgentItem, log);
         var removedByAgentItem = removedBy?.AgentItem;
         if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedByAgentItem, out var dict))
         {
@@ -319,7 +319,7 @@ partial class SingleActor
             if (AgentItem.IsEnglobedAgent)
             {
                 value = log.FindActor(EnglobingAgentItem).GetBuffDistribution(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
-            } 
+            }
             else
             {
                 value = ComputeBuffDistribution(log, _buffSimulators, start, end);
@@ -376,7 +376,7 @@ partial class SingleActor
                 if (AgentItem.IsEnglobedAgent)
                 {
                     value = log.FindActor(EnglobingAgentItem).GetBuffPresence(log, Math.Max(start, Math.Max(FirstAware, by.FirstAware)), Math.Min(end, Math.Min(LastAware, by.LastAware)), byActor);
-                } 
+                }
                 else
                 {
                     value = ComputeBuffPresence(log, _buffSimulators, Math.Max(start, by.FirstAware), Math.Min(end, by.LastAware), byActor);
@@ -462,7 +462,7 @@ partial class SingleActor
             var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log);
             foreach (var graph in graphs)
             {
-                BuffGraph buffGraph = graph.Value;    
+                BuffGraph buffGraph = graph.Value;
                 _buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph, FirstAware, LastAware);
             }
         }
@@ -630,7 +630,7 @@ partial class SingleActor
 
     private static IReadOnlyList<Segment> GetBuffStatus(long buffID, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        return bgms.TryGetValue(buffID, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
+        return bgms.TryGetValue(buffID, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [_emptySegment];
     }
 
     /// <exception cref="InvalidOperationException"></exception>
@@ -877,7 +877,7 @@ partial class SingleActor
             if (AgentItem.IsEnglobedAgent)
             {
                 _trackedBuffs = log.FindActor(EnglobingAgentItem).GetTrackedBuffs(log).ToHashSet();
-            } 
+            }
             else
             {
                 ComputeBuffMap(log);
@@ -948,8 +948,8 @@ partial class SingleActor
         {
             log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
             _buffGraphs = [];
-            _buffDistribution = new (log);
-            _buffPresenceBy = new (AgentItem, log);
+            _buffDistribution = new(log);
+            _buffPresenceBy = new(AgentItem, log);
             _buffSimulators = [];
             return;
         }
@@ -970,8 +970,8 @@ partial class SingleActor
 
         // Init status
         _buffDistribution = new(log);
-        _buffPresenceBy   = new(AgentItem, log);
-        _buffSimulators   = new(trackedBuffs.Count * 2);
+        _buffPresenceBy = new(AgentItem, log);
+        _buffSimulators = new(trackedBuffs.Count * 2);
         var buffStackItemPool = new BuffStackItemPool();
         foreach (Buff buff in trackedBuffs)
         {
@@ -985,7 +985,7 @@ partial class SingleActor
                     {
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                         simulator = buff.CreateSimulator(log, buffStackItemPool, true);
-                    } 
+                    }
                     else
                     {
                         simulator = buff.CreateSimulator(log, buffStackItemPool, false);

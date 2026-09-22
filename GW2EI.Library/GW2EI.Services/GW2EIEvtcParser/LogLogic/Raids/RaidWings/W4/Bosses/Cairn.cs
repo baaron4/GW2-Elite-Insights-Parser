@@ -2,15 +2,14 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.EIData.Mechanic;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -184,7 +183,7 @@ internal class Cairn : BastionOfThePenitent
                 {
                     environmentDecorations.AddWithGrowing(new CircleDecoration(radius, (greenStart, greenEnd), Colors.DarkGreen, 0.3, positionConnector), greenEnd);
                     environmentDecorations.Add(new CircleDecoration(radius, (greenEnd - 200, greenEnd), Colors.DarkGreen, 0.4, positionConnector));
-                } 
+                }
                 else
                 {
                     environmentDecorations.Add(new CircleDecoration(radius, (greenStart, greenEnd), Colors.DarkGreen, 0.3, positionConnector));
@@ -271,9 +270,9 @@ internal class Cairn : BastionOfThePenitent
                             break;
                     }
                 }
-                #if DEBUG_EFFECTS
+#if DEBUG_EFFECTS
                     CombatReplay.DebugAllNPCEffects(log, replay.Decorations, [], 50000, 63000);
-                #endif
+#endif
                 break;
             default:
                 break;

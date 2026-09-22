@@ -12,9 +12,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 public struct SkillCastDto
 {
     public double Start;
-    public long   SkillId;
-    public int    ActualDuration;
-    public int    Status;
+    public long SkillId;
+    public int ActualDuration;
+    public int Status;
     public double Acceleration;
 
     public class Converter : JsonConverter<SkillCastDto>

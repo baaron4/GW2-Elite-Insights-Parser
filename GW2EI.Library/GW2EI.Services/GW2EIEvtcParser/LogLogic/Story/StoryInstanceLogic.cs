@@ -21,7 +21,7 @@ internal abstract class StoryInstance : LogLogic
     {
         return GetGenericLogOffset(logData);
     }
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }

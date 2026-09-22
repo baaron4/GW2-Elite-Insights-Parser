@@ -21,9 +21,9 @@ internal struct ArrayPoolReturner<T> : IDisposable
     public ArrayPoolReturner(int length, ArrayPool<T> pool)
     {
         Tracing.Trace.TrackAverageStat($"PooledArraySize<{typeof(T)}>", length);
-        this.Pool   = pool;
+        this.Pool = pool;
         this.Length = length;
-        this.Array  = pool.Rent(length);
+        this.Array = pool.Rent(length);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -131,7 +131,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             // effectively infinite for empty arrays and we'll never allocate for rents and never store for returns.
             return [];
         }
-        else if(minimumLength < 0)
+        else if (minimumLength < 0)
         {
             throw new ArgumentException($"minimumLength should not be negative, was {minimumLength}");
         }
@@ -183,7 +183,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             }
         }
     }
-    
+
     /// <summary> Clears all arrays in the pool. Noticeably does not destroy the arrays, only clear any remaining references they hold. </summary>
     public void ClearAll()
     {
@@ -203,7 +203,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             }
         }
 
-        foreach(var bucket in _buckets)
+        foreach (var bucket in _buckets)
         {
             bucket?.Clear();
         }
@@ -257,7 +257,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         return BitOperations.Log2((uint)bufferSize - 1 | 15) - 3;
     }
 
-     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int GetMaxSizeForBucket(int binIndex)
     {
         int maxSize = 16 << binIndex;
@@ -391,13 +391,13 @@ internal sealed class SharedArrayPoolPartitions
         }
         public void Clear()
         {
-            if(_count == 0) {  return; }
+            if (_count == 0) { return; }
 
-            lock(this)
+            lock (this)
             {
-                foreach(var arr in _arrays)
+                foreach (var arr in _arrays)
                 {
-                    if(arr == null) { continue; }
+                    if (arr == null) { continue; }
 
                     Array.Clear(arr, 0, arr.Length);
                 }
@@ -464,7 +464,7 @@ internal static class SharedArrayPoolStatics
             }
         }
 
-    Fail:
+Fail:
         result = 0;
         return false;
     }

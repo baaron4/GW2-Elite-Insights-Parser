@@ -73,7 +73,7 @@ internal class SpiritValeInstance : SpiritVale
             {
                 var wallOfGhost = wallOfGhosts[i];
                 long nextWallOfGhostStart = log.LogData.LogEnd;
-                if (i < wallOfGhosts.Count - 1) 
+                if (i < wallOfGhosts.Count - 1)
                 {
                     nextWallOfGhostStart = wallOfGhosts[i + 1].FirstAware;
                 }
@@ -194,7 +194,7 @@ internal class SpiritValeInstance : SpiritVale
                 phases.AddRange(Gorseval.ComputePhases(log, gorseval, Targets, gorsevalPhase, requirePhases));
             }
         }
-        { 
+        {
             var sabethaPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), "Sabetha", _sabetha);
             foreach (var sabethaPhase in sabethaPhases)
             {

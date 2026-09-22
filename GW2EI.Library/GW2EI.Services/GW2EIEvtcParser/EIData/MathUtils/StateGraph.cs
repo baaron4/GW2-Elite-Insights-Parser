@@ -1,5 +1,6 @@
 ﻿
 namespace GW2EIEvtcParser.EIData;
+
 public class StateGraph<T>
 {
     public IReadOnlyList<GenericSegment<T>> Values => _values;

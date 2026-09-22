@@ -77,18 +77,18 @@ public struct AutoTrace : IDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetAverageTimeStart()
     {
-        #if EI_TRACING_STATS
+#if EI_TRACING_STATS
         lstAvgMs = stopwatch.ElapsedMilliseconds;
-        #endif
+#endif
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void TrackAverageTime(string name)
     {
-        #if EI_TRACING_STATS
+#if EI_TRACING_STATS
         var elapsed = stopwatch.ElapsedMilliseconds - lstAvgMs;
         Trace.TrackAverageStat(name, elapsed);
         lstAvgMs = stopwatch.ElapsedMilliseconds;
-        #endif
+#endif
     }
 
     void IDisposable.Dispose()
@@ -117,7 +117,7 @@ public struct AutoTrace : IDisposable
                 Console.WriteLine($"[{Environment.CurrentManagedThreadId}] exit  {name}: {stopwatch.ElapsedMilliseconds,5}ms");
             }
 
-            #if EI_TRACING_STATS
+#if EI_TRACING_STATS
             if(Environment.CurrentManagedThreadId == 1)
             {
                 Console.WriteLine($"[{Environment.CurrentManagedThreadId}] Root tracer destroyed, here are Stats:");
@@ -128,7 +128,7 @@ public struct AutoTrace : IDisposable
                     Console.WriteLine($"\t{group.Key,-20}: {min,5} Min, {(float)total/count,8:F2} Avg, {max,5} Max  ({count,4} Samples)");
                 }
             }
-            #endif
+#endif
         }
     }
 #else

@@ -5,16 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -95,7 +94,7 @@ internal class Deimos : BastionOfThePenitent
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
@@ -317,7 +316,7 @@ internal class Deimos : BastionOfThePenitent
     }
 
     internal static (AgentItem? deimosStruct, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) FindDeimos10PercentBodyStructWithAttackTargets(SingleActor deimos, LogData logData, AgentData agentData, List<CombatItem> combatData, IEnumerable<AttackTargetEvent> attackTargetEvents, IEnumerable<TargetableEvent> targetableEvents)
-    { 
+    {
         var firstTargetable = targetableEvents.FirstOrDefault(x => x.Time >= deimos.FirstAware && x.Targetable);
         var gadgetsAgents = new HashSet<AgentItem>();
         if (firstTargetable != null)
@@ -399,7 +398,7 @@ internal class Deimos : BastionOfThePenitent
         if (deimosStructBody != null)
         {
             deimos10PercentTime = deimos10PercentTargetable;
-        } 
+        }
         else
         {
             // Deimos gadgets via legacy, when attack targets fail
@@ -527,7 +526,7 @@ internal class Deimos : BastionOfThePenitent
             if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
             {
                 var addPhase = new SubPhasePhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, encounterPhase.End));
-                switch(target.ID)
+                switch (target.ID)
                 {
                     case (int)TargetID.Thief:
                         addPhase.Name = "Thief";
@@ -563,7 +562,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -734,13 +733,14 @@ internal class Deimos : BastionOfThePenitent
                             replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
                             hiddenStart = target.LastAware;
                             lineStart = targetableEvent.Time;
-                        } 
+                        }
                         else
                         {
                             if (targetableEvent.Time > hiddenStart)
                             {
-                                replay.Hidden.Add(new Segment(hiddenStart , targetableEvent.Time));
-                            } else
+                                replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                            }
+                            else
                             {
                                 replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                                 replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new PositionConnector(arenaCenter), new PositionConnector(arenaPos)));
@@ -896,9 +896,9 @@ internal class Deimos : BastionOfThePenitent
                         {
                             lifespan.start = previousLifeSpan.end + 1;
                         }
-                    } 
+                    }
                     yDict[effect.Position.Y] = lifespan;
-                } 
+                }
                 else
                 {
                     positionDict[effect.Position.X] = new Dictionary<float, (long start, long end)>

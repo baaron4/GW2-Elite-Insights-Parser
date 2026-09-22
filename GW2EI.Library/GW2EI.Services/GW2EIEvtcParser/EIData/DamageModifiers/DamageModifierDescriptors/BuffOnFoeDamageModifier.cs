@@ -53,7 +53,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
     }
     internal override DamageModifierDescriptor WithBuffOnActorFromFoe()
     {
-        if (_gainComputerSource == null )
+        if (_gainComputerSource == null)
         {
             throw new InvalidOperationException("Unsupported mode when not using src checker");
         }
@@ -135,7 +135,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }
             }
-        } 
+        }
         else
         {
             if (_trackerSource != null)

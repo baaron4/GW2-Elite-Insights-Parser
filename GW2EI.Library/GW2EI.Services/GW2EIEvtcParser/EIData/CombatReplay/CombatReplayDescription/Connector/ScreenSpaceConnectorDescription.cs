@@ -7,6 +7,6 @@ public class ScreenSpaceConnectorDescription : ConnectorDescription
     internal ScreenSpaceConnectorDescription(ScreenSpaceConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
         IsScreenSpace = true;
-        Position = [connector.Position.X, connector.Position.Y]; 
+        Position = [connector.Position.X, connector.Position.Y];
     }
 }

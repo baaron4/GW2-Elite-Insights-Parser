@@ -46,7 +46,7 @@ internal static class ScourgeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Blood as Sand
         new BuffOnActorDamageModifier(Mod_BloodAsSand, [SandShadeBuff, SandSavantSandShadeBuff], "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BloodAsSand, DamageModifierMode.All)
@@ -70,7 +70,7 @@ internal static class ScourgeHelper
             if (gw2Build.Build >= GW2Builds.July2026Balance)
             {
                 expectedDuration = 15000;
-            } 
+            }
             else
             {
                 if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)

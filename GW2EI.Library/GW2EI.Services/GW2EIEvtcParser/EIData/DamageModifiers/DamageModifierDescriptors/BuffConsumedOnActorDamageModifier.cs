@@ -85,7 +85,7 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }
             }
-        } 
+        }
         else
         {
             IReadOnlyDictionary<long, BuffGraph> bgms = actor.GetBuffGraphs(log);

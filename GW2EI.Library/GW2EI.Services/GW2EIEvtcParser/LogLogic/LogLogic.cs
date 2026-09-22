@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -9,14 +6,13 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Decoration;
-using static GW2EIEvtcParser.EIData.Mechanic;
 using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -244,12 +240,12 @@ public abstract class LogLogic
 
     internal virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return [ ];
+        return [];
     }
 
-    internal virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal virtual IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
-        return [ ];
+        return [];
     }
 
     internal virtual string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
@@ -299,7 +295,7 @@ public abstract class LogLogic
         var trashIDs = GetTrashMobsIDs();
         foreach (var trash in trashIDs)
         {
-            if(targetIDs.IndexOf(trash) != -1)
+            if (targetIDs.IndexOf(trash) != -1)
             {
                 throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
@@ -350,7 +346,7 @@ public abstract class LogLogic
             if (p.FirstAware > threshold)
             {
                 enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault(x => x.Spec != Spec.Unknown && x.Subgroup != 0);
-            } 
+            }
             else
             {
                 enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault(x => x.Spec != Spec.Unknown && x.Subgroup != 0);
@@ -373,7 +369,7 @@ public abstract class LogLogic
 
     internal virtual List<InstantCastFinder> GetInstantCastFinders()
     {
-        return [ ];
+        return [];
     }
 
     internal void InvalidateLogID()
@@ -385,7 +381,7 @@ public abstract class LogLogic
     {
         if (!requirePhases)
         {
-            return [ ];
+            return [];
         }
 
         //TODO_PERF(Rennorb): find average complexity
@@ -441,7 +437,7 @@ public abstract class LogLogic
             {
                 instancePhase.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
             }
-        } 
+        }
         else
         {
             phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
@@ -487,17 +483,17 @@ public abstract class LogLogic
 
     internal virtual List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        return [ ];
+        return [];
     }
 
     internal virtual List<CastEvent> SpecialCastEventProcess(CombatData combatData, AgentData agentData, SkillData skillData, Dictionary<long, List<AnimatedCastEvent>> animatedCastDataByID)
     {
-        return [ ];
+        return [];
     }
 
     internal virtual List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        return [ ];
+        return [];
     }
 
     internal virtual void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -590,14 +586,14 @@ public abstract class LogLogic
                             progressState.Progresses.First().Time,
                             progressState.Progresses.Count == 1 ?
                                 progressState.Progresses.First().Time :
-                                i < gadgetCapture.ProgressStates.Count - 1 ? 
-                                    gadgetCapture.ProgressStates[i + 1].Progresses.First().Time 
-                                    : 
+                                i < gadgetCapture.ProgressStates.Count - 1 ?
+                                    gadgetCapture.ProgressStates[i + 1].Progresses.First().Time
+                                    :
                                     gadgetCapture.EndTime);
                         if (progressState.IsDecaying)
                         {
                             environmentDecorations.Add(new ProgressBarDecoration(barSize, 30, (start, end), fromColor, 0.3, color, 0.6, progressState.Progresses, positionConnector));
-                        } 
+                        }
                         else
                         {
                             environmentDecorations.Add(new ProgressBarDecoration(barSize, 30, (start, end), color, 0.3, fromColor, 0.6, progressState.Progresses, positionConnector));
@@ -667,7 +663,7 @@ public abstract class LogLogic
 
     protected virtual IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
-        return [ GetTargetID(GenericTriggerID) ];
+        return [GetTargetID(GenericTriggerID)];
     }
 
     internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
@@ -715,7 +711,7 @@ public abstract class LogLogic
     internal virtual long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericLogOffset(logData);
-        if  (IsInstance)
+        if (IsInstance)
         {
             return startToUse;
         }

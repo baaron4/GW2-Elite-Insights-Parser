@@ -692,9 +692,9 @@ public static partial class ListExt
     public static T? FirstByAware<T>(this IReadOnlyList<T> agents) where T : AgentItem
     {
         (T? Agent, long FirstAware) result = (default, long.MaxValue);
-        foreach(var agent in agents)
+        foreach (var agent in agents)
         {
-            if(agent.FirstAware < result.FirstAware)
+            if (agent.FirstAware < result.FirstAware)
             {
                 result = (agent, agent.FirstAware);
             }

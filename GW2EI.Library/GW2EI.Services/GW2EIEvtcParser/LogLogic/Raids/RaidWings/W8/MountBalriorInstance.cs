@@ -91,7 +91,7 @@ internal class MountBalriorInstance : MountBalrior
                 var encounterName = (isCM ? "Godspoil Greer" : "Greer, the Blightbringer");
                 var name = encounterName + (greers.Count > 0 ? " " + (offset) : "");
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, encounterName, start, end, success, _greer, isCM ? LogData.Mode.CMNoName : LogData.Mode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [.. greeAndRegs, .. protoGreelings], eregs, mainPhase, encounterName, start, end, success, _greer, isCM ? LogData.Mode.CMNoName : LogData.Mode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -133,7 +133,7 @@ internal class MountBalriorInstance : MountBalrior
                 if (targetsByIDs.TryGetValue((int)TargetID.TranscendentBoulder, out var boulders))
                 {
                     AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, _decima, mode);
-                } 
+                }
                 else
                 {
                     AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], [], [], mainPhase, name, start, end, success, _decima, mode);
@@ -192,7 +192,7 @@ internal class MountBalriorInstance : MountBalrior
                 var maxHP = ura.GetHealth(log.CombatData);
                 var isCM = maxHP > 70e6;
                 var encounterName = (isCM ? "Godscream Ura" : "Ura, the Steamshrieker");
-                var name = encounterName  + (uras.Count > 0 ? " " + (offset) : "");
+                var name = encounterName + (uras.Count > 0 ? " " + (offset) : "");
                 ura.OverrideName(name);
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, encounterName, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.Mode.LegendaryCM : LogData.Mode.CMNoName) : LogData.Mode.Normal);
             }
@@ -384,7 +384,7 @@ internal class MountBalriorInstance : MountBalrior
     {
         foreach (var ura in Targets.Where(x => x.IsSpecies(TargetID.Ura)))
         {
-            UraTheSteamshrieker.AdjustUraHP(ura, ura.GetHealth(combatData), 
+            UraTheSteamshrieker.AdjustUraHP(ura, ura.GetHealth(combatData),
                 UraTheSteamshrieker.GetHealedPhaseStartEvent(combatData, ura, logData.LogStart, logData.LogEnd) != null, combatData.GetGW2BuildEvent().Build);
         }
         return base.GetLogMode(combatData, agentData, logData);

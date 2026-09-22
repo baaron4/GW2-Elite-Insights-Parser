@@ -11,7 +11,7 @@ public class SkillModeDescription
     public readonly long SkillID;
     public readonly bool IsBuff;
 
-    internal SkillModeDescription(SkillModeDescriptor skillModeDescriptor, CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) 
+    internal SkillModeDescription(SkillModeDescriptor skillModeDescriptor, CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         Category = (uint)skillModeDescriptor.Category;
         if (log.Buffs.BuffsByIDs.TryGetValue(skillModeDescriptor.SkillID, out var buff))

@@ -83,7 +83,7 @@ public class ConsoleProgram
             if (Executing)
             {
                 AddDelayed(path);
-            } 
+            }
             else
             {
                 Console.WriteLine("File Watcher: adding " + path);
@@ -166,7 +166,8 @@ public class ConsoleProgram
         if (BatchToDiscord)
         {
             Console.WriteLine("Discord: Preparing batch for discord" + Environment.NewLine);
-            ProgramHelper.HandleBatchedDiscordEmbed(DiscordMessageIDs, Operations, (message) => {
+            ProgramHelper.HandleBatchedDiscordEmbed(DiscordMessageIDs, Operations, (message) =>
+            {
                 Console.WriteLine(message);
             });
         }

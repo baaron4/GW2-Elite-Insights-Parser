@@ -5,14 +5,13 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -75,7 +74,7 @@ internal class Eparch : LonelyTower
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         ulong build = combatData.GetGW2BuildEvent().Build;
-        int healthCMRelease = build >= GW2Builds.April2026Balancepocalypse ? 16_961_832 : 
+        int healthCMRelease = build >= GW2Builds.April2026Balancepocalypse ? 16_961_832 :
             build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
         int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
         SingleActor eparch = GetEparchActor();
@@ -133,7 +132,7 @@ internal class Eparch : LonelyTower
         else if (!cmCheck && determinedApplies.Count >= 1)
         {
             successHandler.SetSuccess(true, determinedApplies[0].Time);
-        } 
+        }
         else
         {
             successHandler.SetSuccess(false, eparch.LastAware);
@@ -181,7 +180,7 @@ internal class Eparch : LonelyTower
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

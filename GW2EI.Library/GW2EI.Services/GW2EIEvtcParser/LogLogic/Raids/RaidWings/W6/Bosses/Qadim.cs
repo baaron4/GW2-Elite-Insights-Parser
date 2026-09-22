@@ -7,16 +7,15 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -125,7 +124,7 @@ internal class Qadim : MythwrightGambit
     }
 
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -400,7 +399,7 @@ internal class Qadim : MythwrightGambit
         phases[0].AddTarget(qadim, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SecondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
         phases.AddRange(ComputePhases(log, qadim, Targets, (EncounterPhaseData)phases[0], requirePhases));
-       
+
         return phases;
     }
 
@@ -572,7 +571,7 @@ internal class Qadim : MythwrightGambit
         long qadimStart = qadim.FirstAware;
         long qadimEnd = qadim.LastAware;
         bool isCM = qadim.GetHealth(log.CombatData) > 21e6;
-        int velocityIndex = 0; 
+        int velocityIndex = 0;
         switch (plateform.Character)
         {
             case "00":
@@ -1035,9 +1034,9 @@ internal class Qadim : MythwrightGambit
                     AnimatePlateforms(log, replay, target, opacities, qadimAgent);
                 }
                 var platformDecoration = new BackgroundIconDecoration(
-                    ParserIcons.QadimPlatform, 0, 2247, 
-                    opacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)), 
-                    (target.FirstAware, target.LastAware), 
+                    ParserIcons.QadimPlatform, 0, 2247,
+                    opacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+                    (target.FirstAware, target.LastAware),
                     new AgentConnector(target)
                 );
                 RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
@@ -1062,7 +1061,7 @@ internal class Qadim : MythwrightGambit
     {
         float threshold = 1f;
         for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
-        { 
+        {
             var velocity = velocities[velocityIndex];
             if (velocity.Time < startOffset)
             {

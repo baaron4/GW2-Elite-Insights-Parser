@@ -8,7 +8,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 {
     protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
 
-    public EffectMechanic(Guid effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([ effect ], id, plotlySetting, description, severity, internalCoolDown)
+    public EffectMechanic(Guid effect, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([effect], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

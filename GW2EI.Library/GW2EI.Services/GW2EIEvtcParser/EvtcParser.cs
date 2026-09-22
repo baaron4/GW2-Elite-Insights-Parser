@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -205,13 +204,13 @@ public class EvtcParser
         }
     }
 
-    private static void DoMultiThreadAccelerationCommon(ParsedEvtcLog log, AutoTrace _t, 
+    private static void DoMultiThreadAccelerationCommon(ParsedEvtcLog log, AutoTrace _t,
         IReadOnlyList<(long start, long end)> intervals)
     {
         Parallel.ForEach(log.Friendlies, actor =>
         {
-        foreach (var (start, end) in intervals)
-        {
+            foreach (var (start, end) in intervals)
+            {
                 // To create the caches
                 foreach (var p in log.PlayerList)
                 {
@@ -359,7 +358,7 @@ public class EvtcParser
         DoMultiThreadAccelerationCommon(log, _t, intervals);
     }
 
-    private static void DoMultiThreadAccelerationWithEnglobingAgents(ParsedEvtcLog log, AutoTrace _t, 
+    private static void DoMultiThreadAccelerationWithEnglobingAgents(ParsedEvtcLog log, AutoTrace _t,
         IReadOnlyList<SingleActor> friendliesAndTargets,
         IReadOnlyList<SingleActor> friendliesAndTargetsAndMobsEnglobing, IReadOnlyList<SingleActor> friendliesAndTargetsAndMobsNonEnglobed,
         IReadOnlyList<SingleActor> friendliesAndTargetsEnglobing,
@@ -374,7 +373,7 @@ public class EvtcParser
         Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
         {
             var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-            foreach ( var (start, end) in intervals)
+            foreach (var (start, end) in intervals)
             {
                 actor.GetBuffDistribution(log, start, end);
                 foreach (var englobed in englobeds)
@@ -542,18 +541,18 @@ public class EvtcParser
                         .Where(x => !x.AgentItem.IsEnglobedAgent)
                         .ToList();
 
-                    DoMultiThreadAccelerationWithEnglobingAgents(log, _t, 
-                        friendliesAndTargets, 
-                        friendliesAndTargetsAndMobsEnglobing, friendliesAndTargetsAndMobsNonEnglobed, 
-                        friendliesAndTargetsEnglobing, 
-                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed, 
+                    DoMultiThreadAccelerationWithEnglobingAgents(log, _t,
+                        friendliesAndTargets,
+                        friendliesAndTargetsAndMobsEnglobing, friendliesAndTargetsAndMobsNonEnglobed,
+                        friendliesAndTargetsEnglobing,
+                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed,
                         [(log.LogData.LogStart, log.LogData.LogEnd)]);
                     IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
                     DoMultiThreadAccelerationWithEnglobingAgents(log, _t,
                         friendliesAndTargets,
                         friendliesAndTargetsAndMobsEnglobing, friendliesAndTargetsAndMobsNonEnglobed,
                         friendliesAndTargetsEnglobing,
-                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed, 
+                        friendliesAndTargetsAndMobsEnglobed, friendliesAndTargetsNonEnglobed,
                         phases.Select(x => (x.Start, x.End)).ToList());
                 }
                 else

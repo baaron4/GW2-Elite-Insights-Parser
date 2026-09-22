@@ -82,7 +82,7 @@ partial class SingleActor
     {
         if (stateCount == 0)
         {
-            return [ ];
+            return [];
         }
 
         //TODO_PERF(Rennorb)
@@ -142,7 +142,7 @@ partial class SingleActor
     {
         if (!_damageList1S.TryGetValue(damageType, out var graphs))
         {
-            graphs = new (AgentItem, log);
+            graphs = new(AgentItem, log);
             _damageList1S[damageType] = graphs;
         }
 
@@ -160,7 +160,7 @@ partial class SingleActor
     {
         if (!_damageTakenList1S.TryGetValue(damageType, out var graphs))
         {
-            graphs = new (AgentItem, log);
+            graphs = new(AgentItem, log);
             _damageTakenList1S[damageType] = graphs;
         }
 
@@ -209,7 +209,7 @@ partial class SingleActor
             return null;
         }
 
-        _breakbarDamageList1S ??= new (AgentItem, log);
+        _breakbarDamageList1S ??= new(AgentItem, log);
 
         if (_breakbarDamageList1S.TryGetValue(start, end, target, out var res))
         {
@@ -228,7 +228,7 @@ partial class SingleActor
             return null;
         }
 
-        _breakbarDamageTakenList1S ??= new (AgentItem, log);
+        _breakbarDamageTakenList1S ??= new(AgentItem, log);
 
         if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out var res))
         {

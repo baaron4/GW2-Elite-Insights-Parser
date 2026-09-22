@@ -8,12 +8,12 @@ public class CachingCollectionWithTarget<T> : CachingCollectionCustom<SingleActo
 
     private static readonly SingleActor _nullActor = new DummyActor(ParserHelper._nullAgent);
 
-    public CachingCollectionWithTarget(AgentItem src, ParsedEvtcLog log) : base(log, _nullActor, log.FriendlyAgents.Contains(src.GetFinalMaster()) ? 
-        log.LogData.Logic.Targets.Count 
+    public CachingCollectionWithTarget(AgentItem src, ParsedEvtcLog log) : base(log, _nullActor, log.FriendlyAgents.Contains(src.GetFinalMaster()) ?
+        log.LogData.Logic.Targets.Count
         :
-        log.LogData.Logic.TargetAgents.Contains(src.GetFinalMaster()) ? 
-            log.Friendlies.Count 
-            : 
+        log.LogData.Logic.TargetAgents.Contains(src.GetFinalMaster()) ?
+            log.Friendlies.Count
+            :
             5
     )
     {
@@ -28,7 +28,7 @@ public class CachingCollectionWithAgentTarget<T> : CachingCollectionCustom<Agent
         :
         log.LogData.Logic.TargetAgents.Contains(src.GetFinalMaster()) ?
             log.Friendlies.Count
-            : 
+            :
             5
     )
     {

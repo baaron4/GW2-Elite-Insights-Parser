@@ -67,7 +67,7 @@ internal class SilentSurfInstance : SilentSurf
                 if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
                 {
                     start = determinedLost.Time;
-                } 
+                }
                 else
                 {
                     continue;
@@ -157,19 +157,19 @@ internal class SilentSurfInstance : SilentSurf
     }
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors (target, log, replay);
+        base.ComputeNPCCombatReplayActors(target, log, replay);
         _kanaxai.ComputeNPCCombatReplayActors(target, log, replay);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors (p, log, replay);
+        base.ComputePlayerCombatReplayActors(p, log, replay);
         _kanaxai.ComputePlayerCombatReplayActors(p, log, replay);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations (log, environmentDecorations);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         _kanaxai.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 

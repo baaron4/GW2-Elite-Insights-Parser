@@ -20,8 +20,8 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     {
         LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconTheKeyOfAhdashim;
-        Extension = "keyadash"; 
-        
+        Extension = "keyadash";
+
         _adina = new Adina((int)TargetID.Adina);
         _sabir = new Sabir((int)TargetID.Sabir);
         _qadimThePeerless = new QadimThePeerless((int)TargetID.QadimThePeerless);
@@ -92,7 +92,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
                 phases.AddRange(QadimThePeerless.ComputePhases(log, qtp, qtpPhase, requirePhases));
             }
         }
-        
+
         return phases;
     }
 

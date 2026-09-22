@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser.ParserHelpers;
+
 internal static class StringExt
 {
     internal readonly ref struct SplitResult
@@ -21,7 +22,7 @@ internal static class StringExt
     public static SplitResult SplitOnce(this in ReadOnlySpan<char> str, char split)
     {
         var pivot = str.IndexOf(split);
-        if(pivot == -1) { return new(str, ReadOnlySpan<char>.Empty); }
+        if (pivot == -1) { return new(str, ReadOnlySpan<char>.Empty); }
         return new(str[..pivot], str[(pivot + 1)..]);
     }
 }

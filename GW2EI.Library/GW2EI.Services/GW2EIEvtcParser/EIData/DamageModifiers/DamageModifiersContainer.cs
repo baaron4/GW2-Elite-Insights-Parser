@@ -13,7 +13,7 @@ public class DamageModifiersContainer
 
     internal DamageModifiersContainer(CombatData combatData, LogLogic.LogLogic.ParseModeEnum parseMode, LogLogic.LogLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
-        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
+        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allOutgoingDamageModifiers =
         [
             ItemDamageModifiers.OutgoingDamageModifiers,
             EncounterDamageModifiers.OutgoingDamageModifiers,
@@ -96,7 +96,7 @@ public class DamageModifiersContainer
                 {
                     outDamageModsPerSource[Source.Common] = [outDamageMod];
                 }
-            } 
+            }
             else
             {
                 foreach (var source in outDamageMod.Srcs)
@@ -232,7 +232,7 @@ public class DamageModifiersContainer
 
     public List<OutgoingDamageModifier> GetPersonalOutgoingModifiersPerSpec(ParserHelper.Spec spec)
     {
-        var srcs = ParserHelper.SpecToSources(spec);
+        var srcs = SpecToSources(spec);
         var res = new List<OutgoingDamageModifier>(srcs.Count); //TODO_PERF(Rennorb) @find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
@@ -246,7 +246,7 @@ public class DamageModifiersContainer
 
     public List<IncomingDamageModifier> GetPersonalIncomingModifiersPerSpec(ParserHelper.Spec spec)
     {
-        var srcs = ParserHelper.SpecToSources(spec);
+        var srcs = SpecToSources(spec);
         var res = new List<IncomingDamageModifier>(srcs.Count); //TODO_PERF(Rennorb) @find average complexity
         foreach (ParserHelper.Source src in srcs)
         {

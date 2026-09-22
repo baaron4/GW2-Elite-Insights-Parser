@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.Extensions;
+
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 public static class ExtensionHelper

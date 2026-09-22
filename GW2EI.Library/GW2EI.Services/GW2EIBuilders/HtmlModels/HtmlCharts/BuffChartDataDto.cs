@@ -60,7 +60,7 @@ internal class BuffChartDataDto
     {
         foreach (Buff buff in listToUse)
         {
-            if(boonGraphData.Remove(buff.ID, out var bgm))
+            if (boonGraphData.Remove(buff.ID, out var bgm))
             {
                 BuffChartDataDto? graph = BuildBuffGraph(bgm, phase, usedBuffs);
                 if (graph != null)

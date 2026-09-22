@@ -10,7 +10,7 @@ internal abstract class BuffSimulationItem : SimulationItem
     // however I did not investigate what penalty a fix for tat bug would incur (probably quite minor, something like one clamp).
     public readonly long Start;
     public long End;
-    public long Duration  => End - Start;
+    public long Duration => End - Start;
 
     public BuffSimulationItem(long start, long end)
     {

@@ -66,7 +66,7 @@ internal static class LogLogicUtils
         if (delta > 0)
         {
             yStart -= delta * 0.5f;
-        } 
+        }
         else if (delta < 0)
         {
             xStart += delta * 0.5f;
@@ -184,8 +184,8 @@ internal static class LogLogicUtils
             if (timeToCheck < playerAgent.FirstAware || timeToCheck > playerAgent.LastAware)
             {
                 playerDeadOrDCCount++;
-            } 
-            else 
+            }
+            else
             {
                 var statusEvents = new List<StatusEvent>();
                 statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
@@ -234,7 +234,8 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var gadgetMatchingPositions = gadgetPositions.Where(entry => {
+        var gadgetMatchingPositions = gadgetPositions.Where(entry =>
+        {
             return entry.Value.Any(x => (MovementEvent.GetPoint3D(x) - chestPosition).XY().LengthSquared() < InchDistanceThresholdSquared);
         });
         if (!gadgetMatchingPositions.Any())
@@ -249,7 +250,8 @@ internal static class LogLogicUtils
     {
         var movementData = combatData.Where(x => x.IsGeographical).ToList();
 
-        var nonZeroGadgetVelocities = movementData.Where(evt => {
+        var nonZeroGadgetVelocities = movementData.Where(evt =>
+        {
             if (evt.IsStateChange == StateChange.Velocity)
             {
                 if (MovementEvent.GetPoint3D(evt).Length() < 1e-6)
@@ -273,7 +275,8 @@ internal static class LogLogicUtils
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Key.Type == AgentItem.AgentType.VolatileSpecies && x.Key.Master == null)
             .ToDictionary(x => x.Key, x => x.ToList());
-        var gadgetPositions = positionDict.Where(entry => {
+        var gadgetPositions = positionDict.Where(entry =>
+        {
 
             if (nonZeroGadgetVelocities.ContainsKey(entry.Key))
             {

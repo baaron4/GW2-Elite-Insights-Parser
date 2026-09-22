@@ -18,7 +18,7 @@ public class ShardEvent : MetaDataEvent
         if (shardID < 2000 && shardID > 1000)
         {
             return RegionEnum.NA;
-        } 
+        }
         else if (shardID > 2000 && shardID < 3000)
         {
             return RegionEnum.EU;
@@ -38,7 +38,7 @@ public class ShardEvent : MetaDataEvent
         if (UserWorldID0 > 0)
         {
             Region = GetRegion(UserWorldID0);
-        } 
+        }
         else if (mapEvent != null)
         {
             var mapAPI = apiController.GetAPIMap(mapEvent.MapID);

@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class GaleshotHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new EffectCastFinder(SummonCycloneBow, EffectGUIDs.GaleshotSummonCycloneBow)
             .UsingDstSpecChecker(Spec.Galeshot)
@@ -23,7 +23,7 @@ internal static class GaleshotHelper
         new DamageCastFinder(WutheringWindSkill, WutheringWindSkill),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Wind Force
         new BuffOnActorDamageModifier(Mod_WindForce, WindForce, "Wind Force (Gale Force)", "3% stacking", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByStack, BuffImages.WindForce, DamageModifierMode.PvE),

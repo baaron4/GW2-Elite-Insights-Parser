@@ -13,7 +13,7 @@ internal abstract class OpenWorldLogic : LogLogic
         LogCategoryInformation.SubCategory = LogCategories.SubLogCategory.OpenWorld;
         LogID |= LogIDs.LogMasks.OpenWorldMask;
     }
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }

@@ -23,7 +23,7 @@ internal static class JsonCombatReplayMetaDataBuilder
         var mapMetaDatas = decorationMetadata.OfType<ArenaDecorationMetadataDescription>().GroupBy(x => x.Signature).ToDictionary(x => x.Key, x => x.First());
         foreach (var mapItem in mapDecorations)
         {
-            if (mapItem.ConnectedTo is PositionConnectorDescription posConnector &&  mapMetaDatas.TryGetValue(mapItem.MetadataSignature, out var metadata))
+            if (mapItem.ConnectedTo is PositionConnectorDescription posConnector && mapMetaDatas.TryGetValue(mapItem.MetadataSignature, out var metadata))
             {
                 maps.Add(new JsonCombatReplayMetaData.CombatReplayMap()
                 {

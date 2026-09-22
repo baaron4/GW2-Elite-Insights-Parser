@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class RitualistHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         // Ritualist Shroud
         new BuffGainCastFinder(EnterRitualistsShroud, RitualistsShroud)
@@ -53,7 +53,7 @@ internal static class RitualistHelper
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.RitualistInnervatePreservation2),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Lingering Spirits
         new BuffOnActorDamageModifier(Mod_LingeringSpiritsAnguish, LingeringSpiritsAnguish, "Lingering Spirits (Anguish)", "15%", DamageSource.NoPets, 15, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.Anguish, DamageModifierMode.PvE)
@@ -70,7 +70,7 @@ internal static class RitualistHelper
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.December2025Balance),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Ritualist's Shroud
         new BuffOnActorDamageModifier(Mod_RitualistsShroud, RitualistsShroud, "Ritualist's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Ritualist, ByPresence, SkillImages.RitualistShroud, DamageModifierMode.PvE),
@@ -122,7 +122,7 @@ internal static class RitualistHelper
         new Buff("Dark Stalker (Ritualist)", RitualistDarkStalker, Source.Ritualist, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.Unknown),
     ];
 
-    private static readonly HashSet<int> Minions = 
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.SpiritOfAnguish,
         (int)MinionID.SpiritOfWanderlust,
@@ -147,7 +147,7 @@ internal static class RitualistHelper
         return IsSpiritMinion(agentItem) || IsUndeadMinion(agentItem);
     }
 
-    private static readonly HashSet<long> _ritualistShroudTransform = 
+    private static readonly HashSet<long> _ritualistShroudTransform =
     [
         EnterRitualistsShroud, ExitRitualistsShroud
     ];

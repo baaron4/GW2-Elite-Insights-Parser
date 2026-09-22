@@ -294,7 +294,7 @@ internal class WhisperOfJormag : Bjora
                         var circle = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
-                }                
+                }
                 break;
             default:
                 break;
@@ -349,7 +349,7 @@ internal class WhisperOfJormag : Bjora
             (EffectGUIDs.WhisperOfJormagFallingIceIndicator120, EffectGUIDs.WhisperOfJormagFallingIceSpike120, 120),
             (EffectGUIDs.WhisperOfJormagFallingIceIndicator180, EffectGUIDs.WhisperOfJormagFallingIceSpike180, 180),
         ];
-        foreach(var (indicatorGUID, spikeGUID, radius) in fallingIces)
+        foreach (var (indicatorGUID, spikeGUID, radius) in fallingIces)
         {
             AddFallingIceDecorations(log, environmentDecorations, indicatorGUID, spikeGUID, radius);
         }

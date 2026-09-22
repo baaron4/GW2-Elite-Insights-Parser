@@ -6,16 +6,15 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -85,7 +84,7 @@ internal class BanditTrio : SalvationPass
 
     internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
-        return [ 
+        return [
             TargetID.Cage,
             TargetID.InsectSwarms,
         ];
@@ -127,19 +126,19 @@ internal class BanditTrio : SalvationPass
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
-            
+
             startToUse = Math.Min(berg.FirstAware, startToUse);
             if (!agentData.TryGetFirstAgentItem(TargetID.Zane, out var zane))
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
-            
+
             startToUse = Math.Min(zane.FirstAware, startToUse);
             if (!agentData.TryGetFirstAgentItem(TargetID.Narella, out var narella))
             {
                 throw new MissingKeyActorsException("Narella not found");
             }
-            
+
             startToUse = Math.Min(narella.FirstAware, startToUse);
             // Thrash mob start check
             var boxStart = new Vector2(-2200, -11300);
@@ -180,14 +179,14 @@ internal class BanditTrio : SalvationPass
             var cages = combatData
                 .Where(x => x.IsStateChange == StateChange.Marker && x.Value == cageMarkerGUID.MarkerID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && maxHealths.Any(y=> y.SrcMatchesAgent(x)))
+                .Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && maxHealths.Any(y => y.SrcMatchesAgent(x)))
                 .Distinct();
             foreach (var cage in cages)
             {
                 AgentItem encounterCage = AgentManipulationHelper.CreateEnglobedAgentInInterval(cage, agentData, minFirstAware, maxLastAware);
                 encounterCage.OverrideID(TargetID.Cage, agentData);
             }
-        } 
+        }
         else
         {
             var cages = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 238).Distinct();

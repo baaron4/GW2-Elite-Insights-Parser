@@ -87,9 +87,9 @@ public class MechanicData
         }
         //TODO_PERF(Rennorb) <regroupedMobs> = 0
         var regroupedMobs = new Dictionary<int, SingleActor>();
-        foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) 
-        { 
-            _mechanicLogs.Remove(x); 
+        foreach (var x in _mechanicLogs.Keys.Where(x => !x.Available(log)))
+        {
+            _mechanicLogs.Remove(x);
         }
         CheckConfiguration(log);
         foreach (Mechanic mech in _mechanicLogs.Keys)
@@ -112,19 +112,19 @@ public class MechanicData
     {
         if (_presentMechanics != null)
         {
-            #nullable disable
+#nullable disable
             return;
-            #nullable restore
+#nullable restore
         }
 
         _presentOnFriendliesMechanics = new(log);
-        _presentOnEnemyMechanics      = new(log);
-        _presentMechanics             = new(log);
-        _enemyList                    = new(log);
+        _presentOnEnemyMechanics = new(log);
+        _presentMechanics = new(log);
+        _enemyList = new(log);
         ComputeMechanics(log);
         foreach (var (mechanic, events) in _mechanicLogs)
         {
-            if(events.Count != 0)
+            if (events.Count != 0)
             {
                 events.SortByTime();
             }
@@ -194,7 +194,7 @@ public class MechanicData
         _presentMechanics!.Set(start, end, presentMechanics);
         _presentOnEnemyMechanics!.Set(start, end, presentOnEnemyMechanics);
         _presentOnFriendliesMechanics!.Set(start, end, presentOnFriendliesMechanics);
-        _enemyList!.Set(start, end, [..enemyHash]);
+        _enemyList!.Set(start, end, [.. enemyHash]);
     }
 
     public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)

@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using GW2EIParserCommons;
 
 namespace GW2EIParserWinForms;
+
 internal class ConsoleResultObject
 {
     public static readonly JsonSerializerOptions Serializer = new()

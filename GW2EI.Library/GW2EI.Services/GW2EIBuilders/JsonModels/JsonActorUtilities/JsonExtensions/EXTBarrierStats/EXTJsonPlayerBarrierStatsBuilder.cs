@@ -26,7 +26,7 @@ internal static class EXTJsonPlayerBarrierStatsBuilder
             var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>(phases.Count);
             var allyBarrier1S = new List<IReadOnlyList<int>>(phases.Count);
             var allyBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
-            
+
             foreach (PhaseData phase in phases)
             {
                 outgoingBarrierAlly.Add(EXTJsonBarrierStatsBuilderCommons.BuildOutgoingBarrierStatistics(a.EXTBarrier.GetOutgoingBarrierStats(friendly, log, phase.Start, phase.End)));

@@ -6,7 +6,7 @@ namespace GW2EIBuilders.JsonModels;
 
 internal static class JsonWvWMapDataBuilder
 {
-    public static JsonWvWMapData BuildJsonWvWMapData(ParsedEvtcLog log, WvWTeamsEvent wvwTeamsEvent,  HashSet<ulong> teampMap)
+    public static JsonWvWMapData BuildJsonWvWMapData(ParsedEvtcLog log, WvWTeamsEvent wvwTeamsEvent, HashSet<ulong> teampMap)
     {
         var jsonWvWMapData = new JsonWvWMapData
         {
@@ -25,12 +25,12 @@ internal static class JsonWvWMapDataBuilder
         foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
         {
             jsonWvWMapData.ObjectiveData.Add(new JsonWvWMapData.JsonWvWObjectiveData()
-                {
-                    MapID = objectiveStatusEvent.MapID,
-                    ObjectiveID = objectiveStatusEvent.ObjectiveID,
-                    ObjectiveType = objectiveStatusEvent.ObjectiveType.GetObjectiveTypeName(),
-                    Owners = objectiveStatusEvent.Owners.Select(x => new long[2] {x.TeamID, x.Time}).ToList()
-                }
+            {
+                MapID = objectiveStatusEvent.MapID,
+                ObjectiveID = objectiveStatusEvent.ObjectiveID,
+                ObjectiveType = objectiveStatusEvent.ObjectiveType.GetObjectiveTypeName(),
+                Owners = objectiveStatusEvent.Owners.Select(x => new long[2] { x.TeamID, x.Time }).ToList()
+            }
             );
         }
 
