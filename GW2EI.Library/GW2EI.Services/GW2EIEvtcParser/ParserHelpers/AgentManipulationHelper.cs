@@ -540,31 +540,15 @@ public static class AgentManipulationHelper
     /// <param name="expectedStart"></param>
     /// <param name="expectedEnd"></param>
     /// <returns></returns>
-    internal static AgentItem CreateAgentInIntervalAndDummiesAround(AgentItem originalAgent, AgentData agentData, long expectedStart, long expectedEnd)
+    internal static AgentItem CreateEnglobedAgentInInterval(AgentItem originalAgent, AgentData agentData, long expectedStart, long expectedEnd)
     {
+        expectedStart = Math.Max(originalAgent.FirstAware, expectedStart);
+        expectedEnd = Math.Min(expectedEnd, originalAgent.LastAware);
         AgentItem newAgentItem;
-        if (expectedStart != originalAgent.FirstAware && expectedEnd != originalAgent.LastAware)
+        if (expectedStart != originalAgent.FirstAware || expectedEnd != originalAgent.LastAware)
         {
-            var previousDummy = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedStart - 1, originalAgent.Spec);
-            previousDummy.SetEnglobingAgentItem(originalAgent, agentData);
-            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, expectedStart, expectedEnd - 1, originalAgent.Spec);
+            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, expectedStart, expectedEnd, originalAgent.Spec);
             newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
-            var followingDummy = agentData.AddCustomAgentFrom(originalAgent, expectedEnd, originalAgent.LastAware, originalAgent.Spec);
-            followingDummy.SetEnglobingAgentItem(originalAgent, agentData);
-        }
-        else if (expectedStart != originalAgent.FirstAware)
-        {
-            var previousDummy = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedStart - 1, originalAgent.Spec);
-            previousDummy.SetEnglobingAgentItem(originalAgent, agentData);
-            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, expectedStart, originalAgent.LastAware, originalAgent.Spec);
-            newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
-        }
-        else if (expectedEnd != originalAgent.LastAware)
-        {
-            newAgentItem = agentData.AddCustomAgentFrom(originalAgent, originalAgent.FirstAware, expectedEnd - 1, originalAgent.Spec);
-            newAgentItem.SetEnglobingAgentItem(originalAgent, agentData);
-            var followingDummy = agentData.AddCustomAgentFrom(originalAgent, expectedEnd, originalAgent.LastAware, originalAgent.Spec);
-            followingDummy.SetEnglobingAgentItem(originalAgent, agentData);
         }
         else
         {

@@ -89,7 +89,7 @@ internal abstract class BuffSourceFinder
             var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && !x.CreditedBy.Is(agent)).Select(x => x.CreditedBy));
             foreach (SingleActor tempest in tempests)
             {
-                if (magAuraApplications.Any(x => tempest.AgentItem.Is(x) && x.InAwareTimes(tempest)))
+                if (magAuraApplications.Any(x => tempest.AgentItem.IsAtTime(x, time)))
                 {
                     return true;
                 }

@@ -868,7 +868,7 @@ internal class DecimaTheStormsinger : MountBalrior
             var fulgentCMs = log.CombatData.GetDamageData(FulgentFenceCM);
             foreach (var evt in fulgentCMs)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(decimaCMPhases, thisBugCanDanceEligibilityEvents, evt.Time, Ach_ThisBugCanDance, p);
                 }
