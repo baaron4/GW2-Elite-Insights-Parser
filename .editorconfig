@@ -15,6 +15,9 @@ charset = utf-8-bom
 # .NET Coding Conventions     # 
 ############################### 
 [*.{cs,vb}] 
+# Mark unused usings as warnings or errors so analyzers catch them
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_remove_unnecessary_usings = true
 # Organize usings 
 dotnet_sort_system_directives_first = true 
 # this. preferences 
