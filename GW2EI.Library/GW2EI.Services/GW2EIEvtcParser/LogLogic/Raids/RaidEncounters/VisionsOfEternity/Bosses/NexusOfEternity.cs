@@ -451,7 +451,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Slice Through Reality - Teleport AoE
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
                 {
-                    for (int i = 0; i <= tp.Count - 1; i = i + 2)
+                    for (int i = 0; i <= tp.Count - 1; i += 2)
                     {
                         var entry = tp[i];
                         var exit = tp[i + 1];

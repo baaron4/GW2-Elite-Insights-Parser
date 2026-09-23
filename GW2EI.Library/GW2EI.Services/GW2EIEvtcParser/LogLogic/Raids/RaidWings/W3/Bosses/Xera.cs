@@ -548,8 +548,7 @@ internal class Xera : StrongholdOfTheFaithful
                 // Effect has duration of 4294967295 but the skill lasts only 6000
                 (long, long) lifespan = intervention.ComputeDynamicLifespan(log, 6000);
                 var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(intervention.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
+                environmentDecorations.AddWithBorder(circle, Colors.LightBlue, 0.4);
             }
         }
 

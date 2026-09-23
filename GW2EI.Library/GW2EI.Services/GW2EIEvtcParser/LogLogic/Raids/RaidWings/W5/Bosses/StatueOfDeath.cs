@@ -204,8 +204,7 @@ internal class StatueOfDeath : HallOfChains
                 uint webRadius = 320;
                 var webIndicator = new CircleDecoration(webRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effectEvent.Position));
                 var web = new CircleDecoration(webRadius, (lifespan.end, lifespan.end + 750), Colors.Orange, 0.3, new PositionConnector(effectEvent.Position));
-                environmentDecorations.Add(webIndicator.GetBorderDecoration(Colors.Orange, 0.3));
-                environmentDecorations.AddWithGrowing(webIndicator, lifespan.end);
+                environmentDecorations.AddWithGrowingWithBorder(webIndicator, lifespan.end, Colors.Orange, 0.3);
                 environmentDecorations.Add(web);
             }
         }

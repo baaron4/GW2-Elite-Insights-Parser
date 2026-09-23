@@ -213,6 +213,21 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add the decoration twice, the 2nd one being a copy using given extra parameters and add a border to it.
+    /// </summary>
+    /// <param name="decoration"></param>
+    /// <param name="growingEnd"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="reverseGrowing"></param>
+    internal void AddWithGrowingWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
+    {
+        Add(decoration);
+        Add(decoration.Copy().UsingGrowingEnd(growingEnd, reverseGrowing));
+        Add(decoration.GetBorderDecoration(color.WithAlpha(opacity).ToString()));
+    }
+
+    /// <summary>
     /// Add the decoration twice, the 2nd one being a copy using given extra parameters
     /// </summary>
     /// <param name="decoration"></param>
