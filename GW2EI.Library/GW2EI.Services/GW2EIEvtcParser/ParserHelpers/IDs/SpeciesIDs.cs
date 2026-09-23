@@ -164,6 +164,8 @@ public static class SpeciesIDs
         // - Mursaat Overseer
         MursaatOverseer = 17172,
         Jade = 17181,
+        MursaatOverseerSpikes = SpeciesIDs.MursaatOverseerSpikes,
+        MursaatOverseerClaimArea = SpeciesIDs.MursaatOverseerClaimArea,
         // - Samarog
         Samarog = 17188,
         Guldhem = 17208,
@@ -1374,6 +1376,8 @@ public static class SpeciesIDs
     private const int TileArkk = -128;
     private const int GrandRaidVloxxChest = -129;
     private const int AscensionOrb = -130;
+    private const int MursaatOverseerSpikes = -131;
+    private const int MursaatOverseerClaimArea = -132;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

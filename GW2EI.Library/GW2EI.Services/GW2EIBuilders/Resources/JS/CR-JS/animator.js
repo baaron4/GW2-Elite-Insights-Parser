@@ -1170,39 +1170,6 @@ class Animator {
                 this._moveToSelected(ctx);
                 this.backgroundImages.draw(standardDraw);
                 //ctx.globalCompositeOperation = "color-burn";
-                ctx.save();
-                {
-                    ctx.setTransform(1, 0, 0, 1, 0, 0);
-                    // draw scale
-                    ctx.lineWidth = 3 * resolutionMultiplier;
-                    ctx.strokeStyle = "#CC2200";
-                    const pos = resolutionMultiplier * 70;
-                    const width = resolutionMultiplier * 50;
-                    const height = resolutionMultiplier * 6;
-                    // main line
-                    ctx.beginPath();
-                    ctx.moveTo(pos, pos);
-                    ctx.lineTo(pos + width, pos);
-                    ctx.stroke();
-                    ctx.lineWidth = 2 * resolutionMultiplier;
-                    // right border
-                    ctx.beginPath();
-                    ctx.moveTo(pos - resolutionMultiplier, pos + height);
-                    ctx.lineTo(pos - resolutionMultiplier, pos - height);
-                    ctx.stroke();
-                    // left border
-                    ctx.beginPath();
-                    ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
-                    ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
-                    ctx.stroke();
-                    // text
-                    const fontSize = 13 * resolutionMultiplier;
-                    ctx.font = "bold " + fontSize + "px Comic Sans MS";
-                    ctx.fillStyle = "#CC2200";
-                    ctx.textAlign = "center";
-                    ctx.fillText((50 / (InchToPixel * this.globalScale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
-                }
-                ctx.restore();
             }
             //ctx.restore();
             //ctx.globalCompositeOperation = 'normal';
@@ -1332,6 +1299,39 @@ class Animator {
                 this.screenSpaceActorData.draw(standardDraw);
             }
             ctx.restore()
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                // draw scale
+                ctx.lineWidth = 3 * resolutionMultiplier;
+                ctx.strokeStyle = "#CC2200";
+                const pos = resolutionMultiplier * 70;
+                const width = resolutionMultiplier * 50;
+                const height = resolutionMultiplier * 6;
+                // main line
+                ctx.beginPath();
+                ctx.moveTo(pos, pos);
+                ctx.lineTo(pos + width, pos);
+                ctx.stroke();
+                ctx.lineWidth = 2 * resolutionMultiplier;
+                // right border
+                ctx.beginPath();
+                ctx.moveTo(pos - resolutionMultiplier, pos + height);
+                ctx.lineTo(pos - resolutionMultiplier, pos - height);
+                ctx.stroke();
+                // left border
+                ctx.beginPath();
+                ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
+                ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
+                ctx.stroke();
+                // text
+                const fontSize = 13 * resolutionMultiplier;
+                ctx.font = "bold " + fontSize + "px Comic Sans MS";
+                ctx.fillStyle = "#CC2200";
+                ctx.textAlign = "center";
+                ctx.fillText((50 / (InchToPixel * this.globalScale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+            }
+            ctx.restore();
         }
         //ctx.restore();  
     }

@@ -1029,9 +1029,34 @@ internal class Qadim : MythwrightGambit
                     return;
                 }
                 var opacities = new List<ParametricPoint1D> { new(VisibleOpacity, target.FirstAware) };
-                foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))
+                var gadgetAnimationData = log.CombatData.GetGadgetAnimationData(target.AgentItem);
+                if (gadgetAnimationData.Count > 0)
                 {
-                    AnimatePlateforms(log, replay, target, opacities, qadimAgent);
+                    var destroyToken = new Token("destroy");
+                    var warningToken = new Token("warning");
+                    foreach (var gadgetAnimation in gadgetAnimationData)
+                    {
+                        if (gadgetAnimation.AnimationToken == destroyToken)
+                        {
+                            opacities.Add(new(HiddenOpacity, gadgetAnimation.Time));
+                        }
+                        else if (gadgetAnimation.AnimationToken == warningToken)
+                        {
+                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
+                            replay.Decorations.Add(new CircleDecoration(500, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(gadgetAnimation.LoopEnd));
+                        }
+                        else
+                        {
+                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))
+                    {
+                        AnimatePlateforms(log, replay, target, opacities, qadimAgent);
+                    }
                 }
                 var platformDecoration = new BackgroundIconDecoration(
                     ParserIcons.QadimPlatform, 0, 2247,

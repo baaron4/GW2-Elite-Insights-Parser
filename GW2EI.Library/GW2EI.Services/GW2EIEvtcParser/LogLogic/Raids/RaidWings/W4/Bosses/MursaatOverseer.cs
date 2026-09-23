@@ -1,5 +1,7 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
@@ -53,7 +55,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         var crMap = new CombatReplayMap(
                         (889, 889),
-                        (1360, 2701, 3911, 5258));
+                        (1360, 2711, 3911, 5248));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMursaatOverseer, crMap, parentMap);
         return crMap;
     }
@@ -62,7 +64,9 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         return
         [
-            TargetID.Jade
+            TargetID.Jade,
+            TargetID.MursaatOverseerSpikes,
+            TargetID.MursaatOverseerClaimArea,
         ];
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -104,6 +108,50 @@ internal class MursaatOverseer : BastionOfThePenitent
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
+    private static Vector3 ArenaCenter = new(2636.6294f, 3983.2795f, -4180.5854f);
+
+    internal static void IdentifyMursaatCheckboards(ulong gw2Build, EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var gadgetAnims = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.GadgetAnimation).Select(x => new GadgetAnimationEvent(x, agentData)).ToList();
+        var gadgetAnimDict = gadgetAnims.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var positionsDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+
+        var areasToken = new Token("areas");
+        var spikes = new HashSet<AgentItem>(gadgetAnims.Where(x => x.AnimationToken == areasToken).Select(x => x.Src).Where(x =>
+        {
+            if (positionsDict.TryGetValue(x, out var positions))
+            {
+                return positions.Any(x => (x.Point2D - ArenaCenter.XY()).LengthSquared() < 1890000);
+            }
+            return false;
+        }));
+        foreach (var spike in spikes)
+        {
+            spike.OverrideID(TargetID.MursaatOverseerSpikes, agentData);
+        }
+
+        var offToken = new Token("off");
+        // Type check as it could conflict with spikes
+        var claimAreas = new HashSet<AgentItem>(gadgetAnims.Where(x => x.AnimationToken == offToken && !x.Src.IsSpecies(TargetID.MursaatOverseerSpikes)).Select(x => x.Src).Where(x =>
+        {
+            if (positionsDict.TryGetValue(x, out var positions))
+            {
+                return positions.Any(x => (x.Point2D - ArenaCenter.XY()).LengthSquared() < 1890000);
+            }
+            return false;
+        }));
+        foreach (var claimArea in claimAreas)
+        {
+            claimArea.OverrideID(TargetID.MursaatOverseerClaimArea, agentData);
+        }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        IdentifyMursaatCheckboards(gw2Build, evtcVersion, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
@@ -135,6 +183,49 @@ internal class MursaatOverseer : BastionOfThePenitent
                 foreach (var seg in shields)
                 {
                     replay.Decorations.Add(new CircleDecoration(100, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
+                }
+                break;
+            case (int)TargetID.MursaatOverseerSpikes:
+                var spikeAnims = log.CombatData.GetGadgetAnimationData(target.AgentItem);
+                var spikePrepare = new Token("areas");
+                var spikeUp = new Token("impacts");
+                var spikeConnector = new AgentConnector(target);
+                foreach (var spikeAnim in spikeAnims)
+                {
+                    if (spikeAnim.AnimationToken == spikePrepare)
+                    {
+                        var rectangle = new RectangleDecoration(630, 630, (spikeAnim.Time, spikeAnim.Next?.Time ?? spikeAnim.Time + 5000), Colors.Red, 0.2, spikeConnector).UsingFilled(true);
+                        replay.Decorations.AddWithGrowing(rectangle, rectangle.Lifespan.end);
+                    }
+                    else if (spikeAnim.AnimationToken == spikeUp)
+                    {
+                        var rectangle = new RectangleDecoration(630, 630, (spikeAnim.Time, spikeAnim.Next?.Time ?? spikeAnim.Time + 1000), Colors.Red, 0.5, spikeConnector).UsingFilled(true);
+                        replay.Decorations.Add(rectangle);
+                    }
+                }
+                break;
+            case (int)TargetID.MursaatOverseerClaimArea:
+                var claimAnims = log.CombatData.GetGadgetAnimationData(target.AgentItem);
+                if (claimAnims.Count > 0)
+                {
+                    var first = claimAnims[0];
+                    var onToken = new Token("on");
+                    var claimConnector = new AgentConnector(target);
+                    if (first.AnimationToken != onToken && replay.Positions.Any(x => x.XYZ.X - ArenaCenter.X < 0))
+                    {
+                        // Tile was on claimed state, limit if to the tiles to the left of MO as all tiles get an "off" event at encounter end, regardless of initial state
+                        var rectangle = new RectangleDecoration(630, 630, (target.FirstAware, first.Time), Colors.LightOrange, 0.15, claimConnector).UsingFilled(true);
+                        replay.Decorations.Add(rectangle);
+                    }
+                    foreach (var claimAnim in claimAnims)
+                    {
+                        // Tile was claimed
+                        if (claimAnim.AnimationToken == onToken)
+                        {
+                            var rectangle = new RectangleDecoration(630, 630, (claimAnim.Time, claimAnim.LoopEnd), Colors.LightOrange, 0.15, claimConnector).UsingFilled(true);
+                            replay.Decorations.Add(rectangle);
+                        }
+                    }
                 }
                 break;
             default:

@@ -38,6 +38,12 @@ internal class Adina : TheKeyOfAhdashim
                 new PlayerDstBuffApplyMechanic(ErodingCurse, Mech_ErodingCurse, new (Symbols.Square,Colors.LightPurple), new("Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse"), Sev1),
             ]),
         ]);
+
+    private const uint PlateformRadius = 63;
+    private const uint PlateformEffectRadius = PlateformRadius;
+
+    private Dictionary<float, HashSet<SingleActor>>? _plateformColumns = null;
+    private Dictionary<float, HashSet<SingleActor>>? _plateformRows = null;
     public Adina(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -164,13 +170,16 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
+    private readonly static Vector2 ArenaCenter = new(14909.3f, -1470.64f);
     internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
         var positionsDict = combatData.Where(x => x.IsPosition).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-        var center = new Vector2(14909.3f, -1470.64f);
         foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.Point2D - center).LengthSquared() < 1210000)) // 1100 squared
+            if (agent.IsUnamedSpecies() &&
+                (agent.HitboxWidth == 170 || agent.HitboxWidth == 232 || agent.HitboxWidth == 222) &&
+                positionsDict.TryGetValue(agent, out var agentPositions) &&
+                agentPositions.Any(x => (x.Point2D - ArenaCenter).LengthSquared() < 2560000)) // 1200 squared
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
             }
@@ -195,6 +204,13 @@ internal class Adina : TheKeyOfAhdashim
         ];
     }
 
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        return [
+            TargetID.AdinaPlateform
+        ];
+    }
+
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
@@ -203,6 +219,28 @@ internal class Adina : TheKeyOfAhdashim
             { TargetID.HandOfErosion, 1 },
             { TargetID.HandOfEruption, 1 },
         };
+    }
+
+    private Vector3 FindClosestPlateformPosition(ParsedEvtcLog log, Vector3 position)
+    {
+        var tol = 10f;
+        if (_plateformColumns == null || _plateformRows == null)
+        {
+            var plateforms = log.AgentData.GetStableSpeciesByID(TargetID.AdinaPlateform).Select(log.FindActor).Select(singleActor => (singleActor, singleActor.GetCombatReplayNonPolledPositions(log).FirstOrNull())).Where(x => x.Item2 != null).ToList();
+            _plateformColumns = plateforms.GroupBy(x => MathF.Round(x.Item2!.Value.XYZ.X / tol) * tol).ToDictionary(x => x.Key, x => x.Select(x => x.singleActor).ToHashSet());
+            _plateformRows = plateforms.GroupBy(x => MathF.Round(x.Item2!.Value.XYZ.Y / tol) * tol).ToDictionary(x => x.Key, x => x.Select(x => x.singleActor).ToHashSet());
+        }
+        var tolX = MathF.Round(position.X / tol) * tol;
+        var tolY = MathF.Round(position.Y / tol) * tol;
+        if (_plateformColumns.TryGetValue(tolX, out var singleActorsX) && _plateformRows.TryGetValue(tolY, out var singleActorsY))
+        {
+            var singleActors = singleActorsX.Intersect(singleActorsY);
+            if (singleActors.Count() == 1)
+            {
+                return singleActors.First().GetCombatReplayNonPolledPositions(log).First().XYZ;
+            }
+        }
+        return position;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -225,7 +263,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    private static void ComputePillarLifecycle(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    private void ComputePillarLifecycle(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         var candidateEndEvents = new List<EffectEvent>();
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaGroundRetracted0ms, EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var destroyeds))
@@ -244,14 +282,14 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     continue;
                 }
-                var connector = new PositionConnector(pillarShockwave.Position);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, pillarShockwave.Position));
                 long end = currentAdina.LastAware;
                 var potentialEndEvent = candidateEndEvents.FirstOrDefault(x => x.Time >= start - ServerDelayConstant && (x.Position - pillarShockwave.Position).XY().Length() < 10);
                 if (potentialEndEvent != null)
                 {
                     end = potentialEndEvent.Time;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var explicitelyDestroyed))
@@ -264,7 +302,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     continue;
                 }
-                var connector = new PositionConnector(destroyed.Position);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, destroyed.Position));
                 long start = currentAdina.FirstAware;
                 var potentialDropEvent = startEvents.LastOrDefault(x => x.Time < end + ServerDelayConstant && (x.Position - destroyed.Position).XY().Length() < 10);
                 if (potentialDropEvent != null)
@@ -272,7 +310,7 @@ internal class Adina : TheKeyOfAhdashim
                     // already while iterating shockwave
                     continue;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
     }
@@ -307,7 +345,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetractedWarning in groundRetractedWarnings)
             {
                 var effectLifespan = groundRetractedWarning.ComputeLifespan(log, 4271);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, groundRetractedWarning.Position));
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Brown, 0.3, connector), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaGroundRetracted, out var groundRetracteds))
@@ -315,7 +354,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetracted in groundRetracteds)
             {
                 var effectLifespan = groundRetracted.ComputeLifespan(log, 1000);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, groundRetracted.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Brown, 0.6, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineWarning2, out var mineWarnings))
@@ -323,7 +363,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineWarning in mineWarnings)
             {
                 var effectLifespan = mineWarning.ComputeLifespan(log, 3000);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mineWarning.Position));
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Orange, 0.3, connector), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMine, out var mines))
@@ -331,7 +372,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mine in mines)
             {
                 var effectLifespan = mine.ComputeDynamicLifespan(log, 0);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mine.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Orange, 0.6, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineExplosion, out var mineExplosions))
@@ -339,7 +381,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineExplosion in mineExplosions)
             {
                 var effectLifespan = (mineExplosion.Time, mineExplosion.Time + 100);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mineExplosion.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.DarkRed, 0.6, connector));
             }
         }
         /*if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out var pillarsDestroyed))
@@ -417,11 +460,29 @@ internal class Adina : TheKeyOfAhdashim
                     foreach (var sweep in sweeps)
                     {
                         var sweepLifespan = sweep.ComputeLifespan(log, 450);
-                        replay.Decorations.Add(new RegularPolygonDecoration(60, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
+                        var connector = new PositionConnector(FindClosestPlateformPosition(log, sweep.Position));
+                        replay.Decorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, sweepLifespan, Colors.Red, 0.2, connector));
                     }
                 }
                 var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);
                 replay.Decorations.AddNonHomingMissiles(log, boulderBarrages, Colors.Red, 0.4, 30);
+                break;
+            case (int)TargetID.AdinaPlateform:
+                var colorPlateform = "";
+                var colorPlateformBorder = "";
+                // Colors are hardcoded via string by design, do not use Colors here, we don't want accidental changes
+                if (replay.Positions.Any(x => (x.XYZ.XY() - ArenaCenter).LengthSquared() < 14400)) // 120 squared
+                {
+                    colorPlateform = "rgba(92, 102, 31, 1.0)";
+                    colorPlateformBorder = "rgba(122, 132, 61, 1.0)";
+                }
+                else
+                {
+                    colorPlateform = "rgba(143, 97, 74, 1.0)";
+                    colorPlateformBorder = "rgba(173, 127, 104, 1.0)";
+                }
+                var plateform = new RegularPolygonDecoration(PlateformRadius, 6, (target.FirstAware, target.LastAware), colorPlateform, new AgentConnector(target));
+                replay.Decorations.AddWithBorder(plateform, colorPlateformBorder);
                 break;
             default:
                 break;
@@ -521,92 +582,100 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        string mainPhase1;
-        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
-        }
-        else
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1;
-        }
         var crMap = new CombatReplayMap(
                         (866, 1000),
                         (13860, -2678, 15951, -268));
-        //
-        try
+        if (log.AgentData.GetStableSpeciesByID(TargetID.AdinaPlateform).Count > 0 && log.CombatData.HasGadgetAnimData)
         {
-            var allPhases = log.LogData.GetPhases(log);
-            var adinaPhases = log.LogData.GetEncounterPhases(log, LogID);
-            var splitPhasesMap = new List<string>()
+            AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNoImage, crMap, parentMap);
+        }
+        else
+        {
+            string mainPhase1;
+            if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
             {
-                    CombatReplayAdinaSplitPhase1,
-                    CombatReplayAdinaSplitPhase2,
-                    CombatReplayAdinaSplitPhase3,
-            };
-            var mainPhasesMap = new List<string>()
-            {
-                    mainPhase1,
-                    CombatReplayAdinaMainPhase2,
-                    CombatReplayAdinaMainPhase3,
-                    CombatReplayAdinaMainPhase4
-            };
-            var subPhases = allPhases.OfType<SubPhasePhaseData>().Where(x => !x.BreakbarPhase);
-            long start = log.LogData.LogStart;
-            foreach (var adinaPhase in adinaPhases)
-            {
-                var crMaps = new List<string>();
-                int mainPhaseIndex = 0;
-                int splitPhaseIndex = 0;
-                var phases = subPhases.Where(x => x.EncounterPhase == adinaPhase).ToList();
-                var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
-                for (int i = 0; i < phases.Count; i++)
-                {
-                    PhaseData phaseData = phases[i];
-                    long end = phaseData.End;
-                    if (i < phases.Count - 1)
-                    {
-                        end = phases[i + 1].Start;
-                    }
-                    if (mainPhases.Contains(phaseData))
-                    {
-                        if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
-                        {
-                            splitPhaseIndex++;
-                        }
-                        var url = mainPhasesMap[mainPhaseIndex++];
-                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
-                        crMaps.Add(url);
-                    }
-                    else
-                    {
-                        if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
-                        {
-                            mainPhaseIndex++;
-                        }
-                        var url = splitPhasesMap[splitPhaseIndex++];
-                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
-                        crMaps.Add(url);
-                    }
-                    start = end;
-                }
-            }
-            if (!adinaPhases.Any())
-            {
-                arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
+                mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
             }
             else
             {
-                arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
+                mainPhase1 = CombatReplayAdinaMainPhase1;
+
+                //
+                try
+                {
+                    var allPhases = log.LogData.GetPhases(log);
+                    var adinaPhases = log.LogData.GetEncounterPhases(log, LogID);
+                    var splitPhasesMap = new List<string>()
+                    {
+                            CombatReplayAdinaSplitPhase1,
+                            CombatReplayAdinaSplitPhase2,
+                            CombatReplayAdinaSplitPhase3,
+                    };
+                    var mainPhasesMap = new List<string>()
+                    {
+                            mainPhase1,
+                            CombatReplayAdinaMainPhase2,
+                            CombatReplayAdinaMainPhase3,
+                            CombatReplayAdinaMainPhase4
+                    };
+                    var subPhases = allPhases.OfType<SubPhasePhaseData>().Where(x => !x.BreakbarPhase);
+                    long start = log.LogData.LogStart;
+                    foreach (var adinaPhase in adinaPhases)
+                    {
+                        var crMaps = new List<string>();
+                        int mainPhaseIndex = 0;
+                        int splitPhaseIndex = 0;
+                        var phases = subPhases.Where(x => x.EncounterPhase == adinaPhase).ToList();
+                        var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phaseData = phases[i];
+                            long end = phaseData.End;
+                            if (i < phases.Count - 1)
+                            {
+                                end = phases[i + 1].Start;
+                            }
+                            if (mainPhases.Contains(phaseData))
+                            {
+                                if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
+                                {
+                                    splitPhaseIndex++;
+                                }
+                                var url = mainPhasesMap[mainPhaseIndex++];
+                                arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                                crMaps.Add(url);
+                            }
+                            else
+                            {
+                                if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
+                                {
+                                    mainPhaseIndex++;
+                                }
+                                var url = splitPhasesMap[splitPhaseIndex++];
+                                arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                                crMaps.Add(url);
+                            }
+                            start = end;
+                        }
+                    }
+                    if (!adinaPhases.Any())
+                    {
+                        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
+                    }
+                    else
+                    {
+                        arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
+                    }
+                    if (parentMap != null)
+                    {
+                        AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
+                    }
+                }
+                catch (Exception)
+                {
+                    log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
+                }
             }
-            if (parentMap != null)
-            {
-                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
-            }
-        }
-        catch (Exception)
-        {
-            log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
         }
         //
         return crMap;

@@ -94,6 +94,7 @@ public partial class CombatData
     public readonly bool HasMarkerData = false;
     public readonly bool HasEmoteData = false;
     public readonly bool HasGadgetInteractData = false;
+    public readonly bool HasGadgetAnimData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
 
@@ -623,6 +624,7 @@ public partial class CombatData
         HasCrowdControlData = crowdControlData.Count != 0;
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
+        HasGadgetAnimData = _gadgetAnimationEventsByGadget.Count > 0;
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
         skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);
