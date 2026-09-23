@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
+    types: [closed]
     branches: [ master ]
 
 permissions:
@@ -11,13 +12,16 @@ permissions:
 
 jobs:
   format:
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
@@ -31,4 +35,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: apply automatic dotnet format fixes"
-          branch: ${{ github.head_ref }}
+          branch: ${{ github.head_ref || github.ref_name }}
