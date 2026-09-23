@@ -41,6 +41,10 @@ internal class Adina : TheKeyOfAhdashim
         ]);
 
     private const uint PlateformRadius = 65;
+    private const uint PlateformEffectRadius = PlateformRadius - 1;
+
+    private Dictionary<float, HashSet<SingleActor>>? _plateformColumns = null;
+    private Dictionary<float, HashSet<SingleActor>>? _plateformRows = null;
     public Adina(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -218,6 +222,28 @@ internal class Adina : TheKeyOfAhdashim
         };
     }
 
+    private Vector3 FindClosestPlateformPosition(ParsedEvtcLog log, Vector3 position)
+    {
+        var tol = 10f;
+        if (_plateformColumns == null || _plateformRows == null)
+        {
+            var plateforms = log.AgentData.GetStableSpeciesByID(TargetID.AdinaPlateform).Select(log.FindActor).Select(singleActor => (singleActor, singleActor.GetCombatReplayNonPolledPositions(log).FirstOrNull())).Where(x => x.Item2 != null).ToList();
+            _plateformColumns = plateforms.GroupBy(x => MathF.Round(x.Item2!.Value.XYZ.X / tol) * tol).ToDictionary(x => x.Key, x => x.Select(x => x.singleActor).ToHashSet());
+            _plateformRows = plateforms.GroupBy(x => MathF.Round(x.Item2!.Value.XYZ.Y / tol) * tol).ToDictionary(x => x.Key, x => x.Select(x => x.singleActor).ToHashSet());
+        }
+        var tolX = MathF.Round(position.X / tol) * tol;
+        var tolY = MathF.Round(position.Y / tol) * tol;
+        if (_plateformColumns.TryGetValue(tolX, out var singleActorsX) && _plateformRows.TryGetValue(tolY, out var singleActorsY))
+        {
+            var singleActors = singleActorsX.Intersect(singleActorsY);
+            if (singleActors.Count() == 1)
+            {
+                return singleActors.First().GetCombatReplayNonPolledPositions(log).First().XYZ;
+            }
+        }
+        return position;
+    }
+
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
@@ -238,7 +264,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    private static void ComputePillarLifecycle(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    private void ComputePillarLifecycle(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         var candidateEndEvents = new List<EffectEvent>();
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaGroundRetracted0ms, EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var destroyeds))
@@ -257,14 +283,14 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     continue;
                 }
-                var connector = new PositionConnector(pillarShockwave.Position);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, pillarShockwave.Position));
                 long end = currentAdina.LastAware;
                 var potentialEndEvent = candidateEndEvents.FirstOrDefault(x => x.Time >= start - ServerDelayConstant && (x.Position - pillarShockwave.Position).XY().Length() < 10);
                 if (potentialEndEvent != null)
                 {
                     end = potentialEndEvent.Time;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var explicitelyDestroyed))
@@ -277,7 +303,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     continue;
                 }
-                var connector = new PositionConnector(destroyed.Position);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, destroyed.Position));
                 long start = currentAdina.FirstAware;
                 var potentialDropEvent = startEvents.LastOrDefault(x => x.Time < end + ServerDelayConstant && (x.Position - destroyed.Position).XY().Length() < 10);
                 if (potentialDropEvent != null)
@@ -285,7 +311,7 @@ internal class Adina : TheKeyOfAhdashim
                     // already while iterating shockwave
                     continue;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
     }
@@ -320,7 +346,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetractedWarning in groundRetractedWarnings)
             {
                 var effectLifespan = groundRetractedWarning.ComputeLifespan(log, 4271);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, groundRetractedWarning.Position));
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Brown, 0.3, connector), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaGroundRetracted, out var groundRetracteds))
@@ -328,7 +355,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetracted in groundRetracteds)
             {
                 var effectLifespan = groundRetracted.ComputeLifespan(log, 1000);
-                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, groundRetracted.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Brown, 0.6, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineWarning2, out var mineWarnings))
@@ -336,7 +364,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineWarning in mineWarnings)
             {
                 var effectLifespan = mineWarning.ComputeLifespan(log, 3000);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mineWarning.Position));
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Orange, 0.3, connector), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMine, out var mines))
@@ -344,7 +373,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mine in mines)
             {
                 var effectLifespan = mine.ComputeDynamicLifespan(log, 0);
-                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mine.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.Orange, 0.6, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineExplosion, out var mineExplosions))
@@ -352,7 +382,8 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineExplosion in mineExplosions)
             {
                 var effectLifespan = (mineExplosion.Time, mineExplosion.Time + 100);
-                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
+                var connector = new PositionConnector(FindClosestPlateformPosition(log, mineExplosion.Position));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, effectLifespan, Colors.DarkRed, 0.6, connector));
             }
         }
         /*if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out var pillarsDestroyed))
@@ -430,7 +461,8 @@ internal class Adina : TheKeyOfAhdashim
                     foreach (var sweep in sweeps)
                     {
                         var sweepLifespan = sweep.ComputeLifespan(log, 450);
-                        replay.Decorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
+                        var connector = new PositionConnector(FindClosestPlateformPosition(log, sweep.Position));
+                        replay.Decorations.Add(new RegularPolygonDecoration(PlateformEffectRadius, 6, sweepLifespan, Colors.Red, 0.2, connector));
                     }
                 }
                 var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);
