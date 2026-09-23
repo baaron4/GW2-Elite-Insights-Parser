@@ -40,8 +40,8 @@ internal class Adina : TheKeyOfAhdashim
             ]),
         ]);
 
-    private const uint PlateformRadius = 65;
-    private const uint PlateformEffectRadius = PlateformRadius - 1;
+    private const uint PlateformRadius = 63;
+    private const uint PlateformEffectRadius = PlateformRadius;
 
     private Dictionary<float, HashSet<SingleActor>>? _plateformColumns = null;
     private Dictionary<float, HashSet<SingleActor>>? _plateformRows = null;
