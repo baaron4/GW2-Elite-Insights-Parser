@@ -582,15 +582,6 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        string mainPhase1;
-        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
-        }
-        else
-        {
-            mainPhase1 = CombatReplayAdinaMainPhase1;
-        }
         var crMap = new CombatReplayMap(
                         (866, 1000),
                         (13860, -2678, 15951, -268));
@@ -685,22 +676,6 @@ internal class Adina : TheKeyOfAhdashim
                     log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
                 }
             }
-            if (!adinaPhases.Any())
-            {
-                arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
-            }
-            else
-            {
-                arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
-            }
-            if (parentMap != null)
-            {
-                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
-            }
-        }
-        catch (Exception)
-        {
-            log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
         }
         //
         return crMap;
