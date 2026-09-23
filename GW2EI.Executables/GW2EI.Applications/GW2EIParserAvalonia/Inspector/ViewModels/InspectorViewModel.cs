@@ -33,6 +33,7 @@ public partial class InspectorViewModel : ObservableObject
             return;
         }
         CombatEventsView.Refresh();
+        UpdateEventTypeCounts();
     }
     internal bool AgentSelectFilterDropdownTriggered = false;
     private void CombatEventsViewRefresh(AgentFilterItem? oldValue, AgentFilterItem? newValue)
@@ -46,6 +47,7 @@ public partial class InspectorViewModel : ObservableObject
             return;
         }
         CombatEventsView.Refresh();
+        UpdateEventTypeCounts();
     }
 
     [ObservableProperty]
@@ -90,6 +92,7 @@ public partial class InspectorViewModel : ObservableObject
 
         UpdateVisibleEventTypes();
         UpdateVisibleCombatEvents();
+        UpdateEventTypeCounts();
     }
 
     private bool FilterCombatEvents(object item)
@@ -574,5 +577,26 @@ public partial class InspectorViewModel : ObservableObject
 
             _ => true
         };
+    }
+
+    private void UpdateEventTypeCounts()
+    {
+        var counts = new Dictionary<Type, int>();
+
+        foreach (var eventModel in _allCombatEvents)
+        {
+            if (!FilterCombatEvents(eventModel))
+            {
+                continue;
+            }
+
+            counts.TryGetValue(eventModel.EventType, out var count);
+            counts[eventModel.EventType] = count + 1;
+        }
+
+        foreach (var root in EventTypeFilterRoots)
+        {
+            root.UpdateFilteredCount(counts);
+        }
     }
 }

@@ -20,7 +20,9 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
     internal IReadOnlySet<Type> VisibleTypes => _visibleTypes ?? [];
     private readonly string? _displayName;
     public string Name => _displayName ?? EventType.Name;
-    public int Count { get; private set; }
+    public int TotalCount { get; private set; }
+    public int FilteredCount { get; private set; }
+    public bool ShowFilteredCount => FilteredCount != TotalCount;
     public Type EventType { get; }
     public EventTypeFilterNodeModel? Parent { get; set; }
     public ObservableCollection<EventTypeFilterNodeModel> Children { get; } = [];
@@ -29,7 +31,8 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
     public EventTypeFilterNodeModel(Type type, int count, string? displayName = null)
     {
         EventType = type;
-        Count = count;
+        FilteredCount = count;
+        TotalCount = count;
         _displayName = displayName;
     }
     internal void SetTypeLookup(Dictionary<Type, EventTypeFilterNodeModel> lookup)
@@ -190,11 +193,14 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
     {
         if (node.Children.Count == 0)
         {
-            return node.Count;
+            node.TotalCount = node.FilteredCount;
+            return node.FilteredCount;
         }
 
-        node.Count = node.Children.Sum(CalculateParentCounts);
-        return node.Count;
+        node.TotalCount = node.Children.Sum(CalculateParentCounts);
+        node.FilteredCount = node.TotalCount;
+
+        return node.TotalCount;
     }
 
     private void UpdateVisibleTypes()
@@ -214,5 +220,38 @@ public sealed partial class EventTypeFilterNodeModel : ObservableObject
                 _visibleTypes.Add(pair.Key);
             }
         }
+    }
+
+    internal int UpdateFilteredCount(IReadOnlyDictionary<Type, int> counts)
+    {
+        if (Children.Count == 0)
+        {
+            var count = counts.GetValueOrDefault(EventType);
+
+            if (FilteredCount != count)
+            {
+                FilteredCount = count;
+                OnPropertyChanged(nameof(FilteredCount));
+                OnPropertyChanged(nameof(ShowFilteredCount));
+            }
+
+            return count;
+        }
+
+        var total = 0;
+
+        foreach (var child in Children)
+        {
+            total += child.UpdateFilteredCount(counts);
+        }
+
+        if (FilteredCount != total)
+        {
+            FilteredCount = total;
+            OnPropertyChanged(nameof(FilteredCount));
+            OnPropertyChanged(nameof(ShowFilteredCount));
+        }
+
+        return total;
     }
 }
