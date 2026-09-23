@@ -51,7 +51,7 @@ internal abstract class AttachedDecoration : Decoration
 
     public LineDecoration LineTo(AttachedDecoration other, Color color, double opacity)
     {
-        return LineTo(other, color.WithAlpha(opacity).ToString(true));
+        return LineTo(other, color.WithAlpha(opacity).ToString());
     }
 
     public AttachedDecoration UsingRotationConnector(RotationConnector? rotationConnectedTo)

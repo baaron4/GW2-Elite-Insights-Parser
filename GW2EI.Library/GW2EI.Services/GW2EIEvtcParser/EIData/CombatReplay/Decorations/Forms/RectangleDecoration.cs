@@ -46,7 +46,7 @@ internal class RectangleDecoration : FormDecoration
     public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new RectangleDecorationRenderingData(lifespan, connector))
     {
     }
-    public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+    public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(), connector)
     {
     }
     public override FormDecoration Copy(string? color = null)

@@ -77,8 +77,8 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         ) : this(
             pixelWidth,
             lifespan,
-            color.WithAlpha(opacity).ToString(true),
-            secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
+            color.WithAlpha(opacity).ToString(),
+            secondaryColor.WithAlpha(secondaryOpacity).ToString(),
             progress, connectedTo
             )
     {
@@ -92,8 +92,8 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
        ) : this(
            pixelWidth,
            lifespan,
-           color.WithAlpha(opacity).ToString(true),
-           secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
+           color.WithAlpha(opacity).ToString(),
+           secondaryColor.WithAlpha(secondaryOpacity).ToString(),
            progress, connectedTo
            )
     {

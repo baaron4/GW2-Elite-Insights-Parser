@@ -241,7 +241,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity"></param>
     internal void AddWithBorder(FormDecoration decoration, Color color, double opacity)
     {
-        AddWithBorder(decoration, color.WithAlpha(opacity).ToString(true));
+        AddWithBorder(decoration, color.WithAlpha(opacity).ToString());
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="reverseGrowing"></param>
     internal void AddWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
     {
-        AddWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
+        AddWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(), reverseGrowing);
     }
 
     #endregion FILL & GROWING
@@ -330,7 +330,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTethers(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
     {
-        AddTethers(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
+        AddTethers(tethers, color.WithAlpha(opacity).ToString(), thickness, worldSizeThickess);
     }
 
     /// <summary>
@@ -350,7 +350,7 @@ internal class CombatReplayDecorationContainer
         uint thickness = 2, 
         bool worldSizeThickess = false)
     {
-        AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(true), lifespan, thickness, worldSizeThickess);
+        AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(), lifespan, thickness, worldSizeThickess);
     }
 
     /// <summary>
@@ -433,7 +433,7 @@ internal class CombatReplayDecorationContainer
         uint thickness = 2,
         bool worldSizeThickess = false)
     {
-        AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(true), duration, thickness, worldSizeThickess);
+        AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(), duration, thickness, worldSizeThickess);
     }
 
     /// <summary>
@@ -507,7 +507,7 @@ internal class CombatReplayDecorationContainer
         uint thickness = 2,
         bool worldSizeThickess = false)
     {
-        AddTethersByThirdPartySrcBuff(log, player, buffID, buffSrcAgentID, toTetherAgentID, color.WithAlpha(opacity).ToString(true), firstAwareThreshold, thickness, worldSizeThickess);
+        AddTethersByThirdPartySrcBuff(log, player, buffID, buffSrcAgentID, toTetherAgentID, color.WithAlpha(opacity).ToString(), firstAwareThreshold, thickness, worldSizeThickess);
     }
 
     #endregion TETHER
@@ -526,7 +526,7 @@ internal class CombatReplayDecorationContainer
     /// <remarks>To be used for logs without missile data.</remarks>
     internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
     {
-        AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
+        AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(), radius);
     }
 
     /// <summary>
@@ -566,7 +566,7 @@ internal class CombatReplayDecorationContainer
     /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
     internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius, bool reverse = false)
     {
-        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius, reverse);
+        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(), radius, reverse);
     }
 
     /// <summary>

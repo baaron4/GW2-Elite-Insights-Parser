@@ -68,8 +68,8 @@ internal class ProgressBarDecoration : RectangleDecoration
         IReadOnlyList<(long, double)> progress, GeographicalConnector connector
         ) : this(
             width, height, lifespan,
-            color.WithAlpha(opacity).ToString(true),
-            secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
+            color.WithAlpha(opacity).ToString(),
+            secondaryColor.WithAlpha(secondaryOpacity).ToString(),
             progress, connector
             )
     {
