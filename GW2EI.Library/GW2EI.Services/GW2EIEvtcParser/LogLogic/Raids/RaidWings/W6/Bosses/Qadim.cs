@@ -1050,7 +1050,7 @@ internal class Qadim : MythwrightGambit
                             opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
                         }
                     }
-                } 
+                }
                 else
                 {
                     foreach (var qadimAgent in log.AgentData.GetStableSpeciesByID(TargetID.Qadim))

@@ -108,7 +108,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
-    private static Vector3 ArenaCenter = new (2636.6294f, 3983.2795f, -4180.5854f);
+    private static Vector3 ArenaCenter = new(2636.6294f, 3983.2795f, -4180.5854f);
 
     internal static void IdentifyMursaatCheckboards(ulong gw2Build, EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {

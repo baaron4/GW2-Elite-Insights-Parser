@@ -170,15 +170,15 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    private readonly static Vector2 ArenaCenter = new (14909.3f, -1470.64f);
+    private readonly static Vector2 ArenaCenter = new(14909.3f, -1470.64f);
     internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
         var positionsDict = combatData.Where(x => x.IsPosition).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && 
-                (agent.HitboxWidth == 170 || agent.HitboxWidth == 232 || agent.HitboxWidth == 222) && 
-                positionsDict.TryGetValue(agent, out var agentPositions) && 
+            if (agent.IsUnamedSpecies() &&
+                (agent.HitboxWidth == 170 || agent.HitboxWidth == 232 || agent.HitboxWidth == 222) &&
+                positionsDict.TryGetValue(agent, out var agentPositions) &&
                 agentPositions.Any(x => (x.Point2D - ArenaCenter).LengthSquared() < 2560000)) // 1200 squared
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
@@ -475,7 +475,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     colorPlateform = "rgba(92, 102, 31, 1.0)";
                     colorPlateformBorder = "rgba(122, 132, 61, 1.0)";
-                } 
+                }
                 else
                 {
                     colorPlateform = "rgba(143, 97, 74, 1.0)";
