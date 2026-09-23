@@ -503,6 +503,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Raging Storm - Missile
                 AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
 
+                // Breakbar
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
+                {
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                }
+
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
