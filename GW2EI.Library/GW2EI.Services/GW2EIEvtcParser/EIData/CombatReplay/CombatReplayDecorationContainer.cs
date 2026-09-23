@@ -311,20 +311,20 @@ internal class CombatReplayDecorationContainer
     /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTethers(IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickness = false)
     {
-        int tetherStart = 0;
+        long tetherStart = 0;
         AgentItem src = _unknownAgent;
         AgentItem dst = _unknownAgent;
         foreach (BuffEvent tether in tethers)
         {
             if (tether is BuffApplyEvent)
             {
-                tetherStart = (int)tether.Time;
+                tetherStart = tether.Time;
                 src = tether.By;
                 dst = tether.To;
             }
             else if (tether is BuffRemoveAllEvent)
             {
-                int tetherEnd = (int)tether.Time;
+                long tetherEnd = tether.Time;
                 if (!src.IsUnknown && !dst.IsUnknown)
                 {
                     AddTether((tetherStart, tetherEnd), src, dst, color, thickness, worldSizeThickness);
