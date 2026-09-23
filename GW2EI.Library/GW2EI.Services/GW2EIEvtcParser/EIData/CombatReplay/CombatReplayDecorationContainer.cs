@@ -296,10 +296,10 @@ internal class CombatReplayDecorationContainer
     /// <param name="dst">Agent destination.</param>
     /// <param name="color">Color of the tether decoration.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
-    internal void AddTether((long, long) lifespan, AgentItem src, AgentItem dst, string color, uint thickness = 2, bool worldSizeThickess = false)
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    internal void AddTether((long, long) lifespan, AgentItem src, AgentItem dst, string color, uint thickness = 2, bool worldSizeThickness = false)
     {
-        Add(new LineDecoration(lifespan, color, new AgentConnector(dst), new AgentConnector(src)).WithThickess(thickness, worldSizeThickess));
+        Add(new LineDecoration(lifespan, color, new AgentConnector(dst), new AgentConnector(src)).WithThickess(thickness, worldSizeThickness));
     }
 
     /// <summary>
@@ -308,8 +308,8 @@ internal class CombatReplayDecorationContainer
     /// <param name="tethers">Buff events of the tethers.</param>
     /// <param name="color">Color of the tether decoration.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
-    internal void AddTethers(IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    internal void AddTethers(IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickness = false)
     {
         int tetherStart = 0;
         AgentItem src = _unknownAgent;
@@ -327,7 +327,7 @@ internal class CombatReplayDecorationContainer
                 int tetherEnd = (int)tether.Time;
                 if (!src.IsUnknown && !dst.IsUnknown)
                 {
-                    AddTether((tetherStart, tetherEnd), src, dst, color, thickness, worldSizeThickess);
+                    AddTether((tetherStart, tetherEnd), src, dst, color, thickness, worldSizeThickness);
                     src = _unknownAgent;
                     dst = _unknownAgent;
                 }
@@ -342,10 +342,10 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color of the tether decoration.</param>
     /// <param name="opacity">Opacity of the tether decoration.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
-    internal void AddTethers(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    internal void AddTethers(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickness = false)
     {
-        AddTethers(tethers, color.WithAlpha(opacity).ToString(), thickness, worldSizeThickess);
+        AddTethers(tethers, color.WithAlpha(opacity).ToString(), thickness, worldSizeThickness);
     }
 
     /// <summary>
@@ -356,16 +356,16 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the tether decoration.</param>
     /// <param name="lifespan">Manually-set lifespan.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
         EffectEvent effect, 
         Color color, 
         double opacity, 
         (long start, long end) lifespan, 
         uint thickness = 2, 
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
-        AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(), lifespan, thickness, worldSizeThickess);
+        AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(), lifespan, thickness, worldSizeThickness);
     }
 
     /// <summary>
@@ -375,20 +375,20 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color of the tether decoration.</param>
     /// <param name="lifespan">Manually-set lifespan.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
         EffectEvent effect, 
         string color, 
         (long start, long end) lifespan, 
         uint thickness = 2, 
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
         if (!effect.IsAroundDst)
         {
             return;
         }
 
-        AddTether(lifespan, effect.Dst, effect.Src, color, thickness, worldSizeThickess);
+        AddTether(lifespan, effect.Dst, effect.Src, color, thickness, worldSizeThickness);
     }
 
     /// <summary>
@@ -399,14 +399,14 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color of the tether decoration.</param>
     /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
         ParsedEvtcLog log,
         EffectEvent effect,
         string color,
         int duration = 0,
         uint thickness = 2,
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
         if (!effect.IsAroundDst)
         {
@@ -425,7 +425,7 @@ internal class CombatReplayDecorationContainer
 
         if (!effect.Src.IsUnknown && !effect.Dst.IsUnknown)
         {
-            AddTether(lifespan, effect.Dst, effect.Src, color, thickness, worldSizeThickess);
+            AddTether(lifespan, effect.Dst, effect.Src, color, thickness, worldSizeThickness);
         }
     }
 
@@ -438,7 +438,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the tether decoration.</param>
     /// <param name="duration">Manual set duration to use as override of the <paramref name="effect"/> duration.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
         ParsedEvtcLog log,
         EffectEvent effect,
@@ -446,9 +446,9 @@ internal class CombatReplayDecorationContainer
         double opacity,
         int duration = 0,
         uint thickness = 2,
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
-        AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(), duration, thickness, worldSizeThickess);
+        AddTetherByEffectGUID(log, effect, color.WithAlpha(opacity).ToString(), duration, thickness, worldSizeThickness);
     }
 
     /// <summary>
@@ -463,7 +463,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTethersByThirdPartySrcBuff(
         ParsedEvtcLog log,
         PlayerActor player,
@@ -473,7 +473,7 @@ internal class CombatReplayDecorationContainer
         string color,
         int firstAwareThreshold = 2000,
         uint thickness = 2,
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
         var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffID, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentID)).ToList();
         var buffApplies = buffEvents.OfType<BuffApplyEvent>();
@@ -490,7 +490,7 @@ internal class CombatReplayDecorationContainer
             {
                 if ((Math.Abs(agent.FirstAware - buffApply.Time) < firstAwareThreshold || agent.FirstAware >= buffApply.Time) && agent.FirstAware < removalTime)
                 {
-                    AddTether(lifespan, agent, player.AgentItem, color, thickness, worldSizeThickess);
+                    AddTether(lifespan, agent, player.AgentItem, color, thickness, worldSizeThickness);
                 }
             }
         }
@@ -509,7 +509,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
     /// <param name="thickness">Thickness of the tether.</param>
-    /// <param name="worldSizeThickess"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
+    /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTethersByThirdPartySrcBuff(
         ParsedEvtcLog log,
         PlayerActor player,
@@ -520,9 +520,9 @@ internal class CombatReplayDecorationContainer
         double opacity,
         int firstAwareThreshold = 2000,
         uint thickness = 2,
-        bool worldSizeThickess = false)
+        bool worldSizeThickness = false)
     {
-        AddTethersByThirdPartySrcBuff(log, player, buffID, buffSrcAgentID, toTetherAgentID, color.WithAlpha(opacity).ToString(), firstAwareThreshold, thickness, worldSizeThickess);
+        AddTethersByThirdPartySrcBuff(log, player, buffID, buffSrcAgentID, toTetherAgentID, color.WithAlpha(opacity).ToString(), firstAwareThreshold, thickness, worldSizeThickness);
     }
 
     #endregion TETHER
