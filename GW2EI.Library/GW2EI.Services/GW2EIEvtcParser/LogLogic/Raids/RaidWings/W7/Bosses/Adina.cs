@@ -39,6 +39,8 @@ internal class Adina : TheKeyOfAhdashim
                 new PlayerDstBuffApplyMechanic(ErodingCurse, Mech_ErodingCurse, new (Symbols.Square,Colors.LightPurple), new("Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse"), Sev1),
             ]),
         ]);
+
+    private const uint PlateformRadius = 65;
     public Adina(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -165,13 +167,16 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
+    private readonly static Vector2 ArenaCenter = new (14909.3f, -1470.64f);
     internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
         var positionsDict = combatData.Where(x => x.IsPosition).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-        var center = new Vector2(14909.3f, -1470.64f);
         foreach (var agent in agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies))
         {
-            if (agent.IsUnamedSpecies() && (agent.HitboxWidth == 170 || agent.HitboxWidth == 232) && positionsDict.TryGetValue(agent, out var agentPositions) && agentPositions.Any(x => (x.Point2D - center).LengthSquared() < 1210000)) // 1100 squared
+            if (agent.IsUnamedSpecies() && 
+                (agent.HitboxWidth == 170 || agent.HitboxWidth == 232 || agent.HitboxWidth == 222) && 
+                positionsDict.TryGetValue(agent, out var agentPositions) && 
+                agentPositions.Any(x => (x.Point2D - ArenaCenter).LengthSquared() < 2560000)) // 1200 squared
             {
                 agent.OverrideID(TargetID.AdinaPlateform, agentData);
             }
@@ -259,7 +264,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     end = potentialEndEvent.Time;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var explicitelyDestroyed))
@@ -280,7 +285,7 @@ internal class Adina : TheKeyOfAhdashim
                     // already while iterating shockwave
                     continue;
                 }
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, (start, end), Colors.DarkBrown, 0.7, connector));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, (start, end), Colors.DarkBrown, 0.7, connector));
             }
         }
     }
@@ -315,7 +320,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetractedWarning in groundRetractedWarnings)
             {
                 var effectLifespan = groundRetractedWarning.ComputeLifespan(log, 4271);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Brown, 0.3, new PositionConnector(groundRetractedWarning.Position)), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaGroundRetracted, out var groundRetracteds))
@@ -323,7 +328,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var groundRetracted in groundRetracteds)
             {
                 var effectLifespan = groundRetracted.ComputeLifespan(log, 1000);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Brown, 0.6, new PositionConnector(groundRetracted.Position)));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineWarning2, out var mineWarnings))
@@ -331,7 +336,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineWarning in mineWarnings)
             {
                 var effectLifespan = mineWarning.ComputeLifespan(log, 3000);
-                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
+                environmentDecorations.AddWithFilledWithGrowing(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Orange, 0.3, new PositionConnector(mineWarning.Position)), true, effectLifespan.end);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMine, out var mines))
@@ -339,7 +344,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mine in mines)
             {
                 var effectLifespan = mine.ComputeDynamicLifespan(log, 0);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.Orange, 0.6, new PositionConnector(mine.Position)));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaMineExplosion, out var mineExplosions))
@@ -347,7 +352,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (var mineExplosion in mineExplosions)
             {
                 var effectLifespan = (mineExplosion.Time, mineExplosion.Time + 100);
-                environmentDecorations.Add(new RegularPolygonDecoration(60, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
+                environmentDecorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, effectLifespan, Colors.DarkRed, 0.6, new PositionConnector(mineExplosion.Position)));
             }
         }
         /*if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out var pillarsDestroyed))
@@ -425,16 +430,28 @@ internal class Adina : TheKeyOfAhdashim
                     foreach (var sweep in sweeps)
                     {
                         var sweepLifespan = sweep.ComputeLifespan(log, 450);
-                        replay.Decorations.Add(new RegularPolygonDecoration(60, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
+                        replay.Decorations.Add(new RegularPolygonDecoration(PlateformRadius, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
                     }
                 }
                 var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);
                 replay.Decorations.AddNonHomingMissiles(log, boulderBarrages, Colors.Red, 0.4, 30);
                 break;
             case (int)TargetID.AdinaPlateform:
-                var tst = log.CombatData.GetGadgetAnimationData(target.AgentItem);
-                var plateform = new RegularPolygonDecoration(60, 6, (target.FirstAware, target.LastAware), Colors.Brown, 0.1, new AgentConnector(target));
-                replay.Decorations.Add(plateform);
+                var colorPlateform = "";
+                var colorPlateformBorder = "";
+                // Colors are hardcoded via string by design, do not use Colors here, we don't want accidental changes
+                if (replay.Positions.Any(x => (x.XYZ.XY() - ArenaCenter).LengthSquared() < 14400)) // 120 squared
+                {
+                    colorPlateform = "rgba(92, 102, 31, 1.0)";
+                    colorPlateformBorder = "rgba(122, 132, 61, 1.0)";
+                } 
+                else
+                {
+                    colorPlateform = "rgba(143, 97, 74, 1.0)";
+                    colorPlateformBorder = "rgba(173, 127, 104, 1.0)";
+                }
+                var plateform = new RegularPolygonDecoration(PlateformRadius, 6, (target.FirstAware, target.LastAware), colorPlateform, new AgentConnector(target));
+                replay.Decorations.AddWithBorder(plateform, colorPlateformBorder);
                 break;
             default:
                 break;
