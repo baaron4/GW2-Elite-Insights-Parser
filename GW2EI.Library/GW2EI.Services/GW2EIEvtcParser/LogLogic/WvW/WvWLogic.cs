@@ -3,16 +3,15 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.MapIDs;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -112,30 +111,30 @@ internal class WvWLogic : LogLogic
         switch (mapID.MapID)
         {
             case EternalBattleground:
-                crMap = new CombatReplayMap((954, 1000), 
-                    (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250), 
-                    (-36864, -36864, 36864, 36864), 
+                crMap = new CombatReplayMap((954, 1000),
+                    (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250),
+                    (-36864, -36864, 36864, 36864),
                     (8958, 12798, 12030, 15870));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayEternalBattlegrounds, crMap));
                 break;
             case GreenAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), 
-                    (-30720, -43008, 30720, 43008), 
-                    (-30720, -43008, 30720, 43008), 
+                crMap = new CombatReplayMap((697, 1000),
+                    (-30720, -43008, 30720, 43008),
+                    (-30720, -43008, 30720, 43008),
                     (5630, 11518, 8190, 15102));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case BlueAlpineBorderland:
-                crMap = new CombatReplayMap((697, 1000), 
-                    (-30720, -43008, 30720, 43008), 
-                    (-30720, -43008, 30720, 43008), 
+                crMap = new CombatReplayMap((697, 1000),
+                    (-30720, -43008, 30720, 43008),
+                    (-30720, -43008, 30720, 43008),
                     (12798, 10878, 15358, 14462));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case RedDesertBorderland:
-                crMap = new CombatReplayMap((1000, 1000), 
-                    (-36864, -36864, 36864, 36864), 
-                    (-36864, -36864, 36864, 36864), 
+                crMap = new CombatReplayMap((1000, 1000),
+                    (-36864, -36864, 36864, 36864),
+                    (-36864, -36864, 36864, 36864),
                     (9214, 8958, 12286, 12030));
                 arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayDesertBorderlands, crMap));
                 break;
@@ -369,7 +368,7 @@ internal class WvWLogic : LogLogic
                     }
                 }
             }
-        } 
+        }
         else
         {
             _targets.AddRange(auxTargets.OrderBy(x => (int)x.Spec).ThenBy(x => x.AgentItem.InstID));
@@ -377,7 +376,7 @@ internal class WvWLogic : LogLogic
         FinalizeComputeLogTargets();
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return new[] { TargetID.WorldVersusWorld };
     }

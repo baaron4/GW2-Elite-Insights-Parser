@@ -14,7 +14,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonActorBuilder
 {
 
-    public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, HashSet<ulong>  teampMap)
+    public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, HashSet<ulong> teampMap)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //

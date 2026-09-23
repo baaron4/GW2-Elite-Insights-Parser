@@ -23,7 +23,7 @@ public class CombatReplayMap
         public readonly double Scale;
         public readonly long EncounterID;
 
-        internal CombatReplayMapViewpoint(double xTranslatePercent, double yTranslatePercent, double scale, long encounterID  )
+        internal CombatReplayMapViewpoint(double xTranslatePercent, double yTranslatePercent, double scale, long encounterID)
         {
             XTranslatePercent = xTranslatePercent;
             YTranslatePercent = yTranslatePercent;
@@ -81,7 +81,7 @@ public class CombatReplayMap
         }
         return new Vector3(
             (iPos.X - _continentRect.bottomX) / _continentWidth * _mapWidth + _mapRect.bottomX,
-            (-iPos.Y + _continentRect.bottomY) / _continentHeight * _mapHeight - _mapRect.bottomY, 
+            (-iPos.Y + _continentRect.bottomY) / _continentHeight * _mapHeight - _mapRect.bottomY,
             iPos.Z);
     }
 
@@ -187,7 +187,7 @@ public class CombatReplayMap
             throw new InvalidOperationException("Positions are NaN");
         }
         return new(
-            (float)Math.Round(scaleX * _pixelSize.width * x, ParserHelper.CombatReplayDataDigit), 
+            (float)Math.Round(scaleX * _pixelSize.width * x, ParserHelper.CombatReplayDataDigit),
             (float)Math.Round(scaleY * (_pixelSize.height - _pixelSize.height * y), ParserHelper.CombatReplayDataDigit)
         );
     }

@@ -3,14 +3,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -18,14 +17,14 @@ internal class FraenirOfJormag : Bjora
 {
     public FraenirOfJormag(int triggerID) : base(triggerID)
     {
-        MechanicList.Add(new MechanicGroup([      
+        MechanicList.Add(new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(Icequake, Mech_IceQuake, new (Symbols.Hexagram, Colors.Red), new ("Icequake", "Knocked by Icequake", "Icequake"), Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(IceShockWaveFraenir, Mech_IceShockWaveFraenir, new (Symbols.Square, Colors.Red), new ("Ice Shock Wave", "Knocked by Ice Shock Wave", "Ice Shock Wave"), Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(IceArmSwingFraenir, Mech_IceArmSwingFraenir, new (Symbols.Pentagon, Colors.Orange), new ("IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing"), Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
-            new MechanicGroup([          
+            new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(FrozenMissile, Mech_FrozenMissile, new (Symbols.BowtieOpen, Colors.Orange), new ("FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile"), Sev0, 4000)
                     .UsingBuffChecker(Stability, false),
                 new EnemyCastStartMechanic(FrozenMissile, Mech_FrozenMissileCast, new (Symbols.BowtieOpen, Colors.LightOrange), new ("Frozen Missile", "Cast Frozen Missile", "Frozen Missile"), Sev3, 4000),
@@ -147,7 +146,7 @@ internal class FraenirOfJormag : Bjora
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

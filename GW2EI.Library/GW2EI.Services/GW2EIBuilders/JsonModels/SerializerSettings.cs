@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace GW2EIBuilders.JsonModels;
+
 internal class SerializerSettings
 {
     public static readonly JsonSerializerOptions Default = new()

@@ -1,7 +1,7 @@
-﻿using GW2EIEvtcParser;
+﻿using System.Collections;
+using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParserHelpers;
 using NUnit.Framework;
-using System.Collections;
 
 namespace GW2EIParser.tst.Generated;
 
@@ -12,18 +12,18 @@ internal class ParsesSuccessfully
 
     static IEnumerable<string> EnumerateRecursively(string path)
     {
-        foreach(var entry in Directory.EnumerateFileSystemEntries(path))
+        foreach (var entry in Directory.EnumerateFileSystemEntries(path))
         {
-            if(File.GetAttributes(entry).HasFlag(FileAttributes.Directory))
+            if (File.GetAttributes(entry).HasFlag(FileAttributes.Directory))
             {
-                foreach(var innerEntry in EnumerateRecursively(entry))
+                foreach (var innerEntry in EnumerateRecursively(entry))
                 {
                     yield return innerEntry; // format is already validated by inner recursion
                 }
             }
             else
             {
-                if(SupportedFileFormats.IsSupportedFormat(entry))
+                if (SupportedFileFormats.IsSupportedFormat(entry))
                 {
                     yield return entry;
                 }

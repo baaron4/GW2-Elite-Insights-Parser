@@ -64,7 +64,7 @@ public abstract class AnimatedCastEvent : CastEvent
                 {
                     EffectTarget = agentData.GetAgent(startItem.DstAgent, startItem.Time);
                 }
-            } 
+            }
             else
             {
                 if (startItem.IsActivation == Activation.Quickness)
@@ -103,7 +103,7 @@ public abstract class AnimatedCastEvent : CastEvent
                 }
                 Time -= ActualDuration;
                 SetAcceleration(endItem);
-            } 
+            }
             else
             {
                 int expectedActualDuration = (int)(endItem.Time - startItem.Time);

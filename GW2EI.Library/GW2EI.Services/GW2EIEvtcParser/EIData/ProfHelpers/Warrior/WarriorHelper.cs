@@ -264,7 +264,7 @@ internal static class WarriorHelper
 
     private static bool MercilessHammerChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        long[] improvedSkills = 
+        long[] improvedSkills =
         [
             // Mace
             MaceSmash, MaceBash, PulverizeMace,

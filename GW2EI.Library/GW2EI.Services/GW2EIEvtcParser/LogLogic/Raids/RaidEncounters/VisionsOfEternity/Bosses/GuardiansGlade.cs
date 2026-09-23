@@ -7,16 +7,15 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -233,7 +232,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         var burrowOrAmbushCast = kelaCasts.Where(x => x.SkillID == KelaBurrow || x.SkillID == KelaAmbush1 || x.SkillID == KelaAmbush2).ToList();
         var kelaNonStormRelatedCast = kelaCasts.Where(x => x.SkillID != KelaBurrow && x.SkillID != KelaAmbush1 && x.SkillID != KelaAmbush2 && x.SkillID != log.SkillData.DodgeID && x.ActualDuration > ServerDelayConstant).ToList();
         // Candidate phases
-        var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, false);
+        var kelaPhases = GetSubPhasesByInvul(log, KelaBurrowed, kela, true, true, encounterPhase.Start, encounterPhase.End, ServerDelayConstant, false);
         List<SubPhasePhaseData> candidateMainPhases = [];
         List<SubPhasePhaseData> candidateStormPhases = [];
         for (int i = 0; i < kelaPhases.Count; i++)
@@ -521,7 +520,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                     AddSandDecorations(log, environmentDecorations, borders, 2500, Colors.Yellow, 0.1, true, Colors.Red, 0.2);
                 }
             }
-        } 
+        }
         else
         {
             foreach (var agent in log.AgentData.GetStableSpeciesByIDs([TargetID.ExecutorOfWaves, TargetID.KelaSeneschalOfWavesSand]))

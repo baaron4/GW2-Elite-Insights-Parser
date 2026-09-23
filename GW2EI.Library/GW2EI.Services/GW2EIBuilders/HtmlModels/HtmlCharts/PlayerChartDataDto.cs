@@ -34,7 +34,7 @@ internal class PlayerChartDataDto : ActorChartDataDto
         {
             Total = p.GetBreakbarDamageGraph(log, phase.Start, phase.End, null)?.Values,
             Taken = p.GetBreakbarDamageTakenGraph(log, phase.Start, phase.End, null)?.Values,
-            Targets = new (phase.Targets.Count)
+            Targets = new(phase.Targets.Count)
         };
         foreach (SingleActor target in phase.Targets.Keys)
         {

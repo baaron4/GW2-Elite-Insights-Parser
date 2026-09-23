@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -98,8 +97,8 @@ internal static class RangerHelper
         (int)MinionID.JuvenileCarrionDevourer,
         (int)MinionID.JuvenileLashtailDevourer,
         (int)MinionID.JuvenileWhiptailDevourer,
-    ]; 
-    
+    ];
+
     private static readonly HashSet<int> JuvenileCaninePetIDs =
     [
         (int)MinionID.JuvenileAlpineWolf,
@@ -122,7 +121,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileFireWywern,
     ];
 
-    private static readonly HashSet<int> JuvenilePetIDs = new HashSet<int> { 
+    private static readonly HashSet<int> JuvenilePetIDs = new HashSet<int> {
         (int)MinionID.JuvenileArmorFish,
         (int)MinionID.JuvenileBristleback,
         (int)MinionID.JuvenileFangedIboga,

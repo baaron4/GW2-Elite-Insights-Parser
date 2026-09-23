@@ -6,15 +6,14 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -22,8 +21,8 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 {
     public CosmicObservatory(int triggerID) : base(triggerID)
     {
-        MechanicList.Add( new MechanicGroup([
-        
+        MechanicList.Add(new MechanicGroup([
+
             new MechanicGroup([
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_DancedStars, Mech_DancedStarsLost, new (Symbols.TriangleDownOpen, Colors.DarkBlue), new("DancStars.Achiv.L", "Achievement Eligibility: Danced with the Stars Lost", "Danced with the Stars Lost"))
@@ -488,7 +487,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         SanitizeLastHealthUpdateEvents(dagda, combatData);
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -528,7 +527,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
         if (dagda.GetHealth(combatData) > 50e6)
         {
             // Demonic Aura removed but Timer never applied, not a true CM
-            if (combatData.GetBuffRemoveAllDataByIDByDst(DagdaDemonicAura, dagda.AgentItem).Count > 0 
+            if (combatData.GetBuffRemoveAllDataByIDByDst(DagdaDemonicAura, dagda.AgentItem).Count > 0
                 && combatData.GetBuffApplyDataByIDByDst(DagdaDemonicAuraTimer, dagda.AgentItem).Count == 0)
             {
                 return LogData.Mode.Normal;
@@ -599,7 +598,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(coCMPhases, dancedStarsEligibilityEvents, evt.Time, Ach_DancedStars, p);
                 }

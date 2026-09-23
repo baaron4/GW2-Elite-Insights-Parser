@@ -30,7 +30,7 @@ internal static class AntiquaryHelper
         new BuffGainCastFinder(EmergencyJadeShieldBackfiredSkill, EmergencyJadeShieldBackfiredBuff),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Exhilarating Ephemera
         new BuffOnActorDamageModifier(Mod_ExhilaratingEphemera, ExhilaratingEphemera, "Exhilarating Ephemera", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Antiquary, ByPresence, TraitImages.ExhilaratingEphemera, DamageModifierMode.PvE)
@@ -57,13 +57,13 @@ internal static class AntiquaryHelper
             .UsingEarlyExit((a, log) => log.CombatData.GetBuffApplyDataByIDBySrc(SummonKryptisTurretTargetBuff , a.AgentItem).Count == 0),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new DamageLogDamageModifier(Mod_EnterprisingAristocrat, "Enterprising Aristocrat", "-10% under barrier", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Antiquary, TraitImages.EnterprisingAristocrat, (x, log) => x.ShieldDamage > 0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.January2026Balance),
     ];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = 
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Traits
         new Buff("Scoundrel's Luck", ScoundrelsLuckBuff, Source.Antiquary, BuffClassification.Other, BuffImages.ScoundrelsLuck),
@@ -98,10 +98,10 @@ internal static class AntiquaryHelper
         new Buff("Canach-Coin Toss (Backfired) (Tail 3)", CanachCoinTossBackfiredTail3, Source.Antiquary, BuffClassification.Other, BuffImages.CanachCoinTossBackfiredTail),
         new Buff("Emergency Jade Shield", EmergencyJadeShieldBuff, Source.Antiquary, BuffClassification.Other, SkillImages.EmergencyJadeShield),
         new Buff("Emergency Jade Shield (Backfired)", EmergencyJadeShieldBackfiredBuff, Source.Antiquary, BuffClassification.Other, SkillImages.EmergencyJadeShield),
-        
+
     ];
 
-    private static readonly HashSet<int> Minions = 
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.KryptisTurret,
         (int)MinionID.HoloDancer,

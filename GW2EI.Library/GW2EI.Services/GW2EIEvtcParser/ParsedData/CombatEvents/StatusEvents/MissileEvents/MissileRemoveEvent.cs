@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParsedData.MissileEvent;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 

@@ -99,7 +99,7 @@ public class OffensiveStatistics
                             if (downContributionPerSkillID.TryGetValue(dl.SkillID, out var value))
                             {
                                 downContributionPerSkillID[dl.SkillID] = value + dl.HealthDamage;
-                            } 
+                            }
                             else
                             {
                                 downContributionPerSkillID[dl.SkillID] = dl.HealthDamage;
@@ -125,7 +125,7 @@ public class OffensiveStatistics
                                 LifeLeechDamageCount++;
                                 LifeLeechDamage += dl.HealthDamage;
                             }
-                        } 
+                        }
                         else
                         {
                             if (SkillItem.CanCrit(dl.SkillID, log.LogMetadata.GW2Build))

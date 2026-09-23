@@ -157,7 +157,7 @@ public static class MechanicIDs
     public static readonly int Mech_RadiantAttunementEscort = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_CrimsonAttunementEscort = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_EscortSAK = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
-    public static readonly int Mech_EscortInvulnApplied= StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
+    public static readonly int Mech_EscortInvulnApplied = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_EscortTPCast = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_StatueFixated = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_HailOfFury = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
@@ -174,7 +174,7 @@ public static class MechanicIDs
     public static readonly int Mech_CrimsonEnergyBad = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_CoreHit = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_SpatialDistortion = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
-    public static readonly int Mech_StillWatersImmunity= StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
+    public static readonly int Mech_StillWatersImmunity = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_StillWatersRemoval = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_Madness = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
     public static readonly int Mech_ChaoticHaze = StrongholdOfTheFaithfulMask | ++strongholdOfTheFaithfulCount;
@@ -233,7 +233,7 @@ public static class MechanicIDs
     public static readonly int Mech_EffigyPulse = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_SpearImpact = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_Brutalized = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
-    public static readonly int Mech_BrutalizeCast= BastionOfThePenitentMask | ++bastionOfThePenitentCount;
+    public static readonly int Mech_BrutalizeCast = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_BrutalizeKill = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_FanaticalResilienceEnd = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_SoulSwarm = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
@@ -851,7 +851,7 @@ public static class MechanicIDs
     public static readonly int Mech_CrushingRegret = SotOMask | ++_sotoCount;
     public static readonly int Mech_CrushingRegretEmpowered = SotOMask | ++_sotoCount;
     public static readonly int Mech_CrushingRegretApply = SotOMask | ++_sotoCount;
-    public static readonly int Mech_CrushingRegretCast= SotOMask | ++_sotoCount;
+    public static readonly int Mech_CrushingRegretCast = SotOMask | ++_sotoCount;
     public static readonly int Mech_CrushingRegretSuccess = SotOMask | ++_sotoCount;
     public static readonly int Mech_CrushingRegretFail = SotOMask | ++_sotoCount;
     public static readonly int Mech_WallOfDespair = SotOMask | ++_sotoCount;

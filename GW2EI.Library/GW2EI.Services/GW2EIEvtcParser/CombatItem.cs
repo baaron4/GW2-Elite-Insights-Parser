@@ -52,12 +52,12 @@ public class CombatItem
     public bool IsEffect => IsStateChange == StateChange.Effect_51 || IsStateChange == StateChange.Effect_45 || IsStateChange == StateChange.EffectAgentCreate || IsStateChange == StateChange.EffectAgentRemove || IsStateChange == StateChange.EffectGroundCreate || IsStateChange == StateChange.EffectGroundRemove || IsStateChange == StateChange.EffectMissileCreate;
     public bool IsMissile => IsStateChange == StateChange.MissileCreate || IsStateChange == StateChange.MissileLaunch || IsStateChange == StateChange.MissileRemove;
 
-    public bool IsEssentialMetadata => IsStateChange == StateChange.IDToGUID || IsStateChange == StateChange.Language 
-        || IsStateChange == StateChange.GWBuild || IsStateChange == StateChange.InstanceStart 
-        || IsStateChange == StateChange.LogNPCUpdate || IsStateChange == StateChange.FractalScale 
-        || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID 
+    public bool IsEssentialMetadata => IsStateChange == StateChange.IDToGUID || IsStateChange == StateChange.Language
+        || IsStateChange == StateChange.GWBuild || IsStateChange == StateChange.InstanceStart
+        || IsStateChange == StateChange.LogNPCUpdate || IsStateChange == StateChange.FractalScale
+        || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID
         || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.Tick
-        || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart 
+        || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart
         || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams;
 
     private readonly EvtcVersionEvent _version;
@@ -344,8 +344,8 @@ public class CombatItem
         {
             return IsStateChange == StateChange.BuffApply || IsStateChange == StateChange.BuffChange || IsStateChange == StateChange.BuffInitial;
         }
-        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == Activation.None && 
-            IsBuffRemove == BuffRemove.None && IsStateChange == StateChange.Combat) || 
+        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == Activation.None &&
+            IsBuffRemove == BuffRemove.None && IsStateChange == StateChange.Combat) ||
             IsStateChange == StateChange.BuffInitial;
     }
 
@@ -471,7 +471,7 @@ public class CombatItem
 public static partial class ListExt
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SortByTime<T>(this List<T> list)  where T : CombatItem
+    public static void SortByTime<T>(this List<T> list) where T : CombatItem
     {
         list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time));
     }

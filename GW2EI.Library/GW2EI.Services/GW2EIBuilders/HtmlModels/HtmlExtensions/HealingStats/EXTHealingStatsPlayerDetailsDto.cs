@@ -19,10 +19,10 @@ internal class EXTHealingStatsPlayerDetailsDto
         var minions = actor.GetMinions(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = new (phases.Count),
-            HealingDistributionsTargets = new (phases.Count),
-            IncomingHealingDistributions = new (phases.Count),
-            Minions = new (minions.Count),
+            HealingDistributions = new(phases.Count),
+            HealingDistributionsTargets = new(phases.Count),
+            IncomingHealingDistributions = new(phases.Count),
+            Minions = new(minions.Count),
         };
         foreach (PhaseData phase in phases)
         {
@@ -48,7 +48,7 @@ internal class EXTHealingStatsPlayerDetailsDto
         var phases = log.LogData.GetPhases(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = new (phases.Count),
+            HealingDistributions = new(phases.Count),
             HealingDistributionsTargets = new(phases.Count),
             IncomingHealingDistributions = new(phases.Count)
         };

@@ -191,7 +191,7 @@ public abstract class Actor
     {
         if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
         {
-            hitDamageEventsPerPhasePerTarget = new (AgentItem, log);
+            hitDamageEventsPerPhasePerTarget = new(AgentItem, log);
             _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
         }
 

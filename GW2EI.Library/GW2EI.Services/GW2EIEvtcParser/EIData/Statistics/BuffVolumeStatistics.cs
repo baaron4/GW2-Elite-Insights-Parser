@@ -165,7 +165,7 @@ public class BuffVolumeStatistics
             {
                 totalActiveIncoming = totalIncoming / playerActiveDuration;
                 totalActiveOutgoing = totalOutgoing / playerActiveDuration;
-                totalActiveIncomingByExtension = totalIncomingByExtension / playerActiveDuration; 
+                totalActiveIncomingByExtension = totalIncomingByExtension / playerActiveDuration;
                 totalActiveIncomingByUnknownExtension = totalIncomingByUnknownExtension / playerActiveDuration;
                 totalActiveOutgoingByExtension = totalOutgoingByExtension / playerActiveDuration;
             }
@@ -203,15 +203,15 @@ public class BuffVolumeStatistics
                 uptime.IncomingByExtension = Math.Round(totalIncomingByExtension, ParserHelper.BuffDigit);
                 uptime.IncomingByUnknownExtension = Math.Round(totalIncomingByUnknownExtension, ParserHelper.BuffDigit);
                 uptime.Outgoing = Math.Round(totalOutgoing, ParserHelper.BuffDigit);
-                uptime.OutgoingByExtension = Math.Round((totalOutgoingByExtension) , ParserHelper.BuffDigit);
+                uptime.OutgoingByExtension = Math.Round((totalOutgoingByExtension), ParserHelper.BuffDigit);
                 //
                 if (playerActiveDuration > 0)
                 {
                     uptimeActive.Incoming = Math.Round(totalActiveIncoming, ParserHelper.BuffDigit);
                     uptimeActive.IncomingByExtension = Math.Round(totalActiveIncomingByExtension, ParserHelper.BuffDigit);
-                    uptimeActive.IncomingByUnknownExtension = Math.Round(totalActiveIncomingByUnknownExtension , ParserHelper.BuffDigit);
-                    uptimeActive.Outgoing = Math.Round(totalActiveOutgoing , ParserHelper.BuffDigit);
-                    uptimeActive.OutgoingByExtension = Math.Round((totalActiveOutgoingByExtension) , ParserHelper.BuffDigit);
+                    uptimeActive.IncomingByUnknownExtension = Math.Round(totalActiveIncomingByUnknownExtension, ParserHelper.BuffDigit);
+                    uptimeActive.Outgoing = Math.Round(totalActiveOutgoing, ParserHelper.BuffDigit);
+                    uptimeActive.OutgoingByExtension = Math.Round((totalActiveOutgoingByExtension), ParserHelper.BuffDigit);
                 }
             }
         }

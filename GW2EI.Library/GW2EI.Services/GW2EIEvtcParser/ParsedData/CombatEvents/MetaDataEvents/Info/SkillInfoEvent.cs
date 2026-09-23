@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
+
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 public class SkillInfoEvent : MetaDataEvent
@@ -49,9 +50,9 @@ public class SkillInfoEvent : MetaDataEvent
         // 2
         var srcAgent = evtcItem.SrcAgent;
 
-        Recharge    = *(float*)&time;
-        Range0      = *((float*)&time + 1);
-        Range1      = *(float*)&srcAgent;
+        Recharge = *(float*)&time;
+        Range0 = *((float*)&time + 1);
+        Range1 = *(float*)&srcAgent;
         TooltipTime = *((float*)&srcAgent + 1);
     }
 

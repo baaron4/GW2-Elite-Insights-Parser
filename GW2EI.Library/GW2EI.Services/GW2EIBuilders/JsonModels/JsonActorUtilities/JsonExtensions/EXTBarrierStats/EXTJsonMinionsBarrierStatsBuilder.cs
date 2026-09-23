@@ -41,13 +41,14 @@ internal static class EXTJsonMinionsBarrierStatsBuilder
             totalIncomingBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(listInc.GroupBy(x => x.SkillID), log, skillMap, buffMap).ToList());
         }
 
-        return new() {
-            TotalBarrier                = totalBarrier,
-            TotalIncomingBarrier        = totalIncomingBarrier,
-            TotalAlliedBarrier          = totalAlliedBarrier,
-            TotalBarrierDist            = totalBarrierDist,
-            TotalIncomingBarrierDist    = totalIncomingBarrierDist,
-            AlliedBarrierDist           = alliedBarrierDist,
+        return new()
+        {
+            TotalBarrier = totalBarrier,
+            TotalIncomingBarrier = totalIncomingBarrier,
+            TotalAlliedBarrier = totalAlliedBarrier,
+            TotalBarrierDist = totalBarrierDist,
+            TotalIncomingBarrierDist = totalIncomingBarrierDist,
+            AlliedBarrierDist = alliedBarrierDist,
         };
     }
 

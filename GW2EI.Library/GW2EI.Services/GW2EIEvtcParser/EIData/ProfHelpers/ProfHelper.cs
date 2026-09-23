@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ProfHelper
 {
-    private static readonly List<InstantCastFinder> _genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse = 
+    private static readonly List<InstantCastFinder> _genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse =
     [
         new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -116,7 +116,7 @@ internal static class ProfHelper
         new DamageCastFinder(RelicOfShacklesDamageSkill, RelicOfShacklesDamageSkill)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new DamageCastFinder(RelicOfTheLastTyrantDamage, RelicOfTheLastTyrantDamage)
-            .UsingChecker((hde, combatData, agentData, skillData) => 
+            .UsingChecker((hde, combatData, agentData, skillData) =>
             {
                 return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant && x.RemovedStacks == 5) != null;
             })
@@ -349,7 +349,7 @@ internal static class ProfHelper
     //
     internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<AgentItem> players)
     {
-        List<InstantCastFinder> instantCastFinders = new (500);
+        List<InstantCastFinder> instantCastFinders = new(500);
         instantCastFinders.AddRange(_genericNeedsToBeBeforeTheRestInstantCastFinders_NeverAddAnythingElse);
         instantCastFinders.AddRange(_genericInstantCastFinders);
         foreach (Spec spec in players.Select(x => x.BaseSpec).Distinct())
@@ -392,7 +392,7 @@ internal static class ProfHelper
                 case Spec.Warrior:
                     WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x.GetInstance()));
                     break;
-            }        
+            }
         }
         foreach (Spec spec in players.Select(x => x.Spec).Distinct())
         {
@@ -712,13 +712,13 @@ internal static class ProfHelper
         }
     }
 
-    #if DEBUG_EFFECTS
+#if DEBUG_EFFECTS
     internal static void DEBUG_ComputeProfessionCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         var knownEffects = new HashSet<GUID>();
         CombatReplay.DebugEffects(p, log, replay.Decorations, knownEffects);
     }
-    #endif
+#endif
 
     private static readonly HashSet<Spec> _canSummonClones =
     [
@@ -800,7 +800,7 @@ internal static class ProfHelper
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
-        
+
         switch (minion.ID)
         {
             case (int)MinionID.JadeMech:
@@ -890,7 +890,7 @@ internal static class ProfHelper
     {
         if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
         {
-            return [ ];
+            return [];
         }
 
         var applies = buffs.OfType<BuffApplyEvent>().ToList();
@@ -910,7 +910,7 @@ internal static class ProfHelper
     {
         if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
         {
-            return [ ];
+            return [];
         }
 
         return buffs.Select(bae => new AnimatedSkillCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));

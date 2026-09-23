@@ -1,5 +1,4 @@
 ﻿using System;
-using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.Models;

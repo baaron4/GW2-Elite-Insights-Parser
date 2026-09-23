@@ -60,13 +60,13 @@ public class EvtcVersionEvent : MetaDataEvent
             Build = int.Parse(majorSplit.Tail);
             var minorSplit = majorSplit.Head.SplitOnce('-');
             Revision = int.Parse(minorSplit.Tail);
-        } 
+        }
         catch
         {
             Build = oldBuild;
             Revision = 0;
         }
-        
+
     }
 
     internal string ToEVTCString(bool buildOnly)

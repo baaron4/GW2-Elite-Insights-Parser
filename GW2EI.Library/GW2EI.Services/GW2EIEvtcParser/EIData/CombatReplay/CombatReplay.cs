@@ -49,7 +49,7 @@ public class CombatReplay
         if (velocityInsertTime.HasValue)
         {
             // Add zero velocity after latest event to make sure to stop interpolation ...
-            _Velocities.Add(new(0,0,0, Math.Min(velocityInsertTime.Value + 1, position.Time - 1)));
+            _Velocities.Add(new(0, 0, 0, Math.Min(velocityInsertTime.Value + 1, position.Time - 1)));
             // ... and then restore previous
             _Velocities.Add(new(lastVelocity!.Value.XYZ, position.Time));
         }
@@ -232,7 +232,7 @@ public class CombatReplay
                 HandlePosition(t, ref polledPositionTableIndex, ref positionTableIndex, ref velocityTableIndex, rate);
                 HandleRotation(t, ref polledRotationTableIndex, ref rotationTableIndex, rate);
             }
-        } 
+        }
         else
         {
             for (long t = startOffset; t < logDuration; t += rate)

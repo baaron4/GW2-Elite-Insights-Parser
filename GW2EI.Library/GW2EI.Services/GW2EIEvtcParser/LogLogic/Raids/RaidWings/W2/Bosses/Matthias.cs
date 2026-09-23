@@ -4,16 +4,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -66,7 +64,7 @@ internal class Matthias : SalvationPass
                 new EnemyDstBuffApplyMechanic([BloodShield, BloodShieldAbo], Mech_BloodShield, new (Symbols.Octagon,Colors.Red), new("Bubble", "Blood Shield (protective bubble)","Bubble"), Sev3, 100)
                     .UsingChecker((ba, log) => !ba.To.HasBuff(log, BloodShield, ba.Time - 100) && !ba.To.HasBuff(log, BloodShieldAbo, ba.Time - 100)),
                 new EnemyDstBuffRemoveMechanic([BloodShield, BloodShieldAbo], Mech_BloodShieldRemove, new (Symbols.Octagon,Colors.Green), new("Lost Bubble", "Lost Blood Shield (protective bubble)","Lost Bubble"), Sev1, 100),
-                new PlayerSrcBuffRemoveSingleFromMechanic([BloodShield, BloodShieldAbo], Mech_BloodShieldStackRemoved, new (Symbols.Octagon,Colors.Blue), new("Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"), Sev0),    
+                new PlayerSrcBuffRemoveSingleFromMechanic([BloodShield, BloodShieldAbo], Mech_BloodShieldStackRemoved, new (Symbols.Octagon,Colors.Blue), new("Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"), Sev0),
             ]),
             new PlayerDstBuffApplyMechanic(ZealousBenediction, Mech_ZealousBenediction, new (Symbols.Circle,Colors.Yellow), new("Bombs", "Zealous Benediction (Expanding bombs)","Bomb"), Sev0,0),
         ]);

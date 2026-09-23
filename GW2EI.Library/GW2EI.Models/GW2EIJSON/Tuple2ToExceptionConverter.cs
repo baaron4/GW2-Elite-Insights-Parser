@@ -32,6 +32,6 @@ public class Tuple2ToExceptionConverterFactory : JsonConverterFactory
     {
         var tupleTypes = typeToConvert.GenericTypeArguments;
         var converterType = typeof(Tuple2ToExceptionConverter<,>).MakeGenericType(tupleTypes);
-        return (JsonConverter?)converterType.GetField(nameof(Tuple2ToExceptionConverter<int,int>.Instance), BindingFlags.Public | BindingFlags.Static)!.GetValue(null);
+        return (JsonConverter?)converterType.GetField(nameof(Tuple2ToExceptionConverter<int, int>.Instance), BindingFlags.Public | BindingFlags.Static)!.GetValue(null);
     }
 }

@@ -9,12 +9,12 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ParagonHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new EffectCastFinder(NeverSurrender, EffectGUIDs.ParagonNeverSurrenderInitial),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Strengthening Stanzas - Chant of Action Beta
         new BuffOnActorDamageModifier(Mod_ChantOfAction_StrengtheningStanzas, ChantOfActionBuff, "Strengthening Stanzas: Chant of Action", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE)
@@ -64,7 +64,7 @@ internal static class ParagonHelper
             .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Chant of Recuperation Beta
         new BuffOnActorDamageModifier(Mod_ChantOfRecuperation_StrengtheningStanzas, ChantOfRecuperationBuff, "Strengthening Stanzas: Chant of Recuperation", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE)
@@ -78,7 +78,7 @@ internal static class ParagonHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = 
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Chant of Action", ChantOfActionBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfAction),
         new Buff("Chant of Recuperation", ChantOfRecuperationBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfRecuperation),

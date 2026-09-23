@@ -151,7 +151,7 @@ public class BuffsContainer
                                                     if (other is BuffExtensionEvent bee)
                                                     {
                                                         totalDuration += (int)bee.ExtendedDuration;
-                                                    } 
+                                                    }
                                                     else if (other is BuffStackActiveEvent bsae)
                                                     {
                                                         totalDuration -= (int)(other.Time - previousTime);

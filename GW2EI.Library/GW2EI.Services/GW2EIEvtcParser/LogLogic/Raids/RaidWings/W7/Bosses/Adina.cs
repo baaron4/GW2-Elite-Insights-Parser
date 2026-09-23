@@ -5,15 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -148,8 +147,8 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     end = attackOff.Time;
                 }
-                AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                extra.SetEnglobingAgentItem(hand, agentData);
+                var extra = AgentManipulationHelper.CreateEnglobedAgentInInterval(hand, agentData, start, end);
+                extra.OverrideID(id, agentData);
             }
         }
     }
@@ -195,7 +194,7 @@ internal class Adina : TheKeyOfAhdashim
         RenameHands(Targets, combatData);
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -295,7 +294,7 @@ internal class Adina : TheKeyOfAhdashim
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles0ms, EffectGUIDs.AdinaPillarDestroyedByAdina], out var explicitelyDestroyed))
         {
-            foreach ( var destroyed in explicitelyDestroyed)
+            foreach (var destroyed in explicitelyDestroyed)
             {
                 long end = destroyed.Time;
                 var currentAdina = log.AgentData.GetStableSpeciesByID(TargetID.Adina).FirstOrDefault(x => x.InAwareTimes(end));
@@ -436,7 +435,7 @@ internal class Adina : TheKeyOfAhdashim
                             castDuration = 4600; // cycle 3 from skill def
                             lifespan = (cast.Time, cast.Time + castDuration);
                             var growingEnd = lifespan.end;
-                            var interruptEvent = adinaCasts.FirstOrDefault(x =>x.Time <= lifespan.end);
+                            var interruptEvent = adinaCasts.FirstOrDefault(x => x.Time <= lifespan.end);
                             if (interruptEvent != null)
                             {
                                 lifespan.end = interruptEvent.Time;
@@ -490,7 +489,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    internal static readonly List<TargetID> HandIDs = [ TargetID.HandOfErosion, TargetID.HandOfEruption];
+    internal static readonly List<TargetID> HandIDs = [TargetID.HandOfErosion, TargetID.HandOfEruption];
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor adina, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
@@ -583,7 +582,15 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        
+        string mainPhase1;
+        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
+        {
+            mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
+        }
+        else
+        {
+            mainPhase1 = CombatReplayAdinaMainPhase1;
+        }
         var crMap = new CombatReplayMap(
                         (866, 1000),
                         (13860, -2678, 15951, -268));
@@ -678,6 +685,22 @@ internal class Adina : TheKeyOfAhdashim
                     log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
                 }
             }
+            if (!adinaPhases.Any())
+            {
+                arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
+            }
+            else
+            {
+                arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
+            }
+            if (parentMap != null)
+            {
+                AddDefaultViewpointOnParentFromChild(crMap, parentMap, LogID);
+            }
+        }
+        catch (Exception)
+        {
+            log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
         }
         //
         return crMap;

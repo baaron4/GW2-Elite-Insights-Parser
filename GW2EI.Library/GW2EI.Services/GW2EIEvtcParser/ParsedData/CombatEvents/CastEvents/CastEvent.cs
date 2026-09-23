@@ -64,12 +64,12 @@ public abstract class CastEvent : TimeCombatEvent
 public static partial class ListExt
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SortByTimeThenNegatedSwap<T>(this List<T> list)  where T : CastEvent
+    public static void SortByTimeThenNegatedSwap<T>(this List<T> list) where T : CastEvent
     {
         list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SortByTimeThenSwap<T>(this List<T> list)  where T : CastEvent
+    public static void SortByTimeThenSwap<T>(this List<T> list) where T : CastEvent
     {
         list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
     }

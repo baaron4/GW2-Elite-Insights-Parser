@@ -28,7 +28,7 @@ public class SkillData
         return _skills[ID];
     }
 
-    
+
     internal bool TryGet(long ID, [NotNullWhen(true)] out SkillItem? skillItem)
     {
         return _skills.TryGetValue(ID, out skillItem);

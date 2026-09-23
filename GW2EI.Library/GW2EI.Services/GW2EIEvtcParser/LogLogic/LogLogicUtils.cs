@@ -66,7 +66,7 @@ internal static class LogLogicUtils
         if (delta > 0)
         {
             yStart -= delta * 0.5f;
-        } 
+        }
         else if (delta < 0)
         {
             xStart += delta * 0.5f;
@@ -114,9 +114,24 @@ internal static class LogLogicUtils
         }
         return new("Missing confusion damage");
     }
-    internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
+    internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
     {
-        return CombatData.GetBuffApplyRemoveSequence(combatData.GetBuffDataByIDByDst(buffID, target), target, beginWithApply, addDummyRemoveAllEventAtEnd);
+        return CombatData.GetBuffApplyRemoveSequence(combatData.GetBuffDataByIDByDst(buffID, target), target, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return buffIDs.SelectMany(buffID => GetBuffApplyRemoveSequence(combatData, buffID, target, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss));
+    }
+
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
+    {
+        return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd, minThresholdBetweenGainAndLoss);
     }
 
     internal static List<List<BuffEvent>> GetBuffApplyRemoveSequencePerInstanceID(CombatData combatData, long buffID, AgentItem target, bool addDummyRemoveAllEventAtEnd)
@@ -161,21 +176,6 @@ internal static class LogLogicUtils
         return filtered;
     }
 
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
-    }
-
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return buffIDs.SelectMany(buffID => GetBuffApplyRemoveSequence(combatData, buffID, target, beginWithApply, addDummyRemoveAllEventAtEnd));
-    }
-
-    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
-    {
-        return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
-    }
-
     internal static bool AtLeastOnePlayerAlive(CombatData combatData, LogData logData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
     {
         int playerDeadOrDCCount = 0;
@@ -184,8 +184,8 @@ internal static class LogLogicUtils
             if (timeToCheck < playerAgent.FirstAware || timeToCheck > playerAgent.LastAware)
             {
                 playerDeadOrDCCount++;
-            } 
-            else 
+            }
+            else
             {
                 var statusEvents = new List<StatusEvent>();
                 statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
@@ -234,7 +234,8 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var gadgetMatchingPositions = gadgetPositions.Where(entry => {
+        var gadgetMatchingPositions = gadgetPositions.Where(entry =>
+        {
             return entry.Value.Any(x => (MovementEvent.GetPoint3D(x) - chestPosition).XY().LengthSquared() < InchDistanceThresholdSquared);
         });
         if (!gadgetMatchingPositions.Any())
@@ -249,7 +250,8 @@ internal static class LogLogicUtils
     {
         var movementData = combatData.Where(x => x.IsGeographical).ToList();
 
-        var nonZeroGadgetVelocities = movementData.Where(evt => {
+        var nonZeroGadgetVelocities = movementData.Where(evt =>
+        {
             if (evt.IsStateChange == StateChange.Velocity)
             {
                 if (MovementEvent.GetPoint3D(evt).Length() < 1e-6)
@@ -273,7 +275,8 @@ internal static class LogLogicUtils
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Key.Type == AgentItem.AgentType.VolatileSpecies && x.Key.Master == null)
             .ToDictionary(x => x.Key, x => x.ToList());
-        var gadgetPositions = positionDict.Where(entry => {
+        var gadgetPositions = positionDict.Where(entry =>
+        {
 
             if (nonZeroGadgetVelocities.ContainsKey(entry.Key))
             {

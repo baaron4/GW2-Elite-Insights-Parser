@@ -65,7 +65,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
             positions.Add(y);
         }
         Positions = positions;
-        
+
         var angles = new List<float>(replay.PolledRotations.Count);
         foreach (var facing in replay.PolledRotations)
         {

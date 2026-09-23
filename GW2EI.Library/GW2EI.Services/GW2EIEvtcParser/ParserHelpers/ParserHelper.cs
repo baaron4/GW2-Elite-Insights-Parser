@@ -186,7 +186,7 @@ public static class ParserHelper
     {
         const string CHARSET = "0123456789ABCDEF";
         int offset = 0;
-        foreach(var c in bytes)
+        foreach (var c in bytes)
         {
             destination[offset++] = CHARSET[(c & 0xf0) >> 4];
             destination[offset++] = CHARSET[c & 0x0f];
@@ -195,8 +195,8 @@ public static class ParserHelper
 
     internal static bool IsSupportedStateChange(StateChange state)
     {
-        return state != StateChange.Unknown && state != StateChange.ReplInfo && 
-            state != StateChange.StatReset && state != StateChange.APIDelayed && 
+        return state != StateChange.Unknown && state != StateChange.ReplInfo &&
+            state != StateChange.StatReset && state != StateChange.APIDelayed &&
             state != StateChange.Idle && state != StateChange.AgentChange &&
             state != StateChange.EarlyExit;
     }
@@ -457,7 +457,7 @@ public static class ParserHelper
 
     public static IReadOnlyList<Source> SpecToSources(Spec spec)
     {
-        return SpecToSourcesDictionary.TryGetValue(spec, out var sourceList) ? sourceList : [ ];
+        return SpecToSourcesDictionary.TryGetValue(spec, out var sourceList) ? sourceList : [];
     }
 
     internal static string GetHighResolutionProfIcon(Spec spec)

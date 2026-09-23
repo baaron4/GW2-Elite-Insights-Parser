@@ -30,7 +30,7 @@ internal class GW2TraitAPIController
         fcreate.Close();
 
         List<GW2APITrait> traitList = GetGW2APITraits();
-        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        using (var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
             JsonSerializer.Serialize(writer, traitList, GW2APIUtilities.SerializerSettings);
         }

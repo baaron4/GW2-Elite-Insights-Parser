@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.EIData.Trigonometry;
 using static GW2EIEvtcParser.ParserHelper;
-using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
 

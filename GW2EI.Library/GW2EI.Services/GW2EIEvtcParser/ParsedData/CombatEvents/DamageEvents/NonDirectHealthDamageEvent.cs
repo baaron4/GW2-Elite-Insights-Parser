@@ -27,9 +27,9 @@ public class NonDirectHealthDamageEvent : HealthDamageEvent
         IsAbsorbed = result == DamageResult.DirectOrBuffAbsorb || result == DamageResult.DirectOrBuffInvert;
         ShieldDamage = evtcItem.IsShields > 0 ?
             evtcItem.OverstackValue > 0 ? (int)evtcItem.OverstackValue : HealthDamage
-            : 
+            :
             0;
-        HasHit = result == DamageResult.BuffCycle || result == DamageResult.BuffNotCycle || 
+        HasHit = result == DamageResult.BuffCycle || result == DamageResult.BuffNotCycle ||
             result == DamageResult.BuffNotCycle_DamageToSourceOnHit || IsLifeLeech;
     }
 

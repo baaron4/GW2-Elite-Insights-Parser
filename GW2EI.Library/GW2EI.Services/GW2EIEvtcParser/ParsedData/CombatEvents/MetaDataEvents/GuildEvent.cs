@@ -1,6 +1,4 @@
-﻿using System.Buffers.Binary;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class GuildEvent : MetaDataEvent
 {

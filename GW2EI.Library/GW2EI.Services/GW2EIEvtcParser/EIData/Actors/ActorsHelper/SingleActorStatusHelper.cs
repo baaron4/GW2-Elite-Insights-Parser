@@ -413,7 +413,7 @@ partial class SingleActor
         {
             return false;
         }
-        
+
         // return false if fight ends before any down events
         Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingLogTime));
         if (nextDown == null)
@@ -423,9 +423,9 @@ partial class SingleActor
 
         var healthUpdatesBeforeEnd = GetHealthUpdates(log).Where(update => update.Start > curTime);
         Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in Segment update) => update.Value > 90);
-       
+
         // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
-        if(next90 == null) { return true; }
+        if (next90 == null) { return true; }
 
         // Otherwise return false if the next 90 is before the next down
         if (next90.Value.Start < nextDown.Value.Start)
@@ -487,7 +487,7 @@ partial class SingleActor
                 //wepswap  
                 swapped = swe.SwappedTo;
                 swappedTime = swe.Time;
-            } 
+            }
             else if (estimateResult == WeaponDescriptor.WeaponEstimateResult.NeedNewSet)
             {
                 // We can't say exactly when weapon have been changed, use mid time

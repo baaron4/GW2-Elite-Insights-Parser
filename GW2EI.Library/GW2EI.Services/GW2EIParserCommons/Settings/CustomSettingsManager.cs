@@ -134,7 +134,7 @@ public static class CustomSettingsManager
         if (settings != null)
         {
             settings.FromSettings(Properties.Settings.Default);
-        } 
+        }
         else
         {
             settings = new ProgramSettings(Properties.Settings.Default);

@@ -3,15 +3,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -19,7 +18,7 @@ internal class SuperKodanBrothers : Bjora
 {
     public SuperKodanBrothers(int triggerID) : base(triggerID)
     {
-        MechanicList.Add(new MechanicGroup([      
+        MechanicList.Add(new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(Groundshaker, Mech_Groundshaker, new (Symbols.TriangleDown, Colors.Grey), new ("Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit"), Sev1, 150),
             new PlayerDstHealthDamageHitMechanic(Groundpiercer, Mech_Groundpiercer, new (Symbols.TriangleDown, Colors.White), new ("Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown"), Sev0, 150),
             new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, Mech_UnrelentingPainApply, new(Symbols.DiamondOpen, Colors.Pink), new("UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied"), Sev0),
@@ -216,7 +215,7 @@ internal class SuperKodanBrothers : Bjora
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

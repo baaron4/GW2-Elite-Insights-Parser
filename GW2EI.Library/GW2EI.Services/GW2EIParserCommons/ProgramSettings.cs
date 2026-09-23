@@ -109,7 +109,7 @@ public class ProgramSettings
         IndentJSON = settings.IndentJSON;
         MemoryLimit = settings.MemoryLimit;
     }
-    
+
 
     public int GetMaxParallelRunning()
     {

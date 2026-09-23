@@ -9,8 +9,8 @@ using GW2EIJSON;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIJSON.JsonBuffsUptime;
 using static GW2EIJSON.JsonBuffVolumes;
-using static GW2EIJSON.JsonPlayerBuffsGeneration;
 using static GW2EIJSON.JsonPlayerBuffOutgoingVolumes;
+using static GW2EIJSON.JsonPlayerBuffsGeneration;
 
 namespace GW2EIBuilders.JsonModels.JsonActors;
 

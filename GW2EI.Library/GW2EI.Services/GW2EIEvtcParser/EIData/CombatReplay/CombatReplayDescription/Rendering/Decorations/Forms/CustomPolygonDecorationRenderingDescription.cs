@@ -11,7 +11,7 @@ public class CustomPolygonDecorationRenderingDescription : FormDecorationRenderi
     {
         Type = Types.CustomPolygon;
         var points = new List<float[]>(decoration.Points.Count);
-        foreach(var point in decoration.Points)
+        foreach (var point in decoration.Points)
         {
             points.Add(new float[] { point.X, -point.Y });
         }

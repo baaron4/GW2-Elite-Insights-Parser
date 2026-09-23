@@ -125,7 +125,7 @@ public class StatisticsHelper
                     _presentTargetOtherBuffs.Add(pair.Value);
                 }
             }
-        }    
+        }
     }
 
 
@@ -149,7 +149,7 @@ public class StatisticsHelper
         {
             return buffs;
         }
-        return [ ];
+        return [];
     }
 
     //
@@ -262,7 +262,7 @@ public class StatisticsHelper
     {
         if (!log.CanCombatReplay)
         {
-            return [ ];
+            return [];
         }
 
         var commanders = new List<GenericSegment<Player>>(log.PlayerList.Count); //TODO_PERF(Rennorb): find average complexity
@@ -282,12 +282,12 @@ public class StatisticsHelper
         foreach (var commanderSegment in commanders) // don't deconstruct, guids are large
         {
             var polledPositions = commanderSegment.Value!.GetCombatReplayPolledPositions(log);
-            foreach(var pos in polledPositions)
+            foreach (var pos in polledPositions)
             {
-                if(pos.Time < start) { continue; }
-                if(pos.Time >= commanderSegment.End) { break; }
+                if (pos.Time < start) { continue; }
+                if (pos.Time >= commanderSegment.End) { break; }
 
-                if(pos.Time < commanderSegment.Start)
+                if (pos.Time < commanderSegment.Start)
                 {
                     //NOTE(Rennorb): This means we are between the end of the last, and teh beginning of the current segment,
                     // which in turn means there is no commander right now.

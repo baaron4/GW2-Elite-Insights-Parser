@@ -139,14 +139,10 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.StableSpecies).Where(x => AgentItem.IsMasterOf(x));
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.StableSpecies).Where(x => AgentItem.IsMasterOfAtTime(x, FirstAware));
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
-                if (!agent.InAwareTimes(AgentItem))
-                {
-                    continue;
-                }
                 long id = agent.ID;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
@@ -169,14 +165,10 @@ public abstract partial class SingleActor : Actor
                 }
             }
             // gadget, string based
-            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => AgentItem.IsMasterOf(x));
+            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => AgentItem.IsMasterOfAtTime(x, FirstAware));
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {
-                if (!agent.InAwareTimes(AgentItem))
-                {
-                    continue;
-                }
                 string id = agent.Name;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)

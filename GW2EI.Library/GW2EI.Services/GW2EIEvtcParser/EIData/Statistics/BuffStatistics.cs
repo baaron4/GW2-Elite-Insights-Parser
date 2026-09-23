@@ -15,7 +15,7 @@ public class BuffStatistics
     public double ByExtension { get; internal set; }
     public double Extended { get; internal set; }
 
-    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, SingleActor srcActor, long start, long end)
+    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, SingleActor srcActor, long start, long end)
     {
         long phaseDuration = end - start;
         var srcAgentItem = srcActor.AgentItem;
@@ -99,13 +99,13 @@ public class BuffStatistics
 
             if (hasGeneration)
             {
-                totalGeneration         /= phaseDuration;
+                totalGeneration /= phaseDuration;
                 totalGenerationPresence /= phaseDuration;
-                totalOverstack          /= phaseDuration;
-                totalWasted             /= phaseDuration;
-                totalUnknownExtension   /= phaseDuration;
-                totalExtension          /= phaseDuration;
-                totalExtended           /= phaseDuration;
+                totalOverstack /= phaseDuration;
+                totalWasted /= phaseDuration;
+                totalUnknownExtension /= phaseDuration;
+                totalExtension /= phaseDuration;
+                totalExtended /= phaseDuration;
 
                 var uptime = new BuffStatistics();
                 var uptimeActive = new BuffStatistics();

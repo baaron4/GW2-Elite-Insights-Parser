@@ -4,14 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -64,7 +63,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
         LogID |= 0x000003;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -95,10 +94,10 @@ internal class QadimThePeerless : TheKeyOfAhdashim
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return [ new DamageCastFinder(UnbrearablePower, UnbrearablePower) ];
+        return [new DamageCastFinder(UnbrearablePower, UnbrearablePower)];
     }
 
-    private static readonly IReadOnlyList<(string, Vector2)> PylonLocations = 
+    private static readonly IReadOnlyList<(string, Vector2)> PylonLocations =
     [
         ("(N)", new(1632.32837f, 11588.4014f)),
         ("(SW)", new(322.5202f, 9321.848f)),
@@ -230,7 +229,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.QadimThePeerless)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
         phases[0].AddTarget(mainTarget, log);
         phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
-        
+
         return phases;
     }
 
@@ -467,7 +466,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
         uint magmaRadius = 420;
         int magmaOffset = 4000;
         int magmaDuration = 600000;
-       
+
         int magmaCounter = 0;
         foreach (Segment seg in magmaDrop)
         {

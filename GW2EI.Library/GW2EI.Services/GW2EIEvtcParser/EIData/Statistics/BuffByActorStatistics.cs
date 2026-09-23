@@ -46,8 +46,8 @@ public class BuffByActorStatistics
                 unknownExtension *= 100.0;
                 extension *= 100.0;
                 extended *= 100.0;
-            } 
-            else if (dst.GetBuffPresence(log, start, end, actor).TryGetValue(buff.ID, out var presenceValue)) 
+            }
+            else if (dst.GetBuffPresence(log, start, end, actor).TryGetValue(buff.ID, out var presenceValue))
             {
                 generatedPresence = 100.0 * presenceValue;
             }

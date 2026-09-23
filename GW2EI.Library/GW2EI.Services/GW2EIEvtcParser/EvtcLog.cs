@@ -1,9 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.ParsedData;
-using GW2EIGW2API;
+﻿using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser;
 

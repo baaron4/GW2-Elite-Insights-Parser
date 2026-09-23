@@ -47,14 +47,14 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
                     :
                     (
                         isExtension ?
-                            stack.Src.IsEnglobingAgent ? 
-                                new BuffSimulationItemBaseEnglobingWithExtension(stack) 
-                                : 
+                            stack.Src.IsEnglobingAgent ?
+                                new BuffSimulationItemBaseEnglobingWithExtension(stack)
+                                :
                                 new BuffSimulationItemBaseWithExtension(stack)
                             :
-                            stack.Src.IsEnglobingAgent ? 
-                                new BuffSimulationItemBaseEnglobing(stack) 
-                                : 
+                            stack.Src.IsEnglobingAgent ?
+                                new BuffSimulationItemBaseEnglobing(stack)
+                                :
                                 new BuffSimulationItemBase(stack)
                     )
                     ;

@@ -72,7 +72,7 @@ public class BuffVolumeByActorStatistics
                 {
                     FillDictionnaries(log, buff, group.Key, group.Where(x => x.Time >= src.FirstAware && x.Time <= src.LastAware), buffs, buffsActive, phaseDuration, activePhaseDuration);
                 }
-            } 
+            }
             else
             {
                 FillDictionnaries(log, buff, group.Key, group, buffs, buffsActive, phaseDuration, activePhaseDuration);

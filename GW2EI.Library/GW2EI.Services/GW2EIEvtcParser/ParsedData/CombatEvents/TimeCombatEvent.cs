@@ -15,7 +15,7 @@ public abstract class TimeCombatEvent : CombatEvent
 public static partial class ListExt
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SortByTime<T>(this List<T> list)  where T : TimeCombatEvent
+    public static void SortByTime<T>(this List<T> list) where T : TimeCombatEvent
     {
         list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time));
     }

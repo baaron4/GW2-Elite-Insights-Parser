@@ -11,7 +11,7 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void MaybeAdd<T>(this List<T> list, in T? optional) where T : struct
     {
-        if(optional.HasValue)
+        if (optional.HasValue)
         {
             list.Add(optional.Value);
         }
@@ -19,7 +19,7 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void MaybeAdd<T>(this List<T> list, T? optional) where T : class
     {
-        if(!Equals(optional, default))
+        if (!Equals(optional, default))
         {
             list.Add(optional);
         }
@@ -30,7 +30,7 @@ public static partial class ListExt
     {
         //NOTE(Rennorb): [] internally calls to Array.Empty here, which is static on the type and doesn't need additional caching. 
         // Only one of those will be created per T, not one per call.
-        return dict.TryGetValue(key, out var value) ? value : [ ];
+        return dict.TryGetValue(key, out var value) ? value : [];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -38,7 +38,7 @@ public static partial class ListExt
     {
         //NOTE(Rennorb): [] internally calls to Array.Empty here, which is static on the type and doesn't need additional caching. 
         // Only one of those will be created per T, not one per call.
-        return dict.TryGetValue(key, out var value) ? (IEnumerable<V>)value : [ ];
+        return dict.TryGetValue(key, out var value) ? (IEnumerable<V>)value : [];
     }
 
 
@@ -75,28 +75,28 @@ public static partial class ListExt
     public static T? FirstOrNull<T>(this IEnumerable<T> enumerable, FoNPredicate<T> predicate) where T : struct
     {
         var e = enumerable.GetEnumerator();
-        while(e.MoveNext())
+        while (e.MoveNext())
         {
             var v = e.Current;
-            if(predicate(in v)) { return v; }
+            if (predicate(in v)) { return v; }
         }
         return null;
     }
     public static T? FirstOrNull<T>(this IReadOnlyList<T> list, FoNPredicate<T> predicate) where T : struct
     {
-        for(int i = 0; i < list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             var v = list[i];
-            if(predicate(in v)) { return v; }
+            if (predicate(in v)) { return v; }
         }
         return null;
     }
     public static T? LastOrNull<T>(this IReadOnlyList<T> list, FoNPredicate<T> predicate) where T : struct
     {
-        for(int i = list.Count - 1; i >= 0; i--)
+        for (int i = list.Count - 1; i >= 0; i--)
         {
             var v = list[i];
-            if(predicate(in v)) { return v; }
+            if (predicate(in v)) { return v; }
         }
         return null;
     }
@@ -123,7 +123,7 @@ public static partial class ListExt
             readonly object IEnumerator.Current => _maybeValue!;
 
             int moved = 0;
-            public bool MoveNext() => Current != null  && moved++ == 0;
+            public bool MoveNext() => Current != null && moved++ == 0;
 
             public readonly void Reset() { }
             public readonly void Dispose() { }
@@ -134,7 +134,7 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ReserveAdditional<T>(this List<T> list, int count)
     {
-        if(list.Capacity < list.Count + count)
+        if (list.Capacity < list.Count + count)
         {
             list.Capacity = (int)Math.Max(list.Capacity * 1.4, list.Count + count);
         }

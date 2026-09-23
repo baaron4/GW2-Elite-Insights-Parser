@@ -24,7 +24,7 @@ public abstract class PhaseData
     private readonly HashSet<PhaseData> CanBeSubPhaseOf = [];
 
     public bool BreakbarPhase { get; protected set; } = false;
-    
+
     public PhaseType Type { get; protected set; }
     public enum PhaseType
     {
@@ -113,7 +113,8 @@ public abstract class PhaseData
             {
                 targetData.Priority = priority;
             }
-        } else
+        }
+        else
         {
             _targets[target] = new PhaseTargetData
             {
@@ -172,7 +173,7 @@ public abstract class PhaseData
                 if (enterCombat != null)
                 {
                     startTime = enterCombat.Time;
-                } 
+                }
                 else
                 {
                     SpawnEvent? spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
@@ -203,7 +204,7 @@ public abstract class PhaseData
                 if (died != null)
                 {
                     endTime = died.Time;
-                } 
+                }
                 else
                 {
                     var despawned = log.CombatData.GetDespawnEvents(target.AgentItem).LastOrDefault();

@@ -63,9 +63,9 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        if (targetsByIDs.TryGetValue((int)TargetID.ConjuredAmalgamate, out var conjuredAmalgamates) && 
-            targetsByIDs.TryGetValue((int)TargetID.CALeftArm, out var leftArms) && 
-            targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) && 
+        if (targetsByIDs.TryGetValue((int)TargetID.ConjuredAmalgamate, out var conjuredAmalgamates) &&
+            targetsByIDs.TryGetValue((int)TargetID.CALeftArm, out var leftArms) &&
+            targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) &&
             log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CAArmSmash, out var armSmashes))
         {
             var chest = log.AgentData.GetStableSpeciesByID(_conjuredAmalgamate.ChestID).FirstOrDefault();
@@ -95,7 +95,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         if (prevHPUpdate < hpUpdate.HealthPercent)
                         {
                             end = hpUpdate.Time;
-                        } 
+                        }
                         else
                         {
                             prevHPUpdate = hpUpdate.HealthPercent;
@@ -226,7 +226,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                 phases.AddRange(Qadim.ComputePhases(log, nikare, Targets, qadimPhase, requirePhases));
             }
         }
-        
+
         return phases;
     }
 

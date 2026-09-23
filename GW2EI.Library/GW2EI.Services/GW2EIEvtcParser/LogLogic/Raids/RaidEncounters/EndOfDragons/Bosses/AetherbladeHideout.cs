@@ -7,15 +7,14 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -95,7 +94,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         return "Aetherblade Hideout";
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -466,7 +465,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 SingleActor? phantom = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
                 if (echo != null && phantom != null)
                 {
-                    if (echo.TryGetCurrentPosition(log, effect.Time, out var echoPosition) 
+                    if (echo.TryGetCurrentPosition(log, effect.Time, out var echoPosition)
                         && phantom.TryGetCurrentFacingDirection(log, effect.Time + 100, out var phantomFacing, effect.Duration)
                         && phantom.TryGetCurrentPosition(log, effect.Time, out var phantomPosition))
                     {
@@ -564,7 +563,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
                     successHandler.SetSuccess(true, buffApply.Time);
-                } 
+                }
                 else
                 {
                     successHandler.SetSuccess(false, echoOfScarlet.LastAware);
@@ -612,7 +611,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 phases.Add(maiTrinPhase);
 
                 // Candidate phases
-                var maiPhases = GetSubPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, false);
+                var maiPhases = GetSubPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, ServerDelayConstant, false);
                 List<PhaseData> candidateMainPhases = [];
                 List<PhaseData> candidateSplitPhases = [];
                 for (int i = 0; i < maiPhases.Count; i++)
@@ -641,8 +640,8 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                     {
                         candidateSplitPhase.Name = "Mai Trin Split Phase " + (splitPhaseCount++);
                         phases.Add(candidateSplitPhase);
-                    } 
-                    else if (scarletPhantoms.Any(x => x.FirstAware < candidateSplitPhase.Start) && scarletPhantoms.Any(x => x.LastAware > candidateSplitPhase.End)) 
+                    }
+                    else if (scarletPhantoms.Any(x => x.FirstAware < candidateSplitPhase.Start) && scarletPhantoms.Any(x => x.LastAware > candidateSplitPhase.End))
                     {
                         randomUntargetableStart = Math.Min(randomUntargetableStart, candidateSplitPhase.Start);
                         randomUntargetableEnd = Math.Max(randomUntargetableEnd, candidateSplitPhase.End);
@@ -650,14 +649,14 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 }
                 // Main phases
                 var mainPhaseCount = 1;
-                foreach(var candidateMainPhase in candidateMainPhases)
+                foreach (var candidateMainPhase in candidateMainPhases)
                 {
                     var hasScarletPhantomsAround = scarletPhantoms.Any(x => x.FirstAware < candidateMainPhase.Start) && scarletPhantoms.Any(x => x.LastAware > candidateMainPhase.End);
                     if (!hasScarletPhantomsAround)
                     {
                         candidateMainPhase.Name = "Mai Trin Phase " + (mainPhaseCount++);
                         phases.Add(candidateMainPhase);
-                    } 
+                    }
                     else
                     {
                         randomUntargetableStart = Math.Min(randomUntargetableStart, candidateMainPhase.Start);
@@ -694,7 +693,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                     var phaseID = ((i / 2) + 1);
                     subPhase.Name = "Echo Phase " + phaseID;
                     subPhase.AddTarget(echoOfScarlet, log);
-                    if (beamNPCs.Any(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware))) 
+                    if (beamNPCs.Any(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware)))
                     {
                         var prePuzzleStart = subPhase.Start;
                         var prePuzzleEnd = beamNPCs.Where(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware)).Min(x => x.FirstAware);
@@ -715,12 +714,12 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                                 postPuzzlePhase.AddParentPhase(subPhase);
                                 postPuzzlePhase.AddTarget(echoOfScarlet, log);
                                 phases.Add(postPuzzlePhase);
-                            } 
+                            }
                             else
                             {
                                 puzzleEnd = subPhase.End;
                             }
-                        } 
+                        }
                         else
                         {
                             puzzleEnd = subPhase.End;

@@ -4,14 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -61,7 +60,7 @@ internal class Gorseval : SpiritVale
         ];
     }
 
-    private static readonly List<TargetID> ChargedSoulIDs = 
+    private static readonly List<TargetID> ChargedSoulIDs =
     [
         TargetID.ChargedSoul,
     ];
@@ -381,7 +380,7 @@ internal class Gorseval : SpiritVale
                 if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer0)
                 {
                     rampage = new CircleDecoration(360, lifespan, Colors.DarkPurpleBlue, 0.25, new PositionConnector(pos));
-                } 
+                }
                 else
                 {
                     uint innerRadius, outerRadius;
@@ -389,12 +388,12 @@ internal class Gorseval : SpiritVale
                     {
                         innerRadius = 360;
                         outerRadius = 720;
-                    } 
+                    }
                     else if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer2)
                     {
                         innerRadius = 720;
                         outerRadius = 1080;
-                    } 
+                    }
                     else if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer3)
                     {
                         innerRadius = 1080;

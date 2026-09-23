@@ -60,15 +60,16 @@ public partial class InspectorViewModel : ObservableObject
     [ObservableProperty]
     private string? guidFilter;
     partial void OnGuidFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
-    // Events tab filters
     [ObservableProperty]
     private string? agentSearchText;
-
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
     [ObservableProperty]
     private AgentFilterItem? selectedAgentFilter;
-
+    [ObservableProperty]
+    private AgentFilterRole selectedAgentFilterRole = AgentFilterRole.Any;
+    public IReadOnlyList<AgentFilterRole> AgentFilterRoles { get; } = Enum.GetValues<AgentFilterRole>();
     partial void OnSelectedAgentFilterChanged(AgentFilterItem? oldValue, AgentFilterItem? newValue) => CombatEventsViewRefresh(oldValue, newValue);
+    partial void OnSelectedAgentFilterRoleChanged(AgentFilterRole oldValue, AgentFilterRole newValue) => CombatEventsViewRefresh(oldValue.ToString(), newValue.ToString());
 
     public BulkObservableCollection<EventPropertyModel> SelectedEventProperties { get; } = [];
     public IReadOnlyList<EventTypeFilterNodeModel> EventTypeFilterRoots { get; }
@@ -121,8 +122,7 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (SelectedAgentFilter?.Agent is not null && !
-            eventModel.AgentIds.Contains(SelectedAgentFilter.Agent))
+        if (!MatchesSelectedAgent(eventModel))
         {
             return false;
         }
@@ -214,7 +214,7 @@ public partial class InspectorViewModel : ObservableObject
     }
     public DataGridCollectionView SkillsDataView { get; }
     public int SkillCount => SkillsDataView.Count;
-    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = []; 
+    public BulkObservableCollection<EventPropertyModel> SelectedSkillProperties { get; } = [];
     private bool FilterSkillDataModels(object item)
     {
         if (item is not SkillDataModel skillData)
@@ -543,5 +543,36 @@ public partial class InspectorViewModel : ObservableObject
 
         UpdateVisibleEventTypes();
         UpdateVisibleCombatEvents();
+    }
+
+    private bool MatchesSelectedAgent(EventModel eventModel)
+    {
+        var selectedAgent = SelectedAgentFilter?.Agent;
+
+        if (selectedAgent is null)
+        {
+            return true;
+        }
+
+        var agent = selectedAgent.Value;
+
+        return SelectedAgentFilterRole switch
+        {
+            AgentFilterRole.Any =>
+                eventModel.SourceAgentIds.Contains(agent) ||
+                eventModel.DestinationAgentIds.Contains(agent),
+
+            AgentFilterRole.Src =>
+                eventModel.SourceAgentIds.Contains(agent),
+
+            AgentFilterRole.Dst =>
+                eventModel.DestinationAgentIds.Contains(agent),
+
+            AgentFilterRole.Both =>
+                eventModel.SourceAgentIds.Contains(agent) &&
+                eventModel.DestinationAgentIds.Contains(agent),
+
+            _ => true
+        };
     }
 }

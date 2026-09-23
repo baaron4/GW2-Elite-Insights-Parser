@@ -29,7 +29,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
             }
             _vindicatorDodges.SortByTime();
         }
-        
+
         var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
         {

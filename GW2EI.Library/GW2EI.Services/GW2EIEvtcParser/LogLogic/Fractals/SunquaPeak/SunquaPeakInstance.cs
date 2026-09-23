@@ -1,15 +1,16 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
-using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
-using GW2EIGW2API;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
+
 internal class SunquaPeakInstance : SunquaPeak
 {
     private readonly AiKeeperOfThePeak _aiKeeperOfThePeak;
@@ -138,7 +139,7 @@ internal class SunquaPeakInstance : SunquaPeak
             int offset = 0;
             foreach (var ai in nonEnglobedAis)
             {
-                offset = HandleSingleAiPhase(singlePhases, mainPhase, nonEnglobedAis, ai, log, phases, aiID, offset);       
+                offset = HandleSingleAiPhase(singlePhases, mainPhase, nonEnglobedAis, ai, log, phases, aiID, offset);
             }
         }
         NumericallyRenameEncounterPhases(singlePhases);

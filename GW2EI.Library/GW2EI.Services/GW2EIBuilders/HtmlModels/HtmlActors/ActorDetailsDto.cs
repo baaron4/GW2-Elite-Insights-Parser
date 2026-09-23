@@ -9,15 +9,15 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
 internal class ActorDetailsDto
 {
-    public List<DamageDistributionDto>?           DmgDistributions;
-    public List<List<DamageDistributionDto>>?     DmgDistributionsTargets;
-    public List<DamageDistributionDto>?           DmgDistributionsTaken;
-    public List<List<SkillCastDto>>?           Rotation;
-    public List<List<BuffChartDataDto>>?       BoonGraph;
+    public List<DamageDistributionDto>? DmgDistributions;
+    public List<List<DamageDistributionDto>>? DmgDistributionsTargets;
+    public List<DamageDistributionDto>? DmgDistributionsTaken;
+    public List<List<SkillCastDto>>? Rotation;
+    public List<List<BuffChartDataDto>>? BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
-    public List<FoodDto>?                      Food;
-    public List<ActorDetailsDto>?              Minions;
-    public List<DeathRecapDto>?                DeathRecap;
+    public List<FoodDto>? Food;
+    public List<ActorDetailsDto>? Minions;
+    public List<DeathRecapDto>? DeathRecap;
 
 
     public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
@@ -26,14 +26,14 @@ internal class ActorDetailsDto
         var minions = actor.GetMinions(log);
         var dto = new ActorDetailsDto
         {
-            DmgDistributions        = new(phases.Count),
+            DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
-            DmgDistributionsTaken   = new(phases.Count),
-            BoonGraph               = new(phases.Count),
-            Rotation                = new(phases.Count),
-            Food                    = FoodDto.BuildFoodData(log, actor, usedBuffs),
-            Minions                 = new(minions.Count),
-            DeathRecap              = DeathRecapDto.BuildDeathRecap(log, actor)
+            DmgDistributionsTaken = new(phases.Count),
+            BoonGraph = new(phases.Count),
+            Rotation = new(phases.Count),
+            Food = FoodDto.BuildFoodData(log, actor, usedBuffs),
+            Minions = new(minions.Count),
+            DeathRecap = DeathRecapDto.BuildDeathRecap(log, actor)
         };
         foreach (PhaseData phase in phases)
         {
@@ -61,7 +61,7 @@ internal class ActorDetailsDto
         var phases = log.LogData.GetPhases(log);
         var dto = new ActorDetailsDto
         {
-            DmgDistributions        = new(phases.Count),
+            DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
         };
@@ -91,8 +91,8 @@ internal class ActorDetailsDto
     }
 
     static readonly List<List<BuffChartDataDto>> EmptyBuffChartList = [];
-    static readonly List<SkillCastDto>           EmptyRotationList  = [];
-    static readonly List<BuffChartDataDto>       EmptyBoonGraphList = [];
+    static readonly List<SkillCastDto> EmptyRotationList = [];
+    static readonly List<BuffChartDataDto> EmptyBoonGraphList = [];
 
     public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
     {
@@ -100,12 +100,12 @@ internal class ActorDetailsDto
         var minions = target.GetMinions(log);
         var dto = new ActorDetailsDto
         {
-            DmgDistributions      = new(phases.Count),
+            DmgDistributions = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
-            BoonGraph             = new(phases.Count),
-            BoonGraphPerSource    = new(phases.Count),
-            Rotation              = new(phases.Count),
-            Minions               = new(minions.Count),
+            BoonGraph = new(phases.Count),
+            BoonGraphPerSource = new(phases.Count),
+            Rotation = new(phases.Count),
+            Minions = new(minions.Count),
         };
 
         for (int i = 0; i < phases.Count; i++)
@@ -120,7 +120,7 @@ internal class ActorDetailsDto
 
                 var friendlies = log.Friendlies;
                 var list = new List<List<BuffChartDataDto>>(friendlies.Count);
-                foreach(var friendly in friendlies)
+                foreach (var friendly in friendlies)
                 {
                     list.Add(BuffChartDataDto.BuildBuffGraphData(log, target, friendly, phase, usedBuffs));
                 }

@@ -13,7 +13,7 @@ namespace GW2EIJSON;
     ]
 )]
 [JsonSerializable(typeof(JsonLog))]
-public partial class JsonLogSerializerContext : JsonSerializerContext {  }
+public partial class JsonLogSerializerContext : JsonSerializerContext { }
 
 /// <summary>
 /// The root of the JSON.

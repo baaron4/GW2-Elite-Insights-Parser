@@ -53,8 +53,8 @@ partial class SingleActor
 
         if (_outgoingDamageModifierStatsPerTargets == null)
         {
-            _outgoingDamageModifierStatsPerTargets = new (AgentItem, log);
-            _outgoingDamageModifierEventsPerTargets = new (AgentItem, log);
+            _outgoingDamageModifierStatsPerTargets = new(AgentItem, log);
+            _outgoingDamageModifierEventsPerTargets = new(AgentItem, log);
         }
 
         if (_outgoingDamageModifierStatsPerTargets.TryGetValue(start, end, target, out var res))
@@ -124,7 +124,7 @@ partial class SingleActor
             }
         }
         return ComputeDamageModifierStats(target, log, start, end);
-        
+
     }
 
     private Dictionary<int, DamageModifierStat> ComputeIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
@@ -171,8 +171,8 @@ partial class SingleActor
 
         if (_incomingDamageModifierStatsPerTargets == null)
         {
-            _incomingDamageModifierStatsPerTargets = new (AgentItem, log);
-            _incomingDamageModifierEventsPerTargets = new (AgentItem, log);
+            _incomingDamageModifierStatsPerTargets = new(AgentItem, log);
+            _incomingDamageModifierEventsPerTargets = new(AgentItem, log);
         }
 
         if (_incomingDamageModifierStatsPerTargets.TryGetValue(start, end, target, out var res))
@@ -240,7 +240,7 @@ partial class SingleActor
                 _incomingDamageModifierEventsPerTargets.Set(start, end, log.FindActor(actor), events);
             }
         }
-        return ComputeIncomingDamageModifierStats(target, log, start, end);       
+        return ComputeIncomingDamageModifierStats(target, log, start, end);
     }
 
 

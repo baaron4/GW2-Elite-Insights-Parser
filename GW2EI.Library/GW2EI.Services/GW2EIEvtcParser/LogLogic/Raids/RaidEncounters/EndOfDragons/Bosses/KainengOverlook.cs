@@ -5,15 +5,14 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -103,7 +102,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -250,7 +249,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         if (buffApplies.Any())
         {
             successHandler.SetSuccess(true, buffApplies.First().Time);
-        } 
+        }
         else
         {
             successHandler.SetSuccess(false, ministerLi.LastAware);
@@ -278,7 +277,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
-        
+
         // Fixation
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
         var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
@@ -287,7 +286,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         // Shared Destruction (Green)
         int greenDuration = 6250;
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(p.AgentItem,
-            [ EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, EffectGUIDs.KainengOverlookSharedDestructionGreenFailure ],
+            [EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, EffectGUIDs.KainengOverlookSharedDestructionGreenFailure],
             out var greenEndEffectEvents))
         {
             foreach (EffectEvent effect in greenEndEffectEvents)
@@ -731,7 +730,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(koPhases, testReflexesEligibilityEvents, evt.Time, Ach_TestReflexes, p);
                 }
@@ -749,7 +748,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     var koPhase = koPhases.FirstOrDefault(x => x.InInterval(evt.Time));
                     if (koPhase != null && koPhase.Success)

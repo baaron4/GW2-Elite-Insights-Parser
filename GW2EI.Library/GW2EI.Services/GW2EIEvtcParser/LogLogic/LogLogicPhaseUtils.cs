@@ -89,10 +89,10 @@ internal static class LogLogicPhaseUtils
         return phases;
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
         long last = start;
-        var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
+        var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true, minThresholdBetweenGainAndLoss)
             .Where(x => x.Time >= 0)
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
@@ -127,14 +127,14 @@ internal static class LogLogicPhaseUtils
         return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
-        return GetSubPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end, filterSmallPhases);
+        return GetSubPhasesByInvul(log, [skillID], mainTarget, addSkipPhases, beginWithStart, start, end, minThresholdBetweenGainAndLoss, filterSmallPhases);
     }
 
-    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, bool filterSmallPhases = true)
+    internal static IReadOnlyList<SubPhasePhaseData> GetSubPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long minThresholdBetweenGainAndLoss = ParserHelper.ServerDelayConstant, bool filterSmallPhases = true)
     {
-        return GetSubPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, filterSmallPhases);
+        return GetSubPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.LogData.LogStart, log.LogData.LogEnd, minThresholdBetweenGainAndLoss, filterSmallPhases);
     }
 
 
@@ -326,7 +326,7 @@ internal static class LogLogicPhaseUtils
                 }
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
                 bool success = false;
-                long end = target.LastAware; 
+                long end = target.LastAware;
                 if (useDeath)
                 {
                     var death = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault(x => x.Time >= start);
@@ -335,7 +335,7 @@ internal static class LogLogicPhaseUtils
                         success = true;
                         end = death.Time;
                     }
-                } 
+                }
                 else if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
@@ -361,7 +361,7 @@ internal static class LogLogicPhaseUtils
         return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, chestID, phaseName, icon, encounterID, fightModeChecker, null);
     }
 
-    internal static List<EncounterPhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, string phaseName, LogLogic encounterLogic, LogModeChecker? fightModeChecker, LogStartStatusChecker? fightStartStatusChecker )
+    internal static List<EncounterPhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, string phaseName, LogLogic encounterLogic, LogModeChecker? fightModeChecker, LogStartStatusChecker? fightStartStatusChecker)
     {
         return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, encounterLogic.ChestID, phaseName, encounterLogic.Icon, encounterLogic.LogID, fightModeChecker, fightStartStatusChecker);
     }

@@ -1,6 +1,4 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class GadgetModelInfoEvent : StatusEvent
 {

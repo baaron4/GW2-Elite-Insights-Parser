@@ -333,7 +333,7 @@ public static class EventInspector
 
         if (value is IEnumerable enumerable && value is not string)
         {
-            foreach (var item in enumerable) 
+            foreach (var item in enumerable)
             {
                 if (item != null)
                 {
@@ -352,7 +352,7 @@ public static class EventInspector
             return string.Empty;
         }
 
-        if  (value.GetType().IsClass)
+        if (value.GetType().IsClass)
         {
             return value.GetType().Name;
         }

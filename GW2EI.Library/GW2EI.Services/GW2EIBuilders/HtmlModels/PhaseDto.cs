@@ -7,21 +7,14 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels;
 
-using GameplayStatDataItem = List<double>;
 /*(
-    double timeWasted, // 0
-    int wasted, // 1
-    double timeSaved, // 2
-    int saved, // 3
-    int swap, // 4
-    double distToStack, // 5
-    double distToCom, // 6
-    double castUptime, // 7
-    double castUptimeNoAA // 8
-);
-*/
+    int damage, // 0
+    int powerDamage,
+    int conditionDamage,
+    double breakbarDamage
+);*/
 
-using OffensiveStatDataItem = List<double>;
+using DefensiveStatDataItem = object[];
 /*(
     int directDamageCount, // 0
     int critableDirectDamageCount,
@@ -55,14 +48,21 @@ using OffensiveStatDataItem = List<double>;
 );*/
 
 using DPSStatDataItem = List<double>;
+using GameplayStatDataItem = List<double>;
 /*(
-    int damage, // 0
-    int powerDamage,
-    int conditionDamage,
-    double breakbarDamage
-);*/
+    double timeWasted, // 0
+    int wasted, // 1
+    double timeSaved, // 2
+    int saved, // 3
+    int swap, // 4
+    double distToStack, // 5
+    double distToCom, // 6
+    double castUptime, // 7
+    double castUptimeNoAA // 8
+);
+*/
 
-using DefensiveStatDataItem = object[];
+using OffensiveStatDataItem = List<double>;
 /*(
     int damageTaken, // 0
     int damageBarrier,
@@ -157,10 +157,10 @@ internal class PhaseDto
         IReadOnlyList<OutgoingDamageModifier> commonOutDamageModifiers, IReadOnlyList<OutgoingDamageModifier> itemOutDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict,
         IReadOnlyList<IncomingDamageModifier> commonIncDamageModifiers, IReadOnlyList<IncomingDamageModifier> itemIncDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict)
     {
-        Name          = phase.Name;
-        Duration      = phase.DurationInMS;
-        Start         = phase.Start / 1000.0;
-        End           = phase.End / 1000.0;
+        Name = phase.Name;
+        Duration = phase.DurationInMS;
+        Start = phase.Start / 1000.0;
+        End = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
         Type = (int)phase.Type;
         if (phase is PhaseDataWithMetaData phaseWithMetaData)
@@ -179,11 +179,11 @@ internal class PhaseDto
                     Mode = "Story Mode";
                     break;
                 case LogData.Mode.Normal:
-                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.Emboldened && x.AttachedPhase == phase) ? 
-                        "Emboldened Normal Mode" : 
-                        log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.QuickplayBoost || x.Buff.ID == SkillIDs.QuickplayMorale) ? 
-                            "Quickplay Normal Mode" 
-                            : 
+                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.Emboldened && x.AttachedPhase == phase) ?
+                        "Emboldened Normal Mode" :
+                        log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.Buff.ID == SkillIDs.QuickplayBoost || x.Buff.ID == SkillIDs.QuickplayMorale) ?
+                            "Quickplay Normal Mode"
+                            :
                             "Normal Mode";
                     break;
                 case LogData.Mode.CM:
@@ -211,7 +211,7 @@ internal class PhaseDto
                 default:
                     break;
             }
-        } 
+        }
         else
         {
             var subPhase = (SubPhasePhaseData)phase;
@@ -222,7 +222,7 @@ internal class PhaseDto
         }
 
         var allTargets = phase.Targets;
-        Targets          = new(allTargets.Count);
+        Targets = new(allTargets.Count);
         TargetPriorities = new(allTargets.Count);
         foreach (var pair in allTargets)
         {
@@ -238,7 +238,7 @@ internal class PhaseDto
         }
 
         // add phase markup
-        
+
         if (!BreakbarPhase)
         {
             MarkupLines = new(phases.Count);
@@ -277,7 +277,7 @@ internal class PhaseDto
 
                 MarkupAreas.Add(phaseArea);
             }
-        } 
+        }
         else
         {
             BreakbarRecovered = ((BreakbarPhaseData)phase).BreakbarRecovered;
@@ -294,25 +294,25 @@ internal class PhaseDto
             MarkupLines = null;
         }
 
-        BuffsStatContainer       = new BuffsContainerDto(phase, log, persBuffDict);
+        BuffsStatContainer = new BuffsContainerDto(phase, log, persBuffDict);
         BuffVolumesStatContainer = new BuffVolumesContainerDto(phase, log, persBuffDict);
-        
-        DpsStats              = BuildDPSData(log, phase);
-        DpsStatsTargets       = BuildDPSTargetsData(log, phase);
+
+        DpsStats = BuildDPSData(log, phase);
+        DpsStatsTargets = BuildDPSTargetsData(log, phase);
         OffensiveStatsTargets = BuildOffensiveStatsTargetsData(log, phase);
-        OffensiveStats        = BuildOffensiveStatsData(log, phase);
-        GameplayStats         = BuildGameplayStatsData(log, phase);
-        DefStats              = BuildDefenseData(log, phase);
-        SupportStats          = BuildSupportData(log, phase);
-        
-        DmgModifiersCommon    = DamageModData.BuildOutgoingDmgModifiersData(log, phase, commonOutDamageModifiers);
-        DmgModifiersItem      = DamageModData.BuildOutgoingDmgModifiersData(log, phase, itemOutDamageModifiers);
-        DmgModifiersPers      = DamageModData.BuildPersonalOutgoingDmgModifiersData(log, phase, persOutDamageModDict);
+        OffensiveStats = BuildOffensiveStatsData(log, phase);
+        GameplayStats = BuildGameplayStatsData(log, phase);
+        DefStats = BuildDefenseData(log, phase);
+        SupportStats = BuildSupportData(log, phase);
+
+        DmgModifiersCommon = DamageModData.BuildOutgoingDmgModifiersData(log, phase, commonOutDamageModifiers);
+        DmgModifiersItem = DamageModData.BuildOutgoingDmgModifiersData(log, phase, itemOutDamageModifiers);
+        DmgModifiersPers = DamageModData.BuildPersonalOutgoingDmgModifiersData(log, phase, persOutDamageModDict);
         DmgIncModifiersCommon = DamageModData.BuildIncomingDmgModifiersData(log, phase, commonIncDamageModifiers);
-        DmgIncModifiersItem   = DamageModData.BuildIncomingDmgModifiersData(log, phase, itemIncDamageModifiers);
-        DmgIncModifiersPers   = DamageModData.BuildPersonalIncomingDmgModifiersData(log, phase, persIncDamageModDict);
-        MechanicStats         = MechanicDto.BuildPlayerMechanicData(log, phase);
-        EnemyMechanicStats    = MechanicDto.BuildEnemyMechanicData(log, phase);
+        DmgIncModifiersItem = DamageModData.BuildIncomingDmgModifiersData(log, phase, itemIncDamageModifiers);
+        DmgIncModifiersPers = DamageModData.BuildPersonalIncomingDmgModifiersData(log, phase, persIncDamageModDict);
+        MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase);
+        EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase);
     }
 
     // helper methods
@@ -414,7 +414,7 @@ internal class PhaseDto
             deadTooltip = (deathDuration.TotalSeconds + " seconds dead, " + Math.Round(100.0 - deathDuration.TotalMilliseconds / phase.DurationInMS * 100, 1) + "% Alive");
         }
         return [
-                defenses.DamageTaken, 
+                defenses.DamageTaken,
                 defenses.DamageBarrier,
                 defenses.MissedCount,
                 defenses.InterruptedCount,
@@ -430,7 +430,7 @@ internal class PhaseDto
                 downTooltip,
                 deadCount,
                 deadTooltip,
-                defenses.DownedDamageTaken, 
+                defenses.DownedDamageTaken,
                 defenses.ReceivedCrowdControl,
                 defenses.ReceivedCrowdControlDuration,
                 defenses.StunBreakCount,

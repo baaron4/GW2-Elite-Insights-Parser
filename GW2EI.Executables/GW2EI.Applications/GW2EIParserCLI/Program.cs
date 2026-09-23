@@ -88,7 +88,7 @@ internal static class Program
                 {
                     var duration = long.Parse(args[argPos + 2]);
                     logFiles.AddRange(ProgramHelper.FetchSupportedFormatsFrom(addPath, duration, DateTime.Now));
-                } 
+                }
                 catch (Exception)
                 {
                     PrintHelp();

@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using GW2EIDPSReport.DPSReportJsons;
 using System.Text.Json;
+using GW2EIDPSReport.DPSReportJsons;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIDPSReport;
@@ -283,7 +283,7 @@ public static class DPSReportController
                 catch (AggregateException agg)
                 {
                     traceHandler(requestName + " tentative failed");
-                    traceHandler("Main reason: " + agg.Message);             
+                    traceHandler("Main reason: " + agg.Message);
                     foreach (Exception e in agg.InnerExceptions)
                     {
                         traceHandler("Sub reason: " + e.Message);

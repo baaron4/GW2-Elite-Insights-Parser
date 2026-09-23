@@ -29,39 +29,39 @@ internal static class EXTJsonPlayerHealingStatsBuilder
 
         if (settings.RawFormatTimelineArrays)
         {
-            alliedHealing1S                  = new(log.Friendlies.Count);
-            alliedHealingPowerHealing1S      = new(log.Friendlies.Count);
+            alliedHealing1S = new(log.Friendlies.Count);
+            alliedHealingPowerHealing1S = new(log.Friendlies.Count);
             alliedConversionHealingHealing1S = new(log.Friendlies.Count);
-            alliedHybridHealing1S            = new(log.Friendlies.Count);
-            healing1S                  = new(phases.Count);
-            healingPowerHealing1S      = new(phases.Count);
+            alliedHybridHealing1S = new(log.Friendlies.Count);
+            healing1S = new(phases.Count);
+            healingPowerHealing1S = new(phases.Count);
             conversionHealingHealing1S = new(phases.Count);
-            hybridHealing1S            = new(phases.Count);
+            hybridHealing1S = new(phases.Count);
         }
         else
         {
-            alliedHealing1S                  = null;
-            alliedHealingPowerHealing1S      = null;
+            alliedHealing1S = null;
+            alliedHealingPowerHealing1S = null;
             alliedConversionHealingHealing1S = null;
-            alliedHybridHealing1S            = null;
-            healing1S                  = null;
-            healingPowerHealing1S      = null;
+            alliedHybridHealing1S = null;
+            healing1S = null;
+            healingPowerHealing1S = null;
             conversionHealingHealing1S = null;
-            hybridHealing1S            = null;
+            hybridHealing1S = null;
         }
 
-        var healingReceived1S                  = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
-        var healingPowerHealingReceived1S      = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
+        var healingReceived1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
+        var healingPowerHealingReceived1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
         var conversionHealingHealingReceived1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
-        var hybridHealingReceived1S            = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
-        var alliedHealingDist                  = new List<List<List<EXTJsonHealingDist>>>(log.Friendlies.Count);
-        var totalHealingDist                   = new List<List<EXTJsonHealingDist>>(phases.Count);
-        var totalIncomingHealingDist           = new List<List<EXTJsonHealingDist>>(phases.Count);
-        
+        var hybridHealingReceived1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
+        var alliedHealingDist = new List<List<List<EXTJsonHealingDist>>>(log.Friendlies.Count);
+        var totalHealingDist = new List<List<EXTJsonHealingDist>>(phases.Count);
+        var totalIncomingHealingDist = new List<List<EXTJsonHealingDist>>(phases.Count);
+
         foreach (SingleActor friendly in log.Friendlies)
         {
             var outgoingHealingAlly = new List<EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics>(phases.Count);
-            
+
             var allyHealing1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
             var allyHealingPowerHealing1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
             var allyConversionHealingHealing1S = new List<IReadOnlyList<int>>(phasesCountIfRawFormatRequested);
@@ -139,6 +139,6 @@ internal static class EXTJsonPlayerHealingStatsBuilder
             AlliedHealingDist = alliedHealingDist,
             TotalHealingDist = totalHealingDist,
             TotalIncomingHealingDist = totalIncomingHealingDist
-        };;
+        }; ;
     }
 }

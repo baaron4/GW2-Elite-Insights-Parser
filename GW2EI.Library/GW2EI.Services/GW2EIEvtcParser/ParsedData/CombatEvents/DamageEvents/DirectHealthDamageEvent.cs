@@ -15,7 +15,7 @@ public class DirectHealthDamageEvent : HealthDamageEvent
         IsEvaded = result == DamageResult.DirectEvade;
         HasGlanced = result == DamageResult.DirectGlance;
         ShieldDamage = evtcItem.IsShields > 0 ? (int)evtcItem.OverstackValue : 0;
-        HasHit = result == DamageResult.DirectNormal || HasGlanced || HasCrit; 
+        HasHit = result == DamageResult.DirectNormal || HasGlanced || HasCrit;
     }
 
     internal override void MakeIntoAbsorbed()

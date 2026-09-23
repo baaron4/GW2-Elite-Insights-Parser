@@ -10,7 +10,7 @@ internal class BuffSimulationItemBaseEnglobingWithSeedEnglobing : BuffSimulation
     protected internal BuffSimulationItemBaseEnglobingWithSeedEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
         _seedSrc = buffStackItem.SeedSrc;
-        EnglobedSeedSrcs = _seedSrc.EnglobedAgentItems.Where(subSrc => !( Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
+        EnglobedSeedSrcs = _seedSrc.EnglobedAgentItems.Where(subSrc => !(Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
     }
     internal override long GetKey()
     {

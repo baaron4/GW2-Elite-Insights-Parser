@@ -2,6 +2,7 @@
 using NUnit.Framework;
 
 namespace GW2EIParser.tst;
+
 [TestFixture]
 sealed class Regression
 {
@@ -9,7 +10,7 @@ sealed class Regression
     public static void BuffUptime()
     {
         var file = new FileInfo("TestInput/ShouldParse/Regression/20241014-141601.zevtc");
-        if(!file.Exists)
+        if (!file.Exists)
         {
             Assert.Inconclusive($"Required file ({file}) does not exist.");
             return;

@@ -5,16 +5,15 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -259,7 +258,7 @@ internal class Sabir : TheKeyOfAhdashim
                         {
                             mainPlateformOpacities.Add(new(1, position.Time - 8000));
 
-                        } 
+                        }
                         else if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) >= 200 && mainPlateformOpacities.Last().X != 0)
                         {
                             mainPlateformOpacities.Add(new(0, Math.Min(position.Time + 20000, sabir.LastAware)));
@@ -291,7 +290,7 @@ internal class Sabir : TheKeyOfAhdashim
     {
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
-            base.ComputeEnvironmentCombatReplayDecorations (log, environmentDecorations);
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
     }
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -396,7 +395,7 @@ internal class Sabir : TheKeyOfAhdashim
             var damageData = log.CombatData.GetDamageData(Electrospark);
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(sabirPhases, chargedWindsEligibilityEvents, evt.Time, Ach_ChargedWinds, p);
                 }

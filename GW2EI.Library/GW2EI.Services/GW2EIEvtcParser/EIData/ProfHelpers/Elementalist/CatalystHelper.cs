@@ -129,7 +129,7 @@ internal static class CatalystHelper
                 if (sphereEffect.IsScaled)
                 {
                     replay.Decorations.Add(new CircleDecoration((uint)(240 * sphereEffect.Scale), lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skillMode));
-                } 
+                }
                 else
                 {
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skillMode));

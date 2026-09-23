@@ -4,8 +4,8 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.MapIDs;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
@@ -47,7 +47,8 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
                 if (maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 1e6))
                 {
                     _targetIDs.Add(targetID);
-                } else
+                }
+                else
                 {
                     _trashIDs.Add(targetID);
                 }

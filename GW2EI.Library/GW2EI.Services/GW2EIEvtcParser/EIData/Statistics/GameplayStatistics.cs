@@ -51,7 +51,7 @@ public class GameplayStatistics
                         if (curReferencePoint.Time < curPosition.Value.Time)
                         {
                             continue;
-                        } 
+                        }
                         else if (curReferencePoint.Time == curPosition.Value.Time)
                         {
                             distances.Add((curPosition.Value.XYZ - curReferencePoint.XYZ).XY().Length());
@@ -101,7 +101,7 @@ public class GameplayStatistics
         foreach (CastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
         {
             long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
-            if (cl.Skill.IsAnimatedDodge(log.SkillData) || 
+            if (cl.Skill.IsAnimatedDodge(log.SkillData) ||
                 cl.SkillID == SkillIDs.Jumping ||
                 cl.SkillID == SkillIDs.FlyTo ||
                 cl.SkillID == SkillIDs.Gliding)

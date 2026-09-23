@@ -269,7 +269,7 @@ partial class CombatData
         {
             if (agent.IsEnglobedAgent)
             {
-                markerEvents = markers.Where(marker => marker.Src.Is(agent) && agent.InAwareTimes(marker.Time)).ToList();
+                markerEvents = markers.Where(marker => marker.Src.IsAtTime(agent, marker.Time)).ToList();
             }
             else
             {
@@ -331,7 +331,7 @@ partial class CombatData
         {
             if (agent.IsEnglobedAgent)
             {
-                transformationEvents = transformations.Where(transformation => transformation.Src.Is(agent) && agent.InAwareTimes(transformation.Time)).ToList();
+                transformationEvents = transformations.Where(transformation => transformation.Src.IsAtTime(agent, transformation.Time)).ToList();
             }
             else
             {
@@ -731,7 +731,7 @@ partial class CombatData
         List<EmoteEvent> result;
         if (agent.IsEnglobedAgent)
         {
-            result = emotes.Where(emote => emote.Caster.Is(agent) && agent.InAwareTimes(emote.Time)).ToList();
+            result = emotes.Where(emote => emote.Caster.IsAtTime(agent, emote.Time)).ToList();
         }
         else
         {
@@ -745,8 +745,7 @@ partial class CombatData
         List<EmoteEvent> result;
         if (agent.IsEnglobedAgent)
         {
-            var parentAgent = agent.EnglobingAgentItem;
-            result = emotes.Where(emote => parentAgent.IsMasterOf(emote.Caster) && agent.InAwareTimes(emote.Time)).ToList();
+            result = emotes.Where(emote => agent.IsMasterOfAtTime(emote.Caster, emote.Time)).ToList();
         }
         else
         {
@@ -896,7 +895,7 @@ partial class CombatData
         List<EffectEvent> result;
         if (agent.IsEnglobedAgent)
         {
-            result = effects.Where(effect => effect.Src.Is(agent) && agent.InAwareTimes(effect.Time)).ToList();
+            result = effects.Where(effect => effect.Src.IsAtTime(agent, effect.Time)).ToList();
         }
         else
         {
@@ -910,8 +909,7 @@ partial class CombatData
         List<EffectEvent> result;
         if (agent.IsEnglobedAgent)
         {
-            var parentAgent = agent.EnglobingAgentItem;
-            result = effects.Where(effect => parentAgent.IsMasterOf(effect.Src) && agent.InAwareTimes(effect.Time)).ToList();
+            result = effects.Where(effect => agent.IsMasterOfAtTime(effect.Src, effect.Time)).ToList();
         }
         else
         {
@@ -925,7 +923,7 @@ partial class CombatData
         List<EffectEvent> result;
         if (agent.IsEnglobedAgent)
         {
-            result = effects.Where(effect => effect.Dst.Is(agent) && agent.InAwareTimes(effect.Time)).ToList();
+            result = effects.Where(effect => effect.Dst.IsAtTime(agent, effect.Time)).ToList();
         }
         else
         {

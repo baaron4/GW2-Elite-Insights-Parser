@@ -78,7 +78,7 @@ public static unsafe class StableSort<T>
             pts = 0; // swap
         head_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         swap[pts] = cmp(array[ptl], array[ptr]) <= 0 ? array[ptl] : array[ptr];
-        
+
         ptl = 1; ptr = 3; pts = 3;
         tail_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         swap[pts] = cmp(array[ptl], array[ptr]) > 0 ? array[ptl] : array[ptr];
@@ -93,14 +93,14 @@ public static unsafe class StableSort<T>
         head_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         head_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         swap[pts] = cmp(array[ptl], array[ptr]) <= 0 ? array[ptl] : array[ptr];
-        
+
         ptl = 3; ptr = 7; pts = 7;
         tail_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         tail_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         tail_branchless_merge(swap, ref pts, array, ref ptl, array, ref ptr, cmp);
         swap[pts] = cmp(array[ptl], array[ptr]) > 0 ? array[ptl] : array[ptr];
     }
-       
+
 
     // the next seven functions are used for sorting 0 to 31 elements
 
@@ -141,35 +141,35 @@ public static unsafe class StableSort<T>
 
     static void parity_swap_six(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
-      int pta = 0, ptl, ptr;
-      int x;
+        int pta = 0, ptl, ptr;
+        int x;
 
-      branchless_swap(array, pta, cmp); pta++;
-      branchless_swap(array, pta, cmp); pta += 3;
-      branchless_swap(array, pta, cmp); pta--;
-      branchless_swap(array, pta, cmp); pta = 0;
+        branchless_swap(array, pta, cmp); pta++;
+        branchless_swap(array, pta, cmp); pta += 3;
+        branchless_swap(array, pta, cmp); pta--;
+        branchless_swap(array, pta, cmp); pta = 0;
 
-      if (cmp(array[pta + 2], array[pta + 3]) <= 0)
-      {
-        branchless_swap(array, pta, cmp); pta += 4;
-        branchless_swap(array, pta, cmp);
-        return;
-      }
+        if (cmp(array[pta + 2], array[pta + 3]) <= 0)
+        {
+            branchless_swap(array, pta, cmp); pta += 4;
+            branchless_swap(array, pta, cmp);
+            return;
+        }
 
-      x = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; swap[0] = array[pta + x]; swap[1] = array[pta + (x == 0 ? 1 : 0)]; swap[2] = array[pta + 2]; pta += 4;
-      x = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; swap[4] = array[pta + x]; swap[5] = array[pta + (x == 0 ? 1 : 0)]; swap[3] = array[pta - 1];
+        x = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; swap[0] = array[pta + x]; swap[1] = array[pta + (x == 0 ? 1 : 0)]; swap[2] = array[pta + 2]; pta += 4;
+        x = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; swap[4] = array[pta + x]; swap[5] = array[pta + (x == 0 ? 1 : 0)]; swap[3] = array[pta - 1];
 
-      pta = 0; ptl = 0; ptr = 3;
+        pta = 0; ptl = 0; ptr = 3;
 
-      head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
-      head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
-      head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
+        head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
+        head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
+        head_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
 
-      pta = 5; ptl = 2; ptr = 5;
+        pta = 5; ptl = 2; ptr = 5;
 
-      tail_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
-      tail_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
-      array[pta] = cmp(swap[ptl], swap[ptr]) > 0 ? swap[ptl] : swap[ptr];
+        tail_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
+        tail_branchless_merge(array, ref pta, swap, ref ptl, swap, ref ptr, cmp);
+        array[pta] = cmp(swap[ptl], swap[ptr]) > 0 ? swap[ptl] : swap[ptr];
     }
 
     static void parity_swap_seven(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
@@ -208,11 +208,11 @@ public static unsafe class StableSort<T>
 
     static void tiny_sort(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
-      switch (array.Length)
-      {
-        case 0:
-        case 1:
-          return;
+        switch (array.Length)
+        {
+            case 0:
+            case 1:
+                return;
             case 2:
                 branchless_swap(array, 0, cmp);
                 return;
@@ -221,19 +221,19 @@ public static unsafe class StableSort<T>
                 branchless_swap(array, 1, cmp);
                 branchless_swap(array, 0, cmp);
                 return;
-        case 4:
-          parity_swap_four(array, cmp);
-          return;
-        case 5:
-          parity_swap_five(array, cmp);
-          return;
-        case 6:
-          parity_swap_six(array, swap, cmp);
+            case 4:
+                parity_swap_four(array, cmp);
                 return;
-        case 7:
-          parity_swap_seven(array, swap, cmp);
-          return;
-      }
+            case 5:
+                parity_swap_five(array, cmp);
+                return;
+            case 6:
+                parity_swap_six(array, swap, cmp);
+                return;
+            case 7:
+                parity_swap_seven(array, swap, cmp);
+                return;
+        }
     }
 
     // left must be equal or one smaller than right
@@ -344,7 +344,7 @@ public static unsafe class StableSort<T>
 
         while (count-- != 0)
         {
-            v1 = cmp(array[pta    ], array[pta + 1]) > 0 ? 1 : 0;
+            v1 = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0;
             v2 = cmp(array[pta + 2], array[pta + 3]) > 0 ? 1 : 0;
             v3 = cmp(array[pta + 4], array[pta + 5]) > 0 ? 1 : 0;
             v4 = cmp(array[pta + 6], array[pta + 7]) > 0 ? 1 : 0;
@@ -368,7 +368,7 @@ public static unsafe class StableSort<T>
                     goto default;
 
                 default:
-                //not_ordered:
+                    //not_ordered:
                     tmp = array[pta + (v1 == 0 ? 1 : 0)]; array[pta] = array[pta + v1]; array[pta + 1] = tmp; pta += 2;
                     tmp = array[pta + (v2 == 0 ? 1 : 0)]; array[pta] = array[pta + v2]; array[pta + 1] = tmp; pta += 2;
                     tmp = array[pta + (v3 == 0 ? 1 : 0)]; array[pta] = array[pta + v3]; array[pta + 1] = tmp; pta += 2;
@@ -381,13 +381,13 @@ public static unsafe class StableSort<T>
 
             continue;
 
-            ordered:
+ordered:
 
             pta += 8;
 
             if (count-- != 0)
             {
-                v1 = cmp(array[pta    ], array[pta + 1]) > 0 ? 1 : 0;
+                v1 = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0;
                 v2 = cmp(array[pta + 2], array[pta + 3]) > 0 ? 1 : 0;
                 v3 = cmp(array[pta + 4], array[pta + 5]) > 0 ? 1 : 0;
                 v4 = cmp(array[pta + 6], array[pta + 7]) > 0 ? 1 : 0;
@@ -424,13 +424,13 @@ public static unsafe class StableSort<T>
             }
             break;
 
-            reversed:
+reversed:
 
             pta += 8;
 
             if (count-- != 0)
             {
-                v1 = cmp(array[pta    ], array[pta + 1]) <= 0 ? 1 : 0;
+                v1 = cmp(array[pta], array[pta + 1]) <= 0 ? 1 : 0;
                 v2 = cmp(array[pta + 2], array[pta + 3]) <= 0 ? 1 : 0;
                 v3 = cmp(array[pta + 4], array[pta + 5]) <= 0 ? 1 : 0;
                 v4 = cmp(array[pta + 6], array[pta + 7]) <= 0 ? 1 : 0;
@@ -451,7 +451,7 @@ public static unsafe class StableSort<T>
                 {
                     goto ordered;
                 }
-                if (v1 + v2 + v3 + v4 == 0 && cmp(array[pta + 1], array[pta + 2])  > 0 && cmp(array[pta + 3], array[pta + 4])  > 0 && cmp(array[pta + 5], array[pta + 6])  > 0)
+                if (v1 + v2 + v3 + v4 == 0 && cmp(array[pta + 1], array[pta + 2]) > 0 && cmp(array[pta + 3], array[pta + 4]) > 0 && cmp(array[pta + 5], array[pta + 6]) > 0)
                 {
                     pts = pta;
                     goto reversed;
@@ -472,32 +472,32 @@ public static unsafe class StableSort<T>
 
             switch (nmemb % 8)
             {
-              case 7: if (cmp(array[pta + 5], array[pta + 6]) <= 0) { break; }  goto case 6;
-              case 6: if (cmp(array[pta + 4], array[pta + 5]) <= 0) { break; }  goto case 5;
-              case 5: if (cmp(array[pta + 3], array[pta + 4]) <= 0) { break; }  goto case 4;
-              case 4: if (cmp(array[pta + 2], array[pta + 3]) <= 0) { break; }  goto case 3;
-              case 3: if (cmp(array[pta + 1], array[pta + 2]) <= 0) { break; }  goto case 2;
-              case 2: if (cmp(array[pta    ], array[pta + 1]) <= 0) { break; }  goto case 1;
-              case 1: if (cmp(array[pta - 1], array[pta    ]) <= 0) { break; }  goto case 0;
-              case 0:
-                quad_reversal(array, pts, pta + nmemb % 8 - 1);
+                case 7: if (cmp(array[pta + 5], array[pta + 6]) <= 0) { break; } goto case 6;
+                case 6: if (cmp(array[pta + 4], array[pta + 5]) <= 0) { break; } goto case 5;
+                case 5: if (cmp(array[pta + 3], array[pta + 4]) <= 0) { break; } goto case 4;
+                case 4: if (cmp(array[pta + 2], array[pta + 3]) <= 0) { break; } goto case 3;
+                case 3: if (cmp(array[pta + 1], array[pta + 2]) <= 0) { break; } goto case 2;
+                case 2: if (cmp(array[pta], array[pta + 1]) <= 0) { break; } goto case 1;
+                case 1: if (cmp(array[pta - 1], array[pta]) <= 0) { break; } goto case 0;
+                case 0:
+                    quad_reversal(array, pts, pta + nmemb % 8 - 1);
 
-                if (pts == 0)
-                {
-                    return 1;
-                }
-                goto reverse_end;
+                    if (pts == 0)
+                    {
+                        return 1;
+                    }
+                    goto reverse_end;
             }
             quad_reversal(array, pts, pta - 1);
             break;
         }
         tail_swap(array.Slice(pta, nmemb % 8), swap, cmp);
 
-        reverse_end:
+reverse_end:
 
         pta = 0;
 
-        for (count = nmemb / 32 ; count-- != 0; pta += 32)
+        for (count = nmemb / 32; count-- != 0; pta += 32)
         {
             if (cmp(array[pta + 7], array[pta + 8]) <= 0 && cmp(array[pta + 15], array[pta + 16]) <= 0 && cmp(array[pta + 23], array[pta + 24]) <= 0)
             {
@@ -542,7 +542,7 @@ public static unsafe class StableSort<T>
         {
             if (tpl - ptl > 8)
             {
-                ptl8_ptr: if (cmp(from[ptl + 7], from[ptr]) <= 0)
+ptl8_ptr: if (cmp(from[ptl + 7], from[ptr]) <= 0)
                 {
                     from.Slice(ptl, 8).CopyTo(dest[ptd..]);
                     ptd += 8; ptl += 8;
@@ -551,7 +551,7 @@ public static unsafe class StableSort<T>
                     continue;
                 }
 
-                tpl8_tpr: if (cmp(from[tpl - 7], from[tpr]) > 0)
+tpl8_tpr: if (cmp(from[tpl - 7], from[tpr]) > 0)
                 {
                     tpd -= 7; tpl -= 7;
                     from.Slice(tpl--, 8).CopyTo(dest[(tpd--)..]);
@@ -563,7 +563,7 @@ public static unsafe class StableSort<T>
 
             if (tpr - ptr > 8)
             {
-                ptl_ptr8: if (cmp(from[ptl], from[ptr + 7]) > 0)
+ptl_ptr8: if (cmp(from[ptl], from[ptr + 7]) > 0)
                 {
                     from.Slice(ptr, 8).CopyTo(dest[ptd..]);
                     ptd += 8; ptr += 8;
@@ -572,7 +572,7 @@ public static unsafe class StableSort<T>
                     continue;
                 }
 
-                tpl_tpr8: if (cmp(from[tpl], from[tpr - 7]) <= 0)
+tpl_tpr8: if (cmp(from[tpl], from[tpr - 7]) <= 0)
                 {
                     tpd -= 7; tpr -= 7;
                     from.Slice(tpr--, 8).CopyTo(dest[(tpd--)..]);
@@ -621,7 +621,7 @@ public static unsafe class StableSort<T>
         pt2 = pt1 + block;
         pt3 = pt2 + block;
 
-        switch ((cmp(array[pt1 -1], array[pt1]) <= 0 ? 1 : 0) | (cmp(array[pt3 - 1], array[pt3]) <= 0 ? 2 : 0))
+        switch ((cmp(array[pt1 - 1], array[pt1]) <= 0 ? 1 : 0) | (cmp(array[pt3 - 1], array[pt3]) <= 0 ? 2 : 0))
         {
             case 0:
                 cross_merge(swap, 0, array, 0, block, block, cmp);
@@ -694,7 +694,7 @@ public static unsafe class StableSort<T>
         tpl = block - 1;
         while (ptl < tpl - 1 && ptr < tpr - 1)
         {
-            ptr2: if (cmp(swap[ptl], array[ptr + 1]) > 0)
+ptr2: if (cmp(swap[ptl], array[ptr + 1]) > 0)
             {
                 array[pta++] = array[ptr++]; array[pta++] = array[ptr++];
 
@@ -709,7 +709,7 @@ public static unsafe class StableSort<T>
             }
             goto cross_swap;
 
-            ptl2: if (cmp(swap[ptl + 1], array[ptr]) <= 0)
+ptl2: if (cmp(swap[ptl + 1], array[ptr]) <= 0)
             {
                 array[pta++] = swap[ptl++]; array[pta++] = swap[ptl++];
 
@@ -725,7 +725,7 @@ public static unsafe class StableSort<T>
                 break;
             }
 
-            cross_swap:
+cross_swap:
 
             x = cmp(swap[ptl], array[ptr]) <= 0 ? 1 : 0; array[pta + x] = array[ptr++]; array[pta + (x == 0 ? 1 : 0)] = swap[ptl++]; pta += 2;
             head_branchless_merge(array, ref pta, swap, ref ptl, array, ref ptr, cmp);
@@ -776,18 +776,20 @@ public static unsafe class StableSort<T>
         tpr = right - 1; // swap
         while (tpl > 16 && tpr > 16)
         {
-            tpl_tpr16: if (cmp(array[tpl], swap[tpr - 15]) <= 0)
+tpl_tpr16: if (cmp(array[tpl], swap[tpr - 15]) <= 0)
             {
                 loop = 16; do { array[tpa--] = swap[tpr--]; } while (--loop != 0);
 
-                if (tpr > 16) { goto tpl_tpr16; } break;
+                if (tpr > 16) { goto tpl_tpr16; }
+                break;
             }
 
-            tpl16_tpr: if (cmp(array[tpl - 15], swap[tpr]) > 0)
+tpl16_tpr: if (cmp(array[tpl - 15], swap[tpr]) > 0)
             {
                 loop = 16; do { array[tpa--] = array[tpl--]; } while (--loop != 0);
-      
-                if (tpl > 16) { goto tpl16_tpr; } break;
+
+                if (tpl > 16) { goto tpl16_tpr; }
+                break;
             }
 
             loop = 8;
@@ -812,10 +814,10 @@ public static unsafe class StableSort<T>
 
         while (tpr > 1 && tpl > 1)
         {
-            tpr2: if (cmp(array[tpl], swap[tpr - 1]) <= 0)
+tpr2: if (cmp(array[tpl], swap[tpr - 1]) <= 0)
             {
                 array[tpa--] = swap[tpr--]; array[tpa--] = swap[tpr--];
-      
+
                 if (tpr > 1) { goto tpr2; }
                 break;
             }
@@ -829,7 +831,7 @@ public static unsafe class StableSort<T>
             }
             goto cross_swap;
 
-            tpl2: if (cmp(array[tpl - 1], swap[tpr]) > 0)
+tpl2: if (cmp(array[tpl - 1], swap[tpr]) > 0)
             {
                 array[tpa--] = array[tpl--]; array[tpa--] = array[tpl--];
 
@@ -840,12 +842,12 @@ public static unsafe class StableSort<T>
             if (cmp(array[tpl], swap[tpr - 1]) <= 0)
             {
                 array[tpa--] = swap[tpr--]; array[tpa--] = swap[tpr--];
-      
+
                 if (tpr > 1) { goto tpr2; }
                 break;
             }
-        
-            cross_swap:
+
+cross_swap:
             x = cmp(array[tpl], swap[tpr]) <= 0 ? 1 : 0; tpa--; array[tpa + x] = swap[tpr--]; array[tpa + (x == 0 ? 1 : 0)] = array[tpl--]; tpa--;
             tail_branchless_merge(array, ref tpa, array, ref tpl, swap, ref tpr, cmp);
         }
@@ -863,23 +865,23 @@ public static unsafe class StableSort<T>
 
     static void tail_merge(Span<T> array, Span<T> swap, int nmemb, int block, Func<T, T, int> cmp)
     {
-      int pta, pte; // array
-      pte = nmemb;
+        int pta, pte; // array
+        pte = nmemb;
 
-      while (block < nmemb && block <= swap.Length)
-      {
-        for (pta = 0; pta + block < pte ; pta += block * 2)
+        while (block < nmemb && block <= swap.Length)
         {
-          if (pta + block * 2 < pte)
-          {
-            partial_backward_merge(array[pta..], swap, block * 2, block, cmp);
-            continue;
-          }
-          partial_backward_merge(array[pta..], swap, pte - pta, block, cmp);
-          break;
+            for (pta = 0; pta + block < pte; pta += block * 2)
+            {
+                if (pta + block * 2 < pte)
+                {
+                    partial_backward_merge(array[pta..], swap, block * 2, block, cmp);
+                    continue;
+                }
+                partial_backward_merge(array[pta..], swap, pte - pta, block, cmp);
+                break;
+            }
+            block *= 2;
         }
-        block *= 2;
-      }
     }
 
     // the next four functions provide in-place rotate merge support
@@ -1089,7 +1091,7 @@ public static unsafe class StableSort<T>
 
         if (right != 0)
         {
-            unbalanced = (right*  2 < rblock) | (rblock*  2 < right);
+            unbalanced = (right * 2 < rblock) | (rblock * 2 < right);
 
             if ((unbalanced && right <= swap_size) || right + rblock <= swap_size)
             {
@@ -1122,7 +1124,7 @@ public static unsafe class StableSort<T>
 
         while (block < nmemb)
         {
-            for (pta = 0; pta + block < pte ; pta += block * 2)
+            for (pta = 0; pta + block < pte; pta += block * 2)
             {
                 if (pta + block * 2 < pte)
                 {
@@ -1135,7 +1137,7 @@ public static unsafe class StableSort<T>
                 break;
             }
             block *= 2;
-      }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1160,7 +1162,7 @@ public static unsafe class StableSort<T>
         {
             int block, nmemb = array.Length, swap_size = nmemb;
 
-            if (nmemb > 4194304) { for (swap_size = 4194304 ; swap_size * 8 <= nmemb ; swap_size *= 4) {} }
+            if (nmemb > 4194304) { for (swap_size = 4194304; swap_size * 8 <= nmemb; swap_size *= 4) { } }
 
             using var swap = new ArrayPoolReturner<T>(swap_size, Pool);
             if (swap.Length == 0) //TODO(Rennorb) 
@@ -1219,9 +1221,9 @@ public static unsafe class StableSort<T>
         if (quad1 < quad3) { cbalance += cmp(array[ptc], array[ptc + 1]) > 0 ? 1 : 0; ptc++; }
         if (quad1 < quad4) { dbalance += cmp(array[ptd], array[ptd + 1]) > 0 ? 1 : 0; ptd++; }
 
-        for (cnt = nmemb ; cnt > 132 ; cnt -= 128)
+        for (cnt = nmemb; cnt > 132; cnt -= 128)
         {
-            for (asum = bsum = csum = dsum = 0, loop = 32 ; loop != 0; loop--)
+            for (asum = bsum = csum = dsum = 0, loop = 32; loop != 0; loop--)
             {
                 asum += cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; pta++;
                 bsum += cmp(array[ptb], array[ptb + 1]) > 0 ? 1 : 0; ptb++;
@@ -1243,7 +1245,7 @@ public static unsafe class StableSort<T>
             }
         }
 
-        for ( ; cnt > 7 ; cnt -= 4)
+        for (; cnt > 7; cnt -= 4)
         {
             abalance += cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; pta++;
             bbalance += cmp(array[ptb], array[ptb + 1]) > 0 ? 1 : 0; ptb++;
@@ -1275,16 +1277,17 @@ public static unsafe class StableSort<T>
             switch (span1 | span2 * 2 | span3 * 4)
             {
                 case 0: break;
-                case 1: quad_reversal(array,         0, ptb); abalance = bbalance = 0; break;
+                case 1: quad_reversal(array, 0, ptb); abalance = bbalance = 0; break;
                 case 2: quad_reversal(array, (pta + 1), ptc); bbalance = cbalance = 0; break;
-                case 3: quad_reversal(array,         0, ptc); abalance = bbalance = cbalance = 0; break;
+                case 3: quad_reversal(array, 0, ptc); abalance = bbalance = cbalance = 0; break;
                 case 4: quad_reversal(array, (ptb + 1), ptd); cbalance = dbalance = 0; break;
-                case 5: quad_reversal(array,         0, ptb);
-                        quad_reversal(array, (ptb + 1), ptd); abalance = bbalance = cbalance = dbalance = 0; break;
+                case 5:
+                    quad_reversal(array, 0, ptb);
+                    quad_reversal(array, (ptb + 1), ptd); abalance = bbalance = cbalance = dbalance = 0; break;
                 case 6: quad_reversal(array, (pta + 1), ptd); bbalance = cbalance = dbalance = 0; break;
-                case 7: quad_reversal(array,         0, ptd); return;
+                case 7: quad_reversal(array, 0, ptd); return;
             }
-            if (asum != 0 && abalance != 0) { quad_reversal(array,         0, pta); abalance = 0; }
+            if (asum != 0 && abalance != 0) { quad_reversal(array, 0, pta); abalance = 0; }
             if (bsum != 0 && bbalance != 0) { quad_reversal(array, (pta + 1), ptb); bbalance = 0; }
             if (csum != 0 && cbalance != 0) { quad_reversal(array, (ptb + 1), ptc); cbalance = 0; }
             if (dsum != 0 && dbalance != 0) { quad_reversal(array, (ptc + 1), ptd); dbalance = 0; }
@@ -1426,7 +1429,7 @@ public static unsafe class StableSort<T>
         x = cmp(array[pta], array[pta + 1]) > 0 ? 1 : 0; swap = array[pta + (x == 0 ? 1 : 0)]; array[pta] = array[pta + x]; array[pta + 1] = swap; pta -= 2;
 
         x = (cmp(array[pta], array[pta + 2]) <= 0) ? 2 : 0; array[pta + 2] = array[pta + x]; pta++;
-        x = (cmp(array[pta], array[pta + 2])  > 0) ? 2 : 0; array[pta] = array[pta + x];
+        x = (cmp(array[pta], array[pta + 2]) > 0) ? 2 : 0; array[pta] = array[pta + x];
     }
 
     static T median_of_nine(Span<T> array, int nmemb, Func<T, T, int> cmp)
@@ -1439,7 +1442,7 @@ public static unsafe class StableSort<T>
 
         pta = 0;
 
-        for (x = 0 ; x < 9 ; x++)
+        for (x = 0; x < 9; x++)
         {
             swap[x] = array[pta];
 
@@ -1469,14 +1472,14 @@ public static unsafe class StableSort<T>
         Span<T> pts;
         int cnt, div, cbrt;
 
-        for (cbrt = 32 ; nmemb > cbrt * cbrt * cbrt ; cbrt *= 2) {}
+        for (cbrt = 32; nmemb > cbrt * cbrt * cbrt; cbrt *= 2) { }
 
         div = nmemb / cbrt;
 
         pta = (int)((ulong)&div / 16 % (ulong)div); // for a non-deterministic offset
         pts = ptx == array ? swap : array;
 
-        for (cnt = 0 ; cnt < cbrt ; cnt++)
+        for (cnt = 0; cnt < cbrt; cnt++)
         {
             pts[cnt] = ptx[pta];
 
@@ -1503,21 +1506,21 @@ public static unsafe class StableSort<T>
             int pta = 0, pts = 0, pty = 0;
             T pivt = swap[piv];
 
-            for (cnt = nmemb / 8 ; cnt != 0; cnt--)
+            for (cnt = nmemb / 8; cnt != 0; cnt--)
             {
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
             }
 
-            for (cnt = nmemb % 8 ; cnt != 0; cnt--)
+            for (cnt = nmemb % 8; cnt != 0; cnt--)
             {
-                if(cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+                if (cmp(pivt, ptx[pty]) > 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
             }
             a_size = pta;
             s_size = pts;
@@ -1542,24 +1545,24 @@ public static unsafe class StableSort<T>
             pty = 0; // ptx
         T pivt = swap[piv];
 
-        for (a = 8 ; a <= nmemb ; a += 8)
+        for (a = 8; a <= nmemb; a += 8)
         {
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
 
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
 
             if (pta == 0 || pts == 0) { run = a; }
         }
 
-        for (a = nmemb % 8 ; a != 0; a--)
+        for (a = nmemb % 8; a != 0; a--)
         {
-            if(cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
+            if (cmp(ptx[pty], pivt) <= 0) { array[pta++] = ptx[pty++]; } else { swap[pts++] = ptx[pty++]; }
         }
         m = pta;
 

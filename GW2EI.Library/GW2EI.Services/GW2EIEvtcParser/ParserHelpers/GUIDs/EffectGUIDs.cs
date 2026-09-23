@@ -917,7 +917,7 @@ public static class EffectGUIDs
     public static readonly Guid CascadeAoEIndicator4 = new("965355FD1C53F24085A9C422B8333780");
     public static readonly Guid CascadeAoEIndicator5 = new("F26A2240C0F1E24E81EAEFDE64EFA3BF");
     // Whisper of Jormag
-    public static readonly Guid WhisperOfJormagSlitheringRimeAoE= new("A5EA88A91E5D7046A02680C02A74BD78"); // Src Whisper of Jormag - Duration 1500
+    public static readonly Guid WhisperOfJormagSlitheringRimeAoE = new("A5EA88A91E5D7046A02680C02A74BD78"); // Src Whisper of Jormag - Duration 1500
     public static readonly Guid WhisperOfJormagLethalCoalescence1 = new("26F7FBDCACAB0B469E5197573F464498"); // Src Unknown - Dst Player - Duration 7666
     public static readonly Guid WhisperOfJormagLethalCoalescence2 = new("67FE1B8761FA434ABB92BBE74B23D810"); // Src Unknown - Dst Player - Duration 1166
     public static readonly Guid WhisperOfJormagIceTempestIndicator = new("8AF9543C93387244BCBDCE072BCB00EF"); // Src Whisper of Jormag - Duration 1666
@@ -1137,7 +1137,7 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityProbabilityDistributionVisionsOfEternityExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
     public static readonly Guid NexusOfEternityWorldpiercerLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
     public static readonly Guid NexusOfEternityWorldpiercerIndicator = new("635554D77C7C5C4E81367013B99A14BB"); // src vloxx, duration 2666, singular effect for all 3 beams
-    public static readonly Guid NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE = new ("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
+    public static readonly Guid NexusOfEternityCosmicChargeTrailAndProbabilityDistributionAoE = new("68FD7F34F53AA34FA326FB6C17CF4336"); // src vloxx, duration 10000 for trail, 12000 for puddle, has also dynamic end
     public static readonly Guid NexusOfEternitySurroundingCurseIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // src vloxx, duration 3500
     public static readonly Guid NexusOfEternitySurroundingCurseRagingStormExplosions = new("D200E82ECBB9194DB8DB8BAEBF531673"); // src vloxx, duration 2666 - Conflict with base aoe difference and no flags - Surrounding Curse 200 - Raging Storm 150
     public static readonly Guid NexusOfEternityRagingStormIndicator = new("D11320204E28E643A48469AA8E4845BA"); // src vloxx, duration 3000

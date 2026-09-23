@@ -1,6 +1,4 @@
-﻿using static GW2EIEvtcParser.ArcDPSEnums;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class CustomAnimatedGadgetCastEvent : AnimatedCastEvent
 {

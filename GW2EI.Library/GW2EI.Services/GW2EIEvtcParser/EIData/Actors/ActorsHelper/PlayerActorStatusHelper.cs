@@ -46,7 +46,7 @@ partial class PlayerActor
 
         status = status.OrderBy(x => x.Time).ToList();
 
-        for (var i = 0; i < status.Count; i++) 
+        for (var i = 0; i < status.Count; i++)
         {
             var state = status[i].evt;
             if (state is DespawnEvent)

@@ -153,7 +153,7 @@ internal static class WillbenderHelper
             if (tyrantLethalTempo is BuffApplyEvent)
             {
                 start = tyrantLethalTempo.Time;
-            } 
+            }
             else
             {
                 long end = tyrantLethalTempo.Time;
@@ -166,7 +166,7 @@ internal static class WillbenderHelper
                         {
                             invalidated = true;
                             lethalTempo.Invalidate(skillData);
-                        } 
+                        }
                         else if (lethalTempo.Time > end)
                         {
                             offset = i;

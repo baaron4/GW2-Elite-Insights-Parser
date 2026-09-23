@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class EvokerHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         // Familiar Skills
         new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill),
@@ -28,7 +28,7 @@ internal static class EvokerHelper
             .WithBuilds(GW2Builds.OctoberVoERelease),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Elemental Balance
         new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, FromHPChecker(0, 50), DamageModifierMode.All)
@@ -139,7 +139,7 @@ internal static class EvokerHelper
 
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Elemental Balance
         new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10_Incoming5, "Elemental balance (Incoming)", "-5% if hp >= 50%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, ToHPChecker(50), DamageModifierMode.All)
@@ -163,7 +163,7 @@ internal static class EvokerHelper
             .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
     ];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = 
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Familiar's Prowess (Fox)", FamiliarsProwessFox, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
         new Buff("Familiar's Prowess (Otter)", FamiliarsProwessOtter, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
@@ -187,7 +187,7 @@ internal static class EvokerHelper
         new Buff("Toad Passive", ToadPassive, Source.Evoker, BuffClassification.Other, SkillImages.Calcify),
     ];
 
-    private static readonly HashSet<int> Minions = 
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.FireFox,
         (int)MinionID.WaterOtter,

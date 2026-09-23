@@ -3,14 +3,13 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -78,7 +77,7 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -240,7 +239,7 @@ internal class ValeGuardian : SpiritVale
                         case MagicStorm:
                             lifespan = (cast.Time, cast.EndTime);
                             replay.Decorations.Add(new OverheadProgressBarDecoration(
-                                ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.LightBlue, 0.6, Colors.Black, 0.2, 
+                                ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.LightBlue, 0.6, Colors.Black, 0.2,
                                 [(lifespan.start, 0), (lifespan.start + 30000, 100)], new AgentConnector(target)
                             ).UsingRotationConnector(new AngleConnector(180)));
                             break;
@@ -260,10 +259,10 @@ internal class ValeGuardian : SpiritVale
                             break;
                     }
                 }
-                #if DEBUG_EFFECTS
+#if DEBUG_EFFECTS
                     CombatReplay.DebugEffects(target, log, replay.Decorations, [], target.FirstAware, target.LastAware);
                     CombatReplay.DebugUnknownEffects(log, replay.Decorations, [], target.FirstAware, target.LastAware);
-                #endif
+#endif
                 break;
             case (int)TargetID.BlueGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));

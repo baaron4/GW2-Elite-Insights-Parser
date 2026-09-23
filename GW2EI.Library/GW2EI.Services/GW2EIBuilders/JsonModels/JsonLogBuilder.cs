@@ -1,8 +1,8 @@
 ﻿using GW2EIBuilders.JsonModels.JsonActors;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using static GW2EIJSON.JsonLog;
@@ -160,11 +160,11 @@ internal static class JsonLogBuilder
         jsonLog.Duration = log.LogData.DurationString;
         jsonLog.DurationMS = log.LogData.LogDuration;
         jsonLog.LogStartOffset = log.LogData.LogStartOffset;
-        if (log.LogMetadata.DateInstanceStartStd != null )
+        if (log.LogMetadata.DateInstanceStartStd != null)
         {
             jsonLog.InstanceTimeStartStd = log.LogMetadata.DateInstanceStartStd;
             jsonLog.InstanceIP = log.LogMetadata.LogInstanceIP;
-        } 
+        }
         else
         {
             jsonLog.InstanceTimeStartStd = null;
@@ -245,7 +245,7 @@ internal static class JsonLogBuilder
                 if (instanceBuff.RemainingDuration > 0)
                 {
                     presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase), instanceBuff.RemainingDuration]);
-                } 
+                }
                 else
                 {
                     presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase)]);

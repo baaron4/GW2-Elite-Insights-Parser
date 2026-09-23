@@ -68,10 +68,10 @@ internal class TextDecoration : Decoration
             RotationConnectedTo = rotationConnectedTo;
         }
         /// <summary>
-         /// 
-         /// </summary>
-         /// <param name="skill">Skill information</param>
-         /// <returns></returns>
+        /// 
+        /// </summary>
+        /// <param name="skill">Skill information</param>
+        /// <returns></returns>
         public virtual void UsingSkillMode(SkillModeDescriptor? skill)
         {
             SkillMode = skill;

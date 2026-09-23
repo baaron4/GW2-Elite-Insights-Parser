@@ -93,7 +93,7 @@ partial class CombatData
             .Any(apply => apply.CreditedBy.Is(source) && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
     }
 
-    public static List<BuffEvent> GetBuffApplyRemoveSequence(IReadOnlyList<BuffEvent> buffEvents, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
+    public static List<BuffEvent> GetBuffApplyRemoveSequence(IReadOnlyList<BuffEvent> buffEvents, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd, long minThresholdBetweenGainAndLoss = ServerDelayConstant)
     {
         bool needStart = beginWithApply;
         var main = buffEvents.Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
@@ -109,7 +109,7 @@ partial class CombatData
                     if (filtered.Count > 0)
                     {
                         var prev = filtered[^1];
-                        if (c.Time - prev.Time < ServerDelayConstant)
+                        if (c.Time - prev.Time < minThresholdBetweenGainAndLoss)
                         {
                             filtered.Remove(prev);
                             continue;

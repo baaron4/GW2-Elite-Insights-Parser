@@ -31,14 +31,14 @@ public class JsonBuffVolumes
         /// Buff incoming by
         /// </summary>
         public IReadOnlyDictionary<string, double>? IncomingBy;
-        
+
         /// <summary>
         /// Buff incoming by extension by
         /// </summary>
         public IReadOnlyDictionary<string, double>? IncomingByExtensionBy;
     }
 
-    
+
     /// <summary>
     /// ID of the buff
     /// </summary>

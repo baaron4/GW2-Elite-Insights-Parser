@@ -1,8 +1,8 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -57,7 +57,7 @@ internal class Mordremoth : StoryInstance
         return phases;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -83,7 +83,7 @@ internal class Mordremoth : StoryInstance
         if (buffApply != null)
         {
             successHandler.SetSuccess(true, mordremoth.LastAware);
-        } 
+        }
         else
         {
             successHandler.SetSuccess(false, mordremoth.LastAware);
@@ -96,7 +96,7 @@ internal class Mordremoth : StoryInstance
         return (mordremoth.GetHealth(combatData) > 9e6) ? LogData.Mode.CM : LogData.Mode.Story;
     }
 
-    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return
         [

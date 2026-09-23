@@ -9,13 +9,13 @@ internal class DamageDistributionDto
 {
     public static readonly DamageDistributionDto EmptyInstance = new();
 
-    public long            ContributedDamage;
-    public long            ContributedDownContribution = - 1;
-    public double          ContributedBreakbarDamage;
-    public long            ContributedShieldDamage;
-    public long            TotalDamage;
-    public double          TotalBreakbarDamage;
-    public long            TotalCasting;
+    public long ContributedDamage;
+    public long ContributedDownContribution = -1;
+    public double ContributedBreakbarDamage;
+    public long ContributedShieldDamage;
+    public long TotalDamage;
+    public double TotalBreakbarDamage;
+    public long TotalCasting;
     public List<DistributionItem>? Distribution;
 
     internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IEnumerable<CastEvent> clList, PhaseData phase)

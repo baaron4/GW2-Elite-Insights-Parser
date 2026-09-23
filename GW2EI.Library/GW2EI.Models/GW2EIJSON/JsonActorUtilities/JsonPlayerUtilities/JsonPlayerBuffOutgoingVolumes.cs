@@ -21,7 +21,7 @@ public class JsonPlayerBuffOutgoingVolumes
         public double OutgoingByExtension;
     }
 
-    
+
     /// <summary>
     /// ID of the buff
     /// </summary>

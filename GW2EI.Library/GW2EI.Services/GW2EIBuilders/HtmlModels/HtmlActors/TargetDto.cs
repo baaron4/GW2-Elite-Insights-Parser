@@ -58,7 +58,7 @@ internal class TargetDto : ActorDto
                     activeFound = true;
                     behaviorValue = HPBarActive;
                     HpLeft += (int)(hpValue * Math.Max(HpLeftPercent - minPercent, 0.0) / 100);
-                } 
+                }
                 else if (activeFound)
                 {
                     behaviorValue = HPBarUntouched;
@@ -66,7 +66,7 @@ internal class TargetDto : ActorDto
                 }
                 HpBars.Add([minPercent, maxPercent, hpValue, behaviorValue]);
             }
-        } 
+        }
         else
         {
             HpLeft = target.GetCurrentHealth(log, HpLeftPercent);

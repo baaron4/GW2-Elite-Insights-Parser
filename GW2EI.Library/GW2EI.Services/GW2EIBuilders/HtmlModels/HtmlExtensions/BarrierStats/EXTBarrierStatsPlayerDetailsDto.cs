@@ -19,10 +19,10 @@ internal class EXTBarrierStatsPlayerDetailsDto
         var minions = actor.GetMinions(log);
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
-            BarrierDistributions = new (phases.Count),
-            BarrierDistributionsTargets = new (phases.Count),
-            IncomingBarrierDistributions = new (phases.Count),
-            Minions = new (minions.Count),
+            BarrierDistributions = new(phases.Count),
+            BarrierDistributionsTargets = new(phases.Count),
+            IncomingBarrierDistributions = new(phases.Count),
+            Minions = new(minions.Count),
         };
         foreach (PhaseData phase in phases)
         {
@@ -48,8 +48,8 @@ internal class EXTBarrierStatsPlayerDetailsDto
         var phases = log.LogData.GetPhases(log);
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
-            BarrierDistributions = new (phases.Count),
-            BarrierDistributionsTargets = new (phases.Count),
+            BarrierDistributions = new(phases.Count),
+            BarrierDistributionsTargets = new(phases.Count),
             IncomingBarrierDistributions = new(phases.Count)
         };
         foreach (PhaseData phase in phases)

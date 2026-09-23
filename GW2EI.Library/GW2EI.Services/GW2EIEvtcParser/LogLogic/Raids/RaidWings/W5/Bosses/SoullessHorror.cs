@@ -6,15 +6,14 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Mechanic;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.MechanicIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
-using static GW2EIEvtcParser.MechanicIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -84,7 +83,7 @@ internal class SoullessHorror : HallOfChains
         return crMap;
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -204,7 +203,7 @@ internal class SoullessHorror : HallOfChains
         {
             case (int)TargetID.SoullessHorror:
                 // arena reduction
-                var encounterPhase = log.LogData.GetEncounterPhases(log, LogID).FirstOrDefault(x => x.Targets.ContainsKey(target));     
+                var encounterPhase = log.LogData.GetEncounterPhases(log, LogID).FirstOrDefault(x => x.Targets.ContainsKey(target));
                 if (encounterPhase != null)
                 {
                     var center = new Vector3(-10581, 825, -817);
@@ -437,7 +436,7 @@ internal class SoullessHorror : HallOfChains
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
-    {       
+    {
         return HasFastNecrosis(combatData, logData.LogStart, logData.LogEnd) ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
@@ -457,7 +456,7 @@ internal class SoullessHorror : HallOfChains
             damageData.SortByTime();
             foreach (var evt in damageData)
             {
-                if (evt.HasHit && evt.To.Is(p.AgentItem) && p.InAwareTimes(evt.Time))
+                if (evt.HasHit && evt.To.IsAtTime(p.AgentItem, evt.Time))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(shPhases, necroDancerEligibilityEvents, evt.Time, Ach_NecroDancer, p);
                 }

@@ -18,7 +18,7 @@ internal static class AmalgamHelper
         new EffectCastFinder(SymbioticShielding, EffectGUIDs.AmalgamSymbioticShielding1),
     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Willing Host
         new BuffOnActorDamageModifier(Mod_WillingHost_StrikeCondition, WillingHost, "Willing Host", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Amalgam, ByPresence, TraitImages.WillingHost, DamageModifierMode.PvE)
@@ -41,7 +41,7 @@ internal static class AmalgamHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = 
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Traits     
         new Buff("Willing Host", WillingHost, Source.Amalgam, BuffClassification.Other, TraitImages.WillingHost),

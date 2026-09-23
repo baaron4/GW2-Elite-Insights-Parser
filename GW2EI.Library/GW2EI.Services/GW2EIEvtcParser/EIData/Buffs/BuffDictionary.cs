@@ -49,7 +49,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
                                 insert = false;
                             }
                         }
-                    } 
+                    }
                     if (insert)
                     {
                         listExtension.Add((beeCurrent, list.Count));
@@ -57,7 +57,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
                 }
                 else
                 {
-                    dictExtension[beeCurrent.BuffInstance] = new(initialListCapacity){ (beeCurrent, list.Count) };
+                    dictExtension[beeCurrent.BuffInstance] = new(initialListCapacity) { (beeCurrent, list.Count) };
                 }
             }
         }
@@ -71,7 +71,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
             {
                 insert = false;
             }
-        } 
+        }
         if (insert)
         {
             list.Add(buffEvent);

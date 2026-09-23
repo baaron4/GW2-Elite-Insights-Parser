@@ -33,13 +33,13 @@ public class ParsedEvtcLog : EvtcLog
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
         CombatData = new CombatData(combatItems, LogData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings, apiController)
             .WithExtraProcessing(LogData, AgentData, SkillData, playerList, operation, evtcVersion);
-        
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Checking Log Status");
         LogData.ProcessLogStatus(CombatData, AgentData);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Setting Log Name");
         LogData.CompleteLogName(CombatData, AgentData, apiController);
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
         var successHandler = new LogData.LogSuccessHandler(LogData);
         LogData.Logic.CheckSuccess(CombatData, AgentData, LogData, agentData.GetAgentByType(AgentItem.AgentType.Player), successHandler);
@@ -55,7 +55,7 @@ public class ParsedEvtcLog : EvtcLog
         {
             throw new SkipException();
         }
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling active players");
         List<Player> activePlayers = [];
         var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.StableSpecies).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
@@ -64,14 +64,14 @@ public class ParsedEvtcLog : EvtcLog
             if (p.LastAware <= LogData.LogStart)
             {
                 operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - despawned before Log start");
-            } 
+            }
             else if (p.FirstAware < LogData.LogEnd)
             {
                 if (CombatData.GetDamageTakenData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
                     CombatData.GetDamageData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
                     CombatData.GetBuffDataBySrc(p.EnglobingAgentItem).Any(x => !p.AgentItem.IsMasterOfOrSelf(x.To)) ||
                     (
-                        playerMinions.TryGetValue(p.EnglobingAgentItem, out var minions) && 
+                        playerMinions.TryGetValue(p.EnglobingAgentItem, out var minions) &&
                         minions.Any(x => CombatData.GetDamageData(x).Any(x => !x.ToFriendly)
                     )
                         ))
@@ -94,7 +94,7 @@ public class ParsedEvtcLog : EvtcLog
         }
         PlayerList = activePlayers.OrderBy(a => a.Group).ToList();
         PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling friendlies");
         var friendlies = new List<SingleActor>();
         friendlies.AddRange(PlayerList);
@@ -102,15 +102,15 @@ public class ParsedEvtcLog : EvtcLog
         Friendlies = friendlies;
         FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
         FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + PlayerList.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + LogData.Logic.NonSquadFriendlies.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + LogData.Logic.Targets.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + LogData.Logic.TrashMobs.Count);
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Log Meta Data");
         LogMetadata = new LogMetadata(evtcVersion, CombatData, LogData.EvtcLogEnd - LogData.EvtcLogStart, playerList, extensions, operation);
-        
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Container");
         Buffs = new BuffsContainer(CombatData, SkillData, operation);
 
@@ -201,10 +201,10 @@ public class ParsedEvtcLog : EvtcLog
     }
 
 
-    public 
+    public
         (
         List<SingleActorCombatReplayDescription> actors,
-        List<CombatReplayRenderingDescription> decorationRendering, 
+        List<CombatReplayRenderingDescription> decorationRendering,
         List<CombatReplayMetadataDescription> decorationMetadata
         ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {

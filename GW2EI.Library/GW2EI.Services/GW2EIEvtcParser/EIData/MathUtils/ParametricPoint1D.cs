@@ -4,7 +4,7 @@
 public class ParametricPoint1D(float x, long time)
 {
     public readonly float X = x;
-    public readonly long  Time = time;
+    public readonly long Time = time;
 
     public ParametricPoint1D(ParametricPoint1D a) : this(a.X, a.Time)
     {

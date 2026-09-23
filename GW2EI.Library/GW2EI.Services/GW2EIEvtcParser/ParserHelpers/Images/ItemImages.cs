@@ -122,7 +122,7 @@ internal static class ItemImages
     public const string RelicOfTheNightmare = "https://render.guildwars2.com/file/74940C36779745CBA9DDD56CDF6CBAC1CEA8179F/3122363.png";
     public const string RelicOfTheSunless = "https://render.guildwars2.com/file/CEF1E6DA2DBF143661DF26E668034A621812B61A/3122370.png";
     public const string RelicOfAkeem = "https://render.guildwars2.com/file/594C437E9606A167F4F372BCEB0C2B7C7828037B/3122330.png";
-    public const string RelicOfTheWizardsTower  = "https://render.guildwars2.com/file/0C0EE407B9DAA44438ED6C2DCDA4EEB30953DF1B/3122378.png";
+    public const string RelicOfTheWizardsTower = "https://render.guildwars2.com/file/0C0EE407B9DAA44438ED6C2DCDA4EEB30953DF1B/3122378.png";
     public const string RelicOfTheMirage = "https://render.guildwars2.com/file/5FCA620E77D3D5022ADC70C1191F0B154AB13827/3122360.png";
     public const string RelicOfKarakosa = "https://render.guildwars2.com/file/DD034A0B53355503350F07CCFFE5CC06A90F41D9/3187629.png";
     public const string RelicOfNayos = "https://render.guildwars2.com/file/EA382BAFD541080F71D5530893CC7E069165EA0C/3187631.png";

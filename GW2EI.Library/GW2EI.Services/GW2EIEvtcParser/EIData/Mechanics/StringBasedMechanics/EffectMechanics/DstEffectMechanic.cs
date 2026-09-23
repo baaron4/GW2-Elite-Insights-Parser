@@ -16,7 +16,7 @@ internal abstract class DstEffectMechanic : EffectMechanic
         return effectEvt.Dst;
     }
 
-    public DstEffectMechanic(Guid effectGUID, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([ effectGUID ], id, plotlySetting, description, severity, internalCoolDown)
+    public DstEffectMechanic(Guid effectGUID, int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, int internalCoolDown = 0) : this([effectGUID], id, plotlySetting, description, severity, internalCoolDown)
     {
     }
 

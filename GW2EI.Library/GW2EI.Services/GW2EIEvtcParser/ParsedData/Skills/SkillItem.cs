@@ -137,7 +137,7 @@ public class SkillItem
 
     internal void OverrideFromBuff(Buff buff)
     {
-        if (CanOverrideFromBuffs) 
+        if (CanOverrideFromBuffs)
         {
             Name = buff.Name;
 #if DEBUG

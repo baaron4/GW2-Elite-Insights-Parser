@@ -2,13 +2,12 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
-using static GW2EIEvtcParser.EIData.Mechanic;
-using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity; 
 using static GW2EIEvtcParser.MechanicIDs;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 

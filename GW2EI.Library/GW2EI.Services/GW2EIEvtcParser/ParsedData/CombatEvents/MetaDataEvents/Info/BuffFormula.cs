@@ -72,15 +72,15 @@ public class BuffFormula
 
     private bool IsFlippedFormula => Attr1 == PhysIncomingMultiplicative || Attr1 == CondIncomingMultiplicative || Attr1 == HealingEffectivenessIncomingMultiplicative;
 
-    private bool MultiplyBy100 => (Attr2 != None && Attr2 != AboveHealth)|| Attr1 == HealingEffectivenessIncomingMultiplicative;
+    private bool MultiplyBy100 => (Attr2 != None && Attr2 != AboveHealth) || Attr1 == HealingEffectivenessIncomingMultiplicative;
 
     private string? _solvedDescription = null;
 
 
-    private int LevelFactor(Buff buff) => 
-            buff.Classification == Buff.BuffClassification.Enhancement || 
-            buff.Classification == Buff.BuffClassification.Nourishment || 
-            buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : 
+    private int LevelFactor(Buff buff) =>
+            buff.Classification == Buff.BuffClassification.Enhancement ||
+            buff.Classification == Buff.BuffClassification.Nourishment ||
+            buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 :
                  (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
     internal unsafe BuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
@@ -110,7 +110,8 @@ public class BuffFormula
         // 0.5
         formulaBytes.PushNative(evtcItem.DstMasterInstid);
 
-        fixed(byte* ptr = formulaBytes.Span) {
+        fixed (byte* ptr = formulaBytes.Span)
+        {
             var formulaFloats = (float*)ptr;
 
             Type = (int)formulaFloats[0];
@@ -184,7 +185,7 @@ public class BuffFormula
             if (Attr2 == AboveHealth)
             {
                 _solvedDescription += $" above {LevelOffset * 100}% {stat2}";
-            } 
+            }
             else
             {
                 _solvedDescription += $" from {stat2}";

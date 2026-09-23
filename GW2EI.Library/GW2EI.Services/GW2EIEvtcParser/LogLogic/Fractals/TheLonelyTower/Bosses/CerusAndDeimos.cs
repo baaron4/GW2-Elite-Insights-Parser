@@ -82,7 +82,7 @@ internal class CerusAndDeimos : LonelyTower
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
             successHandler.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
-        } 
+        }
         else
         {
             successHandler.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
@@ -210,7 +210,7 @@ internal class CerusAndDeimos : LonelyTower
         }
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

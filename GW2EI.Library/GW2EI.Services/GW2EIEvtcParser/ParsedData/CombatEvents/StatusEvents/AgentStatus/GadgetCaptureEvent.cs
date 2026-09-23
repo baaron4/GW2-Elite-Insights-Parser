@@ -81,7 +81,7 @@ public class GadgetCaptureEvent : StatusEvent
             if (replaceFirst)
             {
                 _progresses[0] = state;
-            } 
+            }
             else
             {
                 _progresses.Add(state);
