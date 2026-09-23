@@ -61,6 +61,8 @@ internal class CombatReplayDecorationContainer
         return result;
     }
 
+    #region OVERHEAD
+
     /// <summary>
     /// Add an overhead icon decoration
     /// </summary>
@@ -181,6 +183,10 @@ internal class CombatReplayDecorationContainer
         }
     }
 
+    #endregion OVERHEAD
+
+    #region FILL & GROWING
+
     /// <summary>
     /// Add the decoration twice, the 2nd one being a copy using given extra parameters
     /// </summary>
@@ -262,6 +268,10 @@ internal class CombatReplayDecorationContainer
     {
         AddWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
     }
+
+    #endregion FILL & GROWING
+
+    #region TETHER
 
     /// <summary>
     /// Add tether decoration between src and dst
@@ -500,6 +510,10 @@ internal class CombatReplayDecorationContainer
         AddTethersByThirdPartySrcBuff(log, player, buffID, buffSrcAgentID, toTetherAgentID, color.WithAlpha(opacity).ToString(true), firstAwareThreshold, thickness, worldSizeThickess);
     }
 
+    #endregion TETHER
+
+    #region PROJECTILE (Pre-Missile events)
+
     /// <summary>
     /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
     /// </summary>
@@ -536,6 +550,10 @@ internal class CombatReplayDecorationContainer
         Add(shootingCircle);
     }
 
+    #endregion PROJECTILE (Pre-Missile events)
+
+    #region SHOCKWAVE
+
     /// <summary>
     /// Adds a non-filled growing circle resembling a shockwave.
     /// </summary>
@@ -565,7 +583,9 @@ internal class CombatReplayDecorationContainer
         Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end, reverse));
     }
 
+    #endregion SHOCKWAVE
 
+    #region CONCENTRIC
 
     /// <summary>
     /// Adds concentric doughnuts.
@@ -592,6 +612,10 @@ internal class CombatReplayDecorationContainer
         }
 
     }
+
+    #endregion CONCENTRIC
+
+    #region PROGRESS BAR
 
     /// <summary>
     /// Adds two rectangles over each other representing a loading bar.
@@ -692,8 +716,10 @@ internal class CombatReplayDecorationContainer
     {
         AddBreakbar(lifespan, actor, percentUpdates, Colors.BreakbarActiveBlue);
     }
-    #region MISSILE
 
+    #endregion PROGRESS BAR
+
+    #region MISSILE
 
     internal delegate void MissileDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector);
     internal delegate void MissileRotatingDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
