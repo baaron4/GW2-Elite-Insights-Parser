@@ -584,8 +584,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
                 int duration = log.LogData.EncounterIsCM(log, LogID, effect.Time) || log.LogData.EncounterIsLegendaryCM(log, LogID, effect.Time) ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
@@ -596,8 +595,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 999000);
                 var circle = new CircleDecoration(240, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
     }

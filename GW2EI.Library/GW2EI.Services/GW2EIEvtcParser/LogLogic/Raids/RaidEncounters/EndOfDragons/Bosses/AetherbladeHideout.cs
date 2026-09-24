@@ -434,8 +434,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
 
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
-                environmentDecorations.Add(rectangle);
-                environmentDecorations.Add(rectangle.GetBorderDecoration(Colors.LightOrange, 0.2));
+                environmentDecorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
             }
         }
 
@@ -869,8 +868,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             var connector = new AgentConnector(target);
             var rotation = new AngleConnector(facingDirection.Value);
             var pie = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotation);
-            replay.Decorations.AddWithGrowing(pie, growing);
-            replay.Decorations.Add(pie.GetBorderDecoration());
+            replay.Decorations.AddWithGrowingWithBorder(pie, growing, Colors.Orange, 0.2);
 
             // If the indicator lifespan matches the growing or the side Mai Trin is casting, add the shockwave.
             if ((target.IsSpecies(TargetID.MaiTrinRaid) && lifespan.end == growing) || target.IsSpecies(TargetID.MaiTrinRaidDuringEcho))

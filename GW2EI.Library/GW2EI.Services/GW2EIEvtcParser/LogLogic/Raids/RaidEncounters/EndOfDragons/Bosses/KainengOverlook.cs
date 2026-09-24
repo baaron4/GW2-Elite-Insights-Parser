@@ -327,7 +327,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 lifespan = (effect.Time, effect.Time + correctedDuration);
 
                 // Tether Sniper to Player
-                replay.Decorations.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
+                replay.Decorations.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration);
 
                 // Circle around the player
                 replay.Decorations.Add(new CircleDecoration(500, lifespan, Colors.Red, 0.2, new AgentConnector(p)).UsingFilled(false));
@@ -608,8 +608,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
                 int damageDelay = 2000;
                 long warningEnd = lifespan.start + damageDelay;
                 var circle = new CircleDecoration(240, (lifespan.start, warningEnd), Colors.Red, 0.2, connector);
-                environmentDecorations.AddWithGrowing(circle, warningEnd);
-                environmentDecorations.Add(circle.GetBorderDecoration());
+                environmentDecorations.AddWithGrowingWithBorder(circle, warningEnd, Colors.Red, 0.2);
                 environmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
             }
         }
@@ -676,8 +675,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         if (target.TryGetCurrentFacingDirection(log, lifespan.start + 100, out var facingDirection, duration))
         {
             var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facingDirection.Value));
-            replay.Decorations.AddWithGrowing(pie, lifespan.end);
-            replay.Decorations.Add(pie.GetBorderDecoration());
+            replay.Decorations.AddWithGrowingWithBorder(pie, lifespan.end, Colors.Orange, 0.2);
         }
 
     }

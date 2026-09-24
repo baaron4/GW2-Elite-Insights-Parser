@@ -246,8 +246,7 @@ internal class Boneskinner : Bjora
             {
                 lifespan = effect.ComputeLifespan(log, 30000);
                 var circle = new CircleDecoration(100, lifespan, Colors.RedBrownish, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
     }

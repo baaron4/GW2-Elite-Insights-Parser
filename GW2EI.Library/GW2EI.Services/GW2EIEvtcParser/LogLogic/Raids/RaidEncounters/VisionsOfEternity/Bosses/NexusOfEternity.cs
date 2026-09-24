@@ -451,7 +451,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Slice Through Reality - Teleport AoE
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
                 {
-                    for (int i = 0; i <= tp.Count - 1; i = i + 2)
+                    for (int i = 0; i <= tp.Count - 1; i += 2)
                     {
                         var entry = tp[i];
                         var exit = tp[i + 1];
@@ -502,6 +502,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
                 // Raging Storm - Missile
                 AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
+
+                // Breakbar
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
+                {
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                }
 
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
