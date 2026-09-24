@@ -50,7 +50,7 @@ internal class CustomPolygonDecoration : FormDecoration
     {
     }
 
-    public CustomPolygonDecoration(IReadOnlyList<Vector3> points, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(points, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+    public CustomPolygonDecoration(IReadOnlyList<Vector3> points, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(points, lifespan, color.WithAlpha(opacity).ToString(), connector)
     {
     }
 
@@ -58,7 +58,7 @@ internal class CustomPolygonDecoration : FormDecoration
     {
     }
 
-    public CustomPolygonDecoration(IReadOnlyList<Vector3> points, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(points, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+    public CustomPolygonDecoration(IReadOnlyList<Vector3> points, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(points, lifespan, color.WithAlpha(opacity).ToString(), connector)
     {
     }
     public override FormDecoration Copy(string? color = null)

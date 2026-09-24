@@ -52,7 +52,7 @@ internal class RegularPolygonDecoration : FormDecoration
     {
     }
 
-    public RegularPolygonDecoration(uint radius, uint nbPolygon, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, nbPolygon, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+    public RegularPolygonDecoration(uint radius, uint nbPolygon, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, nbPolygon, lifespan, color.WithAlpha(opacity).ToString(), connector)
     {
     }
 
@@ -60,7 +60,7 @@ internal class RegularPolygonDecoration : FormDecoration
     {
     }
 
-    public RegularPolygonDecoration(uint radius, uint nbPolygon, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, nbPolygon, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+    public RegularPolygonDecoration(uint radius, uint nbPolygon, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, nbPolygon, lifespan, color.WithAlpha(opacity).ToString(), connector)
     {
     }
     public override FormDecoration Copy(string? color = null)

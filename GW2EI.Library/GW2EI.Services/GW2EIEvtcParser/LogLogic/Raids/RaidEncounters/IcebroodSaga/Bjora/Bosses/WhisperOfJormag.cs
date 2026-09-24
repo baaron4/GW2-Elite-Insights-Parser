@@ -279,9 +279,7 @@ internal class WhisperOfJormag : Bjora
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
                         var cone = (PieDecoration)new PieDecoration(1350, 28, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                        var border = cone.GetBorderDecoration();
-                        replay.Decorations.AddWithGrowing(cone, lifespan.start + 200);
-                        replay.Decorations.Add(border);
+                        replay.Decorations.AddWithGrowingWithBorder(cone, lifespan.start + 200, Colors.White, 0.2);
                     }
                 }
 

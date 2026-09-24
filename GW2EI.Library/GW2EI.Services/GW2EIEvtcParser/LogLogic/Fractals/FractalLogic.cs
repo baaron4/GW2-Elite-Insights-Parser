@@ -187,8 +187,7 @@ internal abstract class FractalLogic : LogLogic
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 5000);
                 var circle = new CircleDecoration(120, lifespan, Colors.Blue, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
 
                 int pulseDuration = 1000;
                 long pulse = lifespan.start + pulseDuration;

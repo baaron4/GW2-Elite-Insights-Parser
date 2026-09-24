@@ -60,7 +60,7 @@ internal abstract class FormDecoration : AttachedDecoration
     public abstract FormDecoration GetBorderDecoration(string? borderColor = null);
     public FormDecoration GetBorderDecoration(Color borderColor, double opacity)
     {
-        return GetBorderDecoration(borderColor.WithAlpha(opacity).ToString(true));
+        return GetBorderDecoration(borderColor.WithAlpha(opacity).ToString());
     }
 
 }
