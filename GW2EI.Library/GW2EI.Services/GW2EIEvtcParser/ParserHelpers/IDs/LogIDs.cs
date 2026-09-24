@@ -38,6 +38,7 @@ internal static class LogIDs
         public const long SilentSurfMask = 0x000400;
         public const long LonelyTowerMask = 0x000500;
         public const long KinfallMask = 0x000600;
+        public const long SolitaryThroneMask = 0x000700;
     }
 
     public static class RaidEncounterMasks

@@ -26,6 +26,7 @@ internal static class LogImages
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://render.guildwars2.com/file/FD77A5D3AFB8B00A27A94FC73B7A213B6E0CC66C/3301393.png";
     internal const string EncounterIconWhisperingShadow = "https://i.imgur.com/4Xtgr4D.jpeg";
+    internal const string EncounterIconTheEternalTyrant = "";
 
     // Instances
     internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
@@ -36,6 +37,7 @@ internal static class LogImages
     internal const string EncounterIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
     internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
     internal const string InstanceIconKinfall = "https://i.imgur.com/jJXcGeE.png";
+    internal const string InstanceSolitaryThrone = "";
 
     // Combat Replay Maps
     internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";

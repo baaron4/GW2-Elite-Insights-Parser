@@ -283,6 +283,8 @@ public class LogData
                         return new Eparch(id);
                     case TargetID.WhisperingShadow:
                         return new WhisperingShadow(id);
+                    case TargetID.TheEternalTyrant:
+                        return new TheEternalTyrant(id);
                     // Golems
                     case TargetID.MassiveGolem10M:
                     case TargetID.MassiveGolem4M:

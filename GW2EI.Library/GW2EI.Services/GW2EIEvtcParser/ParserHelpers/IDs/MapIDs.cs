@@ -63,6 +63,7 @@ public static class MapIDs
     public const int SirensReefFractal = 1309;
     public const int SnowblindFractal = 948;
     public const int SolidOceanFractal = 958;
+    public const int SolitaryThrone = 1636;
     public const int SwamplandFractal = 949;
     public const int ThaumanovaFractal = 957;
     public const int TwilightOasisFractal = 1267;

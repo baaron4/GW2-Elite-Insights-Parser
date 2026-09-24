@@ -694,6 +694,8 @@ public static class SpeciesIDs
         KryptisRift = SpeciesIDs.KryptisRift,
         // - Kinfall
         WhisperingShadow = 27010,
+        // - Solitary Throne
+        TheEternalTyrant = 99999,
         #endregion FRACTALS
         #region GOLEMS
         MassiveGolem10M = 16169,
