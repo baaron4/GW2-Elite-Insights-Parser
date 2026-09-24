@@ -150,10 +150,10 @@ internal class MAMA : Nightmare
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(1 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.TwistedHorror);
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.TwistedHorror,
+        ];
     }
 
     internal static readonly List<(TargetID, string)> KnightPhases =

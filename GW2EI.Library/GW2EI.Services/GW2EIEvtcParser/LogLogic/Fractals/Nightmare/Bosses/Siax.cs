@@ -56,12 +56,13 @@ internal class Siax : Nightmare
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(2 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.VolatileHallucinationSiax);
-        trashIDs.Add(TargetID.NightmareHallucinationSiax);
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.VolatileHallucinationSiax,
+            TargetID.NightmareHallucinationSiax,
+        ];
     }
+
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return

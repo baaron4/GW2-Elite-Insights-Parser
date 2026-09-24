@@ -30,7 +30,7 @@ internal class Skorvald : ShatteredObservatory
             new PlayerDstHealthDamageHitMechanic(FocusedAnger, Mech_FocusedAnger, new (Symbols.TriangleDown,Colors.Orange), new("Large Cone KB", "Focused Anger (Large Cone Overhead Crosshair Knockback)","Large Cone Knockback"), Sev0),
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], Mech_HorizonStrikeSkorvald, new (Symbols.Circle,Colors.LightOrange), new("Horizon Strike.S", "Horizon Strike (turning pizza slices during Skorvald)","Horizon Strike (Skorvald)"), Sev1), // 
+                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], Mech_HorizonStrikeSkorvald, new (Symbols.Circle,Colors.LightOrange), new("Horizon Strike.S", "Horizon Strike (turning pizza slices during Skorvald)","Horizon Strike (Skorvald)"), Sev1), //
                     new PlayerDstHealthDamageHitMechanic(CrimsonDawn, Mech_CrimsonDawn, new (Symbols.Circle,Colors.DarkRed), new("Horizon Strike.S End", "Crimson Dawn (almost Full platform attack after Horizon Strike)","Horizon Strike (last)"), Sev1),
                 ]
             ),
@@ -209,7 +209,7 @@ internal class Skorvald : ShatteredObservatory
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
         {
-            // Check some CM skills instead, not perfect but helps, 
+            // Check some CM skills instead, not perfect but helps,
             // Solar Bolt is the first thing he tries to cast, that looks very consistent
             // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
             // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
@@ -279,10 +279,10 @@ internal class Skorvald : ShatteredObservatory
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(1 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.SolarBloom);
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.SolarBloom,
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

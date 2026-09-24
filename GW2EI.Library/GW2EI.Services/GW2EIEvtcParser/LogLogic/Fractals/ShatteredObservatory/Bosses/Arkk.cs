@@ -93,19 +93,19 @@ internal class Arkk : ShatteredObservatory
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(10 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.FanaticDagger2);
-        trashIDs.Add(TargetID.FanaticDagger1);
-        trashIDs.Add(TargetID.FanaticBow);
-        trashIDs.Add(TargetID.SolarBloom);
-        trashIDs.Add(TargetID.BLIGHT);
-        trashIDs.Add(TargetID.PLINK);
-        trashIDs.Add(TargetID.DOC);
-        trashIDs.Add(TargetID.CHOP);
-        trashIDs.Add(TargetID.ProjectionArkk);
-        trashIDs.Add(TargetID.ReactorActiveArkk);
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.FanaticDagger2,
+            TargetID.FanaticDagger1,
+            TargetID.FanaticBow,
+            TargetID.SolarBloom,
+            TargetID.BLIGHT,
+            TargetID.PLINK,
+            TargetID.DOC,
+            TargetID.CHOP,
+            TargetID.ProjectionArkk,
+            TargetID.ReactorActiveArkk,
+        ];
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
