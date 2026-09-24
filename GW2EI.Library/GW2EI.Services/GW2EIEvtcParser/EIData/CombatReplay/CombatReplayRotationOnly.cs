@@ -10,6 +10,9 @@ public class CombatReplayRotationOnly : CombatReplay
     internal override void AddPosition(ParametricPoint3D position)
     {
     }
+    internal override void AddTeleport(ParametricPoint3D velocity)
+    {
+    }
 
     internal override void AddVelocity(ParametricPoint3D velocity)
     {
