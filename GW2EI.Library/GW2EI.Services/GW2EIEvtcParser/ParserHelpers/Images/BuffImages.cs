@@ -48,6 +48,7 @@ public static class BuffImages
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
     public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
     public const string Daze = "https://render.guildwars2.com/file/9AE125E930C92FEA0DD99E7EBAEDE4CF5EC556B6/433474.png";
+    public const string Float = "https://render.guildwars2.com/file/18F6E20EB4F7A812FD2C13723F130166BC54C6D1/2440713.png";
     public const string Exposed = "https://wiki.guildwars2.com/images/6/6b/Exposed.png";
     public const string Unblockable = "https://render.guildwars2.com/file/BD6C4CEEC95711F20FC62A4CA310C5A6574F9664/2261523.png";
     public const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";
@@ -326,6 +327,7 @@ public static class BuffImages
     public const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
     public const string Agony = "https://render.guildwars2.com/file/C0B3EB17FEA2B0C4481333F36AA619EB9ABD1CD6/514400.png";
     public const string SpiritsConsumed = "https://wiki.guildwars2.com/images/1/16/Spirits_Consumed.png";
+    public const string MarkedTarget = "https://wiki.guildwars2.com/images/2/25/Marked_Target.png";
     // Mistlock Singularity
     public const string DesertCarapace = "https://render.guildwars2.com/file/6DDE245C59EB022E39EE0827161FFB77C0F04CD0/1029981.png";
     // Instability

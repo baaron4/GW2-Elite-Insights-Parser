@@ -581,6 +581,9 @@ internal static class EncounterBuffs
             new Buff("Gorefrost Target", GorefrostTarget, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Shatterstep", AchievementEligibilityShatterstep, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Undying Light", AchievementEligibilityUndyingLight, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Solitary Throne - Eternal Tyrant
+            new Buff("Targeted (Eternal Tyrant)", TargetedEternalTyrant, Source.EncounterSpecific, BuffClassification.Other, BuffImages.MarkedTarget),
+            new Buff("Low Gravity", LowGravity, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Float),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood
@@ -760,7 +763,7 @@ internal static class EncounterBuffs
             new Buff("Kela Burrowed", KelaBurrowed, Source.EncounterSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             new Buff("Achievement Eligibility: Surefooted", AchievementEligibilitySurefooted, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: See You Later, Alligator", AchievementEligibilitySeeYouLaterAlligator, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Nexus of Eternity         
+            // Nexus of Eternity
             new Buff("Empowered (Nexus of Eternity)", EmpoweredNexusOfEternity, Source.EncounterSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Ascension", Ascension, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Ascension),
             new Buff("Damage Immunity", DamageImmunity, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
@@ -783,7 +786,7 @@ internal static class EncounterBuffs
             new Buff("Aetheric Adrenaline (30%)", AethericAdrenaline30, Source.EncounterSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
             new Buff("Aetheric Adrenaline (40%)", AethericAdrenaline40, Source.EncounterSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
             new Buff("Aetheric Adrenaline (50%)", AethericAdrenaline50, Source.EncounterSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
-            // - Nexus of Eternity   
+            // - Nexus of Eternity
             new Buff("Wizard's Blessing (VoE)", WizardsBlessingVoE, Source.EncounterSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.WizardsBlessing),
             new Buff("Covered in Scarabs 1", CoveredInScarabs, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Covered in Scarabs 2", CoveredInScarabs2, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),

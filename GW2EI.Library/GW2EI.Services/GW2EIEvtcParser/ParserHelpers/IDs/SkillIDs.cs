@@ -5724,8 +5724,10 @@ public static class SkillIDs
     public const long AnnihilatingOrbVloxx = 80323;
     public const long Determined80356 = 80356;
     public const long Ascension = 80368;
+    public const long GravityFieldHit = 80369;
     public const long JudgmentOfEternity1 = 80378;
     public const long VisionsOfEternityInStaff = 80420;
+    public const long AstralOrb = 80433;
     public const long POV_RelicOfTheCuratorGearBuff = 80445;
     public const long DivisionEternal = 80483;
     public const long SurroundingCurseVloxx = 80484;
@@ -5743,6 +5745,7 @@ public static class SkillIDs
     public const long PowerOfAncora = 80598;
     public const long DamageImmunity = 80608;
     public const long JudgmentOfEternityGreenFailDamage = 80629;
+    public const long LowGravity = 80645;
     public const long SurroundingCurseCast = 80653; // doesn't do damage? hp%?
     public const long NexusOfEternity3GreenSelect = 80681;
     public const long ThousandStrikesAspectOfTheSpear = 80709;
@@ -5750,9 +5753,12 @@ public static class SkillIDs
     public const long EternalReflectionCosmicPiercerElite = 80726;
     public const long Excision = 80732;
     public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
+    public const long TargetedEternalTyrant = 80769;
+    public const long AstralBarrage = 80770;
     public const long ProbabilityDistribution = 80809;
     public const long RagingStormVloxx = 80810;
     public const long VloxxsVisionStackBuff = 80855;
+    public const long GravityField = 80869;
     public const long CosmicChargeAspectOfTheSpear = 80871;
     public const long ExcisionExtremis1 = 80901;
     public const long EchoingOutburst = 80908;
@@ -5770,7 +5776,9 @@ public static class SkillIDs
     public const long RelicOfTheLastTyrantDamage = 81068;
     public const long POV_RelicOfTheLanternGearBuff = 81019;
     public const long AscensionsSacrifice = 81076;
+    public const long CosmicBlastHit = 81174;
     public const long RagingStormVloxx2 = 81176;
+    public const long CosmicBlast = 81182;
     public const long POV_RelicOfTheVisionaryGearBuff = 81191;
     public const long TyrantsFuryBuff = 81192;
     public const long EternalReflectionVloxx = 81209;

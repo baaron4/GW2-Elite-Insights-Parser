@@ -22,6 +22,9 @@ public static class EffectGUIDs
     public static readonly Guid EnemyAoE180 = new("60C2DD0478450F4B81BAA6486227872A"); // split compound with effect for hostile, radius 180, e.g. guardian symbols
     public static readonly Guid EnemyAoE240 = new("2125A13079C1C5479C150926EB60A15D"); // split compound with effect for hostile, radius 240, e.g. guardian symbols
     public static readonly Guid AoEWhiteOutline180 = new("E37AD3E0D6DA364999D987D9DDFC9707"); // split compound with generic white outline for ally
+    public static readonly Guid AoEIndicatorFilling280 = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // owned by attacker, duration 3000
+    public static readonly Guid UpdraftPulse1 = new("619CCF0F723DE24892E8158226FBB53A"); // no owner, duration 3366ms
+    public static readonly Guid UpdraftPulse2 = new("ADC809B9FB2D9841807CABB43FCDD5FF"); // owned by gadget, duration 1500ms
     #endregion
 
     #region Mounts
@@ -659,6 +662,18 @@ public static class EffectGUIDs
     public static readonly Guid WhisperingShadowWintryOrb2 = new("795EC8C08BDB514794900B1107C07EC5"); // no owner, default duration 1167ms
     public static readonly Guid WhisperingShadowHailstorm1 = new("C127DECDC53F13428FF21CF0C236C25D"); // no owner, default duration 6667ms
     public static readonly Guid WhisperingShadowHailstorm2 = new("66046924ADCA9E4F831A44E2B4ACA40C"); // no owner, default duration 1167ms
+    // Solitary Throne Fractal
+    public static readonly Guid EternalTyrantCosmicBlast = new("00BD9C27CCD7D24A84FF4B0878A1EC22"); // owned by tyrant, duration 10000ms
+    public static readonly Guid EternalTyrantGravityFieldSpawn = new("00963C48EA253D44B14B91C534104B4E"); // no owner, duration 6000ms
+    public static readonly Guid EternalTyrantGravityField = new("C73F97F8F1A4EA4AB31DDCB76F2E2866"); // owned by gadget, duration 120000ms
+    public static readonly Guid EternalTyrantGravityFieldOutline = new("84805BACFF79AC4AB23525576B101DC7"); // owned by gadget, duration infinite
+    public static readonly Guid EternalTyrantAstralBarrage1 = new("A478BD35F568974091FC99670B5A9700"); // owned by tyrant, duration 1500ms
+    public static readonly Guid EternalTyrantAstralBarrage2 = new("912F68E45158C14E9A30D6011B7B0C7F"); // owned by tyrant, duration 7000ms
+    public static readonly Guid EternalTyrantAstralBarrageAudio = new("02F610D9C8015E46892A216AA82B00C8"); // owned by tyrant, duration 1500ms
+    public static readonly Guid EternalTyrantCosmicWaveWindup1 = new("93D225B6CF002448A0AA8C6C98A8F373"); // owned by tyrant, duration 3333ms
+    public static readonly Guid EternalTyrantCosmicWaveWindup2 = new("139952BB07EEA1428A5E509EFD71E009"); // owned by tyrant, duration 3333ms
+    public static readonly Guid EternalTyrantCosmicWaveIndicator = new("01D633F85F5B65468503C5BC6A9EBC0E"); // owned by tyrant, duration 2000ms
+    public static readonly Guid EternalTyrantCosmicWave = new("F697B3EF5603D3489D24E870ABCAE4B6"); // owned by tyrant, duration 1166ms
     #endregion
 
     #region Raids
@@ -1133,7 +1148,6 @@ public static class EffectGUIDs
     public static readonly Guid NexusOfEternityJudgmentOfEternity3PeopleGreenFail = new("092F93A0CCA8EA48B54594EF6A2683B7"); // duration 2666
     public static readonly Guid NexusOfEternityAscensionsSacrifice2PeopleGreenSelect = new("A47987D0864223429B261683B6452826"); // src vloxx, dst player, duration 5000
     public static readonly Guid NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop = new("BDF708225224C64183BA3CE2A609D37F"); // src vloxx, dst player, duration 5000
-    public static readonly Guid NexusOfEternityProbabilityDistributionIndicator = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityProbabilityDistributionVisionsOfEternityExplosionTBC = new("C35796367350D74CA26BA0B8792D9F65"); // src vloxx, duration 2333, the explosion when the puddle is created?
     public static readonly Guid NexusOfEternityWorldpiercerLineBarrier = new("490F98F24F33004093FCA91038E2C1B2"); // src vloxx, duration infinite, has dynamic end, oriented, dropped under Worldpiercer missile
     public static readonly Guid NexusOfEternityWorldpiercerIndicator = new("635554D77C7C5C4E81367013B99A14BB"); // src vloxx, duration 2666, singular effect for all 3 beams

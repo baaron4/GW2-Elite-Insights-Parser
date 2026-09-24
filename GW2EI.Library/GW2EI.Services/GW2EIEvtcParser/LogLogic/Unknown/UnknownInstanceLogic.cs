@@ -81,6 +81,8 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
                     return new KinfallInstance(GenericTriggerID);
                 case LonelyTowerFractal:
                     return new LonelyTowerInstance(GenericTriggerID);
+                case SolitaryThroneFractal:
+                    return new SolitaryThroneInstance(GenericTriggerID);
                 // Raids
                 case SpiritValeRaid:
                     return new SpiritValeInstance(GenericTriggerID);

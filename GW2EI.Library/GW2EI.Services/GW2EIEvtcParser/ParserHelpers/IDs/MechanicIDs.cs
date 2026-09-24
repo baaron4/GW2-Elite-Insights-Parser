@@ -255,7 +255,7 @@ public static class MechanicIDs
     public static readonly int Mech_DeimosSelectedByGreen = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_DeimosGreenTeleport = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
     public static readonly int Mech_UnnaturalSignet = BastionOfThePenitentMask | ++bastionOfThePenitentCount;
-    #endregion WING 4 
+    #endregion WING 4
     #region WING 5
     private static int hallOfChainsCount = 0;
     public static readonly int Mech_FracturedSpirit = HallOfChainsMask | ++hallOfChainsCount;
@@ -965,6 +965,7 @@ public static class MechanicIDs
     private const int SilentSurfMask = FractalMask | 0x00040000;
     private const int LonelyTowerMask = FractalMask | 0x00050000;
     private const int KinfallMask = FractalMask | 0x00060000;
+    private const int SolitaryThroneMask = FractalMask | 0x00070000;
 
     private static int _fractalCount = 0;
     public static readonly int Mech_FluxBombBuff = FractalMask | ++_fractalCount;
@@ -1164,6 +1165,17 @@ public static class MechanicIDs
     public static readonly int Mech_EmpathicManipulationGuiltInterrupt = SunquaPeakMask | ++_sunquaPeakCount;
     public static readonly int Mech_CacophonousMind = SunquaPeakMask | ++_sunquaPeakCount;
     #endregion SUNQUA PEAK
+    #region SOLITARY THRONE
+    private static int _solitaryThroneCount = 0;
+    public static readonly int Mech_CosmicBlastTarget = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_CosmicBlastHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_GravityFieldTarget = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_GravityFieldHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_AstralBarrageHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_GravityWaveHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_AstralOrbHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_AstralOrbReflect = SolitaryThroneMask | ++_solitaryThroneCount;
+    #endregion SOLITARY THRONE
     #endregion FRACTALS
 
     #region CONVERGENCE
