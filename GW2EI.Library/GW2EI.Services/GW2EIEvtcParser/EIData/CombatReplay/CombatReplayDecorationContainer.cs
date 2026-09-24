@@ -358,11 +358,11 @@ internal class CombatReplayDecorationContainer
     /// <param name="thickness">Thickness of the tether.</param>
     /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
-        EffectEvent effect, 
-        Color color, 
-        double opacity, 
-        (long start, long end) lifespan, 
-        uint thickness = 2, 
+        EffectEvent effect,
+        Color color,
+        double opacity,
+        (long start, long end) lifespan,
+        uint thickness = 2,
         bool worldSizeThickness = false)
     {
         AddTetherByEffectGUID(effect, color.WithAlpha(opacity).ToString(), lifespan, thickness, worldSizeThickness);
@@ -377,10 +377,10 @@ internal class CombatReplayDecorationContainer
     /// <param name="thickness">Thickness of the tether.</param>
     /// <param name="worldSizeThickness"><see langword="true"/> to indicate that thickness is in inches instead of pixels.</param>
     internal void AddTetherByEffectGUID(
-        EffectEvent effect, 
-        string color, 
-        (long start, long end) lifespan, 
-        uint thickness = 2, 
+        EffectEvent effect,
+        string color,
+        (long start, long end) lifespan,
+        uint thickness = 2,
         bool worldSizeThickness = false)
     {
         if (!effect.IsAroundDst)
