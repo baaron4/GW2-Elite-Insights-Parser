@@ -992,7 +992,7 @@ public static class SpeciesIDs
         StormSpirit = 6371,
         WaterSpirit = 12778,
         SpiritOfNatureRenewal = 6649,
-        SpiritOfNatureTBC = 27947,
+        SpiritOfNatureNexusOfEternityConvergenceSAK = 27947,
         // Ranger Pets
         JuvenileJungleStalker = 3827,
         JuvenileKrytanDrakehound = 4425,

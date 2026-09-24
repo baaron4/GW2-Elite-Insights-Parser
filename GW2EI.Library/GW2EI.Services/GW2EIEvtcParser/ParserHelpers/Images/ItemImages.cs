@@ -869,6 +869,7 @@ internal static class ItemImages
     public const string FireElementalPowder = "https://render.guildwars2.com/file/F90EEC96BB0C70D5CC2F30BA2E0B45B8326965A8/219351.png";
     public const string SunspearParagonSupport = "https://render.guildwars2.com/file/CAAF3329AC92102553F8CA0D0116C1B2A9644392/1894924.png";
     public const string RavenSpiritShadow = "https://render.guildwars2.com/file/4820B8070531F833EED091FB1CFB3407E13401E7/2220562.png";
+    public const string BasicGlider = "https://render.guildwars2.com/file/44CBA526B47C025FBE040CC8A9D2A055D06861D0/1001219.png";
     // Other Items
     public const string WatchworkPortalDevice = "https://render.guildwars2.com/file/7B0E6BFAEEB8164FBF3DD33ACFAAAD9E9607753F/619596.png";
     #endregion Miscellaneous

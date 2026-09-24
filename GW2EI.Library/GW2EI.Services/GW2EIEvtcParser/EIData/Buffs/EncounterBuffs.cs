@@ -785,10 +785,10 @@ internal static class EncounterBuffs
             new Buff("Aetheric Adrenaline (50%)", AethericAdrenaline50, Source.EncounterSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
             // - Nexus of Eternity   
             new Buff("Wizard's Blessing (VoE)", WizardsBlessingVoE, Source.EncounterSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.WizardsBlessing),
-            new Buff("Covered in Scarabs 1", CoveredInScarabs, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Covered in Scarabs 2", CoveredInScarabs2, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Covered in Scarabs 1", CoveredInScarabs, Source.EncounterSpecific, BuffClassification.Other, BuffImages.CoveredInScarabs),
+            new Buff("Covered in Scarabs 2", CoveredInScarabs2, Source.EncounterSpecific, BuffClassification.Other, BuffImages.CoveredInScarabs),
             new Buff("Power of Ancora", PowerOfAncora, Source.EncounterSpecific, BuffStackType.Stacking, 50, BuffClassification.Offensive, BuffImages.KryptisEssence),
-            new Buff("Inquest Disguise", InquestDisguise, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Inquest Disguise", InquestDisguise, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Transformation),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.EncounterSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.EncounterSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),

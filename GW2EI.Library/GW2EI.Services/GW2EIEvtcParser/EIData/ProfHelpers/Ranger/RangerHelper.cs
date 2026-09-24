@@ -151,6 +151,14 @@ internal static class RangerHelper
     .Union(JuvenileWyvernPetIDs)
     .ToHashSet();
 
+    /// <summary>
+    /// Special minions tied to Ranger only but not part of the skillset.
+    /// </summary>
+    private static readonly HashSet<int> SpecialMinionIDs =
+    [
+        (int)MinionID.SpiritOfNatureNexusOfEternityConvergenceSAK,
+    ];
+
     internal static bool IsJuvenileFelinePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
@@ -262,7 +270,7 @@ internal static class RangerHelper
 
     internal static bool IsKnownMinionID(int id)
     {
-        return IsJuvenilePetID(id) || SpiritIDs.Contains(id);
+        return IsJuvenilePetID(id) || SpiritIDs.Contains(id) || SpecialMinionIDs.Contains(id);
     }
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
@@ -625,6 +633,12 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.February2024NewWeapons),
         // Spear
         new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.HuntersProwess),
+        // Special Nexus of Eternity convergence buffs
+        new Buff("Forest Call", ForestCall, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
+        new Buff("Moon Call", MoonCall, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
+        new Buff("Wild Call", WildCall, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
+        new Buff("Nurturing Bloom (1)", NurturingBloom1, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
+        new Buff("Nurturing Bloom (2)", NurturingBloom2, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
     ];
 
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)

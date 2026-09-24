@@ -73,6 +73,7 @@ public static class BuffImages
     public const string CrystallineHeart = "https://render.guildwars2.com/file/CDA1F2762D0A7AC275D2147C15026C042245EA35/1451297.png";
     // Others
     public const string RoyalDecree = "https://wiki.guildwars2.com/images/1/1a/Royal_Decree.png";
+    public const string Transformation = "https://wiki.guildwars2.com/images/e/e2/Transformation.png";
     #endregion Commons
     #region WvW
     public const string BorderlandBloodlust = "https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png";
@@ -397,12 +398,13 @@ public static class BuffImages
     public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
     public const string Goop = "https://wiki.guildwars2.com/images/2/2e/Goop.png";
     public const string RelentlessSpeed = "https://wiki.guildwars2.com/images/e/e4/Relentless_Speed.png";
-    public const string Ascension = "https://i.imgur.com/NGIe0XB.png"; // TODO use wiki version
+    public const string Ascension = "https://wiki.guildwars2.com/images/6/63/Ascension_(effect).png";
     // Convergence
     public const string WizardsBlessing = "https://wiki.guildwars2.com/images/d/d8/Wizard%27s_Blessing_%28effect%29.png";
     public const string KryptisEssence = "https://wiki.guildwars2.com/images/3/37/Kryptis_Essence.png";
     public const string WeighedDownByDebirs = "https://wiki.guildwars2.com/images/c/c5/Weighed_Down_by_Debris.png";
     public const string ForgedBinding = "https://wiki.guildwars2.com/images/a/a4/Forged_Binding.png";
+    public const string CoveredInScarabs = "https://wiki.guildwars2.com/images/8/8c/Covered_in_Scarabs.png";
     // Open World
     public const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
     public const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
