@@ -688,13 +688,13 @@ internal class Dhuum : HallOfChains
                     if (pos.XYZ.X < 14000)
                     {
                         // Outside reaper
-                        replay.Trim(target.FirstAware, target.FirstAware + CombatReplayPollingRate);
+                        replay.HideInInterval(new(target.FirstAware, target.LastAware));
                     }
                     else
                     {
                         if (replay.Positions.Count > 1)
                         {
-                            replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                            replay.HideInInterval(new(target.FirstAware, replay.Positions.LastOrDefault().Time));
                         }
                     }
                 }
@@ -790,10 +790,10 @@ internal class Dhuum : HallOfChains
                 var majorSoulSplit = log.CombatData.GetAnimatedCastData(MajorSoulSplit);
                 foreach (var split in majorSoulSplit)
                 {
-                    replay.Hidden.Add(new(hideStart, split.Time));
+                    replay.HideInInterval(new(hideStart, split.Time));
                     hideStart = split.Caster.LastAware;
                 }
-                replay.Hidden.Add(new(hideStart, target.LastAware));
+                replay.HideInInterval(new(hideStart, target.LastAware));
                 break;
             default:
                 break;

@@ -678,7 +678,7 @@ internal class Deimos : BastionOfThePenitent
                 var Sauls = log.AgentData.GetStableSpeciesByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
                 foreach (var Saul in Sauls)
                 {
-                    replay.Hidden.Add(new Segment(Saul.FirstAware, Saul.LastAware));
+                    replay.HideInInterval(new Segment(Saul.FirstAware, Saul.LastAware));
                 }
                 break;
             case (int)TargetID.DemonicBond:
@@ -730,7 +730,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         if (targetableEvent.Targetable)
                         {
-                            replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                            replay.HideInInterval(new Segment(hiddenStart, targetableEvent.Time));
                             hiddenStart = target.LastAware;
                             lineStart = targetableEvent.Time;
                         }
@@ -738,7 +738,7 @@ internal class Deimos : BastionOfThePenitent
                         {
                             if (targetableEvent.Time > hiddenStart)
                             {
-                                replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                                replay.HideInInterval(new Segment(hiddenStart, targetableEvent.Time));
                             }
                             else
                             {
@@ -749,7 +749,7 @@ internal class Deimos : BastionOfThePenitent
                         }
                     }
                 }
-                replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
+                replay.HideInInterval(new Segment(hiddenStart, target.LastAware));
                 break;
             default:
                 break;

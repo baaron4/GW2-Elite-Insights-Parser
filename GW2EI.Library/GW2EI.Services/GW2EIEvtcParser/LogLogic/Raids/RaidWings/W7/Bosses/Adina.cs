@@ -483,6 +483,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
                 var plateform = new RegularPolygonDecoration(PlateformRadius, 6, (target.FirstAware, target.LastAware), colorPlateform, new AgentConnector(target));
                 replay.Decorations.AddWithBorder(plateform, colorPlateformBorder);
+                replay.AddHideByEncounterPhases(log.LogData.GetEncounterPhases(log, LogID), log);
                 break;
             default:
                 break;

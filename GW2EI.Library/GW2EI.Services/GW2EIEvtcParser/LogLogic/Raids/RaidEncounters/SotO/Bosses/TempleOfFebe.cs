@@ -644,17 +644,17 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             // If the Embodiment hasn't been trimmed yet, trim the lifespan to start on first cast and end at the log end.
             if (!startTrimmed)
             {
-                replay.Trim(start, replay.TimeOffsets.end);
+                replay.HideInInterval(new(target.FirstAware, start));
                 startTrimmed = true;
             }
             else
             {
                 // Once already trimmed, hide them at the end of cast and show at the start of the next.
-                replay.Hidden.Add(new Segment(invisibleStart, start));
+                replay.HideInInterval(new Segment(invisibleStart, start));
             }
             invisibleStart = end;
         }
-        replay.Trim(replay.TimeOffsets.start, invisibleStart);
+        replay.HideInInterval(new(invisibleStart, target.LastAware));
     }
 
     /// <summary>

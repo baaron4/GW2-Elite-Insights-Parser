@@ -233,12 +233,12 @@ internal class SpiritRace : SpiritVale
             var hpRestored = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent > 0 && x.Time > hpZeroUpdate.Time);
             if (hpRestored != null)
             {
-                replay.Hidden.Add(new(hpZeroUpdate.Time, hpRestored.Time));
+                replay.HideInInterval(new(hpZeroUpdate.Time, hpRestored.Time));
                 return hpRestored.Time;
             }
             else
             {
-                replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
+                replay.HideInInterval(new(hpZeroUpdate.Time, target.LastAware));
             }
         }
         return long.MaxValue;

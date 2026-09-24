@@ -180,7 +180,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 if (lastHPUpdate != null)
                 {
                     long maiTrinEnd = lastHPUpdate.Time;
-                    replay.Trim(replay.TimeOffsets.start, maiTrinEnd);
+                    replay.HideInInterval(new(maiTrinEnd, target.LastAware));
                 }
                 break;
             case (int)TargetID.MaiTrinRaidDuringEcho:

@@ -253,14 +253,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 }
                 if (finalCAEncounter != null)
                 {
-                    replay.Hidden.Add(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
+                    replay.HideInInterval(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
                 }
                 break;
             case (int)TargetID.CALeftArm:
             case (int)TargetID.CARightArm:
                 if (finalCAEncounter != null)
                 {
-                    replay.Hidden.Add(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
+                    replay.HideInInterval(new Segment(finalCAEncounter.End, log.LogData.LogEnd));
                 }
                 break;
             case (int)TargetID.CABodyAttackTarget:
@@ -270,14 +270,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 var bodyAtHideStart = log.LogData.LogStart;
                 foreach (var noInvul in bodyInvulStatus)
                 {
-                    replay.Hidden.Add(new Segment(bodyAtHideStart, noInvul.Start));
+                    replay.HideInInterval(new Segment(bodyAtHideStart, noInvul.Start));
                     bodyAtHideStart = noInvul.End;
                 }
                 if (finalCAEncounter != null)
                 {
                     bodyAtHideStart = Math.Min(bodyAtHideStart, finalCAEncounter.End);
                 }
-                replay.Hidden.Add(new Segment(bodyAtHideStart, log.LogData.LogEnd));
+                replay.HideInInterval(new Segment(bodyAtHideStart, log.LogData.LogEnd));
                 break;
             case (int)TargetID.CALeftArmAttackTarget:
             case (int)TargetID.CARightArmAttackTarget:
@@ -287,7 +287,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 {
                     if (targetable.Targetable)
                     {
-                        replay.Hidden.Add(new Segment(armAtHideStart, targetable.Time));
+                        replay.HideInInterval(new Segment(armAtHideStart, targetable.Time));
                     }
                     else
                     {
@@ -298,7 +298,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 {
                     armAtHideStart = Math.Min(armAtHideStart, finalCAEncounter.End);
                 }
-                replay.Hidden.Add(new Segment(armAtHideStart, log.LogData.LogEnd));
+                replay.HideInInterval(new Segment(armAtHideStart, log.LogData.LogEnd));
                 break;
             case (int)TargetID.ConjuredGreatsword:
                 break;

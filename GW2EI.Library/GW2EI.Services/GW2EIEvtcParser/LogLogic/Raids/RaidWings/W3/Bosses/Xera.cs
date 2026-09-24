@@ -459,7 +459,7 @@ internal class Xera : StrongholdOfTheFaithful
                     if (xeraInvulApply != null)
                     {
                         long hiddenEnd = xeraInvulApply.Time + 14000;
-                        replay.Hidden.Add(new Segment(hiddenStart, hiddenEnd));
+                        replay.HideInInterval(new Segment(hiddenStart, hiddenEnd));
                         var mergedXera2 = GetXera2Merge(activeXera);
                         if (mergedXera2 != null)
                         {
@@ -474,7 +474,7 @@ internal class Xera : StrongholdOfTheFaithful
                             hiddenStart = deadEvent != null ? deadEvent.Time : threshold;
                         }
                     }
-                    replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
+                    replay.HideInInterval(new Segment(hiddenStart, target.LastAware));
                 }
                 break;
             case (int)TargetID.BloodstoneFragment:

@@ -223,14 +223,14 @@ internal class River : HallOfChains
                 ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstBomberMovement.XYZ != default)
                 {
-                    replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
+                    replay.HideInInterval(new(target.FirstAware, firstBomberMovement.Time - 1000));
                 }
                 break;
             case (int)TargetID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstRiverMovement.XYZ != default)
                 {
-                    replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
+                    replay.HideInInterval(new(target.FirstAware, firstRiverMovement.Time - 1000));
                 }
 
                 if (replay.Rotations.Count != 0)

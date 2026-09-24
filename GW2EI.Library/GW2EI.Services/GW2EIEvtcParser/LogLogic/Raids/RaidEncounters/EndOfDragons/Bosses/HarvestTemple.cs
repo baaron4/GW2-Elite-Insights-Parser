@@ -1823,14 +1823,15 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 if (frostBeamMoveStartVelocity != null)
                 {
                     lifespan = (frostBeamMoveStartVelocity.Time, target.LastAware);
-                    replay.Trim(lifespan.start, lifespan.end);
+                    replay.HideInInterval(new(lifespan.end, target.LastAware));
+                    replay.HideInInterval(new(target.FirstAware, lifespan.start));
                     var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, new AgentConnector(target));
                     replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
                 }
                 else
                 {
                     // Completely hide it
-                    replay.Trim(0, 0);
+                    replay.HideInInterval(new(target.FirstAware, target.LastAware));
                 }
                 break;
             case (int)TargetID.DragonEnergyOrb:

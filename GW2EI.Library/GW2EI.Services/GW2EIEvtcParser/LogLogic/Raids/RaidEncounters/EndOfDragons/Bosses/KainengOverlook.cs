@@ -380,7 +380,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         var determined762Apply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, target.AgentItem).FirstOrDefault();
         if (determined762Apply != null)
         {
-            replay.Trim(replay.TimeOffsets.start, determined762Apply.Time);
+            replay.HideInInterval(new(determined762Apply.Time, target.LastAware));
         }
     }
 

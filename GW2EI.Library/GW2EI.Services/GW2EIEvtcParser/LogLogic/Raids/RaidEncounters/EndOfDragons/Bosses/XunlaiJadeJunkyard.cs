@@ -490,10 +490,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                     var prismStart = log.LogData.EvtcLogStart;
                     foreach (var xjjPhase in xjjPhases)
                     {
-                        replay.Hidden.Add(new(prismStart, xjjPhase.Start));
+                        replay.HideInInterval(new(prismStart, xjjPhase.Start));
                         prismStart = xjjPhase.End;
                     }
-                    replay.Hidden.Add(new(prismStart, log.LogData.EvtcLogEnd));
+                    replay.HideInInterval(new(prismStart, log.LogData.EvtcLogEnd));
                     break;
                 }
             default:

@@ -428,7 +428,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
                 if (firstLiftUp != null)
                 {
                     // Add 15s of wiggle room at the start
-                    replay.Trim(firstLiftUp.Time - 15000, target.LastAware);
+                    replay.HideInInterval(new(target.FirstAware, firstLiftUp.Time - 15000));
                 }
                 break;
             default:

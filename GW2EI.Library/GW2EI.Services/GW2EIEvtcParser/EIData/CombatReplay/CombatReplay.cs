@@ -22,9 +22,13 @@ public class CombatReplay
     protected List<ParametricPoint3D> _Rotations = [];
     protected ParametricPoint3D[] _PolledRotations = [];
 
-    internal readonly List<Segment> Hidden = [];
+    internal IReadOnlyList<Segment> Hidden => _hidden;
+    protected List<Segment> _hidden = [];
     private long _start = -1;
     private long _end = -1;
+
+    internal bool AdditionalDataHandled = false;
+    private bool Finalized = false;
     internal (long start, long end) TimeOffsets => (_start, _end);
     // actors
     internal readonly CombatReplayDecorationContainer Decorations;
@@ -79,10 +83,47 @@ public class CombatReplay
     {
     }
 
-    internal void Trim(long start, long end)
+    internal void Finalize(ParsedEvtcLog log)
     {
-        _start = Math.Max(start, _start);
-        _end = Math.Max(_start, Math.Min(end, _end));
+        if (Finalized)
+        {
+            return;
+        }
+        Finalized = true;
+        long trimStart = TimeOffsets.start;
+        long trimEnd = TimeOffsets.end;
+        _hidden.RemoveAll(x => x.IsEmpty());
+        _hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
+        if (Hidden.Count > 0)
+        {
+            // fuse hidden
+            for (var i = 0; i < _hidden.Count - 1; i++)
+            {
+                var cur = Hidden[i];
+                var next = Hidden[i + 1];
+                if (cur.Intersects(next))
+                {
+                    cur.End = next.End;
+                    next.End = next.Start - 1;
+                    _hidden[i + 1] = cur;
+                    _hidden[i] = next;
+                }
+            }
+            _hidden.RemoveAll(x => x.IsEmpty());
+            // Trim if agent is hidden at start or end
+            var first = Hidden[0];
+            var last = Hidden[^1];
+            if (first.Start <= trimStart && first.End > trimStart)
+            {
+                trimStart = first.End;
+            }
+            if (last.End >= trimEnd && last.Start < trimEnd)
+            {
+                trimEnd = last.Start;
+            }
+        }
+        _start = Math.Max(log.LogData.LogStart, Math.Max(trimStart, _start));
+        _end = Math.Max(_start, Math.Min(Math.Min(trimEnd, _end), log.LogData.LogEnd));
         if (_PolledPositions.Length > 0 && (_PolledPositions[0].Time < _start || _PolledPositions[^1].Time > _end))
         {
             _PolledPositions = _PolledPositions.Where(x => x.Time >= _start && x.Time <= _end).ToArray();
@@ -542,26 +583,34 @@ public class CombatReplay
     /// </summary>
     internal void AddHideByBuff(SingleActor actor, ParsedEvtcLog log, long buffID)
     {
-        Hidden.AddRange(actor.GetBuffStatus(log, buffID).Where(x => x.Value > 0));
+        Finalized = false;
+        _hidden.AddRange(actor.GetBuffStatus(log, buffID).Where(x => x.Value > 0));
     }
 
     internal void AddHideByEncounterPhases(IReadOnlyList<EncounterPhaseData> encounterPhases, ParsedEvtcLog log)
     {
+        Finalized = false;
         long nextInvisible = log.LogData.EvtcLogStart;
         for (var i = 0; i < encounterPhases.Count; i++)
         {
             if (i == 0)
             {
-                Hidden.Add(new(log.LogData.EvtcLogStart, encounterPhases[i].Start));
+                _hidden.Add(new(log.LogData.EvtcLogStart, encounterPhases[i].Start));
                 nextInvisible = encounterPhases[i].End;
             }
             if (i < encounterPhases.Count - 1)
             {
-                Hidden.Add(new(encounterPhases[i].End, encounterPhases[i + 1].Start));
+                _hidden.Add(new(encounterPhases[i].End, encounterPhases[i + 1].Start));
                 nextInvisible = encounterPhases[i + 1].End;
             }
         }
-        Hidden.Add(new(nextInvisible, log.LogData.EvtcLogEnd));
+        _hidden.Add(new(nextInvisible, log.LogData.EvtcLogEnd));
+    }
+
+    internal void HideInInterval(Segment hidden)
+    {
+        Finalized = false;
+        _hidden.Add(hidden);
     }
 }
 
