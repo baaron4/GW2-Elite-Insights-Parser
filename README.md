@@ -43,13 +43,20 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 > ArcDPS EVTC log files are located by default at `"C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"`.
 
 #### Linux
-1. Follow steps 1 & 2 from above.
+There are `.deb` and `.rpm` packages available for Debian and Fedora based distros, .NET8.0 will be installed automatically, simply download the package of your choice and double click it to install.
+
+For Arch users updates must be done via your AUR package manager:
+- Desktop: `elite-insights-bin` run it with `elite-insights` 
+- CLI: `elite-insights-cli-bin` run it with `ei`
+
+These are instructions for the `.zip`:
+1. Follow steps 1 & 2 from above
 2. Open the folder in the terminal.
 3. Run `chmod +x ./GuildWars2EliteInsights` to mark it as an executable.
 4. You can now double click the file to launch it or simply start it with `./GuildWars2EliteInsights`.
 
 #### MacOS
-1. Follow all the Linux steps.
+1. Follow all the Linux .zip steps.
 2. After trying to open `GuildWars2EliteInsights` and Apple will issue a warning. 
 3. Click `Done` and navigate to Privacy & Security scroll to the bottom.
 4. Click `Open Anyway` for `GuildWars2EliteInsights`.

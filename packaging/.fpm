@@ -1,0 +1,11 @@
+-s dir
+--name elite-insights
+--license MIT
+--description "Analyze arcdps combat logs from Guild Wars 2"
+--depends "dotnet-runtime-8.0"
+--url "https://github.com/baaron4/GW2-Elite-Insights-Parser"
+--maintainer "EliphasNUIT"
+--category utility
+./usr=.
+./elite-insights=/usr/bin/elite-insights
+../LICENSE=/usr/share/doc/elite-insights/copyright

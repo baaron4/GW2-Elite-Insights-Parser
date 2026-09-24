@@ -12,7 +12,8 @@
         <OutputPath>..\..\..\GW2EI.bin\$(Configuration)\GW2EI\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-        <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+        <RollForward>LatestPatch</RollForward>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64;osx-arm64;linux-arm64</RuntimeIdentifiers>
         <Configurations>Debug;Release;Release-Win;Release-Linux;Release-OSX;Release-OSX-Arm;Release-Linux-Arm</Configurations>
     </PropertyGroup>
