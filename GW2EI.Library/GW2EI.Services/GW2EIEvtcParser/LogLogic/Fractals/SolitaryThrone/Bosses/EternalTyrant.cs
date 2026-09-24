@@ -143,7 +143,7 @@ internal class EternalTyrant : SolitaryThrone
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        // cosmic blast (launch aoe)
+        // cosmic blast (low gravity aoe)
         var cosmicBlastMissiles = log.CombatData.GetMissileEventsBySkillID(CosmicBlast);
         environmentDecorations.AddNonHomingMissiles(log, cosmicBlastMissiles, Colors.White, 0.2, 100);
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCosmicBlast, out var cosmicBlastFields))

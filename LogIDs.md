@@ -137,6 +137,11 @@ Kinfall Full Instance: 0x030600
 
 Whispering Shadow: 0x030601
 
+### Solitary Throne
+Solitary Throne Full Instance: 0x030700
+
+The Eternal Tyrant: 0x030701
+
 ## Raid Encounters
 ### Festivals
 Freezie: 0x040101
