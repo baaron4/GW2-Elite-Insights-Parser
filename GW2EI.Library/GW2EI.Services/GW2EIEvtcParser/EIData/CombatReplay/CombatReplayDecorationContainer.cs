@@ -1016,11 +1016,34 @@ internal class CombatReplayDecorationContainer
     }
     #endregion MISSILE
 
-    internal void AddFrontAndFlip(FormDecoration decoration, float frontDegree)
+    /// <summary>
+    /// Adds the decoration twice, the 2nd one being a copy flipped 180° of the original <paramref name="frontDegrees"/>.
+    /// </summary>
+    /// <param name="decoration">The main decoration.</param>
+    /// <param name="frontDegrees">The facing degrees.</param>
+    internal void AddFrontAndFlip(FormDecoration decoration, float frontDegrees)
     {
-        var front = new AngleConnector(frontDegree);
-        var flip = new AngleConnector(frontDegree + 180);
+        var front = new AngleConnector(frontDegrees);
+        var flip = new AngleConnector(frontDegrees + 180);
         Add(decoration.UsingRotationConnector(front));
         Add(decoration.Copy().UsingRotationConnector(flip));
+    }
+
+    internal void AddFrontAndFlip(FormDecoration decoration, in Vector3 point)
+    {
+        var flipPoint = -1 * point;
+        var front = new AngleConnector(point);
+        var flip = new AngleConnector(flipPoint);
+        Add(decoration.UsingRotationConnector(front));
+        Add(decoration.Copy().UsingRotationConnector(flip));
+    }
+
+    internal void AddFrontAndFlipWithGrowing(FormDecoration decoration, in Vector3 point, long growing, bool reverse = false)
+    {
+        var flipPoint = -1 * point;
+        var front = new AngleConnector(point);
+        var flip = new AngleConnector(flipPoint);
+        AddWithGrowing((FormDecoration)decoration.UsingRotationConnector(front), growing, reverse);
+        AddWithGrowing((FormDecoration)decoration.Copy().UsingRotationConnector(flip), growing, reverse);
     }
 }
