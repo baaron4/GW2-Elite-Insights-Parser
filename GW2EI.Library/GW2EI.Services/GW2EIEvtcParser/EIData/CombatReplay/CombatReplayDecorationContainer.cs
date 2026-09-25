@@ -1016,6 +1016,8 @@ internal class CombatReplayDecorationContainer
     }
     #endregion MISSILE
 
+    #region FRONT AND FLIP
+
     /// <summary>
     /// Adds the decoration twice, the 2nd one being a copy flipped 180° of the original <paramref name="frontDegrees"/>.
     /// </summary>
@@ -1029,6 +1031,11 @@ internal class CombatReplayDecorationContainer
         Add(decoration.Copy().UsingRotationConnector(flip));
     }
 
+    /// <summary>
+    /// Adds the decoration twice, the 2nd one being a copy flipped 180° of the original <paramref name="point"/>.
+    /// </summary>
+    /// <param name="decoration">The main decoration.</param>
+    /// <param name="point">The facing direction point.</param>
     internal void AddFrontAndFlip(FormDecoration decoration, in Vector3 point)
     {
         var flipPoint = -1 * point;
@@ -1038,6 +1045,13 @@ internal class CombatReplayDecorationContainer
         Add(decoration.Copy().UsingRotationConnector(flip));
     }
 
+    /// <summary>
+    /// Adds the decoration twice, the 2nd one being a copy flipped 180° of the original <paramref name="point"/> and adds a <paramref name="growing"/> animation.
+    /// </summary>
+    /// <param name="decoration">The main decoration.</param>
+    /// <param name="point">The facing direction point.</param>
+    /// <param name="growing">Growing time.</param>
+    /// <param name="reverse">Reverse growing direction.</param>
     internal void AddFrontAndFlipWithGrowing(FormDecoration decoration, in Vector3 point, long growing, bool reverse = false)
     {
         var flipPoint = -1 * point;
@@ -1046,4 +1060,6 @@ internal class CombatReplayDecorationContainer
         AddWithGrowing((FormDecoration)decoration.UsingRotationConnector(front), growing, reverse);
         AddWithGrowing((FormDecoration)decoration.Copy().UsingRotationConnector(flip), growing, reverse);
     }
+
+    #endregion FRONT AND FLIP
 }
