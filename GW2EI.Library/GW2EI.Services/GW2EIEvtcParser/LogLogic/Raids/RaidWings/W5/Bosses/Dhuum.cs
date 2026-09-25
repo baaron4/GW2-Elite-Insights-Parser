@@ -552,14 +552,7 @@ internal class Dhuum : HallOfChains
 
                             // Compute cast time of the Death Mark with Quickness
                             double computedDuration = ComputeCastTimeWithQuickness(log, target, start, defaultCastDuration);
-                            if (computedDuration > 0)
-                            {
-                                castDuration = Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration));
-                            }
-                            else
-                            {
-                                castDuration = defaultCastDuration;
-                            }
+                            castDuration = computedDuration > 0 ? Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration)) : defaultCastDuration;
 
                             long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
                             long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
