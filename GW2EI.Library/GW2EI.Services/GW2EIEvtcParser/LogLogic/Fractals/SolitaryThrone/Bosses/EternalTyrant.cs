@@ -23,10 +23,10 @@ internal class EternalTyrant : SolitaryThrone
             new PlayerDstHealthDamageHitMechanic(GravityFieldHit, Mech_GravityFieldHit, new (Symbols.Circle, Colors.DarkBlue), new("Field.H", "Hit by Gravity Field", "Gravity Field Hit"), Sev1),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(AstralBarrage, Mech_AstralBarrageHit, new (Symbols.Star, Colors.Orange), new("Barrage.H", "Hit by Astral Barrage (Small AoE)", "Astral Barrage Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(AstralBarrageHit, Mech_AstralBarrageHit, new (Symbols.Star, Colors.Orange), new("Barrage.H", "Hit by Astral Barrage (Small AoE)", "Astral Barrage Hit"), Sev1),
         ]),
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic(GravityWave, Mech_GravityWaveHit, new (Symbols.TriangleDown, Colors.Orange), new("Wave.H", "Hit by Gravity Wave (Frontal)", "Wave Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(CosmicWave, Mech_CosmicWaveHit, new (Symbols.TriangleDown, Colors.Orange), new("Wave.H", "Hit by Cosmic Wave (Frontal)", "Cosmic Wave Hit"), Sev0),
         ]),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(AstralOrb, Mech_AstralOrbHit, new (Symbols.StarTriangleDownOpen, Colors.SkyBlue), new("Orb.H", "Hit by Astral Orb", "Astral Orb Hit"), Sev2),

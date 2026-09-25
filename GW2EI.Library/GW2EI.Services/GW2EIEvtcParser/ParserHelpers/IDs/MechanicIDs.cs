@@ -1172,7 +1172,7 @@ public static class MechanicIDs
     public static readonly int Mech_GravityFieldTarget = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_GravityFieldHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_AstralBarrageHit = SolitaryThroneMask | ++_solitaryThroneCount;
-    public static readonly int Mech_GravityWaveHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_CosmicWaveHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_AstralOrbHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_AstralOrbReflect = SolitaryThroneMask | ++_solitaryThroneCount;
     #endregion SOLITARY THRONE

@@ -5729,6 +5729,7 @@ public static class SkillIDs
     public const long VisionsOfEternityInStaff = 80420;
     public const long AstralOrb = 80433;
     public const long POV_RelicOfTheCuratorGearBuff = 80445;
+    public const long AstralBarrageHit = 80457;
     public const long DivisionEternal = 80483;
     public const long SurroundingCurseVloxx = 80484;
     public const long CoveredInScarabs = 80509;
@@ -5758,6 +5759,7 @@ public static class SkillIDs
     public const long ProbabilityDistribution = 80809;
     public const long RagingStormVloxx = 80810;
     public const long VloxxsVisionStackBuff = 80855;
+    public const long CosmicWave = 80864;
     public const long GravityField = 80869;
     public const long CosmicChargeAspectOfTheSpear = 80871;
     public const long ExcisionExtremis1 = 80901;
