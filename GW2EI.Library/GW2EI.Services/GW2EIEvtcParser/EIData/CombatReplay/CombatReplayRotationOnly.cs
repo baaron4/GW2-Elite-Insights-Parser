@@ -3,7 +3,7 @@
 public class CombatReplayRotationOnly : CombatReplay
 {
 
-    internal CombatReplayRotationOnly(ParsedEvtcLog log) : base(log)
+    internal CombatReplayRotationOnly(ParsedEvtcLog log, SingleActor owner) : base(log, owner)
     {
     }
 

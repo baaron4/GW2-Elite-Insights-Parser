@@ -22,6 +22,8 @@ public class CombatReplay
     protected List<ParametricPoint3D> _Rotations = [];
     protected ParametricPoint3D[] _PolledRotations = [];
 
+    internal readonly SingleActor Owner;
+
     internal IReadOnlyList<Segment> Hidden => _hidden;
     protected List<Segment> _hidden = [];
     private long _start = -1;
@@ -33,8 +35,9 @@ public class CombatReplay
     // actors
     internal readonly CombatReplayDecorationContainer Decorations;
 
-    internal CombatReplay(ParsedEvtcLog log)
+    internal CombatReplay(ParsedEvtcLog log, SingleActor owner)
     {
+        Owner = owner;
         _start = log.LogData.LogStart;
         _end = log.LogData.LogEnd;
         //TODO_PERF(Rennorb) @capacity
@@ -90,8 +93,8 @@ public class CombatReplay
             return;
         }
         Finalized = true;
-        long trimStart = TimeOffsets.start;
-        long trimEnd = TimeOffsets.end;
+        long trimStart = Owner.FirstAware;
+        long trimEnd = Owner.LastAware;
         _hidden.RemoveAll(x => x.IsEmpty());
         _hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
         if (Hidden.Count > 0)

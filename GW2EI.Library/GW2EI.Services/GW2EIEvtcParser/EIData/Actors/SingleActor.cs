@@ -395,7 +395,7 @@ public abstract partial class SingleActor : Actor
         {
             return;
         }
-        CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log) : new CombatReplay(log);
+        CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log, this) : new CombatReplay(log, this);
         if (!log.CanCombatReplay)
         {
             // no combat replay support on log
