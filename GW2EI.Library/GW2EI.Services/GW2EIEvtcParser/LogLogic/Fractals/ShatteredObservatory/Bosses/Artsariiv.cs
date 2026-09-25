@@ -26,7 +26,7 @@ internal class Artsariiv : ShatteredObservatory
             new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], Mech_RedMarble, new (Symbols.Circle,Colors.Red), new("Marble", "Red KD Marble after Jump","Red Marble"), Sev0),
             new PlayerDstHealthDamageHitMechanic([TawShot1, TawShot2, TawShot3, TawShot4], Mech_TawShot, new (Symbols.CircleOpen, Colors.Red), new("Taw Shot", "Hit by Taw Shot projectile", "Taw Shot"), Sev2),
             new PlayerSrcHealthDamageHitMechanic([TawShot1, TawShot2, TawShot3, TawShot4], Mech_TawShotReflected, new (Symbols.CircleXOpen, Colors.Red), new("Taw Shot Rfl.", "Hit reflected Taw Shot projectile", "Taw Shot Reflect"), Sev0),
-            new SpawnMechanic((int)TargetID.SparkEternalTyrant, Mech_SparkSpawn, new (Symbols.Star,Colors.Teal),new("Spark","Spawned a Spark (missed marble)", "Spark"), Sev0),
+            new SpawnMechanic((int)TargetID.SparkArtsariiv, Mech_SparkSpawn, new (Symbols.Star,Colors.Teal),new("Spark","Spawned a Spark (missed marble)", "Spark"), Sev0),
         ]);
 
     public Artsariiv(int triggerID) : base(triggerID)
