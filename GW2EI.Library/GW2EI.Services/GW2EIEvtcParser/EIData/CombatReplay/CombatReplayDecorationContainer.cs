@@ -1015,4 +1015,12 @@ internal class CombatReplayDecorationContainer
         }
     }
     #endregion MISSILE
+
+    internal void AddFrontAndFlip(FormDecoration decoration, float frontDegree)
+    {
+        var front = new AngleConnector(frontDegree);
+        var flip = new AngleConnector(frontDegree + 180);
+        Add(decoration.UsingRotationConnector(front));
+        Add(decoration.Copy().UsingRotationConnector(flip));
+    }
 }

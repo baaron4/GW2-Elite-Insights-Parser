@@ -373,10 +373,10 @@ internal class Arkk : ShatteredObservatory
                                     {
                                         break;
                                     }
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                    var indicator = new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector);
+                                    replay.Decorations.AddFrontAndFlip(indicator, angle);
+                                    var damage = new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector);
+                                    replay.Decorations.AddFrontAndFlip(damage, angle);
                                 }
                                 else if (cast.SkillID == HorizonStrikeArkk2)
                                 {
@@ -385,10 +385,10 @@ internal class Arkk : ShatteredObservatory
                                     {
                                         break;
                                     }
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    var indicator = new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector);
+                                    replay.Decorations.AddFrontAndFlip(indicator, angle);
+                                    var damage = new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector);
+                                    replay.Decorations.AddFrontAndFlip(damage, angle);
                                 }
                             }
                             break;

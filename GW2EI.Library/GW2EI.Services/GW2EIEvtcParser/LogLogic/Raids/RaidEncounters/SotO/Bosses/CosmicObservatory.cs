@@ -270,9 +270,8 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 // Correcting life span for the hit time, 4000 is the entire animation, 2000 looks to be correct
                 lifespan.Item2 -= 2000;
-                var slice = new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector);
-                environmentDecorations.Add(slice.UsingRotationConnector(rotation));
-                environmentDecorations.Add(slice.Copy().UsingGrowingEnd(lifespan.Item2).UsingRotationConnector(rotation));
+                var slice = (PieDecoration)new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector).UsingRotationConnector(rotation);
+                environmentDecorations.AddWithGrowing(slice, lifespan.Item2);
             }
         }
 
@@ -284,8 +283,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 

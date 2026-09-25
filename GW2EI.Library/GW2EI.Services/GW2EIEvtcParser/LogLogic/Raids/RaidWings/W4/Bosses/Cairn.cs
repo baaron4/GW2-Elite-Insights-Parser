@@ -205,8 +205,7 @@ internal class Cairn : BastionOfThePenitent
             {
                 var expectedDisplacementDuration = 3000;
                 var circle = new CircleDecoration(90, displacement.ComputeLifespan(log, expectedDisplacementDuration), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + expectedDisplacementDuration));
+                environmentDecorations.AddWithGrowing(circle, displacement.Time + expectedDisplacementDuration);
             }
         }
         AddGreenDecorations(log, environmentDecorations, [EffectGUIDs.CairnDashGreenNoCount, EffectGUIDs.CairnInitialGreen, EffectGUIDs.CairnGreen1Player, EffectGUIDs.CairnGreen2Players, EffectGUIDs.CairnGreen4PlayersOrBigNoCount]);

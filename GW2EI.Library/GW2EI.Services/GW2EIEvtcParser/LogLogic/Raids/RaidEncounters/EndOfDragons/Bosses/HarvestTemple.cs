@@ -1586,8 +1586,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1750);
                 var circle = new CircleDecoration(150, lifespan, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }

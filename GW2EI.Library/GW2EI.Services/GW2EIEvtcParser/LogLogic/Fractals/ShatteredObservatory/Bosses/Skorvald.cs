@@ -594,17 +594,13 @@ internal class Skorvald : ShatteredObservatory
     private static void AddHorizonStrikeDecoration(CombatReplay replay, SingleActor target, (long start, long end) lifespan, float degree)
     {
         var connector = new AgentConnector(target);
-        var frontRotationConnector = new AngleConnector(degree);
-        var flipRotationConnector = new AngleConnector(degree + 180);
         // Indicator
         var pieIndicator = new PieDecoration(1200, 70, lifespan, Colors.Orange, 0.2, connector);
-        replay.Decorations.Add(pieIndicator.UsingRotationConnector(frontRotationConnector));
-        replay.Decorations.Add(pieIndicator.Copy().UsingRotationConnector(flipRotationConnector));
+        replay.Decorations.AddFrontAndFlip(pieIndicator, degree);
         // Attack hit
         (long start, long end) lifespanHit = (lifespan.end, lifespan.end + 300);
         var pieHit = (PieDecoration)new PieDecoration(1200, 70, lifespanHit, Colors.Red, 0.2, connector).UsingGrowingEnd(lifespanHit.end);
-        replay.Decorations.Add(pieHit.UsingRotationConnector(frontRotationConnector));
-        replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
+        replay.Decorations.AddFrontAndFlip(pieHit, degree);
     }
 
     /// <summary>
