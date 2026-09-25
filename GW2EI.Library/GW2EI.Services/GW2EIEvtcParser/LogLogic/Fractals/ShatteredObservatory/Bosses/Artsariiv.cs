@@ -61,7 +61,7 @@ internal class Artsariiv : ShatteredObservatory
         return [
             .. base.GetTrashMobsIDs(),
             TargetID.TemporalAnomalyArtsariiv,
-            TargetID.SparkEternalTyrant,
+            TargetID.SparkArtsariiv,
             TargetID.SmallArtsariiv,
             TargetID.MediumArtsariiv,
             TargetID.BigArtsariiv,
