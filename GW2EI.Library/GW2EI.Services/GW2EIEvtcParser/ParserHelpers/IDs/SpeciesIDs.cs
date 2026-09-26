@@ -38,6 +38,8 @@ public static class SpeciesIDs
         ChargedSoul = 15434,
         EnragedSpirit = 16024,
         AngeredSpirit = 16005,
+        GorsevalEtherealBarrier = SpeciesIDs.GorsevalEtherealBarrier,
+        GorsevalSpectralDarkness = SpeciesIDs.GorsevalSpectralDarkness,
         // - Sabetha
         Sabetha = 15375,
         Kernan = 15372,
@@ -381,7 +383,7 @@ public static class SpeciesIDs
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
         #endregion RAID WINGS
-        #region RAND ENCOUNTERS
+        #region RAID ENCOUNTERS
         // - Festival
         // - Freezie
         Freezie = 21333,
@@ -1378,6 +1380,8 @@ public static class SpeciesIDs
     private const int AscensionOrb = -130;
     private const int MursaatOverseerSpikes = -131;
     private const int MursaatOverseerClaimArea = -132;
+    private const int GorsevalEtherealBarrier = -133;
+    private const int GorsevalSpectralDarkness = -133;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

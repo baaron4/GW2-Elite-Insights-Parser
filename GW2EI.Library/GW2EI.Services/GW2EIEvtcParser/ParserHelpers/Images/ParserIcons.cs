@@ -1003,6 +1003,7 @@ internal static class ParserIcons
         { TargetID.Spirit, TrashSpiritDemonSoul },
         { TargetID.Spirit2, TrashSpiritDemonSoul },
         { TargetID.ChargedSoul, TrashSpiritDemonSoul },
+        { TargetID.GorsevalEtherealBarrier, NoImage },
         { TargetID.HollowedBomber, TrashSpiritDemonSoul },
         { TargetID.Saul, TrashSaul },
         { TargetID.ShackledPrisoner, TrashShackledPrisoner },

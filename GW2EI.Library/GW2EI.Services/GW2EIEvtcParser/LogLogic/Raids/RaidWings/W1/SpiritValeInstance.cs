@@ -259,10 +259,12 @@ internal class SpiritValeInstance : SpiritVale
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         SpiritRace.FindEtherealBarriers(agentData, combatData);
+        Gorseval.IdentifyGorsevalGadgets(agentData, combatData);
         Sabetha.FindArenaGadgets(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         SpiritRace.RenameEtherealBarriersAndOverrideID(Targets, agentData);
         Gorseval.RenameChargedSouls(Targets, combatData);
+        Gorseval.RenameEtherealBarriers(TrashMobs, combatData);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
