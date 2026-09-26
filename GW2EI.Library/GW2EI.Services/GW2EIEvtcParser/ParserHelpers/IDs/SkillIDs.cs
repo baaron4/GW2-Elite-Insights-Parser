@@ -110,17 +110,17 @@ public static class SkillIDs
     internal const long ArcDPSGenericKnockbackPull = 23295;
     internal const long ArcDPSGenericFloat = 23296;
     internal const long ArcDPSGenericLaunch = 23297;
-    internal const long ArcDPSGenericWaterFloatSink = 23298;
+    internal const long ArcDPSGenericWaterFloatSinkDefunc = 23298;
     internal const long ArcDPSGenericCCBuff = 23299;
     internal const long ArcDPSGenericStagger = 23300;
     internal const long ArcDPSGenericInvalid = 23301;
     internal const long ArcDPSGenericGadgetInteract = 23302;
-    internal const long ArcDPSGenericEmote = 23303;
+    internal const long ArcDPSEmote = 23303;
     internal const long ArcDPSGenericFloatWater = 23304;
     internal const long ArcDPSGenericSink = 23305;
     internal const long ArcDPSGenericLockOut = 23306;
     internal const long ArcDPSGenericFear = 23307;
-    internal const long ArcDPSGenericPickUp = 23308;
+    internal const long ArcDPSPickUp = 23308;
     internal const long ArcDPSGenericFallDown = 23309;
     #endregion
     #region Core

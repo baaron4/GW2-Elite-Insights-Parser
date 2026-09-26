@@ -764,9 +764,9 @@ partial class CombatData
         }
         return id switch
         {
-            SkillIDs.ArcDPSGenericEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
+            SkillIDs.ArcDPSEmote => new EmoteEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd, emoteGUIDict),
             SkillIDs.ArcDPSGenericGadgetInteract => new GadgetInteractEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
-            SkillIDs.ArcDPSGenericPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
+            SkillIDs.ArcDPSPickUp => new BundlePickUpEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
             _ => new AnimatedSkillCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd),
         };
     }
