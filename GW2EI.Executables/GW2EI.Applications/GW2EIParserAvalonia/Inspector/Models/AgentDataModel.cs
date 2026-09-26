@@ -42,31 +42,34 @@ public sealed class AgentDataModel
     public readonly List<AgentDataModel>? Regrouped;
     private readonly AgentItem _agentItem;
 
-    public AgentDataModel(AgentItem agent, bool skipEnglobing = false)
+    public readonly IReadOnlyList<AgentInfoEvent> AgentInfoEvents;
+
+    public AgentDataModel(AgentItem agent, EvtcLog log, bool skipEnglobing = false)
     {
         _agentItem = agent;
         if (agent.Master != null)
         {
-            Master = new AgentDataModel(agent.Master);
+            Master = new AgentDataModel(agent.Master, log);
         }
         if (!skipEnglobing)
         {
             if (agent.IsEnglobingAgent)
             {
-                EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x, true)).ToList();
+                EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x, log, true)).ToList();
             }
             if (agent.IsEnglobedAgent)
             {
-                EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem, true);
+                EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem, log, true);
             }
         }
         if (MergeCount > 0)
         {
-            Merges = agent.Merges.Where(x => x.Merged != agent).Select(x => new AgentDataModel(x.Merged)).ToList();
+            Merges = agent.Merges.Where(x => x.Merged != agent).Select(x => new AgentDataModel(x.Merged, log)).ToList();
         }
         if (RegroupedCount > 0)
         {
-            Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged)).ToList();
+            Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged, log)).ToList();
         }
+        AgentInfoEvents = log.CombatData.GetAgentInfoEvents(agent);
     }
 }

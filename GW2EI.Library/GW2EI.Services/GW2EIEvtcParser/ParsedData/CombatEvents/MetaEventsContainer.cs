@@ -53,4 +53,6 @@ internal class MetaEventsContainer
     public readonly List<AttackTargetEvent> AttackTargetEvents = [];
     public readonly Dictionary<AgentItem, List<AttackTargetEvent>> AttackTargetEventsBySrc = [];
     public readonly Dictionary<AgentItem, AttackTargetEvent> AttackTargetEventByAttackTarget = [];
+
+    public readonly Dictionary<AgentItem, List<AgentInfoEvent>> AgentInfoEventsBySrc = [];
 }

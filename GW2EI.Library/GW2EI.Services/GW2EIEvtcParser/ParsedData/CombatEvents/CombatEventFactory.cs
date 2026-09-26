@@ -683,6 +683,10 @@ partial class CombatData
                 }
                 Add(statusEvents.FlyToEventsBySrc, flyToEvent.Src, flyToEvent);
                 break;
+            case StateChange.AgentInfo:
+                var agentInfoEvent = new AgentInfoEvent(stateChangeEvent, agentData, evtcVersion);
+                Add(metaDataEvents.AgentInfoEventsBySrc, agentInfoEvent.Src, agentInfoEvent);
+                break;
             default:
                 break;
         }

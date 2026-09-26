@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser;
+﻿using GW2EIEvtcParser.ParsedData;
+
+namespace GW2EIEvtcParser;
 
 public static class ArcDPSEnums
 {
@@ -348,6 +350,7 @@ public static class ArcDPSEnums
         Jump = 86,
         GadgetModelInfo = 87,
         FlyTo = 88,
+        AgentInfo = 89,
         Unknown
     };
 
@@ -690,4 +693,89 @@ public static class ArcDPSEnums
         };
     }
 
+    // Gadget Type
+
+    // Unstable, in game enum
+    public enum GadgetTypeEnum : uint
+    {
+        Type0 = 0,
+        ArmorDisplay = 1,
+        Type2 = 2,
+        CapturePoint = 3,
+        Container = 4,
+        CraftingStation = 5,
+        Gate = 6,
+        Type7 = 7,
+        Lever = 8,
+        MagicDoor = 9,
+        Meter = 10,
+        MissionGiver = 11,
+        OnOff = 12,
+        Phaseable = 13,
+        PlayerSpecific = 14,
+        Prop = 15,
+        PropBoss = 16,
+        Redirector = 17,
+        RedirectorPoint = 18,
+        ResourceNode = 19,
+        Thing = 20,
+        Type21 = 21,
+        Type22 = 22,
+        Turret = 23,
+        Vista = 24,
+        WeaponDisplay = 25,
+
+        NotApplicable,
+    }
+
+    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, EvtcVersionEvent evtcVersion)
+    {
+        return unsignedInt < (uint)GadgetTypeEnum.NotApplicable ? (GadgetTypeEnum)unsignedInt
+            : GadgetTypeEnum.NotApplicable;
+    }
+
+    // Species Flags
+
+    // Unstable, in game enum
+    public enum SpeciesFlagsEnum : uint
+    {
+        PlaceHolder0 = 0,
+        Champion = 1,
+        PlaceHolder2 = 2,
+        PlaceHolder3 = 3,
+        PlaceHolder4 = 4,
+        Elite = 5,
+        PlaceHolder6 = 6,
+        PlaceHolder7 = 7,
+        PlaceHolder8 = 8,
+        PlaceHolder9 = 9,
+        PlaceHolder10 = 10,
+        Legendary = 11,
+        PlaceHolder12 = 12,
+        PlaceHolder13 = 13,
+        PlaceHolder14 = 14,
+        Prop = 15,
+        PlaceHolder16 = 16,
+        PlaceHolder17 = 17,
+        PlaceHolder18 = 18,
+        PlaceHolder19 = 19,
+        PlaceHolder20 = 20,
+        PlaceHolder21 = 21,
+        PlaceHolder22 = 22,
+        PlaceHolder23 = 23,
+        PlaceHolder24 = 24,
+        PlaceHolder25 = 25,
+        PlaceHolder26 = 26,
+        PlaceHolder27 = 27,
+        PlaceHolder28 = 28,
+        Veteran = 29,
+
+        NotApplicable,
+    }
+
+    public static SpeciesFlagsEnum GetSpeciesFlags(uint unsignedInt, EvtcVersionEvent evtcVersion)
+    {
+        return unsignedInt < (uint)SpeciesFlagsEnum.NotApplicable ? (SpeciesFlagsEnum)unsignedInt
+            : SpeciesFlagsEnum.NotApplicable;
+    }
 }

@@ -294,6 +294,7 @@ public class CombatItem
             || IsStateChange == StateChange.Jump
             || IsStateChange == StateChange.GadgetModelInfo
             || IsStateChange == StateChange.FlyTo
+            || IsStateChange == StateChange.AgentInfo
             ;
     }
 

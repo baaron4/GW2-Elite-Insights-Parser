@@ -398,6 +398,10 @@ partial class CombatData
     {
         return _statusEvents.GadgetModelInfoEventsByPropID.GetValueOrEmpty(propID);
     }
+    public IReadOnlyList<AgentInfoEvent> GetAgentInfoEvents(AgentItem src)
+    {
+        return GetValueOrEmpty(_metaDataEvents.AgentInfoEventsBySrc, src);
+    }
 
     #endregion INFO
     #region LAST90
