@@ -412,7 +412,7 @@ public partial class InspectorViewModel : ObservableObject
         #endregion COMBAT ITEMS
 
         #region AGENTS
-        var agentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent)).OrderBy(agent => agent.ID).ToList();
+        var agentsData = log.AgentData.AllAgents.Select(agent => new AgentDataModel(agent, log)).OrderBy(agent => agent.ID).ToList();
         AgentsDataView = new(agentsData)
         {
             Filter = FilterAgentModels
