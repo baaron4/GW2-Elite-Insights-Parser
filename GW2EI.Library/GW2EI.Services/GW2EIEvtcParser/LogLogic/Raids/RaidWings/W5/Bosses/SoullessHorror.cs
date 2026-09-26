@@ -230,7 +230,7 @@ internal class SoullessHorror : HallOfChains
                     foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
                     {
                         long end = Math.Min(encounterPhase.End, target.LastAware);
-                        Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
+                        Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in x) => x.Value <= hpVal);
                         if (hpUpdate != null)
                         {
                             long ringStart = Math.Max(hpUpdate.Value.Start, encounterPhase.Start);

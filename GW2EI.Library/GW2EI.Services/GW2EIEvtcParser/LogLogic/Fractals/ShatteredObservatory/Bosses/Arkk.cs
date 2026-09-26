@@ -179,7 +179,7 @@ internal class Arkk : ShatteredObservatory
             phase.AddParentPhase(encounterPhase);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk, log);
-            var invulLoss = invuls.FirstOrNull((in Segment x) => x.Start > phase.Start && x.Value == 0);
+            var invulLoss = invuls.FirstOrNull((in x) => x.Start > phase.Start && x.Value == 0);
             phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Start ?? log.LogData.LogEnd));
         }
         phases.AddRange(bloomPhases);
@@ -350,7 +350,7 @@ internal class Arkk : ShatteredObservatory
                             int offset = 520; // ~520ms at the start and between
                             int castDuration = 2600;
                             var connector = new AgentConnector(target);
-                            var rotation = replay.PolledRotations.FirstOrNull((in ParametricPoint3D x) => x.Time >= cast.Time);
+                            var rotation = replay.PolledRotations.FirstOrNull((in x) => x.Time >= cast.Time);
                             if (!rotation.HasValue)
                             {
                                 break;

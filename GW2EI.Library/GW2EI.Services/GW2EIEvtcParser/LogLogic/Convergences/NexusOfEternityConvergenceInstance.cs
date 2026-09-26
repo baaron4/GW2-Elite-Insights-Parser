@@ -274,7 +274,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             var prevStart = long.MinValue;
             foreach (var determinedApply in determinedApplies)
             {
-                var subVloxx = vloxx.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.MergeEnd + ParserHelper.ServerDelayConstant >= determinedApply.Time);
+                var subVloxx = vloxx.AgentItem.Merges.FirstOrNull((in x) => x.MergeEnd + ParserHelper.ServerDelayConstant >= determinedApply.Time);
                 if (subVloxx == null)
                 {
                     break;

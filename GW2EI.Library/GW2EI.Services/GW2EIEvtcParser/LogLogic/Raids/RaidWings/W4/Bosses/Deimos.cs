@@ -169,7 +169,7 @@ internal class Deimos : BastionOfThePenitent
             return;
         }
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
-        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
+        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(deimos.AgentItem));
         if (percent10Start != null)
         {
             long percent10StartTime = percent10Start.Value.MergeEnd;
@@ -490,7 +490,7 @@ internal class Deimos : BastionOfThePenitent
         BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         var phase100to10 = mainFightPhase;
         SubPhasePhaseData? phase10to0 = null;
-        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
+        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(deimos.AgentItem));
         if (invulDei != null || percent10Start != null)
         {
             long percent10StartTime = percent10Start.HasValue ? percent10Start.Value.MergeEnd : long.MaxValue;
@@ -867,7 +867,7 @@ internal class Deimos : BastionOfThePenitent
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         LogData.Mode cmStatus = (target.GetHealth(combatData) > 40e6) ? LogData.Mode.CM : LogData.Mode.Normal;
-        AdjustDeimosHP(target, cmStatus == LogData.Mode.CM, target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(target.AgentItem)) != null);
+        AdjustDeimosHP(target, cmStatus == LogData.Mode.CM, target.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(target.AgentItem)) != null);
 
         return cmStatus;
     }

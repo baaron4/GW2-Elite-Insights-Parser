@@ -203,8 +203,8 @@ internal class Ensolyss : Nightmare
         {
             case (int)TargetID.Ensolyss:
                 IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
-                Segment? percent66treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 66);
-                Segment? percent15treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 15);
+                Segment? percent66treshhold = healthUpdates.FirstOrNull((in x) => x.Value <= 66);
+                Segment? percent15treshhold = healthUpdates.FirstOrNull((in x) => x.Value <= 15);
                 bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                 // Arkk's Shield
@@ -228,7 +228,7 @@ internal class Ensolyss : Nightmare
                                 int start = (int)shieldEffect.Time;
                                 int expectedHitEnd = start + duration;
                                 int attackEnd = start + duration;
-                                Segment? stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrNull((in Segment x) => x.Value > 0);
+                                Segment? stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrNull((in x) => x.Value > 0);
 
                                 // Modify the attackEnd if:
                                 // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase

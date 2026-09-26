@@ -415,14 +415,14 @@ partial class SingleActor
         }
 
         // return false if fight ends before any down events
-        Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingLogTime));
+        Segment? nextDown = down.FirstOrNull((in downSegment) => downSegment.Intersects(remainingLogTime));
         if (nextDown == null)
         {
             return false;
         }
 
         var healthUpdatesBeforeEnd = GetHealthUpdates(log).Where(update => update.Start > curTime);
-        Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in Segment update) => update.Value > 90);
+        Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in update) => update.Value > 90);
 
         // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
         if (next90 == null) { return true; }

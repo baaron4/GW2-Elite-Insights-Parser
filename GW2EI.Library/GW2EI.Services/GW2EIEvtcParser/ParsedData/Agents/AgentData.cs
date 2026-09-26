@@ -40,6 +40,7 @@ public class AgentData
     {
         _apiController = apiController;
         _allAgentsList = allAgentsList;
+        Refresh();
     }
     internal string GetSpec(uint prof, uint elite)
     {
@@ -262,6 +263,12 @@ public class AgentData
         _dirty |= AgentDataDirtyStatus.AllDirty;
     }
 
+    [MemberNotNull(nameof(_allAgentsByAgent))]
+    [MemberNotNull(nameof(_allAgentsByInstID))]
+    [MemberNotNull(nameof(_allAgentsByName))]
+    [MemberNotNull(nameof(_allAgentsByType))]
+    [MemberNotNull(nameof(_allStableSpeciesByID))]
+    [MemberNotNull(nameof(_allVolatileSpeciesByID))]
     private void Refresh()
     {
         _allAgentsList.SortByFirstAware();

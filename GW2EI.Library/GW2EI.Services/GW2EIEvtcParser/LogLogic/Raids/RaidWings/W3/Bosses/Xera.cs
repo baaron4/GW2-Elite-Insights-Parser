@@ -99,7 +99,7 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal static AgentItem? GetXera2Merge(AgentItem xera)
     {
-        return xera.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
+        return xera.Merges.FirstOrNull((in x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)

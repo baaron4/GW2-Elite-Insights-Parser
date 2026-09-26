@@ -151,7 +151,7 @@ internal class Boneskinner : Bjora
                                 long endHitTime = cast.Time + hitTime;
                                 long endCastTime = cast.Time + castTime;
 
-                                var lastDirection = replay.PolledRotations.LastOrNull((in ParametricPoint3D x) => x.Time > cast.Time + 100 && x.Time < cast.Time + 100 + castTime);
+                                var lastDirection = replay.PolledRotations.LastOrNull((in x) => x.Time > cast.Time + 100 && x.Time < cast.Time + 100 + castTime);
                                 if (lastDirection != null)
                                 {
                                     var connector = new AgentConnector(target);

@@ -843,7 +843,7 @@ internal class Dhuum : HallOfChains
         var souls = log.AgentData.GetStableSpeciesByID(TargetID.YourSoul).Where(x => p.AgentItem.IsMasterOf(x));
         foreach (AgentItem soul in souls)
         {
-            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - 100);
+            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in x) => x.Start >= soul.FirstAware - 100);
             if (curHastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
             {
                 AddSoulSplitDecorations(p, replay, soul, curHastenedDemise.Value, soulPosition.Value);

@@ -471,8 +471,8 @@ public abstract partial class SingleActor : Actor
         }
         if (forwardWindow != 0)
         {
-            var parametric = points.FirstOrNull((in ParametricPoint3D x) => x.Time >= time && x.Time <= time + forwardWindow)
-                 ?? points.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+            var parametric = points.FirstOrNull((in x) => x.Time >= time && x.Time <= time + forwardWindow)
+                 ?? points.LastOrNull((in x) => x.Time <= time);
             if (parametric.HasValue)
             {
                 point = parametric.Value.XYZ;
@@ -516,8 +516,8 @@ public abstract partial class SingleActor : Actor
         }
 
         IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-        var next = positions.FirstOrNull((in ParametricPoint3D x) => x.Time >= time);
-        var prev = positions.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+        var next = positions.FirstOrNull((in x) => x.Time >= time);
+        var prev = positions.LastOrNull((in x) => x.Time <= time);
         if (prev.HasValue && next.HasValue)
         {
             long denom = next.Value.Time - prev.Value.Time;

@@ -153,10 +153,7 @@ internal static class LogLogicUtils
                 {
                     remove = singleRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 }
-                if (remove == null)
-                {
-                    remove = removeAlls.FirstOrDefault(x => x.Time > apply.Time);
-                }
+                remove ??= removeAlls.FirstOrDefault(x => x.Time > apply.Time);
                 if (remove != null)
                 {
                     instanceSequence.Add(remove);
@@ -242,7 +239,7 @@ internal static class LogLogicUtils
         {
             return;
         }
-        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => x.Key.HitboxWidth == hitboxWidth);
+        var chest = gadgetMatchingPositions.FirstOrNull((in x) => x.Key.HitboxWidth == hitboxWidth);
         chest?.Key.OverrideID(chestID, agentData);
     }
 
@@ -323,7 +320,7 @@ internal static class LogLogicUtils
     internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, SingleActor actor, long startCastTime, long castDuration)
     {
         long expectedEndCastTime = startCastTime + castDuration;
-        Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
+        Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in x) => x.Value == 1);
         if (quickness != null)
         {
             long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.Value.End) - Math.Max(startCastTime, quickness.Value.Start);
@@ -353,7 +350,7 @@ internal static class LogLogicUtils
     internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, SingleActor actor, long startCastTime, long castDuration)
     {
         long expectedEndCastTime = startCastTime + castDuration;
-        Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
+        Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in x) => x.Value == 1);
         if (quickness != null)
         {
             long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.Value.End) - Math.Max(startCastTime, quickness.Value.Start);
@@ -376,7 +373,7 @@ internal static class LogLogicUtils
     internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, SingleActor actor, long buffID, long startCastTime, long castDuration)
     {
         long end = startCastTime + castDuration;
-        Segment? segment = actor.GetBuffStatus(log, buffID, startCastTime, end).FirstOrNull((in Segment x) => x.Value > 0);
+        Segment? segment = actor.GetBuffStatus(log, buffID, startCastTime, end).FirstOrNull((in x) => x.Value > 0);
         if (segment != null)
         {
             return segment.Value.Start;

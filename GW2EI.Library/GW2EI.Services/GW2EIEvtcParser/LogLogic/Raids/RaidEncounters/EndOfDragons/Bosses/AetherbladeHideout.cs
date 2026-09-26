@@ -234,8 +234,8 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                     (long start, long end) lifespanFirstCircle = (0, 0);
 
                     // In normal mode, the Echo gains Determined but in challenge mode it doesn't, we use the HP updates instead.
-                    Segment? last60HpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value > 58 && x.Value <= 60);
-                    Segment? last20HpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value > 18 && x.Value <= 20);
+                    Segment? last60HpUpdate = target.GetHealthUpdates(log).FirstOrNull((in x) => x.Value > 58 && x.Value <= 60);
+                    Segment? last20HpUpdate = target.GetHealthUpdates(log).FirstOrNull((in x) => x.Value > 18 && x.Value <= 20);
 
                     if (last60HpUpdate != null && Math.Abs(bomb.FirstAware - last60HpUpdate.Value.Start) < threshold)
                     {
@@ -953,7 +953,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 long growing = effect.Time + duration;
 
                 // If the Echo is stunned, end the effect early.
-                Segment? stun = target.GetBuffStatus(log, Stun, lifespan.start, lifespan.end).FirstOrNull((in Segment x) => x.Value == 1);
+                Segment? stun = target.GetBuffStatus(log, Stun, lifespan.start, lifespan.end).FirstOrNull((in x) => x.Value == 1);
                 if (stun != null)
                 {
                     lifespan.end = Math.Min(stun.Value.Start, lifespan.end);

@@ -107,7 +107,7 @@ public static class AgentManipulationHelper
         }
         // Copy states
         var stateEventsToCopy = new List<CombatItem>();
-        Func<CombatItem, bool> canCopyFromAgent = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
+        bool canCopyFromAgent(CombatItem evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
         var stateChangeCopyFromAgentConditions = new List<Func<CombatItem, bool>>()
         {
             (x) => x.IsStateChange == StateChange.BreakbarState,
@@ -142,7 +142,7 @@ public static class AgentManipulationHelper
         // Copy positional data from attack targets
         if (copyPositionalDataFromAttackTarget && attackTargetAgents.Count != 0)
         {
-            Func<CombatItem, bool> canCopyFromAttackTarget = (evt) => attackTargetAgents.Any(x => evt.SrcMatchesAgent(x));
+            bool canCopyFromAttackTarget(CombatItem evt) => attackTargetAgents.Any(x => evt.SrcMatchesAgent(x));
             var stateChangeCopyFromAttackTargetConditions = new List<Func<CombatItem, bool>>()
             {
                 (x) => x.IsPosition,
@@ -226,7 +226,7 @@ public static class AgentManipulationHelper
                     if (originalPlayer.Regrouped.Count > 0)
                     {
 
-                        var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.FirstAware <= start && x.Merged.BaseSpec == SpecToBaseSpec(enterCombat.Spec));
+                        var copyFrom = originalPlayer.Regrouped.LastOrNull((in x) => x.Merged.FirstAware <= start && x.Merged.BaseSpec == SpecToBaseSpec(enterCombat.Spec));
                         if (copyFrom != null)
                         {
                             list.Add((start, copyFrom.Value.Merged, enterCombat.Spec, enterCombat.Subgroup, true));
@@ -388,7 +388,7 @@ public static class AgentManipulationHelper
                         {
                             if (lastPositionEvents.TryGetValue(previousAgent, out var agentPosition))
                             {
-                                var nextPovPosition = povPositions.FirstOrNull((in ParametricPoint3D x) => x.Time > previousAgent.LastAware);
+                                var nextPovPosition = povPositions.FirstOrNull((in x) => x.Time > previousAgent.LastAware);
                                 if (nextPovPosition != null)
                                 {
                                     var length = (nextPovPosition.Value.XYZ - agentPosition).Length();
@@ -401,7 +401,7 @@ public static class AgentManipulationHelper
                             }
                             if (goNext && firstPositionEvents.TryGetValue(curAgent, out agentPosition))
                             {
-                                var prevPovPosition = povPositions.LastOrNull((in ParametricPoint3D x) => x.Time < curAgent.FirstAware);
+                                var prevPovPosition = povPositions.LastOrNull((in x) => x.Time < curAgent.FirstAware);
                                 if (prevPovPosition != null)
                                 {
                                     var length = (prevPovPosition.Value.XYZ - agentPosition).Length();
