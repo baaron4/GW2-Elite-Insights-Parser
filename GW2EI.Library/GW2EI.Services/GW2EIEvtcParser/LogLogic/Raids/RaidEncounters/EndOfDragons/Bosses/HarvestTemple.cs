@@ -1586,8 +1586,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1750);
                 var circle = new CircleDecoration(150, lifespan, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }
@@ -2873,8 +2872,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 continue;
             }
             lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-            environmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing));
-            environmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+            var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+            environmentDecorations.AddWithGrowing(circle, growing);
         }
     }
 
@@ -2895,8 +2894,8 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 continue;
             }
             lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-            environmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)));
-            environmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(growing));
+            var circle = new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position));
+            environmentDecorations.AddWithGrowing(circle, growing);
         }
     }
 

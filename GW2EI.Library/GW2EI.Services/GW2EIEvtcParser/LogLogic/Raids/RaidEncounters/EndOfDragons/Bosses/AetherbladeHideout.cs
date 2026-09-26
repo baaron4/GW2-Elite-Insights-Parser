@@ -403,10 +403,8 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 uint radius = 240;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 long growing = effect.Time + duration;
-                var baseCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                var growingCircle = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing);
-                environmentDecorations.Add(baseCircle);
-                environmentDecorations.Add(growingCircle);
+                var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.AddWithGrowing(circle, growing);
             }
         }
         // Ley Breach - Red Puddles

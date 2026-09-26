@@ -771,9 +771,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 long start = effect.Time;
                 long end = start + 6250;
-                var position = new AgentConnector(effect.Dst);
-                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
-                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
+                var circle = new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, new AgentConnector(effect.Dst));
+                environmentDecorations.AddWithGrowing(circle, end);
             }
         }
 

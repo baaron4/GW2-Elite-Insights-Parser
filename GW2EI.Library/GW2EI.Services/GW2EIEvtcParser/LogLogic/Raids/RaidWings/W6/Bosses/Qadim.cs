@@ -984,9 +984,10 @@ internal class Qadim : MythwrightGambit
                                 if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
                                 {
                                     var position = new Vector3(targetPosition.Value.X + facing.Value.X * spellCenterDistance, targetPosition.Value.Y + facing.Value.Y * spellCenterDistance, targetPosition.Value.Z);
-                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                                    var connector = new PositionConnector(position);
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, connector));
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
+                                    replay.Decorations.AddShockwave(connector, (start + delay, start + delay + duration), Colors.Yellow, 0.5, maxRadius);
                                 }
                             }
                             break;

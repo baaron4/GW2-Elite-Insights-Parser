@@ -674,8 +674,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingFilled(true).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddWithFilledWithGrowing(circle, false, lifespan.end);
             }
         }
         // Boiling Aether - Expanding AoE

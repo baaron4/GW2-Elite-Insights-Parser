@@ -537,8 +537,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
 
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 
@@ -620,8 +619,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(220, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 
@@ -652,8 +650,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
                     var connector = new PositionConnector(effect.Position);
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var circle = new CircleDecoration(420, lifespan, magmaColor, 0.2, connector);
-                    environmentDecorations.Add(circle);
-                    environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                    environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
                 }
             }
         }

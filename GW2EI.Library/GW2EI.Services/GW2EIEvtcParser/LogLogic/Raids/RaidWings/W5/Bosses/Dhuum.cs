@@ -548,14 +548,10 @@ internal class Dhuum : HallOfChains
                         {
                             long start = cast.Time;
                             long defaultCastDuration = 1550;
-                            long castDuration = 0;
 
                             // Compute cast time of the Death Mark with Quickness
                             double computedDuration = ComputeCastTimeWithQuickness(log, target, start, defaultCastDuration);
-                            if (computedDuration > 0)
-                            {
-                                castDuration = Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration));
-                            }
+                            long castDuration = computedDuration > 0 ? Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration)) : defaultCastDuration;
 
                             long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
                             long zoneDeadly = zoneActive + 6000; // Point where the zone becomes impossible to walk through unscathed
@@ -590,8 +586,7 @@ internal class Dhuum : HallOfChains
 
                                 // Activation
                                 var greenCircle = new CircleDecoration(radius, lifespanActivation, "rgba(200, 255, 100, 0.5)", positionConnector);
-                                replay.Decorations.Add(greenCircle);
-                                replay.Decorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
+                                replay.Decorations.AddWithGrowing(greenCircle, lifespanActivation.Item2);
 
                                 // Deadly
                                 var redCircle = new CircleDecoration(radius, lifespanDeadly, Colors.Red, 0.4, positionConnector);
@@ -938,8 +933,7 @@ internal class Dhuum : HallOfChains
 
                 // Green indicator for the safe zone - Activation
                 var greenCircle = new CircleDecoration(radius, lifespanActivation, "rgba(200, 255, 100, 0.5)", connector);
-                environmentDecorations.Add(greenCircle);
-                environmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
+                environmentDecorations.AddWithGrowing(greenCircle, lifespanActivation.Item2);
                 // Damage zone
                 var redCircle = new CircleDecoration(radius, lifespanDeadly, Colors.Red, 0.4, connector);
                 environmentDecorations.Add(redCircle);
@@ -955,8 +949,7 @@ internal class Dhuum : HallOfChains
                 (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumCullCracksIndicator);
                 var connector = new PositionConnector(effect.Position);
                 var greenCircle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
-                environmentDecorations.Add(greenCircle);
-                environmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(greenCircle, lifespan.Item2);
             }
         }
 
@@ -983,8 +976,7 @@ internal class Dhuum : HallOfChains
                 var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(230 / 2, 0, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(173, 255, 225, 0.4)", connector).UsingRotationConnector(rotationConnector);
-                environmentDecorations.Add(rectangle);
-                environmentDecorations.Add(rectangle.Copy().UsingGrowingEnd(effect.Time));
+                environmentDecorations.AddWithGrowing(rectangle, effect.Time);
             }
         }
 

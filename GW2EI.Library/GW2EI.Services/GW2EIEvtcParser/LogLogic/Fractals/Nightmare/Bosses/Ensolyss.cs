@@ -179,13 +179,12 @@ internal class Ensolyss : Nightmare
             var rotationConnector = new AngleConnector(point);
             var flippedRotationConnector = new AngleConnector(flipPoint);
             (long start, long end) lifespanLingering = (lifespan.end, lifespan.end + 1000);
-
-            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growing); // Frontal
-            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(flippedRotationConnector), growing); // Retro
+            var indicator = new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector);
+            replay.Decorations.AddFrontAndFlipWithGrowing(indicator, point, growing);
             if (lifespan.end == growing) // If the attack went off
             {
-                replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Frontal Lingering
-                replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(flippedRotationConnector)); // Retro Lingering
+                var damage = new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector);
+                replay.Decorations.AddFrontAndFlip(damage, point);
             }
         }
     }
@@ -424,8 +423,7 @@ internal class Ensolyss : Nightmare
                             var warning = new CircleDecoration(380, lifespanWarning, Colors.LightOrange, 0.2, new AgentConnector(target));
                             replay.Decorations.AddWithGrowing(warning, lifespanWarning.end);
                             // Growing inwards shockwave
-                            var shockwave = (CircleDecoration)new CircleDecoration(1200, lifespanShockwave2, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave2.end, true);
-                            replay.Decorations.Add(shockwave);
+                            replay.Decorations.AddShockwave(new AgentConnector(target), lifespanShockwave2, Colors.Yellow, 0.4, 1200, true);
                             // 8 Arrows
                             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out var arrows))
                             {
@@ -522,7 +520,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in waveEffects)
             {
                 lifespan = (effect.Time, effect.Time + 2000);
-                environmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Yellow, 0.4, 1200);
             }
         }
 
