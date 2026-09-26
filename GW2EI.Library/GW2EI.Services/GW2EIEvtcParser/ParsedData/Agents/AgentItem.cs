@@ -281,20 +281,20 @@ public class AgentItem
     }
     public bool IsMasterOf(AgentItem ag)
     {
-        if (ag.Is(this))
-        {
-            return false;
-        }
         return ag.IsMaster(this);
     }
 
     public bool IsMasterOrSelfAtTime(AgentItem ag, long time)
     {
+        if (!InAwareTimes(ag))
+        {
+            return false;
+        }
         return GetFinalMaster().IsAtTime(ag, time);
     }
     public bool IsMasterAtTime(AgentItem ag, long time)
     {
-        if (ag.Is(this))
+        if (ag.Is(this) || !InAwareTimes(ag))
         {
             return false;
         }
@@ -306,10 +306,6 @@ public class AgentItem
     }
     public bool IsMasterOfAtTime(AgentItem ag, long time)
     {
-        if (ag.Is(this))
-        {
-            return false;
-        }
         return ag.IsMasterAtTime(this, time);
     }
     #endregion MASTER
