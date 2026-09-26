@@ -222,6 +222,20 @@ public class EvtcParser
 
         });
         _t.Log("Friendlies accelerator caches");
+        Parallel.ForEach(log.Friendlies, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                // To initialize cache
+                actor.GetDamageEvents(null, log, start, end);
+                foreach (var target in log.LogData.Logic.Targets)
+                {
+                    actor.GetDamageEvents(target, log, start, end);
+                }
+            }
+
+        });
+        _t.Log("Friendlies GetDamageEvents");
         //
         //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
         Parallel.ForEach(log.Friendlies, actor =>
@@ -301,20 +315,6 @@ public class EvtcParser
 
         });
         _t.Log("LogData.Logic.Targets GetBuffs Self");
-        Parallel.ForEach(log.Friendlies, actor =>
-        {
-            foreach (var (start, end) in intervals)
-            {
-                // To initialize cache
-                actor.GetDamageEvents(null, log, start, end);
-                foreach (var target in log.LogData.Logic.Targets)
-                {
-                    actor.GetDamageEvents(target, log, start, end);
-                }
-            }
-
-        });
-        _t.Log("PlayerList GetDamageEvents");
     }
 
     private static void DoMultiThreadAcceleration(ParsedEvtcLog log, AutoTrace _t,
@@ -450,6 +450,20 @@ public class EvtcParser
             }
         });
         _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
+
+        Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+        {
+            foreach (var (start, end) in intervals)
+            {
+                // To initialize cache
+                actor.GetDamageEvents(null, log, start, end);
+                foreach (var target in log.LogData.Logic.Targets)
+                {
+                    actor.GetDamageEvents(target, log, start, end);
+                }
+            }
+        });
+        _t.Log("friendliesAndTargetsAndMobs englobed GetDamageEvents");
         DoMultiThreadAccelerationCommon(log, _t, intervals);
     }
 
