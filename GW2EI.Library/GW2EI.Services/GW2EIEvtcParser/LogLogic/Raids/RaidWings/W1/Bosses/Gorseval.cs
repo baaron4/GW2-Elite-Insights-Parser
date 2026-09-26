@@ -385,7 +385,7 @@ internal class Gorseval : SpiritVale
                 replay.Decorations.Add(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
             case (int)TargetID.GorsevalSpectralDarkness:
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GorsevalSpectralDarkness, out var spectralDarknessEvents))
+                if (log.CombatData.TryGetEffectEventsByDstWithGUID(target.AgentItem, EffectGUIDs.GorsevalSpectralDarkness, out var spectralDarknessEvents))
                 {
                     // sizes and growth TBC
                     uint initialRadius = 180;

@@ -1381,7 +1381,7 @@ public static class SpeciesIDs
     private const int MursaatOverseerSpikes = -131;
     private const int MursaatOverseerClaimArea = -132;
     private const int GorsevalEtherealBarrier = -133;
-    private const int GorsevalSpectralDarkness = -133;
+    private const int GorsevalSpectralDarkness = -134;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

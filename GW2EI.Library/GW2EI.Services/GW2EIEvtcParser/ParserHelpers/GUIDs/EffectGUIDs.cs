@@ -674,7 +674,7 @@ public static class EffectGUIDs
     public static readonly Guid GorsevalGhastlyRampageLayer2 = new("7D9FC82789C2DD4FB8466CD63F34205F"); // 3000 duration, Src Gorseval
     public static readonly Guid GorsevalGhastlyRampageLayer3 = new("947769986596634AB09B2AB382EC29E0");// 3000 duration, Src Gorseval
     public static readonly Guid GorsevalGhastlyRampageLayer4 = new("A0CB3F87B91D304D894235E136BA2C0E"); // 3000 duration, Src Gorseval
-    public static readonly Guid GorsevalSpectralDarkness = new("5D8FC3F372696F438261EE0E7A1CCA3D"); // 0 duration, Src/Dst Spectral Darkness,
+    public static readonly Guid GorsevalSpectralDarkness = new("5D8FC3F372696F438261EE0E7A1CCA3D"); // 0 duration, Dst Spectral Darkness,
     // Sabetha
     public static readonly Guid SabethaCannonBarrier = new("3C4BADFCD8987D449715C9A72FDC2149"); // 600.000 duration - Src Cannon Dst Cannon
     public static readonly Guid SabethaCannonBarrage = new("3ED61C8A1C2E594A8AD2E2E69AF16322"); // 3500 duration - Src Cannon
