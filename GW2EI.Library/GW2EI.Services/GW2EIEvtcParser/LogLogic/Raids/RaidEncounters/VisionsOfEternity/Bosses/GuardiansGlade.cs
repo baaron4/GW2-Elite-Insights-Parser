@@ -202,7 +202,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
-        RenameCrocodilianRazortooth(Targets);
+        RenameCrocodilianRazortooth(Targets, evtcVersion);
 
         SingleActor kela = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KelaSeneschalOfWaves)) ?? throw new MissingKeyActorsException("Kela not found");
         SanitizeLastHealthUpdateEvents(kela, combatData);
@@ -684,21 +684,36 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void RenameCrocodilianRazortooth(IReadOnlyList<SingleActor> targets)
+    private static void RenameCrocodilianRazortooth(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor actor in targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (actor.ID)
+            foreach (SingleActor actor in targets)
             {
-                case (int)TargetID.VeteranCrocodilianRazortooth:
-                    actor.OverrideName("Veteran " + actor.Character);
-                    break;
-                case (int)TargetID.EliteCrocodilianRazortooth:
-                    actor.OverrideName("Elite " + actor.Character);
-                    break;
-                case (int)TargetID.DownedEliteCrocodilianRazortooth:
-                    actor.OverrideName("Downed Elite " + actor.Character);
-                    break;
+                switch (actor.ID)
+                {
+                    case (int)TargetID.VeteranCrocodilianRazortooth:
+                        actor.OverrideName("Veteran " + actor.Character);
+                        break;
+                    case (int)TargetID.EliteCrocodilianRazortooth:
+                        actor.OverrideName("Elite " + actor.Character);
+                        break;
+                    case (int)TargetID.DownedEliteCrocodilianRazortooth:
+                        actor.OverrideName("Elite Downed " + actor.Character);
+                        break;
+                }
+            }
+        } 
+        else
+        {
+            foreach (SingleActor actor in targets)
+            {
+                switch (actor.ID)
+                {
+                    case (int)TargetID.DownedEliteCrocodilianRazortooth:
+                        actor.OverrideName("Downed " + actor.Character);
+                        break;
+                }
             }
         }
     }

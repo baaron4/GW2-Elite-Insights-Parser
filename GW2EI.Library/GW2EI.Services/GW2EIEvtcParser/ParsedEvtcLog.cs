@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser;
 
@@ -24,6 +25,35 @@ public class ParsedEvtcLog : EvtcLog
     public readonly StatisticsHelper StatisticsHelper;
 
     private Dictionary<AgentItem, SingleActor>? _agentToActorDictionary;
+
+    private static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
+    {
+        var agentInfo = combatData.GetAgentInfoEvents(singleActor.AgentItem).FirstOrDefault();
+        if (agentInfo != null && agentInfo.SpeciesFlags != SpeciesFlagsEnum.NotApplicable)
+        {
+            // TODO find if there is a way to detect when to add Legendary automatically
+            switch (agentInfo.SpeciesFlags)
+            {
+                case SpeciesFlagsEnum.Veteran:
+                    singleActor.OverrideName("Veteran " + singleActor.Character);
+                    break;
+                case SpeciesFlagsEnum.Elite:
+                    singleActor.OverrideName("Elite " + singleActor.Character);
+                    break;
+                case SpeciesFlagsEnum.Champion:
+                    singleActor.OverrideName("Champion " + singleActor.Character);
+                    break;
+            }
+        }
+    }
+
+    private static void AddRankToSpecies(CombatData combatData, IEnumerable<SingleActor> singleActors)
+    {
+        foreach (var target in singleActors)
+        {
+            AddRankToSpecies(combatData, target);
+        }
+    }
 
     internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, SkillData skillData,
             IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcParserSettings parserSettings, GW2APIController apiController, ParserController operation) : base(agentData, skillData, [], parserSettings, operation)
@@ -108,6 +138,15 @@ public class ParsedEvtcLog : EvtcLog
         _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + LogData.Logic.Targets.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + LogData.Logic.TrashMobs.Count);
 
+        if (CombatData.HasAgentInfo)
+        {
+            _operation.UpdateProgressWithCancellationCheck("Parsing: adding ranks to names");
+            AddRankToSpecies(CombatData, LogData.Logic.Targets);
+            AddRankToSpecies(CombatData, LogData.Logic.TrashMobs);
+            AddRankToSpecies(CombatData, LogData.Logic.NonSquadFriendlies);
+        }
+
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Log Meta Data");
         LogMetadata = new LogMetadata(evtcVersion, CombatData, LogData.EvtcLogEnd - LogData.EvtcLogStart, playerList, extensions, operation);
 
@@ -178,6 +217,10 @@ public class ParsedEvtcLog : EvtcLog
             else
             {
                 actor = new NPC(agentItem);
+                if (CombatData.HasAgentInfo)
+                {
+                    AddRankToSpecies(CombatData, actor);
+                }
             }
             _agentToActorDictionary[agentItem] = actor;
             //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");

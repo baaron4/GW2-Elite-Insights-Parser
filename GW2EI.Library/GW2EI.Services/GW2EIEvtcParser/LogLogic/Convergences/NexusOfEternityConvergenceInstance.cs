@@ -68,27 +68,42 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
 
 
 
-    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    internal static void RenameAdds(IReadOnlyList<SingleActor> actors, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor actor in actors)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (actor.ID)
+            foreach (SingleActor actor in actors)
             {
-                case (int)TargetID.ScarabQueen:
-                    actor.OverrideName("Champion " + actor.Character + " Queen");
-                    break;
-                case (int)TargetID.ChampionWaterElemental:
-                case (int)TargetID.ChampionIceElemental:
-                case (int)TargetID.ChampionAatxe:
-                case (int)TargetID.ChampionCosmicBulwark:
-                case (int)TargetID.ChampionCosmicPiercer:
-                case (int)TargetID.ChampionCosmicSunderer:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
-                case (int)TargetID.EliteCosmicBulwark:
-                case (int)TargetID.EliteCosmicPiercer:
-                    actor.OverrideName("Elite " + actor.Character);
-                    break;
+                switch (actor.ID)
+                {
+                    case (int)TargetID.ScarabQueen:
+                        actor.OverrideName("Champion " + actor.Character + " Queen");
+                        break;
+                    case (int)TargetID.ChampionWaterElemental:
+                    case (int)TargetID.ChampionIceElemental:
+                    case (int)TargetID.ChampionAatxe:
+                    case (int)TargetID.ChampionCosmicBulwark:
+                    case (int)TargetID.ChampionCosmicPiercer:
+                    case (int)TargetID.ChampionCosmicSunderer:
+                        actor.OverrideName("Champion " + actor.Character);
+                        break;
+                    case (int)TargetID.EliteCosmicBulwark:
+                    case (int)TargetID.EliteCosmicPiercer:
+                        actor.OverrideName("Elite " + actor.Character);
+                        break;
+                }
+            }
+        } 
+        else
+        {
+            foreach (SingleActor actor in actors)
+            {
+                switch (actor.ID)
+                {
+                    case (int)TargetID.ScarabQueen:
+                        actor.OverrideName(actor.Character + " Queen");
+                        break;
+                }
             }
         }
     }
@@ -99,7 +114,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VloxxConv)) ?? throw new MissingKeyActorsException("Vloxx not found");
         AdjustVloxHP(vloxx, vloxx.AgentItem.Merges.Count > 0);
-        RenameAdds(TrashMobs);
+        RenameAdds(TrashMobs, evtcVersion);
     }
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)

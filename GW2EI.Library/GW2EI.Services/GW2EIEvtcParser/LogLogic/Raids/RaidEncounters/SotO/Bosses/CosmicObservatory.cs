@@ -464,21 +464,24 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (target.ID)
+            foreach (SingleActor target in Targets)
             {
-                case (int)TargetID.VeteranTheTormented:
-                    target.OverrideName("Veteran " + target.Character);
-                    break;
-                case (int)TargetID.EliteTheTormented:
-                    target.OverrideName("Elite " + target.Character);
-                    break;
-                case (int)TargetID.ChampionTheTormented:
-                    target.OverrideName("Champion " + target.Character);
-                    break;
-                default:
-                    break;
+                switch (target.ID)
+                {
+                    case (int)TargetID.VeteranTheTormented:
+                        target.OverrideName("Veteran " + target.Character);
+                        break;
+                    case (int)TargetID.EliteTheTormented:
+                        target.OverrideName("Elite " + target.Character);
+                        break;
+                    case (int)TargetID.ChampionTheTormented:
+                        target.OverrideName("Champion " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");

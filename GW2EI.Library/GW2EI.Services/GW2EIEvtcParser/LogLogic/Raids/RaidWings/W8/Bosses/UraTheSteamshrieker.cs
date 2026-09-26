@@ -282,23 +282,40 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal static void RenameFumarollers(IReadOnlyList<SingleActor> targets)
+    internal static void RenameFumarollersAndVentshots(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor target in targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (target.ID)
+            foreach (SingleActor target in targets)
             {
-                case (int)TargetID.EliteFumaroller:
-                    target.OverrideName("Elite " + target.Character);
-                    break;
-                case (int)TargetID.ChampionFumaroller:
-                    target.OverrideName("Champion " + target.Character);
-                    break;
-                case (int)TargetID.LegendaryVentshot:
-                    target.OverrideName("Legendary " + target.Character);
-                    break;
-                default:
-                    break;
+                switch (target.ID)
+                {
+                    case (int)TargetID.EliteFumaroller:
+                        target.OverrideName("Elite " + target.Character);
+                        break;
+                    case (int)TargetID.ChampionFumaroller:
+                        target.OverrideName("Champion " + target.Character);
+                        break;
+                    case (int)TargetID.LegendaryVentshot:
+                        target.OverrideName("Legendary " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else
+        {
+            foreach (SingleActor target in targets)
+            {
+                switch (target.ID)
+                {
+                    case (int)TargetID.LegendaryVentshot:
+                        target.OverrideName("Legendary " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -327,7 +344,8 @@ internal class UraTheSteamshrieker : MountBalrior
         FindGeysers(evtcVersion, agentData, combatData);
         FindBloodstoneShards(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        RenameFumarollers(Targets);
+        RenameFumarollersAndVentshots(Targets, evtcVersion);
+        RenameFumarollersAndVentshots(TrashMobs, evtcVersion);
     }
 
     internal static BuffEvent? GetHealedPhaseStartEvent(CombatData combatData, SingleActor ura, long start, long end)

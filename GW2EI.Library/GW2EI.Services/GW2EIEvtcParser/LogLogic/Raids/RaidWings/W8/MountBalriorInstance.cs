@@ -291,8 +291,9 @@ internal class MountBalriorInstance : MountBalrior
         UraTheSteamshrieker.FindGeysers(evtcVersion, agentData, combatData);
         UraTheSteamshrieker.FindBloodstoneShards(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        GreerTheBlightbringer.RenameProtoGreerlings(Targets);
-        UraTheSteamshrieker.RenameFumarollers(Targets);
+        GreerTheBlightbringer.RenameProtoGreerlings(Targets, evtcVersion);
+        UraTheSteamshrieker.RenameFumarollersAndVentshots(Targets, evtcVersion);
+        UraTheSteamshrieker.RenameFumarollersAndVentshots(TrashMobs, evtcVersion);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)

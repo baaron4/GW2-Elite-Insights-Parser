@@ -759,21 +759,42 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         }
     }
 
-    internal static void RenameScarletPhantoms(IReadOnlyList<SingleActor> targets)
+    internal static void RenameScarletPhantoms(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor target in targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (target.ID)
+            foreach (SingleActor target in targets)
             {
-                case (int)TargetID.ScarletPhantomBreakbar:
-                    target.OverrideName("Elite CC " + target.Character);
-                    break;
-                case (int)TargetID.ScarletPhantomHP:
-                case (int)TargetID.ScarletPhantomHPCM:
-                    target.OverrideName("Elite HP " + target.Character);
-                    break;
-                default:
-                    break;
+                switch (target.ID)
+                {
+                    case (int)TargetID.ScarletPhantomBreakbar:
+                        target.OverrideName("Elite CC " + target.Character);
+                        break;
+                    case (int)TargetID.ScarletPhantomHP:
+                    case (int)TargetID.ScarletPhantomHPCM:
+                        target.OverrideName("Elite HP " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } 
+        else
+        {
+            foreach (SingleActor target in targets)
+            {
+                switch (target.ID)
+                {
+                    case (int)TargetID.ScarletPhantomBreakbar:
+                        target.OverrideName("CC " + target.Character);
+                        break;
+                    case (int)TargetID.ScarletPhantomHP:
+                    case (int)TargetID.ScarletPhantomHPCM:
+                        target.OverrideName("HP " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -799,7 +820,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         EchoOfScarletSanitizeLastHealthUpdateEvents(Targets, combatData);
-        RenameScarletPhantoms(Targets);
+        RenameScarletPhantoms(Targets, evtcVersion);
     }
 
     /// <summary>

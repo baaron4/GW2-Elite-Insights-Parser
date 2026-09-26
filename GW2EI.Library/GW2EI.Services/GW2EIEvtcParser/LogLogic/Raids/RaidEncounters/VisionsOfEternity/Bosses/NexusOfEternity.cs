@@ -157,8 +157,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
-        RenameAdds(Targets);
-        RenameAdds(TrashMobs);
+        RenameAdds(Targets, evtcVersion);
+        RenameAdds(TrashMobs, evtcVersion);
     }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor vloxx, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
@@ -620,26 +620,29 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    internal static void RenameAdds(IReadOnlyList<SingleActor> actors)
+    internal static void RenameAdds(IReadOnlyList<SingleActor> actors, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor actor in actors)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (actor.ID)
+            foreach (SingleActor actor in actors)
             {
-                case (int)TargetID.ChampionCosmicBulwark:
-                case (int)TargetID.ChampionCosmicPiercer:
-                case (int)TargetID.ChampionCosmicSunderer:
-                case (int)TargetID.ChampionAspectOfTheSpear:
-                case (int)TargetID.ChampionAspectOfTheStaff:
-                    actor.OverrideName("Champion " + actor.Character);
-                    break;
-                case (int)TargetID.EliteCosmicBulwark:
-                case (int)TargetID.EliteCosmicPiercer:
-                    actor.OverrideName("Elite " + actor.Character);
-                    break;
-                case (int)TargetID.SomethingCosmicPiercer:
-                    //actor.OverrideName("" + actor.Character);
-                    break;
+                switch (actor.ID)
+                {
+                    case (int)TargetID.ChampionCosmicBulwark:
+                    case (int)TargetID.ChampionCosmicPiercer:
+                    case (int)TargetID.ChampionCosmicSunderer:
+                    case (int)TargetID.ChampionAspectOfTheSpear:
+                    case (int)TargetID.ChampionAspectOfTheStaff:
+                        actor.OverrideName("Champion " + actor.Character);
+                        break;
+                    case (int)TargetID.EliteCosmicBulwark:
+                    case (int)TargetID.EliteCosmicPiercer:
+                        actor.OverrideName("Elite " + actor.Character);
+                        break;
+                    case (int)TargetID.SomethingCosmicPiercer:
+                        //actor.OverrideName("" + actor.Character);
+                        break;
+                }
             }
         }
     }
