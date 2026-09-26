@@ -15,6 +15,15 @@ charset = utf-8-bom
 # .NET Coding Conventions     # 
 ############################### 
 [*.{cs,vb}] 
+# Simplify Lambda Expressions
+csharp_style_prefer_simple_lambda_expression = true:warning
+# Prefer implicitly typed lambdas
+csharp_style_prefer_implicitly_typed_lambda_expression = true:warning
+# Prefer Compound Assignments
+dotnet_style_prefer_compound_assignment = true:warning
+dotnet_diagnostic.IDE0074.severity = warning
+# Prefer local functions
+csharp_style_prefer_local_over_anonymous_function = true:warning
 # Mark unused usings as warnings or errors so analyzers catch them
 dotnet_diagnostic.IDE0005.severity = warning
 dotnet_remove_unnecessary_usings = true
