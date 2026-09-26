@@ -265,7 +265,9 @@ public class AgentData
 
     [MemberNotNull(nameof(_allAgentsByAgent))]
     [MemberNotNull(nameof(_allAgentsByInstID))]
+#if DEBUG
     [MemberNotNull(nameof(_allAgentsByName))]
+#endif
     [MemberNotNull(nameof(_allAgentsByType))]
     [MemberNotNull(nameof(_allStableSpeciesByID))]
     [MemberNotNull(nameof(_allVolatileSpeciesByID))]
