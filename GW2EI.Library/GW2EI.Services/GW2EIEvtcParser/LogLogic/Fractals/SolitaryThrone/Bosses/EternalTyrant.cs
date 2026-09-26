@@ -108,33 +108,39 @@ internal class EternalTyrant : SolitaryThrone
         return LogData.Mode.Normal;
     }
 
+    internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor tyrant, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true);
+        for (int i = 0; i < phases.Count; i++)
+        {
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (i % 2 == 0)
+            {
+                phase.Name = "Phase " + (i + 2) / 2;
+                phase.AddTarget(tyrant, log);
+                phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.RimeSprite)), log, PhaseData.TargetPriority.NonBlocking);
+            }
+            else
+            {
+                phase.Name = "Split " + (i + 1) / 2;
+                phase.AddTarget(tyrant, log);
+                phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.FrostElemental)), log, PhaseData.TargetPriority.NonBlocking);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
         var tyrant = GetEternalTyrant();
         phases[0].AddTarget(tyrant, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + i / 2;
-                phase.AddTarget(tyrant, log);
-                AddTargetsToPhase(phase, [TargetID.FrostElemental], log, PhaseData.TargetPriority.NonBlocking);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(tyrant, log);
-                AddTargetsToPhase(phase, [TargetID.RimeSprite], log, PhaseData.TargetPriority.NonBlocking);
-            }
-        }
+        phases.AddRange(ComputePhases(log, tyrant, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
