@@ -564,7 +564,6 @@ public partial class CombatData
                     evtcVersion, settings, apiController);
             }
         }
-        HasAgentInfo = _statusEvents.AgentInfoEventsBySrc.Count > 0;
         foreach (CombatItem combatItem in combatEvents)
         {
             if (combatItem.IsCastEvent())
@@ -627,6 +626,7 @@ public partial class CombatData
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
         HasGadgetAnimData = _gadgetAnimationEventsByGadget.Count > 0;
+        HasAgentInfo = evtcVersion.Build >= ArcDPSBuilds.AgentInfoAdded;
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
         skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);
