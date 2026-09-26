@@ -97,6 +97,7 @@ public partial class CombatData
     public readonly bool HasGadgetAnimData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
+    public readonly bool HasAgentInfo = false;
 
     public bool HasExtraProcessing { get; private set; }
 
@@ -563,6 +564,7 @@ public partial class CombatData
                     evtcVersion, settings, apiController);
             }
         }
+        HasAgentInfo = _statusEvents.AgentInfoEventsBySrc.Count > 0;
         foreach (CombatItem combatItem in combatEvents)
         {
             if (combatItem.IsCastEvent())

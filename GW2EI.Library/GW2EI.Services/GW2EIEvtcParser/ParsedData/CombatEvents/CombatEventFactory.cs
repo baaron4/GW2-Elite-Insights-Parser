@@ -685,7 +685,7 @@ partial class CombatData
                 break;
             case StateChange.AgentInfo:
                 var agentInfoEvent = new AgentInfoEvent(stateChangeEvent, agentData, evtcVersion);
-                Add(metaDataEvents.AgentInfoEventsBySrc, agentInfoEvent.Src, agentInfoEvent);
+                Add(_statusEvents.AgentInfoEventsBySrc, agentInfoEvent.Src, agentInfoEvent);
                 break;
             default:
                 break;

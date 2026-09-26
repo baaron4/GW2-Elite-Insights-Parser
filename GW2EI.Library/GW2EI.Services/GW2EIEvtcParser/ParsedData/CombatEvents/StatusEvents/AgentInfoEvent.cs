@@ -1,8 +1,7 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class AgentInfoEvent : MetaDataEvent
+public class AgentInfoEvent : StatusEvent
 {
-    public readonly AgentItem Src;
     public readonly AgentItem.AgentType Type;
 
     public readonly ArcDPSEnums.GadgetTypeEnum GadgetType = ArcDPSEnums.GadgetTypeEnum.NotApplicable;
@@ -11,9 +10,8 @@ public class AgentInfoEvent : MetaDataEvent
     public readonly ArcDPSEnums.SpeciesFlagsEnum SpeciesFlags = ArcDPSEnums.SpeciesFlagsEnum.NotApplicable;
     public readonly uint SpeciesFlagsValue = uint.MaxValue;
 
-    internal AgentInfoEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem)
+    internal AgentInfoEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
     {
-        Src = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         // TODO Type
         if (Type == AgentItem.AgentType.VolatileSpecies)
         {

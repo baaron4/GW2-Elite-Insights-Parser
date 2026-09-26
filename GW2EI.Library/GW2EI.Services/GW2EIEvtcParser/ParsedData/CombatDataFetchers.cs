@@ -400,7 +400,7 @@ partial class CombatData
     }
     public IReadOnlyList<AgentInfoEvent> GetAgentInfoEvents(AgentItem src)
     {
-        return GetValueOrEmpty(_metaDataEvents.AgentInfoEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.AgentInfoEventsBySrc, src.EnglobingAgentItem);
     }
 
     #endregion INFO
