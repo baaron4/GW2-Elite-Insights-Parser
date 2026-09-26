@@ -199,7 +199,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
-        var buffAppliesAll = log.CombatData.GetBuffApplyData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
+        var buffAppliesAll = log.CombatData.GetBuffApplyData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
         var buffAppliesPlayer = buffAppliesAll.Where(x => x.To.Is(p.AgentItem));
         var agentsToTether = log.AgentData.GetStableSpeciesByID(TargetID.SoulFeast);
 

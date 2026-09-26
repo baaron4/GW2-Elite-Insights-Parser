@@ -334,7 +334,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 
     private void HandleDeimosAndItsGadgets(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
         var targetableEvents = new List<TargetableEvent>();
         foreach (var attackTarget in attackTargetEvents)
         {

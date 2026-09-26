@@ -174,10 +174,7 @@ internal class Ensolyss : Nightmare
     {
         if (attackEnd >= lifespan.end) // If the attack started
         {
-            var flipPoint = -1 * point;
             var connector = new AgentConnector(target);
-            var rotationConnector = new AngleConnector(point);
-            var flippedRotationConnector = new AngleConnector(flipPoint);
             (long start, long end) lifespanLingering = (lifespan.end, lifespan.end + 1000);
             var indicator = new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector);
             replay.Decorations.AddFrontAndFlipWithGrowing(indicator, point, growing);

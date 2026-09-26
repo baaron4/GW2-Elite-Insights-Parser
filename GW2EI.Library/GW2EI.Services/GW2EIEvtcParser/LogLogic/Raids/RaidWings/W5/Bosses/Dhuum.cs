@@ -161,7 +161,7 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO_PERF(Rennorb)
-    private static void ComputeFightPhases(List<SubPhasePhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
+    private static void ComputeFightPhases(List<SubPhasePhaseData> phases, SingleActor dhuum, IReadOnlyList<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillID == MajorSoulSplit);
         // Dhuum brought down to 10%
@@ -418,7 +418,7 @@ internal class Dhuum : HallOfChains
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out _))
         {
             throw new MissingKeyActorsException("Dhuum not found");
         }

@@ -647,8 +647,8 @@ internal static class RangerHelper
         // entangle works fine already
         HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
         HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
-        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger);
-        var rangersCount = rangers.Count();
+        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
+        var rangersCount = rangers.Count;
         // if only one ranger, could only be that one
         if (rangersCount == 1)
         {

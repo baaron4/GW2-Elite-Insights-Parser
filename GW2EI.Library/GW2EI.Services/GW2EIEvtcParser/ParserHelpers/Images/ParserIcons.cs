@@ -769,7 +769,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="Spec"/> to its high resolution profession icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
+    internal static readonly IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
     {
         // Ranger
         { Spec.Galeshot, HighResGaleshot },
@@ -830,7 +830,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="Spec"/> to its base resolution profession icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
+    internal static readonly IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
     {
         // Ranger
         { Spec.Galeshot, BaseResGaleshot },
@@ -891,7 +891,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="TargetID"/> to the corresponding icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<TargetID, string>()
+    internal static readonly IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<TargetID, string>()
     {
         { TargetID.WorldVersusWorld, TargetWorldVersusWorld },
         { TargetID.Mordremoth, TargetMordremoth },
@@ -1430,7 +1430,7 @@ internal static class ParserIcons
     /// <summary>
     /// Dictionary matching a <see cref="MinionID"/> to their icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<MinionID, string>()
+    internal static readonly IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<MinionID, string>()
     {
         { MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
         { MinionID.SnowWurm, MinionCallWurm },

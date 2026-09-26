@@ -144,7 +144,7 @@ internal class Kanaxai : SilentSurf
         var phases = new List<SubPhasePhaseData>(5);
         // Phases
         var mainPhases = GetSubPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true, encounterPhase.Start, encounterPhase.End);
-        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent>().Select(x => x.Time);
+        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent>().Select(x => x.Time).ToList();
         int worldCleaverCount = 0;
         int repeatedCount = 0;
         var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -278,7 +278,7 @@ internal class Kanaxai : SilentSurf
 
         // Orange Tether from Aspect to player
         IEnumerable<BuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
-        IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
+        IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>().ToList();
         IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
         AgentItem tetherAspect = _unknownAgent;
         foreach (BuffApplyEvent apply in tetherApplies)

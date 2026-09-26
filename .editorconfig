@@ -15,17 +15,15 @@ charset = utf-8-bom
 # .NET Coding Conventions     # 
 ############################### 
 [*.{cs,vb}] 
+dotnet_style_explicit_tuple_names = true:warning
 # Simplify Lambda Expressions
 csharp_style_prefer_simple_lambda_expression = true:warning
 # Prefer implicitly typed lambdas
 csharp_style_prefer_implicitly_typed_lambda_expression = true:warning
 # Prefer Compound Assignments
 dotnet_style_prefer_compound_assignment = true:warning
-dotnet_diagnostic.IDE0074.severity = warning
 # Prefer local functions
 csharp_style_prefer_local_over_anonymous_function = true:warning
-# Mark unused usings as warnings or errors so analyzers catch them
-dotnet_diagnostic.IDE0005.severity = warning
 dotnet_remove_unnecessary_usings = true
 # Organize usings 
 dotnet_sort_system_directives_first = true 
@@ -79,19 +77,9 @@ dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 end_of_line = crlf
 dotnet_style_prefer_collection_expression = true:suggestion
-dotnet_diagnostic.CA1416.severity = suggestion
-dotnet_diagnostic.CA2201.severity = suggestion
-dotnet_diagnostic.CA2007.severity = none
-dotnet_diagnostic.CA1056.severity = none
-dotnet_diagnostic.CA1823.severity = warning
-# IDE0290: Use primary constructor
-dotnet_diagnostic.IDE0290.severity = none
 ############################### 
 # C# Coding Conventions       # 
 ############################### 
-
-# IDE0130: Namespace does not match folder structure
-dotnet_diagnostic.IDE0130.severity = silent
 
 [*.cs] 
 # var preferences 
@@ -149,120 +137,88 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences 
 csharp_preserve_single_line_statements = true 
 csharp_preserve_single_line_blocks = true 
+# Preferred
+csharp_preferred_modifier_order = public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async:warning
 ############################### 
 # VB Coding Conventions       # 
 ############################### 
 
-# CA1303: Do not pass literals as localized parameters
-dotnet_diagnostic.CA1303.severity = silent
-
-# CA1305: Specify IFormatProvider
-dotnet_diagnostic.CA1305.severity = silent
-
-# CA1304: Specify CultureInfo
-dotnet_diagnostic.CA1304.severity = silent
-
-# CA1307: Specify StringComparison
-dotnet_diagnostic.CA1307.severity = silent
-
-# CA1031: Do not catch general exception types
-dotnet_diagnostic.CA1031.severity = none
-
-# CA1060: Move pinvokes to native methods class
-dotnet_diagnostic.CA1060.severity = none
-
-# CA1032: Implement standard exception constructors
-dotnet_diagnostic.CA1032.severity = none
-
-# CA2237: Mark ISerializable types with serializable
-dotnet_diagnostic.CA2237.severity = none
-
-# CA1062: Validate arguments of public methods
-dotnet_diagnostic.CA1062.severity = silent
-
-dotnet_diagnostic.CA1051.severity = silent
-
-dotnet_diagnostic.CA1852.severity = suggestion
-
-# CA1819: Properties should not return arrays
-dotnet_diagnostic.CA1819.severity = none
-
-# CA1034: Nested types should not be visible
-dotnet_diagnostic.CA1034.severity = none
-
-# CA1716: Identifiers should not match keywords
-dotnet_diagnostic.CA1716.severity = none
-
+dotnet_diagnostic.CA1002.severity = none
+dotnet_diagnostic.CA1008.severity = none
+dotnet_diagnostic.CA1014.severity = suggestion
+dotnet_diagnostic.CA1024.severity = none
 # CA1028: Enum Storage should be Int32
 dotnet_diagnostic.CA1028.severity = none
-
-# CA1720: Identifier contains type name
-dotnet_diagnostic.CA1720.severity = none
-
-# CA2227: Collection properties should be read only
-dotnet_diagnostic.CA2227.severity = none
-
-# CA1056: Uri properties should not be strings
-dotnet_diagnostic.CA1056.severity = suggestion
-
-# CA1721: Property names should not match get methods
-dotnet_diagnostic.CA1721.severity = none
-
-# CA1801: Review unused parameters
-dotnet_diagnostic.CA1801.severity = silent
-
-# CA1812:
-dotnet_diagnostic.CA1812.severity = silent
-
-# CA1826:
-dotnet_diagnostic.CA1826.severity = silent
-
-# CA1724:
-dotnet_diagnostic.CA1724.severity = silent
-
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+# CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1032.severity = none
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = none
+dotnet_diagnostic.CA1051.severity = silent
 # CA1054: Uri parameters should not be strings
 dotnet_diagnostic.CA1054.severity = suggestion
-
-dotnet_diagnostic.CA1002.severity = none
-
+# CA1056: Uri properties should not be strings
+dotnet_diagnostic.CA1056.severity = suggestion
+# CA1060: Move pinvokes to native methods class
+dotnet_diagnostic.CA1060.severity = none
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = silent
+dotnet_diagnostic.CA1069.severity = none
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = silent
+# CA1304: Specify CultureInfo
+dotnet_diagnostic.CA1304.severity = silent
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = silent
+# CA1307: Specify StringComparison
+dotnet_diagnostic.CA1307.severity = silent
+dotnet_diagnostic.CA1310.severity = suggestion
+dotnet_diagnostic.CA1416.severity = suggestion
+dotnet_diagnostic.CA1707.severity = none
 dotnet_diagnostic.CA1711.severity = none
-
+dotnet_diagnostic.CA1715.severity = none
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+# CA1720: Identifier contains type name
+dotnet_diagnostic.CA1720.severity = none
+# CA1721: Property names should not match get methods
+dotnet_diagnostic.CA1721.severity = none
+# CA1724:
+dotnet_diagnostic.CA1724.severity = silent
+# CA1801: Review unused parameters
+dotnet_diagnostic.CA1801.severity = silent
 dotnet_diagnostic.CA1805.severity = none
-
+dotnet_diagnostic.CA1810.severity = silent
+# CA1812:
+dotnet_diagnostic.CA1812.severity = silent
+dotnet_diagnostic.CA1815.severity = suggestion
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
+dotnet_diagnostic.CA1823.severity = warning
+# CA1826:
+dotnet_diagnostic.CA1826.severity = silent
+dotnet_diagnostic.CA1829.severity = warning
+dotnet_diagnostic.CA1851.severity = warning
+dotnet_diagnostic.CA1852.severity = suggestion
+dotnet_diagnostic.CA1859.severity = none
+dotnet_diagnostic.CA1860.severity = warning
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA2201.severity = suggestion
+dotnet_diagnostic.CA2225.severity = none
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = none
+# CA2237: Mark ISerializable types with serializable
+dotnet_diagnostic.CA2237.severity = none
+dotnet_diagnostic.CA2241.severity = silent
+dotnet_diagnostic.CA5392.severity = suggestion
 dotnet_diagnostic.CA5394.severity = none
 
-dotnet_diagnostic.CA5392.severity = suggestion
 
-dotnet_diagnostic.CA1024.severity = none
-
-dotnet_diagnostic.CA1310.severity = suggestion
-
-dotnet_diagnostic.CA1069.severity = none
-
-dotnet_diagnostic.CA1707.severity = none
-
-dotnet_diagnostic.CA1008.severity = none
-
-dotnet_diagnostic.CA1859.severity = none
-
-dotnet_diagnostic.CA1715.severity = none
-
-dotnet_diagnostic.CA1815.severity = suggestion
-
-dotnet_diagnostic.CA2241.severity = silent
-
-
-dotnet_diagnostic.CA2225.severity = none
-
-dotnet_diagnostic.CA1014.severity = suggestion
-dotnet_diagnostic.CA1810.severity = silent
-dotnet_diagnostic.CA1851.severity = suggestion
-
-
+# dotnet_diagnostic.CS8604.severity = suggestion
+dotnet_diagnostic.CS8606.severity = suggestion
 dotnet_diagnostic.CS8618.severity = suggestion
 dotnet_diagnostic.CS8714.severity = none
-dotnet_diagnostic.CS8606.severity = suggestion
-# dotnet_diagnostic.CS8604.severity = suggestion
 
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion
@@ -274,12 +230,23 @@ csharp_style_expression_bodied_local_functions = false:silent
 
 # IDE0002: Simplify Member Access
 dotnet_diagnostic.IDE0002.severity = warning
+# Mark unused usings as warnings or errors so analyzers catch them
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0033.severity = warning
+dotnet_diagnostic.IDE0036.severity = warning
+dotnet_diagnostic.IDE0060.severity = suggestion
+dotnet_diagnostic.IDE0074.severity = warning
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = none
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = silent
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
 dotnet_diagnostic.IDE0305.severity = silent
+
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_prefer_system_threading_lock = true:suggestion
 
-# IDE0079: Remove unnecessary suppression
-dotnet_diagnostic.IDE0079.severity = none
 
 
 [*.vb] 

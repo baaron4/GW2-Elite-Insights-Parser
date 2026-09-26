@@ -241,8 +241,8 @@ internal static class WarriorHelper
             defBanners = GetBannerAgents(combatData, BannerOfDefenseBuff, playerAgents),
             disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
             tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
-        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior);
-        var warriorsCount = warriors.Count();
+        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
+        var warriorsCount = warriors.Count;
         // if only one warrior, could only be that one
         if (warriorsCount == 1)
         {

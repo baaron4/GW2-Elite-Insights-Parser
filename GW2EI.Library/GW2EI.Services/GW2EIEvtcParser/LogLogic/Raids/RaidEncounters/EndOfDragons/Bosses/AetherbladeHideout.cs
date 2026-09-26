@@ -216,7 +216,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 var initialPoint = new Vector3(3138.17456f, 1639.60657f, -1852.15894f); // The first cirle always spawns on the bomb on north east.
 
                 // Filted bombs to select only 1 bomb per puzzle, with the max last aware
-                var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
+                var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb)).Select(x => x.AgentItem).ToList(), (agent) => agent.FirstAware);
                 var filteredBombs = groupedBombs.Select(x => x.MaxBy(y => y.LastAware));
 
                 // Filter the detonations, we use them only for the end time
@@ -678,7 +678,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             echoPhase.AddTarget(echoOfScarlet, log);
             echoPhase.AddTargets(eliteScarletHPPhantoms, log, PhaseData.TargetPriority.Blocking);
             phases.Add(echoPhase);
-            var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2]));
+            var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2])).ToList();
             var bombs = Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb));
             var echoPhases = GetSubPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.LogData.LogEnd);
             for (int i = 0; i < echoPhases.Count; i++)

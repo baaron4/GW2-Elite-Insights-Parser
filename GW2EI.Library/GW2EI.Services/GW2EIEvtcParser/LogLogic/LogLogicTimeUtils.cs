@@ -159,7 +159,7 @@ internal static class LogLogicTimeUtils
         return null;
     }
 
-    internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
+    internal static void SetSuccessByCombatExit(IReadOnlyList<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         if (!targets.Any())
         {
@@ -211,7 +211,7 @@ internal static class LogLogicTimeUtils
         }
     }
 
-    internal static void SetSuccessByDeath(IEnumerable<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler, bool all)
+    internal static void SetSuccessByDeath(IReadOnlyList<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler, bool all)
     {
         if (!targets.Any())
         {
@@ -234,7 +234,7 @@ internal static class LogLogicTimeUtils
                 maxTime = Math.Max(time, maxTime);
             }
         }
-        if ((all && success == targets.Count()) || (!all && success > 0))
+        if ((all && success == targets.Count) || (!all && success > 0))
         {
             successHandler.SetSuccess(true, maxTime);
         }

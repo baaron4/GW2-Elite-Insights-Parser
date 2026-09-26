@@ -483,7 +483,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         var mainPhase = log.LogData.GetMainPhase(log);
-        var encountersWithDarkAi = log.LogData.GetEncounterPhases(log).Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak)));
+        var encountersWithDarkAi = log.LogData.GetEncounterPhases(log).Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak))).ToList();
         var finalEncounter = encountersWithDarkAi.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {

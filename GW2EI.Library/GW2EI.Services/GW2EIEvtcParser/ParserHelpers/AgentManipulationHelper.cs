@@ -285,7 +285,7 @@ public static class AgentManipulationHelper
         }
     }
 
-    private static void RegroupAgents(AgentData agentData, IEnumerable<AgentItem> agentsToRegroup, IReadOnlyDictionary<AgentItem, List<CombatItem>> srcCombatDataDict, IReadOnlyDictionary<AgentItem, List<CombatItem>> dstCombatDataDict, List<AgentItem> toAdd, List<AgentItem> toRemove)
+    private static void RegroupAgents(AgentData agentData, IReadOnlyList<AgentItem> agentsToRegroup, IReadOnlyDictionary<AgentItem, List<CombatItem>> srcCombatDataDict, IReadOnlyDictionary<AgentItem, List<CombatItem>> dstCombatDataDict, List<AgentItem> toAdd, List<AgentItem> toRemove)
     {
 
         AgentItem firstItem = agentsToRegroup.First();
@@ -489,7 +489,7 @@ public static class AgentManipulationHelper
                 var players = playersByAccount.Value;
                 if (players.Count > 1)
                 {
-                    RegroupAgents(agentData, players.Select(x => x.AgentItem), srcCombatDataDict, dstCombatDataDict, toAdd, toRemove);
+                    RegroupAgents(agentData, players.Select(x => x.AgentItem).ToList(), srcCombatDataDict, dstCombatDataDict, toAdd, toRemove);
                 }
             }
         }

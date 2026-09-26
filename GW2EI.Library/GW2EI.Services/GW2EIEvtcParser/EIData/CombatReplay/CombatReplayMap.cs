@@ -121,8 +121,8 @@ public class CombatReplayMap
                 {
                     continue;
                 }
-                var pos = p.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end);
-                if (pos.Any())
+                var pos = p.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
+                if (pos.Count != 0)
                 {
                     _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.XYZ.X)) - 250, _rectInMap.topX);
                     _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.XYZ.Y)) - 250, _rectInMap.topY);

@@ -315,7 +315,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    internal static (AgentItem? deimosStruct, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) FindDeimos10PercentBodyStructWithAttackTargets(SingleActor deimos, LogData logData, AgentData agentData, List<CombatItem> combatData, IEnumerable<AttackTargetEvent> attackTargetEvents, IEnumerable<TargetableEvent> targetableEvents)
+    internal static (AgentItem? deimosStruct, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) FindDeimos10PercentBodyStructWithAttackTargets(SingleActor deimos, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyList<AttackTargetEvent> attackTargetEvents, IReadOnlyList<TargetableEvent> targetableEvents)
     {
         var firstTargetable = targetableEvents.FirstOrDefault(x => x.Time >= deimos.FirstAware && x.Targetable);
         var gadgetsAgents = new HashSet<AgentItem>();
@@ -386,7 +386,7 @@ internal class Deimos : BastionOfThePenitent
         // Find target
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).Where(x => !x.AttackTarget.IsSpecies(TargetID.DemonicBondAttackTarget));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).Where(x => !x.AttackTarget.IsSpecies(TargetID.DemonicBondAttackTarget)).ToList();
         var targetableEvents = new List<TargetableEvent>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -405,8 +405,8 @@ internal class Deimos : BastionOfThePenitent
             CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamageEvent());
             if (armDeimosDamageEvent != null)
             {
-                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
-                if (deimosGadgets.Any())
+                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
+                if (deimosGadgets.Count != 0)
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
                     gadgetAgents = [.. deimosGadgets];

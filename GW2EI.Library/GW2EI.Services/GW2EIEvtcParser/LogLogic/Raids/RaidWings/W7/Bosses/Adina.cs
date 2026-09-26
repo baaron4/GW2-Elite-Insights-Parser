@@ -97,7 +97,8 @@ internal class Adina : TheKeyOfAhdashim
     {
         var attackTargetEvents = combatData
             .Where(x => x.IsStateChange == StateChange.AttackTarget)
-            .Select(x => new AttackTargetEvent(x, agentData));
+            .Select(x => new AttackTargetEvent(x, agentData))
+            .ToList();
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -170,7 +171,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    private readonly static Vector2 ArenaCenter = new(14909.3f, -1470.64f);
+    private static readonly Vector2 ArenaCenter = new(14909.3f, -1470.64f);
     internal static void FindPlatforms(AgentData agentData, List<CombatItem> combatData)
     {
         var positionsDict = combatData.Where(x => x.IsPosition).Select(x => new PositionEvent(x, agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
@@ -234,8 +235,8 @@ internal class Adina : TheKeyOfAhdashim
         var tolY = MathF.Round(position.Y / tol) * tol;
         if (_plateformColumns.TryGetValue(tolX, out var singleActorsX) && _plateformRows.TryGetValue(tolY, out var singleActorsY))
         {
-            var singleActors = singleActorsX.Intersect(singleActorsY);
-            if (singleActors.Count() == 1)
+            var singleActors = singleActorsX.Intersect(singleActorsY).ToList();
+            if (singleActors.Count == 1)
             {
                 return singleActors.First().GetCombatReplayNonPolledPositions(log).First().XYZ;
             }

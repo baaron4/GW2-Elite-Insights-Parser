@@ -245,8 +245,8 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
         SingleActor ministerLi = GetMinisterLi(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM) ?? throw new MissingKeyActorsException("Minister Li not found");
-        var buffApplies = combatData.GetBuffApplyDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
-        if (buffApplies.Any())
+        var buffApplies = combatData.GetBuffApplyDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
+        if (buffApplies.Count != 0)
         {
             successHandler.SetSuccess(true, buffApplies.First().Time);
         }

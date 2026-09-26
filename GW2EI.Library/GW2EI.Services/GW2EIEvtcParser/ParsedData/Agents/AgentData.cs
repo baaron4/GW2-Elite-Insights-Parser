@@ -301,7 +301,7 @@ public class AgentData
 
     public delegate long AgentGroupingTimeFetchet(AgentItem agentItem);
 
-    public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
+    public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IReadOnlyList<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
     {
         var groupedAgents = new List<IEnumerable<AgentItem>>();
         var processedTimes = new HashSet<long>();

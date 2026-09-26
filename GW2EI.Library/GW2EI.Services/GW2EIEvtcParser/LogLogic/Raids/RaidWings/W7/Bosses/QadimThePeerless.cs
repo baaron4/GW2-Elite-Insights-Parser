@@ -702,7 +702,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
     }
     private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffID, Color color, double opacity)
     {
-        var tethers = log.CombatData.GetBuffDataByIDByDst(buffID, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent);
+        var tethers = log.CombatData.GetBuffDataByIDByDst(buffID, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent).ToList();
         var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
         foreach (var appliedTether in tethers.OfType<BuffApplyEvent>())
         {

@@ -671,9 +671,9 @@ public abstract class LogLogic
         NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents, successHandler);
     }
 
-    protected IEnumerable<SingleActor> GetSuccessCheckTargets()
+    protected IReadOnlyList<SingleActor> GetSuccessCheckTargets()
     {
-        return Targets.Where(x => x.IsAnySpecies(GetSuccessCheckIDs()));
+        return Targets.Where(x => x.IsAnySpecies(GetSuccessCheckIDs())).ToList();
     }
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)

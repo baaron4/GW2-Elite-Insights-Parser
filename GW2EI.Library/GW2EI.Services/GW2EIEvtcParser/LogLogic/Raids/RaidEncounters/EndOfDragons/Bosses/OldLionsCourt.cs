@@ -177,7 +177,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
                     TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, logData, playerAgents, successHandler, true);
+            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)).ToList(), combatData, logData, playerAgents, successHandler, true);
         }
     }
 
@@ -342,10 +342,10 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
         // Fixation
-        IEnumerable<BuffEvent> fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
-        IEnumerable<BuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
-        IEnumerable<BuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
-        IEnumerable<BuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
+        var fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
+        var fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })).ToList();
+        var fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })).ToList();
+        var fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })).ToList();
 
         AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
         AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
@@ -735,7 +735,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
     /// <param name="replay">Combat Replay.</param>
     /// <param name="fixations">The <see cref="BuffEvent"/> where the buff appears.</param>
     /// <param name="icon">The icon related to the respective buff.</param>
-    private static void AddFixatedDecorations(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, IEnumerable<BuffEvent> fixations, string icon)
+    private static void AddFixatedDecorations(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<BuffEvent> fixations, string icon)
     {
         IEnumerable<BuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
         IEnumerable<BuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);

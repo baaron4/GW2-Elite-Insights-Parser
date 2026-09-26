@@ -229,7 +229,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target, log);
-                    var killableAmalgamates = Targets.Where(x => x.IsSpecies(TargetID.KillableVoidAmalgamate));
+                    var killableAmalgamates = Targets.Where(x => x.IsSpecies(TargetID.KillableVoidAmalgamate)).ToList();
                     var prevKillableAmalgamates = killableAmalgamates.FirstOrDefault(x => x.FirstAware < phaseStart && x.FirstAware >= log.LogData.LogStart - ServerDelayConstant);
                     if (prevKillableAmalgamates != null)
                     {
@@ -239,7 +239,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware && y.Time <= target.LastAware));
                     if (attackTargetEvent != null)
                     {
-                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware).ToList();
                         var targetOns = targetables.Where(x => x.Targetable).ToList();
                         var targetOffs = targetables.Where(x => !x.Targetable);
                         // Starts with 2nd soo won phase
@@ -504,12 +504,14 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
             if (soowon != null)
             {
-                var targetOffs = combatData.GetAttackTargetEventsBySrc(soowon.AgentItem).Select(x => x.GetTargetableEvents(combatData).Where(x => x.Time >= soowon.FirstAware && !x.Targetable)).FirstOrDefault(x => x.Any());
+                var targetOffs = combatData.GetAttackTargetEventsBySrc(soowon.AgentItem)
+                        .Select(x => x.GetTargetableEvents(combatData).Where(x => x.Time >= soowon.FirstAware && !x.Targetable))
+                        .FirstOrDefault(x => x.Any())?.ToList();
                 if (targetOffs == null)
                 {
                     return;
                 }
-                if (targetOffs.Count() == 2)
+                if (targetOffs.Count == 2)
                 {
                     HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                     if (lastDamageTaken != null)
@@ -521,7 +523,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                         }
                         else
                         {
-                            var determinedApplies = combatData.GetBuffApplyData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
+                            var determinedApplies = combatData.GetBuffApplyData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant).ToList();
                             IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
                             foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
@@ -760,7 +762,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             TargetID.TheDragonVoidZhaitan,
             TargetID.TheDragonVoidSooWon,
         ];
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -788,15 +790,15 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 attackTargetSortID[atAgent] = long.MaxValue;
                 continue;
             }
-            var targetOns = targetables.Where(x => x.Targetable);
-            if (!targetOns.Any())
+            var targetOns = targetables.Where(x => x.Targetable).ToList();
+            if (targetOns.Count == 0)
             {
                 attackTargetSortID[atAgent] = long.MaxValue;
                 continue;
             }
             attackTargetSortID[atAgent] = targetOns.Min(x => x.Time);
         }
-        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
+        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]).ToList();
         int index = 0;
         HashSet<AgentItem> processedAttackTargets = [];
         long lastLastAware = logData.LogStart;
@@ -901,11 +903,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent, true)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .DistinctBy(x => x.EffectID)
-            .Select(x => (x, combatData.Where(y => y.IsEffect && y.SkillID == x.EffectID)))
-            .GroupBy(x => x.Item1)
+            .Select(effectGUIDEvent => (effectGUIDEvent, combatData.Where(y => y.IsEffect && y.SkillID == effectGUIDEvent.EffectID)))
+            .GroupBy(x => x.effectGUIDEvent)
             .ToDictionary(x => x.Key.GUID, x => x.SelectMany(x => x.Item2));
         // Attack targets
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -933,15 +935,15 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                 attackTargetSortID[atAgent] = long.MaxValue;
                 continue;
             }
-            var targetOns = targetables.Where(x => x.Targetable);
-            if (!targetOns.Any())
+            var targetOns = targetables.Where(x => x.Targetable).ToList();
+            if (targetOns.Count == 0)
             {
                 attackTargetSortID[atAgent] = long.MaxValue;
                 continue;
             }
             attackTargetSortID[atAgent] = targetOns.Min(x => x.Time);
         }
-        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
+        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]).ToList();
         HashSet<AgentItem> processedAttackTargets = [];
         bool needSortByTime = false;
         var hpEvents = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate).ToList();
@@ -957,7 +959,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             processedAttackTargets.Add(atAgent);
             var targetOns = targetables.Where(x => x.Targetable).ToList();
             var targetOffs = targetables.Where(x => !x.Targetable).ToList();
-            var dragonVoidHPEvents = hpEvents.Where(x => x.SrcMatchesAgent(dragonVoid));
+            var dragonVoidHPEvents = hpEvents.Where(x => x.SrcMatchesAgent(dragonVoid)).ToList();
             for (var i = 0; i < targetOns.Count; i++)
             {
                 var targetOn = targetOns[i];

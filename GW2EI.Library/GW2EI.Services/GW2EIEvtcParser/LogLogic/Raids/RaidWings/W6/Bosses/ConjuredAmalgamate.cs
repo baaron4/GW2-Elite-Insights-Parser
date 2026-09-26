@@ -83,7 +83,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             .Select(x => new AttackTargetEvent(x, agentData))
             .ToList();
         var positionEvents = combatData.Where(x => x.IsPosition);
-        var attackTargetPositions = positionEvents.Where(x => attackTargetEvents.Any(y => x.SrcMatchesAgent(y.AttackTarget)));
+        var attackTargetPositions = positionEvents.Where(x => attackTargetEvents.Any(y => x.SrcMatchesAgent(y.AttackTarget))).ToList();
         foreach (var positionEvent in attackTargetPositions)
         {
             var position = new PositionEvent(positionEvent, agentData);
@@ -137,8 +137,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
-        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
-        if (effectIDToGUIDs.Any())
+        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID).ToList();
+        if (effectIDToGUIDs.Count != 0)
         {
             CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => EffectGUIDs.CAArmSmash.Equals(x.SrcAgent, x.DstAgent, true));
             if (armSmashGUID != null)

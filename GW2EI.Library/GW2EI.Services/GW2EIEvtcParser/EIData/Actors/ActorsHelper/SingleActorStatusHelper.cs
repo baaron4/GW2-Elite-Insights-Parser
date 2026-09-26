@@ -126,7 +126,7 @@ partial class SingleActor
         );
         if (AgentItem.IsEnglobedAgent)
         {
-            var englobingRegroupedEvents = AgentItem.EnglobingAgentItem.Regrouped.Where(x => x.MergeStart >= AgentItem.EnglobingAgentItem.FirstAware && x.MergeEnd <= AgentItem.EnglobingAgentItem.LastAware).Select(x => (new SpawnEvent(AgentItem, x.MergeStart), new DespawnEvent(AgentItem, x.MergeEnd)));
+            var englobingRegroupedEvents = AgentItem.EnglobingAgentItem.Regrouped.Where(x => x.MergeStart >= AgentItem.EnglobingAgentItem.FirstAware && x.MergeEnd <= AgentItem.EnglobingAgentItem.LastAware).Select(x => (new SpawnEvent(AgentItem, x.MergeStart), new DespawnEvent(AgentItem, x.MergeEnd))).ToList();
             List<StatusEvent?> firstEvents = [
                 combatData.GetDownEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
                 combatData.GetAliveEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
