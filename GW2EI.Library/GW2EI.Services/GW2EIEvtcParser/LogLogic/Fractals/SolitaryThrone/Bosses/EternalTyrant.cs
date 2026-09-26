@@ -146,7 +146,10 @@ internal class EternalTyrant : SolitaryThrone
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // above platform
         const float platform = -2447.3f;
@@ -185,7 +188,10 @@ internal class EternalTyrant : SolitaryThrone
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         switch (target.ID)
         {
@@ -227,7 +233,10 @@ internal class EternalTyrant : SolitaryThrone
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // cosmic blast (low gravity aoe)
         var cosmicBlastMissiles = log.CombatData.GetMissileEventsBySkillID(CosmicBlast);
