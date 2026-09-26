@@ -488,6 +488,10 @@ internal static class ParserIcons
     private const string TrashAscensionOrb = "https://i.imgur.com/HabikUq.png";
     private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
     private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
+    private const string TrashEarthElemental = "https://i.imgur.com/GymhEiO.png";
+    private const string TrashEmber = "https://i.imgur.com/OzbCqNZ.png";
+    private const string TrashFrostElemental = "https://i.imgur.com/YV3AN5R.png";
+    private const string TrashSpark = "https://i.imgur.com/RUxJLuB.png";
     #endregion
 
     #region Minion
@@ -1428,6 +1432,10 @@ internal static class ParserIcons
         { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
         { TargetID.EternalTyrant, TargetEternalTyrant },
+        { TargetID.EarthElemental, TrashEarthElemental },
+        { TargetID.Ember, TrashEmber },
+        { TargetID.FrostElemental, TrashFrostElemental },
+        { TargetID.SparkEternalTyrant, TrashSpark },
         { TargetID.RimeSprite, TargetRimeSprite },
     };
 
