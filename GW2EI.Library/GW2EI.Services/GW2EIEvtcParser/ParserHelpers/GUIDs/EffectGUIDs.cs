@@ -674,6 +674,8 @@ public static class EffectGUIDs
     public static readonly Guid EternalTyrantCosmicWaveWindup2 = new("139952BB07EEA1428A5E509EFD71E009"); // owned by tyrant, duration 3333ms
     public static readonly Guid EternalTyrantCosmicWaveIndicator = new("01D633F85F5B65468503C5BC6A9EBC0E"); // owned by tyrant, duration 2000ms
     public static readonly Guid EternalTyrantCosmicWave = new("F697B3EF5603D3489D24E870ABCAE4B6"); // owned by tyrant, duration 1166ms
+    public static readonly Guid EternalTyrantCelestialImpactIndicator = new("A68AD70CD0A68F48BADECA8E8AE00EFF"); // owned by tyrant, duration 43000ms
+    public static readonly Guid EternalTyrantCelestialImpact = new("BD2055967CE7D443AF24BFC45EF4DB70"); // owned by tyrant, duration 3333ms
     #endregion
 
     #region Raids

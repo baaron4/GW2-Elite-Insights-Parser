@@ -1175,6 +1175,14 @@ public static class MechanicIDs
     public static readonly int Mech_CosmicWaveHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_AstralOrbHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_AstralOrbReflect = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_AstralPulseHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_SelfDestructHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_ExplodingEnergyHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_CelestialImpactHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_FrigidWindsHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_JadeShardsHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_SearingRadialHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_LightningStrikeHit = SolitaryThroneMask | ++_solitaryThroneCount;
     #endregion SOLITARY THRONE
     #endregion FRACTALS
 

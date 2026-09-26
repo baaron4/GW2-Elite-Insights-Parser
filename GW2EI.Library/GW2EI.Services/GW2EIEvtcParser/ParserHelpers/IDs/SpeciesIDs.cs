@@ -698,9 +698,11 @@ public static class SpeciesIDs
         WhisperingShadow = 27010,
         // - Solitary Throne
         EternalTyrant = 28051,
-        SparkEternalTyrant = 27998,
-        Ember = 27987,
         FrostElemental = 27893,
+        Ember = 27987,
+        SparkEternalTyrant = 27998,
+        EarthElemental = 28042,
+        RimeSprite = 28098,
         #endregion FRACTALS
         #region GOLEMS
         MassiveGolem10M = 16169,
