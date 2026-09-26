@@ -587,6 +587,7 @@ internal static class EncounterBuffs
             new Buff("Invulnerability (Eternal Tyrant)", InvulnerabilityEternalTyrant, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Empowered (Eternal Tyrant)", EmpoweredEternalTyrant, Source.EncounterSpecific, BuffClassification.Other, BuffImages.EmpoweredMursaatOverseer),
             new Buff("Vulnerable to Defiance", VulnerableToDefiance, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
+            new Buff("Attracting Rime Sprites", AttractingRimeSprites, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Rime Sprite (Aura)", RimeSpriteAura, Source.EncounterSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Unrelenting Winds", UnrelentingWinds, Source.EncounterSpecific, BuffStackType.Queue, 3, BuffClassification.Debuff, BuffImages.UnrelentingWinds),
             // Strike Mission

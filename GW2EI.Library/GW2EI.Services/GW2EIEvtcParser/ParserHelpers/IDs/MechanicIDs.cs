@@ -1179,6 +1179,8 @@ public static class MechanicIDs
     public static readonly int Mech_SelfDestructHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_ExplodingEnergyHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_CelestialImpactHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_StormSummoningHit = SolitaryThroneMask | ++_solitaryThroneCount;
+    public static readonly int Mech_AttracingRimeSprites = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_FrigidWindsHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_JadeShardsHit = SolitaryThroneMask | ++_solitaryThroneCount;
     public static readonly int Mech_SearingRadialHit = SolitaryThroneMask | ++_solitaryThroneCount;

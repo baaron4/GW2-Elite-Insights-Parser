@@ -5734,6 +5734,7 @@ public static class SkillIDs
     public const long AstralPulse = 80472;
     public const long DivisionEternal = 80483;
     public const long SurroundingCurseVloxx = 80484;
+    public const long AttractingRimeSprites = 80494;
     public const long CelestialImpact = 80508;
     public const long CoveredInScarabs = 80509;
     public const long EchoingAttack = 80510;
@@ -5761,6 +5762,7 @@ public static class SkillIDs
     public const long CosmicChargeBulwark = 80717;
     public const long EternalReflectionCosmicPiercerElite = 80726;
     public const long Excision = 80732;
+    public const long StormSummoning = 80740;
     public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
     public const long TargetedEternalTyrant = 80769;
     public const long AstralBarrage = 80770;

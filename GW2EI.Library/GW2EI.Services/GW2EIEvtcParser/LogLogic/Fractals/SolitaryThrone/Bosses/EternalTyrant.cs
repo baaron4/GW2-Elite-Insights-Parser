@@ -45,7 +45,11 @@ internal class EternalTyrant : SolitaryThrone
                 .UsingChecker((hit, log) => hit.From.IsSpecies(TargetID.EternalTyrant) && log.CombatData.GetAnimatedCastData(hit.From).Any(x => x.SkillID == CelestialImpact && hit.Time > x.Time && hit.Time <= x.EndTime + ServerDelayConstant)),
         ]),
         new MechanicGroup([
+            new PlayerDstHealthDamageHitMechanic(StormSummoning, Mech_StormSummoningHit, new (Symbols.StarDiamond, Colors.Red), new("Summ.H", "Hit by Storm Summoning (Rime Sprite Spawn)", "Storm Summoning Hit"), Sev0),
+            new PlayerDstBuffApplyMechanic(AttractingRimeSprites, Mech_AttracingRimeSprites, new (Symbols.Y, Colors.White), new("Fixate", "Fixated by Rime Sprite", "Rime Sprite Fixate"), Sev0),
             new PlayerDstHealthDamageHitMechanic(FrigidWinds, Mech_FrigidWindsHit, new (Symbols.StarDiamondOpen, Colors.White), new("Winds.H", "Hit by Frigid Winds (Rime Sprite)", "Frigid Winds Hit"), Sev1),
+        ]),
+        new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(JadeShards, Mech_JadeShardsHit, new (Symbols.StarSquareOpen, Colors.DarkYellow), new("Jade.H", "Hit by Jade Shards (Earth Rings)", "Jade Shards Hit"), Sev1),
             new PlayerDstHealthDamageHitMechanic(SearingRadial, Mech_SearingRadialHit, new (Symbols.StarDiamond, Colors.Orange), new("Sear.H", "Hit by Searing Radial (Fire Wall)", "Searing Radial Hit"), Sev1),
             new PlayerDstHealthDamageHitMechanic(LightningStrikeEternalTyrant, Mech_LightningStrikeHit, new (Symbols.CircleOpenDot, Colors.CobaltBlue), new("Lightning.H", "Hit by Lightning Strike", "Lightning Strike Hit"), Sev0),
@@ -183,6 +187,12 @@ internal class EternalTyrant : SolitaryThrone
                 var decoration = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player.AgentItem));
                 replay.Decorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
             }
+        }
+
+        // attracting rime sprites (storm fixation)
+        foreach (var seg in player.GetBuffStatus(log, AttractingRimeSprites).Where(x => x.Value > 0))
+        {
+            replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.FixationPurpleOverhead);
         }
     }
 
