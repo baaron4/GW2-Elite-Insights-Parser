@@ -778,7 +778,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                         break;
                 }
             }
-        } 
+        }
         else
         {
             foreach (SingleActor target in targets)

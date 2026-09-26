@@ -93,7 +93,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
                         break;
                 }
             }
-        } 
+        }
         else
         {
             foreach (SingleActor actor in actors)

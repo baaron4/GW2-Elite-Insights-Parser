@@ -17,7 +17,7 @@ public class AgentInfoEvent : StatusEvent
         {
             GadgetTypeValue = (uint)evtcItem.Value;
             GadgetType = ArcDPSEnums.GetGadgetType(GadgetTypeValue, evtcVersion);
-        } 
+        }
         else if (Type == AgentItem.AgentType.StableSpecies)
         {
             SpeciesFlagsValue = (uint)evtcItem.BuffDmg;

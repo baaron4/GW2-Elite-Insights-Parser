@@ -703,7 +703,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
                         break;
                 }
             }
-        } 
+        }
         else
         {
             foreach (SingleActor actor in targets)
