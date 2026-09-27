@@ -393,9 +393,12 @@ internal class Gorseval : SpiritVale
                     foreach (var spectralDarknessEvent in spectralDarknessEvents)
                     {
                         lifespan = (spectralDarknessEvent.Time, target.LastAware);
-                        var finalRadius = initialRadius + growthPerMS * (target.LastAware - spectralDarknessEvent.Time);
-                        var spectralDarknessArea = new CircleDecoration((uint)finalRadius, initialRadius, lifespan, Colors.CobaltBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(lifespan.end);
-                        //replay.Decorations.Add(spectralDarknessArea);
+                        var finalRadius = (uint)(initialRadius + growthPerMS * (target.LastAware - spectralDarknessEvent.Time));
+                        if (finalRadius > initialRadius)
+                        {
+                            var spectralDarknessArea = new CircleDecoration(finalRadius, initialRadius, lifespan, Colors.CobaltBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(lifespan.end);
+                            //replay.Decorations.Add(spectralDarknessArea);
+                        }
                     }
                 }
                 break;
