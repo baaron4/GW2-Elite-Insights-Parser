@@ -1051,7 +1051,7 @@ internal class Qadim : MythwrightGambit
                                 var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.3, plateformConnector)
                                     .UsingRotationConnector(plateformFacingConnector));
                                 replay.Decorations.AddWithGrowing(triangleDecoration, gadgetAnimation.LoopEnd);
-                            } 
+                            }
                             else if (gadgetAnimation.AnimationToken == plateformInFlamesToken)
                             {
                                 var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.7, plateformConnector)
