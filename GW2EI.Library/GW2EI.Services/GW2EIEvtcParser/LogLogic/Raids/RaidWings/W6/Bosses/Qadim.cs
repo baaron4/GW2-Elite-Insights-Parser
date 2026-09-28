@@ -1035,19 +1035,29 @@ internal class Qadim : MythwrightGambit
                 {
                     var destroyToken = new Token("destroy");
                     var warningToken = new Token("warning");
+                    var plateformInFlamesToken = new Token("danger");
+                    var plateformFacingConnector = new AgentFacingConnector(target);
+                    var plateformConnector = new AgentConnector(target);
                     foreach (var gadgetAnimation in gadgetAnimationData)
                     {
                         if (gadgetAnimation.AnimationToken == destroyToken)
                         {
                             opacities.Add(new(HiddenOpacity, gadgetAnimation.Time));
                         }
-                        else if (gadgetAnimation.AnimationToken == warningToken)
-                        {
-                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
-                            replay.Decorations.Add(new CircleDecoration(500, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(gadgetAnimation.LoopEnd));
-                        }
                         else
                         {
+                            if (gadgetAnimation.AnimationToken == warningToken)
+                            {
+                                var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.3, plateformConnector)
+                                    .UsingRotationConnector(plateformFacingConnector));
+                                replay.Decorations.AddWithGrowing(triangleDecoration, gadgetAnimation.LoopEnd);
+                            } 
+                            else if (gadgetAnimation.AnimationToken == plateformInFlamesToken)
+                            {
+                                var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.7, plateformConnector)
+                                    .UsingRotationConnector(plateformFacingConnector));
+                                replay.Decorations.Add(triangleDecoration);
+                            }
                             opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
                         }
                     }
