@@ -270,7 +270,14 @@ internal static class JsonLogBuilder
         jsonLog.Targets = log.LogData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap, teamMap)).ToList();
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-        jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods, teamMap)).ToList();
+        IEnumerable<SingleActor> friendliesToBuild = log.Friendlies;
+        string? playerFilter = Environment.GetEnvironmentVariable("EI_PLAYER_FILTER");
+        if (!string.IsNullOrWhiteSpace(playerFilter))
+        {
+            string[] accountFilter = playerFilter.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            friendliesToBuild = log.Friendlies.Where(x => accountFilter.Contains(x.Account, StringComparer.OrdinalIgnoreCase));
+        }
+        jsonLog.Players = friendliesToBuild.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods, teamMap)).ToList();
         //
         if (log.LogMetadata.LogErrors.Any())
         {
