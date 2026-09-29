@@ -67,7 +67,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         if (targetsByIDs.TryGetValue((int)TargetID.Skorvald, out var skorvalds))
         {
             var anomalies = Targets.Where(x => x.IsAnySpecies(Skorvald.FluxAnomalies));
-            var cmAnomalies = anomalies.Where(x => x.IsAnySpecies([TargetID.FluxAnomalyCM1, TargetID.FluxAnomalyCM2, TargetID.FluxAnomalyCM3, TargetID.FluxAnomalyCM4]));
+            var cmAnomalies = anomalies.Where(x => x.IsAnySpecies([TargetID.FluxAnomalySwordSwordCM, TargetID.FluxAnomalyAxeMaceCM, TargetID.FluxAnomalyScepterScepterCM, TargetID.FluxAnomalyHammerCM]));
             foreach (var skorvald in skorvalds)
             {
                 var firstNonZeroHPUpdate = log.CombatData.GetHealthUpdateEvents(skorvald.AgentItem).FirstOrDefault(x => x.HealthPercent > 0);
@@ -267,7 +267,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         Artsariiv.DetectCloneArtsariivs(evtcVersion, agentData, combatData);
         Arkk.IdentifyGadgets(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        Skorvald.RenameAnomalies(Targets, combatData);
+        Skorvald.RenameAnomalies(Targets);
         Artsariiv.RenameSmallArtsariivs(TrashMobs);
         Artsariiv.RenameCloneArtsariivs(Targets, combatData);
     }

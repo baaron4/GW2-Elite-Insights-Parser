@@ -225,6 +225,23 @@ internal static class LogLogicUtils
         }
     }
 
+    internal static void NumericallyRenameBasedOnNames(IEnumerable<SingleActor> targets)
+    {
+        NumericallyRenameBasedOnNames(targets, (target) => target.Character);
+    }
+
+    internal static void NumericallyRenameBasedOnNames(IEnumerable<SingleActor> targets, Func<SingleActor, string> getName)
+    {
+        var counts = new Dictionary<string, int>();
+        foreach (var target in targets)
+        {
+            var name = getName(target);
+            var suffix = counts.GetValueOrDefault(name, 1);
+            target.OverrideName(name + " " + suffix);
+            counts[name] = suffix + 1;
+        }
+    }
+
     private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, int hitboxWidth)
     {
         if (chestID == ChestID.None)
