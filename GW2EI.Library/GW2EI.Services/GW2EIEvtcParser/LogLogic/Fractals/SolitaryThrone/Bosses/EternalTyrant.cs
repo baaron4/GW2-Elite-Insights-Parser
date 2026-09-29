@@ -185,20 +185,25 @@ internal class EternalTyrant : SolitaryThrone
         }
 
         // above platform
-        const float platform = -2447.3f;
-        const float aboveThreshold = platform - 150f;
-        long? start = null;
+        const float platformZ = -2447.3f;
+        const float aboveThreshold = 150f;
+        long? aboveStart = null;
         foreach (var pos in player.GetCombatReplayPolledPositions(log))
         {
-            if (pos.XYZ.Z <= aboveThreshold)
+            var height = platformZ - pos.XYZ.Z;
+            if (height >= aboveThreshold)
             {
-                start ??= pos.Time;
+                aboveStart ??= pos.Time;
             }
-            else if (start != null)
+            else if (aboveStart != null)
             {
-                replay.Decorations.AddOverheadIcon(new Segment(start.Value, pos.Time), player, ParserIcons.GenericBlueArrowUp);
-                start = null;
+                replay.Decorations.AddOverheadIcon(new Segment(aboveStart.Value, pos.Time), player, ParserIcons.GenericBlueArrowUp);
+                aboveStart = null;
             }
+        }
+        if (aboveStart != null)
+        {
+            replay.Decorations.AddOverheadIcon(new Segment(aboveStart.Value, player.LastAware), player, ParserIcons.GenericBlueArrowUp);
         }
 
         // cosmic blast (launch aoe) target
