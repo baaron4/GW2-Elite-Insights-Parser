@@ -132,10 +132,7 @@ public partial class InspectorViewModel : ObservableObject
                 return false;
             }
 
-            if (!string.Equals(
-                    eventModel.GadgetAnimationData,
-                    GadgetDataFilter,
-                    StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(eventModel.GadgetAnimationData, GadgetDataFilter, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
