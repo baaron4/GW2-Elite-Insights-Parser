@@ -641,7 +641,7 @@ internal static class ItemImages
     public const string DecadeEnhancement = "https://render.guildwars2.com/file/9C0A257380D40A5D6C1D93CA73A317035E06C9C6/2724222.png";
     public const string SnowDiamondOrnament = "https://render.guildwars2.com/file/DE210AD99255070E7638763C4EF9E8D162E42FB9/3734078.png";
     public const string SuperSharpeningPolygon = "https://render.guildwars2.com/file/4246FCE23672F905B771F993EE009CF019705DD3/3762453.png";
-    public const string DismountingPotion = ""; // TODO
+    public const string DismountingPotion = "https://render.guildwars2.com/file/C3AF22F63BE7EACF39E7A7E76615D6C5BE58DB1C/2594275.png";
     #endregion Utility
     #region Writ
     public const string WritOfBasicStrength = "https://render.guildwars2.com/file/CAF306FED00FDB05BA5C4E55D5D17E4D07C1CB75/1201921.png";
