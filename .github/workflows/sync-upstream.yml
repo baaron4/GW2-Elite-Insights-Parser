@@ -1,0 +1,73 @@
+name: Sync upstream into logOptimiser
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Weekly, Monday 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout logOptimiser
+        uses: actions/checkout@v4
+        with:
+          ref: logOptimiser
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch upstream
+        run: |
+          git remote add upstream https://github.com/baaron4/GW2-Elite-Insights-Parser.git
+          git fetch upstream master
+
+      - name: Check if already up to date
+        id: check
+        run: |
+          if git merge-base --is-ancestor upstream/master HEAD; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Merge upstream into sync branch
+        if: steps.check.outputs.up_to_date == 'false'
+        run: |
+          git checkout -B sync/upstream-master
+          if git merge upstream/master --no-edit -m "Merge upstream/master into logOptimiser"; then
+            echo "clean merge"
+          else
+            echo "conflicts detected, committing with markers for manual resolution"
+            git add -A
+            git commit -m "Merge upstream/master into logOptimiser (CONFLICTS - resolve manually)"
+          fi
+          git push origin sync/upstream-master --force
+
+      - name: Open or update PR
+        if: steps.check.outputs.up_to_date == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LAST_MSG=$(git log -1 --pretty=%s)
+          if [[ "$LAST_MSG" == *CONFLICTS* ]]; then
+            BODY="Automated sync from baaron4/GW2-Elite-Insights-Parser@master. This merge has CONFLICTS - checkout the \`sync/upstream-master\` branch locally, resolve the conflict markers, commit, and push to update this PR."
+          else
+            BODY="Automated sync from baaron4/GW2-Elite-Insights-Parser@master. Clean merge, no conflicts detected."
+          fi
+          if [ -n "$(gh pr list --head sync/upstream-master --state open --json number --jq '.[0].number')" ]; then
+            echo "PR already open, updated by force-push above."
+          else
+            gh pr create \
+              --base logOptimiser \
+              --head sync/upstream-master \
+              --title "Sync upstream/master into logOptimiser" \
+              --body "$BODY"
+          fi
