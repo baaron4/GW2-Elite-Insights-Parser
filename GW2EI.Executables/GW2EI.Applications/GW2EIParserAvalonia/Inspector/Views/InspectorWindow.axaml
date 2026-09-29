@@ -20,6 +20,15 @@
 
         <TabControl>
 
+            <TabControl.Styles>
+
+                <Style Selector="TabItem">
+                    <Setter Property="BorderBrush" Value="#444"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                </Style>
+
+            </TabControl.Styles>
+
             <TabItem Header="Events">
 
                 <Grid ColumnDefinitions="3*,5,2*,5,5*">
