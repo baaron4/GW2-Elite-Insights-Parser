@@ -271,7 +271,7 @@ internal static class JsonLogBuilder
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
         IEnumerable<SingleActor> friendliesToBuild = log.Friendlies;
-        string? playerFilter = Environment.GetEnvironmentVariable("EI_PLAYER_FILTER");
+        string? playerFilter = Environment.GetEnvironmentVariable("PLAYER_ID");
         if (!string.IsNullOrWhiteSpace(playerFilter))
         {
             string[] accountFilter = playerFilter.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
