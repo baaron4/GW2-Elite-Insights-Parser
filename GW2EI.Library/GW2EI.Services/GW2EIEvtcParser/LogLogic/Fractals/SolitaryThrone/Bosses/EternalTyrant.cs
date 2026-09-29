@@ -42,7 +42,7 @@ internal class EternalTyrant : SolitaryThrone
         ]),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(ArcDPSGenericKill, Mech_CelestialImpactHit, new (Symbols.YDown, Colors.Red), new("Impact.H", "Hit by Celestial Impact (Instant Kill)", "Celestial Impact Hit"), Sev0)
-                .UsingChecker((hit, log) => hit.From.IsSpecies(TargetID.EternalTyrant) && log.CombatData.GetAnimatedCastData(hit.From).Any(x => x.SkillID == CelestialImpact && hit.Time > x.Time && hit.Time <= x.EndTime + ServerDelayConstant)),
+                .UsingChecker((hit, log) => hit.From.IsSpecies(TargetID.EternalTyrant) && log.CombatData.GetAnimatedCastData(hit.From).Any(x => (x.SkillID == CelestialImpact || x.SkillID == CelestialImpactFinal) && hit.Time > x.Time && hit.Time <= x.EndTime + ServerDelayConstant)),
         ]),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(StormSummoning, Mech_StormSummoningHit, new (Symbols.StarDiamond, Colors.Red), new("Summ.H", "Hit by Storm Summoning (Rime Sprite Spawn)", "Storm Summoning Hit"), Sev0),
@@ -112,6 +112,28 @@ internal class EternalTyrant : SolitaryThrone
         return LogData.Mode.Normal;
     }
 
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
+    {
+        var tyrant = GetEternalTyrant();
+        var dead = combatData.GetDeadEvents(tyrant.AgentItem).FirstOrDefault();
+        var invulnEnd = combatData.GetBuffRemoveAllDataByIDByDst(InvulnerabilityEternalTyrant, tyrant.AgentItem).LastOrDefault();
+        if (dead != null)
+        {
+            successHandler.SetSuccess(true, dead.Time);
+            return;
+        }
+        else if (invulnEnd != null)
+        {
+            var health = combatData.GetHealthUpdateEvents(tyrant.AgentItem).LastOrDefault(x => x.Time <= invulnEnd?.Time);
+            if (health?.HealthPercent <= 1.0)
+            {
+                successHandler.SetSuccess(true, invulnEnd.Time);
+                return;
+            }
+        }
+        successHandler.SetSuccess(false, tyrant.LastAware);
+    }
+
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor tyrant, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
@@ -119,21 +141,28 @@ internal class EternalTyrant : SolitaryThrone
             return [];
         }
         var phases = GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true);
+        var finalCast = log.CombatData.GetAnimatedCastData(tyrant.AgentItem).FirstOrDefault(x => x.SkillID == CelestialImpactFinal);
         for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
             phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(tyrant, log);
             if (i % 2 == 0)
             {
                 phase.Name = "Phase " + (i + 2) / 2;
-                phase.AddTarget(tyrant, log);
                 phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.RimeSprite)), log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
-                phase.Name = "Split " + (i + 1) / 2;
-                phase.AddTarget(tyrant, log);
-                phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.FrostElemental)), log, PhaseData.TargetPriority.NonBlocking);
+                if (finalCast != null && phase.InInterval(finalCast.Time))
+                {
+                    phase.Name = "Final";
+                }
+                else
+                {
+                    phase.Name = "Split " + (i + 1) / 2;
+                    phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.FrostElemental)), log, PhaseData.TargetPriority.NonBlocking);
+                }
             }
         }
         return phases;
@@ -318,6 +347,15 @@ internal class EternalTyrant : SolitaryThrone
             foreach (var effect in celestialImpactIndicators)
             {
                 var lifespan = effect.ComputeLifespan(log, 43000);
+                var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
+                environmentDecorations.AddWithGrowing(decoration, lifespan.end);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCelestialImpactIndicatorFast, out var celestialImpactFastIndicators))
+        {
+            foreach (var effect in celestialImpactFastIndicators)
+            {
+                var lifespan = effect.ComputeLifespan(log, 6200);
                 var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
                 environmentDecorations.AddWithGrowing(decoration, lifespan.end);
             }

@@ -5736,6 +5736,7 @@ public static class SkillIDs
     public const long SurroundingCurseVloxx = 80484;
     public const long AttractingRimeSprites = 80494;
     public const long CelestialImpact = 80508;
+    public const long CelestialImpactFinal = 80542;
     public const long CoveredInScarabs = 80509;
     public const long EchoingAttack = 80510;
     public const long CosmicChargeVloxx = 80512;
