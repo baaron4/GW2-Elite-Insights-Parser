@@ -125,6 +125,22 @@ public partial class InspectorViewModel : ObservableObject
             return false;
         }
 
+        if (!string.IsNullOrWhiteSpace(GadgetDataFilter))
+        {
+            if (eventModel.Event is not GadgetAnimationEvent)
+            {
+                return false;
+            }
+
+            if (!string.Equals(
+                    eventModel.GadgetAnimationData,
+                    GadgetDataFilter,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
         if (!MatchesSelectedAgent(eventModel))
         {
             return false;
@@ -401,6 +417,28 @@ public partial class InspectorViewModel : ObservableObject
 
     #endregion COMBAT ITEMS
 
+    #region GADGET ANIMATION
+    public DataGridCollectionView GadgetAnimationView { get; }
+    public IReadOnlyList<string> GadgetAnimationFilterItems { get; }
+    [ObservableProperty]
+    private string? gadgetDataFilter;
+    internal bool GadgetAnimationFilterDropdownTriggered = false;
+    partial void OnGadgetDataFilterChanged(string? oldValue, string? newValue)
+    {
+        if (GadgetAnimationFilterDropdownTriggered)
+        {
+            return;
+        }
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        CombatEventsView.Refresh();
+        UpdateEventTypeCounts();
+    }
+
+    #endregion GADGET ANIMATION
+
     public InspectorViewModel(EvtcLog log)
     {
         #region COMBAT ITEMS
@@ -476,6 +514,12 @@ public partial class InspectorViewModel : ObservableObject
             Filter = FilterContentGUIDs
         };
         #endregion GUIDS
+
+        #region GADGET ANIMATION
+        var gadgetData = allTimeEvents.OfType<GadgetAnimationEvent>().Select(x => new GadgetAnimationModel(x)).GroupBy(x => x.Data).Select(g => g.First()).OrderBy(x => x.Data).ToList();
+        GadgetAnimationView = new(gadgetData);
+        GadgetAnimationFilterItems = gadgetData.Select(x => x.Data).ToList();
+        #endregion GADGET ANIMATION
 
         EventTypeFilterRoots = EventTypeFilterNodeModel.BuildRoots(allTimeEvents, allNonTimeEvents, allHealingExtensionEvents);
         var eventModels = allTimeEvents

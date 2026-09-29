@@ -99,4 +99,22 @@ public partial class InspectorWindow : Window
             });
         }
     }
+
+    private async void GadgetAnimationFilter_GotFocus(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not InspectorViewModel inspectorViewModel)
+        {
+            return;
+        }
+
+        if (sender is AutoCompleteBox autoCompleteBox)
+        {
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                inspectorViewModel.GadgetAnimationFilterDropdownTriggered = true;
+                autoCompleteBox.IsDropDownOpen = true;
+                inspectorViewModel.GadgetAnimationFilterDropdownTriggered = false;
+            });
+        }
+    }
 }
