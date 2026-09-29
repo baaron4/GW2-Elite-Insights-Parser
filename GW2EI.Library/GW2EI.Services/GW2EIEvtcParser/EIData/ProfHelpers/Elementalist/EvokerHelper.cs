@@ -161,6 +161,14 @@ internal static class EvokerHelper
             .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
         new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-10% under Protection while Toad active", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
+        // Stone Heart - special behavior for Evokers in PvP  
+        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-25% damage", DamageSource.Incoming, -25, DamageType.Strike, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.StoneHeart, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.September2026PvPBalanceAndCMReleases),
+        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-15% damage", DamageSource.Incoming, -15, DamageType.Strike, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.StoneHeart, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.September2026PvPBalanceAndCMReleases),
+        new BuffOnActorDamageModifier(Mod_StoneHeart_Evoker, StoneHeart, "Stone Heart (No Toad)", "-40% damage", DamageSource.Incoming, -40, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.StoneHeart, DamageModifierMode.sPvP)
+            .UsingChecker((evt, log) => !evt.To.HasBuff(log, ToadPassive, evt.Time))
+            .WithBuilds(GW2Builds.September2026PvPBalanceAndCMReleases),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
