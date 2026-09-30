@@ -110,6 +110,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.SomethingCosmicPiercer,
             TargetID.ChampionAspectOfTheStaff,
             TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheSword,
             TargetID.ChampionCosmicBulwark,
             TargetID.ChampionCosmicSunderer,
             TargetID.EliteCosmicPiercer,
@@ -167,6 +168,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.ChampionAspectOfTheSpear,
             TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSword,
             // TargetID.SomethingCosmicPiercer,
         ])).ToList();
         var cosmicChamps = targets.Where(x => x.IsAnySpecies(
@@ -233,6 +235,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             {TargetID.EliteCosmicBulwark, 2},
             {TargetID.ChampionAspectOfTheStaff, 3},
             {TargetID.ChampionAspectOfTheSpear, 3},
+            {TargetID.ChampionAspectOfTheSword, 3},
         };
     }
 
@@ -643,6 +646,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     case (int)TargetID.ChampionCosmicSunderer:
                     case (int)TargetID.ChampionAspectOfTheSpear:
                     case (int)TargetID.ChampionAspectOfTheStaff:
+                    case (int)TargetID.ChampionAspectOfTheSword:
                         actor.OverrideName("Champion " + actor.Character);
                         break;
                     case (int)TargetID.EliteCosmicBulwark:
