@@ -4,7 +4,6 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
-using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser;
 
@@ -34,11 +33,11 @@ public class ParsedEvtcLog : EvtcLog
             if (agentInfo.IsVeteran)
             {
                 singleActor.OverrideName("Veteran " + singleActor.Character);
-            } 
+            }
             else if (agentInfo.IsElite)
             {
                 singleActor.OverrideName("Elite " + singleActor.Character);
-            } 
+            }
             else if (agentInfo.IsChampion)
             {
                 singleActor.OverrideName("Champion " + singleActor.Character);
