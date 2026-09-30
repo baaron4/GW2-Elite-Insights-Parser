@@ -5,12 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.MechanicIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -44,9 +46,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev1),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
-        new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic([DivisionEternal, DivisionEternalAspectOfTheSword], Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic([VisionsOfEternityInStaff, VisionsOfEternityInSword,  VisionsOfEternityInSpear], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
-        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2, ExcisionExtremisAspectOfTheSword], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(Excision, Mech_Excision, new (Symbols.Square, Colors.DarkPurpleBlue), new MechanicDescription("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
 
@@ -59,13 +61,20 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionCosmicPiercerChamp, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerElite], Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection", "Eternal Reflection Hit"), Sev2),
         ]),
         new MechanicGroup([
-            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0),
+            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0)
+                .UsingChecker((buffRemove, log) => !buffRemove.To.IsDead(log, buffRemove.Time - ServerDelayConstant, buffRemove.Time + ServerDelayConstant)),
             new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new (Symbols.DiamondWide, Colors.Red), new ("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
         ]),
         new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new (Symbols.Hexagon, Colors.LightBlue), new ("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
         new MechanicGroup([
             new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new (Symbols.HexagonOpen, Colors.GreenishYellow), new ("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev1),
             new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new (Symbols.HexagonOpen, Colors.Green), new ("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_ATrueVisionary, Mech_ATrueVisionaryLost, new (Symbols.HexagonOpen, Colors.LightBlue), new("TrueVisionary.Achiv.L", "Achievement Eligibility: A True Visionary (Lost)", "Achiv: A True Visionary (Lost)"))
+                    .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_ATrueVisionary, Mech_ATrueVisionaryKept, new (Symbols.HexagonOpen, Colors.LightCobaltBlue), new("TrueVisionary.Achiv.K", "Achievement Eligibility: A True Visionary (Kept)", "Achiv: A True Visionary (Kept)"))
+                    .UsingChecker((evt, log) => !evt.Lost)
+            ]),
         ]),
     ]);
 
@@ -249,19 +258,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return phases;
     }
 
-
     private const double CMThreshold = 70e6;
     private const double LCMThreshold = 85e6;
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
-        var uraHP = target.GetHealth(combatData);
-        if (uraHP > CMThreshold)
-        {
-            return uraHP > LCMThreshold ? LogData.Mode.LegendaryCM : LogData.Mode.CMNoName;
-        }
-        return LogData.Mode.Normal;
+        var hp = target.GetHealth(combatData);
+        return hp > LCMThreshold ? LogData.Mode.LegendaryCM : hp > CMThreshold ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
 
@@ -330,7 +334,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         switch (target.ID)
         {
             case (int)TargetID.Vloxx:
-
                 // Probability Distribution - Placed AoE indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
                 {
@@ -361,9 +364,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     foreach (var effect in voeIndicator)
                     {
-                        lifespan = effect.ComputeLifespan(log, 8000);
+                        int duration = 8000;
+                        lifespan = effect.ComputeDynamicLifespan(log, duration); // Channel is interrupted when defiance bar is broken
+                        var growing = effect.Time + duration;
                         var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowingWithBorder(circle, growing, Colors.LightOrange, 0.4);
                     }
                 }
 
@@ -450,17 +455,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
                 }
 
-                // Division Eternal - Big rectangle
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
-                {
-                    foreach (var effect in divisionEternals)
-                    {
-                        lifespan = effect.ComputeLifespan(log, 3000);
-                        var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
-                        replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
-                    }
-                }
-
                 // Slice Through Reality - Teleport AoE
                 if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tpGroups, 3000))
                 {
@@ -524,6 +518,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
 
+                AddDivisionEternal(log, replay, target.AgentItem);
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
@@ -532,16 +527,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Swords last - above other decorations
                 AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxEchoingBladeSwordSwing, 600);
                 AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
-
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
-
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
-
                 break;
             case (int)TargetID.ChampionAspectOfTheSpear:
-
                 AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesAspectOfTheSpear);
 
                 // Cosmic Charge
@@ -555,39 +546,33 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         replay.Decorations.Add(circle);
                     }
                 }
-
+                break;
+            case (int)TargetID.ChampionAspectOfTheSword:
+                AddDivisionEternal(log, replay, target.AgentItem);
+                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
                 break;
             case (int)TargetID.EliteCosmicPiercer:
-
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
                 AddCosmicPiercerAnnhilatingOrb(log, replay);
-
                 break;
             case (int)TargetID.ChampionCosmicPiercer:
-
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
                 AddCosmicPiercerAnnhilatingOrb(log, replay);
-
                 break;
             case (int)TargetID.EliteCosmicBulwark:
-
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
-
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
-
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
-
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
-
                 AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
                 AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing, 400);
-
                 break;
             default:
                 break;
@@ -607,6 +592,21 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
+        var aTrueVisionaryEligibilityEvents = new List<AchievementEligibilityEvent>();
+        var phases = log.LogData.GetEncounterPhases(log, LogID).Where(x => (x.IsCM || x.IsLegendaryCM) && x.Success && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+        foreach (var phase in phases)
+        {
+            var ascension = p.GetBuffStatus(log, Ascension, phase.End);
+            if (ascension.Value < 10)
+            {
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.End, Ach_ATrueVisionary, p, true));
+            }
+            else
+            {
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.End, Ach_ATrueVisionary, p, false));
+            }
+        }
+        achievementEligibilityEvents.AddRange(aTrueVisionaryEligibilityEvents);
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -614,6 +614,29 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
+        }
+
+        var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
+
+        foreach (var encounterPhase in encounterPhases)
+        {
+            if (encounterPhase.Success && encounterPhase.IsCM)
+            {
+                double stacks = 99;
+                var vloxx = encounterPhase.Targets.FirstOrDefault(x => x.Key.IsSpecies(TargetID.Vloxx)).Key;
+                if (vloxx != null)
+                {
+                    var death = log.CombatData.GetDeadEvents(vloxx.AgentItem).FirstOrDefault(x => x.Time > encounterPhase.Start && x.Time <= encounterPhase.End);
+                    if (death != null)
+                    {
+                        stacks = vloxx.GetBuffStatus(log, EmpoweredNexusOfEternity, death.Time - ServerDelayConstant).Value;
+                    }
+                    if (stacks < 10)
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityTrueVisionary], 1, encounterPhase));
+                    }
+                }
+            }
         }
     }
 
@@ -717,6 +740,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Duration 1500 - Scale 3.0 - Echoing Blade - 600 radius - Vloxx
                 // Duration 2500 - Scale 2.5 - Excision Extremis - 500 radius - Vloxx
                 // Duration 1500 - Scale 2.0 - Excision - 400 radius - Sunderer
+                // Duration 3500 - Scale 2.0 - Excision Extremis - 400 radius - Sword
                 uint radius = (uint)(200 * effect.Scale);
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
@@ -726,7 +750,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
     }
 
     /// <summary>
-    /// Used by Echoing Blade, Excision Extremis, Division Eternal
+    /// Used by Echoing Blade, Excision Extremis, Division Eternal, Excision
     /// </summary>
     private static void AddSwordSwings(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, Guid guid, uint radius)
     {
@@ -734,7 +758,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in swords)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
+                // Echoing Blade - Duration 1000 - Vloxx
+                // Excision Extremis, Division Eternal - Duration 833 - Vloxx
+                // Echoing Attack, Excision - Duration 833 - Sunderer
+                // Excision Extremis, Division Eternal - Duration 833 - Sword
+                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 180, -180));
                 replay.Decorations.Add(line);
             }
@@ -834,6 +862,21 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 lifespan = effect.ComputeLifespan(log, 10000);
                 var circle = new DoughnutDecoration(175, 180, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
+            }
+        }
+    }
+
+    private static void AddDivisionEternal(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        // Division Eternal - Big rectangle
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
+        {
+            foreach (var effect in divisionEternals)
+            {
+                // Note: Length of the rectangle is the same for Vloxx and Sword, Vloxx has 8 swings, the Sword 6.
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
             }
         }
     }

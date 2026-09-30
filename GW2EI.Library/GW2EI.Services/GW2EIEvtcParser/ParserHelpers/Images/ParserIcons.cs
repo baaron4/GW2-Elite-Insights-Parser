@@ -486,6 +486,7 @@ internal static class ParserIcons
     private const string TrashAscensionOrb = "https://i.imgur.com/HabikUq.png";
     private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
     private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
+    private const string TrashAspectOfTheSword = "https://i.imgur.com/o2dPlEq.png";
     #endregion
 
     #region Minion
@@ -1426,6 +1427,7 @@ internal static class ParserIcons
         { TargetID.AscensionOrb, TrashAscensionOrb },
         { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
+        { TargetID.ChampionAspectOfTheSword, TrashAspectOfTheSword },
     };
 
     /// <summary>
