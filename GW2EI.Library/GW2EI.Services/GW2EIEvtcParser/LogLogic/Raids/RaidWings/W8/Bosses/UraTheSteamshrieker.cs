@@ -582,7 +582,7 @@ internal class UraTheSteamshrieker : MountBalrior
                         {
                             counter = 0;
                         }
-                        lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                        lifespan = effect.ComputeLifespan(log, 1200);
                         uint radius = initialRadius + (radiusIncrease * counter);
                         replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                         counter++;
@@ -829,7 +829,7 @@ internal class UraTheSteamshrieker : MountBalrior
                             long effectDuration = 800000;
                             foreach (var effect in eruptions.Where(x => x.Duration == effectDuration))
                             {
-                                (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
+                                (long start, long end) = effect.ComputeLifespan(log, effectDuration);
                                 // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
                                 if (Math.Min(end, log.LogData.LogEnd) - start > 30000)
                                 {

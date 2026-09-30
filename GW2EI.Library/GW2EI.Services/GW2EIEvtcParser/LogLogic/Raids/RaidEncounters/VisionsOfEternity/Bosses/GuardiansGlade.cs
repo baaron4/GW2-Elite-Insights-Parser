@@ -657,7 +657,7 @@ internal class GuardiansGlade : VisionsOfEternityRaidEncounter
         for (var i = 0; i < effects.Count; i++)
         {
             var effect = effects[i];
-            var (start, end) = effect.ComputeDynamicLifespan(log, defaultDuration);
+            var (start, end) = effect.ComputeLifespan(log, defaultDuration);
             var next = effects.ElementAtOrDefault(i + 1);
             if (next?.Time < end + maxInterval) // avoid overlap and pulsing by using start of next as end
             {

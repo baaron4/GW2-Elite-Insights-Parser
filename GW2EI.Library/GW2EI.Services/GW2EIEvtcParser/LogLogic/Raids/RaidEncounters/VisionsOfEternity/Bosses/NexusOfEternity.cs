@@ -384,7 +384,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     foreach (var effect in worldpiercerBarrier)
                     {
                         // Up to 10 segments if it doesn't hit the arena border
-                        lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                        lifespan = effect.ComputeLifespan(log, 10000);
                         var line = new RectangleDecoration(365, 10, lifespan, Colors.LightBlue, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                         replay.Decorations.Add(line);
                     }
@@ -470,8 +470,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         {
                             var entry = tpGroup[0];
                             var exit = tpGroup[1];
-                            (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
-                            (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
+                            (long start, long end) lifespanEntry = entry.ComputeLifespan(log, 10000);
+                            (long start, long end) lifespanExit = entry.ComputeLifespan(log, 10000);
                             var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
                             replay.Decorations.Add(entryCircle);
                             var exitCircle = new CircleDecoration(220, lifespanExit, Colors.LightOrange, 0.2, new PositionConnector(exit.Position));
@@ -820,7 +820,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in bluePuddle)
             {
-                lifespan = effect.ComputeDynamicLifespan(log, 8000);
+                lifespan = effect.ComputeLifespan(log, 8000);
                 var circle = new CircleDecoration(180, lifespan, Colors.CobaltBlue, 0.4, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
             }
@@ -831,7 +831,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in redRing)
             {
-                lifespan = effect.ComputeDynamicLifespan(log, 10000);
+                lifespan = effect.ComputeLifespan(log, 10000);
                 var circle = new DoughnutDecoration(175, 180, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
             }
