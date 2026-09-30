@@ -249,11 +249,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return phases;
     }
 
+
+    private const double CMThreshold = 70e6;
+    private const double LCMThreshold = 85e6;
+
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
         var hp = target.GetHealth(combatData);
-        return hp > 85e6 ? LogData.Mode.LegendaryCM : hp > 43e6 ? LogData.Mode.CM : LogData.Mode.Normal;
+        return hp > LCMThreshold ? LogData.Mode.LegendaryCM : hp > CMThreshold ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
 
@@ -443,14 +447,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 }
 
                 // Slice Through Reality - Teleport AoE
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tpGroups, 3000))
                 {
-                    for (int i = 0; i <= tp.Count - 1; i += 2)
+                    foreach (var tpGroup in tpGroups)
                     {
-                        var entry = tp[i];
-                        var exit = tp[i + 1];
-                        if (entry != null && exit != null && exit.Time > entry.Time && exit.Time < entry.Time + 3000)
+                        if (tpGroup.Count == 2)
                         {
+                            var entry = tpGroup[0];
+                            var exit = tpGroup[1];
                             (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
                             (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
                             var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
@@ -618,6 +622,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             orb.OverrideID(TargetID.AscensionOrb, agentData);
             orb.OverrideName("Ascension Orb");
         }
+    }
+
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        return [
+            TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheSword,
+        ];
     }
 
     internal static void RenameAdds(IReadOnlyList<SingleActor> actors, EvtcVersionEvent evtcVersion)
