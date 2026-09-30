@@ -458,4 +458,6 @@ public static class DamageModifierIDs
     public const int Mod_VloxxsVision = 445;
     public const int Mod_RelicOfTheCurator = 446;
     public const int Mod_EmpoweredNexusOfEternity = 447;
+    public const int Mod_StoneHeart_EvokerToad = 448;
+    public const int Mod_StoneHeart_Evoker = 449;
 }

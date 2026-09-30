@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -99,16 +98,7 @@ internal class Skorvald : ShatteredObservatory
 
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
-        return [
-            (int)TargetID.FluxAnomaly1,
-            (int)TargetID.FluxAnomaly2,
-            (int)TargetID.FluxAnomaly3,
-            (int)TargetID.FluxAnomaly4,
-            (int)TargetID.FluxAnomalyCM1,
-            (int)TargetID.FluxAnomalyCM2,
-            (int)TargetID.FluxAnomalyCM3,
-            (int)TargetID.FluxAnomalyCM4,
-        ];
+        return [.. FluxAnomalies.Select(x => (int)x)];
     }
 
     internal static void DetectUnknownAnomalies(AgentData agentData, List<CombatItem> combatData)
@@ -129,44 +119,44 @@ internal class Skorvald : ShatteredObservatory
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<TargetID, int>()
+        return new()
         {
-            {TargetID.Skorvald, 0 },
-            {TargetID.FluxAnomaly1, 1 },
-            {TargetID.FluxAnomalyCM1, 1 },
-            {TargetID.FluxAnomaly2, 1 },
-            {TargetID.FluxAnomalyCM2, 1 },
-            {TargetID.FluxAnomaly3, 1 },
-            {TargetID.FluxAnomalyCM3, 1 },
-            {TargetID.FluxAnomaly4, 1 },
-            {TargetID.FluxAnomalyCM4, 1 },
+            { TargetID.Skorvald, 0 },
+            { TargetID.FluxAnomalySwordSword, 1 },
+            { TargetID.FluxAnomalySwordSwordCM, 1 },
+            { TargetID.FluxAnomalyAxeMace, 1 },
+            { TargetID.FluxAnomalyAxeMaceCM, 1 },
+            { TargetID.FluxAnomalyScepterScepter, 1 },
+            { TargetID.FluxAnomalyScepterScepterCM, 1 },
+            { TargetID.FluxAnomalyHammer, 1 },
+            { TargetID.FluxAnomalyHammerCM, 1 },
         };
     }
 
-    static readonly List<(string, Vector2)> AnomalyLocations =
-    [
-        ("NW", new(-21216.896f, 16050.098f)), // NE
-        ("NE", new(-17991.695f, 16026.498f)), // NW
-        ("SW", new(-21327.797f, 19302.596f)), // SW
-        ("SE", new(-17718.096f, 19303.496f)), // SE
+    static readonly Dictionary<int, string> AnomalySuffixes = new() {
+        { (int)TargetID.FluxAnomalySwordSword, "SW" },
+        { (int)TargetID.FluxAnomalySwordSwordCM, "SW" },
+        { (int)TargetID.FluxAnomalyAxeMace, "SE" },
+        { (int)TargetID.FluxAnomalyAxeMaceCM, "SE" },
+        { (int)TargetID.FluxAnomalyScepterScepter, "NE" },
+        { (int)TargetID.FluxAnomalyScepterScepterCM, "NE" },
+        { (int)TargetID.FluxAnomalyHammer, "NW" },
+        { (int)TargetID.FluxAnomalyHammerCM, "NW" },
+    };
 
-    ];
-
-    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets)
     {
-        var nameCount = new Dictionary<string, int> { { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
-        foreach (SingleActor target in targets)
+        NumericallyRenameBasedOnNames(targets.Where(x => x.IsAnySpecies(FluxAnomalies)), (anomaly) =>
         {
-            if (target.IsAnySpecies(FluxAnomalies))
+            if (AnomalySuffixes.TryGetValue(anomaly.ID, out var suffix))
             {
-                string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, AnomalyLocations, 100);
-                if (suffix != null && nameCount.ContainsKey(suffix))
-                {
-                    // deduplicate name
-                    target.OverrideName(target.Character + " " + (nameCount[suffix]++));
-                }
+                return anomaly.Character + " " + suffix;
             }
-        }
+            else
+            {
+                return anomaly.Character;
+            }
+        });
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -186,7 +176,7 @@ internal class Skorvald : ShatteredObservatory
             combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
             // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
         }
-        RenameAnomalies(Targets, combatData);
+        RenameAnomalies(Targets);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
@@ -222,10 +212,10 @@ internal class Skorvald : ShatteredObservatory
                 //SupernovaCM,
             };
             if (cmSkills.Any(x => combatData.GetAnimatedCastData(x).Count > 0 || combatData.GetDamageData(x).Count > 0) ||
-                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
+                agentData.GetStableSpeciesByID(TargetID.FluxAnomalySwordSwordCM).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyAxeMaceCM).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyScepterScepterCM).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetStableSpeciesByID(TargetID.FluxAnomalyHammerCM).Any(x => x.FirstAware >= target.FirstAware))
             {
                 return LogData.Mode.CM;
             }
@@ -247,15 +237,15 @@ internal class Skorvald : ShatteredObservatory
     }
 
     internal static readonly IReadOnlyList<TargetID> FluxAnomalies = [
-            TargetID.FluxAnomaly1,
-            TargetID.FluxAnomaly2,
-            TargetID.FluxAnomaly3,
-            TargetID.FluxAnomaly4,
-            TargetID.FluxAnomalyCM1,
-            TargetID.FluxAnomalyCM2,
-            TargetID.FluxAnomalyCM3,
-            TargetID.FluxAnomalyCM4,
-        ];
+        TargetID.FluxAnomalySwordSword,
+        TargetID.FluxAnomalyAxeMace,
+        TargetID.FluxAnomalyScepterScepter,
+        TargetID.FluxAnomalyHammer,
+        TargetID.FluxAnomalySwordSwordCM,
+        TargetID.FluxAnomalyAxeMaceCM,
+        TargetID.FluxAnomalyScepterScepterCM,
+        TargetID.FluxAnomalyHammerCM,
+    ];
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
@@ -429,10 +419,10 @@ internal class Skorvald : ShatteredObservatory
                     }
                 }
                 break;
-            case (int)TargetID.FluxAnomalyCM1:
-            case (int)TargetID.FluxAnomalyCM2:
-            case (int)TargetID.FluxAnomalyCM3:
-            case (int)TargetID.FluxAnomalyCM4:
+            case (int)TargetID.FluxAnomalySwordSwordCM:
+            case (int)TargetID.FluxAnomalyAxeMaceCM:
+            case (int)TargetID.FluxAnomalyScepterScepterCM:
+            case (int)TargetID.FluxAnomalyHammerCM:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
