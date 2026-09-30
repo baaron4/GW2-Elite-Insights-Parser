@@ -459,14 +459,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 }
 
                 // Slice Through Reality - Teleport AoE
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tpGroups, 3000))
                 {
-                    for (int i = 0; i <= tp.Count - 1; i += 2)
+                    foreach (var tpGroup in tpGroups)
                     {
-                        var entry = tp[i];
-                        var exit = tp[i + 1];
-                        if (entry != null && exit != null && exit.Time > entry.Time && exit.Time < entry.Time + 3000)
+                        if (tpGroup.Count == 2)
                         {
+                            var entry = tpGroup[0];
+                            var exit = tpGroup[1];
                             (long start, long end) lifespanEntry = entry.ComputeDynamicLifespan(log, 10000);
                             (long start, long end) lifespanExit = entry.ComputeDynamicLifespan(log, 10000);
                             var entryCircle = new CircleDecoration(220, lifespanEntry, Colors.LightOrange, 0.2, new PositionConnector(entry.Position));
