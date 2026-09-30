@@ -44,9 +44,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic(ProbabilityDistribution, Mech_ProbabilityDistribution, new (Symbols.CircleXOpen, Colors.Sand), new ("ProbDist.H", "Hit by Probability Distribution", "Probability Distribution Hit"), Sev1),
         ]),
         new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughReality, new (Symbols.CircleOpenDot, Colors.DarkBlue), new ("SlicReal.H", "Hit by Slice Through Reality", "Slice Through Reality Hit"), Sev0),
-        new PlayerDstHealthDamageHitMechanic(DivisionEternal, Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic([DivisionEternal, DivisionEternalAspectOfTheSword], Mech_DivisionEternal, new (Symbols.BowtieOpen, Colors.DarkRed), new ("DivEter.H", "Hit by Division Eternal", "Division Eternal Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic([VisionsOfEternityInStaff, VisionsOfEternityInSword,  VisionsOfEternityInSpear], Mech_VisionsOfEternity, new (Symbols.CircleX, Colors.LightBlue), new ("VisEter.H", "Hit by Visions of Eternity", "Visions of Eternity Hit"), Sev2),
-        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
+        new PlayerDstHealthDamageHitMechanic([ExcisionExtremis1, ExcisionExtremis2, ExcisionExtremisAspectOfTheSword], Mech_ExcisionExtremis, new (Symbols.CrossOpen, Colors.DarkerLime), new ("ExciExtr.H", "Hit by Excision Extremis", "Excision Extremis Hit"), Sev0),
         new PlayerDstHealthDamageHitMechanic(Excision, Mech_Excision, new (Symbols.Square, Colors.DarkPurpleBlue), new MechanicDescription("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
         new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBlade, new (Symbols.DiamondWide, Colors.DarkYellow), new ("EchoBlad.H", "Hit by Echoing Blade", "Echoing Blade Hit"), Sev2),
 
