@@ -599,11 +599,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             var ascension = p.GetBuffStatus(log, Ascension, phase.End);
             if (ascension.Value < 10)
             {
-                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.Start, Ach_ATrueVisionary, p, true));
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.End, Ach_ATrueVisionary, p, true));
             }
             else
             {
-                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.Start, Ach_ATrueVisionary, p, false));
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.End, Ach_ATrueVisionary, p, false));
             }
         }
         achievementEligibilityEvents.AddRange(aTrueVisionaryEligibilityEvents);
@@ -617,12 +617,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
 
         var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
-        double stacks = 99;
 
         foreach (var encounterPhase in encounterPhases)
         {
             if (encounterPhase.Success && encounterPhase.IsCM)
             {
+                double stacks = 99;
                 var vloxx = encounterPhase.Targets.FirstOrDefault(x => x.Key.IsSpecies(TargetID.Vloxx)).Key;
                 if (vloxx != null)
                 {
