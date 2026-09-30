@@ -357,9 +357,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     foreach (var effect in voeIndicator)
                     {
-                        lifespan = effect.ComputeLifespan(log, 8000);
+                        int duration = 8000;
+                        lifespan = effect.ComputeDynamicLifespan(log, duration); // Channel is interrupted when defiance bar is broken
+                        var growing = effect.Time + duration;
                         var circle = new CircleDecoration(560, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowingWithBorder(circle, growing, Colors.LightOrange, 0.4);
                     }
                 }
 
