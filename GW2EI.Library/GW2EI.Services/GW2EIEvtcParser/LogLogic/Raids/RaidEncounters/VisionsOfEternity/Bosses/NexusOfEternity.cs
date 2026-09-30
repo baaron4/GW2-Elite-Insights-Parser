@@ -246,8 +246,18 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return phases;
     }
 
+
+    private const double CMThreshold = 70e6;
+    private const double LCMThreshold = 85e6;
+
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var uraHP = target.GetHealth(combatData);
+        if (uraHP > CMThreshold)
+        {
+            return uraHP > LCMThreshold ? LogData.Mode.LegendaryCM : LogData.Mode.CMNoName;
+        }
         return LogData.Mode.Normal;
     }
 
