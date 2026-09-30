@@ -5807,6 +5807,9 @@ public static class SkillIDs
     public const long EchoingBlade = 81271;
     public const long AnnihilatingOrbCosmicPiercer = 81273;
     public const long WizardsBlessingVoE = 81287;
+    public const long ExcisionExtremisAspectOfTheSword = 81326;
+    public const long AncoraStrikeAspectOfTheSword = 81327;
+    public const long DivisionEternalAspectOfTheSword = 81330;
     public const long DismountingPotion = 81331;
     #endregion
     #region TODO

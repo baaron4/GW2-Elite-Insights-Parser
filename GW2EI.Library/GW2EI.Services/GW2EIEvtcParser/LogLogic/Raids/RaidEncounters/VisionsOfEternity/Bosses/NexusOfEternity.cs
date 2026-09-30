@@ -110,6 +110,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.SomethingCosmicPiercer,
             TargetID.ChampionAspectOfTheStaff,
             TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheSword,
             TargetID.ChampionCosmicBulwark,
             TargetID.ChampionCosmicSunderer,
             TargetID.EliteCosmicPiercer,
@@ -167,6 +168,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.ChampionAspectOfTheSpear,
             TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSword,
             // TargetID.SomethingCosmicPiercer,
         ])).ToList();
         var cosmicChamps = targets.Where(x => x.IsAnySpecies(
@@ -233,6 +235,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             {TargetID.EliteCosmicBulwark, 2},
             {TargetID.ChampionAspectOfTheStaff, 3},
             {TargetID.ChampionAspectOfTheSpear, 3},
+            {TargetID.ChampionAspectOfTheSword, 3},
         };
     }
 
@@ -248,7 +251,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return LogData.Mode.Normal;
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        var hp = target.GetHealth(combatData);
+        return hp > 85e6 ? LogData.Mode.LegendaryCM : hp > 43e6 ? LogData.Mode.CM : LogData.Mode.Normal;
     }
 
 
@@ -437,17 +442,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
                 }
 
-                // Division Eternal - Big rectangle
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
-                {
-                    foreach (var effect in divisionEternals)
-                    {
-                        lifespan = effect.ComputeLifespan(log, 3000);
-                        var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
-                        replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
-                    }
-                }
-
                 // Slice Through Reality - Teleport AoE
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternitySliceThroughRealityPortAndSuckAoE, out var tp))
                 {
@@ -511,6 +505,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
 
+                AddDivisionEternal(log, replay, target.AgentItem);
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
@@ -543,6 +538,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
                 }
 
+                break;
+            case (int)TargetID.ChampionAspectOfTheSword:
+                AddDivisionEternal(log, replay, target.AgentItem);
+                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem);
+                AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing, 500);
                 break;
             case (int)TargetID.EliteCosmicPiercer:
 
@@ -633,6 +633,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     case (int)TargetID.ChampionCosmicSunderer:
                     case (int)TargetID.ChampionAspectOfTheSpear:
                     case (int)TargetID.ChampionAspectOfTheStaff:
+                    case (int)TargetID.ChampionAspectOfTheSword:
                         actor.OverrideName("Champion " + actor.Character);
                         break;
                     case (int)TargetID.EliteCosmicBulwark:
@@ -694,6 +695,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // Duration 1500 - Scale 3.0 - Echoing Blade - 600 radius - Vloxx
                 // Duration 2500 - Scale 2.5 - Excision Extremis - 500 radius - Vloxx
                 // Duration 1500 - Scale 2.0 - Excision - 400 radius - Sunderer
+                // Duration 3500 - Scale 2.0 - Excision Extremis - 400 radius - Sword
                 uint radius = (uint)(200 * effect.Scale);
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
@@ -711,7 +713,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in swords)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 833);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var line = new RectangleDecoration(radius, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(effect.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 180, -180));
                 replay.Decorations.Add(line);
             }
@@ -811,6 +813,20 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 lifespan = effect.ComputeDynamicLifespan(log, 10000);
                 var circle = new DoughnutDecoration(175, 180, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
                 replay.Decorations.Add(circle);
+            }
+        }
+    }
+
+    private static void AddDivisionEternal(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    {
+        // Division Eternal - Big rectangle
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
+        {
+            foreach (var effect in divisionEternals)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
             }
         }
     }

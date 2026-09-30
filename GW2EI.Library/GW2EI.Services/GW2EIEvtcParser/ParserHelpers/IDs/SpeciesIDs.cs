@@ -589,6 +589,7 @@ public static class SpeciesIDs
         SomethingCosmicPiercer = 28056, // Also in convergence - Spawned for 2 seconds in one raid encounter log, might be challenge/legendary mode npc
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
+        ChampionAspectOfTheSword = 28107,
         EliteCosmicBulwark = 28065, // Also in convergence
         ChampionCosmicBulwark = 27934, // Also in convergence
         ChampionCosmicSunderer = 27933,
