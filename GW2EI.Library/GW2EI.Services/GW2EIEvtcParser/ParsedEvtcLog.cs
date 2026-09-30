@@ -29,20 +29,20 @@ public class ParsedEvtcLog : EvtcLog
     private static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
         var agentInfo = combatData.GetAgentInfoEvents(singleActor.AgentItem).FirstOrDefault();
-        if (agentInfo != null && agentInfo.SpeciesFlags != SpeciesFlagsEnum.NotApplicable)
+        if (agentInfo != null && agentInfo.SpeciesFlags != 0)
         {
-            // TODO find if there is a way to detect when to add Legendary automatically
-            switch (agentInfo.SpeciesFlags)
+            if (agentInfo.IsVeteran)
             {
-                case SpeciesFlagsEnum.Veteran:
-                    singleActor.OverrideName("Veteran " + singleActor.Character);
-                    break;
-                case SpeciesFlagsEnum.Elite:
-                    singleActor.OverrideName("Elite " + singleActor.Character);
-                    break;
-                case SpeciesFlagsEnum.Champion:
-                    singleActor.OverrideName("Champion " + singleActor.Character);
-                    break;
+                singleActor.OverrideName("Veteran " + singleActor.Character);
+            } 
+            else if (agentInfo.IsElite)
+            {
+                singleActor.OverrideName("Elite " + singleActor.Character);
+            } 
+            else if (agentInfo.IsChampion)
+            {
+                singleActor.OverrideName("Champion " + singleActor.Character);
+
             }
         }
     }

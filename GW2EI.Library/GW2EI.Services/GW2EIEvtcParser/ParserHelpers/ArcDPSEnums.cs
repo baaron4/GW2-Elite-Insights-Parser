@@ -43,7 +43,7 @@ public static class ArcDPSEnums
         public const int VisibilityInTargetableStateChange = 20260522;
         public const int VisibilityOnStateChange = 20260527;
         public const int GadgetCapturesAdded = 20260602;
-        public const int AgentInfoAdded = 99999999;
+        public const int AgentInfoAdded = 20260929;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -738,45 +738,12 @@ public static class ArcDPSEnums
     // Species Flags
 
     // Unstable, in game enum
-    public enum SpeciesFlagsEnum : uint
+    [Flags]
+    public enum SpeciesFlags : uint
     {
-        SpeciesFlags0 = 0,
-        Champion = 1,
-        SpeciesFlags2 = 2,
-        SpeciesFlags3 = 3,
-        SpeciesFlags4 = 4,
-        Elite = 5,
-        SpeciesFlags6 = 6,
-        SpeciesFlags7 = 7,
-        SpeciesFlags8 = 8,
-        SpeciesFlags9 = 9,
-        SpeciesFlags10 = 10,
-        Legendary = 11,
-        SpeciesFlags12 = 12,
-        SpeciesFlags13 = 13,
-        SpeciesFlags14 = 14,
-        SpeciesFlags15 = 15,
-        SpeciesFlags16 = 16,
-        SpeciesFlags17 = 17,
-        SpeciesFlags18 = 18,
-        SpeciesFlags19 = 19,
-        SpeciesFlags20 = 20,
-        SpeciesFlags21 = 21,
-        SpeciesFlags22 = 22,
-        SpeciesFlags23 = 23,
-        SpeciesFlags24 = 24,
-        SpeciesFlags25 = 25,
-        SpeciesFlags26 = 26,
-        SpeciesFlags27 = 27,
-        SpeciesFlags28 = 28,
-        Veteran = 29,
-
-        NotApplicable,
-    }
-
-    public static SpeciesFlagsEnum GetSpeciesFlags(uint unsignedInt, EvtcVersionEvent evtcVersion)
-    {
-        return unsignedInt < (uint)SpeciesFlagsEnum.NotApplicable ? (SpeciesFlagsEnum)unsignedInt
-            : SpeciesFlagsEnum.NotApplicable;
+        Champion = 1 << 1,
+        Elite = 1 << 5,
+        Legendary = 1 << 11,
+        Veteran = 1 << 29,
     }
 }
