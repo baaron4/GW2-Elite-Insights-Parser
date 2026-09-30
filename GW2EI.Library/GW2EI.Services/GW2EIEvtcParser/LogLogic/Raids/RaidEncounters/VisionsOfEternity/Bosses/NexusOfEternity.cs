@@ -633,6 +633,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        return [
+            TargetID.ChampionAspectOfTheStaff,
+            TargetID.ChampionAspectOfTheSpear,
+            TargetID.ChampionAspectOfTheSword,
+        ];
+    }
+
     internal static void RenameAdds(IReadOnlyList<SingleActor> actors, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
