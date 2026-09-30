@@ -85,6 +85,7 @@ public static class SkillIDs
     public const long Gliding = -66;
     public const long MirageMirrorShatter = -67;
     public const long FlyTo = -68;
+    public const long AchievementEligibilityTrueVisionary = -69;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

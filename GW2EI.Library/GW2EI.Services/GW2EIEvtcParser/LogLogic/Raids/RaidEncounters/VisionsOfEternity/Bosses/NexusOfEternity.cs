@@ -5,12 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
+using static GW2EIEvtcParser.AchievementEligibilityIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Mechanic.MechanicSeverity;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.MechanicIDs;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -59,13 +61,20 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionCosmicPiercerChamp, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerElite], Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection", "Eternal Reflection Hit"), Sev2),
         ]),
         new MechanicGroup([
-            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0),
+            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0)
+                .UsingChecker((buffRemove, log) => !buffRemove.To.IsDead(log, buffRemove.Time - ServerDelayConstant, buffRemove.Time + ServerDelayConstant)),
             new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new (Symbols.DiamondWide, Colors.Red), new ("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
         ]),
         new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new (Symbols.Hexagon, Colors.LightBlue), new ("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
         new MechanicGroup([
             new PlayerDstBuffApplyMechanic(Ascension, Mech_Ascension, new (Symbols.HexagonOpen, Colors.GreenishYellow), new ("Ascen.A", "Applied Ascension", "Ascension Applied"), Sev1),
             new PlayerDstBuffRemoveSingleMechanic(Ascension, Mech_AscensionRemove, new (Symbols.HexagonOpen, Colors.Green), new ("Ascen.R", "Removed Ascension", "Ascension Removed"), Sev0),
+            new MechanicGroup([
+                new AchievementEligibilityMechanic(Ach_ATrueVisionary, Mech_ATrueVisionaryLost, new (Symbols.HexagonOpen, Colors.LightBlue), new("TrueVisionary.Achiv.L", "Achievement Eligibility: A True Visionary (Lost)", "Achiv: A True Visionary (Lost)"))
+                    .UsingChecker((evt, log) => evt.Lost),
+                new AchievementEligibilityMechanic(Ach_ATrueVisionary, Mech_ATrueVisionaryKept, new (Symbols.HexagonOpen, Colors.LightCobaltBlue), new("TrueVisionary.Achiv.K", "Achievement Eligibility: A True Visionary (Kept)", "Achiv: A True Visionary (Kept)"))
+                    .UsingChecker((evt, log) => !evt.Lost)
+            ]),
         ]),
     ]);
 
@@ -583,6 +592,21 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
+        var aTrueVisionaryEligibilityEvents = new List<AchievementEligibilityEvent>();
+        var phases = log.LogData.GetEncounterPhases(log, LogID).Where(x => (x.IsCM || x.IsLegendaryCM) && x.Success && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+        foreach (var phase in phases)
+        {
+            var ascension = p.GetBuffStatus(log, Ascension, phase.End);
+            if (ascension.Value < 10)
+            {
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.Start, Ach_ATrueVisionary, p, true));
+            }
+            else
+            {
+                aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.Start, Ach_ATrueVisionary, p, false));
+            }
+        }
+        achievementEligibilityEvents.AddRange(aTrueVisionaryEligibilityEvents);
     }
 
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
@@ -590,6 +614,29 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
+        }
+
+        var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
+        double stacks = 99;
+
+        foreach (var encounterPhase in encounterPhases)
+        {
+            if (encounterPhase.Success && encounterPhase.IsCM)
+            {
+                var vloxx = encounterPhase.Targets.FirstOrDefault(x => x.Key.IsSpecies(TargetID.Vloxx)).Key;
+                if (vloxx != null)
+                {
+                    var death = log.CombatData.GetDeadEvents(vloxx.AgentItem).FirstOrDefault(x => x.Time > encounterPhase.Start && x.Time <= encounterPhase.End);
+                    if (death != null)
+                    {
+                        stacks = vloxx.GetBuffStatus(log, EmpoweredNexusOfEternity, death.Time - ServerDelayConstant).Value;
+                    }
+                    if (stacks < 10)
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityTrueVisionary], 1, encounterPhase));
+                    }
+                }
+            }
         }
     }
 
