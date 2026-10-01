@@ -122,7 +122,7 @@ public class EvtcParser
                 PreProcessEvtcData(operation, logData, agentData, combatItems, enabledExtensions, evtcVersion, gw2Build);
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
-            var log = new RawEvtcLog(evtcVersion, logData, agentData, skillData, combatItems, playerList, enabledExtensions, _parserSettings, _apiController, operation);
+            var log = new RawEvtcLog(evtcVersion, logData, agentData, skillData, combatItems, playerList, enabledExtensions, _parserSettings, _apiController, useEIPreProcess, operation);
             _parserSettings = oldSettings;
             return log;
         }

@@ -70,17 +70,7 @@ public class BuffsContainer
             }
             return x.First();
         });
-        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Skill icons using buffs");
-        var adjusted = 0;
-        foreach (var pair in BuffsByIDs)
-        {
-            if (skillData.TryGet(pair.Key, out var skill))
-            {
-                adjusted++;
-                skill.OverrideFromBuff(pair.Value);
-            }
-        }
-        operation.UpdateProgressWithCancellationCheck($"Parsing: Adjusted {adjusted} Skill icons using buffs");
+        AdjustSkillIconsFromBuffs(BuffsByIDs, skillData, operation);
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buffs");
         BuffInfoSolver.AdjustBuffs(combatData, BuffsByIDs, operation);
         foreach (Buff buff in currentBuffs)
@@ -174,6 +164,21 @@ public class BuffsContainer
                 }
             }
         }
+    }
+
+    internal static void AdjustSkillIconsFromBuffs(IReadOnlyDictionary<long, Buff> buffsByIDs, SkillData skillData, ParserController operation)
+    {
+        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Skill icons using buffs");
+        var adjusted = 0;
+        foreach (var pair in buffsByIDs)
+        {
+            if (skillData.TryGet(pair.Key, out var skill))
+            {
+                adjusted++;
+                skill.OverrideFromBuff(pair.Value);
+            }
+        }
+        operation.UpdateProgressWithCancellationCheck($"Parsing: Adjusted {adjusted} Skill icons using buffs");
     }
 
     internal static List<Buff> GetCurrentBuffs(CombatData combatData)
