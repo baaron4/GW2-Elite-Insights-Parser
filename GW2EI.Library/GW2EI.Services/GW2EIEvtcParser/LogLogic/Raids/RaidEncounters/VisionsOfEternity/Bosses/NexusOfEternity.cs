@@ -57,7 +57,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic([CosmicChargeVloxx, CosmicChargeBulwark, CosmicChargeAspectOfTheSpear], Mech_CosmicCharge, new (Symbols.CircleCrossOpen, Colors.White), new ("CosmChar.H", "Hit by Cosmic Charge", "Cosmic Charge Hit"), Sev1),
             new PlayerDstHealthDamageHitMechanic([ThousandStrikesAspectOfTheSpear, ThousandStrikesVloxx], Mech_ThousandStrikes, new (Symbols.CircleOpen, Colors.LightPink), new ("ThouStr.H", "Hit by Thousand Strikes", "Thousand Strikes Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic([RagingStormCosmicBulwark, RagingStormVloxx, RagingStormVloxx2], Mech_RagingStorm, new (Symbols.Cross, Colors.RedBrownish), new ("RagStor.H", "Hit by Raging Storm", "Raging Storm Hit"), Sev1),
-            new PlayerDstHealthDamageHitMechanic([WorldpiercerCosmicBullwark, WorldpiercerVloxx], Mech_Worldpiercer, new (Symbols.Diamond, Colors.FluoOrange), new ("WorldpierV.H", "Hit by Worldpiercer", "Worldpiercer Hit"), Sev0),
+            new MechanicGroup([
+                new PlayerDstHealthDamageHitMechanic([WorldpiercerCosmicBullwark, WorldpiercerVloxx], Mech_Worldpiercer, new (Symbols.DiamondOpen, Colors.FluoOrange), new ("Worldpier.H", "Hit by Worldpiercer", "Worldpiercer Hit"), Sev0, 50),
+                new PlayerDstHealthDamageMechanic(WorldpiercerVloxx, Mech_WorldpiercerVloxxKilled, new (Symbols.Diamond, Colors.FluoOrange), new ("WorldpierV.K", "Killed by Vloxx's Worldpiercer", "Vloxx Worldpiercer Kill"), Sev0)
+                    .UsingChecker((evt, log) => evt.HasKilled),
+            ]),
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionCosmicPiercerChamp, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerElite], Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection", "Eternal Reflection Hit"), Sev2),
         ]),
         new MechanicGroup([
@@ -593,11 +597,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputeAchievementEligibilityEvents(log, p, achievementEligibilityEvents);
         }
         var aTrueVisionaryEligibilityEvents = new List<AchievementEligibilityEvent>();
-        var phases = log.LogData.GetEncounterPhases(log, LogID).Where(x => (x.IsCM || x.IsLegendaryCM) && x.Success && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
+        var phases = log.LogData.GetEncounterPhases(log, LogID).Where(x => (x.IsCM || x.IsLegendaryCM) && x.IntersectsWindow(p.FirstAware, p.LastAware)).ToHashSet();
         foreach (var phase in phases)
         {
             var ascension = p.GetBuffStatus(log, Ascension, phase.End);
-            if (ascension.Value < 10)
+            if (!phase.Success || ascension.Value < 10)
             {
                 aTrueVisionaryEligibilityEvents.Add(new AchievementEligibilityEvent(phase.End, Ach_ATrueVisionary, p, true));
             }
