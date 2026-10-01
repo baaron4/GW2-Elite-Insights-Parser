@@ -744,6 +744,7 @@ public static class ArcDPSEnums
         Champion = 1 << 1,
         Elite = 1 << 5,
         Legendary = 1 << 11,
+        NoDecorateNameTBC = 1 << 19,
         Veteran = 1 << 29,
     }
 }

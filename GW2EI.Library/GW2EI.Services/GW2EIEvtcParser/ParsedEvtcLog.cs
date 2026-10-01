@@ -28,7 +28,7 @@ public class ParsedEvtcLog : EvtcLog
     private static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
         var agentInfo = combatData.GetAgentInfoEvents(singleActor.AgentItem).FirstOrDefault();
-        if (agentInfo != null && agentInfo.SpeciesFlags != 0)
+        if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
         {
             if (agentInfo.IsVeteran)
             {
@@ -41,7 +41,10 @@ public class ParsedEvtcLog : EvtcLog
             else if (agentInfo.IsChampion)
             {
                 singleActor.OverrideName("Champion " + singleActor.Character);
-
+            }
+            else if (agentInfo.IsLegendary)
+            {
+                singleActor.OverrideName("Legendary " + singleActor.Character);
             }
         }
     }
