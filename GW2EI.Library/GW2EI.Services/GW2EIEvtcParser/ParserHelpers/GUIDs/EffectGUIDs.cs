@@ -23,6 +23,7 @@ public static class EffectGUIDs
     public static readonly Guid EnemyAoE240 = new("2125A13079C1C5479C150926EB60A15D"); // split compound with effect for hostile, radius 240, e.g. guardian symbols
     public static readonly Guid AoEWhiteOutline180 = new("E37AD3E0D6DA364999D987D9DDFC9707"); // split compound with generic white outline for ally
     public static readonly Guid AoEIndicatorFilling280 = new("99C7A4DB18932F4F8D2D1A4D7543B52C"); // owned by attacker, duration 3000
+    public static readonly Guid ArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // owned by attacker
     public static readonly Guid UpdraftPulse1 = new("619CCF0F723DE24892E8158226FBB53A"); // no owner, duration 3366ms
     public static readonly Guid UpdraftPulse2 = new("ADC809B9FB2D9841807CABB43FCDD5FF"); // owned by gadget, duration 1500ms
     #endregion
@@ -677,6 +678,9 @@ public static class EffectGUIDs
     public static readonly Guid EternalTyrantCelestialImpactIndicator = new("A68AD70CD0A68F48BADECA8E8AE00EFF"); // owned by tyrant, duration 43000ms
     public static readonly Guid EternalTyrantCelestialImpactIndicatorFast = new("F11DE83882CEE049BA27C97FBAF3398A"); // owned by tyrant, duration 6200ms
     public static readonly Guid EternalTyrantCelestialImpact = new("BD2055967CE7D443AF24BFC45EF4DB70"); // owned by tyrant, duration 3333ms
+    public static readonly Guid EternalTyrantSearingRadial = new("33C7787156D3C44CB320C9975A37A4C6"); // owned by fire dais gadget, duration 24590ms
+    public static readonly Guid EternalTyrantJadeShards = new("F6208F6A171D894E8AE93B2EEA815243"); // owned by earth dais gadget, duration 3000ms
+    public static readonly Guid EternalTyrantLightningStrike = new("62477FC998B5D248B6F6BDF103FD0DCC"); // owned by air dais gadget, duration 2000ms
     #endregion
 
     #region Raids

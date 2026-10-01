@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -218,8 +219,8 @@ internal class EternalTyrant : SolitaryThrone
             foreach (var effect in gravityFieldIndicators)
             {
                 var lifespan = effect.ComputeLifespan(log, 3000);
-                var decoration = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
+                var decoration = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player));
+                replay.Decorations.AddWithGrowing(decoration, lifespan.end);
             }
         }
 
@@ -227,6 +228,17 @@ internal class EternalTyrant : SolitaryThrone
         foreach (var seg in player.GetBuffStatus(log, AttractingRimeSprites).Where(x => x.Value > 0))
         {
             replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.FixationPurpleOverhead);
+        }
+
+        // lightning strike
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.EternalTyrantLightningStrike, out var lightningStrikes))
+        {
+            foreach (var effect in lightningStrikes)
+            {
+                var lifespan = effect.ComputeLifespan(log, 2000);
+                var decoration = new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player)).UsingFilled(false);
+                replay.Decorations.AddWithFilledWithGrowing(decoration, true, lifespan.end);
+            }
         }
     }
 
@@ -378,5 +390,54 @@ internal class EternalTyrant : SolitaryThrone
         // astral pulse (rotating projectile beam)
         var astralPulses = log.CombatData.GetMissileEventsBySkillID(AstralPulse);
         environmentDecorations.AddNonHomingMissiles(log, astralPulses, Colors.White, 0.2, 25);
+
+
+        // searing radial (fire wall)
+        // TODO: indicator collision with construct
+        const uint wallWidth = 50;
+        const uint wallLength = 2000;
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArrowIndicator, out var searingRadialIndiactors))
+        {
+            foreach (var effect in searingRadialIndiactors)
+            {
+                var lifespan = effect.ComputeLifespan(log, 2000);
+                var position = new PositionConnector(effect.Position).WithOffset(wallLength / 2f * Vector3.UnitY, true);
+                var decoration = new RectangleDecoration(wallWidth, wallLength, lifespan, Colors.LightOrange, 0.2, position)
+                    .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                environmentDecorations.Add(decoration);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantSearingRadial, out var searingRadials))
+        {
+            foreach (var effect in searingRadials)
+            {
+                var lifespan = effect.ComputeLifespan(log, 24590);
+                var position = new PositionConnector(effect.Position).WithOffset(wallLength / 2f * Vector3.UnitY, true);
+                var decoration = new RectangleDecoration(wallWidth, wallLength, lifespan, Colors.Red, 0.2, position)
+                    .UsingRotationConnector(new SpinningConnector(effect.Rotation.Z + 90, 360));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
+        // jade shards (earth rings)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantJadeShards, out var jadeShards))
+        {
+            uint[] rings = [140, 260, 440, 780, 1340]; // TODO: double check
+            const long delay = 2000;
+            const long interval = 1000;
+            foreach (var effect in jadeShards)
+            {
+                var position = new PositionConnector(effect.Position);
+                var time = effect.Time + delay;
+                for (var i = 0; i < rings.Length; i++)
+                {
+                    var inner = i > 0 ? rings[i - 1] : 0;
+                    var outer = rings[i];
+                    var decoration = new DoughnutDecoration(inner, outer, (time, time + 500), Colors.Red, 0.2, position);
+                    environmentDecorations.Add(decoration);
+                    time += interval;
+                }
+            }
+        }
     }
 }
