@@ -456,7 +456,7 @@ public partial class InspectorViewModel : ObservableObject
         #endregion AGENTS
 
         #region  SKILLS
-        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData, log.CombatData)).OrderBy(skill => skill.ID).ToList())
+        SkillsDataView = new(log.SkillData.AllSkills.Select(skill => new SkillDataModel(skill, log.SkillData)).OrderBy(skill => skill.ID).ToList())
         {
             Filter = FilterSkillDataModels
         };

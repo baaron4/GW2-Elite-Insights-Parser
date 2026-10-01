@@ -540,12 +540,31 @@
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto"
                                   SelectionMode="Single"
-                                  RowHeight="28">
+                                  RowHeight="40">
+
+                            <DataGrid.Resources>
+                                <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+                            </DataGrid.Resources>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID"
                                                     Binding="{Binding ID}"
                                                     Width="Auto"/>
+
+                                <DataGridTemplateColumn Header="Icon"
+                                                        Width="60"
+                                                        CanUserSort="False">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding IconImage}"
+                                                   Width="32"
+                                                   Height="32"
+                                                   Stretch="Uniform"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
 
                                 <DataGridTextColumn
                                     Binding="{Binding Name}"
@@ -560,6 +579,11 @@
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
                                 </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Type"
+                                                    Binding="{Binding SkillType}"
+                                                    Width="100"/>
+
                             </DataGrid.Columns>
                         </DataGrid>
 
