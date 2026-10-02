@@ -259,39 +259,133 @@ internal class EternalTyrant : SolitaryThrone
 
         switch (target.ID)
         {
-            case (int)TargetID.RimeSprite:
+            case (int)TargetID.EternalTyrant:
+
+                // cosmic blast (low gravity aoe)
+                var cosmicBlastMissiles = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, CosmicBlast);
+                replay.Decorations.AddNonHomingMissiles(log, cosmicBlastMissiles, Colors.White, 0.2, 100);
+                AddCosmisBlastFields(log, target, replay);
+                // astral orb (basic attack projectiles)
+                var astralOrbs = log.CombatData.GetMissileEventsBySkillID(AstralOrb);
+                replay.Decorations.AddReflectableNonHomingMissiles(log, astralOrbs, Colors.LightBlue, 0.2, Colors.Grey, 0.3, 50);
+
+                // astral pulse (rotating projectile beam)
+                var astralPulses = log.CombatData.GetMissileEventsBySkillID(AstralPulse);
+                replay.Decorations.AddNonHomingMissiles(log, astralPulses, Colors.White, 0.2, 25);
+
+                // astral barrage (small aoes)
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantAstralBarrage1, out var astralBarrages))
                 {
-                    foreach (var seg in target.GetBuffStatus(log, RimeSpriteAura).Where(x => x.Value > 0))
+                    foreach (var effect in astralBarrages)
                     {
-                        var decoration = new CircleDecoration(300, (seg.Start, seg.End), Colors.Red, 0.2, new AgentConnector(target))
-                            .UsingFilled(false);
+                        var lifespan = effect.ComputeLifespan(log, 1500);
+                        var decoration = new CircleDecoration(100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.Add(decoration);
                     }
-                    break;
                 }
-            case (int)TargetID.EarthElemental:
+
+                // cosmic wave (frontal)
+                const uint waveRadius = 600;
+                const uint waveAngle = 45;
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCosmicWaveIndicator, out var cosmicWaveIndicators))
                 {
-                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                    var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
-                    foreach (var seg in breakbarActives)
+                    foreach (var effect in cosmicWaveIndicators)
                     {
-                        replay.Decorations.AddActiveBreakbar(seg.TimeSpan, target, breakbarUpdates);
+                        var lifespan = effect.ComputeLifespan(log, 2000);
+                        var decoration = new PieDecoration(waveRadius, waveAngle, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
+                             .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                        replay.Decorations.Add(decoration);
                     }
-                    break;
                 }
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCosmicWave, out var cosmicWaves))
+                {
+                    foreach (var effect in cosmicWaves)
+                    {
+                        var lifespan = effect.ComputeLifespan(log, 2000);
+                        var decoration = new PieDecoration(waveRadius, waveAngle, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position))
+                               .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                        replay.Decorations.Add(decoration);
+                    }
+                }
+
+                // celestial impact (instant kill)
+                const uint impactRadius = 2500;
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCelestialImpactIndicator, out var celestialImpactIndicators))
+                {
+                    foreach (var effect in celestialImpactIndicators)
+                    {
+                        var lifespan = effect.ComputeLifespan(log, 43000);
+                        var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(decoration, lifespan.end);
+                    }
+                }
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCelestialImpactIndicatorFast, out var celestialImpactFastIndicators))
+                {
+                    foreach (var effect in celestialImpactFastIndicators)
+                    {
+                        var lifespan = effect.ComputeLifespan(log, 6200);
+                        var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(decoration, lifespan.end);
+                    }
+                }
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCelestialImpact, out var celestialImpacts))
+                {
+                    foreach (var effect in celestialImpacts)
+                    {
+                        var lifespan = effect.ComputeLifespan(log, 3333);
+                        var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(decoration);
+                    }
+                }
+                break;
+            case (int)TargetID.RimeSprite:
+            {
+                foreach (var seg in target.GetBuffStatus(log, RimeSpriteAura).Where(x => x.Value > 0))
+                {
+                    var decoration = new CircleDecoration(300, (seg.Start, seg.End), Colors.Red, 0.2, new AgentConnector(target))
+                        .UsingFilled(false);
+                    replay.Decorations.Add(decoration);
+                }
+                break;
+            }
+            case (int)TargetID.EarthElemental:
+            {
+                AddCosmisBlastFields(log, target, replay);
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
+                foreach (var seg in breakbarActives)
+                {
+                    replay.Decorations.AddActiveBreakbar(seg.TimeSpan, target, breakbarUpdates);
+                }
+                break;
+            }
             case (int)TargetID.Ember:
             case (int)TargetID.FrostElemental:
             case (int)TargetID.SparkEternalTyrant:
-                {
-                    var lifespan = (target.FirstAware, target.LastAware);
-                    var width = CombatReplayOverheadProgressBarMajorSizeInPixel;
-                    var progress = target.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
-                    var decoration = new OverheadProgressBarDecoration(width, lifespan, Colors.Green, 0.8, Colors.Black, 0.6, progress, new AgentConnector(target))
-                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                        .UsingRotationConnector(new AngleConnector(180));
-                    replay.Decorations.Add(decoration);
-                    break;
-                }
+            {
+                AddCosmisBlastFields(log, target, replay);
+                var lifespan = (target.FirstAware, target.LastAware);
+                var width = CombatReplayOverheadProgressBarMajorSizeInPixel;
+                var progress = target.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
+                var decoration = new OverheadProgressBarDecoration(width, lifespan, Colors.Green, 0.8, Colors.Black, 0.6, progress, new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180));
+                replay.Decorations.Add(decoration);
+                break;
+            }
+        }
+    }
+
+    private static void AddCosmisBlastFields(ParsedEvtcLog log, SingleActor target, CombatReplay replay)
+    {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EternalTyrantCosmicBlast, out var cosmicBlastFields))
+        {
+            foreach (var effect in cosmicBlastFields)
+            {
+                var lifespan = effect.ComputeLifespan(log, 10000);
+                var decoration = new CircleDecoration(100, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                replay.Decorations.AddWithBorder(decoration, Colors.Red, 0.2);
+            }
         }
     }
 
@@ -300,19 +394,6 @@ internal class EternalTyrant : SolitaryThrone
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-        }
-
-        // cosmic blast (low gravity aoe)
-        var cosmicBlastMissiles = log.CombatData.GetMissileEventsBySkillID(CosmicBlast);
-        environmentDecorations.AddNonHomingMissiles(log, cosmicBlastMissiles, Colors.White, 0.2, 100);
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCosmicBlast, out var cosmicBlastFields))
-        {
-            foreach (var effect in cosmicBlastFields)
-            {
-                var lifespan = effect.ComputeLifespan(log, 10000);
-                var decoration = new CircleDecoration(100, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.AddWithBorder(decoration, Colors.Red, 0.2);
-            }
         }
 
         // gravity field (placed aoe)
@@ -325,79 +406,6 @@ internal class EternalTyrant : SolitaryThrone
                 environmentDecorations.AddWithBorder(decoration, Colors.Red, 0.2);
             }
         }
-
-        // astral barrage (small aoes)
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantAstralBarrage1, out var astralBarrages))
-        {
-            foreach (var effect in astralBarrages)
-            {
-                var lifespan = effect.ComputeLifespan(log, 1500);
-                var decoration = new CircleDecoration(100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(decoration);
-            }
-        }
-
-        // cosmic wave (frontal)
-        const uint waveRadius = 600;
-        const uint waveAngle = 45;
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCosmicWaveIndicator, out var cosmicWaveIndicators))
-        {
-            foreach (var effect in cosmicWaveIndicators)
-            {
-                var lifespan = effect.ComputeLifespan(log, 2000);
-                var decoration = new PieDecoration(waveRadius, waveAngle, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position))
-                     .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                environmentDecorations.Add(decoration);
-            }
-        }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCosmicWave, out var cosmicWaves))
-        {
-            foreach (var effect in cosmicWaves)
-            {
-                var lifespan = effect.ComputeLifespan(log, 2000);
-                var decoration = new PieDecoration(waveRadius, waveAngle, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position))
-                       .UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                environmentDecorations.Add(decoration);
-            }
-        }
-
-        // astral orb (basic attack projectiles)
-        var astralOrbs = log.CombatData.GetMissileEventsBySkillID(AstralOrb);
-        environmentDecorations.AddReflectableNonHomingMissiles(log, astralOrbs, Colors.LightBlue, 0.2, Colors.Grey, 0.3, 50);
-
-        // celestial impact (instant kill)
-        const uint impactRadius = 2500;
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCelestialImpactIndicator, out var celestialImpactIndicators))
-        {
-            foreach (var effect in celestialImpactIndicators)
-            {
-                var lifespan = effect.ComputeLifespan(log, 43000);
-                var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.AddWithGrowing(decoration, lifespan.end);
-            }
-        }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCelestialImpactIndicatorFast, out var celestialImpactFastIndicators))
-        {
-            foreach (var effect in celestialImpactFastIndicators)
-            {
-                var lifespan = effect.ComputeLifespan(log, 6200);
-                var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.AddWithGrowing(decoration, lifespan.end);
-            }
-        }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantCelestialImpact, out var celestialImpacts))
-        {
-            foreach (var effect in celestialImpacts)
-            {
-                var lifespan = effect.ComputeLifespan(log, 3333);
-                var decoration = new CircleDecoration(impactRadius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                environmentDecorations.Add(decoration);
-            }
-        }
-
-        // astral pulse (rotating projectile beam)
-        var astralPulses = log.CombatData.GetMissileEventsBySkillID(AstralPulse);
-        environmentDecorations.AddNonHomingMissiles(log, astralPulses, Colors.White, 0.2, 25);
 
 
         // searing radial (fire wall)
