@@ -463,14 +463,23 @@ internal static class LogLogicUtils
 
     /// <summary>
     /// Some bosses may have a health update event at the end of the log that heals them back up to 100% HP.<br></br>
-    /// Override the last health event DstAgent (health %) to the previous one.
+    /// Override the src to unknown.
     /// </summary>
     internal static void SanitizeLastHealthUpdateEvents(SingleActor actor, List<CombatItem> combatData)
     {
         var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(actor.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-        if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
+        var lastNon100Percent = hpUpdates.LastOrDefault(x => HealthUpdateEvent.GetHealthPercent(x) < 100);
+        if (lastNon100Percent != null)
         {
-            hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
+            for (var i = hpUpdates.Count - 1; i >= 0; i--)
+            {
+                var curHPUpdate = hpUpdates[i];
+                if (curHPUpdate.Time <= lastNon100Percent.Time)
+                {
+                    break;
+                }
+                curHPUpdate.OverrideSrcAgent(_unknownAgent);
+            }
         }
     }
 }

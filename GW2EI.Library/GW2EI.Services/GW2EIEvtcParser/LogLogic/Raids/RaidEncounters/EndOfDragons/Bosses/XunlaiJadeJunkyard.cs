@@ -242,9 +242,9 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.VolatileSpecies && x.HitboxWidth == 16);
         foreach (AgentItem sanctuary in sanctuaryPrism)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
+            var zeroHealthUpdates = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
             sanctuary.OverrideID(TargetID.SanctuaryPrism, agentData);
-            sanctuary.OverrideAwareTimes(logData.EvtcLogStart, items.Any() ? items.First().Time : logData.EvtcLogEnd);
+            sanctuary.OverrideAwareTimes(logData.EvtcLogStart, zeroHealthUpdates.Count > 0 ? zeroHealthUpdates.First().Time : logData.EvtcLogEnd);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }

@@ -171,6 +171,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
+        var vloxx = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Vloxx)) ?? throw new MissingKeyActorsException("Vloxx not found");
+        SanitizeLastHealthUpdateEvents(vloxx, combatData);
+
         RenameAdds(Targets, evtcVersion);
         RenameAdds(TrashMobs, evtcVersion);
     }

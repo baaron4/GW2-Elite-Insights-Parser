@@ -262,29 +262,16 @@ internal class TwinLargos : MythwrightGambit
         return LogData.StartStatus.Normal;
     }
 
-    internal static void AdjustFinalHPEvents(List<CombatItem> combatData, AgentItem agentItem)
-    {
-        var hpUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(agentItem)).ToList();
-        if (hpUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
-        {
-            CombatItem lastHPUpdate = hpUpdates.Last();
-            if (lastHPUpdate.DstAgent == 10000)
-            {
-                lastHPUpdate.OverrideSrcAgent(ParserHelper._unknownAgent);
-            }
-        }
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         // discard hp update events after determined apply
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        AdjustFinalHPEvents(combatData, nikare.AgentItem);
+        SanitizeLastHealthUpdateEvents(nikare, combatData);
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
-            AdjustFinalHPEvents(combatData, kenut.AgentItem);
+            SanitizeLastHealthUpdateEvents(kenut, combatData);
         }
     }
 

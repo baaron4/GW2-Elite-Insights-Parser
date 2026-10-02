@@ -294,7 +294,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
             {
                 case (int)TargetID.Kenut:
                 case (int)TargetID.Nikare:
-                    TwinLargos.AdjustFinalHPEvents(combatData, actor.AgentItem);
+                    SanitizeLastHealthUpdateEvents(actor, combatData);
                     break;
             }
         }

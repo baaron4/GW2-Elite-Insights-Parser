@@ -354,7 +354,7 @@ internal class HallOfChainsInstance : HallOfChains
             switch (target.ID)
             {
                 case (int)TargetID.SoullessHorror:
-                    SoullessHorror.HandleSoullessHorrorFinalHPUpdate(combatData, target);
+                    SanitizeLastHealthUpdateEvents(target, combatData);
                     break;
                 default:
                     break;
