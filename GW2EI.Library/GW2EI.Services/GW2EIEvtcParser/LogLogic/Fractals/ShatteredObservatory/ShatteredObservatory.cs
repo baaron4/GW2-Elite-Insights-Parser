@@ -47,8 +47,8 @@ internal abstract class ShatteredObservatory : FractalLogic
         {
             return false;
         }
-        var invulsTarget = GetBuffApplyRemoveSequence(combatData, buffID, target, true, false).Where(x => x.Time >= 0);
-        if (invulsTarget.Count() == count)
+        var invulsTarget = GetBuffApplyRemoveSequence(combatData, buffID, target, true, false).Where(x => x.Time >= 0).ToList();
+        if (invulsTarget.Count == count)
         {
             BuffEvent last = invulsTarget.Last();
             if (last is not BuffApplyEvent)

@@ -642,7 +642,7 @@ internal class DecimaTheStormsinger : MountBalrior
                                     uint radius = 800;
                                     long warningDuration = effect.Time - cast.Time;
                                     (long start, long end) lifespanWarning = (cast.Time, effect.Time);
-                                    (long start, long end) lifespanDamage = effect.ComputeDynamicLifespan(log, 30000);
+                                    (long start, long end) lifespanDamage = effect.ComputeLifespan(log, 30000);
                                     lifespanWarning.end = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, warningDuration); // Cast can be interrupted
 
                                     var warningIndicator = new CircleDecoration(radius, lifespanWarning, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));

@@ -984,9 +984,10 @@ internal class Qadim : MythwrightGambit
                                 if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
                                 {
                                     var position = new Vector3(targetPosition.Value.X + facing.Value.X * spellCenterDistance, targetPosition.Value.Y + facing.Value.Y * spellCenterDistance, targetPosition.Value.Z);
-                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
-                                    replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                                    var connector = new PositionConnector(position);
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, connector));
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
+                                    replay.Decorations.AddShockwave(connector, (start + delay, start + delay + duration), Colors.Yellow, 0.5, maxRadius);
                                 }
                             }
                             break;
@@ -1034,19 +1035,29 @@ internal class Qadim : MythwrightGambit
                 {
                     var destroyToken = new Token("destroy");
                     var warningToken = new Token("warning");
+                    var plateformInFlamesToken = new Token("danger");
+                    var plateformFacingConnector = new AgentFacingConnector(target);
+                    var plateformConnector = new AgentConnector(target);
                     foreach (var gadgetAnimation in gadgetAnimationData)
                     {
                         if (gadgetAnimation.AnimationToken == destroyToken)
                         {
                             opacities.Add(new(HiddenOpacity, gadgetAnimation.Time));
                         }
-                        else if (gadgetAnimation.AnimationToken == warningToken)
-                        {
-                            opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
-                            replay.Decorations.Add(new CircleDecoration(500, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(gadgetAnimation.LoopEnd));
-                        }
                         else
                         {
+                            if (gadgetAnimation.AnimationToken == warningToken)
+                            {
+                                var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.3, plateformConnector)
+                                    .UsingRotationConnector(plateformFacingConnector));
+                                replay.Decorations.AddWithGrowing(triangleDecoration, gadgetAnimation.LoopEnd);
+                            }
+                            else if (gadgetAnimation.AnimationToken == plateformInFlamesToken)
+                            {
+                                var triangleDecoration = (RegularPolygonDecoration)(new RegularPolygonDecoration(1050, 3, (gadgetAnimation.Time, gadgetAnimation.LoopEnd), Colors.Orange, 0.7, plateformConnector)
+                                    .UsingRotationConnector(plateformFacingConnector));
+                                replay.Decorations.Add(triangleDecoration);
+                            }
                             opacities.Add(new(VisibleOpacity, gadgetAnimation.Time));
                         }
                     }

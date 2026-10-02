@@ -334,7 +334,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 
     private void HandleDeimosAndItsGadgets(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
         var targetableEvents = new List<TargetableEvent>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -447,7 +447,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     {
         foreach (var deimos in Targets.Where(x => x.IsSpecies(TargetID.Deimos)))
         {
-            Deimos.AdjustDeimosHP(deimos, deimos.GetHealth(combatData) > 40e6, deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem)) != null);
+            Deimos.AdjustDeimosHP(deimos, deimos.GetHealth(combatData) > 40e6, deimos.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(deimos.AgentItem)) != null);
         }
         return base.GetLogMode(combatData, agentData, logData);
     }

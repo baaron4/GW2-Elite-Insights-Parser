@@ -84,8 +84,8 @@ internal class HallOfChainsInstance : HallOfChains
                 var chest = log.AgentData.GetStableSpeciesByID(_river.ChestID).FirstOrDefault();
                 foreach (var desmina in desminas)
                 {
-                    var currentEnervators = enervators.Where(x => x.InAwareTimes(desmina));
-                    if (!currentEnervators.Any())
+                    var currentEnervators = enervators.Where(x => x.InAwareTimes(desmina)).ToList();
+                    if (currentEnervators.Count == 0)
                     {
                         continue;
                     }
@@ -147,8 +147,8 @@ internal class HallOfChainsInstance : HallOfChains
                 {
                     continue;
                 }
-                var currentPeasants = peasants.Where(x => x.InAwareTimes(eaterOfSoul));
-                if (!currentPeasants.Any())
+                var currentPeasants = peasants.Where(x => x.InAwareTimes(eaterOfSoul)).ToList();
+                if (currentPeasants.Count == 0)
                 {
                     continue;
                 }
@@ -183,8 +183,8 @@ internal class HallOfChainsInstance : HallOfChains
                 {
                     continue;
                 }
-                var currentLightThieves = lightThieves.Where(x => x.InAwareTimes(eyeOfFate));
-                if (!currentLightThieves.Any())
+                var currentLightThieves = lightThieves.Where(x => x.InAwareTimes(eyeOfFate)).ToList();
+                if (currentLightThieves.Count == 0)
                 {
                     continue;
                 }

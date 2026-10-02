@@ -327,7 +327,7 @@ internal class Slothasor : SalvationPass
                 long hideStart = target.FirstAware;
                 foreach (var aliveEvent in aliveUpdates)
                 {
-                    replay.Hidden.Add(new(hideStart, aliveEvent.Time));
+                    replay.HideInInterval(new(hideStart, aliveEvent.Time));
                     var deadEvent = deadUpdates.FirstOrDefault(x => x.Time > hideStart && x.Time > aliveEvent.Time);
                     if (deadEvent == null)
                     {
@@ -338,7 +338,7 @@ internal class Slothasor : SalvationPass
                         hideStart = deadEvent.Time;
                     }
                 }
-                replay.Hidden.Add(new(hideStart, target.LastAware));
+                replay.HideInInterval(new(hideStart, target.LastAware));
                 var slothasorPhases = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(slothasorPhases, log);
                 break;

@@ -73,6 +73,8 @@ internal class StatusEventsContainer
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsBySkillID = [];
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsByTrackingID = [];
 
+    public readonly Dictionary<AgentItem, List<AgentInfoEvent>> AgentInfoEventsBySrc = [];
+
 
     internal void CleanTemp()
     {

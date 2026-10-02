@@ -575,6 +575,7 @@ internal static class SkillImages
     public const string TailWhipOtter = "https://render.guildwars2.com/file/A7179EB9654498EC366C0012246DCE91AD3D68B5/3772577.png";
     public const string ScratchOtter = "https://assets.gw2dat.com/3772576.png";
     public const string LickWounds = "https://render.guildwars2.com/file/7C0379BEF70903068064D0FE211A2305E5577EBF/103997.png";
+    public const string ThrowTorch = "https://render.guildwars2.com/file/10A02F01D7021C39049292DAEEC14E690CE5460B/102988.png";
     // Galeshot
     public const string Mistral = "https://render.guildwars2.com/file/10E31F10E7D84CABF0963FEA12B77EE0BD950E42/3680194.png";
     #endregion Ranger
@@ -809,6 +810,7 @@ internal static class SkillImages
     public const string Backbreaker = "https://render.guildwars2.com/file/3FB1611D020DAE0C082558D346BBF91148E2E223/103086.png";
     public const string HammerShock = "https://render.guildwars2.com/file/D378332B719ED07509EABBCDA3D96C5ABFC116D6/103256.png";
     public const string HammerSwing = "https://render.guildwars2.com/file/C3BAD7D3D29FB64654985F0AB8FEA7713BE375E9/103178.png";
+    public const string Rend = "https://render.guildwars2.com/file/959E954064FEA5F0E8753D43D50BB67D0CBD3FA7/3790493.png";
     // Paragon
     public const string ChantOfAction = "https://render.guildwars2.com/file/A4D0D740CF360E0840EF76282843109C759C63A8/3680225.png";
     public const string ChantOfRecuperation = "https://render.guildwars2.com/file/2D4B0C67FACAADD8612746BD6F5C6BE9A828C9A3/3680227.png";
@@ -907,17 +909,32 @@ internal static class SkillImages
     #region Bundle
     public const string SmashBottle = "https://wiki.guildwars2.com/images/b/ba/Smash_%28empty_bottle%29.png";
     public const string ThrowBottle = "https://wiki.guildwars2.com/images/7/75/Throw_%28empty_bottle%29.png";
+    public const string CorpseToss = "https://wiki.guildwars2.com/images/1/14/Corpse_Toss.png";
+    public const string RushHaresSpeed = "https://wiki.guildwars2.com/images/0/05/Hare's_Speed.png";
     #endregion Bundle
     #region Encounter Specific
     public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
     public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
     public const string TossSlubling = "https://render.guildwars2.com/file/E543F0ECE094EB95271E1138472B63B4E442A8B8/831481.png";
     public const string ThrowLight = "https://wiki.guildwars2.com/images/8/8c/Throw_Light.png";
+    public const string HeartOfTheObscure = "https://wiki.guildwars2.com/images/5/5a/Scan_for_Rift.png";
     // Convergences
     public const string EtherealHealing = "https://wiki.guildwars2.com/images/3/3c/Ethereal_Healing.png";
     public const string PacifiedMagicalStorm = "https://render.guildwars2.com/file/E97BA745FF671D3AC1C3D5FA7CB12C002769185B/1466357.png";
     public const string WatchfulSpirit = "https://wiki.guildwars2.com/images/9/9f/Watchful_Spirit.png";
     public const string RideTheLeyLine = "https://render.guildwars2.com/file/E5D97463D3AA00245845F5E0E421EFC454BCC37C/1466358.png";
+    public const string UnstableMagicVolley = "https://render.guildwars2.com/file/5E023F3C05409ACA51BA2E0B4B55FBF5B606C99D/1466360.png";
+    public const string FocusedMagic = "https://wiki.guildwars2.com/images/2/28/Focused_Magic.png";
+    // - Nexus of Eternity Convergence
+    public const string WildWrath = "https://wiki.guildwars2.com/images/3/37/Wild_Wrath.png";
+    public const string AberrantFeast = "https://wiki.guildwars2.com/images/e/ec/Aberrant_Feast.png";
+    public const string MirrorWall = "https://wiki.guildwars2.com/images/3/36/Mirror_Wall.png";
+    public const string ElementalHurricane = "https://wiki.guildwars2.com/images/e/ec/Elemental_Hurricane.png";
+    public const string ShadowDance = "https://wiki.guildwars2.com/images/0/08/Shadow_Dance.png";
+    public const string ShadowsTorment = "https://wiki.guildwars2.com/images/8/8e/Shadow's_Torment.png";
+    public const string FerociousAssault = "https://wiki.guildwars2.com/images/7/79/Ferocious_Assault.png";
+    public const string TheBigGun = "https://wiki.guildwars2.com/images/6/6f/The_Big_Gun.png";
+    public const string VesselOfTheMists = "https://wiki.guildwars2.com/images/5/56/Vessel_of_the_Mists.png";
     #endregion Encounter Specific
 }
 

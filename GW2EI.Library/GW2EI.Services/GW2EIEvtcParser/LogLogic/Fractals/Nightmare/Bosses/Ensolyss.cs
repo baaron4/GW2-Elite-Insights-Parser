@@ -174,18 +174,14 @@ internal class Ensolyss : Nightmare
     {
         if (attackEnd >= lifespan.end) // If the attack started
         {
-            var flipPoint = -1 * point;
             var connector = new AgentConnector(target);
-            var rotationConnector = new AngleConnector(point);
-            var flippedRotationConnector = new AngleConnector(flipPoint);
             (long start, long end) lifespanLingering = (lifespan.end, lifespan.end + 1000);
-
-            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growing); // Frontal
-            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(flippedRotationConnector), growing); // Retro
+            var indicator = new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector);
+            replay.Decorations.AddFrontAndFlipWithGrowing(indicator, point, growing);
             if (lifespan.end == growing) // If the attack went off
             {
-                replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Frontal Lingering
-                replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(flippedRotationConnector)); // Retro Lingering
+                var damage = new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector);
+                replay.Decorations.AddFrontAndFlip(damage, point);
             }
         }
     }
@@ -204,8 +200,8 @@ internal class Ensolyss : Nightmare
         {
             case (int)TargetID.Ensolyss:
                 IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
-                Segment? percent66treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 66);
-                Segment? percent15treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 15);
+                Segment? percent66treshhold = healthUpdates.FirstOrNull((in x) => x.Value <= 66);
+                Segment? percent15treshhold = healthUpdates.FirstOrNull((in x) => x.Value <= 15);
                 bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                 // Arkk's Shield
@@ -229,7 +225,7 @@ internal class Ensolyss : Nightmare
                                 int start = (int)shieldEffect.Time;
                                 int expectedHitEnd = start + duration;
                                 int attackEnd = start + duration;
-                                Segment? stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrNull((in Segment x) => x.Value > 0);
+                                Segment? stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrNull((in x) => x.Value > 0);
 
                                 // Modify the attackEnd if:
                                 // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase
@@ -424,8 +420,7 @@ internal class Ensolyss : Nightmare
                             var warning = new CircleDecoration(380, lifespanWarning, Colors.LightOrange, 0.2, new AgentConnector(target));
                             replay.Decorations.AddWithGrowing(warning, lifespanWarning.end);
                             // Growing inwards shockwave
-                            var shockwave = (CircleDecoration)new CircleDecoration(1200, lifespanShockwave2, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave2.end, true);
-                            replay.Decorations.Add(shockwave);
+                            replay.Decorations.AddShockwave(new AgentConnector(target), lifespanShockwave2, Colors.Yellow, 0.4, 1200, true);
                             // 8 Arrows
                             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out var arrows))
                             {
@@ -522,7 +517,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in waveEffects)
             {
                 lifespan = (effect.Time, effect.Time + 2000);
-                environmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Yellow, 0.4, 1200);
             }
         }
 

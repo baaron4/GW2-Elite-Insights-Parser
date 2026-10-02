@@ -488,6 +488,7 @@ internal static class ParserIcons
     private const string TrashAscensionOrb = "https://i.imgur.com/HabikUq.png";
     private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
     private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
+    private const string TrashAspectOfTheSword = "https://i.imgur.com/o2dPlEq.png";
     private const string TrashEarthElemental = "https://i.imgur.com/GymhEiO.png";
     private const string TrashEmber = "https://i.imgur.com/OzbCqNZ.png";
     private const string TrashFrostElemental = "https://i.imgur.com/YV3AN5R.png";
@@ -775,7 +776,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="Spec"/> to its high resolution profession icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
+    internal static readonly IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
     {
         // Ranger
         { Spec.Galeshot, HighResGaleshot },
@@ -836,7 +837,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="Spec"/> to its base resolution profession icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
+    internal static readonly IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
     {
         // Ranger
         { Spec.Galeshot, BaseResGaleshot },
@@ -897,7 +898,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="TargetID"/> to the corresponding icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<TargetID, string>()
+    internal static readonly IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<TargetID, string>()
     {
         { TargetID.WorldVersusWorld, TargetWorldVersusWorld },
         { TargetID.Mordremoth, TargetMordremoth },
@@ -1009,6 +1010,7 @@ internal static class ParserIcons
         { TargetID.Spirit, TrashSpiritDemonSoul },
         { TargetID.Spirit2, TrashSpiritDemonSoul },
         { TargetID.ChargedSoul, TrashSpiritDemonSoul },
+        { TargetID.GorsevalEtherealBarrier, NoImage },
         { TargetID.HollowedBomber, TrashSpiritDemonSoul },
         { TargetID.Saul, TrashSaul },
         { TargetID.ShackledPrisoner, TrashShackledPrisoner },
@@ -1313,14 +1315,14 @@ internal static class ParserIcons
         { TargetID.TheSniperCM, TrashTheSniper },
         { TargetID.PushableVoidAmalgamate, TrashPushableVoidAmalgamate },
         { TargetID.KillableVoidAmalgamate, TrashKillableVoidAmalgamate },
-        { TargetID.FluxAnomaly1, TrashFluxAnomaly },
-        { TargetID.FluxAnomaly2, TrashFluxAnomaly },
-        { TargetID.FluxAnomaly3, TrashFluxAnomaly },
-        { TargetID.FluxAnomaly4, TrashFluxAnomaly },
-        { TargetID.FluxAnomalyCM1, TrashFluxAnomaly },
-        { TargetID.FluxAnomalyCM2, TrashFluxAnomaly },
-        { TargetID.FluxAnomalyCM3, TrashFluxAnomaly },
-        { TargetID.FluxAnomalyCM4, TrashFluxAnomaly },
+        { TargetID.FluxAnomalySwordSword, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyAxeMace, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyScepterScepter, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyHammer, TrashFluxAnomaly },
+        { TargetID.FluxAnomalySwordSwordCM, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyAxeMaceCM, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyScepterScepterCM, TrashFluxAnomaly },
+        { TargetID.FluxAnomalyHammerCM, TrashFluxAnomaly },
         { TargetID.SolarBloom, TrashSolarBloom },
         { TargetID.ReactorActiveArkk, TrashReactorArkk },
         { TargetID.Torch, TrashTorch },
@@ -1431,6 +1433,7 @@ internal static class ParserIcons
         { TargetID.AscensionOrb, TrashAscensionOrb },
         { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
+        { TargetID.ChampionAspectOfTheSword, TrashAspectOfTheSword },
         { TargetID.EternalTyrant, TargetEternalTyrant },
         { TargetID.EarthElemental, TrashEarthElemental },
         { TargetID.Ember, TrashEmber },
@@ -1442,7 +1445,7 @@ internal static class ParserIcons
     /// <summary>
     /// Dictionary matching a <see cref="MinionID"/> to their icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<MinionID, string>()
+    internal static readonly IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<MinionID, string>()
     {
         { MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
         { MinionID.SnowWurm, MinionCallWurm },
@@ -1535,7 +1538,7 @@ internal static class ParserIcons
         { MinionID.StormSpirit, MinionStormSpirit },
         { MinionID.WaterSpirit, MinionWaterSpirit },
         { MinionID.SpiritOfNatureRenewal, MinionSpiritOfNatureRenewal },
-        { MinionID.SpiritOfNatureTBC, MinionSpiritOfNatureRenewal },
+        { MinionID.SpiritOfNatureNexusOfEternityConvergenceSAK, MinionSpiritOfNatureRenewal },
         { MinionID.JuvenileAlpineWolf, MinionJuvenileAlpineWolf },
         { MinionID.JuvenileArctodus, MinionJuvenileArctodus },
         { MinionID.JuvenileArmorFish, MinionJuvenileArmorFish },

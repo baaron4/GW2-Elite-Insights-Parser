@@ -181,8 +181,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
         if (!successHandler.Success)
         {
             SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-            var buffApplies = combatData.GetBuffApplyDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= logData.LogStart + 5000);
-            if (buffApplies.Count() == 3)
+            var buffApplies = combatData.GetBuffApplyDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= logData.LogStart + 5000).ToList();
+            if (buffApplies.Count == 3)
             {
                 successHandler.SetSuccess(true, buffApplies.Last().Time);
             }
@@ -490,10 +490,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
                     var prismStart = log.LogData.EvtcLogStart;
                     foreach (var xjjPhase in xjjPhases)
                     {
-                        replay.Hidden.Add(new(prismStart, xjjPhase.Start));
+                        replay.HideInInterval(new(prismStart, xjjPhase.Start));
                         prismStart = xjjPhase.End;
                     }
-                    replay.Hidden.Add(new(prismStart, log.LogData.EvtcLogEnd));
+                    replay.HideInInterval(new(prismStart, log.LogData.EvtcLogEnd));
                     break;
                 }
             default:

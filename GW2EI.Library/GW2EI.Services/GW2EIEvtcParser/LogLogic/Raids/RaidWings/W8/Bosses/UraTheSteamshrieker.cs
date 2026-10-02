@@ -282,23 +282,40 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal static void RenameFumarollers(IReadOnlyList<SingleActor> targets)
+    internal static void RenameFumarollersAndVentshots(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor target in targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (target.ID)
+            foreach (SingleActor target in targets)
             {
-                case (int)TargetID.EliteFumaroller:
-                    target.OverrideName("Elite " + target.Character);
-                    break;
-                case (int)TargetID.ChampionFumaroller:
-                    target.OverrideName("Champion " + target.Character);
-                    break;
-                case (int)TargetID.LegendaryVentshot:
-                    target.OverrideName("Legendary " + target.Character);
-                    break;
-                default:
-                    break;
+                switch (target.ID)
+                {
+                    case (int)TargetID.EliteFumaroller:
+                        target.OverrideName("Elite " + target.Character);
+                        break;
+                    case (int)TargetID.ChampionFumaroller:
+                        target.OverrideName("Champion " + target.Character);
+                        break;
+                    case (int)TargetID.LegendaryVentshot:
+                        target.OverrideName("Legendary " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else
+        {
+            foreach (SingleActor target in targets)
+            {
+                switch (target.ID)
+                {
+                    case (int)TargetID.LegendaryVentshot:
+                        target.OverrideName("Legendary " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -327,7 +344,8 @@ internal class UraTheSteamshrieker : MountBalrior
         FindGeysers(evtcVersion, agentData, combatData);
         FindBloodstoneShards(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        RenameFumarollers(Targets);
+        RenameFumarollersAndVentshots(Targets, evtcVersion);
+        RenameFumarollersAndVentshots(TrashMobs, evtcVersion);
     }
 
     internal static BuffEvent? GetHealedPhaseStartEvent(CombatData combatData, SingleActor ura, long start, long end)
@@ -564,7 +582,7 @@ internal class UraTheSteamshrieker : MountBalrior
                         {
                             counter = 0;
                         }
-                        lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                        lifespan = effect.ComputeLifespan(log, 1200);
                         uint radius = initialRadius + (radiusIncrease * counter);
                         replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                         counter++;
@@ -811,7 +829,7 @@ internal class UraTheSteamshrieker : MountBalrior
                             long effectDuration = 800000;
                             foreach (var effect in eruptions.Where(x => x.Duration == effectDuration))
                             {
-                                (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
+                                (long start, long end) = effect.ComputeLifespan(log, effectDuration);
                                 // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
                                 if (Math.Min(end, log.LogData.LogEnd) - start > 30000)
                                 {

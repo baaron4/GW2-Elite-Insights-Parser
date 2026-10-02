@@ -482,7 +482,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         var mainPhase = log.LogData.GetMainPhase(log);
-        var encountersWithDarkAi = log.LogData.GetEncounterPhases(log).Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak)));
+        var encountersWithDarkAi = log.LogData.GetEncounterPhases(log).Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak))).ToList();
         var finalEncounter = encountersWithDarkAi.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {
@@ -770,9 +770,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 long start = effect.Time;
                 long end = start + 6250;
-                var position = new AgentConnector(effect.Dst);
-                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
-                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
+                var circle = new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, new AgentConnector(effect.Dst));
+                environmentDecorations.AddWithGrowing(circle, end);
             }
         }
 

@@ -332,8 +332,8 @@ internal static class EngineerHelper
         HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
         healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
-        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer);
-        var engineersCount = engineers.Count();
+        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
+        var engineersCount = engineers.Count;
         // if only one engineer, could only be that one
         if (engineersCount == 1)
         {

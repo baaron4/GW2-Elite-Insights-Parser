@@ -198,12 +198,14 @@ internal class Freezie : FestivalRaidEncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
 
+        (long start, long end) lifespan;
+
         // Frost Patch
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieFrozenPatch, out var frozenPatches))
         {
             foreach (EffectEvent effect in frozenPatches)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 30000);
+                lifespan = effect.ComputeLifespan(log, 30000);
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 environmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, Colors.White, 0.4, connector).UsingRotationConnector(rotationConnector));
@@ -216,11 +218,10 @@ internal class Freezie : FestivalRaidEncounterLogic
         {
             foreach (EffectEvent effect in orangeAoEs)
             {
-                (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
+                lifespan = (effect.Time, effect.Time + effect.Duration);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, connector);
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -229,7 +230,7 @@ internal class Freezie : FestivalRaidEncounterLogic
         {
             foreach (EffectEvent effect in blizzards)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 10000);
+                lifespan = effect.ComputeLifespan(log, 10000);
                 var connector = new PositionConnector(effect.Position);
                 environmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, Colors.Orange, 0.2, connector));
                 // Thicker Borders

@@ -36,7 +36,7 @@ internal abstract class BuffSourceFinder
         return agent.GetBaseSpecAtTime(time) == ParserHelper.Spec.Ranger;
     }
 
-    private IEnumerable<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
+    private IReadOnlyList<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
     {
         if (_extensionSkills == null)
         {
@@ -46,7 +46,7 @@ internal abstract class BuffSourceFinder
                 _extensionSkills.AddRange(p.GetIntersectingCastEvents(log).Where(x => ExtensionIDS.Contains(x.SkillID) && !x.IsInterrupted));
             }
         }
-        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillID) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);
+        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillID) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
     }
     // Spec specific checks
 
@@ -117,7 +117,7 @@ internal abstract class BuffSourceFinder
         return res;
     }
 
-    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, Certainty rangerSpecificCheck, IEnumerable<AgentItem> imperialImpactAgents)
+    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, Certainty rangerSpecificCheck, IReadOnlyList<AgentItem> imperialImpactAgents)
     {
         // If uncertainty due to imbued melodies, return unknown
         if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
@@ -131,7 +131,7 @@ internal abstract class BuffSourceFinder
             return dst;
         }
         // uncertainty due to imperial impact but not due to essence of speed
-        if (rangerSpecificCheck == Certainty.NotApplicable && imperialImpactAgents.Count() == 1)
+        if (rangerSpecificCheck == Certainty.NotApplicable && imperialImpactAgents.Count == 1)
         {
             // the vindicator
             return imperialImpactAgents.First();
@@ -155,8 +155,8 @@ internal abstract class BuffSourceFinder
             }
             return ParserHelper._unknownAgent;
         }
-        var imperialImpactAgents = GetImperialImpactAgents(buffID, time, extension, log);
-        var impImpactCount = imperialImpactAgents.Count();
+        var imperialImpactAgents = GetImperialImpactAgents(buffID, time, extension, log).ToList();
+        var impImpactCount = imperialImpactAgents.Count;
         // Multiple imperial impact at the same time
         if (impImpactCount > 1)
         {
@@ -172,7 +172,7 @@ internal abstract class BuffSourceFinder
         if (idsToCheck.Count != 0)
         {
             var cls = GetExtensionSkills(log, time, idsToCheck);
-            var clsCount = cls.Count();
+            var clsCount = cls.Count;
             // If multiple casters, return unknown
             if (clsCount > 1)
             {

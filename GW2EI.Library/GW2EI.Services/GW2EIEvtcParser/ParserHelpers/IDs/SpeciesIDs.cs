@@ -38,6 +38,8 @@ public static class SpeciesIDs
         ChargedSoul = 15434,
         EnragedSpirit = 16024,
         AngeredSpirit = 16005,
+        GorsevalEtherealBarrier = SpeciesIDs.GorsevalEtherealBarrier,
+        GorsevalSpectralDarkness = SpeciesIDs.GorsevalSpectralDarkness,
         // - Sabetha
         Sabetha = 15375,
         Kernan = 15372,
@@ -381,7 +383,7 @@ public static class SpeciesIDs
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
         #endregion RAID WINGS
-        #region RAND ENCOUNTERS
+        #region RAID ENCOUNTERS
         // - Festival
         // - Freezie
         Freezie = 21333,
@@ -587,6 +589,7 @@ public static class SpeciesIDs
         SomethingCosmicPiercer = 28056, // Also in convergence - Spawned for 2 seconds in one raid encounter log, might be challenge/legendary mode npc
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
+        ChampionAspectOfTheSword = 28107,
         EliteCosmicBulwark = 28065, // Also in convergence
         ChampionCosmicBulwark = 27934, // Also in convergence
         ChampionCosmicSunderer = 27933,
@@ -624,14 +627,14 @@ public static class SpeciesIDs
         // - Skorvald
         Skorvald = 17632,
         UnknownAnomaly = SpeciesIDs.UnknownAnomaly,
-        FluxAnomaly1 = 17578,
-        FluxAnomaly2 = 17929,
-        FluxAnomaly3 = 17695,
-        FluxAnomaly4 = 17651,
-        FluxAnomalyCM1 = 17599,
-        FluxAnomalyCM2 = 17770,
-        FluxAnomalyCM3 = 17851,
-        FluxAnomalyCM4 = 17673,
+        FluxAnomalySwordSword = 17578,
+        FluxAnomalyAxeMace = 17929,
+        FluxAnomalyScepterScepter = 17695,
+        FluxAnomalyHammer = 17651,
+        FluxAnomalySwordSwordCM = 17599,
+        FluxAnomalyAxeMaceCM = 17770,
+        FluxAnomalyScepterScepterCM = 17851,
+        FluxAnomalyHammerCM = 17673,
         SolarBloom = 17732,
         // - Artsariiv
         Artsariiv = 17949,
@@ -1000,7 +1003,7 @@ public static class SpeciesIDs
         StormSpirit = 6371,
         WaterSpirit = 12778,
         SpiritOfNatureRenewal = 6649,
-        SpiritOfNatureTBC = 27947,
+        SpiritOfNatureNexusOfEternityConvergenceSAK = 27947,
         // Ranger Pets
         JuvenileJungleStalker = 3827,
         JuvenileKrytanDrakehound = 4425,
@@ -1386,6 +1389,8 @@ public static class SpeciesIDs
     private const int AscensionOrb = -130;
     private const int MursaatOverseerSpikes = -131;
     private const int MursaatOverseerClaimArea = -132;
+    private const int GorsevalEtherealBarrier = -133;
+    private const int GorsevalSpectralDarkness = -134;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

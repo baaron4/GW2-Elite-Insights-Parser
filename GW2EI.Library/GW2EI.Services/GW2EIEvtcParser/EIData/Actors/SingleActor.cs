@@ -327,7 +327,7 @@ public abstract partial class SingleActor : Actor
             }
             else if (previousActiveEnd != actives[i].Start)
             {
-                replay.Hidden.Add(new Segment(previousActiveEnd, actives[i].Start));
+                replay.HideInInterval(new Segment(previousActiveEnd, actives[i].Start));
             }
             previousActiveEnd = actives[i].End;
         }
@@ -340,11 +340,12 @@ public abstract partial class SingleActor : Actor
             }
             else if (previousActiveEnd != last.Start)
             {
-                replay.Hidden.Add(new Segment(previousActiveEnd, last.Start));
+                replay.HideInInterval(new Segment(previousActiveEnd, last.Start));
             }
             trimEnd = last.End;
         }
-        replay.Trim(Math.Max(trimStart, FirstAware), Math.Min(trimEnd, LastAware));
+        replay.HideInInterval(new(FirstAware, trimStart));
+        replay.HideInInterval(new(trimEnd, LastAware));
 
         var visibilityEvents = log.CombatData.GetVisibilityEventsBySrc(AgentItem);
         var invisibleStart = FirstAware;
@@ -357,17 +358,17 @@ public abstract partial class SingleActor : Actor
                 // Agent spawned invisible
                 if (i == 0)
                 {
-                    replay.Hidden.Add(new(FirstAware, invisibleStart));
+                    replay.HideInInterval(new(FirstAware, invisibleStart));
                 }
                 // Agent remained invisible
                 if (i == visibilityEvents.Count - 1)
                 {
-                    replay.Hidden.Add(new(invisibleStart, LastAware));
+                    replay.HideInInterval(new(invisibleStart, LastAware));
                 }
             }
             else if (i > 0)
             {
-                replay.Hidden.Add(new(invisibleStart, Math.Min(visibilityEvent.Time, LastAware)));
+                replay.HideInInterval(new(invisibleStart, Math.Min(visibilityEvent.Time, LastAware)));
             }
         }
         var gadgetAnimationEvents = log.CombatData.GetGadgetAnimationData(AgentItem);
@@ -380,10 +381,11 @@ public abstract partial class SingleActor : Actor
             {
                 if (gadgetAnimationEvent.AnimationToken == offToken || gadgetAnimationEvent.AnimationToken == offngoneToken)
                 {
-                    replay.Hidden.Add(new(gadgetAnimationEvent.Time, gadgetAnimationEvent.LoopEnd));
+                    replay.HideInInterval(new(gadgetAnimationEvent.Time, gadgetAnimationEvent.LoopEnd));
                 }
             }
         }
+        replay.Finalize(log);
     }
 
     [MemberNotNull(nameof(CombatReplay))]
@@ -393,7 +395,7 @@ public abstract partial class SingleActor : Actor
         {
             return;
         }
-        CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log) : new CombatReplay(log);
+        CombatReplay = AgentItem.PositionAttachedAgentItem != null ? new CombatReplayRotationOnly(log, this) : new CombatReplay(log, this);
         if (!log.CanCombatReplay)
         {
             // no combat replay support on log
@@ -426,12 +428,13 @@ public abstract partial class SingleActor : Actor
     protected CombatReplay GetCombatReplay(ParsedEvtcLog log)
     {
         InitCombatReplay(log);
-        if (CombatReplay.Decorations.IsEmpty() && !IsFakeActor && !AgentItem.IsEnglobingAgent)
+        if (!CombatReplay.AdditionalDataHandled && !IsFakeActor && !AgentItem.IsEnglobingAgent)
         {
+            CombatReplay.AdditionalDataHandled = true;
             InitAdditionalCombatReplayData(log, CombatReplay);
+            // Additional data may impact CR lifespan
+            CombatReplay.Finalize(log);
         }
-        CombatReplay.Hidden.RemoveAll(x => x.IsEmpty());
-        CombatReplay.Hidden.Sort((x, y) => x.Start.CompareTo(y.Start));
         return CombatReplay;
     }
 
@@ -468,8 +471,8 @@ public abstract partial class SingleActor : Actor
         }
         if (forwardWindow != 0)
         {
-            var parametric = points.FirstOrNull((in ParametricPoint3D x) => x.Time >= time && x.Time <= time + forwardWindow)
-                 ?? points.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+            var parametric = points.FirstOrNull((in x) => x.Time >= time && x.Time <= time + forwardWindow)
+                 ?? points.LastOrNull((in x) => x.Time <= time);
             if (parametric.HasValue)
             {
                 point = parametric.Value.XYZ;
@@ -513,8 +516,8 @@ public abstract partial class SingleActor : Actor
         }
 
         IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-        var next = positions.FirstOrNull((in ParametricPoint3D x) => x.Time >= time);
-        var prev = positions.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+        var next = positions.FirstOrNull((in x) => x.Time >= time);
+        var prev = positions.LastOrNull((in x) => x.Time <= time);
         if (prev.HasValue && next.HasValue)
         {
             long denom = next.Value.Time - prev.Value.Time;
@@ -614,8 +617,8 @@ public abstract partial class SingleActor : Actor
             {
                 var jumpEvents = log.CombatData.GetJumpEvents(AgentItem);
                 CastEvents.AddRange(jumpEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(Jumping), x.Time, x.LandingTime - x.Time)).Where(x => x.ActualDuration > 0));
-                var flyToEvents = log.CombatData.GetFlyToEvents(AgentItem);
-                CastEvents.AddRange(flyToEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(FlyTo), x.Time, x.LandingTime - x.Time)).Where(x => x.ActualDuration > 0));
+                /*var flyToEvents = log.CombatData.GetFlyToEvents(AgentItem);
+                CastEvents.AddRange(flyToEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(FlyTo), x.Time, x.LandingTime - x.Time)).Where(x => x.ActualDuration > 0));*/
                 var gliderEvents = log.CombatData.GetGliderEvents(AgentItem);
                 CastEvents.AddRange(gliderEvents.Select(x => new CustomAnimatedCastEvent(AgentItem, log.SkillData.Get(Gliding), x.Time, x.GliderClosedTime - x.Time)).Where(x => x.ActualDuration > 0));
             }

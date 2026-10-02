@@ -169,7 +169,7 @@ internal class Deimos : BastionOfThePenitent
             return;
         }
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
-        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
+        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(deimos.AgentItem));
         if (percent10Start != null)
         {
             long percent10StartTime = percent10Start.Value.MergeEnd;
@@ -315,7 +315,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    internal static (AgentItem? deimosStruct, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) FindDeimos10PercentBodyStructWithAttackTargets(SingleActor deimos, LogData logData, AgentData agentData, List<CombatItem> combatData, IEnumerable<AttackTargetEvent> attackTargetEvents, IEnumerable<TargetableEvent> targetableEvents)
+    internal static (AgentItem? deimosStruct, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) FindDeimos10PercentBodyStructWithAttackTargets(SingleActor deimos, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyList<AttackTargetEvent> attackTargetEvents, IReadOnlyList<TargetableEvent> targetableEvents)
     {
         var firstTargetable = targetableEvents.FirstOrDefault(x => x.Time >= deimos.FirstAware && x.Targetable);
         var gadgetsAgents = new HashSet<AgentItem>();
@@ -386,7 +386,7 @@ internal class Deimos : BastionOfThePenitent
         // Find target
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).Where(x => !x.AttackTarget.IsSpecies(TargetID.DemonicBondAttackTarget));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).Where(x => !x.AttackTarget.IsSpecies(TargetID.DemonicBondAttackTarget)).ToList();
         var targetableEvents = new List<TargetableEvent>();
         foreach (var attackTarget in attackTargetEvents)
         {
@@ -405,8 +405,8 @@ internal class Deimos : BastionOfThePenitent
             CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamageEvent());
             if (armDeimosDamageEvent != null)
             {
-                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
-                if (deimosGadgets.Any())
+                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.VolatileSpecies).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
+                if (deimosGadgets.Count != 0)
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
                     gadgetAgents = [.. deimosGadgets];
@@ -490,7 +490,7 @@ internal class Deimos : BastionOfThePenitent
         BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         var phase100to10 = mainFightPhase;
         SubPhasePhaseData? phase10to0 = null;
-        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
+        var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(deimos.AgentItem));
         if (invulDei != null || percent10Start != null)
         {
             long percent10StartTime = percent10Start.HasValue ? percent10Start.Value.MergeEnd : long.MaxValue;
@@ -678,7 +678,7 @@ internal class Deimos : BastionOfThePenitent
                 var Sauls = log.AgentData.GetStableSpeciesByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
                 foreach (var Saul in Sauls)
                 {
-                    replay.Hidden.Add(new Segment(Saul.FirstAware, Saul.LastAware));
+                    replay.HideInInterval(new Segment(Saul.FirstAware, Saul.LastAware));
                 }
                 break;
             case (int)TargetID.DemonicBond:
@@ -730,7 +730,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         if (targetableEvent.Targetable)
                         {
-                            replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                            replay.HideInInterval(new Segment(hiddenStart, targetableEvent.Time));
                             hiddenStart = target.LastAware;
                             lineStart = targetableEvent.Time;
                         }
@@ -738,7 +738,7 @@ internal class Deimos : BastionOfThePenitent
                         {
                             if (targetableEvent.Time > hiddenStart)
                             {
-                                replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                                replay.HideInInterval(new Segment(hiddenStart, targetableEvent.Time));
                             }
                             else
                             {
@@ -749,7 +749,7 @@ internal class Deimos : BastionOfThePenitent
                         }
                     }
                 }
-                replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
+                replay.HideInInterval(new Segment(hiddenStart, target.LastAware));
                 break;
             default:
                 break;
@@ -867,7 +867,7 @@ internal class Deimos : BastionOfThePenitent
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         LogData.Mode cmStatus = (target.GetHealth(combatData) > 40e6) ? LogData.Mode.CM : LogData.Mode.Normal;
-        AdjustDeimosHP(target, cmStatus == LogData.Mode.CM, target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(target.AgentItem)) != null);
+        AdjustDeimosHP(target, cmStatus == LogData.Mode.CM, target.AgentItem.Merges.FirstOrNull((in x) => x.Merged.Is(target.AgentItem)) != null);
 
         return cmStatus;
     }

@@ -16,6 +16,7 @@ public sealed class EventModel
     internal Guid GUIDStruct { get; }
     public string GUID { get; }
     public long ContentID { get; }
+    public string? GadgetAnimationData { get; }
     public IReadOnlySet<ulong> AgentIds { get; }
     public IReadOnlySet<ulong> SourceAgentIds { get; }
     public IReadOnlySet<ulong> DestinationAgentIds { get; }
@@ -69,6 +70,10 @@ public sealed class EventModel
             case EffectEvent effect:
                 GUIDStruct = effect.GUIDEvent.GetGUIDStruct();
                 ContentID = effect.GUIDEvent.ContentID;
+                break;
+
+            case GadgetAnimationEvent gadgetAnimation:
+                GadgetAnimationData = gadgetAnimation.AnimationToken.DataString;
                 break;
         }
 

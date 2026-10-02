@@ -318,11 +318,11 @@ internal class Sabetha : SpiritVale
                     foreach (var marker in swords)
                     {
                         lifespan = (marker.Time, marker.EndTime);
-                        replay.Hidden.Add(new Segment(hideStart, lifespan.start));
+                        replay.HideInInterval(new Segment(hideStart, lifespan.start));
                         hideStart = lifespan.end;
                         replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.RedCrossSwordsMarker);
                     }
-                    replay.Hidden.Add(new Segment(hideStart, target.LastAware));
+                    replay.HideInInterval(new Segment(hideStart, target.LastAware));
                 }
                 var sabethaPhases = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(sabethaPhases, log);

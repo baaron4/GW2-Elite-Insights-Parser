@@ -149,13 +149,16 @@ internal class GreerTheBlightbringer : MountBalrior
         return startToUse;
     }
 
-    internal static void RenameProtoGreerlings(IReadOnlyList<SingleActor> targets)
+    internal static void RenameProtoGreerlings(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
-        foreach (SingleActor target in targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            if (target.IsSpecies(TargetID.ProtoGreerling))
+            foreach (SingleActor target in targets)
             {
-                target.OverrideName("Champion " + target.Character);
+                if (target.IsSpecies(TargetID.ProtoGreerling))
+                {
+                    target.OverrideName("Champion " + target.Character);
+                }
             }
         }
     }
@@ -163,7 +166,7 @@ internal class GreerTheBlightbringer : MountBalrior
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        RenameProtoGreerlings(Targets);
+        RenameProtoGreerlings(Targets, evtcVersion);
     }
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)

@@ -199,7 +199,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
-        var buffAppliesAll = log.CombatData.GetBuffApplyData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
+        var buffAppliesAll = log.CombatData.GetBuffApplyData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
         var buffAppliesPlayer = buffAppliesAll.Where(x => x.To.Is(p.AgentItem));
         var agentsToTether = log.AgentData.GetStableSpeciesByID(TargetID.SoulFeast);
 
@@ -270,9 +270,8 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 // Correcting life span for the hit time, 4000 is the entire animation, 2000 looks to be correct
                 lifespan.Item2 -= 2000;
-                var slice = new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector);
-                environmentDecorations.Add(slice.UsingRotationConnector(rotation));
-                environmentDecorations.Add(slice.Copy().UsingGrowingEnd(lifespan.Item2).UsingRotationConnector(rotation));
+                var slice = (PieDecoration)new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector).UsingRotationConnector(rotation);
+                environmentDecorations.AddWithGrowing(slice, lifespan.Item2);
             }
         }
 
@@ -284,8 +283,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 
@@ -466,21 +464,24 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+        if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
-            switch (target.ID)
+            foreach (SingleActor target in Targets)
             {
-                case (int)TargetID.VeteranTheTormented:
-                    target.OverrideName("Veteran " + target.Character);
-                    break;
-                case (int)TargetID.EliteTheTormented:
-                    target.OverrideName("Elite " + target.Character);
-                    break;
-                case (int)TargetID.ChampionTheTormented:
-                    target.OverrideName("Champion " + target.Character);
-                    break;
-                default:
-                    break;
+                switch (target.ID)
+                {
+                    case (int)TargetID.VeteranTheTormented:
+                        target.OverrideName("Veteran " + target.Character);
+                        break;
+                    case (int)TargetID.EliteTheTormented:
+                        target.OverrideName("Elite " + target.Character);
+                        break;
+                    case (int)TargetID.ChampionTheTormented:
+                        target.OverrideName("Champion " + target.Character);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");

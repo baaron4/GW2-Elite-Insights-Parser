@@ -641,6 +641,7 @@ internal static class ItemImages
     public const string DecadeEnhancement = "https://render.guildwars2.com/file/9C0A257380D40A5D6C1D93CA73A317035E06C9C6/2724222.png";
     public const string SnowDiamondOrnament = "https://render.guildwars2.com/file/DE210AD99255070E7638763C4EF9E8D162E42FB9/3734078.png";
     public const string SuperSharpeningPolygon = "https://render.guildwars2.com/file/4246FCE23672F905B771F993EE009CF019705DD3/3762453.png";
+    public const string DismountingPotion = "https://render.guildwars2.com/file/C3AF22F63BE7EACF39E7A7E76615D6C5BE58DB1C/2594275.png";
     #endregion Utility
     #region Writ
     public const string WritOfBasicStrength = "https://render.guildwars2.com/file/CAF306FED00FDB05BA5C4E55D5D17E4D07C1CB75/1201921.png";
@@ -869,6 +870,7 @@ internal static class ItemImages
     public const string FireElementalPowder = "https://render.guildwars2.com/file/F90EEC96BB0C70D5CC2F30BA2E0B45B8326965A8/219351.png";
     public const string SunspearParagonSupport = "https://render.guildwars2.com/file/CAAF3329AC92102553F8CA0D0116C1B2A9644392/1894924.png";
     public const string RavenSpiritShadow = "https://render.guildwars2.com/file/4820B8070531F833EED091FB1CFB3407E13401E7/2220562.png";
+    public const string BasicGlider = "https://render.guildwars2.com/file/44CBA526B47C025FBE040CC8A9D2A055D06861D0/1001219.png";
     // Other Items
     public const string WatchworkPortalDevice = "https://render.guildwars2.com/file/7B0E6BFAEEB8164FBF3DD33ACFAAAD9E9607753F/619596.png";
     #endregion Miscellaneous

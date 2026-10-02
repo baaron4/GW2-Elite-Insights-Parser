@@ -219,7 +219,12 @@ internal static class ElementalistHelper
         // - Stone Flesh
         new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.Incoming, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneFlesh, DamageModifierMode.All),
         // - Stone Heart
-        new BuffOnActorDamageModifier(Mod_StoneHeart, StoneHeart, "Stone Heart", "-40% damage", DamageSource.Incoming, -40, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneHeart, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_StoneHeart, StoneHeart, "Stone Heart", "-50% damage", DamageSource.Incoming, -50, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneHeart, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new BuffOnActorDamageModifier(Mod_StoneHeart, StoneHeart, "Stone Heart", "-40% damage", DamageSource.Incoming, -40, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneHeart, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+        new BuffOnActorDamageModifier(Mod_StoneHeart, StoneHeart, "Stone Heart", "-40% damage", DamageSource.Incoming, -40, DamageType.Strike, DamageType.All, [Source.BaseElementalistOnly, Source.Tempest, Source.Weaver, Source.Catalyst], ByPresence, TraitImages.StoneHeart, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.April2026Balancepocalypse),
         // - Geomancer's Training
         new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.GeomancersTraining, (x, log) => TargetWithinRangeChecker(x, log, 360), DamageModifierMode.All)
             .UsingApproximate()

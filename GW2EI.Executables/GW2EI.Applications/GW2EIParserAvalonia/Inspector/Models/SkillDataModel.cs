@@ -1,8 +1,14 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class SkillDataModel
+public sealed class SkillDataModel : INotifyPropertyChanged
 {
     public long ID { get; }
     public string Name { get; }
@@ -33,7 +39,24 @@ public sealed class SkillDataModel
 
     public bool IsCastSkill { get; }
 
-    public SkillDataModel(SkillItem skill, SkillData skillData, CombatData combatData)
+    public string DisplayIcon => !string.IsNullOrWhiteSpace(ApiIcon) ? ApiIcon :
+        !string.IsNullOrWhiteSpace(SkillItem.BuffInfo?.BuffSkill.Icon) ? SkillItem.BuffInfo.BuffSkill.Icon : Icon;
+    public string SkillType => IsCastSkill ? "Ability" : IsBuff ? "Buff" : string.Empty;
+
+    private static readonly SkillIconService IconService = new();
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private Bitmap? _iconImage;
+    public Bitmap? IconImage
+    {
+        get => _iconImage;
+        private set
+        {
+            _iconImage = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public SkillDataModel(SkillItem skill, SkillData skillData)
     {
         SkillItem = skill;
 
@@ -63,5 +86,22 @@ public sealed class SkillDataModel
 
         IsBuff = skill.BuffInfo != null;
         IsCastSkill = skill.SkillInfo != null;
+
+        _ = LoadIconAsync();
+    }
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private async Task LoadIconAsync()
+    {
+        if (!Uri.TryCreate(DisplayIcon, UriKind.Absolute, out var uri))
+        {
+            return;
+        }
+
+        IconImage = await IconService.LoadAsync(uri);
     }
 }

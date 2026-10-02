@@ -162,15 +162,12 @@ public abstract class EffectEvent : StatusEvent
     /// Computes the lifespan of an effect.
     /// Will use default duration if all other methods fail
     /// defaultDuration is ignored for <see cref="EffectEventCBTS45"/> and considered as 0.
-    /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
+    /// Use this method in places where an effect is expected to have a dynamic end time and the code has to support logs from <see cref="EffectEventCBTS45"/> era. Otherwise this method is equivalent to <see cref="EffectEvent.ComputeLifespan"/>
     /// See <see cref="ComputeEndTime"/> for information about computed end times.
     /// </summary>
     public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
-        long durationToUse = defaultDuration;
-        long start = Time;
-        long end = ComputeEndTime(log, durationToUse, agent, associatedBuff);
-        return (start, end);
+        return ComputeLifespan(log, defaultDuration, agent, associatedBuff);
     }
 
     /// <summary>

@@ -61,7 +61,7 @@ internal class AetherbladeHideoutInstance : EndOfDragonsRaidEncounter
         AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         AetherbladeHideout.EchoOfScarletSanitizeLastHealthUpdateEvents(Targets, combatData);
-        AetherbladeHideout.RenameScarletPhantoms(Targets);
+        AetherbladeHideout.RenameScarletPhantoms(Targets, evtcVersion);
     }
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {

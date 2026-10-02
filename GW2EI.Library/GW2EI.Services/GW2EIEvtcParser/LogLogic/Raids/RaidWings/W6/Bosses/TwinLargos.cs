@@ -264,7 +264,7 @@ internal class TwinLargos : MythwrightGambit
 
     internal static void AdjustFinalHPEvents(List<CombatItem> combatData, AgentItem agentItem)
     {
-        var hpUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(agentItem));
+        var hpUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(agentItem)).ToList();
         if (hpUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
         {
             CombatItem lastHPUpdate = hpUpdates.Last();

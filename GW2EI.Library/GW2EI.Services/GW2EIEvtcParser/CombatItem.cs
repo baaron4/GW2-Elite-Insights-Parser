@@ -58,7 +58,8 @@ public class CombatItem
         || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID
         || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.Tick
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart
-        || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams;
+        || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams
+        || IsStateChange == StateChange.AgentInfo;
 
     private readonly EvtcVersionEvent _version;
 
@@ -294,6 +295,7 @@ public class CombatItem
             || IsStateChange == StateChange.Jump
             || IsStateChange == StateChange.GadgetModelInfo
             || IsStateChange == StateChange.FlyTo
+            || IsStateChange == StateChange.AgentInfo
             ;
     }
 

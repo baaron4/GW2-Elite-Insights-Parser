@@ -97,6 +97,7 @@ public partial class CombatData
     public readonly bool HasGadgetAnimData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
+    public readonly bool HasAgentInfo = false;
 
     public bool HasExtraProcessing { get; private set; }
 
@@ -481,8 +482,9 @@ public partial class CombatData
         {
             var dictExtensions = events.OfType<BuffExtensionEvent>()
                 .Where(x => x.BuffInstance != 0)
-                .GroupBy(x => x.BuffInstance);
-            if (dictExtensions.Any())
+                .GroupBy(x => x.BuffInstance)
+                .ToDictionary(x => x.Key, x => x.ToList());
+            if (dictExtensions.Count != 0)
             {
                 var dictApply = events.OfType<BuffApplyEvent>()
                     .Where(x => x.BuffInstance != 0)
@@ -497,7 +499,7 @@ public partial class CombatData
                 {
                     if (!dictApply.TryGetValue(extensionEventsPerID.Key, out var appliesPerBuffID)) { continue; }
 
-                    foreach (var extensionEvents in extensionEventsPerID.GroupBy(y => y.BuffID))
+                    foreach (var extensionEvents in extensionEventsPerID.Value.GroupBy(y => y.BuffID))
                     {
                         if (!appliesPerBuffID.TryGetValue(extensionEvents.Key, out var applies)) { continue; }
 
@@ -625,6 +627,7 @@ public partial class CombatData
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
         HasGadgetAnimData = _gadgetAnimationEventsByGadget.Count > 0;
+        HasAgentInfo = evtcVersion.Build >= ArcDPSBuilds.AgentInfoAdded;
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
         skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);

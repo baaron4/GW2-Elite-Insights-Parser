@@ -168,8 +168,7 @@ internal class StatueOfIce : HallOfChains
 
                 (long, long) lifespan = green.ComputeLifespan(log, 15000);
                 var circle = new CircleDecoration(120, lifespan, color, 0.4, new PositionConnector(green.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2, true);
             }
         }
     }

@@ -20,6 +20,15 @@
 
         <TabControl>
 
+            <TabControl.Styles>
+
+                <Style Selector="TabItem">
+                    <Setter Property="BorderBrush" Value="#444"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                </Style>
+
+            </TabControl.Styles>
+
             <TabItem Header="Events">
 
                 <Grid ColumnDefinitions="3*,5,2*,5,5*">
@@ -32,7 +41,7 @@
                               Margin="8">
 
                             <Grid Grid.Row="0"
-                                  RowDefinitions="Auto,Auto,Auto"
+                                  RowDefinitions="Auto,Auto,Auto,Auto"
                                   ColumnDefinitions="Auto,*"
                                   Margin="0,0,0,8">
 
@@ -145,6 +154,26 @@
                                         Width="110"/>
 
                                 </Grid>
+
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Text="Animation"
+                                    VerticalAlignment="Center"
+                                    Margin="0,4,8,0"/>
+
+                                <AutoCompleteBox
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding GadgetAnimationFilterItems}"
+                                    x:CompileBindings="False"
+                                    SelectedItem="{Binding GadgetDataFilter, Mode=TwoWay}"
+                                    FilterMode="Contains"
+                                    MinimumPrefixLength="0"
+                                    IsTextCompletionEnabled="False"
+                                    PlaceholderText="Gadget animation"
+                                    Margin="0,4,0,0"
+                                    GotFocus="GadgetAnimationFilter_GotFocus"/>
 
                             </Grid>
 
@@ -511,12 +540,31 @@
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto"
                                   SelectionMode="Single"
-                                  RowHeight="28">
+                                  RowHeight="40">
+
+                            <DataGrid.Resources>
+                                <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+                            </DataGrid.Resources>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID"
                                                     Binding="{Binding ID}"
                                                     Width="Auto"/>
+
+                                <DataGridTemplateColumn Header="Icon"
+                                                        Width="60"
+                                                        CanUserSort="False">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding IconImage}"
+                                                   Width="32"
+                                                   Height="32"
+                                                   Stretch="Uniform"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
 
                                 <DataGridTextColumn
                                     Binding="{Binding Name}"
@@ -531,6 +579,11 @@
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
                                 </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Type"
+                                                    Binding="{Binding SkillType}"
+                                                    Width="100"/>
+
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -1016,6 +1069,34 @@
 
                     </TabControl>
                 </Grid>
+            </TabItem>
+
+            <TabItem Header="Gadget Animation">
+
+                <DataGrid ItemsSource="{Binding GadgetAnimationView}"
+                          AutoGenerateColumns="False"
+                          x:CompileBindings="False"
+                          IsReadOnly="True"
+                          CanUserResizeColumns="True"
+                          CanUserReorderColumns="True"
+                          CanUserSortColumns="True"
+                          GridLinesVisibility="All"
+                          HeadersVisibility="Column"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          SelectionMode="Extended"
+                          RowHeight="28">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Data"
+                                            Binding="{Binding Data}"
+                                            Width="*"/>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
             </TabItem>
 
             <TabItem Header="Combat Items">

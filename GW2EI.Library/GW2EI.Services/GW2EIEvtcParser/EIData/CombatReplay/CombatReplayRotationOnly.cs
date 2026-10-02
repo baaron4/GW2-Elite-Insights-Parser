@@ -3,11 +3,14 @@
 public class CombatReplayRotationOnly : CombatReplay
 {
 
-    internal CombatReplayRotationOnly(ParsedEvtcLog log) : base(log)
+    internal CombatReplayRotationOnly(ParsedEvtcLog log, SingleActor owner) : base(log, owner)
     {
     }
 
     internal override void AddPosition(ParametricPoint3D position)
+    {
+    }
+    internal override void AddTeleport(ParametricPoint3D velocity)
     {
     }
 

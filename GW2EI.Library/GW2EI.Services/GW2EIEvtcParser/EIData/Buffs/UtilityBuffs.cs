@@ -65,6 +65,7 @@ internal static class UtilityBuffs
         new Buff("Sharpening Golem", SharpeningGolem, Source.Item, BuffClassification.Enhancement, ItemImages.NourishmentEffect),
         new Buff("Snow Diamond Ornament", SnowDiamondOrnament, Source.Item, BuffClassification.Enhancement, ItemImages.SnowDiamondOrnament),
         new Buff("Super Sharpening Polygon", SuperSharpeningPolygon, Source.Item, BuffClassification.Enhancement, ItemImages.SnowDiamondOrnament),
+        new Buff("Dismounted", DismountingPotion, Source.Item, BuffClassification.Enhancement, ItemImages.DismountingPotion),
     ];
 
     internal static readonly IReadOnlyList<Buff> OtherConsumables =

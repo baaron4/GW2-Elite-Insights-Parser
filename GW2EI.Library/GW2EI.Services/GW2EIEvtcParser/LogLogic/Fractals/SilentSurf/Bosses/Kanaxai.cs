@@ -144,7 +144,7 @@ internal class Kanaxai : SilentSurf
         var phases = new List<SubPhasePhaseData>(5);
         // Phases
         var mainPhases = GetSubPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true, encounterPhase.Start, encounterPhase.End);
-        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent>().Select(x => x.Time);
+        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent>().Select(x => x.Time).ToList();
         int worldCleaverCount = 0;
         int repeatedCount = 0;
         var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -278,7 +278,7 @@ internal class Kanaxai : SilentSurf
 
         // Orange Tether from Aspect to player
         IEnumerable<BuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
-        IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
+        IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>().ToList();
         IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
         AgentItem tetherAspect = _unknownAgent;
         foreach (BuffApplyEvent apply in tetherApplies)
@@ -449,8 +449,7 @@ internal class Kanaxai : SilentSurf
             {
                 (long start, long end) lifespan = (aoe.Time, aoe.Time + 1500);
                 var circle = new CircleDecoration(380, lifespan, Colors.Red, 0.2, new PositionConnector(aoe.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingFilled(false));
+                environmentDecorations.AddWithBorder(circle);
             }
         }
 
@@ -494,8 +493,7 @@ internal class Kanaxai : SilentSurf
             {
                 (long start, long end) lifespan = harrowshot.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(280, lifespan, Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
-                environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }
@@ -537,8 +535,7 @@ internal class Kanaxai : SilentSurf
         int start = (int)aoe.Time;
         int effectEnd = start + duration;
         var circle = new CircleDecoration(180, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
-        environmentDecorations.Add(circle);
-        environmentDecorations.Add(circle.Copy().UsingFilled(false));
+        environmentDecorations.AddWithBorder(circle);
     }
 
     /// <summary>

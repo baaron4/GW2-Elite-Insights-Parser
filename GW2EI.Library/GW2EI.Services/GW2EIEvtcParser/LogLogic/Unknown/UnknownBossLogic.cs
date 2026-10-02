@@ -29,7 +29,7 @@ internal class UnknownBossLogic : UnknownEncounterLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)), combatData, logData, playerAgents, successHandler, true);
+        SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)).ToList(), combatData, logData, playerAgents, successHandler, true);
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)

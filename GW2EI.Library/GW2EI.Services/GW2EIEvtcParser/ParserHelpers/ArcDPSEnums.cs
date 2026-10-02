@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser;
+﻿using GW2EIEvtcParser.ParsedData;
+
+namespace GW2EIEvtcParser;
 
 public static class ArcDPSEnums
 {
@@ -41,6 +43,7 @@ public static class ArcDPSEnums
         public const int VisibilityInTargetableStateChange = 20260522;
         public const int VisibilityOnStateChange = 20260527;
         public const int GadgetCapturesAdded = 20260602;
+        public const int AgentInfoAdded = 20260929;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -348,6 +351,7 @@ public static class ArcDPSEnums
         Jump = 86,
         GadgetModelInfo = 87,
         FlyTo = 88,
+        AgentInfo = 89,
         Unknown
     };
 
@@ -690,4 +694,57 @@ public static class ArcDPSEnums
         };
     }
 
+    // Gadget Type
+
+    // Unstable, in game enum
+    public enum GadgetTypeEnum : uint
+    {
+        Type0 = 0,
+        ArmorDisplay = 1,
+        Type2 = 2,
+        CapturePoint = 3,
+        Container = 4,
+        CraftingStation = 5,
+        Gate = 6,
+        Type7 = 7,
+        Lever = 8,
+        MagicDoor = 9,
+        Meter = 10,
+        MissionGiver = 11,
+        OnOff = 12,
+        Phaseable = 13,
+        PlayerSpecific = 14,
+        Prop = 15,
+        PropBoss = 16,
+        Redirector = 17,
+        RedirectorPoint = 18,
+        ResourceNode = 19,
+        Thing = 20,
+        Type21 = 21,
+        Type22 = 22,
+        Turret = 23,
+        Vista = 24,
+        WeaponDisplay = 25,
+
+        NotApplicable,
+    }
+
+    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, EvtcVersionEvent evtcVersion)
+    {
+        return unsignedInt < (uint)GadgetTypeEnum.NotApplicable ? (GadgetTypeEnum)unsignedInt
+            : GadgetTypeEnum.NotApplicable;
+    }
+
+    // Species Flags
+
+    // Unstable, in game enum
+    [Flags]
+    public enum SpeciesFlags : uint
+    {
+        Champion = 1 << 1,
+        Elite = 1 << 5,
+        Legendary = 1 << 11,
+        NoDecorateNameTBC = 1 << 19,
+        Veteran = 1 << 29,
+    }
 }

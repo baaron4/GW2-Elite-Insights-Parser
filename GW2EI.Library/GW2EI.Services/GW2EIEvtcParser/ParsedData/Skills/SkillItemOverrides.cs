@@ -274,6 +274,7 @@ public static class SkillItemOverrides
         { HarriersTossAdrenalineLevel2, "Harrier's Toss (Adrenaline Level 2)" },
         { HarriersTossAdrenalineLevel3, "Harrier's Toss (Adrenaline Level 3)" },
         { BerserkEndSkill, "Berserk (End)" },
+        { RendFollowUpDamage, "Rend (Follow Up)" },
         #endregion Warrior
         // Special Forces Training Area
         { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
@@ -453,7 +454,7 @@ public static class SkillItemOverrides
     {
         { WeaponSwap, SkillImages.WeaponSwap },
         //{ Jumping, SkillImages.Jumping }, Icon for jumping?
-        //{ Gliding, SkillImages.Gliding }, Icon for gliding?
+        { Gliding, ItemImages.BasicGlider },
         { WeaponStow, SkillImages.WeaponStow },
         { WeaponDraw, SkillImages.WeaponDraw },
         { Resurrect, SkillImages.Resurrect },
@@ -555,6 +556,7 @@ public static class SkillItemOverrides
         { SkyscaleFireballSkill, SkillImages.SkyscaleFireball },
         { SkyscaleFireballDamage, SkillImages.SkyscaleFireball },
         { SkyscaleBlastSkill, SkillImages.SkyscaleBlast },
+        { SkyscaleBlastDamage, SkillImages.SkyscaleBlast },
         // Raptor
         { RaptorTailSpin, SkillImages.RaptorTailSpin },
         // Warclaw
@@ -572,6 +574,7 @@ public static class SkillItemOverrides
         { WarclawDashWildClaws, SkillImages.WarclawDash },
         // Jackal
         { JackalPounceDamage, SkillImages.JackalPounce },
+        { JackalPounceBarrier, SkillImages.JackalPounce },
         // Griffon
         { GriffonSwoopDamage, SkillImages.GriffonSwoop },
         // Beetle
@@ -1198,6 +1201,7 @@ public static class SkillItemOverrides
             { ChantOfRecuperationHealing, SkillImages.ChantOfRecuperation },
             { ChantOfRecuperationBarrier, SkillImages.ChantOfRecuperation },
             { UnshakableMountainBarrier, TraitImages.UnshakableMountain },
+            { RendFollowUpDamage, SkillImages.Rend },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },
@@ -1276,7 +1280,7 @@ public static class SkillItemOverrides
             // - Arkk
             { HypernovaLaunchSAK, SkillImages.CelestialDash },
             // - Eparch
-            { HeartOfTheObscure, "https://wiki.guildwars2.com/images/5/5a/Scan_for_Rift.png" },
+            { HeartOfTheObscure, SkillImages.HeartOfTheObscure },
             // Kela
             { ThrowRelic, SkillImages.ThrowLight },
             // Freezie
@@ -1289,6 +1293,25 @@ public static class SkillItemOverrides
             { HealingRainConvergence, SkillImages.PacifiedMagicalStorm },
             { WatchfulSpirit, SkillImages.WatchfulSpirit },
             { RideTheLeyLine, SkillImages.RideTheLeyLine },
+            { UnstableMagicVolley, SkillImages.UnstableMagicVolley },
+            { FocusedMagic, SkillImages.FocusedMagic },
+            // - Nexus of Eternity Convergence
+            { HeartOfTheObscureVoE, SkillImages.HeartOfTheObscure },
+            { HeartOfTheObscureVoE2, SkillImages.HeartOfTheObscure },
+            { WildWrath, SkillImages.WildWrath },
+            { NurturingBloom1, SkillImages.WildWrath },
+            { NurturingBloom2, SkillImages.WildWrath },
+            { AberrantFeast, SkillImages.AberrantFeast },
+            { MirrorWall, SkillImages.MirrorWall },
+            { ElementalHurricane, SkillImages.ElementalHurricane },
+            { ShadowDance, SkillImages.ShadowDance },
+            { ShadowsTorment, SkillImages.ShadowsTorment },
+            { FerociousAssault1, SkillImages.FerociousAssault },
+            { FerociousAssault2, SkillImages.FerociousAssault },
+            { FerociousAssault3, SkillImages.FerociousAssault },
+            { FerociousAssault4, SkillImages.FerociousAssault },
+            { TheBigGun, SkillImages.TheBigGun },
+            { VesselOfTheMists, SkillImages.VesselOfTheMists },
         #endregion  EncounterIcons
         #region Misc
             { WhirlingAssault, SkillImages.WhirlingAssault },
@@ -1299,6 +1322,9 @@ public static class SkillItemOverrides
             { HollowedBoulderShot, SkillImages.FireBoulder },
             { SmokeScreen, "https://wiki.guildwars2.com/images/0/0a/Smoke_Screen_%28engineer_skill%29.png" },
             { EjectionSeat, SkillImages.Eject },
+            { CorpseToss, SkillImages.CorpseToss },
+            { ThrowTorchSacredTorch, SkillImages.ThrowTorch },
+            { RushHaresSpeed, SkillImages.RushHaresSpeed },
         #endregion
         #region WvWIcons
             { WvWSpendingSupplies, "https://wiki.guildwars2.com/images/b/b7/Repair_Master.png" },
