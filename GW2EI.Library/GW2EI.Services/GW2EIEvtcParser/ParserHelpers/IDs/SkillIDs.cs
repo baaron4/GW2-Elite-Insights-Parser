@@ -5817,7 +5817,6 @@ public static class SkillIDs
     public const long ExcisionExtremis2 = 81053;
     public const long InquestDisguise = 81067;
     public const long RelicOfTheLastTyrantDamage = 81068;
-    public const long POV_RelicOfTheLanternGearBuff = 81019;
     public const long AscensionsSacrifice = 81076;
     public const long VulnerableToDefiance = 81082;
     public const long ForestCall = 81093;
