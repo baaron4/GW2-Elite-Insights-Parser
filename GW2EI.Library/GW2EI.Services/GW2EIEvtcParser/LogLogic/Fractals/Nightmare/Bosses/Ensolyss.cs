@@ -77,12 +77,12 @@ internal class Ensolyss : Nightmare
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(2 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.NightmareHallucination1);
-        trashIDs.Add(TargetID.NightmareHallucination2);
-        //trashIDs.Add(TargetID.NightmareAltar);
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.NightmareHallucination1,
+            TargetID.NightmareHallucination2,
+            // TargetID.NightmareAltar,
+        ];
     }
 
     internal static void IgnoreFakeEnsolysses(AgentData agentData, List<CombatItem> combatData)

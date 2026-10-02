@@ -121,7 +121,7 @@ public abstract class LogLogic
                         new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericFloat, Mech_PlayerFloat, new (Symbols.StarTriangleUp, Colors.LightBlue), new("Flt", "Float"), Sev4),
                         new PlayerDstCrowdControlMechanic(SkillIDs.ArcDPSGenericLaunch, Mech_PlayerLaunch, new (Symbols.StarTriangleUp, Colors.DarkPurple), new("Lnch", "Launched"), Sev4),
                         new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericLockOut, SkillIDs.ArcDPSGenericStagger, SkillIDs.ArcDPSGenericFear], Mech_PlayerLockOut, new (Symbols.StarTriangleUp, Colors.LightPurple), new("Lckt", "Lockout", "Lockout (Stun, Daze, Petrify, etc...)"), Sev4),
-                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSink, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], Mech_PlayerFloatSinkWater, new (Symbols.StarTriangleUp, Colors.DarkBlue), new("Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked"), Sev4),
+                        new PlayerDstCrowdControlMechanic([SkillIDs.ArcDPSGenericWaterFloatSinkDefunc, SkillIDs.ArcDPSGenericFloatWater, SkillIDs.ArcDPSGenericSink], Mech_PlayerFloatSinkWater, new (Symbols.StarTriangleUp, Colors.DarkBlue), new("Wtr.Flt.Snk", "Float or Sinked in Water", "Float or Sinked"), Sev4),
                     ]
                 ),
             ])

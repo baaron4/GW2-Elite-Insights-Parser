@@ -48,6 +48,12 @@ public static class BuffImages
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
     public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
     public const string Daze = "https://render.guildwars2.com/file/9AE125E930C92FEA0DD99E7EBAEDE4CF5EC556B6/433474.png";
+    public const string Knockback = "https://render.guildwars2.com/file/400B7FD39724FBD700B94AB8AB52B5B9167646F4/2440715.png";
+    public const string KnockdownPull = "https://render.guildwars2.com/file/7632087376D36B0D100F1B07BE53F154BC337D7C/2440716.png";
+    public const string Float = "https://render.guildwars2.com/file/18F6E20EB4F7A812FD2C13723F130166BC54C6D1/2440713.png";
+    public const string Launch = "https://render.guildwars2.com/file/B4087CEB5CC006172E0A09DADC5452807A0CA3F7/2440712.png";
+    public const string Sink = "https://render.guildwars2.com/file/6837AAE7291A9A0EDBD937C4D1017CB73D8045FB/2440714.png";
+    public const string Evade = "https://wiki.guildwars2.com/images/e/e2/Evade.png";
     public const string Exposed = "https://wiki.guildwars2.com/images/6/6b/Exposed.png";
     public const string Unblockable = "https://render.guildwars2.com/file/BD6C4CEEC95711F20FC62A4CA310C5A6574F9664/2261523.png";
     public const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";
@@ -212,7 +218,7 @@ public static class BuffImages
     public const string Countdown = "https://wiki.guildwars2.com/images/0/05/Countdown.png";
     public const string GazeAvoidance = "https://wiki.guildwars2.com/images/1/10/Gaze_Avoidance.png";
     // Mursaat
-    public const string EmpoweredMursaarOverseer = "https://wiki.guildwars2.com/images/9/9c/Empowered_%28Mursaat_Overseer%29.png";
+    public const string EmpoweredMursaatOverseer = "https://wiki.guildwars2.com/images/9/9c/Empowered_%28Mursaat_Overseer%29.png";
     public const string Dispel = "https://wiki.guildwars2.com/images/8/84/Mursaat_Overseer%27s_Shield.png";
     public const string Protect = "https://wiki.guildwars2.com/images/f/f6/Protect.png";
     public const string Claim = "https://wiki.guildwars2.com/images/e/ef/Claim.png";
@@ -327,6 +333,8 @@ public static class BuffImages
     public const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
     public const string Agony = "https://render.guildwars2.com/file/C0B3EB17FEA2B0C4481333F36AA619EB9ABD1CD6/514400.png";
     public const string SpiritsConsumed = "https://wiki.guildwars2.com/images/1/16/Spirits_Consumed.png";
+    public const string MarkedTarget = "https://wiki.guildwars2.com/images/2/25/Marked_Target.png";
+    public const string UnrelentingWinds = "https://wiki.guildwars2.com/images/d/de/Unrelenting_Winds.png";
     // Mistlock Singularity
     public const string DesertCarapace = "https://render.guildwars2.com/file/6DDE245C59EB022E39EE0827161FFB77C0F04CD0/1029981.png";
     // Instability

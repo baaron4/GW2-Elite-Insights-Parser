@@ -26,6 +26,7 @@ internal static class LogImages
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://render.guildwars2.com/file/FD77A5D3AFB8B00A27A94FC73B7A213B6E0CC66C/3301393.png";
     internal const string EncounterIconWhisperingShadow = "https://i.imgur.com/4Xtgr4D.jpeg";
+    internal const string EncounterIconEternalTyrant = "https://render.guildwars2.com/file/7597125D7CA89E250CE997349F61939996E90C27/3122211.png";
 
     // Instances
     internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";

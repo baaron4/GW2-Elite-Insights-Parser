@@ -245,6 +245,9 @@ internal static class ParserIcons
     private const string TargetWhisperingShadow = "https://i.imgur.com/ncmbsdG.png";
     private const string TargetKelaSeneschalOfWaves = "https://i.imgur.com/wSpjlSf.png";
     private const string TargetVloxx = "https://i.imgur.com/9ZVp5ZH.png";
+    private const string TargetEternalTyrant = "https://i.imgur.com/r2OJ7fJ.png";
+    private const string TargetConstructOfGaldra = "https://i.imgur.com/wLB0Xf8.png";
+    private const string TargetRimeSprite = "https://i.imgur.com/kxYwbVe.png";
     #endregion
 
     #region Trash
@@ -487,6 +490,10 @@ internal static class ParserIcons
     private const string TrashAspectOfTheSpear = "https://i.imgur.com/gNdcD7a.png";
     private const string TrashAspectOfTheStaff = "https://i.imgur.com/StuTpMS.png";
     private const string TrashAspectOfTheSword = "https://i.imgur.com/o2dPlEq.png";
+    private const string TrashEarthElemental = "https://i.imgur.com/GymhEiO.png";
+    private const string TrashEmber = "https://i.imgur.com/OzbCqNZ.png";
+    private const string TrashFrostElemental = "https://i.imgur.com/YV3AN5R.png";
+    private const string TrashSpark = "https://i.imgur.com/RUxJLuB.png";
     #endregion
 
     #region Minion
@@ -1428,6 +1435,13 @@ internal static class ParserIcons
         { TargetID.ChampionAspectOfTheSpear, TrashAspectOfTheSpear },
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
         { TargetID.ChampionAspectOfTheSword, TrashAspectOfTheSword },
+        { TargetID.EternalTyrant, TargetEternalTyrant },
+        { TargetID.ConstructOfGaldra, TargetConstructOfGaldra },
+        { TargetID.EarthElemental, TrashEarthElemental },
+        { TargetID.Ember, TrashEmber },
+        { TargetID.FrostElemental, TrashFrostElemental },
+        { TargetID.SparkEternalTyrant, TrashSpark },
+        { TargetID.RimeSprite, TargetRimeSprite },
     };
 
     /// <summary>

@@ -339,7 +339,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             case (int)TargetID.Vloxx:
                 // Probability Distribution - Placed AoE indicator
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionIndicator, out var puddlesIndicators))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.AoEIndicatorFilling280, out var puddlesIndicators))
                 {
                     foreach (var effect in puddlesIndicators)
                     {

@@ -639,7 +639,7 @@ public static class SpeciesIDs
         // - Artsariiv
         Artsariiv = 17949,
         TemporalAnomalyArtsariiv = 17870,
-        Spark = 17630,
+        SparkArtsariiv = 17630,
         SmallArtsariiv = 17811, // tiny adds
         MediumArtsariiv = 17694, // small adds
         BigArtsariiv = 17937, // big adds
@@ -699,6 +699,14 @@ public static class SpeciesIDs
         KryptisRift = SpeciesIDs.KryptisRift,
         // - Kinfall
         WhisperingShadow = 27010,
+        // - Solitary Throne
+        EternalTyrant = 28051,
+        ConstructOfGaldra = 28108,
+        FrostElemental = 27893,
+        Ember = 27987,
+        SparkEternalTyrant = 27998,
+        EarthElemental = 28042,
+        RimeSprite = 28098,
         #endregion FRACTALS
         #region GOLEMS
         MassiveGolem10M = 16169,

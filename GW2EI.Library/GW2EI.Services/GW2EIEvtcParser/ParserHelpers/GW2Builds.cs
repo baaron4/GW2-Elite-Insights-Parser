@@ -265,6 +265,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-07-15
     public const long July2026Balance = 203989;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-15
+    public const long September2026NexusOfEternitySolitaryThrone = 207032;
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-29
     public const long September2026PvPBalanceAndCMReleases = 207830;
 

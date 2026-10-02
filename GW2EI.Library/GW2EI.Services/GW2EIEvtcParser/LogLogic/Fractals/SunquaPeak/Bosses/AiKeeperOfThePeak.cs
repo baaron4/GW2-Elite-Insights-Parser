@@ -170,20 +170,19 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TargetID>(9 + base.GetTrashMobsIDs().Count);
-        trashIDs.AddRange(base.GetTrashMobsIDs());
-        trashIDs.Add(TargetID.FearDemon);
-        trashIDs.Add(TargetID.GuiltDemon);
-        trashIDs.Add(TargetID.AiDoubtDemon);
-        trashIDs.Add(TargetID.PlayerDoubtDemon);
-        trashIDs.Add(TargetID.EnragedWaterSprite);
-        // Transition sorrow demons
-        trashIDs.Add(TargetID.TransitionSorrowDemon1);
-        trashIDs.Add(TargetID.TransitionSorrowDemon2);
-        trashIDs.Add(TargetID.TransitionSorrowDemon3);
-        trashIDs.Add(TargetID.TransitionSorrowDemon4);
-
-        return trashIDs;
+        return [
+            .. base.GetTrashMobsIDs(),
+            TargetID.FearDemon,
+            TargetID.GuiltDemon,
+            TargetID.AiDoubtDemon,
+            TargetID.PlayerDoubtDemon,
+            TargetID.EnragedWaterSprite,
+            // Transition sorrow demons
+            TargetID.TransitionSorrowDemon1,
+            TargetID.TransitionSorrowDemon2,
+            TargetID.TransitionSorrowDemon3,
+            TargetID.TransitionSorrowDemon4,
+        ];
     }
 
     private static bool HasDarkMode(AgentData agentData)

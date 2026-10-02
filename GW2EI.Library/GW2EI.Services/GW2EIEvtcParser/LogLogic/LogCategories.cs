@@ -36,6 +36,7 @@ public class LogCategories
         SilentSurf,
         LonelyTower,
         Kinfall,
+        SolitaryThrone,
         //
         Grothmar,
         Bjora,
