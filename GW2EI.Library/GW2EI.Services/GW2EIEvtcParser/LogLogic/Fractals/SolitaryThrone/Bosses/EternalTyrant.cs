@@ -52,7 +52,7 @@ internal class EternalTyrant : SolitaryThrone
         ]),
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(JadeShards, Mech_JadeShardsHit, new (Symbols.StarSquareOpen, Colors.DarkYellow), new("Jade.H", "Hit by Jade Shards (Earth Rings)", "Jade Shards Hit"), Sev1),
-            new PlayerDstHealthDamageHitMechanic(SearingRadial, Mech_SearingRadialHit, new (Symbols.StarDiamond, Colors.Orange), new("Sear.H", "Hit by Searing Radial (Fire Wall)", "Searing Radial Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic(SearingRadial, Mech_SearingRadialHit, new (Symbols.StarDiamond, Colors.Orange), new("Sear.H", "Hit by Searing Radial (Fire Wall)", "Searing Radial Hit"), Sev0),
             new PlayerDstHealthDamageHitMechanic(LightningStrikeEternalTyrant, Mech_LightningStrikeHit, new (Symbols.CircleOpenDot, Colors.CobaltBlue), new("Lightning.H", "Hit by Lightning Strike", "Lightning Strike Hit"), Sev0),
         ]),
     ]);
@@ -222,12 +222,12 @@ internal class EternalTyrant : SolitaryThrone
         }
 
         // gravity field (placed aoe) indicator
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.AoEIndicatorFilling280, out var gravityFieldIndicators))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.EternalTyrantGravityFieldIndicator, out var gravityFieldIndicators))
         {
             foreach (var effect in gravityFieldIndicators)
             {
-                var lifespan = effect.ComputeLifespan(log, 3000);
-                var decoration = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player));
+                var lifespan = effect.ComputeLifespan(log, 6000);
+                var decoration = new CircleDecoration(450, lifespan, Colors.LightOrange, 0.2, new AgentConnector(player));
                 replay.Decorations.AddWithGrowing(decoration, lifespan.end);
             }
         }

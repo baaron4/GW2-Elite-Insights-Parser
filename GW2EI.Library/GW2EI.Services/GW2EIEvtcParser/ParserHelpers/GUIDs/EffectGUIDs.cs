@@ -665,6 +665,7 @@ public static class EffectGUIDs
     public static readonly Guid WhisperingShadowHailstorm2 = new("66046924ADCA9E4F831A44E2B4ACA40C"); // no owner, default duration 1167ms
     // Solitary Throne Fractal
     public static readonly Guid EternalTyrantCosmicBlast = new("00BD9C27CCD7D24A84FF4B0878A1EC22"); // owned by tyrant, duration 10000ms
+    public static readonly Guid EternalTyrantGravityFieldIndicator = new("5B8556FF8297754790CD6377D3B7C1D6"); // owned by tyrant, duration 6000ms
     public static readonly Guid EternalTyrantGravityFieldSpawn = new("00963C48EA253D44B14B91C534104B4E"); // no owner, duration 6000ms
     public static readonly Guid EternalTyrantGravityField = new("C73F97F8F1A4EA4AB31DDCB76F2E2866"); // owned by gadget, duration 120000ms
     public static readonly Guid EternalTyrantGravityFieldOutline = new("84805BACFF79AC4AB23525576B101DC7"); // owned by gadget, duration infinite
