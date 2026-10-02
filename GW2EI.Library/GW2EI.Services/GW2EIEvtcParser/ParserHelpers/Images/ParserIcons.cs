@@ -246,6 +246,7 @@ internal static class ParserIcons
     private const string TargetKelaSeneschalOfWaves = "https://i.imgur.com/wSpjlSf.png";
     private const string TargetVloxx = "https://i.imgur.com/9ZVp5ZH.png";
     private const string TargetEternalTyrant = "https://i.imgur.com/r2OJ7fJ.png";
+    private const string TargetConstructOfGaldra = "https://i.imgur.com/wLB0Xf8.png";
     private const string TargetRimeSprite = "https://i.imgur.com/kxYwbVe.png";
     #endregion
 
@@ -1435,6 +1436,7 @@ internal static class ParserIcons
         { TargetID.ChampionAspectOfTheStaff, TrashAspectOfTheStaff },
         { TargetID.ChampionAspectOfTheSword, TrashAspectOfTheSword },
         { TargetID.EternalTyrant, TargetEternalTyrant },
+        { TargetID.ConstructOfGaldra, TargetConstructOfGaldra },
         { TargetID.EarthElemental, TrashEarthElemental },
         { TargetID.Ember, TrashEmber },
         { TargetID.FrostElemental, TrashFrostElemental },
