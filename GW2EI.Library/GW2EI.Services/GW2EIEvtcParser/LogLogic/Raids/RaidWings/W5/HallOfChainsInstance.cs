@@ -23,7 +23,6 @@ internal class HallOfChainsInstance : HallOfChains
     private readonly IReadOnlyList<HallOfChains> _subLogics;
     public HallOfChainsInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconHallOfChains;
         Extension = "hallchains";
 

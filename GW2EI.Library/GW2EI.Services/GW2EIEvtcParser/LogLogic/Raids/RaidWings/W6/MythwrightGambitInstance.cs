@@ -19,7 +19,6 @@ internal class MythwrightGambitInstance : MythwrightGambit
     private readonly IReadOnlyList<MythwrightGambit> _subLogics;
     public MythwrightGambitInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconMythwrightGambit;
         Extension = "mythgamb";
 

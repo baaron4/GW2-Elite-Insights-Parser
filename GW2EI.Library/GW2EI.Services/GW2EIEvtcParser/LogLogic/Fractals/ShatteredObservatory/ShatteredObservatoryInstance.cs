@@ -18,7 +18,6 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
     private readonly IReadOnlyList<ShatteredObservatory> _subLogics;
     public ShatteredObservatoryInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconShatteredObservatory;
         Extension = "shtrdobs";
 

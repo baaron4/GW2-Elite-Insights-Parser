@@ -19,7 +19,6 @@ internal class SalvationPassInstance : SalvationPass
     private readonly IReadOnlyList<SalvationPass> _subLogics;
     public SalvationPassInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconSalvationPass;
         Extension = "salvpass";
 

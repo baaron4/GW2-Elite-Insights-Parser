@@ -19,7 +19,6 @@ internal class MountBalriorInstance : MountBalrior
     private readonly IReadOnlyList<MountBalrior> _subLogics;
     public MountBalriorInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconMountBalrior;
         Extension = "mntbalr";
 

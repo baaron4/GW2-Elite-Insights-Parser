@@ -15,7 +15,6 @@ internal class SilentSurfInstance : SilentSurf
 
     public SilentSurfInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconSilentSurf;
         Extension = "slntsrf";
 

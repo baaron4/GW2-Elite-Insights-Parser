@@ -20,7 +20,6 @@ internal class SpiritValeInstance : SpiritVale
 
     public SpiritValeInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconSpiritVale;
         Extension = "sprtvale";
 

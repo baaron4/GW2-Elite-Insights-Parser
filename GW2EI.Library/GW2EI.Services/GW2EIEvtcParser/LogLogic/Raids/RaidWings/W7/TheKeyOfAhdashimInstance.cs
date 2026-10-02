@@ -18,7 +18,6 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     private readonly IReadOnlyList<TheKeyOfAhdashim> _subLogics;
     public TheKeyOfAhdashimInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconTheKeyOfAhdashim;
         Extension = "keyadash";
 

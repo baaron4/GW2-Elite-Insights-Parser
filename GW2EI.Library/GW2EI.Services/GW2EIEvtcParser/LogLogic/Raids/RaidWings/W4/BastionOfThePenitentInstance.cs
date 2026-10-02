@@ -22,7 +22,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     private readonly IReadOnlyList<BastionOfThePenitent> _subLogics;
     public BastionOfThePenitentInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconBastionOfThePenitent;
         Extension = "bstpen";
 

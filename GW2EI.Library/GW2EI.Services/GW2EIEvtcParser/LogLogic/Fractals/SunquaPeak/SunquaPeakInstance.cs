@@ -17,7 +17,6 @@ internal class SunquaPeakInstance : SunquaPeak
 
     public SunquaPeakInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconSilentSurf;
         Extension = "snqpk";
 

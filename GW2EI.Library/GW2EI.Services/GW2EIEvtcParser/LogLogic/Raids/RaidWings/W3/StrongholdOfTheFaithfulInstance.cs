@@ -20,7 +20,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     private readonly IReadOnlyList<StrongholdOfTheFaithful> _subLogics;
     public StrongholdOfTheFaithfulInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconStrongholdOfTheFaithful;
         Extension = "strgldfaith";
 

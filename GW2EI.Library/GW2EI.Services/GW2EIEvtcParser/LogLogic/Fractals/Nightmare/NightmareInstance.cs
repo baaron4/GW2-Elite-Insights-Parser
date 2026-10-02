@@ -18,7 +18,6 @@ internal class NightmareInstance : Nightmare
     private readonly IReadOnlyList<Nightmare> _subLogics;
     public NightmareInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconNightmare;
         Extension = "nightmare";
 

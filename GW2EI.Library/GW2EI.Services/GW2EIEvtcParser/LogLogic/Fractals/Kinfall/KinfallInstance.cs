@@ -14,7 +14,6 @@ internal class KinfallInstance : Kinfall
 
     public KinfallInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconKinfall;
         Extension = "knfll";
 
