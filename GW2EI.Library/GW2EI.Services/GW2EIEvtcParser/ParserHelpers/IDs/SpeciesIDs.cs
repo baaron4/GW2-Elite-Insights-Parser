@@ -698,6 +698,7 @@ public static class SpeciesIDs
         WhisperingShadow = 27010,
         // - Solitary Throne
         EternalTyrant = 28051,
+        ConstructOfGaldra = 28108,
         FrostElemental = 27893,
         Ember = 27987,
         SparkEternalTyrant = 27998,

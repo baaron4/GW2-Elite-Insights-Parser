@@ -5809,6 +5809,11 @@ public static class SkillIDs
     public const long EchoingBlade = 81271;
     public const long AnnihilatingOrbCosmicPiercer = 81273;
     public const long WizardsBlessingVoE = 81287;
+    public const long ShearForce = 81321;
+    public const long FrigidBurst = 81338;
+    public const long ConstructOfGaldraFrontal = 81341;
+    public const long FeatherField = 81342;
+    public const long GrabPunch = 81344;
     #endregion
     #region TODO
     #endregion TODO

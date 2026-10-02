@@ -69,6 +69,7 @@ internal class EternalTyrant : SolitaryThrone
     {
         return [
             TargetID.EternalTyrant,
+            TargetID.ConstructOfGaldra,
             TargetID.RimeSprite,
             TargetID.FrostElemental,
         ];
@@ -79,8 +80,9 @@ internal class EternalTyrant : SolitaryThrone
         return new()
         {
             { TargetID.EternalTyrant, 0 },
-            { TargetID.RimeSprite, 1 },
-            { TargetID.FrostElemental, 2 },
+            { TargetID.ConstructOfGaldra, 1 },
+            { TargetID.RimeSprite, 2 },
+            { TargetID.FrostElemental, 3 },
         };
     }
 
@@ -143,15 +145,19 @@ internal class EternalTyrant : SolitaryThrone
         }
         var phases = GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true);
         var finalCast = log.CombatData.GetAnimatedCastData(tyrant.AgentItem).FirstOrDefault(x => x.SkillID == CelestialImpactFinal);
-        for (int i = 0; i < phases.Count; i++)
+        var constructs = targets.Where(x => x.IsSpecies(TargetID.ConstructOfGaldra));
+        var sprites = targets.Where(x => x.IsSpecies(TargetID.RimeSprite));
+        var elementals = targets.Where(x => x.IsSpecies(TargetID.FrostElemental));
+        for (var i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
             phase.AddParentPhase(encounterPhase);
             phase.AddTarget(tyrant, log);
+            phase.AddTargets(constructs, log, PhaseData.TargetPriority.NonBlocking);
             if (i % 2 == 0)
             {
                 phase.Name = "Phase " + (i + 2) / 2;
-                phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.RimeSprite)), log, PhaseData.TargetPriority.NonBlocking);
+                phase.AddTargets(sprites, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
@@ -162,7 +168,7 @@ internal class EternalTyrant : SolitaryThrone
                 else
                 {
                     phase.Name = "Split " + (i + 1) / 2;
-                    phase.AddTargets(targets.Where(x => x.IsSpecies(TargetID.FrostElemental)), log, PhaseData.TargetPriority.NonBlocking);
+                    phase.AddTargets(elementals, log, PhaseData.TargetPriority.NonBlocking);
                 }
             }
         }
@@ -173,7 +179,9 @@ internal class EternalTyrant : SolitaryThrone
     {
         var phases = GetInitialPhase(log);
         var tyrant = GetEternalTyrant();
+        var constructs = Targets.Where(x => x.IsSpecies(TargetID.ConstructOfGaldra));
         phases[0].AddTarget(tyrant, log);
+        phases[0].AddTargets(constructs, log, PhaseData.TargetPriority.NonBlocking);
         phases.AddRange(ComputePhases(log, tyrant, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
