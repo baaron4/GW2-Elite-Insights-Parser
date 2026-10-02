@@ -339,40 +339,40 @@ internal class EternalTyrant : SolitaryThrone
                 }
                 break;
             case (int)TargetID.RimeSprite:
-            {
-                foreach (var seg in target.GetBuffStatus(log, RimeSpriteAura).Where(x => x.Value > 0))
                 {
-                    var decoration = new CircleDecoration(300, (seg.Start, seg.End), Colors.Red, 0.2, new AgentConnector(target))
-                        .UsingFilled(false);
-                    replay.Decorations.Add(decoration);
+                    foreach (var seg in target.GetBuffStatus(log, RimeSpriteAura).Where(x => x.Value > 0))
+                    {
+                        var decoration = new CircleDecoration(300, (seg.Start, seg.End), Colors.Red, 0.2, new AgentConnector(target))
+                            .UsingFilled(false);
+                        replay.Decorations.Add(decoration);
+                    }
+                    break;
                 }
-                break;
-            }
             case (int)TargetID.EarthElemental:
-            {
-                AddCosmisBlastFields(log, target, replay);
-                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
-                foreach (var seg in breakbarActives)
                 {
-                    replay.Decorations.AddActiveBreakbar(seg.TimeSpan, target, breakbarUpdates);
+                    AddCosmisBlastFields(log, target, replay);
+                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                    var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
+                    foreach (var seg in breakbarActives)
+                    {
+                        replay.Decorations.AddActiveBreakbar(seg.TimeSpan, target, breakbarUpdates);
+                    }
+                    break;
                 }
-                break;
-            }
             case (int)TargetID.Ember:
             case (int)TargetID.FrostElemental:
             case (int)TargetID.SparkEternalTyrant:
-            {
-                AddCosmisBlastFields(log, target, replay);
-                var lifespan = (target.FirstAware, target.LastAware);
-                var width = CombatReplayOverheadProgressBarMajorSizeInPixel;
-                var progress = target.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
-                var decoration = new OverheadProgressBarDecoration(width, lifespan, Colors.Green, 0.8, Colors.Black, 0.6, progress, new AgentConnector(target))
-                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                    .UsingRotationConnector(new AngleConnector(180));
-                replay.Decorations.Add(decoration);
-                break;
-            }
+                {
+                    AddCosmisBlastFields(log, target, replay);
+                    var lifespan = (target.FirstAware, target.LastAware);
+                    var width = CombatReplayOverheadProgressBarMajorSizeInPixel;
+                    var progress = target.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
+                    var decoration = new OverheadProgressBarDecoration(width, lifespan, Colors.Green, 0.8, Colors.Black, 0.6, progress, new AgentConnector(target))
+                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                        .UsingRotationConnector(new AngleConnector(180));
+                    replay.Decorations.Add(decoration);
+                    break;
+                }
         }
     }
 
