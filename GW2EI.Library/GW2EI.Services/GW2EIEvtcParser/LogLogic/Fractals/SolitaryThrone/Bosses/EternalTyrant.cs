@@ -427,6 +427,17 @@ internal class EternalTyrant : SolitaryThrone
             }
         }
 
+        // storm summoning (rime sprite spawn)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantStormSummoning, out var stormSummons))
+        {
+            foreach (var effect in stormSummons)
+            {
+                var lifespan = effect.ComputeLifespan(log, 3000);
+                var decoration = new CircleDecoration(180, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
         // jade shards (earth rings)
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EternalTyrantJadeShards, out var jadeShards))
         {

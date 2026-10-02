@@ -680,6 +680,7 @@ public static class EffectGUIDs
     public static readonly Guid EternalTyrantCelestialImpactIndicatorFast = new("F11DE83882CEE049BA27C97FBAF3398A"); // owned by tyrant, duration 6200ms
     public static readonly Guid EternalTyrantCelestialImpact = new("BD2055967CE7D443AF24BFC45EF4DB70"); // owned by tyrant, duration 3333ms
     public static readonly Guid EternalTyrantSearingRadial = new("33C7787156D3C44CB320C9975A37A4C6"); // owned by fire dais gadget, duration 24590ms
+    public static readonly Guid EternalTyrantStormSummoning = new("D0471A4E6D69A44CB7E1E2E9A014FB5E"); // owned by ice dais gadget, duration 3000ms
     public static readonly Guid EternalTyrantJadeShards = new("F6208F6A171D894E8AE93B2EEA815243"); // owned by earth dais gadget, duration 3000ms
     public static readonly Guid EternalTyrantLightningStrike = new("62477FC998B5D248B6F6BDF103FD0DCC"); // owned by air dais gadget, duration 2000ms
     #endregion
