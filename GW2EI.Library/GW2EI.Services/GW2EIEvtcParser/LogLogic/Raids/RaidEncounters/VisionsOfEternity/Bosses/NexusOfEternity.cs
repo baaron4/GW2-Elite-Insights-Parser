@@ -295,9 +295,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in judgmentOfEternity)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
+                long duration = 8000;
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                long growing = effect.Time + duration;
                 var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end, true);
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing, true);
                 replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize3Overhead);
             }
         }
@@ -307,9 +309,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in ascensionsSacrifice)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                long duration = 5000;
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                long growing = effect.Time + duration;
                 var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end, true);
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing, true);
                 replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize2Overhead);
 
                 // Chain - Appears 500ms after the green, duration 4500 - The buff applied is POV only
@@ -322,9 +326,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in probabilityDistribution)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                long duration = 5000;
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                long growing = effect.Time + duration;
                 var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(circle, true, lifespan.end);
+                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing);
             }
         }
     }
