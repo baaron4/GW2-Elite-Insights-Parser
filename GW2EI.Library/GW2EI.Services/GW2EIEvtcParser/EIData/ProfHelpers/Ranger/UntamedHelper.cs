@@ -26,6 +26,7 @@ internal static class UntamedHelper
 
         // Pet
         new EffectCastFinder(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.UntamedVenomousOutburst2)
             .WithMinions(),
         new EffectCastFinder(RendingVines, EffectGUIDs.UntamedRendingVines)
             .WithMinions(),

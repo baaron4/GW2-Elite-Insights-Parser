@@ -473,6 +473,7 @@ public static class EffectGUIDs
     public static readonly Guid UntamedMutateConditions = new("D7DCD4ABF9E4A749950AF0175E02EA06");
     public static readonly Guid UntamedUnnaturalTraversal = new("8D36806A690A5442A983308EDCECB018");
     public static readonly Guid UntamedVenomousOutburst = new("60BE4692A455B140A05AD794BF4753F6");
+    public static readonly Guid UntamedVenomousOutburst2 = new("A635307E0E955E44B84F14E25A25FC7F");
     public static readonly Guid UntamedRendingVines = new("2C40B0741111444F98895A658A7F978F");
     public static readonly Guid UntamedEnvelopingHaze = new("F2B1B61970FC59418AC049BF3A07FFD4");
     public static readonly Guid GaleshotSummonCycloneBow = new("C1F1E386CC1E0B448435269DBBFB34D7"); // Duration 2333 - IsAroundDst
