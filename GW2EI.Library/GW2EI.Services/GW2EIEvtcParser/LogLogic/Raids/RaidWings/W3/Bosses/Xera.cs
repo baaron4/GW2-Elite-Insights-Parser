@@ -200,7 +200,7 @@ internal class Xera : StrongholdOfTheFaithful
                     phase2.AddParentPhase(encounterPhase);
                 }
                 phase2.AddTarget(xera, log);
-                phase2.AddTargets(targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
+                phase2.AddTargets(targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log, PhaseData.TargetPriority.Blocking);
                 //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                 phases.Add(phase2);
             }
