@@ -685,7 +685,7 @@ partial class CombatData
                 break;
             case StateChange.AgentInfo:
                 var agentInfoAgent = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
-                switch(agentInfoAgent.Spec)
+                switch (agentInfoAgent.Spec)
                 {
                     case Spec.NPC:
                         var npcInfoEvent = new NPCInfoEvent(stateChangeEvent, agentData, evtcVersion);
