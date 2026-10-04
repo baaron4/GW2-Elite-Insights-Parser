@@ -55,18 +55,32 @@
                                       Grid.Column="1"
                                       ColumnDefinitions="3*,Auto,1*">
 
-                                    <TextBox Grid.Column="0"
-                                             Text="{Binding SkillNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="Skill name"/>
+                                    <AutoCompleteBox
+                                        Grid.Column="0"
+                                        ItemsSource="{Binding SkillNameFilterItems}"
+                                        x:CompileBindings="False"
+                                        SelectedItem="{Binding SkillNameFilter, Mode=TwoWay}"
+                                        FilterMode="Contains"
+                                        MinimumPrefixLength="0"
+                                        IsTextCompletionEnabled="False"
+                                        PlaceholderText="Skill name"
+                                        GotFocus="Filter_GotFocus"/>
 
                                     <TextBlock Grid.Column="1"
                                                Text="ID"
                                                VerticalAlignment="Center"
                                                Margin="12,0,8,0"/>
 
-                                    <TextBox Grid.Column="2"
-                                             Text="{Binding SkillIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="Skill ID"/>
+                                    <AutoCompleteBox
+                                        Grid.Column="2"
+                                        ItemsSource="{Binding SkillIdFilterItems}"
+                                        x:CompileBindings="False"
+                                        SelectedItem="{Binding SkillIdFilter, Mode=TwoWay}"
+                                        FilterMode="Contains"
+                                        MinimumPrefixLength="0"
+                                        IsTextCompletionEnabled="False"
+                                        PlaceholderText="Skill ID"
+                                        GotFocus="Filter_GotFocus"/>
 
                                 </Grid>
 
@@ -81,19 +95,33 @@
                                       ColumnDefinitions="3*,Auto,1*"
                                       Margin="0,4,0,0">
 
-                                    <TextBox Grid.Column="0"
-                                             Text="{Binding GuidFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="GUID"
-                                             MaxLength="32"/>
+                                    <AutoCompleteBox
+                                        Grid.Column="0"
+                                        ItemsSource="{Binding GuidFilterItems}"
+                                        x:CompileBindings="False"
+                                        SelectedItem="{Binding GuidFilter, Mode=TwoWay}"
+                                        FilterMode="Contains"
+                                        MinimumPrefixLength="0"
+                                        IsTextCompletionEnabled="False"
+                                        PlaceholderText="GUID"
+                                        MaxLength="32"
+                                        GotFocus="Filter_GotFocus"/>
 
                                     <TextBlock Grid.Column="1"
                                                Text="ID"
                                                VerticalAlignment="Center"
                                                Margin="12,0,8,0"/>
 
-                                    <TextBox Grid.Column="2"
-                                             Text="{Binding GuidIdFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="Content ID"/>
+                                    <AutoCompleteBox
+                                        Grid.Column="2"
+                                        ItemsSource="{Binding GuidIdFilterItems}"
+                                        x:CompileBindings="False"
+                                        SelectedItem="{Binding GuidIdFilter, Mode=TwoWay}"
+                                        FilterMode="Contains"
+                                        MinimumPrefixLength="0"
+                                        IsTextCompletionEnabled="False"
+                                        PlaceholderText="Content ID"
+                                        GotFocus="Filter_GotFocus"/>
 
                                 </Grid>
 
@@ -120,7 +148,7 @@
                                         MinimumPrefixLength="0"
                                         IsTextCompletionEnabled="False"
                                         PlaceholderText="All agents"
-                                        GotFocus="AgentFilter_GotFocus">
+                                        GotFocus="Filter_GotFocus">
 
                                         <AutoCompleteBox.ItemTemplate>
                                             <DataTemplate x:DataType="inspectorContent:AgentFilterItem">
@@ -173,7 +201,7 @@
                                     IsTextCompletionEnabled="False"
                                     PlaceholderText="Gadget animation"
                                     Margin="0,4,0,0"
-                                    GotFocus="GadgetAnimationFilter_GotFocus"/>
+                                    GotFocus="Filter_GotFocus"/>
 
                             </Grid>
 

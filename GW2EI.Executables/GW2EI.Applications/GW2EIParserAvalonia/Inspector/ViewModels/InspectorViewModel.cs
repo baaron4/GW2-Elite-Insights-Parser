@@ -12,6 +12,7 @@ namespace GW2EIParserAvalonia.ViewModels;
 
 public partial class InspectorViewModel : ObservableObject
 {
+    internal bool DropdownFilterTriggered = false;
     #region COMBAT EVENTS
     [ObservableProperty]
     private EventModel? selectedEvent;
@@ -35,10 +36,9 @@ public partial class InspectorViewModel : ObservableObject
         CombatEventsView.Refresh();
         UpdateEventTypeCounts();
     }
-    internal bool AgentSelectFilterDropdownTriggered = false;
     private void CombatEventsViewRefresh(AgentFilterItem? oldValue, AgentFilterItem? newValue)
     {
-        if (AgentSelectFilterDropdownTriggered)
+        if (DropdownFilterTriggered)
         {
             return;
         }
@@ -52,16 +52,52 @@ public partial class InspectorViewModel : ObservableObject
 
     [ObservableProperty]
     private string? skillIdFilter;
-    partial void OnSkillIdFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
+    partial void OnSkillIdFilterChanged(string? oldValue, string? newValue)
+    {
+        if (DropdownFilterTriggered)
+        {
+            return;
+        }
+
+        CombatEventsViewRefresh(oldValue, newValue);
+    }
+    public IReadOnlyList<string> SkillIdFilterItems { get; private set; } = [];
     [ObservableProperty]
     private string? skillNameFilter;
-    partial void OnSkillNameFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
+    partial void OnSkillNameFilterChanged(string? oldValue, string? newValue)
+    {
+        if (DropdownFilterTriggered)
+        {
+            return;
+        }
+
+        CombatEventsViewRefresh(oldValue, newValue);
+    }
+    public IReadOnlyList<string> SkillNameFilterItems { get; private set; } = [];
     [ObservableProperty]
     private string? guidIdFilter;
-    partial void OnGuidIdFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
+    partial void OnGuidIdFilterChanged(string? oldValue, string? newValue)
+    {
+        if (DropdownFilterTriggered)
+        {
+            return;
+        }
+
+        CombatEventsViewRefresh(oldValue, newValue);
+    }
+    public IReadOnlyList<string> GuidIdFilterItems { get; private set; } = [];
     [ObservableProperty]
     private string? guidFilter;
-    partial void OnGuidFilterChanged(string? oldValue, string? newValue) => CombatEventsViewRefresh(oldValue, newValue);
+    partial void OnGuidFilterChanged(string? oldValue, string? newValue)
+    {
+        if (DropdownFilterTriggered)
+        {
+            return;
+        }
+
+        CombatEventsViewRefresh(oldValue, newValue);
+    }
+    public IReadOnlyList<string> GuidFilterItems { get; private set; } = [];
     [ObservableProperty]
     private string? agentSearchText;
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
@@ -419,10 +455,9 @@ public partial class InspectorViewModel : ObservableObject
     public IReadOnlyList<string> GadgetAnimationFilterItems { get; }
     [ObservableProperty]
     private string? gadgetDataFilter;
-    internal bool GadgetAnimationFilterDropdownTriggered = false;
     partial void OnGadgetDataFilterChanged(string? oldValue, string? newValue)
     {
-        if (GadgetAnimationFilterDropdownTriggered)
+        if (DropdownFilterTriggered)
         {
             return;
         }
@@ -531,6 +566,36 @@ public partial class InspectorViewModel : ObservableObject
         {
             eventModels[i].SourceIndex = i;
         }
+
+        SkillNameFilterItems = eventModels
+            .Where(x => !string.IsNullOrWhiteSpace(x.SkillName))
+            .Select(x => x.SkillName!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(x => x)
+            .ToList();
+
+        SkillIdFilterItems = eventModels
+            .Where(x => x.SkillId.HasValue)
+            .Select(x => x.SkillId!.Value)
+            .Distinct()
+            .OrderBy(x => x)
+            .Select(x => x.ToString())
+            .ToList();
+
+        GuidFilterItems = eventModels
+            .Where(x => !string.IsNullOrWhiteSpace(x.GUID))
+            .Select(x => x.GUID)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(x => x)
+            .ToList();
+
+        GuidIdFilterItems = eventModels
+            .Where(x => x.ContentID != 0)
+            .Select(x => x.ContentID)
+            .Distinct()
+            .OrderBy(x => x)
+            .Select(x => x.ToString())
+            .ToList();
 
         _allCombatEvents = eventModels;
         _combatEventsByType = eventModels

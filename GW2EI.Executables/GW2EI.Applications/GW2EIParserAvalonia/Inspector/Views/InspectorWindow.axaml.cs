@@ -83,38 +83,19 @@ public partial class InspectorWindow : Window
         await clipboard.SetTextAsync(model.ContentID.ToString());
     }
 
-    private async void AgentFilter_GotFocus(object? sender, RoutedEventArgs e)
+    private async void Filter_GotFocus(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not InspectorViewModel inspectorViewModel)
-        {
-            return;
-        }
-        if (sender is AutoCompleteBox autoCompleteBox)
-        {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                inspectorViewModel.AgentSelectFilterDropdownTriggered = true;
-                autoCompleteBox.IsDropDownOpen = true;
-                inspectorViewModel.AgentSelectFilterDropdownTriggered = false;
-            });
-        }
-    }
-
-    private async void GadgetAnimationFilter_GotFocus(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not InspectorViewModel inspectorViewModel)
+        if (sender is not AutoCompleteBox autoCompleteBox ||
+            DataContext is not InspectorViewModel inspectorViewModel)
         {
             return;
         }
 
-        if (sender is AutoCompleteBox autoCompleteBox)
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                inspectorViewModel.GadgetAnimationFilterDropdownTriggered = true;
-                autoCompleteBox.IsDropDownOpen = true;
-                inspectorViewModel.GadgetAnimationFilterDropdownTriggered = false;
-            });
-        }
+            inspectorViewModel.DropdownFilterTriggered = true;
+            autoCompleteBox.IsDropDownOpen = true;
+            inspectorViewModel.DropdownFilterTriggered = false;
+        });
     }
 }
