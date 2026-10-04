@@ -37,6 +37,7 @@ internal static class LogImages
     internal const string EncounterIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
     internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
     internal const string InstanceIconKinfall = "https://i.imgur.com/jJXcGeE.png";
+    internal const string InstanceIconSolitaryThrone = "https://i.imgur.com/gHUyQ9F.png";
 
     // Combat Replay Maps
     internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
@@ -54,6 +55,7 @@ internal static class LogImages
     internal const string CombatReplaySilentSurf = "https://wiki.guildwars2.com/images/f/f9/Silent_Surf_Fractal_map.jpg";
     internal const string CombatReplayEparch = "https://i.imgur.com/begYkfC.png";
     internal const string CombatReplayKinfall = "https://wiki.guildwars2.com/images/3/31/Kinfall_Fractal_map.jpg";
+    internal const string CombatReplaySolitaryThrone = "https://wiki.guildwars2.com/images/5/55/Solitary_Throne_Fractal_map.jpg";
 
     #endregion FRACTALS
 

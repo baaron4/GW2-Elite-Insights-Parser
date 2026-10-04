@@ -62,6 +62,7 @@ internal class EternalTyrant : SolitaryThrone
         MechanicList.Add(Mechanics);
         Extension = "tyrant";
         Icon = EncounterIconEternalTyrant;
+        GenericFallBackMethod = FallBackMethod.None;
         LogID |= 0x000001;
     }
 
@@ -101,40 +102,49 @@ internal class EternalTyrant : SolitaryThrone
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EternalTyrant)) ?? throw new MissingKeyActorsException("Eternal Tyrant not found");
     }
 
-    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
+    internal static LogData.Mode GetLogModeForEternalTyrant(SingleActor eternalTyrant, CombatData combatData)
     {
         const int healthT4 = 12_664_274;
         const int healthThreshold = healthT4 + 1_000_000;
 
         ulong build = combatData.GetGW2BuildEvent().Build;
-        var tyrant = GetEternalTyrant();
-        if (build > GW2Builds.September2026NexusOfEternitySolitaryThrone && tyrant.GetHealth(combatData) >= healthThreshold)
+        if (build > GW2Builds.September2026NexusOfEternitySolitaryThrone && eternalTyrant.GetHealth(combatData) >= healthThreshold)
         {
             return LogData.Mode.CM;
         }
         return LogData.Mode.Normal;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
+    internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         var tyrant = GetEternalTyrant();
-        var dead = combatData.GetDeadEvents(tyrant.AgentItem).FirstOrDefault();
-        var invulnEnd = combatData.GetBuffRemoveAllDataByIDByDst(InvulnerabilityEternalTyrant, tyrant.AgentItem).LastOrDefault();
+        return GetLogModeForEternalTyrant(tyrant, combatData);
+    }
+
+    internal static (bool success, long endTime) CheckSuccess(AgentItem eternalTyrant, CombatData combatData)
+    {
+        var dead = combatData.GetDeadEvents(eternalTyrant).FirstOrDefault();
+        var invulnEnd = combatData.GetBuffRemoveAllDataByIDByDst(InvulnerabilityEternalTyrant, eternalTyrant).LastOrDefault();
         if (dead != null)
         {
-            successHandler.SetSuccess(true, dead.Time);
-            return;
+            return (true, dead.Time);
         }
         else if (invulnEnd != null)
         {
-            var health = combatData.GetHealthUpdateEvents(tyrant.AgentItem).LastOrDefault(x => x.Time <= invulnEnd?.Time);
+            var health = combatData.GetHealthUpdateEvents(eternalTyrant).LastOrDefault(x => x.Time <= invulnEnd?.Time);
             if (health?.HealthPercent <= 1.0)
             {
-                successHandler.SetSuccess(true, invulnEnd.Time);
-                return;
+                return (true, invulnEnd.Time);
             }
         }
-        successHandler.SetSuccess(false, tyrant.LastAware);
+        return (false, eternalTyrant.LastAware);
+    }
+
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
+    {
+        var tyrant = GetEternalTyrant();
+        var (success, endTime) = CheckSuccess(tyrant.AgentItem, combatData);
+        successHandler.SetSuccess(success, endTime);
     }
 
     internal static IReadOnlyList<SubPhasePhaseData> ComputePhases(ParsedEvtcLog log, SingleActor tyrant, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
