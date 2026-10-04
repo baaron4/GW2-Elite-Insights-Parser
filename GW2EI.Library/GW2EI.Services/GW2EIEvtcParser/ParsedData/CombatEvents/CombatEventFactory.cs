@@ -684,8 +684,18 @@ partial class CombatData
                 Add(statusEvents.FlyToEventsBySrc, flyToEvent.Src, flyToEvent);
                 break;
             case StateChange.AgentInfo:
-                var agentInfoEvent = new AgentInfoEvent(stateChangeEvent, agentData, evtcVersion);
-                Add(_statusEvents.AgentInfoEventsBySrc, agentInfoEvent.Src, agentInfoEvent);
+                var agentInfoAgent = agentData.GetAgent(stateChangeEvent.SrcAgent, stateChangeEvent.Time);
+                switch(agentInfoAgent.Spec)
+                {
+                    case Spec.NPC:
+                        var npcInfoEvent = new NPCInfoEvent(stateChangeEvent, agentData, evtcVersion);
+                        Add(_statusEvents.NPCInfoEventsBySrc, npcInfoEvent.Src, npcInfoEvent);
+                        break;
+                    case Spec.Gadget:
+                        var gadgetInfoEvent = new GadgetInfoEvent(stateChangeEvent, agentData, evtcVersion);
+                        Add(_statusEvents.GadgetInfoEventsBySrc, gadgetInfoEvent.Src, gadgetInfoEvent);
+                        break;
+                }
                 break;
             default:
                 break;

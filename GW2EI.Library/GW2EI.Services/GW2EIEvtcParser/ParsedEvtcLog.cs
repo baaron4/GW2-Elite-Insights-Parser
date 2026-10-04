@@ -27,7 +27,7 @@ public class ParsedEvtcLog : EvtcLog
 
     private static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
-        var agentInfo = combatData.GetAgentInfoEvents(singleActor.AgentItem).FirstOrDefault();
+        var agentInfo = combatData.GetNPCInfoEvents(singleActor.AgentItem).FirstOrDefault();
         if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
         {
             if (agentInfo.IsVeteran)

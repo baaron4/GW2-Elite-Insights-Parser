@@ -400,7 +400,22 @@ partial class CombatData
     }
     public IReadOnlyList<AgentInfoEvent> GetAgentInfoEvents(AgentItem src)
     {
-        return GetTimeValueOrEmpty(_statusEvents.AgentInfoEventsBySrc, src.EnglobingAgentItem);
+        switch (src.Spec)
+        {
+            case Spec.NPC:
+                return GetNPCInfoEvents(src);
+            case Spec.Gadget:
+                return GetGadgetInfoEvents(src);
+        }
+        return [];
+    }
+    public IReadOnlyList<GadgetInfoEvent> GetGadgetInfoEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.GadgetInfoEventsBySrc, src.EnglobingAgentItem);
+    }
+    public IReadOnlyList<NPCInfoEvent> GetNPCInfoEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.NPCInfoEventsBySrc, src.EnglobingAgentItem);
     }
 
     #endregion INFO
