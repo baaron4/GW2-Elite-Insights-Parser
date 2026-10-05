@@ -153,7 +153,7 @@ internal class EternalTyrant : SolitaryThrone
         {
             return [];
         }
-        var phases = GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true);
+        var phases = GetSubPhasesByInvul(log, InvulnerabilityEternalTyrant, tyrant, true, true, encounterPhase.Start, encounterPhase.End);
         var finalCast = log.CombatData.GetAnimatedCastData(tyrant.AgentItem).FirstOrDefault(x => x.SkillID == CelestialImpactFinal);
         var constructs = targets.Where(x => x.IsSpecies(TargetID.ConstructOfGaldra));
         var sprites = targets.Where(x => x.IsSpecies(TargetID.RimeSprite));
