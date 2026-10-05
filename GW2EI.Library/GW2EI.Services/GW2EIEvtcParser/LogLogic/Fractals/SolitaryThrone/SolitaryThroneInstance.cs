@@ -30,7 +30,7 @@ internal class SolitaryThroneInstance : SolitaryThrone
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, CombatReplayMap? parentMap = null)
     {
-        var crMap = new CombatReplayMap((800, 960), (-9216, -9216, 12288, 12288));
+        var crMap = new CombatReplayMap((1053, 1053), (-9216, -9216, 12288, 12288));
         var parentCRMap = CombatReplayMap.CreateSquareMapFrom(crMap);
         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplaySolitaryThrone, crMap));
         _eternalTyrant.GetCombatMapInternal(log, arenaDecorations, parentCRMap);
