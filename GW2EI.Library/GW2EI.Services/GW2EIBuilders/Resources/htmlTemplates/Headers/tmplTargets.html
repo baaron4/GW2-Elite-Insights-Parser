@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex flex-row justify-content-center flex-wrap" :style="{'width': totalWidth}">
-        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 408px;">
+    <div class="d-flex flex-row justify-content-center flex-wrap" style="max-width: 650px; min-width: 450px;">
+        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" :style="{'max-width': totalWidths.targets}">
             <div v-for="target in mainTargets">
                 <img class="icon-lg mr-2 ml-2 target-cell" 
                     :src="getTargetData(target.id).icon" 
@@ -11,7 +11,7 @@
                 <target-data-component :targetid="target.id"></target-data-component>
             </div>
         </div>
-        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" style="max-width: 362px;">           
+        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" :style="{'max-width': totalWidths.subtargets}">           
             <div class="d-flex flex-row justify-content-center align-items-center flex-wrap">
                 <div v-for="target in secondaryTargets">
                     <img class=" icon-ll mr-2 ml-2 target-cell" 
@@ -46,19 +46,21 @@
         props: ["targets", "phaseindex"],
         template: `${template}`,
         computed: {
-            totalWidth: function() {
-                let totalWidth = Math.min(this.mainTargets.length, 5) * 80;
+            totalWidths: function() {
+                let targetsWidth = Math.min(this.mainTargets.length, 5) * 80;
+                let subtargetsWidth = 0;
                 if (this.secondaryTargets.length > 0) {
+                    let remainingWidth = 650 - targetsWidth;
                     // margin between main and secondary
-                    totalWidth += 40;
-                    if (this.secondaryTargets.length == 2) {
-                        // Select all/deselect all are bigger than 2 icons
-                        totalWidth += 210;
-                    } else {
-                        totalWidth += Math.min(this.secondaryTargets.length, 5) * 72;
-                    }
+                    remainingWidth -= 40;
+                    subtargetsWidth = remainingWidth;
+                } else {
+                    targetsWidth = 600;
                 }
-                return `${totalWidth}px`;
+                return {
+                    targets: `${targetsWidth}px`,
+                    subtargets: `${subtargetsWidth}px`,
+                }
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
