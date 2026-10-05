@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIEvtcParser;
@@ -11,11 +12,27 @@ using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.Views;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using GW2EIUpdater;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
 public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
+
+#if WINDOWS
+    internal const string AssetName = "GW2EI-win-x64.zip";
+#elif OSX
+    internal const string AssetName = "GW2EI-osx-x64.zip";
+#elif OSX_Arm
+    internal const string AssetName = "GW2EI-osx-arm64.zip";
+#elif LINUX_ARM
+    internal const string AssetName = "GW2EI-linux-arm64.zip";
+#elif LINUX
+    internal const string AssetName = "GW2EI-linux-x64.zip";
+#else
+    internal const string AssetName = "GW2EI-all.zip";
+#endif
+
     [ObservableProperty]
     private ObservableCollection<LogFileViewModel> logFiles = [];
     [ObservableProperty]
@@ -79,6 +96,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
         UpdateWatchDirectory();
         UpdateButtonStates();
+        UpdaterInitialCheck();
     }
 
     private void SettingsViewModel_SettingsApplied(object? sender, EventArgs e)
@@ -468,6 +486,31 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         {
             _trace.Add("Discord: Auto update Discord Batch failed " + ex.Message);
         }
+    }
+
+    private void UpdaterInitialCheck()
+    {
+#if DEBUG
+        long time = 0;
+#else 
+        long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+#endif
+        if (time - GW2EIParserCommons.Properties.Settings.Default.UpdateLastChecked > 3600)
+        {
+            GW2EIParserCommons.Properties.Settings.Default.UpdateLastChecked = time;
+            Task.Factory.StartNew(async () =>
+            {
+                List<string> traces = [];
+                Updater.UpdateInfo? info = await Updater.CheckForUpdate(AssetName, traces);
+                if (info != null)
+                {
+                    GW2EIParserCommons.Properties.Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
+                    UpdateVersionLabel(info.Value.UpdateAvailable);
+                }
+                traces.ForEach(x => _trace.Add("Updater: " + x));
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        UpdateVersionLabel(GW2EIParserCommons.Properties.Settings.Default.UpdateAvailable);
     }
 
     public void UpdateVersionLabel(bool isAvailable)
