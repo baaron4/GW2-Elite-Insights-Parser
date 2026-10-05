@@ -316,7 +316,7 @@ internal static class LogLogicUtils
             var position = MovementEvent.GetPoint3D(positionEvt).XY();
             foreach (var (suffix, expectedPosition) in positionData)
             {
-                if ((position - expectedPosition).LengthSquared() < maxDiff)
+                if ((position - expectedPosition).LengthSquared() < maxDiff * maxDiff)
                 {
                     target.OverrideName(target.Character + " " + suffix);
                     return suffix;
