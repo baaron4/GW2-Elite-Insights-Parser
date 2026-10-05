@@ -55,6 +55,10 @@ internal class SolitaryThroneInstance : SolitaryThrone
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.EternalTyrant, out var eternalTyrants))
         {
+            if (!targetsByIDs.TryGetValue((int)TargetID.ConstructOfGaldra, out var constructs))
+            {
+                constructs = [];
+            }
             foreach (var eternalTyrant in eternalTyrants)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(eternalTyrant.AgentItem).FirstOrDefault();
@@ -64,7 +68,7 @@ internal class SolitaryThroneInstance : SolitaryThrone
                     var (success, end) = EternalTyrant.CheckSuccess(eternalTyrant.AgentItem, log.CombatData);
                     var name = "Eternal Tyrant";
                     var mode = EternalTyrant.GetLogModeForEternalTyrant(eternalTyrant, log.CombatData);
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [eternalTyrant], [], [], mainPhase, name, start, end, success, _eternalTyrant, mode);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [eternalTyrant], constructs, [], mainPhase, name, start, end, success, _eternalTyrant, mode);
                 }
             }
         }
