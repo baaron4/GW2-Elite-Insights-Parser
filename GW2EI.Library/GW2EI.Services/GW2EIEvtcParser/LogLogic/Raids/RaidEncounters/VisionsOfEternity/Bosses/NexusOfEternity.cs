@@ -636,18 +636,19 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             if (encounterPhase.Success && encounterPhase.IsCM)
             {
                 double stacks = 99;
-                var vloxx = encounterPhase.Targets.FirstOrDefault(x => x.Key.IsSpecies(TargetID.Vloxx)).Key;
-                if (vloxx != null)
+                var vloxx = encounterPhase.Targets.First(x => x.Key.IsSpecies(TargetID.Vloxx)).Key;
+                var death = log.CombatData.GetDeadEvents(vloxx.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
+                if (death != null)
                 {
-                    var death = log.CombatData.GetDeadEvents(vloxx.AgentItem).FirstOrDefault(x => x.Time > encounterPhase.Start && x.Time <= encounterPhase.End);
-                    if (death != null)
-                    {
-                        stacks = vloxx.GetBuffStatus(log, EmpoweredNexusOfEternity, death.Time - ServerDelayConstant).Value;
-                    }
-                    if (stacks < 10)
-                    {
-                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityTrueVisionary], 1, encounterPhase));
-                    }
+                    stacks = vloxx.GetBuffStatus(log, EmpoweredNexusOfEternity, death.Time - 50).Value;
+                }
+                else
+                {
+                    stacks = vloxx.GetBuffStatus(log, EmpoweredNexusOfEternity, encounterPhase.End - 50).Value;
+                }
+                if (stacks < 10)
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityAShatteredVision], 1, encounterPhase));
                 }
             }
         }

@@ -773,7 +773,7 @@ internal static class EncounterBuffs
             new Buff("Empowered (Nexus of Eternity)", EmpoweredNexusOfEternity, Source.EncounterSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaatOverseer),
             new Buff("Ascension", Ascension, Source.EncounterSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Ascension),
             new Buff("Damage Immunity", DamageImmunity, Source.EncounterSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
-            new Buff("Achievement Eligibility: True Visionary", AchievementEligibilityTrueVisionary, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: A Shattered Vision", AchievementEligibilityAShatteredVision, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Convergences
             // - Outer Nayos
             new Buff("Unstable Attunement (SotO)", UnstableAttunementSotO, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.DebilitatingVoid),
