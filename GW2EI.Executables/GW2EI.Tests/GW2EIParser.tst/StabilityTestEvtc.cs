@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIParserCommons.Exceptions;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
@@ -112,17 +112,7 @@ internal class StabilityTestEvtc
         }
 
         using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
-        using var sw = new StreamWriter(fs, TestHelper.NoBOMEncodingUTF8);
-        var serializer = new JsonSerializer
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = TestHelper.DefaultJsonContractResolver
-        };
-        using var writer = new JsonTextWriter(sw)
-        {
-            Formatting = Formatting.Indented
-        };
-        serializer.Serialize(writer, dict);
+        JsonSerializer.Serialize(fs, dict);
     }
 
 

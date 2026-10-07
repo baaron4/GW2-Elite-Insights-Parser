@@ -503,21 +503,13 @@ public sealed class ProgramHelper : IDisposable
                 DetailedWvWParse = true,
             },
                                         APIController);
-            EvtcLog? inspectLog;
             ParsingFailureReason? failureReason;
-            switch (inspectMode)
+            EvtcLog? inspectLog = inspectMode switch
             {
-                case InspectionMode.Raw:
-                default:
-                    inspectLog = parser.ParseRawLog(operation, fInfo, out failureReason, false);
-                    break;
-                case InspectionMode.EI:
-                    inspectLog = parser.ParseLog(operation, fInfo, out failureReason, false);
-                    break;
-                case InspectionMode.RawWithEIPreProcess:
-                    inspectLog = parser.ParseRawLog(operation, fInfo, out failureReason, true);
-                    break;
-            }
+                InspectionMode.EI => parser.ParseLog(operation, fInfo, out failureReason, false),
+                InspectionMode.RawWithEIPreProcess => parser.ParseRawLog(operation, fInfo, out failureReason, true),
+                _ => parser.ParseRawLog(operation, fInfo, out failureReason, false),
+            };
             failureReason?.Throw();
             return inspectLog;
         }

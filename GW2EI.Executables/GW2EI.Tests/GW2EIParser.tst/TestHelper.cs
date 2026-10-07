@@ -1,20 +1,15 @@
 ﻿using System.Text;
+using System.Text.Json;
 using GW2EIBuilders;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
 using GW2EIJSON;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.tst;
 
 internal static class TestHelper
 {
     internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
-    internal static readonly DefaultContractResolver DefaultJsonContractResolver = new()
-    {
-        NamingStrategy = new CamelCaseNamingStrategy()
-    };
     private static readonly Version Version = new(1, 0);
     public static readonly EvtcParserSettings ParserSettings = new(2200, 150)
     {
@@ -89,118 +84,115 @@ internal static class TestHelper
     }
 
     ///////////////////////////////////////
-    ///
-
-    //https://stackoverflow.com/questions/24876082/find-and-return-json-differences-using-newtonsoft-in-c
-
-    /// <summary>
-    /// Deep compare two NewtonSoft JObjects. If they don't match, returns text diffs
-    /// </summary>
-    /// <param name="source">The expected results</param>
-    /// <param name="target">The actual results</param>
-    /// <returns>Text string</returns>
-
-    public static StringBuilder CompareObjects(JObject source, JObject target)
+    /// Thanks gemini
+    public static List<string> Compare(string json1, string json2)
     {
-        var returnString = new StringBuilder();
-        foreach (var sourcePair in source)
-        {
-            if (sourcePair.Value!.Type == JTokenType.Object)
-            {
-                if (target.GetValue(sourcePair.Key) == null)
-                {
-                    returnString.Append("Key " + sourcePair.Key
-                                        + " not found" + Environment.NewLine);
-                }
-                else if (target.GetValue(sourcePair.Key)!.Type != JTokenType.Object)
-                {
-                    returnString.Append("Key " + sourcePair.Key
-                                        + " is not an object in target" + Environment.NewLine);
-                }
-                else
-                {
-                    returnString.Append(CompareObjects(sourcePair.Value.ToObject<JObject>()!,
-                        target.GetValue(sourcePair.Key)!.ToObject<JObject>()!));
-                }
-            }
-            else if (sourcePair.Value.Type == JTokenType.Array)
-            {
-                if (target.GetValue(sourcePair.Key) == null)
-                {
-                    returnString.Append("Key " + sourcePair.Key
-                                        + " not found" + Environment.NewLine);
-                }
-                else
-                {
-                    returnString.Append(CompareArrays(sourcePair.Value.ToObject<JArray>()!,
-                        target.GetValue(sourcePair.Key)!.ToObject<JArray>()!, sourcePair.Key));
-                }
-            }
-            else
-            {
-                JToken expected = sourcePair.Value;
-                JToken? actual = target.SelectToken("['" + sourcePair.Key + "']");
-                if (actual == null)
-                {
-                    returnString.Append("Key " + sourcePair.Key
-                                        + " not found" + Environment.NewLine);
-                }
-                else
-                {
-                    if (!JToken.DeepEquals(expected, actual))
-                    {
-                        returnString.Append("Key " + sourcePair.Key + ": "
-                                            + sourcePair.Value + " !=  "
-                                            + target.Property(sourcePair.Key)!.Value
-                                            + Environment.NewLine);
-                    }
-                }
-            }
-        }
-        return returnString;
+        using var doc1 = JsonDocument.Parse(json1);
+        using var doc2 = JsonDocument.Parse(json2);
+
+        var differences = new List<string>();
+        CompareElements(doc1.RootElement, doc2.RootElement, "$", differences);
+        return differences;
     }
 
-    /// <summary>
-    /// Deep compare two NewtonSoft JArrays. If they don't match, returns text diffs
-    /// </summary>
-    /// <param name="source">The expected results</param>
-    /// <param name="target">The actual results</param>
-    /// <param name="arrayName">The name of the array to use in the text diff</param>
-    /// <returns>Text string</returns>
-    public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
+    private static void CompareElements(JsonElement e1, JsonElement e2, string path, List<string> diffs)
     {
-        var returnString = new StringBuilder();
-        for (int index = 0; index < source.Count; index++)
+        if (e1.ValueKind != e2.ValueKind)
         {
+            diffs.Add($"Mismatch at {path}: Kind '{e1.ValueKind}' != '{e2.ValueKind}'");
+            return;
+        }
 
-            JToken expected = source[index];
-            if (expected.Type == JTokenType.Object)
+        switch (e1.ValueKind)
+        {
+            case JsonValueKind.Object:
+                CompareObjects(e1, e2, path, diffs);
+                break;
+
+            case JsonValueKind.Array:
+                CompareArrays(e1, e2, path, diffs);
+                break;
+
+            case JsonValueKind.String:
+                if (e1.GetString() != e2.GetString())
+                {
+                    diffs.Add($"Value mismatch at {path}: '{e1.GetString()}' != '{e2.GetString()}'");
+                }
+
+                break;
+
+            case JsonValueKind.Number:
+                if (e1.GetRawText() != e2.GetRawText())
+                {
+                    diffs.Add($"Value mismatch at {path}: {e1.GetRawText()} != {e2.GetRawText()}");
+                }
+
+                break;
+
+            case JsonValueKind.True:
+            case JsonValueKind.False:
+                if (e1.GetBoolean() != e2.GetBoolean())
+                {
+                    diffs.Add($"Value mismatch at {path}: {e1.GetBoolean()} != {e2.GetBoolean()}");
+                }
+
+                break;
+
+            case JsonValueKind.Null:
+            case JsonValueKind.Undefined:
+                break;
+        }
+    }
+
+    private static void CompareObjects(JsonElement obj1, JsonElement obj2, string path, List<string> diffs)
+    {
+        var props2 = new Dictionary<string, JsonElement>();
+        foreach (var prop in obj2.EnumerateObject())
+        {
+            props2[prop.Name] = prop.Value;
+        }
+
+        var visitedProps = new HashSet<string>();
+
+        foreach (var prop1 in obj1.EnumerateObject())
+        {
+            visitedProps.Add(prop1.Name);
+            string currentPath = $"{path}.{prop1.Name}";
+
+            if (props2.TryGetValue(prop1.Name, out var value2))
             {
-                JToken actual = (index >= target.Count) ? new JObject() : target[index];
-                returnString.Append(CompareObjects(expected.ToObject<JObject>()!,
-                    actual.ToObject<JObject>()!));
+                CompareElements(prop1.Value, value2, currentPath, diffs);
             }
             else
             {
-
-                JToken actual = (index >= target.Count) ? "" : target[index];
-                if (!JToken.DeepEquals(expected, actual))
-                {
-                    if (string.IsNullOrEmpty(arrayName))
-                    {
-                        returnString.Append("Index " + index + ": " + expected
-                                            + " != " + actual + Environment.NewLine);
-                    }
-                    else
-                    {
-                        returnString.Append("Key " + arrayName
-                                            + "[" + index + "]: " + expected
-                                            + " != " + actual + Environment.NewLine);
-                    }
-                }
+                diffs.Add($"Missing key at {path}: Property '{prop1.Name}' found in first object but missing in second.");
             }
         }
-        return returnString;
+
+        foreach (var prop2 in obj2.EnumerateObject())
+        {
+            if (!visitedProps.Contains(prop2.Name))
+            {
+                diffs.Add($"Extra key at {path}: Property '{prop2.Name}' found in second object but missing in first.");
+            }
+        }
+    }
+
+    private static void CompareArrays(JsonElement arr1, JsonElement arr2, string path, List<string> diffs)
+    {
+        int len1 = arr1.GetArrayLength();
+        int len2 = arr2.GetArrayLength();
+
+        if (len1 != len2)
+        {
+            diffs.Add($"Array length mismatch at {path}: First has {len1} items, second has {len2} items.");
+        }
+
+        int minLen = Math.Min(len1, len2);
+        for (int i = 0; i < minLen; i++)
+        {
+            CompareElements(arr1[i], arr2[i], $"{path}[{i}]", diffs);
+        }
     }
 
 }

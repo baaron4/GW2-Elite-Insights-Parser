@@ -7,7 +7,7 @@ namespace GW2EIBuilders;
 
 public class RawFormatBuilder
 {
-    private JsonLog _jsonLog;
+    private readonly JsonLog _jsonLog;
 
     public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadResults)
     {
