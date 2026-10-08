@@ -5,7 +5,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using GW2EIEvtcParser;
-using GW2EIParserAvalonia.Models;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.ViewModels;
 
