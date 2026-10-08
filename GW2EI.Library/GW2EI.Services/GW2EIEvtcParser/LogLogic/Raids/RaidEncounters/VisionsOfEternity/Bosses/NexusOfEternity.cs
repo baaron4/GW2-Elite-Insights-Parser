@@ -764,8 +764,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 for (var i = swingStart; i < swings.Count; i++)
                 {
                     var swingToTest = swings[i];
-                    if (swingToTest.Time >= lifespan.start && 
-                        swingToTest.Time < lifespan.end && 
+                    if (swingToTest.Time >= lifespan.start &&
+                        swingToTest.Time < lifespan.end &&
                         (swingToTest.Position.XY() - effect.Position.XY()).LengthSquared() < 10)
                     {
                         swingStart = i + 1;
@@ -888,7 +888,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         // Division Eternal - Big rectangle
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
         {
-            long divisionEternalDuration = 3000; 
+            long divisionEternalDuration = 3000;
             if (!log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing, out var groupedSwings, divisionEternalDuration))
             {
                 groupedSwings = [];
