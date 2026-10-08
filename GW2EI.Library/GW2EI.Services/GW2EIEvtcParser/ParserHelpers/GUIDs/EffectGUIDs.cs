@@ -1174,9 +1174,9 @@ public static class EffectGUIDs
     //public static readonly Guid NexusOfEternityUndefined1 = new("29E4FF27335CD045962342511841CBCA"); // duration 3333
     //public static readonly Guid NexusOfEternityUndefined2 = new("71D5D17395B8834086033B0F0AF245E4"); // duration 3033
     public static readonly Guid NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator = new("A5962B65A450534EA76BDEE374C2708B"); // src vloxx and sunderer, duration 1500/2500, echoing blade, excision extremis, echoing attack
-    public static readonly Guid NexusOfEternityVloxxEchoingBladeSwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
-    public static readonly Guid NexusOfEternityVloxxExcisionExtremisDivisionEternalSwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833, echoing blade, excision extremis, division eternal
-    public static readonly Guid NexusOfEternityChampionSundererEchoingAttackExcisionSwordSwing = new("F2485AEE8C0CE64D90AFE149D9C88C86"); // src sunderer, duration 833, echoing attack, excision
+    public static readonly Guid NexusOfEternityVloxxEchoingBlade_SwordSwing = new("40EF37BFC16E2744865BBFDD8DC748DF"); // src vloxx, duration 1000
+    public static readonly Guid NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing = new("B486884192085E4BB45FF076F994B0B6"); // src vloxx, duration 833, echoing blade, excision extremis, division eternal
+    public static readonly Guid NexusOfEternityChampionSundererAndAspectSword_EchoingAttack_Excision_SwordSwing = new("F2485AEE8C0CE64D90AFE149D9C88C86"); // src sunderer, duration 833, echoing attack, excision
     public static readonly Guid NexusOfEternityDivisionEternalIndicator = new("5614D57DBA8E1B43A97EB03D904D5B89"); // src vloxx, duration 3000
     public static readonly Guid NexusOfEternityVloxxStaffBigConeIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D"); // src vloxx, duration 8000, has dynamic end // TODO VERIFY THIS
     public static readonly Guid NexusOfEternityVisionsOfEternityIndicator = new("4B6532EC3792184DA4CAF258E1E9E45D");
