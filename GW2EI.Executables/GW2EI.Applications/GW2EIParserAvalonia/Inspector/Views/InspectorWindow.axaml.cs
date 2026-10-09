@@ -5,7 +5,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using GW2EIEvtcParser;
-using GW2EIParserAvalonia.Models;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.ViewModels;
 
@@ -51,36 +50,19 @@ public partial class InspectorWindow : Window
         }
     }
 
-    private async void CopyGuid_Click(object? sender, RoutedEventArgs e)
+    private async void CopyValue_Click(object? sender, RoutedEventArgs e)
     {
-        if (sender is not MenuItem menuItem || menuItem.CommandParameter is not ContentGUIDModel model)
+        if (sender is not MenuItem { CommandParameter: { } value })
         {
             return;
         }
 
         var clipboard = GetTopLevel(this)?.Clipboard;
-        if (clipboard is null)
+
+        if (clipboard is not null)
         {
-            return;
+            await clipboard.SetTextAsync(value.ToString() ?? string.Empty);
         }
-
-        await clipboard.SetTextAsync(model.GUID.ToString());
-    }
-
-    private async void CopyContentId_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not MenuItem menuItem || menuItem.CommandParameter is not ContentGUIDModel model)
-        {
-            return;
-        }
-
-        var clipboard = GetTopLevel(this)?.Clipboard;
-        if (clipboard is null)
-        {
-            return;
-        }
-
-        await clipboard.SetTextAsync(model.ContentID.ToString());
     }
 
     private async void Filter_GotFocus(object? sender, RoutedEventArgs e)

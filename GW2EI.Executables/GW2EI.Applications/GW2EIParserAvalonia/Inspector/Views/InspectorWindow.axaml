@@ -21,8 +21,11 @@
         <TabControl>
 
             <TabControl.Styles>
-
                 <Style Selector="TabItem">
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="MinHeight" Value="32"/>
+                    <Setter Property="Padding" Value="7,0"/>
                     <Setter Property="BorderBrush" Value="#444"/>
                     <Setter Property="BorderThickness" Value="0,0,1,0"/>
                 </Style>
@@ -53,7 +56,7 @@
 
                                 <Grid Grid.Row="0"
                                       Grid.Column="1"
-                                      ColumnDefinitions="3*,Auto,1*">
+                                      ColumnDefinitions="5*,40,1.5*">
 
                                     <AutoCompleteBox
                                         Grid.Column="0"
@@ -66,10 +69,12 @@
                                         PlaceholderText="Skill name"
                                         GotFocus="Filter_GotFocus"/>
 
-                                    <TextBlock Grid.Column="1"
-                                               Text="ID"
-                                               VerticalAlignment="Center"
-                                               Margin="12,0,8,0"/>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Text="ID"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="8,0,0,0"/>
 
                                     <AutoCompleteBox
                                         Grid.Column="2"
@@ -92,7 +97,7 @@
 
                                 <Grid Grid.Row="1"
                                       Grid.Column="1"
-                                      ColumnDefinitions="3*,Auto,1*"
+                                      ColumnDefinitions="5*,40,1.5*"
                                       Margin="0,4,0,0">
 
                                     <AutoCompleteBox
@@ -107,10 +112,12 @@
                                         MaxLength="32"
                                         GotFocus="Filter_GotFocus"/>
 
-                                    <TextBlock Grid.Column="1"
-                                               Text="ID"
-                                               VerticalAlignment="Center"
-                                               Margin="12,0,8,0"/>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Text="ID"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="8,0,0,0"/>
 
                                     <AutoCompleteBox
                                         Grid.Column="2"
@@ -135,7 +142,7 @@
                                 <Grid
                                     Grid.Row="2"
                                     Grid.Column="1"
-                                    ColumnDefinitions="*,Auto,Auto"
+                                    ColumnDefinitions="5*,40,1.5*"
                                     Margin="0,4,0,0">
 
                                     <AutoCompleteBox
@@ -173,13 +180,18 @@
                                         Grid.Column="1"
                                         Text="BY"
                                         VerticalAlignment="Center"
-                                        Margin="12,0,8,0"/>
+                                        HorizontalAlignment="Left"
+                                        Margin="8,0,0,0"/>
 
                                     <ComboBox
                                         Grid.Column="2"
                                         ItemsSource="{Binding AgentFilterRoles}"
                                         SelectedItem="{Binding SelectedAgentFilterRole, Mode=TwoWay}"
-                                        Width="110"/>
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Padding="8,0"/>
 
                                 </Grid>
 
@@ -323,8 +335,7 @@
 
                                 <TextBlock Text="{Binding SelectedEvent.Type}"
                                            FontSize="18"
-                                           FontWeight="Bold"
-                                           TextTrimming="CharacterEllipsis"/>
+                                           FontWeight="Bold"/>
 
                                 <TextBlock Grid.Column="1"
                                            Text="{Binding SelectedEvent.Time}"
@@ -342,9 +353,17 @@
 
                                     <TreeDataTemplate ItemsSource="{Binding Children}">
 
-                                        <Grid ColumnDefinitions="180,130,*"
+                                        <Grid ColumnDefinitions="300,*"
                                               MinHeight="24"
                                               Margin="2">
+
+                                            <Grid.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Value"
+                                                              Click="CopyValue_Click"
+                                                              CommandParameter="{Binding Value}"/>
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
 
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="SemiBold"
@@ -353,8 +372,7 @@
 
                                             <TextBlock Grid.Column="2"
                                                        Text="{Binding Value}"
-                                                       VerticalAlignment="Center"
-                                                       TextTrimming="CharacterEllipsis"/>
+                                                       VerticalAlignment="Center"/>
 
                                         </Grid>
 
@@ -407,12 +425,28 @@
                                 <DataGridTextColumn
                                     Binding="{Binding ID}"
                                     Width="Auto">
+
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy ID"
+                                                              Click="CopyValue_Click"
+                                                              CommandParameter="{Binding ID}"/>
+                                                </ContextMenu>
+                                            </Setter>
+
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="ID" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpeciesFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Species..."
+                                                         PlaceholderText="Filter Species"
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -426,12 +460,28 @@
                                 <DataGridTextColumn
                                     Binding="{Binding Name}"
                                     Width="Auto">
+
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Name"
+                                                              Click="CopyValue_Click"
+                                                              CommandParameter="{Binding Name}"/>
+                                                </ContextMenu>
+                                            </Setter>
+
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Name" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Name..."
+                                                         PlaceholderText="Filter Name"
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -446,7 +496,7 @@
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Type" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentTypeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Type..."
+                                                         PlaceholderText="Filter Type"
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -465,7 +515,7 @@
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Spec" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Spec..."
+                                                         PlaceholderText="Filter Spec"
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -480,7 +530,7 @@
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Base Spec" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).AgentBaseSpecFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Base Spec..."
+                                                         PlaceholderText="Filter Base Spec"
                                                          />
                                             </StackPanel>
                                         </DataTemplate>
@@ -518,6 +568,14 @@
                                             <Grid ColumnDefinitions="180,130,*"
                                                   MinHeight="24"
                                                   Margin="2">
+
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Value"
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding Value}"/>
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
 
                                                 <TextBlock Text="{Binding Name}"
                                                            FontWeight="SemiBold"
@@ -577,7 +635,24 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID"
                                                     Binding="{Binding ID}"
-                                                    Width="Auto"/>
+                                                    Width="Auto">
+
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy ID"
+                                                              Click="CopyValue_Click"
+                                                              CommandParameter="{Binding ID}"/>
+                                                </ContextMenu>
+                                            </Setter>
+
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+
+                                </DataGridTextColumn>
 
                                 <DataGridTemplateColumn Header="Icon"
                                                         Width="60"
@@ -597,12 +672,28 @@
                                 <DataGridTextColumn
                                     Binding="{Binding Name}"
                                     Width="Auto">
+
+                                    <DataGridTextColumn.CellTheme>
+                                        <ControlTheme TargetType="DataGridCell"
+                                                      BasedOn="{StaticResource {x:Type DataGridCell}}">
+
+                                            <Setter Property="ContextMenu">
+                                                <ContextMenu>
+                                                    <MenuItem Header="Copy Name"
+                                                              Click="CopyValue_Click"
+                                                              CommandParameter="{Binding Name}"/>
+                                                </ContextMenu>
+                                            </Setter>
+
+                                        </ControlTheme>
+                                    </DataGridTextColumn.CellTheme>
+
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="4">
                                                 <TextBlock Text="Name" />
                                                 <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).SkillDataNameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="Filter Skill Name..." />
+                                                         PlaceholderText="Filter Skill Name" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
@@ -645,6 +736,14 @@
                                             <Grid ColumnDefinitions="180,130,*"
                                                   MinHeight="24"
                                                   Margin="2">
+
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Copy Value"
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding Value}"/>
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
 
                                                 <TextBlock Text="{Binding Name}"
                                                            FontWeight="SemiBold"
@@ -728,8 +827,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -749,8 +848,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -787,8 +886,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -808,8 +907,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -846,8 +945,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -863,8 +962,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -901,8 +1000,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -918,8 +1017,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -956,8 +1055,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -973,8 +1072,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -1011,8 +1110,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -1028,8 +1127,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -1066,8 +1165,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy Content ID"
-                                                                  Click="CopyContentId_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding ContentID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -1083,8 +1182,8 @@
                                                 <Setter Property="ContextMenu">
                                                     <ContextMenu>
                                                         <MenuItem Header="Copy GUID"
-                                                                  Click="CopyGuid_Click"
-                                                                  CommandParameter="{Binding}" />
+                                                                  Click="CopyValue_Click"
+                                                                  CommandParameter="{Binding GUID}" />
                                                     </ContextMenu>
                                                 </Setter>
                                             </ControlTheme>
@@ -1119,7 +1218,24 @@
 
                         <DataGridTextColumn Header="Data"
                                             Binding="{Binding Data}"
-                                            Width="*"/>
+                                            Width="*">
+
+                            <DataGridTextColumn.CellTheme>
+                                <ControlTheme TargetType="DataGridCell"
+                                              BasedOn="{StaticResource {x:Type DataGridCell}}">
+
+                                    <Setter Property="ContextMenu">
+                                        <ContextMenu>
+                                            <MenuItem Header="Copy Data"
+                                                      Click="CopyValue_Click"
+                                                      CommandParameter="{Binding Data}"/>
+                                        </ContextMenu>
+                                    </Setter>
+
+                                </ControlTheme>
+                            </DataGridTextColumn.CellTheme>
+
+                        </DataGridTextColumn>
 
                     </DataGrid.Columns>
 
@@ -1174,8 +1290,7 @@
                                         <StackPanel Spacing="4">
                                             <TextBlock Text="State Change" />
                                             <TextBox Text="{Binding #InspectorView.((vm:InspectorViewModel)DataContext).StateChangeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     PlaceholderText="Filter State Change..."
-                                                     Width="220" />
+                                                     PlaceholderText="Filter State Change" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTextColumn.HeaderTemplate>
