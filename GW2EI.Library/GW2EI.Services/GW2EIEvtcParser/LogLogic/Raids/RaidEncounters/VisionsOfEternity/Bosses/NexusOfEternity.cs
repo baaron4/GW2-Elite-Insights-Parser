@@ -531,10 +531,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
 
-                AddDivisionEternal(log, replay, target.AgentItem);
+                var usedVloxxSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityVloxxEchoingBlade_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
+                AddDivisionEternal(log, replay, target.AgentItem, usedVloxxSwings);
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
-                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityVloxxEchoingBlade_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
                 AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
                 AddRagingStorm(log, replay, target.AgentItem);
                 break;
@@ -558,8 +558,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 }
                 break;
             case (int)TargetID.ChampionAspectOfTheSword:
-                AddDivisionEternal(log, replay, target.AgentItem);
-                AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityChampionSundererAndAspectSword_EchoingAttack_Excision_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
+                var usedAspectSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityChampionSundererAndAspectSword_EchoingAttack_Excision_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
+                AddDivisionEternal(log, replay, target.AgentItem, usedAspectSwings);
                 break;
             case (int)TargetID.EliteCosmicPiercer:
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);
@@ -739,8 +739,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddEchoingBladeExcisionExtremisIndicators(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, ReadOnlySpan<Guid> swingGUIDs)
+    private static HashSet<EffectEvent> AddEchoingBladeExcisionExtremisIndicators(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, ReadOnlySpan<Guid> swingGUIDs)
     {
+        var usedEvents = new HashSet<EffectEvent>();
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityVloxxEchoingBladeExcisionExtremisIndicator, out var echoingBladeIndicator))
         {
             if (!log.CombatData.TryGetEffectEventsBySrcWithGUIDs(agent, swingGUIDs, out var swings))
@@ -748,7 +749,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 swings = [];
             }
             swings.SortByTime();
-            int swingStart = 0;
+            var availableSwings = swings.ToHashSet();
             foreach (var effect in echoingBladeIndicator)
             {
                 // Base radius 200
@@ -761,14 +762,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var pie = (PieDecoration)new PieDecoration(radius, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(angle));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
-                for (var i = swingStart; i < swings.Count; i++)
+                foreach (var swingToTest in availableSwings)
                 {
-                    var swingToTest = swings[i];
-                    if (swingToTest.Time >= lifespan.start && 
-                        swingToTest.Time < lifespan.end && 
+                    if (swingToTest.Time >= lifespan.start &&
+                        swingToTest.Time < lifespan.end &&
                         (swingToTest.Position.XY() - effect.Position.XY()).LengthSquared() < 10)
                     {
-                        swingStart = i + 1;
                         // Echoing Blade - Duration 1000 - Vloxx
                         // Echoing Attack, Excision - Duration 833 - Sunderer
                         // Excision Extremis - Duration 833 - Vloxx
@@ -779,11 +778,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             .WithOffset(new(-swordRadius * 0.5f + 40, 0, 0), true); // hilt and tip overflow a little on both sides
                         var line = new RectangleDecoration(swordRadius, 10, lifespan, Colors.Blue, 0.4, swingConnector).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z, -180));
                         replay.Decorations.Add(line);
+                        availableSwings.Remove(swingToTest);
+                        usedEvents.Add(swingToTest);
                         break;
                     }
                 }
             }
         }
+        return usedEvents;
     }
 
     private static void AddThousandStrikes(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, long skill)
@@ -883,35 +885,49 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddDivisionEternal(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
+    private static void AddDivisionEternal(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, IReadOnlyCollection<EffectEvent> toIgnore)
     {
         // Division Eternal - Big rectangle
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityDivisionEternalIndicator, out var divisionEternals))
         {
-            long divisionEternalDuration = 3000; 
-            if (!log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing, out var groupedSwings, divisionEternalDuration))
+            long divisionEternalDuration = 3000;
+
+            if (!log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing, out var swings))
             {
-                groupedSwings = [];
+                swings = [];
             }
             var swingStart = 0;
             foreach (var effect in divisionEternals)
             {
                 // Note: Length of the rectangle is the same for Vloxx and Sword, Vloxx has 8 swings, the Sword 6.
-                (long start, long end) lifespan = effect.ComputeLifespan(log, divisionEternalDuration);
-                var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                (long start, long end) lifespanRectangle = effect.ComputeLifespan(log, divisionEternalDuration);
+                var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespanRectangle, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
-                for (var i = swingStart; i < groupedSwings.Count; i++)
+                for (var i = swingStart; i < swings.Count; i++)
                 {
-                    var swordSwings = groupedSwings[i];
-                    var firstSwing = swordSwings[0];
-                    if (firstSwing.Time > lifespan.start && firstSwing.Time + firstSwing.Duration < lifespan.end)
+                    var firstSwing = swings[i];
+                    if (toIgnore.Contains(firstSwing))
+                    {
+                        continue;
+                    }
+                    if (firstSwing.Time > lifespanRectangle.start && firstSwing.Time + firstSwing.Duration < lifespanRectangle.end)
                     {
                         swingStart = i + 1;
                         // Division Eternal - Duration 833 - Vloxx & Sword
-                        foreach (var swordSwing in swordSwings)
+                        for (var j = i; j < swings.Count; j++)
                         {
-                            lifespan = swordSwing.ComputeLifespan(log, swordSwing.Duration);
-                            var line = new RectangleDecoration(500, 10, lifespan, Colors.Blue, 0.4, new PositionConnector(swordSwing.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 90, -180));
+                            var swordSwing = swings[j];
+                            if (toIgnore.Contains(swordSwing))
+                            {
+                                continue;
+                            }
+                            var lifespanSwing = swordSwing.ComputeLifespan(log, swordSwing.Duration);
+                            if (lifespanSwing.start > lifespanRectangle.end)
+                            {
+                                swingStart = j;
+                                break;
+                            }
+                            var line = new RectangleDecoration(500, 10, lifespanSwing, Colors.Blue, 0.4, new PositionConnector(swordSwing.Position).WithOffset(new(-300, 0, 0), true)).UsingRotationConnector(new SpinningConnector(effect.Rotation.Z - 90, -180));
                             replay.Decorations.Add(line);
                         }
                         break;
