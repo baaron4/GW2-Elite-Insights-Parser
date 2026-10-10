@@ -65,9 +65,18 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionCosmicPiercerChamp, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerElite], Mech_EternalReflection, new (Symbols.DiamondTall, Colors.DarkMagenta), new ("EterRefl.H", "Hit by Eternal Reflection", "Eternal Reflection Hit"), Sev2),
         ]),
         new MechanicGroup([
-            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0)
+            new EnemyDstBuffRemoveSingleMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredLost, new (Symbols.DiamondWideOpen, Colors.Red), new ("Emp.L", "Lost Empowered", "Empowered Lost"), Sev0)
                 .UsingChecker((buffRemove, log) => !buffRemove.To.IsDead(log, buffRemove.Time - ServerDelayConstant, buffRemove.Time + ServerDelayConstant)),
-            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new (Symbols.DiamondWide, Colors.Red), new ("Emp.A", "Applied Empowered", "Empowered Applied"), Sev0),
+            new PlayerSrcBuffRemoveSingleFromMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredRemoved, new (Symbols.DiamondWide, Colors.Green), new ("Emp.R", "Removed Empowered from Vloxx", "Empowered Remove"), Sev0)
+                .UsingChecker((buffRemove, log) => !buffRemove.To.IsDead(log, buffRemove.Time - ServerDelayConstant, buffRemove.Time + ServerDelayConstant)),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSelf, new (Symbols.DiamondWide, Colors.Red), new ("Emp.Vl", "Gained Empowered from self", "Empowered by Vloxx"), Sev0)
+                 .UsingChecker((apply, log) => !apply.By.IsAnySpecies([TargetID.ChampionAspectOfTheStaff, TargetID.ChampionAspectOfTheSpear, TargetID.ChampionAspectOfTheSword])),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredStaff, new (Symbols.Star, Colors.Red), new ("Emp.St", "Gained Empowered from Staff", "Empowered by Staff"), Sev0)
+                .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheStaff)),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSpear, new (Symbols.TriangleUp, Colors.Red), new ("Emp.Sp", "Gained Empowered from Spear", "Empowered by Spear"), Sev0)
+                .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSpear)),
+            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSword, new (Symbols.Square, Colors.Red), new ("Emp.Sw", "Gained Empowered from Sword", "Empowered by Sword"), Sev0)
+                .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSword)),
         ]),
         new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new (Symbols.Hexagon, Colors.LightBlue), new ("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
         new MechanicGroup([
