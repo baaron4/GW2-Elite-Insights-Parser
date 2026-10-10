@@ -947,8 +947,8 @@ public static class MechanicIDs
     public static readonly int Mech_AscensionsSacrifice = VoEMask | ++_voeCount;
     public static readonly int Mech_EternalReflection = VoEMask | ++_voeCount;
     public static readonly int Mech_EchoingBlade = VoEMask | ++_voeCount;
-    public static readonly int Mech_VloxxEmpowered = VoEMask | ++_voeCount;
-    public static readonly int Mech_VloxxEmpoweredRemoved = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxEmpoweredSelf = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxEmpoweredLost = VoEMask | ++_voeCount;
     public static readonly int Mech_DamageImmunity = VoEMask | ++_voeCount;
     public static readonly int Mech_Ascension = VoEMask | ++_voeCount;
     public static readonly int Mech_AscensionRemove = VoEMask | ++_voeCount;
@@ -960,6 +960,7 @@ public static class MechanicIDs
     public static readonly int Mech_VloxxEmpoweredStaff = VoEMask | ++_voeCount;
     public static readonly int Mech_VloxxEmpoweredSpear = VoEMask | ++_voeCount;
     public static readonly int Mech_VloxxEmpoweredSword = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxEmpoweredRemoved = VoEMask | ++_voeCount;
     #endregion VOE
 
     #endregion RAID ENCOUNTERS
