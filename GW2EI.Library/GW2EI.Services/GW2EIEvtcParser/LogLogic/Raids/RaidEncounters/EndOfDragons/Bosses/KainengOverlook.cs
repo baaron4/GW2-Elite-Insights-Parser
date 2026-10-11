@@ -173,7 +173,7 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         ];
     }
 
-    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor?> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
+    private static long AddSplitPhase(EncounterPhaseData encounterPhase, List<PhaseData> phases, IReadOnlyList<SingleActor?> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID, long startOffset)
     {
         if (targets.All(x => x != null))
         {
@@ -182,48 +182,52 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
             {
                 if (target != null)
                 {
-                    cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
-                    if (cbtEnter != null)
+                    var curCbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault(x => x.Time >= startOffset);
+                    if (curCbtEnter != null && (cbtEnter == null || cbtEnter.Time > curCbtEnter.Time))
                     {
-                        break;
+                        cbtEnter = curCbtEnter;
                     }
                 }
             }
             if (cbtEnter != null)
             {
                 BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
-                long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.LogData.LogEnd;
+                long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : encounterPhase.End;
                 var addPhase = new SubPhasePhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets, log);
-                addPhase.AddParentPhase(phases[0]);
+                addPhase.AddParentPhase(encounterPhase);
                 phases.Add(addPhase);
+                return phaseEnd;
             }
         }
+        return startOffset;
     }
 
-    private SingleActor? GetMinisterLi(bool isCM)
+    private SingleActor? GetMinisterLi(bool isCM, long time)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(isCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
+        return Targets.FirstOrDefault(x => x.IsSpecies(isCM ? TargetID.MinisterLiCM : TargetID.MinisterLi) && x.InAwareTimes(time));
+    }
+
+    private SingleActor? GetDamagedOrDefaultTarget(ParsedEvtcLog log, TargetID speciesID, EncounterPhaseData encounterPhase)
+    {
+        return Targets.FirstOrDefault(x => x.IsSpecies(speciesID) && encounterPhase.IntersectsWindow(x.FirstAware, x.LastAware) && log.CombatData.GetDamageTakenData(x.AgentItem).Any(y => y.CreditedFrom.IsPlayer && y.HealthDamage > 0)) ?? Targets.LastOrDefault(x => x.IsSpecies(speciesID) && encounterPhase.IntersectsWindow(x.FirstAware, x.LastAware));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        var isCM = ((EncounterPhaseData)phases[0]).IsCM;
-        SingleActor ministerLi = GetMinisterLi(isCM) ?? throw new MissingKeyActorsException("Minister Li not found");
-        phases[0].AddTarget(ministerLi, log);
+        var encounterPhase = (EncounterPhaseData)phases[0];
+        var isCM = encounterPhase.IsCM;
+        SingleActor ministerLi = GetMinisterLi(isCM, encounterPhase.Start) ?? throw new MissingKeyActorsException("Minister Li not found");
+        encounterPhase.AddTarget(ministerLi, log);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheSniperCM : TargetID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(isCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
+        SingleActor? enforcer = GetDamagedOrDefaultTarget(log, isCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer, encounterPhase);
+        SingleActor? mindblade = GetDamagedOrDefaultTarget(log, isCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade, encounterPhase);
+        SingleActor? mechRider = GetDamagedOrDefaultTarget(log, isCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider, encounterPhase);
+        SingleActor? sniper = GetDamagedOrDefaultTarget(log, isCM ? TargetID.TheSniperCM : TargetID.TheSniper, encounterPhase);
+        SingleActor? ritualist = GetDamagedOrDefaultTarget(log, isCM ? TargetID.TheRitualistCM : TargetID.TheRitualist, encounterPhase);
         //
-        phases[0].AddTarget(enforcer, log, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(mindblade, log, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(mechRider, log, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(sniper, log, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(ritualist, log, PhaseData.TargetPriority.Blocking);
+        encounterPhase.AddTargets([enforcer, mindblade, mechRider, sniper, ritualist], log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -237,14 +241,15 @@ internal class KainengOverlook : EndOfDragonsRaidEncounter
         }
         // when wiped during a split phase, Li's LastAware is well before fight end
         phases.AddRange(subPhases.Where(x => (x.End + x.Start) / 2 <= ministerLi.LastAware + ServerDelayConstant));
-        AddSplitPhase(phases, [enforcer, mindblade, ritualist], ministerLi, log, 1);
-        AddSplitPhase(phases, [mechRider, sniper], ministerLi, log, 2);
+        long splitPhaseStartOffset = subPhases.FirstOrDefault()?.End ?? ministerLi.LastAware;
+        splitPhaseStartOffset = AddSplitPhase(encounterPhase, phases, [enforcer, mindblade, ritualist], ministerLi, log, 1, splitPhaseStartOffset);
+        AddSplitPhase(encounterPhase, phases, [mechRider, sniper], ministerLi, log, 2, splitPhaseStartOffset);
         return phases;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        SingleActor ministerLi = GetMinisterLi(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(GetLogMode(combatData, agentData, logData) == LogData.Mode.CM, 0) ?? throw new MissingKeyActorsException("Minister Li not found");
         var buffApplies = combatData.GetBuffApplyDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
         if (buffApplies.Count != 0)
         {
