@@ -5735,7 +5735,7 @@ public static class SkillIDs
     public const long Determined80356 = 80356;
     public const long Ascension = 80368;
     public const long GravityFieldHit = 80369;
-    public const long JudgmentOfEternity1 = 80378;
+    public const long JudgmentOfEternityFinalPhase = 80378;
     public const long ShadowsTorment = 80387;
     public const long VesselOfTheMists = 80397;
     public const long VisionsOfEternityInStaff = 80420;
@@ -5768,7 +5768,7 @@ public static class SkillIDs
     public const long VisionsOfEternityInSword = 80591;
     public const long PowerOfAncora = 80598;
     public const long DamageImmunity = 80608;
-    public const long JudgmentOfEternityGreenFailDamage = 80629;
+    public const long JudgmentOfEternity = 80629;
     public const long SearingRadial = 80630;
     public const long LowGravity = 80645;
     public const long SurroundingCurseCast = 80653;
@@ -5798,7 +5798,7 @@ public static class SkillIDs
     public const long CosmicWave = 80864;
     public const long GravityField = 80869;
     public const long CosmicChargeAspectOfTheSpear = 80871;
-    public const long ExcisionExtremis1 = 80901;
+    public const long ExcisionExtremisVloxxFinalPhase = 80901;
     public const long EchoingOutburst = 80908;
     public const long POV_RelicOfTheLastTyrantGearBuff = 80911;
     public const long WorldpiercerVloxx = 80916;
@@ -5814,7 +5814,7 @@ public static class SkillIDs
     public const long POV_RelicOfTheLanternGearBuff = 81019;
     public const long WildCall = 81031;
     public const long ElementalHurricane = 81043;
-    public const long ExcisionExtremis2 = 81053;
+    public const long ExcisionExtremisVloxx = 81053;
     public const long InquestDisguise = 81067;
     public const long RelicOfTheLastTyrantDamage = 81068;
     public const long AscensionsSacrifice = 81076;
@@ -5824,7 +5824,7 @@ public static class SkillIDs
     public const long FerociousAssault4 = 81139;
     public const long LightningStrikeEternalTyrant = 81140;
     public const long CosmicBlastHit = 81174;
-    public const long RagingStormVloxx2 = 81176;
+    public const long RagingStormVloxxFinalPhase = 81176;
     public const long CosmicBlast = 81182;
     public const long ShadowDance = 81184;
     public const long InvulnerabilityEternalTyrant = 81188;
@@ -5837,6 +5837,7 @@ public static class SkillIDs
     public const long EchoingBlade = 81271;
     public const long AnnihilatingOrbCosmicPiercer = 81273;
     public const long WizardsBlessingVoE = 81287;
+    public const long ProbabilityDistributionFinalPhase = 81318;
     public const long ShearForce = 81321;
     public const long ExcisionExtremisAspectOfTheSword = 81326;
     public const long AncoraStrikeAspectOfTheSword = 81327;
