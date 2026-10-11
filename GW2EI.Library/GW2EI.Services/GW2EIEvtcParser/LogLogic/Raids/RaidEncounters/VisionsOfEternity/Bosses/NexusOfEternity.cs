@@ -600,11 +600,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
+                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
+                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
@@ -851,8 +853,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.Add(circle);
             }
         }
-
-        AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
     }
 
     private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, long[] ids)
