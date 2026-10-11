@@ -400,14 +400,12 @@ partial class CombatData
     }
     public IReadOnlyList<AgentInfoEvent> GetAgentInfoEvents(AgentItem src)
     {
-        switch (src.Spec)
+        return src.Spec switch
         {
-            case Spec.NPC:
-                return GetNPCInfoEvents(src);
-            case Spec.Gadget:
-                return GetGadgetInfoEvents(src);
-        }
-        return [];
+            Spec.NPC => GetNPCInfoEvents(src),
+            Spec.Gadget => GetGadgetInfoEvents(src),
+            _ => [],
+        };
     }
     public IReadOnlyList<GadgetInfoEvent> GetGadgetInfoEvents(AgentItem src)
     {
