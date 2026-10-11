@@ -373,12 +373,7 @@ internal class Gorseval : SpiritVale
                     replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightOrange, 0.5, new AgentConnector(target)));
                 }
                 //  Ghastly Rampage
-                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                foreach (var segment in breakbarActives)
-                {
-                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                }
+                replay.Decorations.AddActiveBreakbars(log, target);
                 break;
             case (int)TargetID.ChargedSoul:
                 lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);

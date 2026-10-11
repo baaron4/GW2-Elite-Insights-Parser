@@ -524,12 +524,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxx2]);
 
                 // Breakbar
-                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                foreach (var segment in breakbarActives)
-                {
-                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                }
+                replay.Decorations.AddActiveBreakbars(log, target);
 
                 AddDivisionEternal(log, replay, target.AgentItem);
                 var usedVloxxSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityVloxxEchoingBlade_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
@@ -544,6 +539,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.ChampionAspectOfTheStaff:
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
+                // Breakbar
+                replay.Decorations.AddActiveBreakbars(log, target);
                 break;
             case (int)TargetID.ChampionAspectOfTheSpear:
                 AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesAspectOfTheSpear);
@@ -559,11 +556,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                         replay.Decorations.Add(circle);
                     }
                 }
+                // Breakbar
+                replay.Decorations.AddActiveBreakbars(log, target);
                 break;
             case (int)TargetID.ChampionAspectOfTheSword:
                 AddDivisionEternal(log, replay, target.AgentItem);
                 var usedAspectSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityChampionSundererAndAspectSword_EchoingAttack_Excision_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
                 AddSwordSwings(log, replay, target.AgentItem, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing, 500, usedAspectSwings);
+                // Breakbar
+                replay.Decorations.AddActiveBreakbars(log, target);
                 break;
             case (int)TargetID.EliteCosmicPiercer:
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerElite]);

@@ -393,12 +393,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
                         lifespan = (lifespan.start - 5000, lifespan.start);
                         replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, lifespan, Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), lifespan.start);
                     }
-                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                    var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                    foreach (var segment in breakbarActives)
-                    {
-                        replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                    }
+                    replay.Decorations.AddActiveBreakbars(log, target);
                 }
                 break;
             case (int)TargetID.BigKillerTornado:
@@ -409,12 +404,7 @@ internal class QadimThePeerless : TheKeyOfAhdashim
                     // Red tether from Qadim to the Pylon during breakbar
                     var breakbarBuffs = GetBuffApplyRemoveSequence(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
                     replay.Decorations.AddTethers(breakbarBuffs, Colors.Red, 0.4);
-                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                    var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                    foreach (var segment in breakbarActives)
-                    {
-                        replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                    }
+                    replay.Decorations.AddActiveBreakbars(log, target);
                 }
                 break;
             case (int)TargetID.PeerlessQadimAuraPylon:

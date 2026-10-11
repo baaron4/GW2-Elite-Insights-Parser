@@ -592,9 +592,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                     // Breakbar
-                    var toxicPercentUpdates = target.GetBreakbarPercentUpdates(log);
-                    var toxicStates = target.GetBreakbarStatus(log);
-                    replay.Decorations.AddBreakbar(target, toxicPercentUpdates, toxicStates);
+                    replay.Decorations.AddBreakbars(log, target);
                 }
                 else
                 {
@@ -617,9 +615,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                 // Breakbar
-                var titanspawnPercentUpdates = target.GetBreakbarPercentUpdates(log);
-                var titanspawnStates = target.GetBreakbarStatus(log);
-                replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
+                replay.Decorations.AddBreakbars(log, target);
                 break;
             case (int)TargetID.LegendaryVentshot:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log))

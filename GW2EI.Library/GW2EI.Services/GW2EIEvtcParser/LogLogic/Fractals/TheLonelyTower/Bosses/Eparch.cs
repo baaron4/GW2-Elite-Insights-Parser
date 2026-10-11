@@ -262,12 +262,7 @@ internal class Eparch : LonelyTower
                 }
 
                 // Consume Breakbar
-                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                foreach (var segment in breakbarActives)
-                {
-                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                }
+                replay.Decorations.AddActiveBreakbars(log, target);
                 break;
             case (int)TargetID.KryptisRift:
                 {

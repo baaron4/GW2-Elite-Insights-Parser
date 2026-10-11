@@ -4,6 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Decoration;
 using static GW2EIEvtcParser.EIData.Trigonometry;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -672,28 +673,27 @@ internal class CombatReplayDecorationContainer
             Add(background);
         }
     }
-
     /// <summary>
-    /// Adds a dynamic breakbar decoration with each various state.<br></br>
+    /// Adds dynamic breakbars decoration with each various state.<br></br>
     /// The breakbar will be displayed as long as the actor is present and it's active, recovering or immune.
     /// </summary>
+    /// <param name="log"></param>
     /// <param name="actor"></param>
-    /// <param name="percentUpdates"></param>
-    /// <param name="stateUpdates"></param>
-    internal void AddBreakbar(SingleActor actor, IReadOnlyList<Segment> percentUpdates,
-        (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) stateUpdates)
+    internal void AddBreakbars(ParsedEvtcLog log, SingleActor actor)
     {
-        foreach (var segment in stateUpdates.breakbarActives)
+        var breakbarUpdates = actor.GetBreakbarPercentUpdates(log);
+        var (_, breakbarActives, breakbarImmunes, breakbarRecoverings) = actor.GetBreakbarStatus(log);
+        foreach (var segment in breakbarActives)
         {
-            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarActiveBlue);
+            AddBreakbar(segment.TimeSpan, actor, breakbarUpdates, Colors.BreakbarActiveBlue);
         }
-        foreach (var segment in stateUpdates.breakbarRecoverings)
+        foreach (var segment in breakbarRecoverings)
         {
-            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarRecoveringOrange);
+            AddBreakbar(segment.TimeSpan, actor, breakbarUpdates, Colors.BreakbarRecoveringOrange);
         }
-        foreach (var segment in stateUpdates.breakbarImmunes)
+        foreach (var segment in breakbarImmunes)
         {
-            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarImmuneGrey);
+            AddBreakbar(segment.TimeSpan, actor, breakbarUpdates, Colors.BreakbarImmuneGrey);
         }
     }
 
@@ -721,15 +721,18 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Adds a dynamic breakbar decoration.<br></br>
-    /// To be used during active state only.
+    /// Adds a dynamic active breakbar decorations for agent.<br></br>
     /// </summary>
-    /// <param name="lifespan"></param>
+    /// <param name="log"></param>
     /// <param name="actor"></param>
-    /// <param name="percentUpdates"></param>
-    internal void AddActiveBreakbar((long start, long end) lifespan, SingleActor actor, IReadOnlyList<Segment> percentUpdates)
+    internal void AddActiveBreakbars(ParsedEvtcLog log, SingleActor actor)
     {
-        AddBreakbar(lifespan, actor, percentUpdates, Colors.BreakbarActiveBlue);
+        var breakbarUpdates = actor.GetBreakbarPercentUpdates(log);
+        var (_, breakbarActives, _, _) = actor.GetBreakbarStatus(log);
+        foreach (var segment in breakbarActives)
+        {
+            AddBreakbar(segment.TimeSpan, actor, breakbarUpdates, Colors.BreakbarActiveBlue);
+        }
     }
 
     #endregion PROGRESS BAR

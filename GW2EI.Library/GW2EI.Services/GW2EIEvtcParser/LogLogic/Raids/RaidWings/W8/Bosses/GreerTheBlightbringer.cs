@@ -363,12 +363,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 }
 
                 // Rot the World - Breakbar
-                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                foreach (var segment in breakbarActives)
-                {
-                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
-                }
+                replay.Decorations.AddActiveBreakbars(log, target);
 
                 // Invulnerable Barrier
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerInvulnerableBarrier, out var invulnerableBarriers))

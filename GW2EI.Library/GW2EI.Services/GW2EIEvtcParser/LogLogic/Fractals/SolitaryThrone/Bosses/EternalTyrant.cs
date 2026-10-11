@@ -361,12 +361,7 @@ internal class EternalTyrant : SolitaryThrone
             case (int)TargetID.EarthElemental:
                 {
                     AddCosmisBlastFields(log, target, replay);
-                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                    var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
-                    foreach (var seg in breakbarActives)
-                    {
-                        replay.Decorations.AddActiveBreakbar(seg.TimeSpan, target, breakbarUpdates);
-                    }
+                    replay.Decorations.AddActiveBreakbars(log, target);
                     break;
                 }
             case (int)TargetID.Ember:
