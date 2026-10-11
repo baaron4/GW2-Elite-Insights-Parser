@@ -93,6 +93,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             ]),
         ]),
         new PlayerDstBuffApplyMechanic(FixatedTimed, Mech_VloxxFixated, new(Symbols.Diamond, Colors.Purple), new("Fixate", "Fixated by Vloxx", "Fixated"), Sev1),
+        new PlayerDstBuffRemoveMechanic(FixatedTimed, Mech_VloxxFixatedLost, new(Symbols.DiamondOpen, Colors.Purple), new("Fixate.L", "Lost Fixation early (downed or stealthed)", "Fixate Lost"), Sev0)
+            .UsingChecker((remove, log) => remove.RemovedDuration > ServerDelayConstant),
     ]);
 
     public NexusOfEternity(int triggerID) : base(triggerID)

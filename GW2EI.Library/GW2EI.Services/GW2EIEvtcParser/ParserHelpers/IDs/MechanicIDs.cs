@@ -963,6 +963,7 @@ public static class MechanicIDs
     public static readonly int Mech_VloxxEmpoweredSword = VoEMask | ++_voeCount;
     public static readonly int Mech_VloxxEmpoweredRemoved = VoEMask | ++_voeCount;
     public static readonly int Mech_VloxxFixated = VoEMask | ++_voeCount;
+    public static readonly int Mech_VloxxFixatedLost = VoEMask | ++_voeCount;
     #endregion VOE
 
     #endregion RAID ENCOUNTERS
