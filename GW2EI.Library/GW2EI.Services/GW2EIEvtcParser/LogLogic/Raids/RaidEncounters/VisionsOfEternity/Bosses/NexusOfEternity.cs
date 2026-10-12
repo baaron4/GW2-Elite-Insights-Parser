@@ -74,11 +74,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpowered, new(Symbols.DiamondWide, Colors.Red), new("Emp.A", "Gained Empowered from any source", "Empowered Applied"), Sev0),
             new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSelf, new(Symbols.Diamond, Colors.Red), new("Emp.Vl", "Gained Empowered from self", "Empowered by Vloxx"), Sev0)
                  .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.Vloxx)),
-            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredStaff, new(Symbols.Star, Colors.Red), new("Emp.St", "Gained Empowered from Staff", "Empowered by Staff"), Sev0)
+            new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredStaff, new(Symbols.Star, Colors.Red), new("Emp.St", "Vloxx Gained Empowered from Staff", "Vloxx Empowered by Staff"), Sev0)
                 .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheStaff)),
-            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSpear, new(Symbols.TriangleUp, Colors.Red), new("Emp.Sp", "Gained Empowered from Spear", "Empowered by Spear"), Sev0)
+            new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSpear, new(Symbols.TriangleUp, Colors.Red), new("Emp.Sp", "Vloxx Gained Empowered from Spear", "Vloxx Empowered by Spear"), Sev0)
                 .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSpear)),
-            new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSword, new(Symbols.Square, Colors.Red), new("Emp.Sw", "Gained Empowered from Sword", "Empowered by Sword"), Sev0)
+            new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSword, new(Symbols.Square, Colors.Red), new("Emp.Sw", "Vloxx Gained Empowered from Sword", "Vloxx Empowered by Sword"), Sev0)
                 .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSword)),
             new EnemySrcMissileMechanic(VloxxAscensionOrb, Mech_AspectWeaponGeneratedOrbs, new(Symbols.Circle, Colors.Purple), new("Asp.OrbGen", "Weapon Aspect generated orbs (breakbar broken)", "Weapon Aspect generated orbs"), Sev1)
                 .UsingChecker((missile, log) => missile.Src.IsAnySpecies([TargetID.ChampionAspectOfTheStaff, TargetID.ChampionAspectOfTheSpear, TargetID.ChampionAspectOfTheSword]))

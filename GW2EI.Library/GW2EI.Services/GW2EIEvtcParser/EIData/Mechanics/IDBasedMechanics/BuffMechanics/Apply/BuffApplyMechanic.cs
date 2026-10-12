@@ -31,7 +31,7 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
 
     protected abstract bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor);
 
-    protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor)
+    protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor, Dictionary<int, SingleActor> regroupedMobs)
     {
         InsertMechanic(log, mechanicLogs, ba.Time, actor, ba.AppliedDuration);
     }
@@ -45,7 +45,7 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
             {
                 if (c is BuffApplyEvent ba && TryGetActor(log, GetAgentItem(ba), regroupedMobs, out var amp) && Keep(ba, log))
                 {
-                    AddMechanic(log, mechanicLogs, ba, amp);
+                    AddMechanic(log, mechanicLogs, ba, amp, regroupedMobs);
                 }
             }
         }

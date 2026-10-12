@@ -14,7 +14,7 @@ internal class PlayerSrcPlayerDstBuffApplyMechanic : PlayerSrcBuffApplyMechanic
     {
     }
 
-    protected override void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor)
+    protected override void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor, Dictionary<int, SingleActor> regroupedMobs)
     {
         SingleActor? dst = MechanicHelper.FindPlayerActor(log, ba.To);
         if (dst != null)
