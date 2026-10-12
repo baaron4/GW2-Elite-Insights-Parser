@@ -352,6 +352,7 @@ public static class ArcDPSEnums
         GadgetModelInfo = 87,
         FlyTo = 88,
         AgentInfo = 89,
+        PvPScoreUpdate = 90,
         Unknown
     };
 

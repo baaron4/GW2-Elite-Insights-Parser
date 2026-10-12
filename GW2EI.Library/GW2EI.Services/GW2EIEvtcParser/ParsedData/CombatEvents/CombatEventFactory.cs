@@ -697,6 +697,11 @@ partial class CombatData
                         break;
                 }
                 break;
+            case StateChange.PvPScoreUpdate:
+                var pvpScoreUpdate = new PvPScoreUpdateEvent(stateChangeEvent);
+                _statusEvents.PvPScoreUpdateEvents.Add(pvpScoreUpdate);
+                Add(_statusEvents.PvPScoreUpdateEventsByTeamID, pvpScoreUpdate.TeamID, pvpScoreUpdate);
+                break;
             default:
                 break;
         }

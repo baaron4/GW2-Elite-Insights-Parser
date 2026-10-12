@@ -166,6 +166,7 @@ public class CombatItem
             || IsStateChange == StateChange.MapChange
             || IsStateChange == StateChange.WvWObjectiveStatus
             || IsStateChange == StateChange.Tick
+            || IsStateChange == StateChange.PvPScoreUpdate
             ;
     }
 
