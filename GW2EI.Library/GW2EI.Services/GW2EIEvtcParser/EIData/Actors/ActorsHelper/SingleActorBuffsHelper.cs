@@ -962,8 +962,6 @@ partial class SingleActor
         _buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count + 5);
         var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfBoons]);
         var activeCombatMinionsGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfActiveCombatMinions]);
-        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfClones]) : null;
-        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfRangerPets]) : null;
         var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfConditions]);
         var boonIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
         var condiIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
@@ -1041,37 +1039,15 @@ partial class SingleActor
         _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
         foreach (Minions minions in GetMinions(log))
         {
-            IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
+            IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanAsSegmentsPerMinion(log);
             foreach (IReadOnlyList<Segment> minionsSegments in segments)
             {
                 activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
-            }
-            if (numberOfClonesGraph != null && MesmerHelper.IsClone(minions.ReferenceAgentItem))
-            {
-                foreach (IReadOnlyList<Segment> minionsSegments in segments)
-                {
-                    numberOfClonesGraph.MergePresenceInto(minionsSegments);
-                }
-            }
-            if (numberOfRangerPets != null && RangerHelper.IsJuvenilePet(minions.ReferenceAgentItem))
-            {
-                foreach (IReadOnlyList<Segment> minionsSegments in segments)
-                {
-                    numberOfRangerPets.MergePresenceInto(minionsSegments);
-                }
             }
         }
         if (activeCombatMinionsGraph.Values.Any())
         {
             _buffGraphs[SkillIDs.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
-        }
-        if (numberOfClonesGraph != null && numberOfClonesGraph.Values.Any())
-        {
-            _buffGraphs[SkillIDs.NumberOfClones] = numberOfClonesGraph;
-        }
-        if (numberOfRangerPets != null && numberOfRangerPets.Values.Any())
-        {
-            _buffGraphs[SkillIDs.NumberOfRangerPets] = numberOfRangerPets;
         }
     }
     #endregion COMPUTE
