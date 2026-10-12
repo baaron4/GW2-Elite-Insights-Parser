@@ -80,6 +80,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSpear)),
             new EnemyDstBuffApplyMechanic(EmpoweredNexusOfEternity, Mech_VloxxEmpoweredSword, new(Symbols.Square, Colors.Red), new("Emp.Sw", "Gained Empowered from Sword", "Empowered by Sword"), Sev0)
                 .UsingChecker((apply, log) => apply.By.IsSpecies(TargetID.ChampionAspectOfTheSword)),
+            new EnemySrcMissileMechanic(VloxxAscensionOrb, Mech_AspectWeaponGeneratedOrbs, new(Symbols.Circle, Colors.Purple), new("Asp.OrbGen", "Weapon Aspect generated orbs (breakbar broken)", "Weapon Aspect generated orbs"), Sev1)
+                .UsingChecker((missile, log) => missile.Src.IsAnySpecies([TargetID.ChampionAspectOfTheStaff, TargetID.ChampionAspectOfTheSpear, TargetID.ChampionAspectOfTheSword]))
         ]),
         new EnemyDstBuffApplyMechanic(DamageImmunity, Mech_DamageImmunity, new(Symbols.Hexagon, Colors.LightBlue), new("DmgImm.A", "Applied Damage Immunity", "Damage Immunity Applied"), Sev2),
         new MechanicGroup([
