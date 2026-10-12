@@ -43,12 +43,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, Mech_AscensionSacrificeTarget, new(Symbols.DiamondOpen, Colors.Chocolate), new("AscSac.T", "Selected for Ascension's Sacrifice (Chains & 2-Player Greens)", "Ascenion's Sacrifice Target"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrificeHit, new(Symbols.Diamond, Colors.Chocolate), new("AscSac.H", "Hit by Ascension's Sacrifice (Chains & 2-Player Greens)", "Ascension's Sacrifice Hit"), Sev0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([SurroundingCurseVloxx, SurroundingCurseAspectOfTheStaff], Mech_SurroundingCurseHit, new(Symbols.CircleCross, Colors.Teal), new("SurrCur.H", "Hit by Surrounding Curse (Staff Projectiles)", "Surrounding Curse Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([SurroundingCurseVloxx, SurroundingCurseAspectOfTheStaff], Mech_SurroundingCurseHit, new(Symbols.CircleCross, Colors.Teal), new("SurrCur.H", "Hit by Surrounding Curse (Staff Projectiles)", "Surrounding Curse Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerChamp, EternalReflectionCosmicPiercerElite], Mech_EternalReflectionHit, new(Symbols.DiamondTall, Colors.DarkMagenta), new("EterRefl.H", "Hit by Eternal Reflection (Staff Frontal)", "Eternal Reflection Hit"), Sev2),
         ]),
         // spear
         new MechanicGroup([
-            new PlayerDstHealthDamageHitMechanic([CosmicChargeVloxx, CosmicChargeAspectOfTheSpear, CosmicChargeBulwark], Mech_CosmicChargeHit, new(Symbols.CircleCrossOpen, Colors.White), new("CosmChar.H", "Hit by Cosmic Charge (Spear Charge)", "Cosmic Charge Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([CosmicChargeVloxx, CosmicChargeAspectOfTheSpear, CosmicChargeBulwark], Mech_CosmicChargeHit, new(Symbols.CircleCrossOpen, Colors.White), new("CosmChar.H", "Hit by Cosmic Charge (Spear Charge)", "Cosmic Charge Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic([ThousandStrikesAspectOfTheSpear, ThousandStrikesVloxx], Mech_ThousandStrikesHit, new(Symbols.CircleOpen, Colors.LightPink), new("ThouStr.H", "Hit by Thousand Strikes (Spear Frontal)", "Thousand Strikes Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic([RagingStormVloxx, RagingStormVloxxFinalPhase, RagingStormCosmicBulwark], Mech_RagingStormHit, new(Symbols.Cross, Colors.RedBrownish), new("RagStor.H", "Hit by Raging Storm (Spear Projectiles)", "Raging Storm Hit"), Sev1),
             new MechanicGroup([
@@ -60,8 +60,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         // sword
         new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(SliceThroughReality, Mech_SliceThroughRealityHit, new(Symbols.CircleOpenDot, Colors.DarkBlue), new("SlicReal.H", "Hit by Slice Through Reality (Sword Teleport)", "Slice Through Reality Hit"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([DivisionEternal, DivisionEternalAspectOfTheSword], Mech_DivisionEternalHit, new(Symbols.BowtieOpen, Colors.DarkRed), new("DivEter.H", "Hit by Division Eternal (Sword Frontal)", "Division Eternal Hit"), Sev0),
-            new PlayerDstHealthDamageHitMechanic([ExcisionExtremisVloxx, ExcisionExtremisVloxxFinalPhase, ExcisionExtremisAspectOfTheSword], Mech_ExcisionExtremisHit, new(Symbols.CrossOpen, Colors.DarkerLime), new("ExciExtr.H", "Hit by Excision Extremis (Random Half-Circles)", "Excision Extremis Hit"), Sev0),
+            new PlayerDstHealthDamageHitMechanic([DivisionEternal, DivisionEternalAspectOfTheSword], Mech_DivisionEternalHit, new(Symbols.BowtieOpen, Colors.DarkRed), new("DivEter.H", "Hit by Division Eternal (Sword Frontal)", "Division Eternal Hit"), Sev1),
+            new PlayerDstHealthDamageHitMechanic([ExcisionExtremisVloxx, ExcisionExtremisVloxxFinalPhase, ExcisionExtremisAspectOfTheSword], Mech_ExcisionExtremisHit, new(Symbols.CrossOpen, Colors.DarkerLime), new("ExciExtr.H", "Hit by Excision Extremis (Random Half-Circles)", "Excision Extremis Hit"), Sev1),
             new PlayerDstHealthDamageHitMechanic(Excision, Mech_ExcisionHit, new(Symbols.Square, Colors.DarkPurpleBlue), new("Exci.H", "Hit by Excision", "Excision Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic(EchoingBlade, Mech_EchoingBladeHit, new(Symbols.DiamondWide, Colors.DarkYellow), new("EchoBlad.H", "Hit by Echoing Blade (Spin Half-Circles & Red Projectiles)", "Echoing Blade Hit"), Sev2),
         ]),
