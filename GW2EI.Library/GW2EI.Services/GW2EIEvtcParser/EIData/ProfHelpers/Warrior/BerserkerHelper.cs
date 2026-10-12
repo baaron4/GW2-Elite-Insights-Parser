@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParserHelpers;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -18,6 +19,12 @@ internal static class BerserkerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(KingOfFires, EffectGUIDs.BerserkerKingOfFires)
             .UsingSrcSpecChecker(Spec.Berserker)
+            // The effect also occurs without detonation; require consumption of the caster's Fire Aura.
+            .UsingChecker((evt, combatData, agentData, skillData) =>
+                CombatData.FindRelatedEvents(
+                    combatData.GetBuffRemoveAllData(FireAura),
+                    evt.Time
+                ).Any(removal => removal.To.Is(evt.Src)))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(Outrage, EffectGUIDs.BerserkerOutrage)
             .UsingSrcSpecChecker(Spec.Berserker),
