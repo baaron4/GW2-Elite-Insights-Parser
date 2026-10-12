@@ -642,6 +642,11 @@ internal static class RangerHelper
         new Buff("Nurturing Bloom (2)", NurturingBloom2, Source.EncounterSpecific, BuffClassification.Other, SkillImages.WildWrath),
     ];
 
+    public static List<BuffEvent> TransformRangerPetCount(CombatData combatData, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    {
+        return CreateBuffApplyAndRemovesBasedOnMinionLifespan(combatData, agentData, skillData, JuvenilePetIDs, NumberOfRangerPets, evtcVersion);
+    }
+
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
         var playerAgents = new HashSet<AgentItem>(players);

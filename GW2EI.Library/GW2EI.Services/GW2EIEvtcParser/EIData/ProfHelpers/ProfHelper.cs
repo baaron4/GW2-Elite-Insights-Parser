@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
@@ -271,6 +272,31 @@ internal static class ProfHelper
         new BreakbarDamageCastFinder(Technobabble, Technobabble),
         #endregion Misc
     ];
+
+    public static List<BuffEvent> CreateBuffApplyAndRemovesBasedOnMinionLifespan(CombatData combatData, AgentData agentData, SkillData skillData, IReadOnlyCollection<int> ids, long skillID, EvtcVersionEvent evtcVersion)
+    {
+        var minions = agentData.GetStableSpeciesByIDs(ids.ToArray());
+        var res = new List<BuffEvent>();
+        var skill = skillData.Get(skillID);
+        foreach (var minion in minions)
+        {
+            var master = minion.GetFinalMaster();
+            if (master.Is(minion))
+            {
+                break;
+            }
+            var segments = new NPC(minion).GetLifeSpanAsSegments(combatData); // create temp npc for the purpose of the API
+            foreach (var segment in segments)
+            {
+                if (segment.Value > 0)
+                {
+                    res.Add(new BuffApplyEvent(master, master, segment.Start, (int)(segment.End - segment.Start), skill, IFF.Friend, (uint)minion.UniqueID, true));
+                    res.Add(new BuffRemoveSingleEvent(master, master, segment.End, 0, skill, IFF.Friend, (uint)minion.UniqueID));
+                }
+            }
+        }
+        return res;
+    }
 
     internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
     {

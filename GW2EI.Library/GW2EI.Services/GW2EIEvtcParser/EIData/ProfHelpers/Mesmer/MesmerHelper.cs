@@ -270,7 +270,7 @@ internal static class MesmerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Number of Clones", NumberOfClones, [Source.BaseMesmerOnly, Source.Chronomancer, Source.Mirage], BuffStackType.Stacking, 99, BuffClassification.Other, ItemImages.SuperiorRuneOfTheMesmer),
+        new Buff("Number of Clones", NumberOfClones, [Source.BaseMesmerOnly, Source.Chronomancer, Source.Mirage], BuffStackType.Stacking, 3, BuffClassification.Other, ItemImages.SuperiorRuneOfTheMesmer),
         // Signets
         new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfTheEther),
         new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfDomination),
@@ -312,7 +312,12 @@ internal static class MesmerHelper
         new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.Clarity),
     ];
 
-    private static readonly HashSet<int> _clones =
+    public static List<BuffEvent> TransformMesmerCloneStorage(CombatData combatData, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    {
+        return CreateBuffApplyAndRemovesBasedOnMinionLifespan(combatData, agentData, skillData, Clones, NumberOfClones, evtcVersion);
+    }
+
+    private static readonly HashSet<int> Clones =
     [
         (int)MinionID.CloneSword,
         (int)MinionID.CloneScepter,
@@ -424,10 +429,10 @@ internal static class MesmerHelper
         {
             return false;
         }
-        return _clones.Contains(agentItem.ID);
+        return Clones.Contains(agentItem.ID);
     }
 
-    private static readonly HashSet<int> _phantasms =
+    private static readonly HashSet<int> Phantasms =
     [
         (int)MinionID.IllusionaryWarlock,
         (int)MinionID.IllusionaryWarden,
@@ -451,7 +456,7 @@ internal static class MesmerHelper
         {
             return false;
         }
-        return _phantasms.Contains(agentItem.ID);
+        return Phantasms.Contains(agentItem.ID);
     }
 
     internal static bool IsIllusion(AgentItem agentItem)
@@ -460,12 +465,12 @@ internal static class MesmerHelper
         {
             return false;
         }
-        return _clones.Contains(agentItem.ID) || _phantasms.Contains(agentItem.ID);
+        return Clones.Contains(agentItem.ID) || Phantasms.Contains(agentItem.ID);
     }
 
     internal static bool IsKnownMinionID(int id)
     {
-        return _phantasms.Contains(id) || _clones.Contains(id);
+        return Phantasms.Contains(id) || Clones.Contains(id);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

@@ -101,7 +101,7 @@ public partial class CombatData
 
     public bool HasExtraProcessing { get; private set; }
 
-    private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, LogData logData, EvtcVersionEvent evtcVersion)
+    private void EIBuffParse(IReadOnlyList<AgentItem> players, AgentData agentData, SkillData skillData, LogData logData, EvtcVersionEvent evtcVersion)
     {
         //TODO_PERF(Rennorb) @find average complexity
         var toAdd = new List<BuffEvent>(players.Count * 10);
@@ -132,6 +132,8 @@ public partial class CombatData
                 ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p), _buffData, skillData);
             }
         }
+        toAdd.AddRange(MesmerHelper.TransformMesmerCloneStorage(this, agentData, skillData, evtcVersion));
+        toAdd.AddRange(RangerHelper.TransformRangerPetCount(this, agentData, skillData, evtcVersion));
         if (cleanLethalTempo)
         {
             _buffData[LethalTempo].RemoveAll(x => x.BuffID == NoBuff);
@@ -461,7 +463,7 @@ public partial class CombatData
         ProfHelper.ProcessRacialGadgets(players, this);
         // Custom events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
-        EIBuffParse(players, skillData, logData, evtcVersion);
+        EIBuffParse(players, agentData, skillData, logData, evtcVersion);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
         EIDamageParse(skillData, agentData, logData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
