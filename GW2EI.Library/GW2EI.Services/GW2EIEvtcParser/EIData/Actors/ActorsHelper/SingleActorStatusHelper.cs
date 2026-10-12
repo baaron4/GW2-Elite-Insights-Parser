@@ -163,7 +163,7 @@ partial class SingleActor
     [MemberNotNull(nameof(_dcs))]
     [MemberNotNull(nameof(_actives))]
     [MemberNotNull(nameof(_deads))]
-    private (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(CombatData combatData)
+    internal (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(CombatData combatData)
     {
         _downs ??= new(combatData.GetDownEvents(AgentItem).Count);
         _dcs ??= new(combatData.GetDespawnEvents(AgentItem).Count);
@@ -235,6 +235,35 @@ partial class SingleActor
         }
         (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(combatData);
         return actives.Sum(x => x.IntersectingArea(start, end)) > duration;
+    }
+
+    internal IReadOnlyList<Segment> GetLifeSpanAsSegments(CombatData combatData)
+    {
+        List<Segment> minionSegments = [];
+        var (deads, downs, dcs, actives) = GetStatus(combatData);
+        foreach (var seg in deads)
+        {
+            minionSegments.Add(seg.WithOtherType(0.0));
+        }
+        foreach (var seg in dcs)
+        {
+            minionSegments.Add(seg.WithOtherType(0.0));
+        }
+        foreach (var seg in downs)
+        {
+            minionSegments.Add(seg.WithOtherType(1.0));
+        }
+        foreach (var seg in actives)
+        {
+            minionSegments.Add(seg.WithOtherType(1.0));
+        }
+        minionSegments.Sort((x, y) => x.Start.CompareTo(y.Start));
+        return minionSegments;
+    }
+
+    public IReadOnlyList<Segment> GetLifeSpanAsSegments(ParsedEvtcLog log)
+    {
+        return GetLifeSpanAsSegments(log.CombatData);
     }
     #endregion STATUS
     #region BREAKBAR

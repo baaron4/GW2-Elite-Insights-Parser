@@ -186,33 +186,12 @@ public class Minions : Actor
         return false;
     }
 
-    internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
+    internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanAsSegmentsPerMinion(ParsedEvtcLog log)
     {
-        List<List<Segment>> minionsSegments = [];
-        long logEnd = log.LogData.LogEnd;
+        List<IReadOnlyList<Segment>> minionsSegments = [];
         foreach (NPC minion in _minionList)
         {
-            List<Segment> minionSegments = [];
-            long start = Math.Max(Math.Max(minion.FirstAware, Master.FirstAware), 0);
-            // Find end
-            long end = Math.Min(minion.LastAware, Master.LastAware);
-            DeadEvent? dead = log.CombatData.GetDeadEvents(minion.AgentItem).LastOrDefault();
-            if (dead != null)
-            {
-                end = Math.Min(dead.Time, end);
-            }
-            DespawnEvent? despawn = log.CombatData.GetDespawnEvents(minion.AgentItem).LastOrDefault();
-            if (despawn != null)
-            {
-                end = Math.Min(despawn.Time, end);
-            }
-            //
-            end = Math.Min(end, logEnd);
-            minionSegments.Add(new Segment(log.LogData.LogStart, start, 0));
-            minionSegments.Add(new Segment(start, end, 1));
-            minionSegments.Add(new Segment(end, logEnd, 0));
-            minionSegments.RemoveAll(x => x.Start > x.End);
-            minionsSegments.Add(minionSegments);
+            minionsSegments.Add(minion.GetLifeSpanAsSegments(log));
         }
         return minionsSegments;
     }
