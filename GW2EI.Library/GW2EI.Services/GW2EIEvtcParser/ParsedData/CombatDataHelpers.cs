@@ -46,7 +46,7 @@ partial class CombatData
     }
     public bool HasLostBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffRemoveAllEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffRemoveAllDataByIDByDst(buffID, agent), time, epsilon)
             .Any();
     }
     public bool HasLostBuffStack(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
