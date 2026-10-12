@@ -270,6 +270,7 @@ internal static class MesmerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
+        new Buff("Number of Clones", NumberOfClones, [Source.BaseMesmerOnly, Source.Chronomancer, Source.Mirage], BuffStackType.Stacking, 99, BuffClassification.Other, ItemImages.SuperiorRuneOfTheMesmer),
         // Signets
         new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfTheEther),
         new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfDomination),
