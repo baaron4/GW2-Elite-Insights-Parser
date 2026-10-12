@@ -162,9 +162,9 @@ partial class CombatData
     }
     public IReadOnlyList<PvPScoreUpdateEvent> GetPvPScoreUpdateEventsByTeamID(uint teamID)
     {
-        if (_statusEvents.PvPScoreUpdateEventsByTeamID.TryGetValue(teamID, out var pvpScoreUpdateEvents)) 
-        { 
-            return pvpScoreUpdateEvents; 
+        if (_statusEvents.PvPScoreUpdateEventsByTeamID.TryGetValue(teamID, out var pvpScoreUpdateEvents))
+        {
+            return pvpScoreUpdateEvents;
         }
         return [];
     }

@@ -1,8 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
-using static GW2EIEvtcParser.WvWHelper;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class PvPScoreUpdateEvent : TimeCombatEvent
 {
