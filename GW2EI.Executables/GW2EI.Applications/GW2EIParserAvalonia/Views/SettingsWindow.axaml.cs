@@ -6,6 +6,7 @@ using System.Text;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using GW2EIBuilders;
 using GW2EIParserAvalonia.Services;
 using GW2EIParserAvalonia.ViewModels;
 using GW2EIParserCommons;
@@ -202,6 +203,13 @@ public partial class SettingsWindow : Window
     {
         ProgramHelper.APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
         var messageWindow = new MessageWindow("Spec List has been redone", _trace);
+        await messageWindow.ShowDialog(this);
+    }
+
+    private async void CreateJSONSchemaButton_Click(object sender, RoutedEventArgs e)
+    {
+        RawFormatBuilder.CreateJSONSchema(ProgramHelper.JSONSchemaLocation);
+        var messageWindow = new MessageWindow("JSON Schema has been created", _trace);
         await messageWindow.ShowDialog(this);
     }
 }
