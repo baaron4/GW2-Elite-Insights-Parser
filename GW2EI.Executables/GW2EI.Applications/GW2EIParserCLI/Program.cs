@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using GW2EIBuilders;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Properties;
 using GW2EIUpdater;
@@ -77,6 +78,12 @@ internal static class Program
                 ProgramHelper.APIController.WriteAPIMapsToFile(ProgramHelper.MapAPICacheLocation);
                 ProgramHelper.APIController.WriteAPITraitsToFile(ProgramHelper.TraitAPICacheLocation);
                 ProgramHelper.APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
+                parserArgOffset += 1;
+            }
+
+            if (args.Contains("-schema"))
+            {
+                RawFormatBuilder.CreateJSONSchema(ProgramHelper.JSONSchemaLocation);
                 parserArgOffset += 1;
             }
 
@@ -160,6 +167,7 @@ internal static class Program
         Console.WriteLine("-populate_from [path] [duration] : evtcs inside and under path will be added to the list of logs to be parsed. Duration, in hours, is used to limit the age of the logs, 0 for infinite");
         Console.WriteLine("-discord_batch : will upload logs uploaded to dps.report to the provided discord webhook. Will do nothing without a webhook or no dps.report urls");
         Console.WriteLine("-cache : will update the API caches");
+        Console.WriteLine("-schema : will generate JSON schema matching GW2EIJson.JsonLog");
         Console.WriteLine("-update : will check for the latest update available on GitHub and restart the application");
     }
 }
