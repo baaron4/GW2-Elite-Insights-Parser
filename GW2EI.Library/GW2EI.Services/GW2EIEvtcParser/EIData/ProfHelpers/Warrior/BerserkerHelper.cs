@@ -18,6 +18,8 @@ internal static class BerserkerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(KingOfFires, EffectGUIDs.BerserkerKingOfFires)
             .UsingSrcSpecChecker(Spec.Berserker)
+            // The effect also occurs without detonation; require consumption of the caster's Fire Aura.
+            .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasLostBuff(FireAura, evt.Src, evt.Time))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(Outrage, EffectGUIDs.BerserkerOutrage)
             .UsingSrcSpecChecker(Spec.Berserker),
