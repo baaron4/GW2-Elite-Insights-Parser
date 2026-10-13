@@ -80,7 +80,7 @@ public sealed class ParserService : IDisposable
         try
         {
             operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
-        } 
+        }
         catch
         {
             operation.InspectLog = null;

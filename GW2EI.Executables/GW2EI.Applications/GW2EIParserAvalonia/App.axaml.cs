@@ -38,7 +38,7 @@ public partial class App : Application
             {
                 EarlyShutdown(desktop, ArgFaulty);
                 return;
-            } 
+            }
             else if (CommandLineOptions == CommandWindow.HelpCommandLineOptions)
             {
                 EarlyShutdown(desktop, 0);
@@ -65,7 +65,7 @@ public partial class App : Application
                     EarlyShutdown(desktop, InspectLogFaulty);
                     return;
                 }
-            } 
+            }
             else
             {
                 desktop.MainWindow = new MainWindow(trace)
