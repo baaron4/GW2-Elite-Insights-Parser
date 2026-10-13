@@ -324,6 +324,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         // Ascension's Sacrifice - Greens (2 people)
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, out var ascensionsSacrifice))
         {
+            // Failed greens
+            log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var ascensionsSacrificeFail);
+            var removes = log.CombatData.GetBuffRemoveSingleDataByIDByDst(Ascension, p.AgentItem);
+
             foreach (var effect in ascensionsSacrifice)
             {
                 long duration = 5000;
@@ -335,6 +339,19 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
 
                 // Chain - Appears 500ms after the green, duration 4500 - The buff applied is POV only
                 replay.Decorations.AddTetherByEffectGUID(effect, Colors.Yellow, 0.4, (lifespan.start + 500, lifespan.end));
+
+                if (ascensionsSacrificeFail != null)
+                {
+                    // The effect is not unique and colliedes with other mechanics.
+                    // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
+                    var explosion = ascensionsSacrificeFail.FirstOrDefault(x => x.Src.IsSpecies(TargetID.Vloxx) && Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
+                    if (explosion != null && removes.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                    {
+                        lifespan = explosion.ComputeLifespan(log, 1666);
+                        var circle2 = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));
+                        replay.Decorations.AddWithBorder(circle2, Colors.DarkRed, 0.4);
+                    }
+                }
             }
         }
 
@@ -525,6 +542,17 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     }
                 }
 
+                // Judgment of Eternity - Greens (3 people) failed
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.NexusOfEternityJudgmentOfEternity3PeopleGreenFail, out var judgmentOfEternityFail))
+                {
+                    foreach (var effect in judgmentOfEternityFail)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2666);
+                        var circle = new CircleDecoration(240, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithBorder(circle, Colors.DarkRed, 0.4);
+                    }
+                }
+
                 // Echoing Blade - Red AoEs with spinning sword - Reflectable
                 var echoingBlade = log.CombatData.GetMissileEventsBySkillID(EchoingBlade);
                 replay.Decorations.AddNonHomingMissiles(log, echoingBlade, Colors.Red, 0.3, 200);
@@ -594,11 +622,13 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
+                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
+                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
@@ -882,8 +912,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.Add(circle);
             }
         }
-
-        AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
     }
 
     private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, long[] ids)
