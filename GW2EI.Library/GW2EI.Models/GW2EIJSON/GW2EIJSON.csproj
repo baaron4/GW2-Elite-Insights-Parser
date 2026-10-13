@@ -40,6 +40,12 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
+    <ItemGroup>
+        <Content Include="Content\schema.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     </PropertyGroup>

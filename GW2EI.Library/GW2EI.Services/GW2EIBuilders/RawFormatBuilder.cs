@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Schema;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIJSON;
@@ -41,6 +43,16 @@ public class RawFormatBuilder
     public static void CreateJSON(JsonLog jsonLog, Stream stream, bool indent)
     {
         JsonSerializer.Serialize(stream, jsonLog, indent ? SerializerSettings.Indentent : SerializerSettings.Default);
+    }
+
+    public static void CreateJSONSchema(string path)
+    {
+        JsonNode schemaNode = JsonSchemaExporter.GetJsonSchemaAsNode(
+            SerializerSettings.Default,
+            typeof(JsonLog)
+        );
+        string schemaJson = schemaNode.ToJsonString(SerializerSettings.Indentent);
+        File.WriteAllText(path, schemaJson);
     }
 
 }

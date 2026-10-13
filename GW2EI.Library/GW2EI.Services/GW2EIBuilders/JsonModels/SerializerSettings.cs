@@ -1,6 +1,7 @@
 ﻿
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using GW2EIJSON;
 
 namespace GW2EIBuilders.JsonModels;
 
@@ -13,6 +14,7 @@ internal class SerializerSettings
         WriteIndented = false,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+        TypeInfoResolver = JsonLogSerializerContext.Default,
         //NOTE(Rennorb): htmlescapes by default
     };
 
