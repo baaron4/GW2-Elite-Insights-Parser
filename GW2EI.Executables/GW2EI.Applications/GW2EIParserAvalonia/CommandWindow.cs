@@ -44,6 +44,8 @@ internal class CommandWindow
         return fileType == FileType.Disk || fileType == FileType.Pipe;
     }
 
+    internal static readonly CommandLineOptions HelpCommandLineOptions = new();
+
     private readonly string[] _args;
 
     public CommandWindow(string[]? args)
@@ -101,8 +103,9 @@ internal class CommandWindow
             Console.WriteLine("");
             Console.WriteLine("-c [config path] : use another config file");
             Console.WriteLine("-p : disable windows specific functions");
+            Console.WriteLine("-inspect : will launch an inspector window on the first given log file. If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
             Console.WriteLine("-h : help");
-            return null;
+            return HelpCommandLineOptions;
         }
 
         if (_args.Contains("-c"))
@@ -125,15 +128,32 @@ internal class CommandWindow
             }
         }
 
+        var inspectOnly = false;
+        if (_args.Contains("-inspect"))
+        {
+            parserArgOffset += 1;
+            inspectOnly = true;
+        }
+
         for (int i = parserArgOffset; i < _args.Length; i++)
         {
             logFiles.Add(_args[i]);
+            if (inspectOnly)
+            {
+                break;
+            }
+        }
+
+        if (inspectOnly && logFiles.Count == 0)
+        {
+            inspectOnly = false;
         }
 
         return new CommandLineOptions
         {
             LogFiles = logFiles,
-            ConfigPath = configPath
+            ConfigPath = configPath,
+            InspectOnly = inspectOnly
         };
     }
 }

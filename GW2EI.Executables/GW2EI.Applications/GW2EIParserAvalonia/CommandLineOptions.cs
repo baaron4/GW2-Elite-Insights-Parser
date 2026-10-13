@@ -6,4 +6,6 @@ public class CommandLineOptions
 {
     public IReadOnlyList<string> LogFiles { get; init; } = [];
     public string? ConfigPath { get; init; }
+
+    public bool InspectOnly { get; init; }
 }

@@ -71,6 +71,23 @@ public sealed class ParserService : IDisposable
         }
     }
 
+    public void InspectParseSync(InspectorOperationController operation)
+    {
+        if (operation.InspectLog != null || operation.Errored)
+        {
+            return;
+        }
+        try
+        {
+            operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
+        } 
+        catch
+        {
+            operation.InspectLog = null;
+            operation.Errored = true;
+        }
+    }
+
     public bool ParseMultipleLogs()
     {
         return _programHelper.ParseMultipleLogs();
