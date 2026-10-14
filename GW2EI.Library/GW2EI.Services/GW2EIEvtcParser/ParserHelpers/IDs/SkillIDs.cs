@@ -5784,6 +5784,7 @@ public static class SkillIDs
     public const long StormSummoning = 80740;
     public const long TheBigGun = 80745;
     public const long RelicOfTheEternalAlchemyHealing = 80747; // also gear buff id
+    public const long SurroundingCurseLegendaryCosmicPiercer = 80755;
     public const long TargetedEternalTyrant = 80769;
     public const long AstralBarrage = 80770;
     public const long HeartOfTheObscureVoE2 = 80790;
@@ -5809,6 +5810,7 @@ public static class SkillIDs
     public const long POV_GravityFieldForce = 80970;
     public const long RimeSpriteAura = 80988;
     public const long EmpoweredNexusOfEternity = 81002;
+    public const long LegendaryCosmicPiercerDash = 81007; // not named skill that is used when it moves
     public const long WorldpiercerCosmicBullwark = 81015;
     public const long VisionsOfEternityInSpear = 81017;
     public const long POV_RelicOfTheLanternGearBuff = 81019;

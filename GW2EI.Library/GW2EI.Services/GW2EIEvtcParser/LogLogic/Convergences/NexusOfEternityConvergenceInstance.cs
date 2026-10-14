@@ -146,7 +146,7 @@ internal class NexusOfEternityConvergenceInstance : ConvergenceLogic
             TargetID.CosmicPiercer1,
             TargetID.ChampionCosmicPiercer,
             TargetID.EliteCosmicPiercer,
-            TargetID.SomethingCosmicPiercer,
+            TargetID.LegendaryCosmicPiercer,
             TargetID.CosmicPiercer5,
             TargetID.CosmicSunderer1,
             TargetID.CosmicSunderer2,
