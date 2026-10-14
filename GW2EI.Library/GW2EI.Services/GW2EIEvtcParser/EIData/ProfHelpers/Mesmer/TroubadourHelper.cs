@@ -96,7 +96,7 @@ internal static class TroubadourHelper
             }
         }
         // First sequence of note applies, to handle initial state
-        var firstNoteBuffEventsBySrc = noteBuffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x =>  x.Take(3).ToList());
+        var firstNoteBuffEventsBySrc = noteBuffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.Take(3).ToList());
 
         // All instrument buff applies
         List<BuffApplyEvent> instrumentBuffApplies = [
