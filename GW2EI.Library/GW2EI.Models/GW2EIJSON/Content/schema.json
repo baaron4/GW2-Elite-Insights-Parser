@@ -1,0 +1,4335 @@
+{
+  "type": [
+    "object",
+    "null"
+  ],
+  "properties": {
+    "parsingSettings": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "parseExtensions": {
+          "type": "boolean"
+        },
+        "computePhases": {
+          "type": "boolean"
+        },
+        "computeCombatReplay": {
+          "type": "boolean"
+        },
+        "computeDamageModifiers": {
+          "type": "boolean"
+        },
+        "computeDamage": {
+          "type": "boolean"
+        },
+        "computeCast": {
+          "type": "boolean"
+        },
+        "computeBuff": {
+          "type": "boolean"
+        },
+        "computeMechanics": {
+          "type": "boolean"
+        }
+      }
+    },
+    "eliteInsightsVersion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "triggerID": {
+      "type": "integer"
+    },
+    "isInstanceLog": {
+      "type": "boolean"
+    },
+    "eiEncounterID": {
+      "type": "integer"
+    },
+    "eiLogID": {
+      "type": "integer"
+    },
+    "mapID": {
+      "type": "integer"
+    },
+    "fightName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fightIcon": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "icon": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "arcVersion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "arcRevision": {
+      "type": "integer"
+    },
+    "gW2Build": {
+      "type": "integer"
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fractalScale": {
+      "type": "integer"
+    },
+    "region": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "languageID": {
+      "type": "integer"
+    },
+    "recordedBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recordedAccountBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeStart": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeEnd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeStartStd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeEndStd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "durationMS": {
+      "type": "integer"
+    },
+    "logStartOffset": {
+      "type": "integer"
+    },
+    "instanceTimeStartStd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instanceIP": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instancePrivacy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "targetless": {
+      "type": "boolean"
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "isCM": {
+      "type": "boolean"
+    },
+    "isLegendaryCM": {
+      "type": "boolean"
+    },
+    "isLateStart": {
+      "type": "boolean"
+    },
+    "missingPreEvent": {
+      "type": "boolean"
+    },
+    "anonymous": {
+      "type": "boolean"
+    },
+    "detailedWvW": {
+      "type": "boolean"
+    },
+    "targets": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "finalHealth": {
+            "type": "integer"
+          },
+          "finalBarrier": {
+            "type": "integer"
+          },
+          "barrierPercent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "enum": [
+                  "NaN",
+                  "Infinity",
+                  "-Infinity"
+                ]
+              }
+            ]
+          },
+          "healthPercentBurned": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "enum": [
+                  "NaN",
+                  "Infinity",
+                  "-Infinity"
+                ]
+              }
+            ]
+          },
+          "healthBars": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "minPercent": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "maxPercent": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "health": {
+                  "type": "integer"
+                },
+                "active": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "buffs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "buffData": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "uptime": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "presence": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "generated": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "generatedPresence": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "overstacked": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "wasted": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "unknownExtended": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "byExtension": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "extended": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "states": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "statesPerSource": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "additionalProperties": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "buffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "buffVolumeData": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "incoming": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "incomingByExtension": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "incomingByUnknownExtension": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "incomingBy": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "incomingByExtensionBy": {
+                        "type": [
+                          "object",
+                          "null"
+                        ],
+                        "additionalProperties": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "enemyPlayer": {
+            "type": "boolean"
+          },
+          "breakbarPercents": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "enum": [
+                      "NaN",
+                      "Infinity",
+                      "-Infinity"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firstAware": {
+            "type": "integer"
+          },
+          "lastAware": {
+            "type": "integer"
+          },
+          "totalHealth": {
+            "type": "integer"
+          },
+          "condition": {
+            "type": "integer"
+          },
+          "concentration": {
+            "type": "integer"
+          },
+          "healing": {
+            "type": "integer"
+          },
+          "toughness": {
+            "type": "integer"
+          },
+          "hitboxHeight": {
+            "type": "integer"
+          },
+          "hitboxWidth": {
+            "type": "integer"
+          },
+          "instanceID": {
+            "type": "integer"
+          },
+          "teamID": {
+            "type": "integer"
+          },
+          "minions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "totalDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "totalTargetDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "totalDamageTaken": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "totalBreakbarDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "enum": [
+                          "NaN",
+                          "Infinity",
+                          "-Infinity"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "totalTargetBreakbarDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+                  }
+                },
+                "totalBreakbarDamageTaken": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "enum": [
+                          "NaN",
+                          "Infinity",
+                          "-Infinity"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "totalShieldDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "totalTargetShieldDamage": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                  }
+                },
+                "totalShieldDamageTaken": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "totalDamageDist": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "totalDamage": {
+                          "type": "integer"
+                        },
+                        "totalBreakbarDamage": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        },
+                        "min": {
+                          "type": "integer"
+                        },
+                        "max": {
+                          "type": "integer"
+                        },
+                        "hits": {
+                          "type": "integer"
+                        },
+                        "connectedHits": {
+                          "type": "integer"
+                        },
+                        "crit": {
+                          "type": "integer"
+                        },
+                        "glance": {
+                          "type": "integer"
+                        },
+                        "flank": {
+                          "type": "integer"
+                        },
+                        "againstMoving": {
+                          "type": "integer"
+                        },
+                        "missed": {
+                          "type": "integer"
+                        },
+                        "invulned": {
+                          "type": "integer"
+                        },
+                        "interrupted": {
+                          "type": "integer"
+                        },
+                        "evaded": {
+                          "type": "integer"
+                        },
+                        "blocked": {
+                          "type": "integer"
+                        },
+                        "shieldDamage": {
+                          "type": "integer"
+                        },
+                        "critDamage": {
+                          "type": "integer"
+                        },
+                        "downContribution": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "id": {
+                          "type": "integer"
+                        },
+                        "indirectDamage": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "targetDamageDist": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+                    }
+                  }
+                },
+                "totalDamageTakenDist": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+                  }
+                },
+                "rotation": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "skills": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "castTime": {
+                              "type": "integer"
+                            },
+                            "duration": {
+                              "type": "integer"
+                            },
+                            "timeGained": {
+                              "type": "integer"
+                            },
+                            "quickness": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "enum": [
+                                    "NaN",
+                                    "Infinity",
+                                    "-Infinity"
+                                  ]
+                                }
+                              ]
+                            },
+                            "ignoreOnRotationRender": {
+                              "type": [
+                                "boolean",
+                                "null"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "isUniquePerTimeFrame": {
+                  "type": "boolean"
+                },
+                "extHealingStats": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "totalHealing": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "totalAlliedHealing": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                      }
+                    },
+                    "totalIncomingHealing": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "totalHealingDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "totalHealing": {
+                              "type": "integer"
+                            },
+                            "totalDownedHealing": {
+                              "type": "integer"
+                            },
+                            "min": {
+                              "type": "integer"
+                            },
+                            "max": {
+                              "type": "integer"
+                            },
+                            "hits": {
+                              "type": "integer"
+                            },
+                            "id": {
+                              "type": "integer"
+                            },
+                            "indirectHealing": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "alliedHealingDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/minions/items/properties/extHealingStats/properties/totalHealingDist/items"
+                        }
+                      }
+                    },
+                    "totalIncomingHealingDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "$ref": "#/properties/targets/items/properties/minions/items/properties/extHealingStats/properties/totalHealingDist/items"
+                      }
+                    }
+                  }
+                },
+                "extBarrierStats": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "totalBarrier": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "totalAlliedBarrier": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                      }
+                    },
+                    "totalIncomingBarrier": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "totalBarrierDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "totalBarrier": {
+                              "type": "integer"
+                            },
+                            "min": {
+                              "type": "integer"
+                            },
+                            "max": {
+                              "type": "integer"
+                            },
+                            "hits": {
+                              "type": "integer"
+                            },
+                            "id": {
+                              "type": "integer"
+                            },
+                            "indirectBarrier": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "alliedBarrierDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/minions/items/properties/extBarrierStats/properties/totalBarrierDist/items"
+                        }
+                      }
+                    },
+                    "totalIncomingBarrierDist": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "$ref": "#/properties/targets/items/properties/minions/items/properties/extBarrierStats/properties/totalBarrierDist/items"
+                      }
+                    }
+                  }
+                },
+                "combatReplayData": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "start": {
+                        "type": "integer"
+                      },
+                      "end": {
+                        "type": "integer"
+                      },
+                      "iconURL": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "positions": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "enum": [
+                                  "NaN",
+                                  "Infinity",
+                                  "-Infinity"
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "orientations": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "enum": [
+                                "NaN",
+                                "Infinity",
+                                "-Infinity"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "dead": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      },
+                      "down": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      },
+                      "dc": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "isFake": {
+            "type": "boolean"
+          },
+          "dpsAll": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "dps": {
+                  "type": "integer"
+                },
+                "damage": {
+                  "type": "integer"
+                },
+                "condiDps": {
+                  "type": "integer"
+                },
+                "condiDamage": {
+                  "type": "integer"
+                },
+                "powerDps": {
+                  "type": "integer"
+                },
+                "powerDamage": {
+                  "type": "integer"
+                },
+                "breakbarDamage": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "actorDps": {
+                  "type": "integer"
+                },
+                "actorDamage": {
+                  "type": "integer"
+                },
+                "actorCondiDps": {
+                  "type": "integer"
+                },
+                "actorCondiDamage": {
+                  "type": "integer"
+                },
+                "actorPowerDps": {
+                  "type": "integer"
+                },
+                "actorPowerDamage": {
+                  "type": "integer"
+                },
+                "actorBreakbarDamage": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "statsAll": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "wasted": {
+                  "type": "integer"
+                },
+                "timeWasted": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "saved": {
+                  "type": "integer"
+                },
+                "timeSaved": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "stackDist": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "distToCom": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "avgBoons": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "avgActiveBoons": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "avgConditions": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "avgActiveConditions": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "swapCount": {
+                  "type": "integer"
+                },
+                "skillCastUptime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "skillCastUptimeNoAA": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "totalDamageCount": {
+                  "type": "integer"
+                },
+                "totalDmg": {
+                  "type": "integer"
+                },
+                "directDamageCount": {
+                  "type": "integer"
+                },
+                "directDmg": {
+                  "type": "integer"
+                },
+                "connectedDamageCount": {
+                  "type": "integer"
+                },
+                "connectedDmg": {
+                  "type": "integer"
+                },
+                "connectedDirectDamageCount": {
+                  "type": "integer"
+                },
+                "connectedDirectDmg": {
+                  "type": "integer"
+                },
+                "connectedPowerCount": {
+                  "type": "integer"
+                },
+                "connectedPowerDamage": {
+                  "type": "integer"
+                },
+                "connectedPowerAbove90HPCount": {
+                  "type": "integer"
+                },
+                "connectedPowerAbove90HPDamage": {
+                  "type": "integer"
+                },
+                "connectedLifeLeechCount": {
+                  "type": "integer"
+                },
+                "connectedLifeLeechDamage": {
+                  "type": "integer"
+                },
+                "connectedConditionCount": {
+                  "type": "integer"
+                },
+                "connectedConditionDamage": {
+                  "type": "integer"
+                },
+                "connectedConditionAbove90HPCount": {
+                  "type": "integer"
+                },
+                "connectedConditionAbove90HPDamage": {
+                  "type": "integer"
+                },
+                "critableDirectDamageCount": {
+                  "type": "integer"
+                },
+                "criticalRate": {
+                  "type": "integer"
+                },
+                "criticalDmg": {
+                  "type": "integer"
+                },
+                "flankingRate": {
+                  "type": "integer"
+                },
+                "againstMovingRate": {
+                  "type": "integer"
+                },
+                "glanceRate": {
+                  "type": "integer"
+                },
+                "missed": {
+                  "type": "integer"
+                },
+                "evaded": {
+                  "type": "integer"
+                },
+                "blocked": {
+                  "type": "integer"
+                },
+                "interrupts": {
+                  "type": "integer"
+                },
+                "invulned": {
+                  "type": "integer"
+                },
+                "killed": {
+                  "type": "integer"
+                },
+                "downed": {
+                  "type": "integer"
+                },
+                "againstDownedCount": {
+                  "type": "integer"
+                },
+                "againstDownedDamage": {
+                  "type": "integer"
+                },
+                "downContribution": {
+                  "type": "integer"
+                },
+                "appliedCrowdControlDownContribution": {
+                  "type": "integer"
+                },
+                "appliedCrowdControlDurationDownContribution": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "appliedCrowdControl": {
+                  "type": "integer"
+                },
+                "appliedCrowdControlDuration": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "defenses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "damageTaken": {
+                  "type": "integer"
+                },
+                "damageTakenCount": {
+                  "type": "integer"
+                },
+                "conditionDamageTaken": {
+                  "type": "integer"
+                },
+                "conditionDamageTakenCount": {
+                  "type": "integer"
+                },
+                "powerDamageTaken": {
+                  "type": "integer"
+                },
+                "powerDamageTakenCount": {
+                  "type": "integer"
+                },
+                "strikeDamageTaken": {
+                  "type": "integer"
+                },
+                "strikeDamageTakenCount": {
+                  "type": "integer"
+                },
+                "lifeLeechDamageTaken": {
+                  "type": "integer"
+                },
+                "lifeLeechDamageTakenCount": {
+                  "type": "integer"
+                },
+                "downedDamageTaken": {
+                  "type": "integer"
+                },
+                "downedDamageTakenCount": {
+                  "type": "integer"
+                },
+                "damageBarrier": {
+                  "type": "integer"
+                },
+                "damageBarrierCount": {
+                  "type": "integer"
+                },
+                "breakbarDamageTaken": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "breakbarDamageTakenCount": {
+                  "type": "integer"
+                },
+                "blockedCount": {
+                  "type": "integer"
+                },
+                "evadedCount": {
+                  "type": "integer"
+                },
+                "missedCount": {
+                  "type": "integer"
+                },
+                "dodgeCount": {
+                  "type": "integer"
+                },
+                "invulnedCount": {
+                  "type": "integer"
+                },
+                "interruptedCount": {
+                  "type": "integer"
+                },
+                "downCount": {
+                  "type": "integer"
+                },
+                "downDuration": {
+                  "type": "integer"
+                },
+                "deadCount": {
+                  "type": "integer"
+                },
+                "deadDuration": {
+                  "type": "integer"
+                },
+                "dcCount": {
+                  "type": "integer"
+                },
+                "dcDuration": {
+                  "type": "integer"
+                },
+                "boonStrips": {
+                  "type": "integer"
+                },
+                "boonStripsTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "conditionCleanses": {
+                  "type": "integer"
+                },
+                "conditionCleansesTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "receivedCrowdControl": {
+                  "type": "integer"
+                },
+                "receivedCrowdControlDuration": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "stunBreak": {
+                  "type": "integer"
+                },
+                "removedStunDuration": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "totalDamageDist": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+            }
+          },
+          "totalDamageTaken": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+            }
+          },
+          "rotation": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/rotation/items"
+            }
+          },
+          "damage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "powerDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "conditionDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "breakbarDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "conditionsStates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "boonsStates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "activeCombatMinions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "healthPercents": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "barrierPercents": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "combatReplayData": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "end": {
+                "type": "integer"
+              },
+              "iconURL": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "positions": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/positions"
+              },
+              "orientations": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/orientations"
+              },
+              "dead": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/dead"
+              },
+              "down": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/down"
+              },
+              "dc": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/dc"
+              }
+            }
+          }
+        }
+      }
+    },
+    "players": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "account": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": "integer"
+          },
+          "hasCommanderTag": {
+            "type": "boolean"
+          },
+          "commanderTagStates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "profession": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "friendlyNPC": {
+            "type": "boolean"
+          },
+          "notInSquad": {
+            "type": "boolean"
+          },
+          "guildID": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isEnglobed": {
+            "type": "boolean"
+          },
+          "weapons": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "weaponSets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "weapons": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "timeframe": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "activeClones": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "activeRangerPets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "dpsTargets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/properties/targets/items/properties/dpsAll/items"
+              }
+            }
+          },
+          "damageTaken1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "powerDamageTaken1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "conditionDamageTaken1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "breakbarDamageTaken1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "targetDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+              }
+            }
+          },
+          "targetPowerDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+            }
+          },
+          "targetConditionDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+            }
+          },
+          "targetBreakbarDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+              }
+            }
+          },
+          "targetDamageDist": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/targetDamageDist/items"
+            }
+          },
+          "statsTargets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "totalDamageCount": {
+                    "type": "integer"
+                  },
+                  "totalDmg": {
+                    "type": "integer"
+                  },
+                  "directDamageCount": {
+                    "type": "integer"
+                  },
+                  "directDmg": {
+                    "type": "integer"
+                  },
+                  "connectedDamageCount": {
+                    "type": "integer"
+                  },
+                  "connectedDmg": {
+                    "type": "integer"
+                  },
+                  "connectedDirectDamageCount": {
+                    "type": "integer"
+                  },
+                  "connectedDirectDmg": {
+                    "type": "integer"
+                  },
+                  "connectedPowerCount": {
+                    "type": "integer"
+                  },
+                  "connectedPowerDamage": {
+                    "type": "integer"
+                  },
+                  "connectedPowerAbove90HPCount": {
+                    "type": "integer"
+                  },
+                  "connectedPowerAbove90HPDamage": {
+                    "type": "integer"
+                  },
+                  "connectedLifeLeechCount": {
+                    "type": "integer"
+                  },
+                  "connectedLifeLeechDamage": {
+                    "type": "integer"
+                  },
+                  "connectedConditionCount": {
+                    "type": "integer"
+                  },
+                  "connectedConditionDamage": {
+                    "type": "integer"
+                  },
+                  "connectedConditionAbove90HPCount": {
+                    "type": "integer"
+                  },
+                  "connectedConditionAbove90HPDamage": {
+                    "type": "integer"
+                  },
+                  "critableDirectDamageCount": {
+                    "type": "integer"
+                  },
+                  "criticalRate": {
+                    "type": "integer"
+                  },
+                  "criticalDmg": {
+                    "type": "integer"
+                  },
+                  "flankingRate": {
+                    "type": "integer"
+                  },
+                  "againstMovingRate": {
+                    "type": "integer"
+                  },
+                  "glanceRate": {
+                    "type": "integer"
+                  },
+                  "missed": {
+                    "type": "integer"
+                  },
+                  "evaded": {
+                    "type": "integer"
+                  },
+                  "blocked": {
+                    "type": "integer"
+                  },
+                  "interrupts": {
+                    "type": "integer"
+                  },
+                  "invulned": {
+                    "type": "integer"
+                  },
+                  "killed": {
+                    "type": "integer"
+                  },
+                  "downed": {
+                    "type": "integer"
+                  },
+                  "againstDownedCount": {
+                    "type": "integer"
+                  },
+                  "againstDownedDamage": {
+                    "type": "integer"
+                  },
+                  "downContribution": {
+                    "type": "integer"
+                  },
+                  "appliedCrowdControlDownContribution": {
+                    "type": "integer"
+                  },
+                  "appliedCrowdControlDurationDownContribution": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "enum": [
+                          "NaN",
+                          "Infinity",
+                          "-Infinity"
+                        ]
+                      }
+                    ]
+                  },
+                  "appliedCrowdControl": {
+                    "type": "integer"
+                  },
+                  "appliedCrowdControlDuration": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "enum": [
+                          "NaN",
+                          "Infinity",
+                          "-Infinity"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "support": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "resurrects": {
+                  "type": "integer"
+                },
+                "resurrectTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "condiCleanse": {
+                  "type": "integer"
+                },
+                "condiCleanseTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "condiCleanseSelf": {
+                  "type": "integer"
+                },
+                "condiCleanseTimeSelf": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "boonStrips": {
+                  "type": "integer"
+                },
+                "boonStripsTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "boonStripDownContribution": {
+                  "type": "integer"
+                },
+                "boonStripDownContributionTime": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "stunBreak": {
+                  "type": "integer"
+                },
+                "removedStunDuration": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                },
+                "stunBreakSelf": {
+                  "type": "integer"
+                },
+                "removedStunSelfDuration": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "damageModifiers": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "damageModifiers": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "hitCount": {
+                        "type": "integer"
+                      },
+                      "totalHitCount": {
+                        "type": "integer"
+                      },
+                      "damageGain": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "totalDamage": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "damageModifiersTarget": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "$ref": "#/properties/players/items/properties/damageModifiers/items"
+              }
+            }
+          },
+          "incomingDamageModifiers": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/damageModifiers/items"
+            }
+          },
+          "incomingDamageModifiersTarget": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/damageModifiersTarget/items"
+            }
+          },
+          "buffUptimes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items"
+            }
+          },
+          "selfBuffs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "buffData": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "generation": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "generationPresence": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "overstack": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "wasted": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "unknownExtended": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "byExtension": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "extended": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "groupBuffs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "offGroupBuffs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "squadBuffs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "buffUptimesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items"
+            }
+          },
+          "selfBuffsActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "groupBuffsActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "offGroupBuffsActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "squadBuffsActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffs/items"
+            }
+          },
+          "buffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffVolumes/items"
+            }
+          },
+          "selfBuffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "buffVolumeData": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "outgoing": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      },
+                      "outgoingByExtension": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "enum": [
+                              "NaN",
+                              "Infinity",
+                              "-Infinity"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "groupBuffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "offGroupBuffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "squadBuffVolumes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "buffVolumesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffVolumes/items"
+            }
+          },
+          "selfBuffVolumesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "groupBuffVolumesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "offGroupBuffVolumesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "squadBuffVolumesActive": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/players/items/properties/selfBuffVolumes/items"
+            }
+          },
+          "deathRecap": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "deathTime": {
+                  "type": "integer"
+                },
+                "toDown": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "indirectDamage": {
+                        "type": "boolean"
+                      },
+                      "src": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "damage": {
+                        "type": "integer"
+                      },
+                      "time": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "toKill": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "$ref": "#/properties/players/items/properties/deathRecap/items/properties/toDown/items"
+                  }
+                }
+              }
+            }
+          },
+          "consumables": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "stack": {
+                  "type": "integer"
+                },
+                "duration": {
+                  "type": "integer"
+                },
+                "time": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "activeTimes": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "integer"
+            }
+          },
+          "extHealingStats": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "outgoingHealingAllies": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "hps": {
+                        "type": "integer"
+                      },
+                      "healing": {
+                        "type": "integer"
+                      },
+                      "healingPowerHps": {
+                        "type": "integer"
+                      },
+                      "healingPowerHealing": {
+                        "type": "integer"
+                      },
+                      "conversionHps": {
+                        "type": "integer"
+                      },
+                      "conversionHealing": {
+                        "type": "integer"
+                      },
+                      "hybridHps": {
+                        "type": "integer"
+                      },
+                      "hybridHealing": {
+                        "type": "integer"
+                      },
+                      "downedHps": {
+                        "type": "integer"
+                      },
+                      "downedHealing": {
+                        "type": "integer"
+                      },
+                      "actorHps": {
+                        "type": "integer"
+                      },
+                      "actorHealing": {
+                        "type": "integer"
+                      },
+                      "actorHealingPowerHps": {
+                        "type": "integer"
+                      },
+                      "actorHealingPowerHealing": {
+                        "type": "integer"
+                      },
+                      "actorConversionHps": {
+                        "type": "integer"
+                      },
+                      "actorConversionHealing": {
+                        "type": "integer"
+                      },
+                      "actorHybridHps": {
+                        "type": "integer"
+                      },
+                      "actorHybridHealing": {
+                        "type": "integer"
+                      },
+                      "actorDownedHps": {
+                        "type": "integer"
+                      },
+                      "actorDownedHealing": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "outgoingHealing": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/extHealingStats/properties/outgoingHealingAllies/items/items"
+                }
+              },
+              "incomingHealing": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "healed": {
+                      "type": "integer"
+                    },
+                    "healingPowerHealed": {
+                      "type": "integer"
+                    },
+                    "conversionHealed": {
+                      "type": "integer"
+                    },
+                    "hybridHealed": {
+                      "type": "integer"
+                    },
+                    "downedHealed": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "alliedHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+                }
+              },
+              "alliedHealingPowerHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+                }
+              },
+              "alliedConversionHealingHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+                }
+              },
+              "alliedHybridHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+                }
+              },
+              "healing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "healingPowerHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "conversionHealingHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "hybridHealing1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "healingReceived1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "healingPowerHealingReceived1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "conversionHealingHealingReceived1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "hybridHealingReceived1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "alliedHealingDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extHealingStats/properties/alliedHealingDist/items"
+                }
+              },
+              "totalHealingDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extHealingStats/properties/totalHealingDist/items"
+                }
+              },
+              "totalIncomingHealingDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extHealingStats/properties/totalHealingDist/items"
+                }
+              }
+            }
+          },
+          "extBarrierStats": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "outgoingBarrierAllies": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "bps": {
+                        "type": "integer"
+                      },
+                      "barrier": {
+                        "type": "integer"
+                      },
+                      "actorBps": {
+                        "type": "integer"
+                      },
+                      "actorBarrier": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "outgoingBarrier": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/extBarrierStats/properties/outgoingBarrierAllies/items/items"
+                }
+              },
+              "incomingBarrier": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "barrier": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "alliedBarrier1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/players/items/properties/targetDamage1S/items"
+                }
+              },
+              "barrier1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "barrierReceived1S": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+                }
+              },
+              "alliedBarrierDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extBarrierStats/properties/alliedBarrierDist/items"
+                }
+              },
+              "totalBarrierDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extBarrierStats/properties/totalBarrierDist/items"
+                }
+              },
+              "totalIncomingBarrierDist": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "$ref": "#/properties/targets/items/properties/minions/items/properties/extBarrierStats/properties/totalBarrierDist/items"
+                }
+              }
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firstAware": {
+            "type": "integer"
+          },
+          "lastAware": {
+            "type": "integer"
+          },
+          "totalHealth": {
+            "type": "integer"
+          },
+          "condition": {
+            "type": "integer"
+          },
+          "concentration": {
+            "type": "integer"
+          },
+          "healing": {
+            "type": "integer"
+          },
+          "toughness": {
+            "type": "integer"
+          },
+          "hitboxHeight": {
+            "type": "integer"
+          },
+          "hitboxWidth": {
+            "type": "integer"
+          },
+          "instanceID": {
+            "type": "integer"
+          },
+          "teamID": {
+            "type": "integer"
+          },
+          "minions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items"
+            }
+          },
+          "isFake": {
+            "type": "boolean"
+          },
+          "dpsAll": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/dpsAll/items"
+            }
+          },
+          "statsAll": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/statsAll/items"
+            }
+          },
+          "defenses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/defenses/items"
+            }
+          },
+          "totalDamageDist": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+            }
+          },
+          "totalDamageTaken": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalDamageDist/items"
+            }
+          },
+          "rotation": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/rotation/items"
+            }
+          },
+          "damage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "powerDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "conditionDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/minions/items/properties/totalTargetDamage/items"
+            }
+          },
+          "breakbarDamage1S": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "conditionsStates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "boonsStates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "activeCombatMinions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+            }
+          },
+          "healthPercents": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "barrierPercents": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+            }
+          },
+          "combatReplayData": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "end": {
+                "type": "integer"
+              },
+              "iconURL": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "positions": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/positions"
+              },
+              "orientations": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/orientations"
+              },
+              "dead": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/dead"
+              },
+              "down": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/down"
+              },
+              "dc": {
+                "$ref": "#/properties/targets/items/properties/minions/items/properties/combatReplayData/items/properties/dc"
+              }
+            }
+          }
+        }
+      }
+    },
+    "phases": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "start": {
+            "type": "integer"
+          },
+          "end": {
+            "type": "integer"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "success": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "isCM": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "isLegendaryCM": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "eiEncounterID": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "encounterPhase": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "encounterIcon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "encounterIsLateStart": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "encounterMissingPreEvent": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "targets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "integer"
+            }
+          },
+          "secondaryTargets": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "integer"
+            }
+          },
+          "targetPriorities": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "subPhases": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "integer"
+            }
+          },
+          "phaseType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "breakbarPhase": {
+            "type": "boolean"
+          },
+          "breakbarRecovered": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "enum": [
+                  "NaN",
+                  "Infinity",
+                  "-Infinity"
+                ]
+              }
+            ]
+          },
+          "breakbarActive": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "mechanics": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "mechanicsData": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "time": {
+                  "type": "integer"
+                },
+                "actor": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "instid": {
+                  "type": "integer"
+                },
+                "weight": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fullName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "internalCooldown": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "isAchievementEligibility": {
+            "type": "boolean"
+          },
+          "severity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "uploadLinks": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "skillMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "autoAttack": {
+            "type": "boolean"
+          },
+          "canCrit": {
+            "type": "boolean"
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isSwap": {
+            "type": "boolean"
+          },
+          "isInstantCast": {
+            "type": "boolean"
+          },
+          "isTraitProc": {
+            "type": "boolean"
+          },
+          "isUnconditionalProc": {
+            "type": "boolean"
+          },
+          "isGearProc": {
+            "type": "boolean"
+          },
+          "isNotAccurate": {
+            "type": "boolean"
+          },
+          "conversionBasedHealing": {
+            "type": "boolean"
+          },
+          "hybridHealing": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "buffMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "classification": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stacking": {
+            "type": "boolean"
+          },
+          "conversionBasedHealing": {
+            "type": "boolean"
+          },
+          "hybridHealing": {
+            "type": "boolean"
+          },
+          "descriptions": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "damageModMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nonMultiplier": {
+            "type": "boolean"
+          },
+          "isCounter": {
+            "type": "boolean"
+          },
+          "skillBased": {
+            "type": "boolean"
+          },
+          "approximate": {
+            "type": "boolean"
+          },
+          "incoming": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "teamMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "guid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "personalBuffs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "personalDamageMods": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "$ref": "#/properties/personalBuffs/additionalProperties"
+      }
+    },
+    "presentFractalInstabilities": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer"
+      }
+    },
+    "presentInstanceBuffs": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+      }
+    },
+    "logErrors": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "usedExtensions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "signature": {
+            "type": "integer"
+          },
+          "runningExtension": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "combatReplayMetaData": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "inchToPixel": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "enum": [
+                "NaN",
+                "Infinity",
+                "-Infinity"
+              ]
+            }
+          ]
+        },
+        "pollingRate": {
+          "type": "integer"
+        },
+        "sizes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer"
+          }
+        },
+        "maps": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "interval": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "position": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "enum": [
+                        "NaN",
+                        "Infinity",
+                        "-Infinity"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "wvWMapData": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "redShardID": {
+          "type": "integer"
+        },
+        "blueShardID": {
+          "type": "integer"
+        },
+        "greenShardID": {
+          "type": "integer"
+        },
+        "redTeamID": {
+          "type": "integer"
+        },
+        "blueTeamID": {
+          "type": "integer"
+        },
+        "greenTeamID": {
+          "type": "integer"
+        },
+        "objectiveData": {
+          "type": "array",
+          "items": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "mapID": {
+                "type": "integer"
+              },
+              "objectiveID": {
+                "type": "integer"
+              },
+              "objectiveType": {
+                "type": "string"
+              },
+              "owners": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
