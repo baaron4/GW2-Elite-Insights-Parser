@@ -260,7 +260,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             {TargetID.ChampionCosmicPiercer, 1},
             {TargetID.ChampionCosmicBulwark, 1},
             {TargetID.ChampionCosmicSunderer, 1},
-            {TargetID.LegendaryCosmicPiercer, 1},
             {TargetID.EliteCosmicPiercer, 2},
             {TargetID.EliteCosmicBulwark, 2},
             {TargetID.ChampionAspectOfTheStaff, 3},
