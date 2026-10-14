@@ -746,9 +746,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     case (int)TargetID.EliteCosmicPiercer:
                         actor.OverrideName("Elite " + actor.Character);
                         break;
-                    case (int)TargetID.LegendaryCosmicPiercer:
-                        actor.OverrideName("Legendary " + actor.Character);
-                        break;
                 }
             }
         }
