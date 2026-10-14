@@ -147,6 +147,10 @@ public static class EffectGUIDs
     public static readonly Guid TroubadourDeafeningDrumWave3 = new("C7B5AD810BB6534AB324A25FBD0BED4D"); // 0 duration, around Dst
     public static readonly Guid TroubadourSyncopateDelayedWave1 = new("24498E18DEC97B4094376849EF7A3746"); // 2000 duration, around Dst
     public static readonly Guid TroubadourSyncopateDelayedWave2 = new("8ECB35B63BA6C045BE9F0B864972B983"); // 0 duration, around Dst
+    public static readonly Guid TroubadourNote1 = new("513843DFD3293D4CA6E3743D79A7246D");
+    public static readonly Guid TroubadourNote2 = new("A8B672F7A86EBC4AAF3783B8D2E94C8D");
+    public static readonly Guid TroubadourNote3 = new("5D5E82DD9912C440B50C842C3FB2B40F");
+
     #endregion
 
     #region Necromancer

@@ -86,6 +86,7 @@ public static class SkillIDs
     public const long MirageMirrorShatter = -67;
     public const long FlyTo = -68;
     public const long AchievementEligibilityAShatteredVision = -69;
+    public const long NumberOfNotes = -70;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

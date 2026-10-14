@@ -139,6 +139,7 @@ internal static class TraitImages
     public const string SymphonicResonance = "https://render.guildwars2.com/file/AF276ECB07996BF5343A513FF2E52F3BE1CBAD0B/3679978.png";
     public const string LoveSong = "https://render.guildwars2.com/file/1CC50D6BDDE64580522F0D396D194C020AC50DCE/3679972.png";
     public const string Chronophantasma = "https://render.guildwars2.com/file/120E2199010315D0C1FACA9BBFB5DF9E5E47027F/1012481.png";
+    public const string NumberOfNotes = "https://i.imgur.com/fxKfARS.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://render.guildwars2.com/file/22B370D754AC1D69A8FE66DCCB36BE940455E5EA/1012539.png";

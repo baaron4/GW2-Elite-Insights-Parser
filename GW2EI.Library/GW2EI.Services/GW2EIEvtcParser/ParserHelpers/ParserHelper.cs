@@ -164,6 +164,12 @@ public static class ParserHelper
         return groupByTime;
     }
 
+    internal static bool IsCloseMultipleOf(int value, int multipleOf, int tol = 50)
+    {
+        int nearest = (int)Math.Round((double)value / multipleOf) * multipleOf;
+        return Math.Abs(value - nearest) <= tol;
+    }
+
     internal static T MaxBy<T, TComparable>(this IEnumerable<T> en, Func<T, TComparable> evaluate) where TComparable : IComparable<TComparable>
     {
         return en.Select(t => (value: t, eval: evaluate(t)))

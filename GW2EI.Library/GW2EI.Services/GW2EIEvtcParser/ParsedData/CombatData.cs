@@ -133,6 +133,7 @@ public partial class CombatData
             }
         }
         toAdd.AddRange(MesmerHelper.TransformMesmerCloneStorage(this, agentData, skillData, evtcVersion));
+        toAdd.AddRange(TroubadourHelper.TransformTroubadourNoteStorage(this, agentData, skillData, evtcVersion));
         toAdd.AddRange(RangerHelper.TransformRangerPetCount(this, agentData, skillData, evtcVersion));
         if (cleanLethalTempo)
         {

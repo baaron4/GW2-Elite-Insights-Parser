@@ -29,11 +29,12 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
         _addedActive = evtcItem.IsShields > 0;
     }
 
-    internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, IFF iff, uint id, bool addedActive) : base(by, to, time, buffSkill, iff, id)
+    internal BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, IFF iff, uint id, bool addedActive, bool initial = false) : base(by, to, time, buffSkill, iff, id)
     {
         AppliedDuration = duration;
         OriginalAppliedDuration = duration;
         _addedActive = addedActive;
+        Initial = initial;
     }
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
