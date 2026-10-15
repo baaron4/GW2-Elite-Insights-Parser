@@ -99,7 +99,7 @@ internal static class TroubadourHelper
         // Instrument Buff Applies are not reliable, casting prof skills or elite will not trigger a buff apply if incoming buff apply duration is lower than what is currently running
         // That also means we can't find initial state reliably
         // Effects are always present but we need to keep an eye on this for possible collisions
-        if (combatData.TryGetEffectEventsByGUIDs([EffectGUIDs.TroubadourLivelyLuteWave2, EffectGUIDs.TroubadourFlusteringFluteWave1, EffectGUIDs.TroubadourDeafeningDrumWave2, EffectGUIDs.TroubadourHarmoniusHarpWave4], out var instrumentEffects)) 
+        if (combatData.TryGetEffectEventsByGUIDs([EffectGUIDs.TroubadourLivelyLuteWave2, EffectGUIDs.TroubadourFlusteringFluteWave1, EffectGUIDs.TroubadourDeafeningDrumWave2, EffectGUIDs.TroubadourHarmoniusHarpWave4], out var instrumentEffects))
         {
             foreach (var instrumentEffect in instrumentEffects)
             {
