@@ -127,6 +127,15 @@ internal static class TroubadourHelper
                 if (troubInstrumentBuffApplies.Count == 1)
                 {
                     var instrumentBuffApply = troubInstrumentBuffApplies[0];
+                    // Sanity check
+                    // When elite is cast, new instruments are applied only if the incoming duration is higher than current
+                    // Only possible collision with count == 1 is when elite applies a single buff with 15s duration, aka 4 instruments already running but only one is below 15s duration
+                    // Would require 3 instruments to be played with 3 notes + cast elite in less than 5 seconds, while a 4th instrument is already active with less than 15s
+                    // The reality of note generation speed make this quite difficult to achieve but TBC
+                    if (!IsCloseMultipleOf(instrumentBuffApply.OriginalAppliedDuration, 5000))
+                    {
+                        continue;
+                    }
                     noteBuffEvents.Add(new BuffRemoveAllEvent(troub, troub, instrumentBuffApply.Time, int.MaxValue, noteSkill, IFF.Friend, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                     if (doInitial)
                     {
