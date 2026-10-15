@@ -114,25 +114,26 @@ internal static class TroubadourHelper
                 .GroupBy(y => MathF.Round(y.Time / tol) * tol).
                 ToDictionary(y => y.Key, y => y.ToList()
         ));
+        var taleOfTheAugustQueenCasts = combatData.GetAnimatedCastData(TaleOfTheAugustQueen);
         foreach (var grouped in groupedBuffApplies)
         {
             var troub = grouped.Key;
             bool doInitial = true;
+            var troubQueenCasts = taleOfTheAugustQueenCasts.Where(x => x.Caster.Is(troub)).ToList();
             foreach (var groupedInstrumentBuffApplies in grouped.Value)
             {
                 // Keep only intrument buff applies after first aware, ignore the ones applied before log start as their notes couldn't have been consummed during the log
                 var troubInstrumentBuffApplies = groupedInstrumentBuffApplies.Value
-                    .Where(instrumentBuffApply => instrumentBuffApply.Time - (instrumentBuffApply.OriginalAppliedDuration - instrumentBuffApply.AppliedDuration) >= troub.FirstAware).ToList();
+                    .Where(instrumentBuffApply => instrumentBuffApply.Time - (instrumentBuffApply.OriginalAppliedDuration - instrumentBuffApply.AppliedDuration) >= troub.FirstAware)
+                    .ToList();
                 // If more than 1, Tale of the August Queen trigger
                 if (troubInstrumentBuffApplies.Count == 1)
                 {
                     var instrumentBuffApply = troubInstrumentBuffApplies[0];
                     // Sanity check
                     // When elite is cast, new instruments are applied only if the incoming duration is higher than current
-                    // Only possible collision with count == 1 is when elite applies a single buff with 15s duration, aka 4 instruments already running but only one is below 15s duration
-                    // Would require 3 instruments to be played with 3 notes + cast elite in less than 5 seconds, while a 4th instrument is already active with less than 15s
-                    // The reality of note generation speed make this quite difficult to achieve but TBC
-                    if (!IsCloseMultipleOf(instrumentBuffApply.OriginalAppliedDuration, 5000))
+                    // Only possible collision with count == 1 is when elite applies a single buff with 15s duration, aka 4 instruments already running but only one is below 15s duration, which we discard via cast check
+                    if (!IsCloseMultipleOf(instrumentBuffApply.OriginalAppliedDuration, 5000) || taleOfTheAugustQueenCasts.Any(x => x.IntersectsActualCastWindow(instrumentBuffApply.Time)))
                     {
                         continue;
                     }

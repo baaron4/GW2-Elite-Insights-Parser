@@ -5403,7 +5403,7 @@ public static class SkillIDs
     public const long DefensiveProtocolProtect = 76959;
     public const long WanderlustPlayerSkill = 76961;
     public const long TwinMoonSweep1 = 76968;
-    public const long TakeOfTheAugustQueen = 76971;
+    public const long TaleOfTheAugustQueen = 76971;
     public const long ChantOfFreedomBuff = 76972;
     public const long MagpiesDefenseBarrierBuff = 76974;
     public const long SplinterWeaponSkill2 = 76975;
