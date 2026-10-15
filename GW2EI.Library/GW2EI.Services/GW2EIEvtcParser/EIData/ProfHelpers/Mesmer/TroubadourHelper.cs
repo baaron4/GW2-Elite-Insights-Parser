@@ -95,9 +95,23 @@ internal static class TroubadourHelper
                 noteBuffEvents.Add(new BuffApplyEvent(note.Src, note.Src, note.Time, int.MaxValue, noteSkill, IFF.Friend, ++buffStackID, true));
             }
         }
-        // First sequence of note applies, to handle initial state
-        var firstNoteBuffEventsBySrc = noteBuffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.Take(3).ToList());
-
+        // Buff Remove Alls
+        // Instrument Buff Applies are not reliable, casting prof skills or elite will not trigger a buff apply if incoming buff apply duration is lower than what is currently running
+        // That also means we can't find initial state reliably
+        // Effects are always present but we need to keep an eye on this for possible collisions
+        if (combatData.TryGetEffectEventsByGUIDs([EffectGUIDs.TroubadourLivelyLuteWave2, EffectGUIDs.TroubadourFlusteringFluteWave1, EffectGUIDs.TroubadourDeafeningDrumWave2, EffectGUIDs.TroubadourHarmoniusHarpWave4], out var instrumentEffects)) 
+        {
+            foreach (var instrumentEffect in instrumentEffects)
+            {
+                var troub = instrumentEffect.Src;
+                noteBuffEvents.Add(new BuffRemoveAllEvent(troub, troub, instrumentEffect.Time, int.MaxValue, noteSkill, IFF.Friend, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+            }
+        }
+        noteBuffEvents.SortByTime();
+        // Buff Initial, this is not 100% reliable due to instrument buff apply situation
+        // First sequence of note applies and first remove, to handle initial state
+        var firstNoteBuffApplyEventsBySrc = noteBuffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.OfType<BuffApplyEvent>().Take(3).ToList());
+        var firstNoteBuffRemoveEventsByDst = noteBuffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.FirstOrDefault(x => x is BuffRemoveAllEvent));
         // All instrument buff applies
         List<BuffApplyEvent> instrumentBuffApplies = [
             ..combatData.GetBuffApplyData(LutePlaying).OfType<BuffApplyEvent>(),
@@ -105,7 +119,6 @@ internal static class TroubadourHelper
             ..combatData.GetBuffApplyData(DrumPlaying).OfType<BuffApplyEvent>(),
             ..combatData.GetBuffApplyData(HarpPlaying).OfType<BuffApplyEvent>(),
         ];
-        instrumentBuffApplies.SortByTime();
         // Regroup by time with tolerance, to handle Tale of the August Queen casts
         var tol = 30f;
         var groupedBuffApplies = instrumentBuffApplies
@@ -118,7 +131,6 @@ internal static class TroubadourHelper
         foreach (var grouped in groupedBuffApplies)
         {
             var troub = grouped.Key;
-            bool doInitial = true;
             var troubQueenCasts = taleOfTheAugustQueenCasts.Where(x => x.Caster.Is(troub)).ToList();
             foreach (var groupedInstrumentBuffApplies in grouped.Value)
             {
@@ -130,36 +142,31 @@ internal static class TroubadourHelper
                 if (troubInstrumentBuffApplies.Count == 1)
                 {
                     var instrumentBuffApply = troubInstrumentBuffApplies[0];
-                    // Sanity check
-                    // When elite is cast, new instruments are applied only if the incoming duration is higher than current
-                    // Only possible collision with count == 1 is when elite applies a single buff with 15s duration, aka 4 instruments already running but only one is below 15s duration, which we discard via cast check
-                    if (!IsCloseMultipleOf(instrumentBuffApply.OriginalAppliedDuration, 5000) || taleOfTheAugustQueenCasts.Any(x => x.IntersectsActualCastWindow(instrumentBuffApply.Time)))
+                    // Single buff apply elite cast collision check
+                    if (taleOfTheAugustQueenCasts.Any(x => x.IntersectsActualCastWindow(instrumentBuffApply.Time)))
                     {
                         continue;
                     }
-                    noteBuffEvents.Add(new BuffRemoveAllEvent(troub, troub, instrumentBuffApply.Time, int.MaxValue, noteSkill, IFF.Friend, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-                    if (doInitial)
+                    if (firstNoteBuffRemoveEventsByDst.TryGetValue(troub, out var firstRemoveAll) && firstRemoveAll != null && firstRemoveAll.Time + ServerDelayConstant < instrumentBuffApply.Time)
                     {
-                        doInitial = false;
-                        // Handle buff initial as note creation effects will not be present in the log
-                        var expectedNoteCount = (int)Math.Round(instrumentBuffApply.OriginalAppliedDuration / 5000.0) - 1;
-                        var missingNotes = 0;
-                        // Keep only applies before the very first within log instrument buff apply
-                        if (firstNoteBuffEventsBySrc.TryGetValue(troub, out var firstNoteApplies) &&
-                            firstNoteApplies.Where(x => x.Time < instrumentBuffApply.Time).ToList() is List<BuffEvent> restrictedFirstNoteApplies &&
-                            restrictedFirstNoteApplies.Count != expectedNoteCount)
-                        {
-                            missingNotes = expectedNoteCount - restrictedFirstNoteApplies.Count;
-                        }
-                        else
-                        {
-                            missingNotes = expectedNoteCount;
-                        }
-                        for (var i = 0; i < missingNotes; i++)
-                        {
-                            noteBuffEvents.Add(new BuffApplyEvent(troub, troub, troub.FirstAware, int.MaxValue, noteSkill, IFF.Friend, ++buffStackID, true, true));
-                        }
+                        // We already consumed notes before apply an instrument buff, initial state unknown
+                        break;
                     }
+                    // Deduce number of notes used by buff apply
+                    var expectedNoteCount = (int)Math.Round(instrumentBuffApply.OriginalAppliedDuration / 5000.0) - 1;
+                    var missingNotes = expectedNoteCount;
+                    // Keep only note applies before the very first within log instrument buff apply
+                    if (firstNoteBuffApplyEventsBySrc.TryGetValue(troub, out var firstNoteApplies) &&
+                        firstNoteApplies.Where(x => x.Time < instrumentBuffApply.Time).ToList() is List<BuffApplyEvent> restrictedFirstNoteApplies &&
+                        restrictedFirstNoteApplies.Count != expectedNoteCount)
+                    {
+                        missingNotes = expectedNoteCount - restrictedFirstNoteApplies.Count;
+                    }
+                    for (var i = 0; i < missingNotes; i++)
+                    {
+                        noteBuffEvents.Add(new BuffApplyEvent(troub, troub, troub.FirstAware, int.MaxValue, noteSkill, IFF.Friend, ++buffStackID, true, true));
+                    }
+                    break;
                 }
             }
         }
