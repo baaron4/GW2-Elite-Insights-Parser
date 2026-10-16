@@ -477,7 +477,7 @@ public static class MechanicIDs
     public static readonly int Mech_BlobOfBlight = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_BlobOfBlightTarget = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_BoonsCorruptedGreer = MountBalriorMask | ++mountBalriorCount;
-    public static readonly int Mech_EmpoweredGreer = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredGreerEncounter = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_ChorusOfThunder = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_ChorusOfThunderTarget = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_DiscordantThunder = MountBalriorMask | ++mountBalriorCount;
@@ -545,6 +545,11 @@ public static class MechanicIDs
     public static readonly int Mech_UraReturn = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_RisingPressure = MountBalriorMask | ++mountBalriorCount;
     public static readonly int Mech_TitanicResistance = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredGreer = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredEreg = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredGree = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredReeg = MountBalriorMask | ++mountBalriorCount;
+    public static readonly int Mech_EmpoweredGreerEncounterReflect = MountBalriorMask | ++mountBalriorCount;
     #endregion WING 8
     #endregion RAID WINGS
 

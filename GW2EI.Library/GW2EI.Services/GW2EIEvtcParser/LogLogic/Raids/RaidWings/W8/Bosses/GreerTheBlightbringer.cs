@@ -48,7 +48,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], Mech_EruptionOfRootTarget, new (Symbols.Circle, Colors.Green), new("ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)"), Sev1),
                 ]),
                 new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], Mech_RipplesOfRot, new (Symbols.StarSquareOpenDot, Colors.Chocolate), new("RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit"), Sev1),
-                new PlayerDstBuffApplyMechanic(PlagueRot, Mech_PlagueRot, new (Symbols.YDown, Colors.Red), new("PlagueRot", "Received Plague Rot", "Plague Rot"), Sev0),
+                new PlayerDstBuffApplyMechanic(PlagueRot, Mech_PlagueRot, new (Symbols.YDown, Colors.DarkRed), new("PlagueRot", "Received Plague Rot", "Plague Rot"), Sev0),
                 new MechanicGroup([
                     new AchievementEligibilityMechanic(Ach_Unplagued, Mech_UnplaguedLost, new (Symbols.YDown, Colors.DarkYellow), new("Unplagued.Achiv.L", "Achievement Eligibility: Guaranteed Plague Free Lost", "Achiv Unplagued Lost"))
                         .UsingChecker((evt, log) => evt.Lost),
@@ -85,7 +85,18 @@ internal class GreerTheBlightbringer : MountBalrior
             ]),
             new PlayerDstBuffRemoveMechanic(Boons, Mech_BoonsCorruptedGreer, new (Symbols.Octagon, Colors.Purple), new("BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted"), Sev0, 100)
                 .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg, (int)TargetID.Ereg])),
-            new EnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredGreer, new (Symbols.YUp, Colors.Red), new("Empowered", "Gained Empowered", "Empowered"), Sev0),
+            new MechanicGroup([
+                new PlayerSrcBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredGreerEncounterReflect, new (Symbols.YUp, Colors.DarkRed), new("Empowered.Rfl", "Reflected empowering orb back to target", "Empowered Enemy"), Sev0),
+                new EnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredGreerEncounter, new (Symbols.YUp, Colors.Red), new("Empowered", "Gained Empowered", "Empowered"), Sev0),
+                new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredGreer, new (Symbols.Y, Colors.Red), new("Empowered.Gr", "Greer Gained Empowered", "Greer Empowered"), Sev0)
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.Greer)),
+                new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredEreg, new (Symbols.YRight, Colors.Red), new("Empowered.E", "Ereg Gained Empowered", "Ereg Empowered"), Sev0)
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.Ereg)),
+                new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredGree, new (Symbols.YLeft, Colors.Red), new("Empowered.Ge", "Gree Gained Empowered", "Gree Empowered"), Sev0)
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.Gree)),
+                new EnemySrcEnemyDstBuffApplyMechanic(EmpoweredGreer, Mech_EmpoweredReeg, new (Symbols.YDown, Colors.Red), new("Empowered.R", "Reeg Gained Empowered", "Reeg Empowered"), Sev0)
+                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.Reeg)),
+            ]),
         ]);
 
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
