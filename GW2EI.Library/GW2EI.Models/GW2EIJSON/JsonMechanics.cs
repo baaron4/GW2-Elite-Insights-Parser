@@ -18,7 +18,7 @@ public class JsonMechanics
         public long Time;
 
         /// <summary>
-        /// The actor who is concerned by the mechanic
+        /// The actor who is concerned by the mechanic, if actor is not a player or a target, mechanics are regrouped by species id.
         /// </summary>
         public string? Actor;
         /// <summary>
@@ -26,7 +26,7 @@ public class JsonMechanics
         /// </summary>
         public int Id;
         /// <summary>
-        /// Instance ID of the Actor
+        /// Instance ID of the Actor, only relevant is actor is a player or a target
         /// </summary>
         public int Instid;
         /// <summary>
