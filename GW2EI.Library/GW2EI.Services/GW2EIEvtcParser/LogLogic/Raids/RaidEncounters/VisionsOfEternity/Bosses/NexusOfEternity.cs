@@ -358,16 +358,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             }
         }
 
-        // Eternal Reflection - Explosions
-        foreach (var effect in eternalReflectionExplosions)
-        {
-            // Duration 1666 - We reduce it to a brief 150 indicator.
-            // No game build check here - We show a this default effect on a failed Ascension's Sacrifice for logs prio to 29 Sept 2026.
-            lifespan = (effect.Time, effect.Time + 250);
-            var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
-            replay.Decorations.Add(circle);
-        }
-
         // Probability Distribution - Spread AoE
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityProbabilityDistributionSpreadAndPuddleDrop, out var probabilityDistribution))
         {
@@ -661,6 +651,19 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+
+        // Eternal Reflection - Explosions, also happens during 2 green failures but that is shown with an extra decoration
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var eternalReflectionExplosions))
+        {
+            foreach (var effect in eternalReflectionExplosions)
+            {
+                // Duration 1666 - We reduce it to a brief 150 indicator.
+                // No game build check here - We show a this default effect on a failed Ascension's Sacrifice for logs prio to 29 Sept 2026.
+                var lifespan = (effect.Time, effect.Time + 250);
+                var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
+                environmentDecorations.Add(circle);
+            }
         }
     }
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
