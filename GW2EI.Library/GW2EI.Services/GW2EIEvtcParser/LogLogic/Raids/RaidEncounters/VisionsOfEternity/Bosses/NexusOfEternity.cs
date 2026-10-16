@@ -667,13 +667,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
 
-        // Eternal Reflection - Explosions, also happens during 2 green failures but that is shown with an extra decoration
+        // Eternal Reflection - Explosions, also happens during 2 green failures but that is shown with an extra decoration on player side
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var eternalReflectionExplosions))
         {
             foreach (var effect in eternalReflectionExplosions)
             {
-                // Duration 1666 - We reduce it to a brief 150 indicator.
-                // No game build check here - We show a this default effect on a failed Ascension's Sacrifice for logs prio to 29 Sept 2026.
+                // Duration 1666 - We reduce it to a brief 150 indicator to avoid massive bloat.
                 var lifespan = (effect.Time, effect.Time + 250);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
