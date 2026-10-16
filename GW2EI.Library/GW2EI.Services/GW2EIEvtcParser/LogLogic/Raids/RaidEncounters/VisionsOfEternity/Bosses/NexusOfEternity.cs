@@ -672,7 +672,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             foreach (var effect in eternalReflectionExplosions)
             {
-                // Duration 1666 - We reduce it to a brief 150 indicator to avoid massive bloat.
+                // Duration 1666 - We reduce it to a brief 250 indicator to avoid massive bloat.
                 var lifespan = (effect.Time, effect.Time + 250);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
