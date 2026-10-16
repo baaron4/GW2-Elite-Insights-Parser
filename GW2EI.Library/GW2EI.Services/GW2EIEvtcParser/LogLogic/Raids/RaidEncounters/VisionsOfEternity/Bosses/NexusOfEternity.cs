@@ -319,40 +319,54 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             }
         }
 
-        log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var ascensionsSacrificeFail);
-        List<EffectEvent> eternalReflectionExplosions = ascensionsSacrificeFail != null ? ascensionsSacrificeFail.ToList() : [];
-
         // Ascension's Sacrifice - Greens (2 people)
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, out var ascensionsSacrifice))
         {
             // Failed greens
             var removes = log.CombatData.GetBuffRemoveSingleDataByIDByDst(Ascension, p.AgentItem);
+            var ascensionsSacrificeHealthDamage = log.CombatData.GetDamageData(AscensionsSacrifice).Where(x => x.To.Is(p.AgentItem) && x.HealthDamage > 0).ToList();
+            var genericLaunches = log.CombatData.GetCrowdControlData(ArcDPSGenericLaunch).Where(x => x.To.Is(p.AgentItem)).ToList();
+
+            if (!log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var ascensionsSacrificeFail))
+            {
+                ascensionsSacrificeFail = [];
+            }
+            var ascensionsSacrificeFailFromVloxx = ascensionsSacrificeFail.Where(x => x.Src.IsSpecies(TargetID.Vloxx)).ToList();
 
             foreach (var effect in ascensionsSacrifice)
             {
                 long duration = 5000;
                 lifespan = effect.ComputeLifespan(log, duration);
                 long growing = effect.Time + duration;
-                var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing, true);
+                var sacrificeCircle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
+                replay.Decorations.AddWithFilledWithGrowing(sacrificeCircle, true, growing, true);
                 replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize2Overhead);
 
                 // Chain - Appears 500ms after the green, duration 4500 - The buff applied is POV only
                 replay.Decorations.AddTetherByEffectGUID(effect, Colors.Yellow, 0.4, (lifespan.start + 500, lifespan.end));
 
-                // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-29#Update_-_September_29,_2026
-                // Ascension's Sacrifice: Fixed an issue that prevented players from losing Ascension on fail.
-                if (ascensionsSacrificeFail != null && log.CombatData.GetGW2BuildEvent().Build >= GW2Builds.September2026PvPBalanceAndCMReleases)
+                if (ascensionsSacrificeFailFromVloxx.Count > 0)
                 {
                     // The effect is not unique and collides with other mechanics.
                     // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
-                    var explosion = ascensionsSacrificeFail.FirstOrDefault(x => x.Src.IsSpecies(TargetID.Vloxx) && Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
-                    if (explosion != null && removes.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
+                    if (explosion != null)
                     {
                         lifespan = explosion.ComputeLifespan(log, 1666);
-                        var circle2 = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));
-                        replay.Decorations.AddWithBorder(circle2, Colors.DarkRed, 0.4);
-                        eternalReflectionExplosions.Remove(explosion);
+                        var sacrificeFailCircle = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));
+                        // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-29#Update_-_September_29,_2026
+                        // Ascension's Sacrifice: Fixed an issue that prevented players from losing Ascension on fail.
+                        if (log.CombatData.GetGW2BuildEvent().Build >= GW2Builds.September2026PvPBalanceAndCMReleases)
+                        {
+                            if (removes.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                            {
+                                replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
+                            }
+                        } 
+                        else if (ascensionsSacrificeHealthDamage.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant) || genericLaunches.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant)) 
+                        {
+                            replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
+                        }
                     }
                 }
             }
