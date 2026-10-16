@@ -19,6 +19,10 @@ internal static class Symbols
     public static Symbol YUpOpen = new("y-up-open");
     public static Symbol YDown = new("y-down");
     public static Symbol YDownOpen = new("y-down-open");
+    public static Symbol YLeft = new("y-left");
+    public static Symbol YLeftOpen = new("y-left-open");
+    public static Symbol YRight = new("y-right");
+    public static Symbol YRightOpen = new("y-right-open");
     public static Symbol Circle = new("circle");
     public static Symbol CircleOpen = new("circle-open");
     public static Symbol CircleOpenDot = new("circle-open-dot");
