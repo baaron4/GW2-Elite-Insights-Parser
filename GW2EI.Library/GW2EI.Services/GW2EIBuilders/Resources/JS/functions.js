@@ -125,7 +125,11 @@ function addMechanicsToGraph(data, phase, phaseIndex) {
             marker: {
                 symbol: mech.symbol,
                 color: mech.color,
-                size: mech.size ? mech.size : 15
+                size: mech.size ? mech.size - 2 : 13,
+                line: {
+                    width: 2,
+                    color: mech.color
+                }
             },
             text: [],
             name: mechData.name,
