@@ -586,7 +586,7 @@ public static class SpeciesIDs
         Vloxx = 28106,
         EliteCosmicPiercer = 27929, // Also in convergence
         ChampionCosmicPiercer = 27958, // Also in convergence
-        SomethingCosmicPiercer = 28056, // Also in convergence - Spawned for 2 seconds in one raid encounter log, might be challenge/legendary mode npc
+        LegendaryCosmicPiercer = 28056, // Also in convergence - Spawns as minion of the Champion Cosmic Piercer, untargettable but "visible", disappears when master is killed
         ChampionAspectOfTheStaff = 28017,
         ChampionAspectOfTheSpear = 28033,
         ChampionAspectOfTheSword = 28107,

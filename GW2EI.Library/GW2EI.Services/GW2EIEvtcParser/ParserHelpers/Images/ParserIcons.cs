@@ -1427,7 +1427,7 @@ internal static class ParserIcons
         { TargetID.VloxxConv, TargetVloxx },
         { TargetID.EliteCosmicPiercer, TrashCosmicPiercer },
         { TargetID.ChampionCosmicPiercer, TrashCosmicPiercer },
-        { TargetID.SomethingCosmicPiercer, TrashCosmicPiercer },
+        { TargetID.LegendaryCosmicPiercer, TrashCosmicPiercer },
         { TargetID.ChampionCosmicSunderer, TrashCosmicSunderer },
         { TargetID.EliteCosmicBulwark, TrashCosmicBulwark },
         { TargetID.ChampionCosmicBulwark, TrashCosmicBulwark },

@@ -43,7 +43,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 new PlayerDstEffectMechanic(EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, Mech_AscensionSacrificeTarget, new(Symbols.DiamondOpen, Colors.Chocolate), new("AscSac.T", "Selected for Ascension's Sacrifice (Chains & 2-Player Greens)", "Ascenion's Sacrifice Target"), Sev1),
                 new PlayerDstHealthDamageHitMechanic(AscensionsSacrifice, Mech_AscensionsSacrificeHit, new(Symbols.Diamond, Colors.Chocolate), new("AscSac.H", "Hit by Ascension's Sacrifice (Chains & 2-Player Greens)", "Ascension's Sacrifice Hit"), Sev0),
             ]),
-            new PlayerDstHealthDamageHitMechanic([SurroundingCurseVloxx, SurroundingCurseAspectOfTheStaff], Mech_SurroundingCurseHit, new(Symbols.CircleCross, Colors.Teal), new("SurrCur.H", "Hit by Surrounding Curse (Staff Projectiles)", "Surrounding Curse Hit"), Sev2),
+            new PlayerDstHealthDamageHitMechanic([SurroundingCurseVloxx, SurroundingCurseAspectOfTheStaff, SurroundingCurseLegendaryCosmicPiercer], Mech_SurroundingCurseHit, new(Symbols.CircleCross, Colors.Teal), new("SurrCur.H", "Hit by Surrounding Curse (Staff Projectiles)", "Surrounding Curse Hit"), Sev2),
             new PlayerDstHealthDamageHitMechanic([EternalReflectionVloxx, EternalReflectionAspectOfTheStaff, EternalReflectionCosmicPiercerChamp, EternalReflectionCosmicPiercerElite], Mech_EternalReflectionHit, new(Symbols.DiamondTall, Colors.DarkMagenta), new("EterRefl.H", "Hit by Eternal Reflection (Staff Frontal)", "Eternal Reflection Hit"), Sev2),
         ]),
         // spear
@@ -137,7 +137,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.Vloxx,
             TargetID.ChampionCosmicPiercer,
-            TargetID.SomethingCosmicPiercer,
             TargetID.ChampionAspectOfTheStaff,
             TargetID.ChampionAspectOfTheSpear,
             TargetID.ChampionAspectOfTheSword,
@@ -153,6 +152,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         return
         [
             TargetID.AscensionOrb,
+            TargetID.LegendaryCosmicPiercer,
         ];
     }
 
@@ -202,14 +202,12 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             TargetID.ChampionAspectOfTheSpear,
             TargetID.ChampionAspectOfTheStaff,
             TargetID.ChampionAspectOfTheSword,
-            // TargetID.SomethingCosmicPiercer,
         ])).ToList();
         var cosmicChamps = targets.Where(x => x.IsAnySpecies(
         [
             TargetID.ChampionCosmicBulwark,
             TargetID.ChampionCosmicPiercer,
             TargetID.ChampionCosmicSunderer,
-            // TargetID.SomethingCosmicPiercer,
         ])).ToList();
         encounterPhase.AddTargets(aspectChampions, log, PhaseData.TargetPriority.NonBlocking);
         encounterPhase.AddTargets(cosmicChamps, log, PhaseData.TargetPriority.Blocking);
@@ -222,7 +220,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         [
             TargetID.EliteCosmicBulwark,
             TargetID.EliteCosmicPiercer,
-            //TargetID.EliteCosmicSunderer, // Elite sunderer?
         ])).ToList();
 
         for (int i = 0; i < phases.Count; i++)
@@ -261,7 +258,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         {
             {TargetID.Vloxx, 0},
             {TargetID.ChampionCosmicPiercer, 1},
-            {TargetID.SomethingCosmicPiercer, 1},
             {TargetID.ChampionCosmicBulwark, 1},
             {TargetID.ChampionCosmicSunderer, 1},
             {TargetID.EliteCosmicPiercer, 2},
@@ -619,6 +615,9 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionCosmicPiercerChamp]);
                 AddCosmicPiercerAnnhilatingOrb(log, replay);
                 break;
+            case (int)TargetID.LegendaryCosmicPiercer:
+                AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [SurroundingCurseLegendaryCosmicPiercer]);
+                break;
             case (int)TargetID.EliteCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
@@ -746,9 +745,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                     case (int)TargetID.EliteCosmicBulwark:
                     case (int)TargetID.EliteCosmicPiercer:
                         actor.OverrideName("Elite " + actor.Character);
-                        break;
-                    case (int)TargetID.SomethingCosmicPiercer:
-                        //actor.OverrideName("" + actor.Character);
                         break;
                 }
             }
