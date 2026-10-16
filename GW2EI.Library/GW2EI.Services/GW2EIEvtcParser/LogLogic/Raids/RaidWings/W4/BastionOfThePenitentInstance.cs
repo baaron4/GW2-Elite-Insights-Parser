@@ -349,6 +349,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        MursaatOverseer.IdentifyMursaatCheckboards(gw2Build, evtcVersion, agentData, combatData, extensions);
         Samarog.HandleSpears(evtcVersion, agentData, combatData);
         Deimos.HandleDemonicBonds(agentData, combatData);
         Deimos.HandleShackledPrisoners(agentData, combatData);
