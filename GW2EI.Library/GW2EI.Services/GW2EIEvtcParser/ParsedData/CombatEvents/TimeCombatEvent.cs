@@ -1,14 +1,29 @@
 ﻿using System.Runtime.CompilerServices;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Interfaces;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class TimeCombatEvent : CombatEvent
+public abstract class TimeCombatEvent : CombatEvent, ITimeComparable
 {
     public long Time { get; protected set; }
 
     protected TimeCombatEvent(long time)
     {
         Time = time;
+    }
+
+    public bool IsAtTime(long time, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return Math.Abs(time - Time) < epsilon;
+    }
+    public bool IsAtTime(TimeCombatEvent evt, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return IsAtTime(evt.Time, epsilon);
+    }
+    public bool IsAtTime(CombatItem evt, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return IsAtTime(evt.Time, epsilon);
     }
 }
 

@@ -105,7 +105,7 @@ internal class Sabir : TheKeyOfAhdashim
                 {
                     BuffRemoveAllEvent? buffRemove = combatData
                         .GetBuffRemoveAllDataByIDByDst(ViolentCurrents, effect.Src)
-                        .FirstOrDefault(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant);
+                        .FirstOrDefault(x => x.IsAtTime(effect));
                     return buffRemove != null;
                 }),
         ];
