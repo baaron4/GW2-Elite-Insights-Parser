@@ -583,7 +583,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.AddNonHomingMissiles(log, worldpiercer, Colors.CobaltBlue, 0.4, 100);
 
                 // Raging Storm - Missile
-                AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxxFinalPhase]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormVloxx, RagingStormVloxxFinalPhase]);
 
                 // Breakbar
                 replay.Decorations.AddActiveBreakbars(log, target);
@@ -644,14 +644,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormCosmicBulwark]);
                 AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormCosmicBulwark]);
                 AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
@@ -935,10 +935,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, long[] ids)
+    private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, AgentItem target, long[] ids)
     {
         // The missile in game is quite long and comes vertically, in the replay it disappears before hitting the AoE
-        var ragingStorm = log.CombatData.GetMissileEventsBySkillIDs(ids);
+        var ragingStorm = log.CombatData.GetMissileEventsBySrcBySkillIDs(target, ids);
         replay.Decorations.AddNonHomingMissiles(log, ragingStorm, Colors.MidTeal, 0.5, 20);
     }
 
