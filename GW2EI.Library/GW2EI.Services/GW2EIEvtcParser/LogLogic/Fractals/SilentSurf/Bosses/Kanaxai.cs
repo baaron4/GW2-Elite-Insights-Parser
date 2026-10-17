@@ -258,7 +258,7 @@ internal class Kanaxai : SilentSurf
     {
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
         BuffApplyEvent? invul762Gain = combatData.GetBuffApplyDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
-        if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
+        if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => x.IsAtTime(invul762Gain)))
         {
             successHandler.SetSuccess(true, invul762Gain.Time);
         }

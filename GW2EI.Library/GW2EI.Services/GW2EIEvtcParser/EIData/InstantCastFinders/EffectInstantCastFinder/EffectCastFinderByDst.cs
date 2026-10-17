@@ -15,9 +15,9 @@ internal class EffectCastFinderByDst : EffectCastFinder
 #if DEBUG
     protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        var test = combatData.GetEffectEventsBySrc(evt.Dst).Where(x => Math.Abs(x.Time - evt.Time) <= ParserHelper.ServerDelayConstant && x.EffectID != evt.EffectID);
+        var test = combatData.GetEffectEventsBySrc(evt.Dst).Where(x => x.IsAtTime(evt) && x.EffectID != evt.EffectID);
         var testGUIDs = test.Select(x => x.GUIDEvent);
-        var test2 = combatData.GetEffectEventsByDst(evt.Dst).Where(x => Math.Abs(x.Time - evt.Time) <= ParserHelper.ServerDelayConstant && x.EffectID != evt.EffectID);
+        var test2 = combatData.GetEffectEventsByDst(evt.Dst).Where(x => x.IsAtTime(evt) && x.EffectID != evt.EffectID);
         var test2GUIDs = test2.Select(x => x.GUIDEvent);
         return true;
     }

@@ -161,7 +161,7 @@ internal static class ChronomancerHelper
             foreach (var shatter in shatters)
             {
                 var boonGivingShattersInFrame = boonGivingShatters
-                    .Where(x => Math.Abs(x.Time - shatter.Time) < ServerDelayConstant)
+                    .Where(x => x.IsAtTime(shatter))
                     .ToList();
                 var skill = skillDict[shatter.GUIDEvent.GUID];
                 HashSet<long> skillIDs;
@@ -207,7 +207,7 @@ internal static class ChronomancerHelper
                     {
                         // Safety check
                         if (chronoShatters.Any(x =>
-                                Math.Abs(x.Time - shatter.Time) < ServerDelayConstant &&
+                                x.IsAtTime(shatter) &&
                                 (x.Position.XY() - shatter.Position.XY()).LengthSquared() < 1e-6)
                             )
                         {

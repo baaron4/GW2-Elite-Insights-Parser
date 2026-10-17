@@ -340,8 +340,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     // The effect is not unique and colliedes with other mechanics.
                     // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
-                    var explosion = ascensionsSacrificeFail.FirstOrDefault(x => x.Src.IsSpecies(TargetID.Vloxx) && Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
-                    if (explosion != null && removes.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                    var explosion = ascensionsSacrificeFail.FirstOrDefault(x => x.Src.IsSpecies(TargetID.Vloxx) && x.IsAtTime(lifespan.end));
+                    if (explosion != null && removes.Any(x => x.IsAtTime(explosion)))
                     {
                         lifespan = explosion.ComputeLifespan(log, 1666);
                         var circle2 = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));

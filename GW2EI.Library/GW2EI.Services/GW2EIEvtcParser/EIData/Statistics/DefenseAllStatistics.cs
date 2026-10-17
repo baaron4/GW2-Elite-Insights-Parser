@@ -24,7 +24,7 @@ public class DefenseAllStatistics : DefensePerTargetStatistics
             {
                 var vaporFormRemoves = log.CombatData.GetBuffRemoveAllDataByIDByDst(SkillIDs.VaporForm, actor.AgentItem).Where(brae => brae.Time >= start && brae.Time <= end);
                 var downEvents = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent);
-                DownCount = downEvents.Count(downEvent => !vaporFormRemoves.Any(vaporRemove => Math.Abs(vaporRemove.Time - downEvent.Time) < ParserHelper.ServerDelayConstant));
+                DownCount = downEvents.Count(downEvent => !vaporFormRemoves.Any(vaporRemove => vaporRemove.IsAtTime(downEvent)));
             }
             else
             {
