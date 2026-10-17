@@ -103,7 +103,9 @@ internal class CommandWindow
             Console.WriteLine("");
             Console.WriteLine("-c [config path] : use another config file");
             Console.WriteLine("-p : disable windows specific functions");
-            Console.WriteLine("-inspect : will launch an inspector window on the first given log file. If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
+            Console.WriteLine("-inspect_raw : will launch an inspector window on the first given log file, content will be the raw data as present in the evtc. If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
+            Console.WriteLine("-inspect_ei_partial : will launch an inspector window on the first given log file, content will be pre-processed by ei (gadget identifications, buff formula deduction, etc). If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
+            Console.WriteLine("-inspect_ei_full : will launch an inspector window on the first given log file, content will be fully processed by ei (partial + custom events and agents). If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
             Console.WriteLine("-h : help");
             return HelpCommandLineOptions;
         }
@@ -128,32 +130,42 @@ internal class CommandWindow
             }
         }
 
-        var inspectOnly = false;
-        if (_args.Contains("-inspect"))
+        var inspectMode = ProgramHelper.InspectionMode.NotApplicable;
+        if (_args.Contains("-inspect_raw"))
         {
             parserArgOffset += 1;
-            inspectOnly = true;
+            inspectMode = ProgramHelper.InspectionMode.Raw;
+        } 
+        else if (_args.Contains("-inspect_ei_partial"))
+        {
+            parserArgOffset += 1;
+            inspectMode = ProgramHelper.InspectionMode.RawWithEIPreProcess;
+        } 
+        else if (_args.Contains("-inspect_ei_full"))
+        {
+            parserArgOffset += 1;
+            inspectMode = ProgramHelper.InspectionMode.EI;
         }
 
         for (int i = parserArgOffset; i < _args.Length; i++)
         {
             logFiles.Add(_args[i]);
-            if (inspectOnly)
+            if (inspectMode != ProgramHelper.InspectionMode.NotApplicable)
             {
                 break;
             }
         }
 
-        if (inspectOnly && logFiles.Count == 0)
+        if (inspectMode != ProgramHelper.InspectionMode.NotApplicable && logFiles.Count == 0)
         {
-            inspectOnly = false;
+            inspectMode = ProgramHelper.InspectionMode.NotApplicable;
         }
 
         return new CommandLineOptions
         {
             LogFiles = logFiles,
             ConfigPath = configPath,
-            InspectOnly = inspectOnly
+            InspectMode = inspectMode
         };
     }
 }

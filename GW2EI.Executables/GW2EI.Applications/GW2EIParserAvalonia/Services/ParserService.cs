@@ -41,9 +41,9 @@ public sealed class ParserService : IDisposable
         }
     }
 
-    public async Task InspectParseAsync(InspectorOperationController operation, OnTaskRun onTaskRun)
+    public async Task InspectParseAsync(InspectorOperationController operation, OnTaskRun onTaskRun, InspectionMode inspectMode = InspectionMode.RawWithEIPreProcess)
     {
-        if (operation.InspectLog != null || operation.Errored)
+        if (operation.InspectLog != null || operation.Errored || inspectMode == InspectionMode.NotApplicable)
         {
             return;
         }
@@ -54,7 +54,7 @@ public sealed class ParserService : IDisposable
             await Task.Run(() =>
             {
                 onTaskRun();
-                operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
+                operation.InspectLog = _programHelper.ParseLogForInspection(operation, inspectMode);
             }, cancellationTokenSource.Token)
                 .ContinueWith(t =>
                 {
@@ -71,15 +71,15 @@ public sealed class ParserService : IDisposable
         }
     }
 
-    public void InspectParseSync(InspectorOperationController operation)
+    public void InspectParseSync(InspectorOperationController operation, InspectionMode inspectMode = InspectionMode.RawWithEIPreProcess)
     {
-        if (operation.InspectLog != null || operation.Errored)
+        if (operation.InspectLog != null || operation.Errored || inspectMode == InspectionMode.NotApplicable)
         {
             return;
         }
         try
         {
-            operation.InspectLog = _programHelper.ParseLogForInspection(operation, InspectionMode.RawWithEIPreProcess);
+            operation.InspectLog = _programHelper.ParseLogForInspection(operation, inspectMode);
         }
         catch
         {
