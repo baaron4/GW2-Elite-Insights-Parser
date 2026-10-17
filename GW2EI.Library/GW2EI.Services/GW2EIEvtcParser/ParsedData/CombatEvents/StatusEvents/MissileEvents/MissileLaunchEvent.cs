@@ -36,6 +36,8 @@ public class MissileLaunchEvent : TimeCombatEvent
 
     public readonly float Speed;
     public readonly float MotionRadius;
+    // Only relevant for non homing missiles
+    public readonly long ExpectedEndTime;
 
     public bool IsFirstLaunch { get; private set; }
     public readonly byte LaunchType;
@@ -95,28 +97,17 @@ public class MissileLaunchEvent : TimeCombatEvent
         flagsBytes.PushNative(evtcItem.IsMoving);
         LaunchFlags = BitConverter.ToUInt32(flagsBytes);
         LaunchType = evtcItem.IFFByte;
+
+        ExpectedEndTime = long.MaxValue;
+        if (_targetedAgent != null)
+        {
+            ExpectedEndTime = (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
+        }
     }
 
     internal void ForceNotFirstLaunch()
     {
         IsFirstLaunch = false;
-    }
-
-    /// <summary>
-    /// Assumes that the missile goes from LaunchPosition to TargetPosition
-    /// </summary>
-    /// <returns></returns>
-    public long GetExpectedEndTime()
-    {
-        // To be verified
-        if ((Missile.Flag1 & 1) == 0)
-        {
-            return (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
-        }
-        else
-        {
-            return (long)((TargetPosition - LaunchPosition).Length() / Speed) + Time;
-        }
     }
 
     /// <summary>
@@ -128,19 +119,11 @@ public class MissileLaunchEvent : TimeCombatEvent
     public ParametricPoint3D GetFinalPosition(long start, long end)
     {
         var velocity = Speed;
-        // To be verified
-        if ((Missile.Flag1 & 1) == 0)
-        {
-            var direction = (TargetPosition.XY() - LaunchPosition.XY());
-            direction /= Math.Max(direction.Length(), 1e-6f);
-            return new ParametricPoint3D(LaunchPosition + new Vector3(velocity * direction, 0) * (end - start), end);
-        }
-        else
-        {
-            var direction = (TargetPosition - LaunchPosition);
-            direction /= Math.Max(direction.Length(), 1e-6f);
-            return new ParametricPoint3D(LaunchPosition + velocity * direction * (end - start), end);
-        }
+        var direction = (TargetPosition.XY() - LaunchPosition.XY());
+        direction /= Math.Max(direction.Length(), 1e-6f);
+        var zDirection = TargetPosition.Z - LaunchPosition.Z;
+        var zVelocity = zDirection / ExpectedEndTime;
+        return new ParametricPoint3D(LaunchPosition + new Vector3(velocity * direction, zVelocity * zDirection) * (end - start), end);
     }
     /// <summary>
     /// Assumes that the missile goes from LaunchPosition to TargetPosition
