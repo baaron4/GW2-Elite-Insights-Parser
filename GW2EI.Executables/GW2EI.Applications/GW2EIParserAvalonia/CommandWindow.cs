@@ -135,12 +135,12 @@ internal class CommandWindow
         {
             parserArgOffset += 1;
             inspectMode = ProgramHelper.InspectionMode.Raw;
-        } 
+        }
         else if (_args.Contains("-inspect_ei_partial"))
         {
             parserArgOffset += 1;
             inspectMode = ProgramHelper.InspectionMode.RawWithEIPreProcess;
-        } 
+        }
         else if (_args.Contains("-inspect_ei_full"))
         {
             parserArgOffset += 1;
