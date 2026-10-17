@@ -362,8 +362,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                             {
                                 replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
                             }
-                        } 
-                        else if (ascensionsSacrificeHealthDamage.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant) || genericLaunches.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant)) 
+                        }
+                        else if (ascensionsSacrificeHealthDamage.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant) || genericLaunches.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
                         {
                             replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
                         }
