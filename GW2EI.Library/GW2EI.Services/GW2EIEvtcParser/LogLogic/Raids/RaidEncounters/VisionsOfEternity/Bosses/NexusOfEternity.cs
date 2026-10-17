@@ -591,6 +591,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 AddDivisionEternal(log, replay, target.AgentItem);
                 var usedVloxxSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityVloxxEchoingBlade_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 200);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
                 AddRagingStorm(log, replay, target.AgentItem);
@@ -600,6 +601,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 200);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 // Breakbar
                 replay.Decorations.AddActiveBreakbars(log, target);
@@ -643,12 +645,14 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
                 AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
                 AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
@@ -665,18 +669,6 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (!log.LogData.IgnoreBaseCallsForCRAndInstanceBuffs)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-        }
-
-        // Eternal Reflection - Explosions, also happens during 2 green failures but that is shown with an extra decoration on player side
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var eternalReflectionExplosions))
-        {
-            foreach (var effect in eternalReflectionExplosions)
-            {
-                // Duration 1666 - We reduce it to a brief 250 indicator to avoid massive bloat.
-                var lifespan = (effect.Time, effect.Time + 250);
-                var circle = new CircleDecoration(200, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
-                environmentDecorations.Add(circle);
-            }
         }
     }
     internal override void ComputeAchievementEligibilityEvents(ParsedEvtcLog log, Player p, List<AchievementEligibilityEvent> achievementEligibilityEvents)
@@ -807,7 +799,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
 
         // Surrounding Curse - Explosion
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseRagingStormExplosions, out var surrCurseDamage))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternitySurroundingCurseRagingStormExplosions, out var surrCurseDamage))
         {
             foreach (var effect in surrCurseDamage)
             {
@@ -1013,6 +1005,22 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespanRectangle = effect.ComputeLifespan(log, divisionEternalDuration);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespanRectangle, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
+            }
+        }
+    }
+
+    private static void AddEternalReflectionRagingStorm(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, uint radius)
+    {
+        // Eternal Reflection and Raging Storm (Bulwark) - Explosions, also happens during 2 green failures but that is shown with an extra decoration on player side
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var eternalReflectionExplosions))
+        {
+            foreach (var effect in eternalReflectionExplosions)
+            {
+                // Raging Storm indicator from Cosmic Bulwark has a radius of 150, the explosion effect remains 200 so we correct it.
+                // Duration 1666 - We reduce it to a brief 250 indicator to avoid massive bloat.
+                var lifespan = (effect.Time, effect.Time + 250);
+                var circle = new CircleDecoration(radius, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
             }
         }
     }
