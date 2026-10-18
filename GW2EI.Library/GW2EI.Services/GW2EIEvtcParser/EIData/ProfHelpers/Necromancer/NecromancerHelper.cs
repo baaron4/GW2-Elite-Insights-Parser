@@ -24,6 +24,7 @@ internal static class NecromancerHelper
         new DamageCastFinder(LesserEnfeeble, LesserEnfeeble)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers)
+            .WithTarget()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
         // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
@@ -97,7 +98,7 @@ internal static class NecromancerHelper
             .WithBuilds(GW2Builds.January2026Balance),
         // - Close to Death
         new DamageLogDamageModifier(Mod_CloseToDeath, "Close to Death", "20% below 50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.CloseToDeath, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
-        
+
         // Soul Reaping
         // - Soul Barbs
         new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All)
@@ -126,7 +127,7 @@ internal static class NecromancerHelper
         // Death Shroud
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
-        
+
         // Death Magic
         // - Dark Defiance / Dark Defense
         new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All)

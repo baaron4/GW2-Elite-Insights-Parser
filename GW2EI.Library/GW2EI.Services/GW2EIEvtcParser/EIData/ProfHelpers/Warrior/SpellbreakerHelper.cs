@@ -18,10 +18,11 @@ internal static class SpellbreakerHelper
     [
         new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightBuff),
         new BuffGiveCastFinder(MagebaneTetherSkill, MagebaneTetherBuff)
+            .WithTarget()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LossAversion, LossAversion)
+            .WithTarget()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
