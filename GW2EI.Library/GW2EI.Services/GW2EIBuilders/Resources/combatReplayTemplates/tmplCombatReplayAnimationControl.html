@@ -199,6 +199,7 @@
                 </div>
                 <div class="d-flex justify-content-center slidercontainer my-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
+                           @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip"
                            :max="maxTime" :value="time * 1000 - range.min" class="slider" :id="htmlElementIDs.timeRangeID"
                            :style="{'background': getSliderGradient()}">
                     <div class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
@@ -278,9 +279,7 @@
         data: function () {
             return {
                 isTouchDevice: isTouchDevice,
-                useAdvancedTimeline: window.localStorage && window.localStorage.getItem("ei_useAdvancedTimeline") !== null
-                    ? window.localStorage.getItem("ei_useAdvancedTimeline") === "true"
-                    : !isTouchDevice,
+                useAdvancedTimeline: !isTouchDevice && window.localStorage && (window.localStorage.getItem("ei_useAdvancedTimeline") === null || window.localStorage.getItem("ei_useAdvancedTimeline") === "true"),
                 backwards: false,
                 sliderDelimiter: sliderDelimiter,
                 selectedPhaseId: -1,
@@ -324,14 +323,9 @@
             this.updateAnimatorTimes(encounterPhase);
             this.resetViewpoint();
             this.selectedPhaseId = this.normalPhases[0].id;
-            this.$el.addEventListener("mousemove", this.onSimpleTimelineSliderMouseMove);
-            this.$el.addEventListener("mouseleave", this.hideSimpleTimelineTooltip);
             animationControlComponent = this;
         },
         beforeDestroy() {
-            this.$el.removeEventListener("mousemove", this.onSimpleTimelineSliderMouseMove);
-            this.$el.removeEventListener("mouseleave", this.hideSimpleTimelineTooltip);
-
             if (this.simpleTimelineTooltip) {
                 this.simpleTimelineTooltip.remove();
                 this.simpleTimelineTooltip = null;
