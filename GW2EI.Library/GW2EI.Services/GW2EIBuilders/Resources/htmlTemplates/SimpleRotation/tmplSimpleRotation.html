@@ -70,7 +70,7 @@
         </div>
         <div style="z-index: 1;" class="mb-4 mt-2">
             <a href="#" class="dropdown-toggle rot-font-dropdown" data-toggle="dropdown" title="Filter Skills">
-                Skills <span class="caret"></span>           
+                Skills <span class="caret"></span>
             </a>
             <img class="icon ml-2" :src="UIIcons.QuestionMark"
                 data-original-title="Use Skills dropdown to hide unwanted skills or click on a specific skill below to make all other skills transparent" />
@@ -87,7 +87,7 @@
                         Deselect all
                     </button>
                 </li>
-                <li v-for="(skill, index) in skillList" :key="index">               
+                <li v-for="(skill, index) in skillList" :key="index">
                     <div style="width: max-content;">
                         <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
                             v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
@@ -122,7 +122,7 @@
                 for (var i = 0; i < rotation.length; i++) {
                     const rota = rotation[i];
                     const skillID = rota[1];
-                    const skill = this.getSkill(skillID);                
+                    const skill = this.getSkill(skillID);
                     const isInstant = rota[3] === RotationStatus.INSTANT;
                     if (isInstant && skill.unconditionalProc) {
                         hasInstantCastUnconditional = true;
@@ -183,6 +183,7 @@
                         skill: this.getSkill(cast[1]),
                         duration: cast[2],
                         type: cast[3],
+                        target: cast[6],
                         globalCast: globalCast,
                         individualCast: individualCasts[skillID]
                     };
@@ -274,6 +275,13 @@
                 }
                 tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
                 tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
+                if (cast.target > 0) {
+                    tooltip += `<br>Target: ${logData.npcMap[cast.target]}`;
+                } else if (cast.target < 0) {
+                    const id = -cast.target;
+                    const target = logData.players.find((actor) => actor.uniqueID == id) || logData.targets.find((actor) => actor.uniqueID == id);
+                    tooltip += `<br>Target: ${target ? target.name : "unknown player"}`;
+                }
                 return tooltip;
             },
             setAllSelectedSkills(selected) {
