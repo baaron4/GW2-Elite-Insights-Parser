@@ -23,13 +23,10 @@
                     </li>
                 </ul>
             </div>
-            <label v-if="!isTouchDevice" class="d-flex align-items-center ml-3 mb-0">
-                <span class="mr-2">Advanced timeline</span>
-                <span class="timeline-switch">
-                    <input type="checkbox" id="timelineModeSwitch" role="switch" v-model="useAdvancedTimeline" aria-label="Advanced timeline">
-                    <span class="timeline-switch-slider"></span>
-                </span>
-            </label>
+            <div v-if="!isTouchDevice" class="custom-control custom-switch ml-3">
+                <input type="checkbox" class="custom-control-input" id="timelineModeSwitch" v-model="useAdvancedTimeline">
+                <label class="custom-control-label" for="timelineModeSwitch">Advanced timeline</label>
+            </div>
         </div>
         <div class="d-flex mt-1">
             <div class="position-relative mx-auto">

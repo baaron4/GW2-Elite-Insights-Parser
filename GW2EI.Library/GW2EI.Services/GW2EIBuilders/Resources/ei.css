@@ -1145,72 +1145,9 @@ td.approximate::before {
     overflow-x: auto;
 }
 
-.timeline-switch {
-    position: relative;
-    display: inline-block;
-    width: 42px;
-    height: 24px;
-    flex: 0 0 42px;
-    vertical-align: middle;
-}
-
-.timeline-switch input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 2;
-}
-
-.timeline-switch-slider {
-    position: absolute;
-    inset: 0;
-    border-radius: 24px;
-    background-color: #adb5bd;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.timeline-switch-slider::before {
-    content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    top: 3px;
-    left: 3px;
-    border-radius: 50%;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    transition: transform 0.2s ease;
-}
-
-.theme-yeti .timeline-switch input:checked + .timeline-switch-slider {
-    background-color: #008cba;
-}
-
-.theme-yeti .timeline-switch input:checked + .timeline-switch-slider::before {
-    transform: translateX(18px);
-}
-
-.theme-slate .timeline-switch input:checked + .timeline-switch-slider {
-    background-color: #0064B8;
-}
-
-.theme-slate .timeline-switch input:checked + .timeline-switch-slider::before {
-    transform: translateX(18px);
-}
-
-.theme-yeti .timeline-switch input:focus-visible + .timeline-switch-slider {
-    outline: 2px solid #008cba;
-    outline-offset: 3px;
-}
-
-.theme-slate .timeline-switch input:focus-visible + .timeline-switch-slider {
-    outline: 2px solid #66afe9;
-    outline-offset: 3px;
+.theme-slate .custom-switch
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #005CC8;
 }
 
 .simple-timeline-time-tooltip {
