@@ -25,6 +25,7 @@ public sealed class ProgramHelper : IDisposable
         EI = 0,
         Raw = 1,
         RawWithEIPreProcess = 2,
+        NotApplicable,
     }
 
     public ProgramHelper(Version parserVersion, ProgramSettings settings)
@@ -484,6 +485,10 @@ public sealed class ProgramHelper : IDisposable
         operation.Reset();
         try
         {
+            if (inspectMode == InspectionMode.NotApplicable)
+            {
+                throw new InvalidOperationException("ParseLogForInspection must have a valid inspection mode");
+            }
             operation.Start();
             var fInfo = new FileInfo(operation.InputFile);
 

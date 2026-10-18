@@ -1172,7 +1172,7 @@ public static class SpeciesIDs
         // Raids
         InsectSwarm = 16120,
         // General
-        Unknown,
+        Unknown = int.MaxValue,
     }
 
     internal static readonly Vector3 GuardianChestPosition = new(-4770.21f, -20629.2f, -2401.27f);

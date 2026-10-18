@@ -296,6 +296,8 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             base.ComputePlayerCombatReplayActors(p, log, replay);
         }
 
+        (long start, long end) lifespan;
+
         // Fixation
         var fixated = p.GetBuffStatus(log, FixatedTimed).Where(x => x.Value > 0);
         foreach (Segment seg in fixated)
@@ -309,7 +311,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             foreach (var effect in judgmentOfEternity)
             {
                 long duration = 8000;
-                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                lifespan = effect.ComputeLifespan(log, duration);
                 long growing = effect.Time + duration;
                 var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
                 replay.Decorations.AddWithFilledWithGrowing(circle, true, growing, true);
@@ -321,31 +323,50 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.NexusOfEternityAscensionsSacrifice2PeopleGreenSelect, out var ascensionsSacrifice))
         {
             // Failed greens
-            log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var ascensionsSacrificeFail);
             var removes = log.CombatData.GetBuffRemoveSingleDataByIDByDst(Ascension, p.AgentItem);
+            var ascensionsSacrificeHealthDamage = log.CombatData.GetDamageData(AscensionsSacrifice).Where(x => x.To.Is(p.AgentItem) && x.HealthDamage > 0).ToList();
+            var genericLaunches = log.CombatData.GetCrowdControlData(ArcDPSGenericLaunch).Where(x => x.To.Is(p.AgentItem)).ToList();
+
+            if (!log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var ascensionsSacrificeFail))
+            {
+                ascensionsSacrificeFail = [];
+            }
+            var ascensionsSacrificeFailFromVloxx = ascensionsSacrificeFail.Where(x => x.Src.IsSpecies(TargetID.Vloxx)).ToList();
 
             foreach (var effect in ascensionsSacrifice)
             {
                 long duration = 5000;
-                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                lifespan = effect.ComputeLifespan(log, duration);
                 long growing = effect.Time + duration;
-                var circle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
-                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing, true);
+                var sacrificeCircle = new CircleDecoration(150, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p.AgentItem));
+                replay.Decorations.AddWithFilledWithGrowing(sacrificeCircle, true, growing, true);
                 replay.Decorations.AddOverheadIcon(lifespan, p, ParserIcons.GreenMarkerSize2Overhead);
 
                 // Chain - Appears 500ms after the green, duration 4500 - The buff applied is POV only
                 replay.Decorations.AddTetherByEffectGUID(effect, Colors.Yellow, 0.4, (lifespan.start + 500, lifespan.end));
 
-                if (ascensionsSacrificeFail != null)
+                if (ascensionsSacrificeFailFromVloxx.Count > 0)
                 {
-                    // The effect is not unique and colliedes with other mechanics.
+                    // The effect is not unique and collides with other mechanics.
                     // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
-                    var explosion = ascensionsSacrificeFail.FirstOrDefault(x => x.Src.IsSpecies(TargetID.Vloxx) && x.IsAtTime(lifespan.end));
-                    if (explosion != null && removes.Any(x => x.IsAtTime(explosion)))
+                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => x.IsAtTime(lifespan.end));
+                    if (explosion != null)
                     {
                         lifespan = explosion.ComputeLifespan(log, 1666);
-                        var circle2 = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));
-                        replay.Decorations.AddWithBorder(circle2, Colors.DarkRed, 0.4);
+                        var sacrificeFailCircle = new CircleDecoration(150, lifespan, Colors.MilitaryGreen, 0.4, new PositionConnector(explosion.Position));
+                        // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-29#Update_-_September_29,_2026
+                        // Ascension's Sacrifice: Fixed an issue that prevented players from losing Ascension on fail.
+                        if (log.CombatData.GetGW2BuildEvent().Build >= GW2Builds.September2026PvPBalanceAndCMReleases)
+                        {
+                            if (removes.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                            {
+                                replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
+                            }
+                        }
+                        else if (ascensionsSacrificeHealthDamage.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant) || genericLaunches.Any(x => Math.Abs(x.Time - explosion.Time) < ServerDelayConstant))
+                        {
+                            replay.Decorations.AddWithBorder(sacrificeFailCircle, Colors.DarkRed, 0.4);
+                        }
                     }
                 }
             }
@@ -357,7 +378,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             foreach (var effect in probabilityDistribution)
             {
                 long duration = 5000;
-                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                lifespan = effect.ComputeLifespan(log, duration);
                 long growing = effect.Time + duration;
                 var circle = new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p.AgentItem));
                 replay.Decorations.AddWithFilledWithGrowing(circle, true, growing);
@@ -562,7 +583,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 replay.Decorations.AddNonHomingMissiles(log, worldpiercer, Colors.CobaltBlue, 0.4, 100);
 
                 // Raging Storm - Missile
-                AddRagingStormMissiles(log, replay, [RagingStormVloxx, RagingStormVloxxFinalPhase]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormVloxx, RagingStormVloxxFinalPhase]);
 
                 // Breakbar
                 replay.Decorations.AddActiveBreakbars(log, target);
@@ -570,6 +591,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 AddDivisionEternal(log, replay, target.AgentItem);
                 var usedVloxxSwings = AddEchoingBladeExcisionExtremisIndicators(log, replay, target.AgentItem, [EffectGUIDs.NexusOfEternityVloxxEchoingBlade_SwordSwing, EffectGUIDs.NexusOfEternityVloxxAndAspectSword_ExcisionExtremis_DivisionEternal_SwordSwing]);
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionVloxx, SurroundingCurseVloxx]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 200);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 AddThousandStrikes(log, replay, target.AgentItem, ThousandStrikesVloxx);
                 AddRagingStorm(log, replay, target.AgentItem);
@@ -579,6 +601,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 break;
             case (int)TargetID.ChampionAspectOfTheStaff:
                 AddEternalReflectionSurroundingCurse(log, replay, target.AgentItem, [EternalReflectionAspectOfTheStaff, SurroundingCurseAspectOfTheStaff]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 200);
                 AddSurroundingCurseAoe(log, replay, target.AgentItem);
                 // Breakbar
                 replay.Decorations.AddActiveBreakbars(log, target);
@@ -621,13 +644,15 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
             case (int)TargetID.EliteCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormCosmicBulwark]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicBulwark:
                 // NOTE: Cosmic Charge does not leave a trail like Vloxx and Aspect of the Spear
                 AddRagingStorm(log, replay, target.AgentItem);
-                AddRagingStormMissiles(log, replay, [RagingStormCosmicBulwark]);
+                AddRagingStormMissiles(log, replay, target.AgentItem, [RagingStormCosmicBulwark]);
+                AddEternalReflectionRagingStorm(log, replay, target.AgentItem, 150);
                 AddCosmicBulwarkWorldpiercer(log, replay, target.AgentItem);
                 break;
             case (int)TargetID.ChampionCosmicSunderer:
@@ -774,7 +799,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
 
         // Surrounding Curse - Explosion
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NexusOfEternitySurroundingCurseRagingStormExplosions, out var surrCurseDamage))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternitySurroundingCurseRagingStormExplosions, out var surrCurseDamage))
         {
             foreach (var effect in surrCurseDamage)
             {
@@ -910,10 +935,10 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
         }
     }
 
-    private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, long[] ids)
+    private static void AddRagingStormMissiles(ParsedEvtcLog log, CombatReplay replay, AgentItem target, long[] ids)
     {
         // The missile in game is quite long and comes vertically, in the replay it disappears before hitting the AoE
-        var ragingStorm = log.CombatData.GetMissileEventsBySkillIDs(ids);
+        var ragingStorm = log.CombatData.GetMissileEventsBySrcBySkillIDs(target, ids);
         replay.Decorations.AddNonHomingMissiles(log, ragingStorm, Colors.MidTeal, 0.5, 20);
     }
 
@@ -980,6 +1005,22 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 (long start, long end) lifespanRectangle = effect.ComputeLifespan(log, divisionEternalDuration);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(2400, 1200, lifespanRectangle, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(rectangle, Colors.LightOrange, 0.2);
+            }
+        }
+    }
+
+    private static void AddEternalReflectionRagingStorm(ParsedEvtcLog log, CombatReplay replay, AgentItem agent, uint radius)
+    {
+        // Eternal Reflection and Raging Storm (Bulwark) - Explosions, also happens during 2 green failures but that is shown with an extra decoration on player side
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(agent, EffectGUIDs.NexusOfEternityEternalReflectionAscensionsSacrificeExplosionAoE, out var eternalReflectionExplosions))
+        {
+            foreach (var effect in eternalReflectionExplosions)
+            {
+                // Raging Storm indicator from Cosmic Bulwark has a radius of 150, the explosion effect remains 200 so we correct it.
+                // Duration 1666 - We reduce it to a brief 250 indicator to avoid massive bloat.
+                var lifespan = (effect.Time, effect.Time + 250);
+                var circle = new CircleDecoration(radius, lifespan, Colors.LightCobaltBlue, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.Add(circle);
             }
         }
     }

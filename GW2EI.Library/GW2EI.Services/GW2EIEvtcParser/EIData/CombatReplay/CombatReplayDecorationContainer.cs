@@ -751,7 +751,7 @@ internal class CombatReplayDecorationContainer
             trajectoryLifeSpan = (launch.Time, end);
             if (missileEvent.RemoveEvent == null)
             {
-                trajectoryLifeSpan.end = launch.GetExpectedEndTime();
+                trajectoryLifeSpan.end = launch.ExpectedEndTime;
             }
         }
         else

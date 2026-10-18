@@ -1131,6 +1131,12 @@ td.approximate::before {
     text-align: center;
 }
 
+.no-user-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
 /* Combat Replay Timeline */
 .timeline {
     padding-right: 0.5rem !important;

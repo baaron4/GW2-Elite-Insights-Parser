@@ -47,12 +47,12 @@ public partial class App : Application
 
             ApplicationTrace trace = new();
 
-            if (CommandLineOptions.InspectOnly)
+            if (CommandLineOptions.InspectMode != ProgramHelper.InspectionMode.NotApplicable)
             {
                 var Settings = CustomSettingsManager.GetProgramSettings();
                 using var parserService = new ParserService(Settings);
                 var controller = new InspectorOperationController(CommandLineOptions.LogFiles[0]);
-                parserService.InspectParseSync(controller);
+                parserService.InspectParseSync(controller, CommandLineOptions.InspectMode);
                 if (controller.InspectLog != null)
                 {
                     desktop.MainWindow = new InspectorWindow(controller.InspectLog, trace)
