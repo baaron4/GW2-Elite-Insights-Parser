@@ -22,10 +22,10 @@ public class GadgetInteractEvent : AnimatedCastEvent
                 Status = AnimationStatus.Interrupted;
                 SavedDuration = -ActualDuration;
             }
-            ExpectedDuration = (int)(ExpectedDuration / AcceleratedToNonAcceleratedRatio);
+            ExpectedDuration = (int)(ExpectedDuration * TimeScale);
             if (Status == AnimationStatus.Reduced)
             {
-                int scaledExpectedDuration = (int)Math.Round(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
+                int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / TimeScale);
                 SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
             }
         }

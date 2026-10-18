@@ -23,7 +23,7 @@ public abstract class CastEvent : TimeCombatEvent
     public int SavedDuration { get; protected set; }
 
     public int ExpectedDuration { get; protected set; }
-    public int ExpectedScaledDuration => (int)(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
+    public int ExpectedScaledDuration => (int)(ExpectedDuration / TimeScale);
 
     public int ActualDuration { get; protected set; }
 
@@ -31,8 +31,11 @@ public abstract class CastEvent : TimeCombatEvent
     public long ExpectedEndTime => Time + ExpectedDuration;
     public long ExpectedScaledEndTime => Time + ExpectedScaledDuration;
 
-    public double Acceleration { get; protected set; } = 0;
-    public double AcceleratedToNonAcceleratedRatio = 1.0;
+    /// <summary>Cast speed as precentage with 100% = normal.</summary>
+    public double TimeScale { get; protected set; } = 1.0;
+
+    /// <summary>Cast acceleration mapped to 100% = Quickness, 0% = none, -100% = Slow.</summary>
+    public double AccelerationQuicknessSlow { get; protected set; } = 0;
 
     internal CastEvent(CombatItem baseItem, AgentData agentData, SkillData skillData) : base(baseItem.Time)
     {

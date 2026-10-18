@@ -12,20 +12,21 @@ public abstract class AnimatedCastEvent : CastEvent
 
     private void SetAcceleration(CombatItem endItem)
     {
-        double nonScaledToScaledRatio = 1.0;
+        TimeScale = 1.0;
         if (_scaledActualDuration > 0)
         {
-            nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
-            if (nonScaledToScaledRatio > 1.0)
+            TimeScale = (double)_scaledActualDuration / ActualDuration;
+            if (TimeScale > 1.0)
             {
-                // faster
-                Acceleration = (nonScaledToScaledRatio - 1.0) / 0.5;
+                // faster, convert to quickness percent
+                AccelerationQuicknessSlow = (TimeScale - 1.0) / 0.5;
             }
             else
             {
-                Acceleration = -(1.0 - nonScaledToScaledRatio) / 0.6;
+                // slower, convert to slow percent
+                AccelerationQuicknessSlow = -(1.0 - TimeScale) / 0.6;
             }
-            Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
+            AccelerationQuicknessSlow = Math.Max(Math.Min(AccelerationQuicknessSlow, 1.0), -1.0);
         }
         if (SkillID != SkillIDs.Resurrect)
         {
@@ -40,14 +41,13 @@ public abstract class AnimatedCastEvent : CastEvent
                     break;
                 case Activation.Minimum:
                 case Activation.NoData:
-                    int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
+                    int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / TimeScale);
                     SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
                     Status = AnimationStatus.Reduced;
                     break;
             }
         }
-        AcceleratedToNonAcceleratedRatio = 1.0 / nonScaledToScaledRatio;
-        Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
+        AccelerationQuicknessSlow = Math.Round(AccelerationQuicknessSlow, ParserHelper.AccelerationDigit);
     }
 
     protected const float PositionConvertConstant = 10.0f;
@@ -68,7 +68,7 @@ public abstract class AnimatedCastEvent : CastEvent
             {
                 if (startItem.IsActivation == Activation.Quickness)
                 {
-                    Acceleration = 1;
+                    AccelerationQuicknessSlow = 1;
                 }
             }
             //_effectHappenedDuration = startItem.Value;
@@ -138,7 +138,7 @@ public abstract class AnimatedCastEvent : CastEvent
     {
         ActualDuration = (int)dur;
         ExpectedDuration = ActualDuration;
-        Acceleration = 0;
+        AccelerationQuicknessSlow = 0;
         Status = AnimationStatus.Full;
         SavedDuration = 0;
     }
