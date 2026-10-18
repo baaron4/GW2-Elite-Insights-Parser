@@ -1,28 +1,36 @@
 <template>
     <div>
-        <ul v-if="showNormalPhases && isTouchDevice"
-            class="nav nav-pills d-flex flex-row justify-content-center mb-1 mx-auto">
-            <li class="nav-item" v-for="(phase, id) in normalPhases"
-                :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
-                <a class="nav-link" @click="updatePhaseTime(phase)">
-                    {{ getPhaseName(phase) }}
-                </a>
-            </li>
-        </ul>
-        <div v-if="showNormalPhases && !isTouchDevice" class="d-flex">
-            <a href="#" class="dropdown-toggle mx-auto" data-toggle="dropdown" title="Phase Selector">
-                {{ selectedPhase && !selectedPhase.breakbarPhase ? getPhaseName(selectedPhase) : 'Phase Selector' }}
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
-                <li v-for="(phase, index) in normalPhases" class="phase-selector-item" :key="index" :class="{ 'active': selectedPhase === phase }"
-                    @click="updatePhaseTime(phase)"
+        <div v-if="showNormalPhases" class="d-flex align-items-center justify-content-center mb-1">
+            <ul v-if="isTouchDevice"
+                class="nav nav-pills d-flex flex-row justify-content-center mb-1 mx-auto">
+                <li class="nav-item" v-for="(phase, id) in normalPhases"
                     :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
-                    {{ getPhaseName(phase) }}
+                    <a class="nav-link" @click="updatePhaseTime(phase)">
+                        {{ getPhaseName(phase) }}
+                    </a>
                 </li>
             </ul>
+            <div v-if="showNormalPhases && !isTouchDevice" class="d-flex">
+                <a href="#" class="dropdown-toggle mx-auto" data-toggle="dropdown" title="Phase Selector">
+                    {{ selectedPhase && !selectedPhase.breakbarPhase ? getPhaseName(selectedPhase) : 'Phase Selector' }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown wd-200px">
+                    <li v-for="(phase, index) in normalPhases" class="phase-selector-item" :key="index" :class="{ 'active': selectedPhase === phase }"
+                        @click="updatePhaseTime(phase)"
+                        :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
+                        {{ getPhaseName(phase) }}
+                    </li>
+                </ul>
+            </div>
+            <label v-if="!isTouchDevice" class="d-flex align-items-center ml-3 mb-0">
+                <span class="mr-2">Advanced timeline</span>
+                <span class="timeline-switch">
+                    <input type="checkbox" id="timelineModeSwitch" role="switch" v-model="useAdvancedTimeline" aria-label="Advanced timeline">
+                    <span class="timeline-switch-slider"></span>
+                </span>
+            </label>
         </div>
-
         <div class="d-flex mt-1">
             <div class="position-relative mx-auto">
                 <canvas class="replay position-relative" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"></canvas>
@@ -42,11 +50,11 @@
             </div>
         </div>
 
-         <div class="timeline mt-1 rounded" ref="timeline" :style="{
+        <div class="timeline mt-1 rounded" ref="timeline" :style="{
                 backgroundColor: timelineColors.background,
                 border: '1px solid ' + timelineColors.backgroundBorder
             }">
-            <svg v-if="!isTouchDevice" ref="svg" 
+            <svg v-if="useAdvancedTimeline" ref="svg"
                  :width="timelineWidth"
                  :height="20 + 10 * maxDepth + 30"
                  @mousemove="onTimelineMouseMove"
@@ -54,69 +62,69 @@
                 <g class="no-user-select">
                     <!-- Invisible cursor scroll line -->
                     <rect x="0"
-                        y="0"
-                        :width="timelineWidth"
-                        :height="10 * maxDepth + 30"
-                        fill="transparent"
-                        style="cursor: pointer;"
-                        @mousedown="onTimelineMouseDown" />
+                          y="0"
+                          :width="timelineWidth"
+                          :height="10 * maxDepth + 30"
+                          fill="transparent"
+                          style="cursor: pointer;"
+                          @mousedown="onTimelineMouseDown" />
 
                     <g v-for="phaseBloc in phasesByDepth">
                         <!-- Invisible grab -->
                         <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 + phaseBloc.depth * 10"
-                            :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
-                            stroke="transparent"
-                            stroke-width="10"
-                            stroke-linecap="butt"
-                            @mouseenter="hoverPhase(phaseBloc.phase)"
-                            @mouseleave="resetHoveredPhase"
-                            @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                            @click="onPhaseClick(phaseBloc.phase, $event)"
-                            @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
+                              :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
+                              stroke="transparent"
+                              stroke-width="10"
+                              stroke-linecap="butt"
+                              @mouseenter="hoverPhase(phaseBloc.phase)"
+                              @mouseleave="resetHoveredPhase"
+                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                              @click="onPhaseClick(phaseBloc.phase, $event)"
+                              @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
 
                         <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 + phaseBloc.depth * 10"
-                            :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
-                            :stroke="phaseBloc.color"
-                            stroke-width="4"
-                            stroke-linecap="butt"
-                            :opacity="getPhaseOpacity(phaseBloc.phase)"
-                            style="pointer-events: none;" />
+                              :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + phaseBloc.depth * 10"
+                              :stroke="phaseBloc.color"
+                              stroke-width="4"
+                              stroke-linecap="butt"
+                              :opacity="getPhaseOpacity(phaseBloc.phase)"
+                              style="pointer-events: none;" />
 
                         <line :x1="timeOffsetedToX(phaseBloc.phase.start)" :y1="20 - 5 + phaseBloc.depth * 10"
-                            :x2="timeOffsetedToX(phaseBloc.phase.start)" :y2="20 + 5 + phaseBloc.depth * 10"
-                            :stroke="phaseBloc.color"
-                            stroke-width="2"
-                            :opacity="getPhaseOpacity(phaseBloc.phase)"
-                            @mouseenter="hoverPhase(phaseBloc.phase)"
-                            @mouseleave="resetHoveredPhase"
-                            @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                            @click="onPhaseClick(phaseBloc.phase, $event)"
-                            @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
+                              :x2="timeOffsetedToX(phaseBloc.phase.start)" :y2="20 + 5 + phaseBloc.depth * 10"
+                              :stroke="phaseBloc.color"
+                              stroke-width="2"
+                              :opacity="getPhaseOpacity(phaseBloc.phase)"
+                              @mouseenter="hoverPhase(phaseBloc.phase)"
+                              @mouseleave="resetHoveredPhase"
+                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                              @click="onPhaseClick(phaseBloc.phase, $event)"
+                              @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
 
                         <line :x1="timeOffsetedToX(phaseBloc.phase.end)" :y1="20 - 5 + phaseBloc.depth * 10"
-                            :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + 5 + phaseBloc.depth * 10"
-                            :stroke="phaseBloc.color"
-                            stroke-width="2"
-                            :opacity="getPhaseOpacity(phaseBloc.phase)"
-                            @mouseenter="hoverPhase(phaseBloc.phase)"
-                            @mouseleave="resetHoveredPhase"
-                            @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                            @click="onPhaseClick(phaseBloc.phase, $event)"
-                            @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
+                              :x2="timeOffsetedToX(phaseBloc.phase.end)" :y2="20 + 5 + phaseBloc.depth * 10"
+                              :stroke="phaseBloc.color"
+                              stroke-width="2"
+                              :opacity="getPhaseOpacity(phaseBloc.phase)"
+                              @mouseenter="hoverPhase(phaseBloc.phase)"
+                              @mouseleave="resetHoveredPhase"
+                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                              @click="onPhaseClick(phaseBloc.phase, $event)"
+                              @mouseup="onPhaseMouseUp(phaseBloc.phase, $event)" />
                     </g>
 
                     <!-- Drag cursor, larger for easier grab -->
                     <line id="large-line-drag"
-                        :x1="timeOffsetedToX(time)" y1="0"
-                        :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
-                        stroke="transparent" stroke-width="10"
-                        style="pointer-events: stroke; cursor: grab;"
-                        @mousedown="startDragCursorFromLine" />
+                          :x1="timeOffsetedToX(time)" y1="0"
+                          :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
+                          stroke="transparent" stroke-width="10"
+                          style="pointer-events: stroke; cursor: grab;"
+                          @mousedown="startDragCursorFromLine" />
                     <!-- The cursor visual -->
                     <line :x1="timeOffsetedToX(time)" y1="0"
-                        :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
-                        :stroke="timelineColors.cursor" stroke-width="2" stroke-dasharray="4 2"
-                        style="pointer-events: none;" />
+                          :x2="timeOffsetedToX(time)" :y2="10 * maxDepth + 30"
+                          :stroke="timelineColors.cursor" stroke-width="2" stroke-dasharray="4 2"
+                          style="pointer-events: none;" />
                     <!-- Cursor circle -->
                     <circle :cx="timeOffsetedToX(time)"
                             :cy="10 * maxDepth + 25"
@@ -128,12 +136,12 @@
                     <!-- Fixed time ticks -->
                     <g v-for="tick in ticks">
                         <line :x1="tick.x" y1="15" :x2="tick.x" y2="25"
-                            :stroke="timelineColors.tick" />
+                              :stroke="timelineColors.tick" />
 
                         <text :x="getTickX(tick)" y="10"
-                            font-size="10"
-                            text-anchor="middle"
-                            :fill="timelineColors.text">
+                              font-size="10"
+                              text-anchor="middle"
+                              :fill="timelineColors.text">
                             {{ tick.label }}
                         </text>
                     </g>
@@ -141,35 +149,35 @@
                     <!-- Mechanics ticks -->
                     <g v-for="tick in playerMechanicTicks">
                         <line :x1="tick.x" y1="15" :x2="tick.x" y2="25"
-                            :stroke="timelineColors.mechanic" />
+                              :stroke="timelineColors.mechanic" />
                         <!-- Top -->
                         <line :x1="tick.x - 1" y1="15" :x2="tick.x + 1" y2="15"
-                            :stroke="timelineColors.mechanic" />
+                              :stroke="timelineColors.mechanic" />
                         <!-- Bottom -->
                         <line :x1="tick.x - 1" y1="25" :x2="tick.x + 1" y2="25"
-                            :stroke="timelineColors.mechanic" />
+                              :stroke="timelineColors.mechanic" />
                     </g>
 
                     <!-- Moving time -->
                     <g v-if="isHoveringTimeline">
                         <rect :x="timeToX(hoverTime) - 18"
-                            y="-3"
-                            width="36"
-                            height="16"
-                            rx="3"
-                            fill="black"
-                            opacity="0.5"
-                            pointer-events="none" />
+                              y="-3"
+                              width="36"
+                              height="16"
+                              rx="3"
+                              fill="black"
+                              opacity="0.5"
+                              pointer-events="none" />
                         <text :x="timeToX(hoverTime)" y="10"
-                            font-size="10"
-                            text-anchor="middle"
-                            :fill="timelineColors.text"
-                            style="pointer-events: none; font-weight: 600;">
+                              font-size="10"
+                              text-anchor="middle"
+                              :fill="timelineColors.text"
+                              style="pointer-events: none; font-weight: 600;">
                             {{ formatTime(hoverTime) }}
                         </text>
                     </g>
                 </g>
-                
+
                 <text v-if="hoveredPhase || selectedPhase"
                       :x="timelineWidth / 2"
                       :y="10 * maxDepth + 45"
@@ -180,12 +188,22 @@
                     {{ getFormattedPhaseText(hoveredPhase || selectedPhase) }}
                 </text>
             </svg>
-            <div v-else class="d-flex justify-content-center slidercontainer my-1">
-                <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
-                       :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
-                       :style="{'background': getSliderGradient()}">
-                <div class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
-                    {{ sliderDelimiter.name }}
+
+            <div v-else class="simple-timeline-container my-1">
+                <div class="simple-timeline-ticks"
+                     :style="{ color: timelineColors.text }">
+                    <span v-for="tick in ticks" :key="tick.time"
+                          class="simple-timeline-tick" :style="{left: (getTickX(tick) / timelineWidth * 100) + '%'}">
+                        {{ tick.label }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-center slidercontainer my-1">
+                    <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
+                           :max="maxTime" :value="time * 1000 - range.min" class="slider" :id="htmlElementIDs.timeRangeID"
+                           :style="{'background': getSliderGradient()}">
+                    <div class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
+                        {{ sliderDelimiter.name }}
+                    </div>
                 </div>
             </div>
 
@@ -199,10 +217,10 @@
                 </label>
 
                 <div @click="toggleAnimate();" style="width: 80px;"
-                    class="btn btn-small"
+                     class="btn btn-small"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Play / pause animation">
-                    {{ animated ? "&#9208 Pause" : "&#9654 Play" }} 
+                    {{ animated ? "&#9208 Pause" : "&#9654 Play" }}
                 </div>
                 <div @click="restartAnimate();" class="btn btn-small"
                      :class="{'btn-dark': !light, 'btn-light': light}"
@@ -210,11 +228,11 @@
                     &#8617;&#65039; Restart
                 </div>
                 <div @click="toggleBackwards();" style="width: 104px;"
-                    class="btn btn-small"
+                     class="btn btn-small"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Play animation backwards/forwards">
-                    {{ backwards ? "&#9654; Forwards" : "&#9664; Backwards" }} 
-                    
+                    {{ backwards ? "&#9654; Forwards" : "&#9664; Backwards" }}
+
                 </div>
 
                 <combat-replay-time-speed-picker-component />
@@ -260,17 +278,21 @@
         data: function () {
             return {
                 isTouchDevice: isTouchDevice,
+                useAdvancedTimeline: window.localStorage && window.localStorage.getItem("ei_useAdvancedTimeline") !== null
+                    ? window.localStorage.getItem("ei_useAdvancedTimeline") === "true"
+                    : !isTouchDevice,
                 backwards: false,
                 sliderDelimiter: sliderDelimiter,
                 selectedPhaseId: -1,
                 hoveredPhaseId: null,
                 draggingCursor: false,
                 hoverTime: 0,
-                isHoveringTimeline: false,    
-                clickThroughDragCursor: false,    
+                isHoveringTimeline: false,
+                clickThroughDragCursor: false,
                 blockDragCursor: false,
-                phaseDoubleClickTimeout: null, 
+                phaseDoubleClickTimeout: null,
                 dragThroughPhaseBlockTimeout: null,
+                simpleTimelineTooltip: null,
                 animationData: reactiveAnimationData,
             };
         },
@@ -286,7 +308,15 @@
                     }
                 },
                 deep: true
-            }
+            },
+            useAdvancedTimeline: function (value) {
+                if (window.localStorage) {
+                    window.localStorage.setItem("ei_useAdvancedTimeline", value);
+                }
+                if (value) {
+                    this.hideSimpleTimelineTooltip();
+                }
+            },
         },
         mounted() {
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
@@ -294,13 +324,24 @@
             this.updateAnimatorTimes(encounterPhase);
             this.resetViewpoint();
             this.selectedPhaseId = this.normalPhases[0].id;
+            this.$el.addEventListener("mousemove", this.onSimpleTimelineSliderMouseMove);
+            this.$el.addEventListener("mouseleave", this.hideSimpleTimelineTooltip);
             animationControlComponent = this;
         },
+        beforeDestroy() {
+            this.$el.removeEventListener("mousemove", this.onSimpleTimelineSliderMouseMove);
+            this.$el.removeEventListener("mouseleave", this.hideSimpleTimelineTooltip);
+
+            if (this.simpleTimelineTooltip) {
+                this.simpleTimelineTooltip.remove();
+                this.simpleTimelineTooltip = null;
+            }
+        },
         computed: {
-            selectedPhase: function() {
+            selectedPhase: function () {
                 return logData.phases[this.selectedPhaseId];
             },
-            hoveredPhase: function() {
+            hoveredPhase: function () {
                 return logData.phases[this.hoveredPhaseId];
             },
             phases: function () {
@@ -341,7 +382,7 @@
             hasBreakbarPhases: function () {
                 return this.phases.filter(phase => phase.breakbarPhase).length > 0;
             },
-            phasesByDepth: function() {
+            phasesByDepth: function () {
                 const phase0 = this.phases[0];
                 const remainingPhases = new Set(this.phases.filter(phase => !phase.breakbarPhase));
                 remainingPhases.delete(phase0);
@@ -375,7 +416,7 @@
                 });
                 return result;
             },
-            maxDepth: function() {
+            maxDepth: function () {
                 const depths = this.phasesByDepth.map(phaseBloc => phaseBloc.depth);
                 return Math.max(Math.max(...depths) + 1, 2);
             },
@@ -506,7 +547,7 @@
             getPhaseName: function (phase) {
                 return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
             },
-            getFormattedPhaseText: function (phase) {              
+            getFormattedPhaseText: function (phase) {
                 const offset = (this.range.min / 1000);
                 var res = this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
                 if (this.animationData.selectedMechanic.name != null) {
@@ -610,7 +651,7 @@
             },
             resetHoveredPhase() {
                 this.hoveredPhaseId = -1;
-            },    
+            },
             clearPhaseMouseEvents() {
                 clearTimeout(this.dragThroughPhaseBlockTimeout);
                 this.dragThroughPhaseBlockTimeout = null;
@@ -622,7 +663,7 @@
                     return;
                 }
                 this.selectedPhaseId = phase.id;
-                this.dragThroughPhaseBlockTimeout = this.dragThroughPhaseBlockTimeout ||  setTimeout(() => {
+                this.dragThroughPhaseBlockTimeout = this.dragThroughPhaseBlockTimeout || setTimeout(() => {
                     this.clearPhaseMouseEvents();
                     let time = this.getTimeFromEvent(e);
                     this.updateTime(time * 1000);
@@ -682,6 +723,56 @@
                 this.draggingCursor = false;
                 window.removeEventListener("mousemove", this.onDragCursor);
                 window.removeEventListener("mouseup", this.stopDragCursor);
+            },
+            onSimpleTimelineSliderMouseMove(e) {
+                const slider = document.getElementById(this.htmlElementIDs.timeRangeID);
+
+                if (this.useAdvancedTimeline || !slider || !slider.classList.contains("slider")) {
+                    this.hideSimpleTimelineTooltip();
+                    return;
+                }
+
+                const rect = slider.getBoundingClientRect();
+
+                // Show the tooltip while the pointer is inside the slider on both axes.
+                if (rect.width <= 0 ||
+                    rect.height <= 0 ||
+                    e.clientX < rect.left ||
+                    e.clientX > rect.right ||
+                    e.clientY < rect.top ||
+                    e.clientY > rect.bottom) {
+                    this.hideSimpleTimelineTooltip();
+                    return;
+                }
+
+                if (!this.simpleTimelineTooltip) {
+                    this.simpleTimelineTooltip = document.createElement("div");
+                    this.simpleTimelineTooltip.className = "simple-timeline-time-tooltip";
+                    document.body.appendChild(this.simpleTimelineTooltip);
+                }
+
+                const clampedX = Math.max(rect.left, Math.min(e.clientX, rect.right));
+                const ratio = (clampedX - rect.left) / rect.width;
+                const min = Number(slider.min) || 0;
+                const max = Number(slider.max) || 0;
+                const time = (min + ratio * (max - min)) / 1000;
+
+                this.simpleTimelineTooltip.textContent = this.formatTime(time);
+
+                const tooltipWidth = this.simpleTimelineTooltip.offsetWidth;
+                const tooltipHalfWidth = tooltipWidth / 2;
+
+                const tooltipX = Math.max(rect.left + tooltipHalfWidth, Math.min(clampedX, rect.right - tooltipHalfWidth));
+
+                this.simpleTimelineTooltip.style.left = `${tooltipX}px`;
+                this.simpleTimelineTooltip.style.top = `${rect.top - 24}px`;
+                this.simpleTimelineTooltip.style.display = "block";
+            },
+
+            hideSimpleTimelineTooltip() {
+                if (this.simpleTimelineTooltip) {
+                    this.simpleTimelineTooltip.style.display = "none";
+                }
             },
         },
     });
