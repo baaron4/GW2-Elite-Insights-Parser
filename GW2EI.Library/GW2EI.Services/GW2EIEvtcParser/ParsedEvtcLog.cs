@@ -25,7 +25,7 @@ public class ParsedEvtcLog : EvtcLog
 
     private Dictionary<AgentItem, SingleActor>? _agentToActorDictionary;
 
-    private static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
+    internal static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
         var agentInfo = combatData.GetNPCInfoEvents(singleActor.AgentItem).FirstOrDefault();
         if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
@@ -218,31 +218,12 @@ public class ParsedEvtcLog : EvtcLog
             }
             else
             {
-                actor = new NPC(agentItem);
-                if (CombatData.HasAgentInfo)
-                {
-                    AddRankToSpecies(CombatData, actor);
-                }
+                actor = new NPC(agentItem, this);
             }
             _agentToActorDictionary[agentItem] = actor;
             //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
         }
         return actor;
-    }
-
-    /// <summary>
-    /// Find the corresponding actor, creates one otherwise
-    /// </summary>
-    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="SingleActor"/> for</param>
-    /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
-    /// <returns></returns>
-    public SingleActor? FindActor(AgentItem agentItem, bool excludePlayers)
-    {
-        if (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player)
-        {
-            return null;
-        }
-        return FindActor(agentItem);
     }
 
 

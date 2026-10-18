@@ -46,11 +46,8 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                     if (agentItem.IsSpecies(TargetID.Environment) && Keep(effectEvent, log))
                     {
-                        SingleActor? actor = log.FindActor(agentItem, true);
-                        if (actor != null)
-                        {
-                            InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);
-                        }
+                        SingleActor actor = log.FindActor(agentItem); 
+                        InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);
                     }
                     else
                     {
