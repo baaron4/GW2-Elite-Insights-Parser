@@ -6,7 +6,6 @@ public abstract class AnimatedCastEvent : CastEvent
 {
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;
-    public AgentItem EffectTarget { get; protected set; } = ParserHelper._unknownAgent;
 
     public readonly AnimationStart AnimStart;
     public readonly AnimationStop AnimStop;

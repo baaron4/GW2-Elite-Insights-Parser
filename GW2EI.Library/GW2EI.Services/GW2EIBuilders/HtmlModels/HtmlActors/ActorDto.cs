@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
@@ -52,6 +53,15 @@ internal abstract class ActorDto
                 Id = i,
                 Name = minions[i].Character
             });
+        }
+    }
+
+    public static void AssembleNPCs(Dictionary<int, AgentItem> npcs, Dictionary<int, string> dict, ParsedEvtcLog log)
+    {
+        dict.EnsureCapacity(dict.Count + npcs.Count);
+        foreach (var (id, agent) in npcs)
+        {
+            dict.Add(id, agent.FirstName);
         }
     }
 }

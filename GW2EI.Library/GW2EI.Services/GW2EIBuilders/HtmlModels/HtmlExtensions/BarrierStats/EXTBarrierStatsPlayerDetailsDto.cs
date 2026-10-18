@@ -1,6 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
@@ -13,7 +13,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
 
     // helpers
 
-    public static EXTBarrierStatsPlayerDetailsDto BuildPlayerBarrierData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTBarrierStatsPlayerDetailsDto BuildPlayerBarrierData(ParsedEvtcLog log, SingleActor actor, UsedData used)
     {
         var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
@@ -26,24 +26,24 @@ internal class EXTBarrierStatsPlayerDetailsDto
         };
         foreach (PhaseData phase in phases)
         {
-            dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, null, phase, usedSkills, usedBuffs));
+            dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, null, phase, used));
             var dmgTargetsDto = new List<EXTBarrierStatsBarrierDistributionDto>(log.Friendlies.Count);
             foreach (SingleActor target in log.Friendlies)
             {
-                dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, target, phase, usedSkills, usedBuffs));
+                dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, target, phase, used));
             }
             dto.BarrierDistributionsTargets.Add(dmgTargetsDto);
-            dto.IncomingBarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildIncomingBarrierDistData(log, actor, phase, usedSkills, usedBuffs));
+            dto.IncomingBarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildIncomingBarrierDistData(log, actor, phase, used));
         }
         foreach (var minion in minions)
         {
-            dto.Minions.Add(BuildFriendlyMinionsHealingData(log, actor, minion, usedSkills, usedBuffs));
+            dto.Minions.Add(BuildFriendlyMinionsHealingData(log, actor, minion, used));
         }
 
         return dto;
     }
 
-    private static EXTBarrierStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static EXTBarrierStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedData used)
     {
         var phases = log.LogData.GetPhases(log);
         var dto = new EXTBarrierStatsPlayerDetailsDto
@@ -57,11 +57,11 @@ internal class EXTBarrierStatsPlayerDetailsDto
             var dmgTargetsDto = new List<EXTBarrierStatsBarrierDistributionDto>(log.Friendlies.Count);
             foreach (SingleActor target in log.Friendlies)
             {
-                dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
+                dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, target, phase, used));
             }
             dto.BarrierDistributionsTargets.Add(dmgTargetsDto);
-            dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, null, phase, usedSkills, usedBuffs));
-            dto.IncomingBarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionIncomingBarrierDistData(log, minion, null, phase, usedSkills, usedBuffs));
+            dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, null, phase, used));
+            dto.IncomingBarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionIncomingBarrierDistData(log, minion, null, phase, used));
         }
         return dto;
     }

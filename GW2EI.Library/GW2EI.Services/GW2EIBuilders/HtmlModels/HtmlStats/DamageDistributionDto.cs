@@ -4,6 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 using DistributionItem = object[];
 internal class DamageDistributionDto
 {
@@ -59,7 +60,7 @@ internal class DamageDistributionDto
         return (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted);
     }
 
-    private static DistributionItem GetDamageEventToItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, IReadOnlyDictionary<long, int>? downContributionPerSkillID, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static DistributionItem GetDamageEventToItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, IReadOnlyDictionary<long, int>? downContributionPerSkillID, UsedData used, BuffsContainer boons, PhaseData phase)
     {
         int totaldamage = 0,
             mindamage = int.MaxValue,
@@ -109,23 +110,23 @@ internal class DamageDistributionDto
 
         if (IsIndirectDamage)
         {
-            if (!usedBoons.ContainsKey(skill.ID))
+            if (!used.buffs.ContainsKey(skill.ID))
             {
                 if (boons.BuffsByIDs.TryGetValue(skill.ID, out var buff))
                 {
-                    usedBoons.Add(buff.ID, buff);
+                    used.buffs.Add(buff.ID, buff);
                 }
                 else
                 {
                     SkillItem aux = skill;
                     var auxBoon = new Buff(aux.Name, aux.ID, aux.Icon);
-                    usedBoons.Add(auxBoon.ID, auxBoon);
+                    used.buffs.Add(auxBoon.ID, auxBoon);
                 }
             }
         }
         else
         {
-            usedSkills.TryAdd(skill.ID, skill);
+            used.skills.TryAdd(skill.ID, skill);
         }
 
         long timeSpentCasting = 0;
@@ -167,19 +168,19 @@ internal class DamageDistributionDto
     }
 
 
-    private static List<DistributionItem> BuildDamageDistributionTakenBodyData(ParsedEvtcLog log, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<DistributionItem> BuildDamageDistributionTakenBodyData(ParsedEvtcLog log, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, UsedData used, PhaseData phase)
     {
         var list = new List<DistributionItem>();
         //NOTE(Rennorb): The inner list only ever gets enumerated once, because once its matched it gets removed.
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         foreach (var group in damageLogs.GroupBy(x => x.Skill))
         {
-            list.Add(GetDamageEventToItem(group.Key, group.ToList(), [], breakbarLogsBySkill, null, usedSkills, usedBuffs, log.Buffs, phase));
+            list.Add(GetDamageEventToItem(group.Key, group.ToList(), [], breakbarLogsBySkill, null, used, log.Buffs, phase));
         }
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
         {
-            usedSkills.TryAdd(skill.ID, skill);
+            used.skills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
             var hits = events.Count();
             list.Add([
@@ -211,7 +212,7 @@ internal class DamageDistributionDto
         return list;
     }
 
-    private static List<DistributionItem> BuildDamageDistributionBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, IReadOnlyDictionary<long, int>? downContributionPerSkillID, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<DistributionItem> BuildDamageDistributionBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, IReadOnlyDictionary<long, int>? downContributionPerSkillID, UsedData used, PhaseData phase)
     {
         var list = new List<DistributionItem>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -219,14 +220,14 @@ internal class DamageDistributionDto
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         foreach (var group in damageLogs.GroupBy(x => x.Skill))
         {
-            list.Add(GetDamageEventToItem(group.Key, group.ToList(), castLogsBySkill, breakbarLogsBySkill, downContributionPerSkillID, usedSkills, usedBuffs, log.Buffs, phase));
+            list.Add(GetDamageEventToItem(group.Key, group.ToList(), castLogsBySkill, breakbarLogsBySkill, downContributionPerSkillID, used, log.Buffs, phase));
         }
         // non damaging
         foreach (var pair in castLogsBySkill)
         {
-            if (!usedSkills.ContainsKey(pair.Key.ID))
+            if (!used.skills.ContainsKey(pair.Key.ID))
             {
-                usedSkills.Add(pair.Key.ID, pair.Key);
+                used.skills.Add(pair.Key.ID, pair.Key);
             }
             double breakbarDamage = breakbarLogsBySkill.Remove(pair.Key, out var brList) ? Math.Round(brList.Sum(x => x.BreakbarDamage), 1) : 0;
 
@@ -263,7 +264,7 @@ internal class DamageDistributionDto
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
         {
-            usedSkills.TryAdd(skill.ID, skill);
+            used.skills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
             var hits = events.Count();
 
@@ -297,7 +298,7 @@ internal class DamageDistributionDto
     }
 
 
-    public static DamageDistributionDto BuildDamageDistributionData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DamageDistributionDto BuildDamageDistributionData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, UsedData used)
     {
         DamageStatistics dps = actor.GetDamageStats(target, log, phase.Start, phase.End);
         var casting = actor.GetIntersectingCastEvents(log, phase.Start, phase.End);
@@ -312,12 +313,12 @@ internal class DamageDistributionDto
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
             TotalCasting = actor.GetGameplayStats(log, phase.Start, phase.End).SkillCastTime,
-            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, breakbarLogs, actor.GetOffensiveStats(target, log, phase.Start, phase.End).DownContributionPerSkillID, usedSkills, usedBuffs, phase)
+            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, breakbarLogs, actor.GetOffensiveStats(target, log, phase.Start, phase.End).DownContributionPerSkillID, used, phase)
         };
         return dto;
     }
 
-    public static DamageDistributionDto BuildDamageTakenDistributionData(ParsedEvtcLog log, SingleActor actor, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DamageDistributionDto BuildDamageTakenDistributionData(ParsedEvtcLog log, SingleActor actor, PhaseData phase, UsedData used)
     {
         DefenseAllStatistics? incomingDamageStats = actor.GetDefenseStats(log, phase.Start, phase.End);
         var damageLogs = actor.GetDamageTakenEvents(null, log, phase.Start, phase.End);
@@ -325,7 +326,7 @@ internal class DamageDistributionDto
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         var dto = new DamageDistributionDto
         {
-            Distribution = BuildDamageDistributionTakenBodyData(log, damageLogs, breakbarLogs, usedSkills, usedBuffs, phase),
+            Distribution = BuildDamageDistributionTakenBodyData(log, damageLogs, breakbarLogs, used, phase),
             ContributedDamage = incomingDamageStats.DamageTaken,
             ContributedShieldDamage = incomingDamageStats.DamageBarrier,
             ContributedBreakbarDamage = incomingDamageStats.BreakbarDamageTaken
@@ -333,7 +334,7 @@ internal class DamageDistributionDto
         return dto;
     }
 
-    public static DamageDistributionDto BuildMinionsDamageDistributionData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DamageDistributionDto BuildMinionsDamageDistributionData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
     {
         DamageStatistics dps = minions.Master.GetDamageStats(target, log, phase.Start, phase.End);
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
@@ -347,12 +348,12 @@ internal class DamageDistributionDto
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
             TotalCasting = minions.GetIntersectingCastTime(log, phase.Start, phase.End),
-            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, brkDamageLogs, null, usedSkills, usedBuffs, phase)
+            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, brkDamageLogs, null, used, phase)
         };
         return dto;
     }
 
-    public static DamageDistributionDto BuildMinionsDamageTakenDistributionData(ParsedEvtcLog log, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DamageDistributionDto BuildMinionsDamageTakenDistributionData(ParsedEvtcLog log, Minions minions, PhaseData phase, UsedData used)
     {
         var damageLogs = minions.GetDamageTakenEvents(null, log, phase.Start, phase.End);
         var breakbarLogs = minions.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End);
@@ -361,7 +362,7 @@ internal class DamageDistributionDto
             ContributedDamage = damageLogs.Sum(x => x.HealthDamage),
             ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage),
             ContributedBreakbarDamage = Math.Round(breakbarLogs.Sum(x => x.BreakbarDamage), 1),
-            Distribution = BuildDamageDistributionTakenBodyData(log, damageLogs, breakbarLogs, usedSkills, usedBuffs, phase)
+            Distribution = BuildDamageDistributionTakenBodyData(log, damageLogs, breakbarLogs, used, phase)
         };
         return dto;
     }

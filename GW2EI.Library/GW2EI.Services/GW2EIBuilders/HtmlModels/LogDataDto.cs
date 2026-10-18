@@ -52,6 +52,7 @@ internal class LogDataDto
     public Dictionary<string, DamageModDto> DamageModMap = new(50);
     public Dictionary<string, DamageModDto> DamageIncModMap = new(50);
     public List<MechanicDto> MechanicMap = new(30);
+    public Dictionary<int, string> NpcMap = new();
     // Extra components
     public CombatReplayDto? CrData;
     public ChartDataDto? GraphData;
@@ -164,7 +165,7 @@ internal class LogDataDto
         }
     }
 
-    private static Dictionary<Spec, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> persBuffDict, Dictionary<long, Buff> usedBuffs)
+    private static Dictionary<Spec, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> persBuffDict, UsedData used)
     {
         var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>(log.FriendliesListBySpec.Count);
         // Collect all personal buffs by spec
@@ -198,13 +199,13 @@ internal class LogDataDto
             foreach (Buff boon in pair.Value)
             {
                 persBuffDict[pair.Key.ToString()].Add(boon.ID);
-                usedBuffs[boon.ID] = boon;
+                used.buffs[boon.ID] = boon;
             }
         }
         return boonsBySpec;
     }
 
-    private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalOutgoingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<OutgoingDamageModifier> usedDamageMods)
+    private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalOutgoingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedData used)
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>(log.FriendliesListBySpec.Count);
         // Collect all personal damage mods by spec
@@ -228,13 +229,13 @@ internal class LogDataDto
             foreach (OutgoingDamageModifier mod in pair.Value)
             {
                 dgmModDict[pair.Key.ToString()].Add(mod.ID);
-                usedDamageMods.Add(mod);
+                used.damageMods.Add(mod);
             }
         }
         return damageModBySpecs;
     }
 
-    private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncomingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, HashSet<IncomingDamageModifier> usedDamageMods)
+    private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncomingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedData used)
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>(log.FriendliesListBySpec.Count);
         // Collect all personal damage mods by spec
@@ -258,7 +259,7 @@ internal class LogDataDto
             foreach (IncomingDamageModifier mod in pair.Value)
             {
                 dgmModDict[pair.Key.ToString()].Add(mod.ID);
-                usedDamageMods.Add(mod);
+                used.incDamageMods.Add(mod);
             }
         }
         return damageModBySpecs;
@@ -276,91 +277,91 @@ internal class LogDataDto
     [MemberNotNull(nameof(Enhancements))]
     [MemberNotNull(nameof(OtherConsumables))]
     [MemberNotNull(nameof(InstanceBuffs))]
-    private void BuildBuffDictionaries(ParsedEvtcLog log, Dictionary<long, Buff> usedBuffs)
+    private void BuildBuffDictionaries(ParsedEvtcLog log, UsedData used)
     {
         StatisticsHelper statistics = log.StatisticsHelper;
         Boons = new(statistics.PresentBoons.Count);
         foreach (Buff boon in statistics.PresentBoons)
         {
             Boons.Add(boon.ID);
-            usedBuffs[boon.ID] = boon;
+            used.buffs[boon.ID] = boon;
         }
         Conditions = new(statistics.PresentConditions.Count);
         foreach (Buff condition in statistics.PresentConditions)
         {
             Conditions.Add(condition.ID);
-            usedBuffs[condition.ID] = condition;
+            used.buffs[condition.ID] = condition;
         }
         OffBuffs = new(statistics.PresentConditions.Count);
         foreach (Buff offBuff in statistics.PresentOffbuffs)
         {
             OffBuffs.Add(offBuff.ID);
-            usedBuffs[offBuff.ID] = offBuff;
+            used.buffs[offBuff.ID] = offBuff;
         }
         SupBuffs = new(statistics.PresentSupbuffs.Count);
         foreach (Buff supBuff in statistics.PresentSupbuffs)
         {
             SupBuffs.Add(supBuff.ID);
-            usedBuffs[supBuff.ID] = supBuff;
+            used.buffs[supBuff.ID] = supBuff;
         }
         DefBuffs = new(statistics.PresentDefbuffs.Count);
         foreach (Buff defBuff in statistics.PresentDefbuffs)
         {
             DefBuffs.Add(defBuff.ID);
-            usedBuffs[defBuff.ID] = defBuff;
+            used.buffs[defBuff.ID] = defBuff;
         }
         Debuffs = new(statistics.PresentDebuffs.Count);
         foreach (Buff debuff in statistics.PresentDebuffs)
         {
             Debuffs.Add(debuff.ID);
-            usedBuffs[debuff.ID] = debuff;
+            used.buffs[debuff.ID] = debuff;
         }
         TargetDebuffs = new(statistics.PresentTargetDebuffs.Count);
         foreach (Buff debuff in statistics.PresentTargetDebuffs)
         {
             TargetDebuffs.Add(debuff.ID);
-            usedBuffs[debuff.ID] = debuff;
+            used.buffs[debuff.ID] = debuff;
         }
         TargetOtherBuffs = new(statistics.PresentTargetOtherBuffs.Count);
         foreach (Buff buff in statistics.PresentTargetOtherBuffs)
         {
             TargetOtherBuffs.Add(buff.ID);
-            usedBuffs[buff.ID] = buff;
+            used.buffs[buff.ID] = buff;
         }
         GearBuffs = new(statistics.PresentGearbuffs.Count);
         foreach (Buff gearBuff in statistics.PresentGearbuffs)
         {
             GearBuffs.Add(gearBuff.ID);
-            usedBuffs[gearBuff.ID] = gearBuff;
+            used.buffs[gearBuff.ID] = gearBuff;
         }
         Nourishments = new(statistics.PresentNourishements.Count);
         foreach (Buff nourishment in statistics.PresentNourishements)
         {
             Nourishments.Add(nourishment.ID);
-            usedBuffs[nourishment.ID] = nourishment;
+            used.buffs[nourishment.ID] = nourishment;
         }
         Enhancements = new(statistics.PresentEnhancements.Count);
         foreach (Buff enhancement in statistics.PresentEnhancements)
         {
             Enhancements.Add(enhancement.ID);
-            usedBuffs[enhancement.ID] = enhancement;
+            used.buffs[enhancement.ID] = enhancement;
         }
         OtherConsumables = new(statistics.PresentOtherConsumables.Count);
         foreach (Buff otherConsumables in statistics.PresentOtherConsumables)
         {
             OtherConsumables.Add(otherConsumables.ID);
-            usedBuffs[otherConsumables.ID] = otherConsumables;
+            used.buffs[otherConsumables.ID] = otherConsumables;
         }
         var instanceBuffs = log.LogData.Logic.GetInstanceBuffs(log);
         InstanceBuffs = new(instanceBuffs.Count);
         foreach (var instanceBuff in instanceBuffs)
         {
             InstanceBuffs.Add([instanceBuff.Buff.ID, instanceBuff.Stack, instanceBuff.AttachedPhase.Start, instanceBuff.AttachedPhase.End, instanceBuff.RemainingDuration]);
-            usedBuffs[instanceBuff.Buff.ID] = instanceBuff.Buff;
+            used.buffs[instanceBuff.Buff.ID] = instanceBuff.Buff;
         }
     }
 
-    private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods,
+    private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, UsedData used,
         HashSet<int> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
@@ -375,7 +376,7 @@ internal class LogDataDto
                 {
                     commonDamageModifiers.Add(dMod);
                     DmgModifiersCommon.Add(dMod.ID);
-                    usedDamageMods.Add(dMod);
+                    used.damageMods.Add(dMod);
                 }
             }
         }
@@ -387,7 +388,7 @@ internal class LogDataDto
                 {
                     commonDamageModifiers.Add(dMod);
                     DmgModifiersCommon.Add(dMod.ID);
-                    usedDamageMods.Add(dMod);
+                    used.damageMods.Add(dMod);
                 }
             }
         }
@@ -399,7 +400,7 @@ internal class LogDataDto
                 {
                     itemDamageModifiers.Add(dMod);
                     DmgModifiersItem.Add(dMod.ID);
-                    usedDamageMods.Add(dMod);
+                    used.damageMods.Add(dMod);
                 }
             }
         }
@@ -411,13 +412,13 @@ internal class LogDataDto
                 {
                     itemDamageModifiers.Add(dMod);
                     DmgModifiersItem.Add(dMod.ID);
-                    usedDamageMods.Add(dMod);
+                    used.damageMods.Add(dMod);
                 }
             }
         }
     }
 
-    private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, HashSet<IncomingDamageModifier> usedIncDamageMods,
+    private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, UsedData used,
         HashSet<int> allIncDamageMods, List<IncomingDamageModifier> commonIncDamageModifiers, List<IncomingDamageModifier> itemIncDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
@@ -432,7 +433,7 @@ internal class LogDataDto
                 {
                     commonIncDamageModifiers.Add(dMod);
                     DmgIncModifiersCommon.Add(dMod.ID);
-                    usedIncDamageMods.Add(dMod);
+                    used.incDamageMods.Add(dMod);
                 }
             }
         }
@@ -444,7 +445,7 @@ internal class LogDataDto
                 {
                     commonIncDamageModifiers.Add(dMod);
                     DmgIncModifiersCommon.Add(dMod.ID);
-                    usedIncDamageMods.Add(dMod);
+                    used.incDamageMods.Add(dMod);
                 }
             }
         }
@@ -456,7 +457,7 @@ internal class LogDataDto
                 {
                     itemIncDamageModifiers.Add(dMod);
                     DmgIncModifiersItem.Add(dMod.ID);
-                    usedIncDamageMods.Add(dMod);
+                    used.incDamageMods.Add(dMod);
                 }
             }
         }
@@ -468,27 +469,34 @@ internal class LogDataDto
                 {
                     itemIncDamageModifiers.Add(dMod);
                     DmgIncModifiersItem.Add(dMod.ID);
-                    usedIncDamageMods.Add(dMod);
+                    used.incDamageMods.Add(dMod);
                 }
             }
         }
     }
 
+    internal class UsedData
+    {
+        //TODO_PERF(Rennorb) @find capacity dependencies
+        public Dictionary<long, Buff> buffs = new(128);
+        public HashSet<OutgoingDamageModifier> damageMods = new(32);
+        public HashSet<IncomingDamageModifier> incDamageMods = new(16);
+        public Dictionary<long, SkillItem> skills = new(256);
+        public Dictionary<int, AgentItem> npcs = new(16);
+    };
+
     public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)
     {
         using var _t = new AutoTrace("BuildLogData");
 
-        var usedBuffs = new Dictionary<long, Buff>(128); //TODO_PERF(Rennorb) @find capacity dependencies
-        var usedDamageMods = new HashSet<OutgoingDamageModifier>(32); //TODO_PERF(Rennorb) @find capacity dependencies
-        var usedIncDamageMods = new HashSet<IncomingDamageModifier>(16); //TODO_PERF(Rennorb) @find capacity dependencies
-        var usedSkills = new Dictionary<long, SkillItem>(256); //TODO_PERF(Rennorb) @find capacity dependencies
+        var used = new UsedData();
 
         log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
         var logData = new LogDataDto(log, light, parserVersion, uploadLinks);
         if (cr)
         {
             log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay");
-            logData.CrData = new CombatReplayDto(log, usedSkills, usedBuffs);
+            logData.CrData = new CombatReplayDto(log, used);
         }
         _t.Log("built main data");
 
@@ -501,7 +509,7 @@ internal class LogDataDto
         foreach (SingleActor actor in log.Friendlies)
         {
             logData.HasCommander = logData.HasCommander || (actor is Player p && p.IsCommander(log));
-            logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
+            logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, used)));
         }
         _t.Log("built player data");
 
@@ -518,15 +526,15 @@ internal class LogDataDto
         logData.Targets = new(log.LogData.Logic.Targets.Count);
         foreach (SingleActor target in log.LogData.Logic.Targets)
         {
-            var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
+            var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, used, cr));
             logData.Targets.Add(targetDto);
         }
         _t.Log("built target data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Skill/Buff/Damage Modifier dictionaries");
-        Dictionary<Spec, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, usedBuffs);
-        Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict = BuildPersonalOutgoingDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
-        Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncomingDamageModData(log, logData.DmgIncModifiersPers, usedIncDamageMods);
+        Dictionary<Spec, IReadOnlyList<Buff>> persBuffDict = BuildPersonalBuffData(log, logData.PersBuffs, used);
+        Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict = BuildPersonalOutgoingDamageModData(log, logData.DmgModifiersPers, used);
+        Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncomingDamageModData(log, logData.DmgIncModifiersPers, used);
 
         var allOutDamageMods = new HashSet<int>(60);
         var commonOutDamageModifiers = new List<OutgoingDamageModifier>(20);
@@ -535,9 +543,9 @@ internal class LogDataDto
         var commonIncDamageModifiers = new List<IncomingDamageModifier>(20);
         var itemIncDamageModifiers = new List<IncomingDamageModifier>(20);
 
-        logData.BuildBuffDictionaries(log, usedBuffs);
-        logData.BuildOutgoingDamageModDictionaries(log, usedDamageMods, allOutDamageMods, commonOutDamageModifiers, itemOutDamageModifiers);
-        logData.BuildIncomingDamageModDictionaries(log, usedIncDamageMods, allIncDamageMods, commonIncDamageModifiers, itemIncDamageModifiers);
+        logData.BuildBuffDictionaries(log, used);
+        logData.BuildOutgoingDamageModDictionaries(log, used, allOutDamageMods, commonOutDamageModifiers, itemOutDamageModifiers);
+        logData.BuildIncomingDamageModDictionaries(log, used, allIncDamageMods, commonIncDamageModifiers, itemIncDamageModifiers);
         _t.Log("built modifier dicts");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Phases");
@@ -557,25 +565,27 @@ internal class LogDataDto
         if (log.CombatData.HasEXTHealing)
         {
             log.UpdateProgressWithCancellationCheck("HTML: building Healing Extension");
-            logData.HealingStatsExtension = new HealingStatsExtension(log, usedSkills, usedBuffs);
+            logData.HealingStatsExtension = new HealingStatsExtension(log, used);
             if (log.CombatData.HasEXTBarrier)
             {
                 log.UpdateProgressWithCancellationCheck("HTML: building Barrier Extension");
-                logData.BarrierStatsExtension = new BarrierStatsExtension(log, usedSkills, usedBuffs);
+                logData.BarrierStatsExtension = new BarrierStatsExtension(log, used);
             }
         }
         _t.Log("built healing data");
 
-        SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);
-        DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
-        DamageModDto.AssembleDamageModifiers(usedIncDamageMods, logData.DamageIncModMap);
-        BuffDto.AssembleBuffs(usedBuffs.Values, logData.BuffMap, log);
+        SkillDto.AssembleSkills(used.skills.Values, logData.SkillMap, log);
+        DamageModDto.AssembleDamageModifiers(used.damageMods, logData.DamageModMap);
+        DamageModDto.AssembleDamageModifiers(used.incDamageMods, logData.DamageIncModMap);
+        BuffDto.AssembleBuffs(used.buffs.Values, logData.BuffMap, log);
         MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, log.LogData.LogStart, log.LogData.LogEnd), logData.MechanicMap);
+        ActorDto.AssembleNPCs(used.npcs, logData.NpcMap, log);
 
-        Trace.TrackAverageStat("usedBuffs", usedBuffs.Count);
-        Trace.TrackAverageStat("usedDamageMods", usedDamageMods.Count);
-        Trace.TrackAverageStat("usedIncDamageMods", usedIncDamageMods.Count);
-        Trace.TrackAverageStat("usedSkills", usedSkills.Count);
+        Trace.TrackAverageStat("usedBuffs", used.buffs.Count);
+        Trace.TrackAverageStat("usedDamageMods", used.damageMods.Count);
+        Trace.TrackAverageStat("usedIncDamageMods", used.incDamageMods.Count);
+        Trace.TrackAverageStat("usedSkills", used.skills.Count);
+        Trace.TrackAverageStat("usedNpcs", used.npcs.Count);
 
         return logData;
     }

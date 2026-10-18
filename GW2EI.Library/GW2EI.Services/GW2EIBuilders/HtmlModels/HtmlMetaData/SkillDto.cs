@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
@@ -16,6 +17,7 @@ public struct SkillCastDto
     public int ActualDuration;
     public int Status;
     public double Acceleration;
+    public int Target;
 
     public class Converter : JsonConverter<SkillCastDto>
     {
@@ -32,6 +34,7 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.ActualDuration);
             writer.WriteNumberValue(value.Status);
             writer.WriteNumberValue(value.Acceleration);
+            writer.WriteNumberValue(value.Target);
             writer.WriteEndArray();
         }
     }
@@ -67,19 +70,7 @@ internal class SkillDto : IDItemDto
         }
     }
 
-    private static SkillCastDto GetSkillData(CastEvent cl, long phaseStart)
-    {
-        return new SkillCastDto()
-        {
-            Start = (cl.Time - phaseStart) / 1000.0,
-            SkillId = cl.SkillID,
-            ActualDuration = cl.ActualDuration,
-            Status = (int)cl.Status,
-            Acceleration = cl.Acceleration,
-        };
-    }
-
-    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, UsedData used)
     {
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
         var list = new List<SkillCastDto>(casting.Count);
@@ -89,12 +80,33 @@ internal class SkillDto : IDItemDto
             {
                 continue;
             }
-            if (!usedSkills.ContainsKey(cl.SkillID))
+            if (!used.skills.ContainsKey(cl.SkillID))
             {
-                usedSkills.Add(cl.SkillID, cl.Skill);
+                used.skills.Add(cl.SkillID, cl.Skill);
             }
 
-            list.Add(GetSkillData(cl, phase.Start));
+            var target = cl.EffectTarget;
+            var targetId = 0;
+            if (target.IsPlayer)
+            {
+                targetId = -target.UniqueID;
+            }
+            else if (target.IsNPC && !target.IsUnamedSpecies())
+            {
+                used.npcs.TryAdd(target.ID, target);
+                targetId = target.ID;
+            }
+
+            var cast = new SkillCastDto()
+            {
+                Start = (cl.Time - phase.Start) / 1000.0,
+                SkillId = cl.SkillID,
+                ActualDuration = cl.ActualDuration,
+                Status = (int)cl.Status,
+                Acceleration = cl.Acceleration,
+                Target = targetId,
+            };
+            list.Add(cast);
         }
         return list;
     }

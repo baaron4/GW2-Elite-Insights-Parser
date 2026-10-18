@@ -220,7 +220,7 @@ internal class Matthias : SalvationPass
                 continue;
             }
             sacrifice = sacrifice.EnglobingAgentItem;
-            AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
+            AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.FirstName, Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
             AgentManipulationHelper.RedirectDamageAndCopyRemainingFromSrcToDst(sacrificeCrystal, sacrifice, copies, combatData, extensions);
         }
         if (copies.Count != 0)

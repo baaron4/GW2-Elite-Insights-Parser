@@ -11,6 +11,7 @@ public abstract class CastEvent : TimeCombatEvent
     public SkillItem Skill { get; protected set; }
     public long SkillID => Skill.ID;
     public AgentItem Caster { get; protected set; }
+    public AgentItem EffectTarget { get; protected set; } = ParserHelper._unknownAgent;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public bool IsUnknown => Status == AnimationStatus.Unknown;
