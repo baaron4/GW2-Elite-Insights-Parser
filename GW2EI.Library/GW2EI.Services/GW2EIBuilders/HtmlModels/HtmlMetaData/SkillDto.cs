@@ -17,6 +17,7 @@ public struct SkillCastDto
     public int ActualDuration;
     public int Status;
     public double Quickness;
+    public int Expected;
     public int Target;
 
     public class Converter : JsonConverter<SkillCastDto>
@@ -34,6 +35,7 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.ActualDuration);
             writer.WriteNumberValue(value.Status);
             writer.WriteNumberValue(value.Quickness);
+            writer.WriteNumberValue(value.Expected);
             writer.WriteNumberValue(value.Target);
             writer.WriteEndArray();
         }
@@ -104,6 +106,7 @@ internal class SkillDto : IDItemDto
                 ActualDuration = cl.ActualDuration,
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
+                Expected = cl.ExpectedScaledDuration,
                 Target = targetId,
             };
             list.Add(cast);
