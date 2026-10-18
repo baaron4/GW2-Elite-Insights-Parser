@@ -152,7 +152,7 @@ It is also possible to launch the Avalonia UI application via console. It accept
 
 Use `-h` to display the help message.
 
-Inspection related options only accept a single log, any additional logs will be ignored. If no logs are provided while using that option, the default UI will launch.
+Inspection related options only accept a single log, any additional logs will be ignored. If no logs are provided while using that option, the default UI will launch instead.
 
 `-inspect_raw`: will launch an inspector window on the first given log file, content will be the raw data as present in the evtc.
 
@@ -160,7 +160,7 @@ Inspection related options only accept a single log, any additional logs will be
 
 `-inspect_ei_full`: will launch an inspector window on the first given log file, content will be fully processed by ei (partial + custom events and agents).
 
-If trying to parse the request log ends in failure, the application will return with error code 2.
+If trying to parse the requested log ends in failure, the application will return with error code 2.
 
 #### Windows
 ```
