@@ -7,7 +7,7 @@ using GW2EIParserCommons.Properties;
 
 namespace GW2EIParserAvalonia.Services;
 
-public sealed class ApplicationTrace : IApplicationTrace
+internal sealed class ApplicationTrace : IApplicationTrace
 {
     private readonly string _traceFileName;
     private readonly BlockingCollection<string> _messages = [];

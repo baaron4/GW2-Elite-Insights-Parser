@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -49,10 +49,6 @@
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <UserSecretsId>deaea9ef-69e9-4b48-ba82-b2294277674f</UserSecretsId>
     </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.11" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />

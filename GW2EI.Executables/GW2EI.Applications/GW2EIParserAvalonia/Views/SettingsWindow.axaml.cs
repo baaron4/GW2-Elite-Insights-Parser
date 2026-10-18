@@ -14,7 +14,7 @@ using GW2EIParserCommons.Properties;
 
 namespace GW2EIParserAvalonia.Views;
 
-public partial class SettingsWindow : Window
+internal partial class SettingsWindow : Window
 {
     private readonly IApplicationTrace _trace = null!;
 

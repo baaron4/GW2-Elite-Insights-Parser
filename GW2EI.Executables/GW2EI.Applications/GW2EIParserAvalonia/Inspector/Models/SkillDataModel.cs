@@ -8,7 +8,7 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class SkillDataModel : INotifyPropertyChanged
+internal sealed class SkillDataModel : INotifyPropertyChanged
 {
     public long ID { get; }
     public string Name { get; }

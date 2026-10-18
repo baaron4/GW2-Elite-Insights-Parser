@@ -9,7 +9,7 @@ using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     internal bool DropdownFilterTriggered = false;
 

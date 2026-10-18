@@ -8,12 +8,14 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public sealed partial class EventTypeFilterNodeModel : ObservableObject
+internal sealed partial class EventTypeFilterNodeModel : ObservableObject
 {
     [ObservableProperty]
-    private bool? isChecked = true;
+    public partial bool? IsChecked { get; set; } = true;
+
     [ObservableProperty]
-    private bool isExpanded = true;
+    public partial bool IsExpanded { get; set; } = true;
+
     private bool _isUpdatingHierarchy;
     private Dictionary<Type, EventTypeFilterNodeModel>? _typeLookup;
     private HashSet<Type>? _visibleTypes;

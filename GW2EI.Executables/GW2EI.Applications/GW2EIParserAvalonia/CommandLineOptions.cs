@@ -3,7 +3,7 @@ using GW2EIParserCommons;
 
 namespace GW2EIParserAvalonia;
 
-public class CommandLineOptions
+internal class CommandLineOptions
 {
     public IReadOnlyList<string> LogFiles { get; init; } = [];
     public string? ConfigPath { get; init; }

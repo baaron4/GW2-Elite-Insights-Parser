@@ -9,7 +9,7 @@ using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.Services;
 
-public static class EventInspector
+internal static class EventInspector
 {
     private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyCache = new();
     private static readonly ConcurrentDictionary<Type, FieldInfo[]> FieldCache = new();

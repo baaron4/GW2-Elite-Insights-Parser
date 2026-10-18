@@ -9,7 +9,7 @@ using GW2EIUpdater;
 
 namespace GW2EIParserAvalonia.Views;
 
-public partial class UpdaterWindow : Window
+internal partial class UpdaterWindow : Window
 {
     private readonly Updater.UpdateInfo _info;
     private readonly IApplicationTrace _trace = null!;

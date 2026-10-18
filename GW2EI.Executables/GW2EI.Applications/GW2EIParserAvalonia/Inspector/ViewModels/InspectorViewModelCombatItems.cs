@@ -5,13 +5,14 @@ using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     public DataGridCollectionView CombatItemsView { get; }
     public int CombatItemCount => CombatItemsView.Count;
 
     [ObservableProperty]
-    private string? stateChangeFilter;
+    public partial string? StateChangeFilter { get; set; }
+
     partial void OnStateChangeFilterChanged(string? oldValue, string? newValue)
     {
         if (oldValue == newValue)

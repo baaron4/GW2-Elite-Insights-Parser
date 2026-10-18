@@ -16,7 +16,7 @@ using GW2EIUpdater;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
+internal sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
 
 #if WINDOWS
@@ -34,33 +34,47 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 #endif
 
     [ObservableProperty]
-    private ObservableCollection<LogFileViewModel> logFiles = [];
+    public partial ObservableCollection<LogFileViewModel> LogFiles { get; set; } = [];
+
     [ObservableProperty]
-    private string queueStatus = "Waiting";
+    public partial string QueueStatus { get; set; } = "Waiting";
+
     [ObservableProperty]
-    private bool parseEnabled = false;
+    public partial bool ParseEnabled { get; set; } = false;
+
     [ObservableProperty]
-    private bool cancelAllEnabled = false;
+    public partial bool CancelAllEnabled { get; set; } = false;
+
     [ObservableProperty]
-    private bool clearAllEnabled = false;
+    public partial bool ClearAllEnabled { get; set; } = false;
+
     [ObservableProperty]
-    private bool clearUncompletedEnabled = false;
+    public partial bool ClearUncompletedEnabled { get; set; } = false;
+
     [ObservableProperty]
-    private bool discordBatchEnabled = true;
+    public partial bool DiscordBatchEnabled { get; set; } = true;
+
     [ObservableProperty]
-    private bool checkUpdatesEnabled = true;
+    public partial bool CheckUpdatesEnabled { get; set; } = true;
+
     [ObservableProperty]
-    private bool settingsEnabled = true;
+    public partial bool SettingsEnabled { get; set; } = true;
+
     [ObservableProperty]
-    private bool autoDiscordBatch;
+    public partial bool AutoDiscordBatch { get; set; }
+
     [ObservableProperty]
-    private string watchingDirectory = string.Empty;
+    public partial string WatchingDirectory { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool watchingDirectoryVisible;
+    public partial bool WatchingDirectoryVisible { get; set; }
+
     [ObservableProperty]
-    private bool logTracesVisible;
+    public partial bool LogTracesVisible { get; set; }
+
     [ObservableProperty]
-    private string version = string.Empty;
+    public partial string Version { get; set; } = string.Empty;
+
     private readonly List<ulong> _currentDiscordMessageIDs = [];
     private readonly ParserService _parserService;
     private readonly Queue<LogFileViewModel> _logQueue = new();

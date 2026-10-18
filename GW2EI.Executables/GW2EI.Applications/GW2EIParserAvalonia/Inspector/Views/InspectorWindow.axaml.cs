@@ -10,7 +10,7 @@ using GW2EIParserAvalonia.ViewModels;
 
 namespace GW2EIParserAvalonia;
 
-public partial class InspectorWindow : Window
+internal partial class InspectorWindow : Window
 {
     private readonly IApplicationTrace _trace = null!;
 

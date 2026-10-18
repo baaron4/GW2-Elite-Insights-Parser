@@ -5,7 +5,7 @@ using GW2EIGW2API.GW2API;
 namespace GW2EIParserBenchmark;
 
 [MemoryDiagnoser]
-public class GW2APIControllerBenchmark
+internal class GW2APIControllerBenchmark
 {
     private GW2APIController? _apiController;
 

@@ -9,26 +9,34 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class LogFileViewModel : ObservableObject
+internal partial class LogFileViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string inputFilePath;
+    public partial string InputFilePath { get; set; }
+
     [ObservableProperty]
-    private string logStatus;
+    public partial string LogStatus { get; set; }
+
     [ObservableProperty]
-    private string buttonText;
+    public partial string ButtonText { get; set; }
+
     [ObservableProperty]
-    private string reParseText;
+    public partial string ReParseText { get; set; }
+
     [ObservableProperty]
-    private bool removeEnabled;
+    public partial bool RemoveEnabled { get; set; }
+
     [ObservableProperty]
-    private bool reParseEnabled;
+    public partial bool ReParseEnabled { get; set; }
+
     [ObservableProperty]
-    private bool logTracesEnabled;
+    public partial bool LogTracesEnabled { get; set; }
+
     [ObservableProperty]
-    private long elapsed;
+    public partial long Elapsed { get; set; }
+
     [ObservableProperty]
-    private OperationState state;
+    public partial OperationState State { get; set; }
     public AvaloniaOperationController Operation { get; }
     public InspectorOperationController InspectorOperation { get; }
     public event EventHandler? ParseRequested;
@@ -43,17 +51,17 @@ public partial class LogFileViewModel : ObservableObject
 
     public LogFileViewModel(string fullPath)
     {
-        inputFilePath = fullPath;
-        Operation = new AvaloniaOperationController(inputFilePath, this);
-        InspectorOperation = new InspectorOperationController(inputFilePath);
-        logStatus = Operation.Status;
-        buttonText = Operation.ButtonText;
-        reParseText = Operation.ReParseText;
-        elapsed = Operation.Elapsed;
-        state = Operation.State;
-        removeEnabled = true;
-        reParseEnabled = Operation.ReParseEnabled;
-        logTracesEnabled = Operation.LogTracesEnabled;
+        InputFilePath = fullPath;
+        Operation = new AvaloniaOperationController(InputFilePath, this);
+        InspectorOperation = new InspectorOperationController(InputFilePath);
+        LogStatus = Operation.Status;
+        ButtonText = Operation.ButtonText;
+        ReParseText = Operation.ReParseText;
+        Elapsed = Operation.Elapsed;
+        State = Operation.State;
+        RemoveEnabled = true;
+        ReParseEnabled = Operation.ReParseEnabled;
+        LogTracesEnabled = Operation.LogTracesEnabled;
         Operation.ProgressUpdated += Operation_ProgressUpdated;
     }
 

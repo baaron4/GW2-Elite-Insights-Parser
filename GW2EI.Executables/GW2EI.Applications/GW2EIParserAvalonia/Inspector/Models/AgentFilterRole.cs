@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParserAvalonia.Models;
 
-public enum AgentFilterRole
+internal enum AgentFilterRole
 {
     Any,
     Src,

@@ -8,10 +8,11 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     [ObservableProperty]
-    private EventModel? selectedEvent;
+    public partial EventModel? SelectedEvent { get; set; }
+
     partial void OnSelectedEventChanged(EventModel? value)
     {
         if (value?.Event == null)
@@ -47,7 +48,8 @@ public partial class InspectorViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string? skillIdFilter;
+    public partial string? SkillIdFilter { get; set; }
+
     partial void OnSkillIdFilterChanged(string? oldValue, string? newValue)
     {
         if (DropdownFilterTriggered)
@@ -59,7 +61,8 @@ public partial class InspectorViewModel : ObservableObject
     }
     public IReadOnlyList<string> SkillIdFilterItems { get; private set; } = [];
     [ObservableProperty]
-    private string? skillNameFilter;
+    public partial string? SkillNameFilter { get; set; }
+
     partial void OnSkillNameFilterChanged(string? oldValue, string? newValue)
     {
         if (DropdownFilterTriggered)
@@ -71,7 +74,8 @@ public partial class InspectorViewModel : ObservableObject
     }
     public IReadOnlyList<string> SkillNameFilterItems { get; private set; } = [];
     [ObservableProperty]
-    private string? guidIdFilter;
+    public partial string? GuidIdFilter { get; set; }
+
     partial void OnGuidIdFilterChanged(string? oldValue, string? newValue)
     {
         if (DropdownFilterTriggered)
@@ -83,7 +87,8 @@ public partial class InspectorViewModel : ObservableObject
     }
     public IReadOnlyList<string> GuidIdFilterItems { get; private set; } = [];
     [ObservableProperty]
-    private string? guidFilter;
+    public partial string? GuidFilter { get; set; }
+
     partial void OnGuidFilterChanged(string? oldValue, string? newValue)
     {
         if (DropdownFilterTriggered)
@@ -95,12 +100,13 @@ public partial class InspectorViewModel : ObservableObject
     }
     public IReadOnlyList<string> GuidFilterItems { get; private set; } = [];
     [ObservableProperty]
-    private string? agentSearchText;
+    public partial string? AgentSearchText { get; set; }
     public IReadOnlyList<AgentFilterItem> AgentFilterItems { get; }
     [ObservableProperty]
-    private AgentFilterItem? selectedAgentFilter;
+    public partial AgentFilterItem? SelectedAgentFilter { get; set; }
+
     [ObservableProperty]
-    private AgentFilterRole selectedAgentFilterRole = AgentFilterRole.Any;
+    public partial AgentFilterRole SelectedAgentFilterRole { get; set; } = AgentFilterRole.Any;
     public IReadOnlyList<AgentFilterRole> AgentFilterRoles { get; } = Enum.GetValues<AgentFilterRole>();
     partial void OnSelectedAgentFilterChanged(AgentFilterItem? oldValue, AgentFilterItem? newValue) => CombatEventsViewRefresh(oldValue, newValue);
     partial void OnSelectedAgentFilterRoleChanged(AgentFilterRole oldValue, AgentFilterRole newValue) => CombatEventsViewRefresh(oldValue.ToString(), newValue.ToString());

@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace GW2EIParserAvalonia.Services;
 
-public sealed class BulkObservableCollection<T> : ObservableCollection<T>
+internal sealed class BulkObservableCollection<T> : ObservableCollection<T>
 {
     public void ReplaceRange(IEnumerable<T> items)
     {

@@ -4,7 +4,7 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.Views;
 
-public partial class MessageWindow : Window
+internal partial class MessageWindow : Window
 {
     public string Message { get; } = string.Empty;
     private readonly IApplicationTrace _trace = null!;

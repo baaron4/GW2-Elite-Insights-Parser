@@ -5,7 +5,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class AgentDataModel
+internal sealed class AgentDataModel
 {
     public ulong Agent => _agentItem.Agent;
     public ushort InstID => _agentItem.InstID;

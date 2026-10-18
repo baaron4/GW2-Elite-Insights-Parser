@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParserAvalonia.ViewModels;
 
-public enum OperationState
+internal enum OperationState
 {
     Ready = 0,
     Parsing = 1,

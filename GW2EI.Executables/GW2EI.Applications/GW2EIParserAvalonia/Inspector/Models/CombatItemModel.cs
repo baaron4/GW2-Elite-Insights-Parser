@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class CombatItemModel
+internal sealed class CombatItemModel
 {
     public long Time => _combatItem.Time;
     public ulong SrcAgent => _combatItem.SrcAgent;

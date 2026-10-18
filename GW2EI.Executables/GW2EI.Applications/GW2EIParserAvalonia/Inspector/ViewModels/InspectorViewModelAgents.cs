@@ -6,17 +6,19 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     [ObservableProperty]
-    private AgentDataModel? selectedAgent;
+    public partial AgentDataModel? SelectedAgent { get; set; }
+
     partial void OnSelectedAgentChanged(AgentDataModel? value)
     {
         SelectedAgentProperties.ReplaceRange(EventInspector.Inspect(value));
     }
     public DataGridCollectionView AgentsDataView { get; }
     [ObservableProperty]
-    private string? agentSpeciesFilter;
+    public partial string? AgentSpeciesFilter { get; set; }
+
     private void RefreshAgentsDataView(string? oldValue, string? newValue)
     {
         if (newValue == oldValue)
@@ -28,16 +30,20 @@ public partial class InspectorViewModel : ObservableObject
     }
     partial void OnAgentSpeciesFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
-    private string? agentNameFilter;
+    public partial string? AgentNameFilter { get; set; }
+
     partial void OnAgentNameFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
-    private string? agentTypeFilter;
+    public partial string? AgentTypeFilter { get; set; }
+
     partial void OnAgentTypeFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
-    private string? agentSpecFilter;
+    public partial string? AgentSpecFilter { get; set; }
+
     partial void OnAgentSpecFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     [ObservableProperty]
-    private string? agentBaseSpecFilter;
+    public partial string? AgentBaseSpecFilter { get; set; }
+
     partial void OnAgentBaseSpecFilterChanged(string? oldValue, string? newValue) => RefreshAgentsDataView(oldValue, newValue);
     private bool FilterAgentModels(object item)
     {
@@ -80,7 +86,7 @@ public partial class InspectorViewModel : ObservableObject
     }
 
     public int AgentCount => AgentsDataView.Count;
-    public BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
+    internal BulkObservableCollection<EventPropertyModel> SelectedAgentProperties { get; } = [];
 
 
 }

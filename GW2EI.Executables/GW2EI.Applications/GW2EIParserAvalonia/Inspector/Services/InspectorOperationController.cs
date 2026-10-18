@@ -3,7 +3,7 @@ using GW2EIParserCommons;
 
 namespace GW2EIParserAvalonia.Services;
 
-public class InspectorOperationController : OperationController
+internal class InspectorOperationController : OperationController
 {
 
     public EvtcLog? InspectLog { get; internal set; }

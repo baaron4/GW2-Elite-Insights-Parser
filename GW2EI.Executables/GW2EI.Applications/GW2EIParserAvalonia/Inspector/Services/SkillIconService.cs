@@ -7,7 +7,7 @@ using Avalonia.Media.Imaging;
 
 namespace GW2EIParserAvalonia.Services;
 
-public sealed class SkillIconService
+internal sealed class SkillIconService
 {
     private static readonly HttpClient HttpClient = CreateHttpClient();
     private readonly ConcurrentDictionary<string, Task<Bitmap?>> _cache = new();

@@ -5,7 +5,7 @@ using GW2EIParserCommons.Properties;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class SettingsViewModel : ObservableObject
+internal partial class SettingsViewModel : ObservableObject
 {
     private readonly ProgramSettings _settings;
 
@@ -17,111 +17,150 @@ public partial class SettingsViewModel : ObservableObject
     // General
     // - Log
     [ObservableProperty]
-    private bool computePhases;
+    public partial bool ComputePhases { get; set; }
+
     [ObservableProperty]
-    private bool computeDamage;
+    public partial bool ComputeDamage { get; set; }
+
     [ObservableProperty]
-    private bool computeBuff;
+    public partial bool ComputeBuff { get; set; }
+
     [ObservableProperty]
-    private bool computeCast;
+    public partial bool ComputeCast { get; set; }
+
     [ObservableProperty]
-    private bool computeDamageModifiers;
+    public partial bool ComputeDamageModifiers { get; set; }
+
     [ObservableProperty]
-    private bool computeCombatReplay;
+    public partial bool ComputeCombatReplay { get; set; }
+
     [ObservableProperty]
-    private bool computeMechanics;
+    public partial bool ComputeMechanics { get; set; }
+
     [ObservableProperty]
-    private bool parseExtensions;
+    public partial bool ParseExtensions { get; set; }
+
     [ObservableProperty]
-    private bool detailledWvW;
+    public partial bool DetailledWvW { get; set; }
+
     // - Parsing
     [ObservableProperty]
-    private bool singleThreaded;
+    public partial bool SingleThreaded { get; set; }
+
     [ObservableProperty]
-    private bool parseMultipleLogs;
+    public partial bool ParseMultipleLogs { get; set; }
+
     [ObservableProperty]
-    private bool skipFailedTries;
+    public partial bool SkipFailedTries { get; set; }
+
     [ObservableProperty]
-    private bool autoAdd;
+    public partial bool AutoAdd { get; set; }
+
     [ObservableProperty]
-    private string autoAddPath = string.Empty;
+    public partial string AutoAddPath { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool autoParse;
+    public partial bool AutoParse { get; set; }
+
     [ObservableProperty]
-    private long customTooShort;
+    public partial long CustomTooShort { get; set; }
+
     [ObservableProperty]
-    private int customTooBig;
+    public partial int CustomTooBig { get; set; }
+
     [ObservableProperty]
-    private int memoryLimit;
+    public partial int MemoryLimit { get; set; }
+
     // - Output
     [ObservableProperty]
-    private bool anonymous;
+    public partial bool Anonymous { get; set; }
+
     [ObservableProperty]
-    private bool saveAtOut;
+    public partial bool SaveAtOut { get; set; }
+
     [ObservableProperty]
-    private string outLocation = string.Empty;
+    public partial string OutLocation { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool addDuration;
+    public partial bool AddDuration { get; set; }
+
     [ObservableProperty]
-    private bool addPoVProf;
+    public partial bool AddPoVProf { get; set; }
+
     [ObservableProperty]
-    private bool saveOutTrace;
+    public partial bool SaveOutTrace { get; set; }
+
     [ObservableProperty]
-    private bool applicationTraces;
+    public partial bool ApplicationTraces { get; set; }
 
     // HTML
     [ObservableProperty]
-    private bool saveOutHTML;
+    public partial bool SaveOutHTML { get; set; }
+
     [ObservableProperty]
-    private bool lightTheme;
+    public partial bool LightTheme { get; set; }
+
     [ObservableProperty]
-    private bool darkTheme;
+    public partial bool DarkTheme { get; set; }
+
     [ObservableProperty]
-    private bool htmlExternalScripts;
+    public partial bool HtmlExternalScripts { get; set; }
+
     [ObservableProperty]
-    private string htmlExternalScriptsPath = string.Empty;
+    public partial string HtmlExternalScriptsPath { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private string htmlExternalScriptsCdn = string.Empty;
+    public partial string HtmlExternalScriptsCdn { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool htmlCompressJson;
+    public partial bool HtmlCompressJson { get; set; }
 
     // CSV
     [ObservableProperty]
-    private bool saveOutCSV;
+    public partial bool SaveOutCSV { get; set; }
 
     // JSON
     [ObservableProperty]
-    private bool saveOutJSON;
+    public partial bool SaveOutJSON { get; set; }
+
     [ObservableProperty]
-    private bool indentJSON;
+    public partial bool IndentJSON { get; set; }
+
     [ObservableProperty]
-    private bool rawTimelineArrays;
+    public partial bool RawTimelineArrays { get; set; }
+
     [ObservableProperty]
-    private bool compressRaw;
+    public partial bool CompressRaw { get; set; }
 
     // Upload / Webhook
     [ObservableProperty]
-    private bool uploadToDPSReports;
+    public partial bool UploadToDPSReports { get; set; }
+
     [ObservableProperty]
-    private string dPSReportUserToken = string.Empty;
+    public partial string DPSReportUserToken { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool uploadToWingman;
+    public partial bool UploadToWingman { get; set; }
+
     [ObservableProperty]
-    private bool sendEmbedToWebhook;
+    public partial bool SendEmbedToWebhook { get; set; }
+
     [ObservableProperty]
-    private string webhookURL = string.Empty;
+    public partial string WebhookURL { get; set; } = string.Empty;
+
     [ObservableProperty]
-    private bool sendSimpleMessageToWebhook;
+    public partial bool SendSimpleMessageToWebhook { get; set; }
+
     [ObservableProperty]
-    private bool autoDiscordBatch;
+    public partial bool AutoDiscordBatch { get; set; }
 
     // GUI
     [ObservableProperty]
-    private long populateHourLimit;
+    public partial long PopulateHourLimit { get; set; }
 
     // Updater
     [ObservableProperty]
-    private bool updateAvailable;
+    public partial bool UpdateAvailable { get; set; }
 
     private bool _loading = false;
 

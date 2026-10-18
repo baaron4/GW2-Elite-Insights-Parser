@@ -4,7 +4,7 @@ using GW2EIParserAvalonia.Models;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     public DataGridCollectionView SkillGUIDsView { get; }
     public DataGridCollectionView EffectGUIDsView { get; }
@@ -16,9 +16,10 @@ public partial class InspectorViewModel : ObservableObject
 
     // Content GUID tab filters
     [ObservableProperty]
-    private string? contentIdFilter;
+    public partial string? ContentIdFilter { get; set; }
+
     [ObservableProperty]
-    private string? contentGuidFilter;
+    public partial string? ContentGuidFilter { get; set; }
 
     private void RefreshGUIDViews(string? oldValue, string? newValue)
     {

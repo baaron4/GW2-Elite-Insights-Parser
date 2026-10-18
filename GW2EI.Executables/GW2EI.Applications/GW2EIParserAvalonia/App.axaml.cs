@@ -10,7 +10,7 @@ using GW2EIParserCommons;
 
 namespace GW2EIParserAvalonia;
 
-public partial class App : Application
+internal partial class App : Application
 {
     private const int ArgFaulty = 1;
     private const int InspectLogFaulty = 2;

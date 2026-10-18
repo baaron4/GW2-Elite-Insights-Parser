@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParserAvalonia.Models;
 
-public enum Endpoint
+internal enum Endpoint
 {
     None,
     Source,

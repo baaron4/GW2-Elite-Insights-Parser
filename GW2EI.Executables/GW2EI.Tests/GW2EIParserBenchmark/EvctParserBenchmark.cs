@@ -6,7 +6,9 @@ using GW2EIGW2API;
 namespace GW2EIParserBenchmark;
 
 [MemoryDiagnoser]
+#pragma warning disable CA1515 // Consider making public types internal
 public class EvctParserBenchmark
+#pragma warning restore CA1515 // Consider making public types internal
 {
     [ParamsSource(nameof(Files))]
     public string _filePath { get; set; } = null!;

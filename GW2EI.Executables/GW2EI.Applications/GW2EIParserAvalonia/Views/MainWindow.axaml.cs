@@ -17,7 +17,7 @@ using GW2EIUpdater;
 
 namespace GW2EIParserAvalonia.Views;
 
-public sealed partial class MainWindow : Window, IDisposable
+internal sealed partial class MainWindow : Window, IDisposable
 {
     private FileSystemWatcher? _logFileWatcher;
     private readonly IApplicationTrace _trace = null!;

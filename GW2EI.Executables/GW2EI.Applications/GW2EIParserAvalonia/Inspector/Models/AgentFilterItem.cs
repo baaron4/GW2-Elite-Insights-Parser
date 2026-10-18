@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParserAvalonia.Models;
 
-public sealed class AgentFilterItem
+internal sealed class AgentFilterItem
 {
     public ulong Agent { get; }
     public ushort InstID { get; }

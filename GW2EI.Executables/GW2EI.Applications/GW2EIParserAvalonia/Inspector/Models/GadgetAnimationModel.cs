@@ -2,7 +2,7 @@
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class GadgetAnimationModel
+internal sealed class GadgetAnimationModel
 {
     public string Data => _event.AnimationToken.DataString;
 

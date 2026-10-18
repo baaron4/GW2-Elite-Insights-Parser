@@ -4,12 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     public DataGridCollectionView GadgetAnimationView { get; }
     public IReadOnlyList<string> GadgetAnimationFilterItems { get; }
     [ObservableProperty]
-    private string? gadgetDataFilter;
+    public partial string? GadgetDataFilter { get; set; }
+
     partial void OnGadgetDataFilterChanged(string? oldValue, string? newValue)
     {
         if (DropdownFilterTriggered)

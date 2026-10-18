@@ -8,7 +8,7 @@ using static GW2EIParserCommons.ProgramHelper;
 
 namespace GW2EIParserAvalonia.Services;
 
-public sealed class ParserService : IDisposable
+internal sealed class ParserService : IDisposable
 {
     private readonly ProgramHelper _programHelper;
     public ProgramSettings Settings { get; }
@@ -20,7 +20,7 @@ public sealed class ParserService : IDisposable
         _programHelper = new ProgramHelper(version, Settings);
     }
 
-    public delegate void OnTaskRun();
+    internal delegate void OnTaskRun();
 
     public async Task ParseAsync(AvaloniaOperationController operation, OnTaskRun onTaskRun)
     {

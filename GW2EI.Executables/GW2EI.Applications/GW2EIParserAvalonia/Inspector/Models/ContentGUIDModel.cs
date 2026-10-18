@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class ContentGUIDModel
+internal sealed class ContentGUIDModel
 {
     public long ContentID => _event.ContentID;
     public string GUID => _event.GUIDString;

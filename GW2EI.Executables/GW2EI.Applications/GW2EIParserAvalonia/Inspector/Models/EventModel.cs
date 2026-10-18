@@ -5,7 +5,7 @@ using static GW2EIParserAvalonia.Services.EventAgentResolver;
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class EventModel
+internal sealed class EventModel
 {
     public object Event { get; }
     public long? Time { get; }

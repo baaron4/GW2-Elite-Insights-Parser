@@ -2,7 +2,7 @@
 
 namespace GW2EIParserAvalonia.Models;
 
-public sealed class EventPropertyModel
+internal sealed class EventPropertyModel
 {
     public string Name { get; }
     public string Value { get; }

@@ -2,7 +2,7 @@
     <PropertyGroup>
         <RootNamespace>GW2EIParserAvalonia</RootNamespace>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>

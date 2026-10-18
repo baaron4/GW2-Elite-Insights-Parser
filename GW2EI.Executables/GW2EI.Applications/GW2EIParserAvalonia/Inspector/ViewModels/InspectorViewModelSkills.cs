@@ -6,10 +6,11 @@ using GW2EIParserAvalonia.Services;
 
 namespace GW2EIParserAvalonia.ViewModels;
 
-public partial class InspectorViewModel : ObservableObject
+internal partial class InspectorViewModel : ObservableObject
 {
     [ObservableProperty]
-    private SkillDataModel? selectedSkill;
+    public partial SkillDataModel? SelectedSkill { get; set; }
+
     partial void OnSelectedSkillChanged(SkillDataModel? value)
     {
         if (value?.SkillItem == null)
@@ -21,7 +22,8 @@ public partial class InspectorViewModel : ObservableObject
         SelectedSkillProperties.ReplaceRange(EventInspector.Inspect(value.SkillItem));
     }
     [ObservableProperty]
-    private string? skillDataNameFilter;
+    public partial string? SkillDataNameFilter { get; set; }
+
     partial void OnSkillDataNameFilterChanged(string? oldValue, string? newValue)
     {
         if (oldValue == newValue)

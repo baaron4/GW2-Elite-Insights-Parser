@@ -1,6 +1,6 @@
 ﻿namespace GW2EIParserAvalonia.Services;
 
-public interface IApplicationTrace
+internal interface IApplicationTrace
 {
     void Add(string message);
 }
