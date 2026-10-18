@@ -182,7 +182,7 @@
             </svg>
             <div v-else class="d-flex justify-content-center slidercontainer my-1">
                 <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
-                       :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
+                       :max="maxTime" :value="time * 1000 - range.min" class="slider"
                        :style="{'background': getSliderGradient()}">
                 <div class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
                     {{ sliderDelimiter.name }}
@@ -192,10 +192,8 @@
             <div class="d-flex align-items-center justify-content-center">
                 <label class="mr-auto">
                     <input style="width: 100px;" class="form-control d-inline h-auto text-right" type="number" step="0.001"
-                           data-original-title="Time"
-                           :id="htmlElementIDs.timeRangeDisplayID" value="0"
+                           data-original-title="Time" :value="(time - range.min / 1000.0).toFixed(3)"
                            @input="updateInputTime($event.target.value);">
-                    <input type="range" :min="minTime" :max="maxTime" value="0" :id="htmlElementIDs.timeRangeID" style="display: none;">
                 </label>
 
                 <div @click="toggleAnimate();" style="width: 80px;"
@@ -222,8 +220,43 @@
         </div>
     </div>
 </template>
-
 <script>
+
+    function parseCRDuration(crDurationStr) {
+        if (!crDurationStr) {
+            return null;
+        }
+        const regex = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?(?:(\d+)ms)?$/;
+        const match = crDurationStr.match(regex);
+
+        if (!match) {
+            return null;
+        }
+
+        const [, hours, minutes, seconds, milliseconds] = match;
+
+        const totalMs =
+            (parseInt(hours || 0) * 60 * 60 * 1000) +
+            (parseInt(minutes || 0) * 60 * 1000) +
+            (parseInt(seconds || 0) * 1000) +
+            parseInt(milliseconds || 0);
+
+        return totalMs;
+    }
+
+    function getDefaultCombatReplayTime() {
+        const timeS = EIUrlParams.get("crTime");
+        if (!timeS) {
+            const timeMS = EIUrlParams.get("crTimeMS")
+            if (!timeMS) {          
+                const timeStr = EIUrlParams.get("crTimeStr")
+                return parseCRDuration(timeStr);
+            }
+            return Math.max(parseInt(timeMS), 0);
+        }
+        return Math.max(parseFloat(timeS), 0.0) * 1000;
+    }
+
     const MaxPhaseDepth = 2;
 
     // Last one breakbar, previous is remainings
@@ -289,12 +322,19 @@
             }
         },
         mounted() {
-            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
+            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID);
             const encounterPhase = this.encounterPhase;
             this.updateAnimatorTimes(encounterPhase);
             this.resetViewpoint();
             this.selectedPhaseId = this.normalPhases[0].id;
             animationControlComponent = this;
+            const defaultCombatReplayTime = getDefaultCombatReplayTime();
+            if (defaultCombatReplayTime !== null) {
+                const startTime = defaultCombatReplayTime - encounterPhase.start * 1000;
+                if (startTime >= 0 && startTime <= (encounterPhase.end - encounterPhase.start) * 1000) {
+                    this.updateTime(startTime);
+                }
+            }
         },
         computed: {
             selectedPhase: function() {
@@ -396,8 +436,6 @@
                     mainCanvasID: "main-canvas",
                     bgCanvasID: "bg-canvas",
                     pickCanvasID: "picking-canvas",
-                    timeRangeID: "timeRange",
-                    timeRangeDisplayID: "timeRangeDisplay",
                 };
             },
             timelineWidth() {
