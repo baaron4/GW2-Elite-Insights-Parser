@@ -8,7 +8,7 @@ using Tracing;
 
 namespace GW2EIParserWinForms;
 
-public class ConsoleProgram
+public class ConsoleProgram : IDisposable
 {
     private readonly List<ulong> DiscordMessageIDs = [];
 
@@ -228,5 +228,11 @@ public class ConsoleProgram
             programHelper.GenerateTraceFile(operation);
         }
         Console.WriteLine("Processed - " + JsonSerializer.Serialize(new ConsoleResultObject(operation), ConsoleResultObject.Serializer) + Environment.NewLine);
+    }
+
+    public void Dispose()
+    {
+        FileWatcher.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

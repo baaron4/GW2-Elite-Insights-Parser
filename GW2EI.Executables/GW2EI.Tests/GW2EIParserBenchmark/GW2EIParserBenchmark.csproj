@@ -5,6 +5,8 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>Recommended</AnalysisMode>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyTitle>EliteInsights.bench</AssemblyTitle>
         <OutputPath>..\..\..\GW2EI.bin\$(Configuration).bench\</OutputPath>

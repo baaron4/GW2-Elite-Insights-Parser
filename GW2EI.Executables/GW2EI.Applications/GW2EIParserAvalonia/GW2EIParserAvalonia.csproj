@@ -3,6 +3,9 @@
         <RootNamespace>GW2EIParserAvalonia</RootNamespace>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>Recommended</AnalysisMode>
         <Nullable>enable</Nullable>
         <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>

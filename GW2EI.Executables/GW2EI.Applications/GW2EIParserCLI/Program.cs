@@ -147,7 +147,7 @@ internal static class Program
         using var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
         if (logFiles.Count > 0 || pathToWatch != null)
         {
-            var consoleProgram = new ConsoleProgram(programHelper, batchDiscord, pathToWatch);
+            using var consoleProgram = new ConsoleProgram(programHelper, batchDiscord, pathToWatch);
             return consoleProgram.ParseAll(logFiles);
         }
         else

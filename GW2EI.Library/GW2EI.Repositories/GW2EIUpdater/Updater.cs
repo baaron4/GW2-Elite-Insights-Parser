@@ -10,7 +10,9 @@ public static class Updater
     /// <summary>
     /// Structure to store the update information.
     /// </summary>
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string? file, bool update)
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
         public readonly GitHubRelease Release = release;
         /// <summary>
@@ -67,11 +69,11 @@ public static class Updater
             var latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse) ?? throw new InvalidOperationException("Deserialize failed");
 
             // Release format is "v1.0.0.0"
-            string version = latestRelease.Name.Substring(1); // Remove "v"
+            string version = latestRelease.Name[1..]; // Remove "v"
             var latestVersion = Version.Parse(version);
 
             // File download size
-            var asset = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName));
+            var asset = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName, StringComparison.Ordinal));
             if (asset == null)
             {
                 return new UpdateInfo(
@@ -120,7 +122,7 @@ public static class Updater
         {
             traces.Add($"Creating temp directory {folderPath}");
             Directory.CreateDirectory(folderPath);
-            var downloadUrl = info.Release.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName))?.BrowserDownloadUrl;
+            var downloadUrl = info.Release.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName, StringComparison.Ordinal))?.BrowserDownloadUrl;
             if (downloadUrl == null)
             {
                 traces.Add($"No download url");

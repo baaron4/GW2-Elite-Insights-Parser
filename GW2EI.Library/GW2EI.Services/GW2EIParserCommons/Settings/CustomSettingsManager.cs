@@ -63,8 +63,8 @@ public static class CustomSettingsManager
             Console.WriteLine("Warning: invalid setting line \"" + line + "\"");
             return;
         }
-        string name = line.Substring(0, equalsPos).Trim();
-        string value = line.Substring(equalsPos + 1).Trim();
+        string name = line[..equalsPos].Trim();
+        string value = line[(equalsPos + 1)..].Trim();
         if (value.StartsWith('\"') && value.EndsWith('\"'))
         {
             value = value.Trim('\"');
