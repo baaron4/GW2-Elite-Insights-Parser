@@ -7,8 +7,8 @@ public class CustomAnimatedGadgetCastEvent : AnimatedCastEvent
     {
     }
 
-    internal CustomAnimatedGadgetCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    internal CustomAnimatedGadgetCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : this(caster, skill, start, dur)
     {
-        EffectTarget = effectTarget;
+        Target = target;
     }
 }

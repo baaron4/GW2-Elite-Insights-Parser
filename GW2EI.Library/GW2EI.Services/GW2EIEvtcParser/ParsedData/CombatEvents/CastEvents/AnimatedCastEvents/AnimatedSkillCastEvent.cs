@@ -11,8 +11,8 @@ public class AnimatedSkillCastEvent : AnimatedCastEvent
     {
     }
 
-    internal AnimatedSkillCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    internal AnimatedSkillCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : this(caster, skill, start, dur)
     {
-        EffectTarget = effectTarget;
+        Target = target;
     }
 }

@@ -5,14 +5,14 @@ namespace GW2EIEvtcParser.ParsedData;
 public class GadgetInteractEvent : AnimatedCastEvent
 {
 
-    public AgentItem Gadget => EffectTarget;
+    public AgentItem Gadget => Target;
 
     internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData,
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         if (startItem != null && startItem.IsStateChange != StateChange.AnimationStart)
         {
-            EffectTarget = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
+            Target = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
         }
         // Bandaid, may not be perfect
         if (AnimStart == AnimationStart.GadgetInteract) // Sanity check
@@ -31,7 +31,7 @@ public class GadgetInteractEvent : AnimatedCastEvent
         }
     }
 
-    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : base(caster, skill, start, dur, effectTarget)
+    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : base(caster, skill, start, dur, target)
     {
     }
 }

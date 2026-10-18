@@ -11,7 +11,7 @@ public abstract class CastEvent : TimeCombatEvent
     public SkillItem Skill { get; protected set; }
     public long SkillID => Skill.ID;
     public AgentItem Caster { get; protected set; }
-    public AgentItem EffectTarget { get; protected set; } = ParserHelper._unknownAgent;
+    public AgentItem Target { get; protected set; } = ParserHelper._unknownAgent;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public bool IsUnknown => Status == AnimationStatus.Unknown;
@@ -60,6 +60,11 @@ public abstract class CastEvent : TimeCombatEvent
     internal void OverrideSkill(SkillItem skill)
     {
         Skill = skill;
+    }
+
+    public void OverrideTarget(AgentItem target)
+    {
+        Target = target;
     }
 
     public abstract bool IgnoreOnRotationRender();

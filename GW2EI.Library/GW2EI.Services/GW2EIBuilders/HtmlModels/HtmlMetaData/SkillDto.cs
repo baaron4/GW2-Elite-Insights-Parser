@@ -87,7 +87,7 @@ internal class SkillDto : IDItemDto
                 used.skills.Add(cl.SkillID, cl.Skill);
             }
 
-            var target = cl.EffectTarget;
+            var target = cl.Target;
             var targetId = 0;
             if (target.IsPlayer)
             {

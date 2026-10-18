@@ -16,6 +16,7 @@ public class InstantCastEvent : CastEvent
         ActualDuration = 0;
         ExpectedDuration = 0;
     }
+
     public override bool IgnoreOnRotationRender()
     {
         return false;

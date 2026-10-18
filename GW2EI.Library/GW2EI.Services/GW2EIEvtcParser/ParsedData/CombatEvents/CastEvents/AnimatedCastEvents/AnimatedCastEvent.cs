@@ -61,7 +61,7 @@ public abstract class AnimatedCastEvent : CastEvent
             {
                 if (startItem.DstAgent != 0)
                 {
-                    EffectTarget = agentData.GetAgent(startItem.DstAgent, startItem.Time);
+                    Target = agentData.GetAgent(startItem.DstAgent, startItem.Time);
                 }
             }
             else
@@ -143,9 +143,9 @@ public abstract class AnimatedCastEvent : CastEvent
         SavedDuration = 0;
     }
 
-    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : this(caster, skill, start, dur)
     {
-        EffectTarget = effectTarget;
+        Target = target;
     }
 
     public override long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)
