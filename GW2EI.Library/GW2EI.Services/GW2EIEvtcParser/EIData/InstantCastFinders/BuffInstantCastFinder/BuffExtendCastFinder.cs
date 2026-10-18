@@ -15,6 +15,11 @@ internal class BuffExtendCastFinder : BuffCastFinder<BuffExtensionEvent>
         return evt.To;
     }
 
+    protected override AgentItem GetOtherKeyAgent(BuffExtensionEvent evt)
+    {
+        return evt.By;
+    }
+
     internal BuffExtendCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.ExtendedDuration - duration) < epsilon);

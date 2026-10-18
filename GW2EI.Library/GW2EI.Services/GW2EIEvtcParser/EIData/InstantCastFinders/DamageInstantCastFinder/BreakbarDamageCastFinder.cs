@@ -4,12 +4,19 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class BreakbarDamageCastFinder : CheckedCastFinder<BreakbarDamageEvent>
 {
+    protected bool Target = false;
     private readonly long _damageSkillID;
 
     public BreakbarDamageCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
         UsingNotAccurate();
         _damageSkillID = damageSkillID;
+    }
+
+    public BreakbarDamageCastFinder WithTarget()
+    {
+        Target = true;
+        return this;
     }
 
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -29,7 +36,12 @@ internal class BreakbarDamageCastFinder : CheckedCastFinder<BreakbarDamageEvent>
                         continue;
                     }
                     lastTime = de.Time;
-                    res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));
+                    var instant = new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From);
+                    if (Target)
+                    {
+                        instant.OverrideTarget(de.To);
+                    }
+                    res.Add(instant);
                 }
             }
         }

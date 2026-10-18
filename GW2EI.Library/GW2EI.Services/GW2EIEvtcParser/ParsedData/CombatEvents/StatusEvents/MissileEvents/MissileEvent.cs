@@ -16,7 +16,7 @@ public class MissileEvent : StatusEvent
         ev->skillid = skillid;
         *(float*)&ev->iff = something_range;
         ev->is_statechange = CBTS_MISSILECREATE;
-        ev->is_shields = flags0; 
+        ev->is_shields = flags0;
         ev->is_offcycle = flags1;
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
@@ -30,14 +30,16 @@ public class MissileEvent : StatusEvent
 
     private readonly List<MissileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
+    public MissileLaunchEvent? InitialLaunch => LaunchEvents.FirstOrDefault();
     public MissileRemoveEvent? RemoveEvent { get; private set; }
 
+    public AgentItem? TargetedAgent => InitialLaunch != null && InitialLaunch.HasTargetAgent ? InitialLaunch.TargetedAgent : null;
     public bool MaybeReflected => LaunchEvents.Any(x => x.MaybeReflected);
 
     internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);
-        // 1 
+        // 1
         originBytes.PushNative(evtcItem.Value);
         // 1
         originBytes.PushNative(evtcItem.BuffDmg);

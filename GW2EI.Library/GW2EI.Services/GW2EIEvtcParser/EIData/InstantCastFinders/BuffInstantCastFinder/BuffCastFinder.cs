@@ -6,6 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where Event : BuffEvent
 {
     protected bool Minions = false;
+    protected bool Target = false;
     protected readonly long BuffID;
     protected BuffCastFinder(long skillID, long buffID) : base(skillID)
     {
@@ -17,6 +18,7 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
     }
 
     protected abstract AgentItem GetKeyAgent(Event evt);
+    protected abstract AgentItem GetOtherKeyAgent(Event evt);
 
     public virtual BuffCastFinder<Event> WithMinions()
     {
@@ -24,6 +26,11 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
         return this;
     }
 
+    public virtual BuffCastFinder<Event> WithTarget()
+    {
+        Target = true;
+        return this;
+    }
 
     internal BuffCastFinder<Event> UsingByBaseSpecChecker(Spec spec)
     {
@@ -100,7 +107,12 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
                         continue;
                     }
                     lastTime = evt.Time;
-                    res.Add(new InstantCastEvent(GetTime(evt, GetKeyAgent(evt), combatData), skillData.Get(SkillID), group.Key));
+                    var instant = new InstantCastEvent(GetTime(evt, GetKeyAgent(evt), combatData), skillData.Get(SkillID), group.Key);
+                    if (Target)
+                    {
+                        instant.OverrideTarget(GetOtherKeyAgent(evt));
+                    }
+                    res.Add(instant);
                 }
             }
         }
