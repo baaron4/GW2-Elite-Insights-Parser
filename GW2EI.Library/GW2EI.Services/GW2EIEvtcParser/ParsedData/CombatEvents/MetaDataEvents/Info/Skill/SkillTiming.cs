@@ -13,7 +13,7 @@ public abstract class SkillTiming
     {
         SkillInfo = skillInfo;
         TriggerUlong = evtcItem.SrcAgent;
-        Trigger = GetSkillAction(TriggerUlong);
+        Trigger = GetSkillTrigger(TriggerUlong);
     }
 
 }

@@ -34,7 +34,7 @@ public class SkillInfoEvent : MetaDataEvent
     {
         if (evtcItem.SkillID != SkillID)
         {
-            throw new InvalidOperationException("Non matching buff id in BuffDataEvent complete method");
+            throw new InvalidOperationException("Non matching buff id in SkillInfoEvent complete method");
         }
         switch (evtcItem.IsStateChange)
         {
@@ -47,7 +47,7 @@ public class SkillInfoEvent : MetaDataEvent
             case StateChange.SkillStep:
                 break;
             default:
-                throw new InvalidDataException("Invalid combat event in BuffDataEvent complete method");
+                throw new InvalidDataException("Invalid combat event in SkillInfoEvent complete method");
         }
     }
 

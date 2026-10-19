@@ -584,7 +584,7 @@ public static class ArcDPSEnums
         AnimationCompleted = 5,
         Unknown = ulong.MaxValue,
     }
-    public static TriggerType GetSkillAction(ulong bt)
+    public static TriggerType GetSkillTrigger(ulong bt)
     {
         return Enum.IsDefined(typeof(TriggerType), bt) ? (TriggerType)bt : TriggerType.Unknown;
     }
