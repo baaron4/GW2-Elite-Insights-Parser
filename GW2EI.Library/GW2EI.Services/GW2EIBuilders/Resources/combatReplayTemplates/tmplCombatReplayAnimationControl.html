@@ -198,7 +198,7 @@
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range"
                            @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip" 
                            :min="minTime" :max="maxTime" :value="time * 1000 - range.min" 
-                           class="slider" :id="htmlElementIDs.timeRangeID"
+                           class="slider" :id="htmlElementIDs.simpleTimelineID"
                            :style="{'background': getSliderGradient()}">
                     <div v-if="selectedPhase" class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
                         {{ getFormattedPhaseText(selectedPhase) }}
@@ -472,6 +472,7 @@
                     mainCanvasID: "main-canvas",
                     bgCanvasID: "bg-canvas",
                     pickCanvasID: "picking-canvas",
+                    simpleTimelineID: 'simple-timeline'
                 };
             },
             timelineWidth() {
@@ -757,7 +758,7 @@
                 window.removeEventListener("mouseup", this.stopDragCursor);
             },
             onSimpleTimelineSliderMouseMove(e) {
-                const slider = document.getElementById(this.htmlElementIDs.timeRangeID);
+                const slider = document.getElementById(this.htmlElementIDs.simpleTimelineID);
 
                 if (this.useAdvancedTimeline || !slider || !slider.classList.contains("slider")) {
                     this.hideSimpleTimelineTooltip();
