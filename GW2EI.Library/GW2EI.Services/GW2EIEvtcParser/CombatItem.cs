@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
@@ -7,7 +6,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser;
 
-public class CombatItem: ITimeComparable
+public class CombatItem : ITimeComparable
 {
     public long Time { get; private set; }
     public ulong SrcAgent { get; private set; }

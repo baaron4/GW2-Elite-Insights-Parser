@@ -78,7 +78,7 @@ public class SkillInfoEvent : MetaDataEvent
         if (evtcVersion.Build >= ArcDPSBuilds.SkillInfoRework)
         {
             _SkillTimings.Add(new SkillTimingWithSteps(evtcItem, this));
-        } 
+        }
         else
         {
             _SkillTimings.Add(new SkillTimingNoSteps(evtcItem, this));
