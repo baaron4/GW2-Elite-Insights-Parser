@@ -24,7 +24,7 @@
                 </ul>
             </div>
             <div v-if="!isTouchDevice" class="custom-control custom-switch ml-3">
-                <input type="checkbox" class="custom-control-input" id="timelineModeSwitch" v-model="useAdvancedTimeline">
+                <input type="checkbox" class="custom-control-input" id="timelineModeSwitch" v-model="setUseAdvancedTimeline">
                 <label class="custom-control-label" for="timelineModeSwitch">Advanced timeline</label>
             </div>
         </div>
@@ -305,7 +305,7 @@
                 },
                 deep: true
             },
-            useAdvancedTimeline: function (value) {
+            setUseAdvancedTimeline: function (value) {
                 if (window.localStorage) {
                     window.localStorage.setItem("ei_useAdvancedTimeline", value);
                 }
