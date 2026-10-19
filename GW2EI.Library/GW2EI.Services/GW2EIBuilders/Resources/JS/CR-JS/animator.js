@@ -97,11 +97,6 @@ const reactiveAnimationData = {
         times: [],
     }
 };
-
-const sliderDelimiter = {
-    min: -1,
-    max: -1,
-}
 //
 
 let InchToPixel = 10;
