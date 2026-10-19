@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-if="showNormalPhases" class="d-flex align-items-center justify-content-center mb-1">
-            <ul v-if="isTouchDevice"
+        <div class="d-flex align-items-center justify-content-center mb-1">
+            <ul v-if="showNormalPhases && isTouchDevice"
                 class="nav nav-pills d-flex flex-row justify-content-center mb-1 mx-auto">
                 <li class="nav-item" v-for="(phase, id) in normalPhases"
                     :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
@@ -199,8 +199,8 @@
                            @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip"
                            :max="maxTime" :value="time * 1000 - range.min" class="slider" :id="htmlElementIDs.timeRangeID"
                            :style="{'background': getSliderGradient()}">
-                    <div class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
-                        {{ sliderDelimiter.name }}
+                    <div v-if="selectedPhase" class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
+                        {{ getFormattedPhaseText(selectedPhase) }}
                     </div>
                 </div>
             </div>
@@ -564,7 +564,6 @@
                 const offset = this.range.min;
                 this.sliderDelimiter.min = min - offset;
                 this.sliderDelimiter.max = max - offset;
-                this.sliderDelimiter.name = name;
                 this.updateTime(min - offset);
             },
             updateInputTime: function (value) {
