@@ -50,14 +50,15 @@ public abstract class AnimatedCastEvent : CastEvent
         AcceleratedToNonAcceleratedRatio = 1.0 / nonScaledToScaledRatio;
         Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
     }
-
-    protected const float PositionConvertConstant = 10.0f;
     protected AnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"), agentData, skillData)
     {
+        var animWithScaledDurations = (startItem ?? endItem)?.Build >= ArcDPSBuilds.AnimWithScaledDurations;
+        var animatedDodge = Skill.IsAnimatedDodge(skillData);
         // Start is present
         if (startItem != null)
         {
-            ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
+            // Control returned moved from Value (which became last significant trigger) to BuffDmg
+            ExpectedDuration = animWithScaledDurations ? startItem.BuffDmg : startItem.Value;
             if (startItem.IsStateChange == StateChange.AnimationStart)
             {
                 if (startItem.DstAgent != 0)
@@ -77,7 +78,7 @@ public abstract class AnimatedCastEvent : CastEvent
             // End item missing
             if (endItem == null)
             {
-                if (Skill.ID == skillData.DodgeID)
+                if (animatedDodge)
                 {
                     ExpectedDuration = 750;
                 }
@@ -90,19 +91,12 @@ public abstract class AnimatedCastEvent : CastEvent
         if (endItem != null)
         {
             ActualDuration = endItem.Value;
-            _scaledActualDuration = endItem.BuffDmg;
+            _scaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
             // Start missing
             if (startItem == null)
             {
                 ExpectedDuration = ActualDuration;
-                if (Skill.IsAnimatedDodge(skillData))
-                {
-                    // dodge animation start item has always 0 as expected duration
-                    ExpectedDuration = ActualDuration;
-                    _scaledActualDuration = 0;
-                }
                 Time -= ActualDuration;
-                SetAcceleration(endItem);
             }
             else
             {
@@ -113,14 +107,14 @@ public abstract class AnimatedCastEvent : CastEvent
                     ActualDuration = expectedActualDuration;
                     _scaledActualDuration = 0;
                 }
-                if (Skill.IsAnimatedDodge(skillData))
-                {
-                    // dodge animation start item has always 0 as expected duration
-                    ExpectedDuration = ActualDuration;
-                    _scaledActualDuration = 0;
-                }
-                SetAcceleration(endItem);
             }
+            if (animatedDodge)
+            {
+                // dodge animation start item has always 0 as expected duration
+                ExpectedDuration = ActualDuration;
+                _scaledActualDuration = 0;
+            }
+            SetAcceleration(endItem);
             AnimStop = GetAnimationStop(endItem.Result);
 
         }

@@ -11,6 +11,7 @@ public static class ArcDPSEnums
     {
         public const int StartOfLife = int.MinValue;
         //
+        public const int AnimWithScaledDurations = 20191107;
         public const int ProperConfusionDamageSimulation = 20210529;
         public const int ScoringSystemChange = 20210800; // was somewhere around there
         public const int DirectX11Update = 20210923;
@@ -110,7 +111,7 @@ public static class ArcDPSEnums
     {
         None = 0, // not used - not this kind of event
         Normal = 1, // started skill/animation activation
-        Quickness = 2, // unused as of nov 5 2019
+        Quickness = 2, // unused as of nov 7 2019
         Minimum = 3,  // stopped skill activation with reaching tooltip time
         Cancel = 4, // stopped skill activation without reaching tooltip time
         Reset = 5, // animation completed fully
