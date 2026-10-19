@@ -62,7 +62,7 @@ public class CombatItem : ITimeComparable
         || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams
         || IsStateChange == StateChange.AgentInfo;
 
-    private readonly EvtcVersionEvent _version;
+    internal readonly EvtcVersionEvent _version;
 
 #if DEBUG
     // For debugging, to get rid of statechanges seen generally on all agents
@@ -218,7 +218,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsDirectDamageEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
+        if (Build >= ArcDPSBuilds.ResultEnumRework)
         {
             return IsStateChange == StateChange.Combat &&
                     IsBuff == 0;
@@ -232,7 +232,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsBuffDamageEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.ResultEnumRework)
+        if (Build >= ArcDPSBuilds.ResultEnumRework)
         {
             return IsStateChange == StateChange.Combat &&
                     IsBuff != 0;
@@ -344,7 +344,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsBuffApplyEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        if (Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
             return IsStateChange == StateChange.BuffApply || IsStateChange == StateChange.BuffChange || IsStateChange == StateChange.BuffInitial;
         }
@@ -355,7 +355,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsBuffRemoveEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        if (Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
             return IsStateChange == StateChange.BuffRemoveAll || IsStateChange == StateChange.BuffRemoveSingle;
         }
@@ -364,7 +364,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsBuffRemoveAllEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        if (Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
             return IsStateChange == StateChange.BuffRemoveAll;
         }
@@ -414,7 +414,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsStartCastEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
+        if (Build >= ArcDPSBuilds.AnimationAsStateChanges)
         {
             return IsStateChange == StateChange.AnimationStart;
         }
@@ -427,7 +427,7 @@ public class CombatItem : ITimeComparable
 
     public bool IsEndCastEvent()
     {
-        if (_version.Build >= ArcDPSBuilds.AnimationAsStateChanges)
+        if (Build >= ArcDPSBuilds.AnimationAsStateChanges)
         {
             return IsStateChange == StateChange.AnimationStop;
         }

@@ -24,13 +24,13 @@ public class SkillInfoEvent : MetaDataEvent
 
     private readonly List<SkillStep> _SkillSteps = [];
 
-    internal SkillInfoEvent(CombatItem evtcItem, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem)
+    internal SkillInfoEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem)
     {
         Skill = skillData.Get(evtcItem.SkillID);
-        CompleteSkillInfoEvent(evtcItem, evtcVersion);
+        CompleteSkillInfoEvent(evtcItem);
     }
 
-    internal void CompleteSkillInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    internal void CompleteSkillInfoEvent(CombatItem evtcItem)
     {
         if (evtcItem.SkillID != SkillID)
         {
@@ -39,10 +39,10 @@ public class SkillInfoEvent : MetaDataEvent
         switch (evtcItem.IsStateChange)
         {
             case StateChange.SkillTiming:
-                BuildFromSkillTiming(evtcItem, evtcVersion);
+                BuildFromSkillTiming(evtcItem);
                 break;
             case StateChange.SkillInfo:
-                BuildFromSkillInfo(evtcItem, evtcVersion);
+                BuildFromSkillInfo(evtcItem);
                 break;
             case StateChange.SkillStep:
                 break;
@@ -51,7 +51,7 @@ public class SkillInfoEvent : MetaDataEvent
         }
     }
 
-    private unsafe void BuildFromSkillInfo(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    private unsafe void BuildFromSkillInfo(CombatItem evtcItem)
     {
         // 2 
         var time = evtcItem.Time;
@@ -63,7 +63,7 @@ public class SkillInfoEvent : MetaDataEvent
         Range1 = *(float*)&srcAgent;
         TooltipTime = *((float*)&srcAgent + 1);
 
-        if (evtcVersion.Build >= ArcDPSBuilds.SkillInfoRework)
+        if (evtcItem.Build >= ArcDPSBuilds.SkillInfoRework)
         {
             // 2
             var dstAgent = evtcItem.DstAgent;
@@ -73,9 +73,9 @@ public class SkillInfoEvent : MetaDataEvent
         }
     }
 
-    private void BuildFromSkillTiming(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    private void BuildFromSkillTiming(CombatItem evtcItem)
     {
-        if (evtcVersion.Build >= ArcDPSBuilds.SkillInfoRework)
+        if (evtcItem.Build >= ArcDPSBuilds.SkillInfoRework)
         {
             _SkillTimings.Add(new SkillTimingWithSteps(evtcItem, this));
         }

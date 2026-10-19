@@ -124,13 +124,13 @@ internal class Artsariiv : ShatteredObservatory
         ];
     }
 
-    internal static bool DetectCloneArtsariivs(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
+    internal static bool DetectCloneArtsariivs(AgentData agentData, List<CombatItem> combatData)
     {
         var artsariivMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
                 MarkerGUIDs.ArtsariivTripleLaserEyeMarker.Equals(x.SrcAgent, x.DstAgent, true))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .Select(x => new MarkerGUIDEvent(x))
             .FirstOrDefault();
         if (artsariivMarkerGUID != null)
         {
@@ -189,7 +189,7 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (!DetectCloneArtsariivs(evtcVersion, agentData, combatData))
+        if (!DetectCloneArtsariivs(agentData, combatData))
         {
             // Legacy
             var targetArtsariiv = FindTargetArtsariiv(agentData);

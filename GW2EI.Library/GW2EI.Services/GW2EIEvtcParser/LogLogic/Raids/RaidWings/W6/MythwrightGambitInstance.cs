@@ -283,7 +283,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
             .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
         Qadim.FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
-        Qadim.FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
+        Qadim.FindLamps(maxHPUpdates, agentData, combatData);
         Qadim.FindPyres(gw2Build, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Qadim.RenamePyres(Targets);

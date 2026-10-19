@@ -564,8 +564,7 @@ public partial class CombatData
             if (combatItem.IsEssentialMetadata)
             {
                 AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData,
-                    skillData, wepSwaps, buffEvents, stunBreakData,
-                    evtcVersion, settings, apiController);
+                    skillData, wepSwaps, buffEvents, stunBreakData, settings, apiController);
             }
         }
         foreach (CombatItem combatItem in combatEvents)
@@ -578,11 +577,11 @@ public partial class CombatData
             {
                 if (combatItem.IsBuffApplyEvent())
                 {
-                    AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                    AddBuffApplyEvent(combatItem, buffEvents, agentData, skillData);
                 }
                 else
                 {
-                    AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData, evtcVersion);
+                    AddBuffRemoveEvent(combatItem, buffEvents, agentData, skillData);
                 }
             }
             else if (combatItem.IsDamageEvent())
@@ -593,7 +592,7 @@ public partial class CombatData
                 }
                 else if (combatItem.IsBuffDamageEvent())
                 {
-                    AddBuffDamageDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData, evtcVersion);
+                    AddBuffDamageDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, stunBreakData, agentData, skillData);
                 }
             }
             else if (combatItem.IsStateChange != StateChange.Combat)
@@ -612,8 +611,7 @@ public partial class CombatData
                 else
                 {
                     AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData,
-                        wepSwaps, buffEvents, stunBreakData,
-                        evtcVersion, settings, apiController);
+                        wepSwaps, buffEvents, stunBreakData, settings, apiController);
                 }
             }
         }
@@ -636,7 +634,7 @@ public partial class CombatData
         skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
-        List<AnimatedCastEvent> animatedCastData = CreateCastEvents(evtcVersion, castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
+        List<AnimatedCastEvent> animatedCastData = CreateCastEvents(castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO_PERF(Rennorb)

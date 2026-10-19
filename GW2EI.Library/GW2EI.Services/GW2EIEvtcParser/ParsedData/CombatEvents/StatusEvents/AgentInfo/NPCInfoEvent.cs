@@ -10,7 +10,7 @@ public class NPCInfoEvent : AgentInfoEvent
     public bool IsLegendary => (SpeciesFlags & (uint)ArcDPSEnums.SpeciesFlags.Legendary) > 0;
     public bool DecorateName => (SpeciesFlags & (uint)ArcDPSEnums.SpeciesFlags.NoDecorateNameTBC) == 0;
 
-    internal NPCInfoEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, evtcVersion)
+    internal NPCInfoEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         SpeciesFlags = (uint)evtcItem.BuffDmg;
     }

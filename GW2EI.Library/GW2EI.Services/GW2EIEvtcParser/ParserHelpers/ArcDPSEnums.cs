@@ -733,7 +733,7 @@ public static class ArcDPSEnums
         NotApplicable,
     }
 
-    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, EvtcVersionEvent evtcVersion)
+    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, int evtcBuild)
     {
         return unsignedInt < (uint)GadgetTypeEnum.NotApplicable ? (GadgetTypeEnum)unsignedInt
             : GadgetTypeEnum.NotApplicable;

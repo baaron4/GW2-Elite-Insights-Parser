@@ -24,13 +24,13 @@ public class BuffInfoEvent : MetaDataEvent
     public uint DurationCap { get; private set; }
     public readonly List<BuffFormula> Formulas = [];
 
-    internal BuffInfoEvent(CombatItem evtcItem, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem)
+    internal BuffInfoEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem)
     {
         BuffSkill = skillData.Get(evtcItem.SkillID);
-        CompleteBuffInfoEvent(evtcItem, evtcVersion);
+        CompleteBuffInfoEvent(evtcItem);
     }
 
-    internal void CompleteBuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    internal void CompleteBuffInfoEvent(CombatItem evtcItem)
     {
         if (evtcItem.SkillID != BuffID)
         {
@@ -39,17 +39,17 @@ public class BuffInfoEvent : MetaDataEvent
         switch (evtcItem.IsStateChange)
         {
             case StateChange.BuffFormula:
-                BuildFromBuffFormula(evtcItem, evtcVersion);
+                BuildFromBuffFormula(evtcItem);
                 break;
             case StateChange.BuffInfo:
-                BuildFromBuffInfo(evtcItem, evtcVersion);
+                BuildFromBuffInfo(evtcItem);
                 break;
             default:
                 throw new InvalidDataException("Invalid combat event in BuffDataEvent complete method");
         }
     }
 
-    private void BuildFromBuffInfo(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    private void BuildFromBuffInfo(CombatItem evtcItem)
     {
         ProbablyInvul = evtcItem.IsFlanking > 0;
         ProbablyInvert = evtcItem.IsShields > 0;
@@ -58,7 +58,7 @@ public class BuffInfoEvent : MetaDataEvent
         MaxStacks = evtcItem.SrcMasterInstid;
         DurationCap = evtcItem.OverstackValue;
         // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
-        if (evtcVersion.Build >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
+        if (evtcItem.Build >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
         {
             StackingTypeByte = evtcItem.Pad1;
             StackingType = GetBuffStackType(StackingTypeByte);
@@ -79,9 +79,9 @@ public class BuffInfoEvent : MetaDataEvent
         }
     }
 
-    private void BuildFromBuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+    private void BuildFromBuffFormula(CombatItem evtcItem)
     {
-        Formulas.Add(new BuffFormula(evtcItem, evtcVersion));
+        Formulas.Add(new BuffFormula(evtcItem));
     }
 
 }

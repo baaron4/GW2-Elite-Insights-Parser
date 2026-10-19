@@ -14,11 +14,11 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
     internal uint OverridenRegenInstance;
     private readonly bool _addedActive;
 
-    internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, skillData)
+    internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
         Initial = evtcItem.IsStateChange == StateChange.BuffInitial;
         AppliedDuration = evtcItem.Value;
-        if (Initial && evtcVersion.Build >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
+        if (Initial && evtcItem.Build >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
         {
             OriginalAppliedDuration = evtcItem.BuffDmg;
         }
