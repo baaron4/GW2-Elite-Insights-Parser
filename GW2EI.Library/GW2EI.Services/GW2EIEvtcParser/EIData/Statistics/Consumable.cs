@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class Consumable: ITimeComparable
+public class Consumable : ITimeComparable
 {
     public readonly Buff Buff;
     public readonly long Time;
