@@ -100,6 +100,8 @@ With the `-watch` option, the application will watch given path in order to pars
 
 You can refresh the API caches using the `-cache` option.
 
+You can generate the JSON schema using the `-schema` option.
+
 You can update EI to its latest version using the `-update` option.
 
 Use `-h` to display the help message.
@@ -143,6 +145,34 @@ For every input, CLI will consistently output a JSON like object, preceded by "P
 
 > [!NOTE]
 > It may take some time for each file to parse and they will not be ready to open the moment they are created.
+
+### For UI launched via console
+
+It is also possible to launch the Avalonia UI application via console. It accepts a different set of options compared to the CLI application.
+
+Use `-h` to display the help message.
+
+Inspection related options only accept a single log, any additional logs will be ignored. If no logs are provided while using that option, the default UI will launch instead.
+
+`-inspect_raw`: will launch an inspector window on the first given log file, content will be the raw data as present in the evtc.
+
+`-inspect_ei_partial`: will launch an inspector window on the first given log file, content will be pre-processed by ei (gadget identifications, buff formula deduction, etc). This is the recommended mode if you want to compare content against a parsed log.
+
+`-inspect_ei_full`: will launch an inspector window on the first given log file, content will be fully processed by ei (partial + custom events and agents).
+
+If trying to parse the requested log ends in failure, the application will return with error code 2.
+
+#### Windows
+```
+.\GuildWars2EliteInsights.exe -c [config path] [logs]
+```
+
+#### Linux/MacOS
+
+```
+dotnet ./GuildWars2EliteInsights.dll -c [config path] [logs]
+```
+
 
 ## Settings
 <img src="./docs/Images/EISettingsGeneral.png" width="60%">
