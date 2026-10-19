@@ -148,7 +148,7 @@ public static class ParserHelper
         var groupByTime = new Dictionary<long, List<T>>();
         foreach (T c in list)
         {
-            long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < ServerDelayConstant);
+            long key = groupByTime.Keys.FirstOrDefault(x => c.IsAtTime(x));
             if (key != 0)
             {
                 groupByTime[key].Add(c);

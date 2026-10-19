@@ -377,7 +377,7 @@ internal class UraTheSteamshrieker : MountBalrior
             foreach (var swapEvent in swapEvents)
             {
                 if ((swapEvent.SwappedFrom == WeaponSetIDs.KitSet || swapEvent.SwappedTo == WeaponSetIDs.KitSet) &&
-                    deterrenceAppliesOnPicker.Any(x => Math.Abs(x.Time - swapEvent.Time) < ServerDelayConstant))
+                    deterrenceAppliesOnPicker.Any(x => x.IsAtTime(swapEvent)))
                 {
                     swapEvent.FlagAsSpecialBundleSwap();
                 }

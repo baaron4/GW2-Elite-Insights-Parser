@@ -86,7 +86,7 @@ internal abstract class BuffSourceFinder
     {
         if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out var tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
-            var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && !x.CreditedBy.Is(agent)).Select(x => x.CreditedBy));
+            var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && x.IsAtTime(time) && !x.CreditedBy.Is(agent)).Select(x => x.CreditedBy));
             foreach (SingleActor tempest in tempests)
             {
                 if (magAuraApplications.Any(x => tempest.AgentItem.IsAtTime(x, time)))
