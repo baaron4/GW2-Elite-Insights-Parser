@@ -44,6 +44,7 @@ public static class ArcDPSEnums
         public const int VisibilityOnStateChange = 20260527;
         public const int GadgetCapturesAdded = 20260602;
         public const int AgentInfoAdded = 20260929;
+        public const int SkillInfoRework = 20269999;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -353,6 +354,7 @@ public static class ArcDPSEnums
         FlyTo = 88,
         AgentInfo = 89,
         PvPScoreUpdate = 90,
+        SkillStep = 91,
         Unknown
     };
 
@@ -576,15 +578,15 @@ public static class ArcDPSEnums
         return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
     }*/
     // WIP
-    public enum SkillAction : byte
+    public enum TriggerType : ulong
     {
         EffectHappened = 4,
         AnimationCompleted = 5,
-        Unknown = byte.MaxValue,
+        Unknown = ulong.MaxValue,
     }
-    public static SkillAction GetSkillAction(byte bt)
+    public static TriggerType GetSkillAction(ulong bt)
     {
-        return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
+        return Enum.IsDefined(typeof(TriggerType), bt) ? (TriggerType)bt : TriggerType.Unknown;
     }
 
     // Squad Marker index

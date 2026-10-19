@@ -119,7 +119,7 @@ internal abstract class InstantCastFinder : IVersionable
         long time = evt.Time + TimeOffset;
         if (BeforeWeaponSwap || AfterWeaponSwap)
         {
-            var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();
+            var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => x.IsAtTime(time, ServerDelayConstant / 2)).ToList();
             if (wepSwaps.Count != 0)
             {
                 return BeforeWeaponSwap ? Math.Min(wepSwaps[0].Time - 1, time) : Math.Max(wepSwaps[0].Time + 1, time);

@@ -101,7 +101,6 @@ const reactiveAnimationData = {
 const sliderDelimiter = {
     min: -1,
     max: -1,
-    name: logData.phases[0].name
 }
 //
 

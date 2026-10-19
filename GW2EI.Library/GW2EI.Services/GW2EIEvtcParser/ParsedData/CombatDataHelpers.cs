@@ -7,7 +7,7 @@ partial class CombatData
 {
     public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : TimeCombatEvent
     {
-        return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
+        return events.Where(evt => evt.IsAtTime(time, epsilon));
     }
     public bool HasRelatedHit(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {

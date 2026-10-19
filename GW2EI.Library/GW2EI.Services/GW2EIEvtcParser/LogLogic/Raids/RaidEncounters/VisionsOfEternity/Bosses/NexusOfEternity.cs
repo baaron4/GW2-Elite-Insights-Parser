@@ -349,7 +349,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     // The effect is not unique and collides with other mechanics.
                     // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
-                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
+                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => x.IsAtTime(lifespan.end));
                     if (explosion != null)
                     {
                         lifespan = explosion.ComputeLifespan(log, 1666);

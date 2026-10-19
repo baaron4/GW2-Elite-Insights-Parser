@@ -874,7 +874,7 @@ internal class DecimaTheStormsinger : MountBalrior
             var damageData = p.GetDamageTakenEvents(null, log).Where(x => fluxlanceIDs.Contains(x.SkillID) || thunderIDs.Contains(x.SkillID)).ToList();
             foreach (var evt in exposeds)
             {
-                if (damageData.Any(x => Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
+                if (damageData.Any(x => x.IsAtTime(evt)))
                 {
                     InsertAchievementEligibityEventAndRemovePhase(decimaCMPhases, thisBugCanDanceEligibilityEvents, evt.Time, Ach_ThisBugCanDance, p);
                 }

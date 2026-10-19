@@ -1,11 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser;
 
-public class CombatItem
+public class CombatItem: ITimeComparable
 {
     public long Time { get; private set; }
     public ulong SrcAgent { get; private set; }
@@ -468,6 +470,19 @@ public class CombatItem
     internal void OverrideValue(int value)
     {
         Value = value;
+    }
+
+    public bool IsAtTime(long time, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return Math.Abs(time - Time) < epsilon;
+    }
+    public bool IsAtTime(TimeCombatEvent evt, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return IsAtTime(evt.Time, epsilon);
+    }
+    public bool IsAtTime(CombatItem evt, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        return IsAtTime(evt.Time, epsilon);
     }
 }
 

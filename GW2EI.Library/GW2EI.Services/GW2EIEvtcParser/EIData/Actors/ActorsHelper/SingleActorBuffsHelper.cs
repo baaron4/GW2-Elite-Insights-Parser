@@ -1088,7 +1088,7 @@ partial class SingleActor
                 long time = ba.Time;
                 if (time <= log.LogData.LogEnd)
                 {
-                    Consumable? existing = _consumeList.Find(x => Math.Abs(x.Time - time) < ServerDelayConstant && x.Buff.ID == consumable.ID);
+                    Consumable? existing = _consumeList.Find(x => x.IsAtTime(ba) && x.Buff.ID == consumable.ID);
                     if (existing != null)
                     {
                         existing.Stack++;

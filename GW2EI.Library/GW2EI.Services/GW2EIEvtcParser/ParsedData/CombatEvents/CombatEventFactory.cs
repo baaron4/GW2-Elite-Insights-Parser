@@ -195,13 +195,14 @@ partial class CombatData
                 break;
             case StateChange.SkillInfo:
             case StateChange.SkillTiming:
+            case StateChange.SkillStep:
                 if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
                 {
-                    skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent);
+                    skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent, evtcVersion);
                 }
                 else
                 {
-                    skillInfoEvent = new SkillInfoEvent(stateChangeEvent, skillData);
+                    skillInfoEvent = new SkillInfoEvent(stateChangeEvent, skillData, evtcVersion);
                     metaDataEvents.SkillInfoEvents[stateChangeEvent.SkillID] = skillInfoEvent;
                 }
                 break;
