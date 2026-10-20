@@ -99,7 +99,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         LaunchType = evtcItem.IFFByte;
 
         ExpectedEndTime = long.MaxValue;
-        if (_targetedAgent != null)
+        if (_targetedAgent == null)
         {
             ExpectedEndTime = (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
         }
