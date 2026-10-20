@@ -122,7 +122,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         var direction = (TargetPosition.XY() - LaunchPosition.XY());
         direction /= Math.Max(direction.Length(), 1e-6f);
         var zDirection = TargetPosition.Z - LaunchPosition.Z;
-        var zVelocity = zDirection / ExpectedEndTime;
+        var zVelocity = zDirection / (ExpectedEndTime - Time);
         return new ParametricPoint3D(LaunchPosition + new Vector3(velocity * direction, zVelocity * zDirection) * (end - start), end);
     }
     /// <summary>
