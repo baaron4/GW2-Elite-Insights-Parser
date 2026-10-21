@@ -912,11 +912,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
             }
-
-            // Decoration above indicator
-            var thousandStrikes = log.CombatData.GetMissileEventsBySkillID(skill);
-            replay.Decorations.AddNonHomingMissiles(log, thousandStrikes, Colors.LightBlue, 0.3, 20);
         }
+
+        // Decoration above indicator
+        var thousandStrikes = log.CombatData.GetMissileEventsBySrcBySkillID(agent, skill);
+        replay.Decorations.AddNonHomingMissiles(log, thousandStrikes, Colors.LightBlue, 0.4, 20);
     }
 
     private static void AddRagingStorm(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)
