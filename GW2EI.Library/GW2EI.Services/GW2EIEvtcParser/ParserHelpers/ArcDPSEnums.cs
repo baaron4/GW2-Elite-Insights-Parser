@@ -43,7 +43,7 @@ public static class ArcDPSEnums
         public const int VisibilityOnStateChange = 20260527;
         public const int GadgetCapturesAdded = 20260602;
         public const int AgentInfoAdded = 20260929;
-        public const int SkillInfoRework = 20269999;
+        public const int SkillInfoRework = 20261021;
         //
         public const int EndOfLife = int.MaxValue;
     }
