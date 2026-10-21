@@ -4,7 +4,6 @@ internal class GainComputerByMultiplyingStack : GainComputer
 {
     public GainComputerByMultiplyingStack()
     {
-        Multiplier = true;
     }
 
     public override double ComputeGain(double gainPerStack, int stack)

@@ -8,8 +8,8 @@ internal class GainComputerByStackPlusConstant : GainComputerByStack
         ConstantGain = constant;
     }
 
-    public override double ComputeGain(double gainPerStack, int stack)
+    protected override double GetGain(double gainPerStack, int stack)
     {
-        return (gainPerStack * stack + ConstantGain) / (100 + (stack * gainPerStack + ConstantGain));
+        return base.GetGain(gainPerStack, stack) + ConstantGain;
     }
 }

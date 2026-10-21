@@ -33,7 +33,7 @@ internal static class SharedDamageModifiers
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Boons
-        new CounterOnActorDamageModifier(Mod_MightEqual25, Might, "Might 25", "With 25 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByExactNumberOfBuffsPresent(25), ParserIcons.Might25, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_MightEqual25, Might, "Might 25", "With 25 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByExactlyNStacksPresent(25), ParserIcons.Might25, DamageModifierMode.All),
         new CounterOnActorDamageModifier(Mod_MightAbove20, Might, "Might >= 20", "With at least 20 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByAtLeastNStacksPresent(20), ParserIcons.MightAbove20, DamageModifierMode.All),
         new CounterOnActorDamageModifier(Mod_MightLess15, Might, "Might <= 15", "With less than 15 stacks of Might", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Common, new GainComputerByAtMostNStacksPresent(15), ParserIcons.MightBelow15, DamageModifierMode.All),
         new CounterOnActorDamageModifier(Mod_Fury, Fury, "Fury", "Under Fury", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Common, ByPresence, BuffImages.Fury, DamageModifierMode.All),

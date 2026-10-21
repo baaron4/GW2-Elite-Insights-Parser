@@ -4,6 +4,6 @@ internal class GainComputerByMultiPresence : GainComputerByStack
 {
     public GainComputerByMultiPresence()
     {
-        Multiplier = true;
+
     }
 }
