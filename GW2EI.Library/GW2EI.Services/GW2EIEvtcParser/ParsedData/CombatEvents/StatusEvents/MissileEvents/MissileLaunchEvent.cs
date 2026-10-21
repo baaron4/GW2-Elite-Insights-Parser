@@ -37,7 +37,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly float Speed;
     public readonly float MotionRadius;
     // Only relevant for non homing missiles
-    public readonly long ExpectedEndTime;
+    public long ExpectedEndTime => (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
 
     public bool IsFirstLaunch { get; private set; }
     public readonly byte LaunchType;
@@ -97,12 +97,6 @@ public class MissileLaunchEvent : TimeCombatEvent
         flagsBytes.PushNative(evtcItem.IsMoving);
         LaunchFlags = BitConverter.ToUInt32(flagsBytes);
         LaunchType = evtcItem.IFFByte;
-
-        ExpectedEndTime = long.MaxValue;
-        if (_targetedAgent == null)
-        {
-            ExpectedEndTime = (long)((TargetPosition.XY() - LaunchPosition.XY()).Length() / Speed) + Time;
-        }
     }
 
     internal void ForceNotFirstLaunch()
