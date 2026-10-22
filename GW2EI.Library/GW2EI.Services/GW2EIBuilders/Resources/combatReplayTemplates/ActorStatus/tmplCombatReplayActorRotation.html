@@ -47,12 +47,12 @@
                 const progress = (this.time / 1000 - cast.time);
                 const expected = cast.expected / 1000;
                 if (progress >= expected) {
-                    return "background: #0f0";
+                    return "background: #0c0";
                 } else {
                     const fill = 100 * progress / expected;
                     const end = cast.time + cast.duration / 1000;
                     const cancel = cast.type === RotationStatus.CANCEL && progress + 100 >= end;
-                    const color = cancel ? "#f00" : "#f80";
+                    const color = cancel ? "#e00 " : "#e70";
                     return `background: linear-gradient(to right, ${color} ${fill}%, ${fill}%, #000 ${100 - fill}%`;
                 }
             },
