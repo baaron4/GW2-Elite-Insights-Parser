@@ -62,7 +62,7 @@ public abstract class CastEvent : TimeCombatEvent
         Skill = skill;
     }
 
-    public void OverrideTarget(AgentItem target)
+    internal void OverrideTarget(AgentItem target)
     {
         Target = target;
     }
