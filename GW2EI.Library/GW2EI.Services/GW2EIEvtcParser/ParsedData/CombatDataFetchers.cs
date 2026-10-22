@@ -432,6 +432,31 @@ partial class CombatData
         return GetTimeValueOrEmpty(_statusEvents.NPCInfoEventsBySrc, src.EnglobingAgentItem);
     }
 
+    public string? GetNPCRank(AgentItem src)
+    {
+        var agentInfo = GetNPCInfoEvents(src).FirstOrDefault();
+        if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
+        {
+            if (agentInfo.IsVeteran)
+            {
+                return "Veteran";
+            }
+            else if (agentInfo.IsElite)
+            {
+                return "Elite";
+            }
+            else if (agentInfo.IsChampion)
+            {
+                return "Champion";
+            }
+            else if (agentInfo.IsLegendary)
+            {
+                return "Legendary";
+            }
+        }
+        return null;
+    }
+
     #endregion INFO
     #region LAST90
     public IReadOnlyList<Last90BeforeDownEvent> GetLast90BeforeDownEvents()
