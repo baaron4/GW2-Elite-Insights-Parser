@@ -61,15 +61,13 @@ internal abstract class ActorDto
         dict.EnsureCapacity(dict.Count + npcs.Count);
         foreach (var (key, agent) in npcs)
         {
-            var actor = log.FindActor(agent);
-            var name = actor.Character;
-            if (name != agent.FirstName)
+            var name = agent.FirstName;
+            var actor = log.TryFindActor(agent);
+            var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
+            if (actor != null && agents.Count == 1)
             {
-                var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
-                if (agents.Count > 1) // prefer agent name for non-unique NPCs with name overrides
-                {
-                    name = agent.FirstName;
-                }
+                // prefer actor name for unique NPCs
+                name = actor.Character;
             }
             dict.Add(key, name);
         }
