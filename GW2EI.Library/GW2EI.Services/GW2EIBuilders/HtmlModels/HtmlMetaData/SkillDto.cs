@@ -107,7 +107,7 @@ internal class SkillDto : IDItemDto
                 ActualDuration = cl.ActualDuration,
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
-                Expected = cl.ExpectedScaledDuration,
+                Expected = cl.ExpectedScaledExecute,
                 Target = targetKey,
             };
             list.Add(cast);

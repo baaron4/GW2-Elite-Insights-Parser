@@ -56,7 +56,15 @@ public abstract class AnimatedCastEvent : CastEvent
         // Start is present
         if (startItem != null)
         {
-            ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
+            if (startItem.BuffDmg > 0)
+            {
+                ExpectedDuration = startItem.BuffDmg;
+                _expectedExecuteOverride = startItem.Value;
+            }
+            else
+            {
+                ExpectedDuration = startItem.Value;
+            }
             if (startItem.IsStateChange == StateChange.AnimationStart)
             {
                 if (startItem.DstAgent != 0)
