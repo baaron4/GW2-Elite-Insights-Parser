@@ -269,21 +269,14 @@
                 };
             },
             getTooltip(cast) {
-                var tooltip = `${cast.skill.name} at ${cast.time}s`;
+                let tooltip = `${cast.skill.name} at ${cast.time}s`;
                 if (cast.type !== RotationStatus.INSTANT) {
                     tooltip += ` for ${cast.duration}ms`;
                 }
                 tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
                 tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
                 if (cast.target) {
-                    tooltip += "<br>Target: ";
-                    if (cast.target.startsWith("u")) {
-                        const id = Number.parseInt(cast.target.slice(1));
-                        const target = logData.players.find((actor) => actor.uniqueID == id) || logData.targets.find((actor) => actor.uniqueID == id);
-                        tooltip += target ? target.name : "unknown";
-                    } else {
-                        tooltip += logData.npcMap[cast.target];
-                    }
+                    tooltip += `<br>Target: ${findTargetName(cast.target)}`;
                 }
                 return tooltip;
             },

@@ -31,12 +31,14 @@
                 };
             },
             getTooltip(cast) {
-                const tooltip = `${cast.skill.name} at ${cast.time}s`;
-                if (cast.type === RotationStatus.INSTANT) {
-                    return tooltip;
-                } else {
-                    return tooltip + ` for ${cast.duration}ms`;
+                let tooltip = `${cast.skill.name} at ${cast.time}s`;
+                if (cast.type !== RotationStatus.INSTANT) {
+                    tooltip += ` for ${cast.duration}ms`;
                 }
+                if (cast.target) {
+                    tooltip += `\nTarget: ${findTargetName(cast.target)}`;
+                }
+                return tooltip;
             },
             isAnimated(cast) {
                 return cast && cast.type !== RotationStatus.INSTANT;
@@ -70,7 +72,8 @@
                     skill: findSkill(false, skill[1]),
                     duration: skill[2],
                     type: skill[3],
-                    expected: skill[5]
+                    expected: skill[5],
+                    target: skill[6]
                 }));
             },
             actorRotationDurationIndexes: function () {
