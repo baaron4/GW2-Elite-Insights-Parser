@@ -18,7 +18,7 @@ public struct SkillCastDto
     public int Status;
     public double Quickness;
     public int Expected;
-    public int Target;
+    public string? Target;
 
     public class Converter : JsonConverter<SkillCastDto>
     {
@@ -36,7 +36,7 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.Status);
             writer.WriteNumberValue(value.Quickness);
             writer.WriteNumberValue(value.Expected);
-            writer.WriteNumberValue(value.Target);
+            writer.WriteStringValue(value.Target);
             writer.WriteEndArray();
         }
     }
@@ -88,15 +88,16 @@ internal class SkillDto : IDItemDto
             }
 
             var target = cl.Target;
-            var targetId = 0;
-            if (target.IsPlayer)
+            string? targetKey = null;
+            if (target.IsPlayer || log.LogData.Logic.TargetAgents.Contains(target))
             {
-                targetId = -target.UniqueID;
+                targetKey = "u" + target.UniqueID;
             }
             else if (target.IsNPC && !target.IsUnamedSpecies())
             {
-                used.npcs.TryAdd(target.ID, target);
-                targetId = target.ID;
+                var prefix = target.IsVolatileSpecies() ? "v" : "s";
+                targetKey = prefix + target.ID;
+                used.npcs.TryAdd(targetKey, target);
             }
 
             var cast = new SkillCastDto()
@@ -107,7 +108,7 @@ internal class SkillDto : IDItemDto
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
                 Expected = cl.ExpectedScaledDuration,
-                Target = targetId,
+                Target = targetKey,
             };
             list.Add(cast);
         }

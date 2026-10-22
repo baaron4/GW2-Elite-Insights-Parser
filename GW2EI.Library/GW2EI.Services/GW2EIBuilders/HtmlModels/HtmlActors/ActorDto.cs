@@ -56,12 +56,22 @@ internal abstract class ActorDto
         }
     }
 
-    public static void AssembleNPCs(Dictionary<int, AgentItem> npcs, Dictionary<int, string> dict, ParsedEvtcLog log)
+    public static void AssembleNPCs(Dictionary<string, AgentItem> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + npcs.Count);
-        foreach (var (id, agent) in npcs)
+        foreach (var (key, agent) in npcs)
         {
-            dict.Add(id, agent.FirstName);
+            var actor = log.FindActor(agent);
+            var name = actor.Character;
+            if (name != agent.FirstName)
+            {
+                var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
+                if (agents.Count > 1) // prefer agent name for non-unique NPCs with name overrides
+                {
+                    name = agent.FirstName;
+                }
+            }
+            dict.Add(key, name);
         }
     }
 }

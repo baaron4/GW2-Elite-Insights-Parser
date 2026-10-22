@@ -632,6 +632,16 @@ public class AgentItem
     {
         return ids.Any(IsSpecies);
     }
+
+    public bool IsVolatileSpecies()
+    {
+        return Type == AgentType.VolatileSpecies;
+    }
+
+    public bool IsCustomSpecies()
+    {
+        return Type == AgentType.StableSpecies && ID < 0;
+    }
     #endregion SPECIES
     #region INTERNAL UTILS
     internal void AddMergeFrom(AgentItem mergedFrom, long start, long end)

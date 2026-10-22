@@ -52,7 +52,7 @@ internal class LogDataDto
     public Dictionary<string, DamageModDto> DamageModMap = new(50);
     public Dictionary<string, DamageModDto> DamageIncModMap = new(50);
     public List<MechanicDto> MechanicMap = new(30);
-    public Dictionary<int, string> NpcMap = new();
+    public Dictionary<string, string> NpcMap = new();
     // Extra components
     public CombatReplayDto? CrData;
     public ChartDataDto? GraphData;
@@ -482,7 +482,7 @@ internal class LogDataDto
         public HashSet<OutgoingDamageModifier> damageMods = new(32);
         public HashSet<IncomingDamageModifier> incDamageMods = new(16);
         public Dictionary<long, SkillItem> skills = new(256);
-        public Dictionary<int, AgentItem> npcs = new(16);
+        public Dictionary<string, AgentItem> npcs = new(16);
     };
 
     public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)
