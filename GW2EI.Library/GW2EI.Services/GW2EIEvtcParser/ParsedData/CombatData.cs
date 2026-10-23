@@ -631,7 +631,7 @@ public partial class CombatData
         HasAgentInfo = evtcVersion.Build >= ArcDPSBuilds.AgentInfoAdded;
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
-        skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEvents, _metaDataEvents.BuffInfoEvents);
+        skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEventBySkillID, _metaDataEvents.BuffInfoEventByBuffID);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
         List<AnimatedCastEvent> animatedCastData = CreateCastEvents(castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);

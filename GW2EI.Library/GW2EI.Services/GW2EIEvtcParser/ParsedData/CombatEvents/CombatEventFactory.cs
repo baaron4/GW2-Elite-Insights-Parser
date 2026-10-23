@@ -171,14 +171,14 @@ partial class CombatData
                 break;
             case StateChange.BuffInfo:
             case StateChange.BuffFormula:
-                if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var buffInfoEvent))
+                if (metaDataEvents.BuffInfoEventByBuffID.TryGetValue(stateChangeEvent.SkillID, out var buffInfoEvent))
                 {
                     buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent);
                 }
                 else
                 {
                     buffInfoEvent = new BuffInfoEvent(stateChangeEvent, skillData);
-                    metaDataEvents.BuffInfoEvents[stateChangeEvent.SkillID] = buffInfoEvent;
+                    metaDataEvents.BuffInfoEventByBuffID[stateChangeEvent.SkillID] = buffInfoEvent;
                 }
                 if (stateChangeEvent.IsStateChange == StateChange.BuffInfo)
                 {
@@ -195,14 +195,15 @@ partial class CombatData
             case StateChange.SkillInfo:
             case StateChange.SkillTiming:
             case StateChange.SkillStep:
-                if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
+                if (metaDataEvents.SkillInfoEventBySkillID.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
                 {
                     skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent);
                 }
                 else
                 {
                     skillInfoEvent = new SkillInfoEvent(stateChangeEvent, skillData);
-                    metaDataEvents.SkillInfoEvents[stateChangeEvent.SkillID] = skillInfoEvent;
+                    metaDataEvents.SkillInfoEventBySkillID[stateChangeEvent.SkillID] = skillInfoEvent;
+                    metaDataEvents.SkillInfoEvents.Add(skillInfoEvent);
                 }
                 break;
             case StateChange.BreakbarState:
