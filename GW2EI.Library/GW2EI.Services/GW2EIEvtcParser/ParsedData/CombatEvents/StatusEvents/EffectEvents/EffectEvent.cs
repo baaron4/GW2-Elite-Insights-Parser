@@ -87,6 +87,7 @@ public abstract class EffectEvent : StatusEvent
     /// Flags of the effect
     /// </summary>
     public byte Flags { get; protected set; } = 0;
+    public IReadOnlyList<int> FlagsAsBits => GetIndividualFlagsAsBits(Flags);
 
     internal EffectEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs) : base(evtcItem, agentData)
     {

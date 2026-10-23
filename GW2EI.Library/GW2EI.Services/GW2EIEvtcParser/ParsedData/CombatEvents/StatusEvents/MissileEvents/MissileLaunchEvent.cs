@@ -42,6 +42,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public bool IsFirstLaunch { get; private set; }
     public readonly byte LaunchType;
     public readonly uint LaunchFlags;
+    public IReadOnlyList<int> LaunchFlagsAsBits => GetIndividualFlagsAsBits(LaunchFlags);
     public bool MaybeReflected => Missile.Src.Is(TargetedAgent) && !IsFirstLaunch;
     public MissileEvent Missile { get; internal set; }
     internal MissileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)

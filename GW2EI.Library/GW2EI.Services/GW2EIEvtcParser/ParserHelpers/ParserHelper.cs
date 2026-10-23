@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -720,5 +721,43 @@ public static class ParserHelper
             i++;
         }
         return -1;
+    }
+
+    public static unsafe IReadOnlyList<T> GetIndividualFlagsAsValue<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    {
+        var activeFlags = new List<T>();
+
+        int bitCount = sizeof(T) * 8;
+
+        for (int i = 0; i < bitCount; i++)
+        {
+            T bit = T.One << i;
+
+            if ((toDeFlag & bit) != T.Zero)
+            {
+                activeFlags.Add(bit);
+            }
+        }
+
+        return activeFlags;
+    }
+
+    public static unsafe IReadOnlyList<int> GetIndividualFlagsAsBits<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    {
+        var activeFlags = new List<int>();
+
+        int bitCount = sizeof(T) * 8;
+
+        for (int i = 0; i < bitCount; i++)
+        {
+            T bit = T.One << i;
+
+            if ((toDeFlag & bit) != T.Zero)
+            {
+                activeFlags.Add(i);
+            }
+        }
+
+        return activeFlags;
     }
 }
