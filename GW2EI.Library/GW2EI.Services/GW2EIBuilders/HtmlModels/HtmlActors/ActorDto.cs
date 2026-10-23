@@ -62,12 +62,11 @@ internal abstract class ActorDto
         foreach (var (key, agent) in npcs)
         {
             var name = agent.FirstName;
-            var actor = log.TryFindActor(agent);
             var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
-            if (actor != null && agents.Count == 1)
+            if (agents.Count == 1)
             {
                 // prefer actor name for unique NPCs
-                name = actor.Character;
+                name = log.FindActor(agent).Character;
             }
             dict.Add(key, name);
         }

@@ -183,17 +183,6 @@ public class ParsedEvtcLog : EvtcLog
     }
 
     /// <summary>
-    /// Find the corresponding actor, returns null otherwise
-    /// </summary>
-    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="SingleActor"/> for</param>
-    /// <returns></returns>
-    public SingleActor? TryFindActor(AgentItem agentItem)
-    {
-        InitActorDictionaries();
-        return _agentToActorDictionary.GetValueOrDefault(agentItem);
-    }
-
-    /// <summary>
     /// Find the corresponding actor, creates one otherwise
     /// </summary>
     /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="SingleActor"/> for</param>
