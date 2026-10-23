@@ -27,10 +27,10 @@ public class ParsedEvtcLog : EvtcLog
 
     internal static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
-        var rank = combatData.GetNPCRank(singleActor.AgentItem);
+        var rank = combatData.GetNPCRankPrefix(singleActor.AgentItem);
         if (rank != null)
         {
-            singleActor.OverrideName(rank + " " + singleActor.Character);
+            singleActor.OverrideName(rank + singleActor.Character);
         }
     }
 

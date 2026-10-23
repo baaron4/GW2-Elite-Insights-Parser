@@ -432,26 +432,26 @@ partial class CombatData
         return GetTimeValueOrEmpty(_statusEvents.NPCInfoEventsBySrc, src.EnglobingAgentItem);
     }
 
-    public string? GetNPCRank(AgentItem src)
+    public string? GetNPCRankPrefix(AgentItem src)
     {
         var agentInfo = GetNPCInfoEvents(src).FirstOrDefault();
         if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
         {
             if (agentInfo.IsVeteran)
             {
-                return "Veteran";
+                return "Veteran ";
             }
             else if (agentInfo.IsElite)
             {
-                return "Elite";
+                return "Elite ";
             }
             else if (agentInfo.IsChampion)
             {
-                return "Champion";
+                return "Champion ";
             }
             else if (agentInfo.IsLegendary)
             {
-                return "Legendary";
+                return "Legendary ";
             }
         }
         return null;
