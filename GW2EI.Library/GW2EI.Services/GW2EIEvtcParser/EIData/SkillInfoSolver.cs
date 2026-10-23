@@ -161,7 +161,7 @@ internal static class SkillInfoSolver
                 flagToCheck &= ~pair.Key;
             }
             // We determine only one flag per call
-            if (ParserHelper.GetIndividualFlags(flagToCheck).Count > 0)
+            if (ParserHelper.GetIndividualFlagsAsValue(flagToCheck).Count > 0)
             {
                 return false;
             }

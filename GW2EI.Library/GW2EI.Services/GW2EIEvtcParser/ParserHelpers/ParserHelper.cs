@@ -723,7 +723,7 @@ public static class ParserHelper
         return -1;
     }
 
-    public static unsafe IReadOnlyList<T> GetIndividualFlags<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    public static unsafe IReadOnlyList<T> GetIndividualFlagsAsValue<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
     {
         var activeFlags = new List<T>();
 
@@ -736,6 +736,25 @@ public static class ParserHelper
             if ((toDeFlag & bit) != T.Zero)
             {
                 activeFlags.Add(bit);
+            }
+        }
+
+        return activeFlags;
+    }
+
+    public static unsafe IReadOnlyList<int> GetIndividualFlagsAsBits<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    {
+        var activeFlags = new List<int>();
+
+        int bitCount = sizeof(T) * 8;
+
+        for (int i = 0; i < bitCount; i++)
+        {
+            T bit = T.One << i;
+
+            if ((toDeFlag & bit) != T.Zero)
+            {
+                activeFlags.Add(i);
             }
         }
 

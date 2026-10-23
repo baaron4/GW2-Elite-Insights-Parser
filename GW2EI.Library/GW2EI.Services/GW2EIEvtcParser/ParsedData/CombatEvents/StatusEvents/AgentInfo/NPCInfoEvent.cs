@@ -4,6 +4,8 @@ public class NPCInfoEvent : AgentInfoEvent
 {
     public readonly uint SpeciesFlags = 0;
 
+    public IReadOnlyList<int> SpeciesFlagsAsBits => ParserHelper.GetIndividualFlagsAsBits(SpeciesFlags);
+
     public bool IsVeteran => (SpeciesFlags & (uint)ArcDPSEnums.SpeciesFlags.Veteran) > 0;
     public bool IsChampion => (SpeciesFlags & (uint)ArcDPSEnums.SpeciesFlags.Champion) > 0;
     public bool IsElite => (SpeciesFlags & (uint)ArcDPSEnums.SpeciesFlags.Elite) > 0;
