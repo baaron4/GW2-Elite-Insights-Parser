@@ -46,24 +46,24 @@
             getCastbarStyle(cast) {
                 const start = 1000 * cast.time;
                 const passed = this.time - start;
-                const full = Math.min(cast.expected, cast.duration);
                 const cancel = cast.type === RotationStatus.CANCEL;
-                if (!cancel && passed >= full) {
+                if (!cancel && passed >= cast.expected) {
                     return "background: #0c0";
                 } else {
-                    let color = "#e70";
-                    let fill = 100 * passed / full;
+                    const progress = 100 * passed / cast.expected;
+                    let fill = "#e70";
+                    let bg = "#840";
                     if (cancel) {
-                        color = "#e00";
-                        fill = 100 - fill;
+                        fill = "#e00";
+                        bg = "#600";
                     }
-                    return `background: linear-gradient(to right, ${color} ${fill}%, ${fill}%, #000 ${100 - fill}%`;
+                    return `background: linear-gradient(to right, ${fill} ${progress}%, ${progress}%, ${bg} ${100 - progress}%`;
                 }
             },
             getCastbarTimes(cast) {
                 const expected = cast.expected / 1000;
-                const progress = (this.time / 1000 - cast.time)
-                return `${progress.toFixed(2)} / ${expected.toFixed(2)}`;
+                const passed = this.time / 1000 - cast.time;
+                return `${passed.toFixed(2)} / ${expected.toFixed(2)}`;
             }
         },
         computed: {
