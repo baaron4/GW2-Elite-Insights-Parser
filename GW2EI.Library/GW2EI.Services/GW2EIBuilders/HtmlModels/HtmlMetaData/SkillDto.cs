@@ -62,6 +62,20 @@ internal class SkillDto : IDItemDto
         UnconditionalProc = log.SkillData.IsUnconditionalProc(skill.ID);
     }
 
+    private static readonly Dictionary<long, int?> ComputedControlReturns = new();
+
+    private static int? ComputeControlReturn(ParsedEvtcLog log, long skillID)
+    {
+        if (!ComputedControlReturns.TryGetValue(skillID, out var controlReturn))
+        {
+            var water = false; // TODO: handle underwater
+            var info = log.SkillData.Get(skillID).SkillInfo;
+            controlReturn = info?.GetAnimation(water).ComputeControlReturn();
+            ComputedControlReturns.Add(skillID, controlReturn);
+        }
+        return controlReturn;
+    }
+
     public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + skills.Count);
@@ -100,6 +114,16 @@ internal class SkillDto : IDItemDto
                 used.npcs.TryAdd(targetKey, target);
             }
 
+            var expected = cl.ActualDuration;
+            if (log.LogMetadata.EvtcBuild >= ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
+            {
+                var controlReturn = ComputeControlReturn(log, cl.SkillID);
+                if (controlReturn != null)
+                {
+                    expected = Math.Min(cl.ActualDuration, cl.Scale(controlReturn.Value));
+                }
+            }
+
             var cast = new SkillCastDto()
             {
                 Start = (cl.Time - phase.Start) / 1000.0,
@@ -107,7 +131,7 @@ internal class SkillDto : IDItemDto
                 ActualDuration = cl.ActualDuration,
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
-                Expected = cl.ExpectedScaledDuration,
+                Expected = expected,
                 Target = targetKey,
             };
             list.Add(cast);

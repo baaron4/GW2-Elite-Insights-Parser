@@ -23,11 +23,11 @@ public abstract class CastEvent : TimeCombatEvent
     public int SavedDuration { get; protected set; }
 
     public int ExpectedDuration { get; protected set; }
-    public int ExpectedScaledDuration => (int)(ExpectedDuration / TimeScale);
+    public int ExpectedScaledDuration => Scale(ExpectedDuration);
 
     protected int? _expectedExecuteOverride = null;
     public int ExpectedExecute => _expectedExecuteOverride ?? ExpectedDuration;
-    public int ExpectedScaledExecute => (int)(ExpectedExecute / TimeScale);
+    public int ExpectedScaledExecute => Scale(ExpectedExecute);
 
     public int ActualDuration { get; protected set; }
 
@@ -72,6 +72,11 @@ public abstract class CastEvent : TimeCombatEvent
     }
 
     public abstract bool IgnoreOnRotationRender();
+
+    public int Scale(int duration)
+    {
+        return (int)(duration / TimeScale);
+    }
 }
 
 public static partial class ListExt
