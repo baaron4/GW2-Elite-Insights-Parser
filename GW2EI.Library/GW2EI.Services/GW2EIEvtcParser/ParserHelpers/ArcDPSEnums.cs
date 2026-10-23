@@ -1,6 +1,4 @@
-﻿using GW2EIEvtcParser.ParsedData;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 public static class ArcDPSEnums
 {
@@ -11,6 +9,7 @@ public static class ArcDPSEnums
     {
         public const int StartOfLife = int.MinValue;
         //
+        public const int AnimWithScaledDurations = 20191107;
         public const int ProperConfusionDamageSimulation = 20210529;
         public const int ScoringSystemChange = 20210800; // was somewhere around there
         public const int DirectX11Update = 20210923;
@@ -44,6 +43,7 @@ public static class ArcDPSEnums
         public const int VisibilityOnStateChange = 20260527;
         public const int GadgetCapturesAdded = 20260602;
         public const int AgentInfoAdded = 20260929;
+        public const int SkillInfoRework = 20261021;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -109,7 +109,7 @@ public static class ArcDPSEnums
     {
         None = 0, // not used - not this kind of event
         Normal = 1, // started skill/animation activation
-        Quickness = 2, // unused as of nov 5 2019
+        Quickness = 2, // unused as of nov 7 2019
         Minimum = 3,  // stopped skill activation with reaching tooltip time
         Cancel = 4, // stopped skill activation without reaching tooltip time
         Reset = 5, // animation completed fully
@@ -353,6 +353,7 @@ public static class ArcDPSEnums
         FlyTo = 88,
         AgentInfo = 89,
         PvPScoreUpdate = 90,
+        SkillStep = 91,
         Unknown
     };
 
@@ -576,15 +577,15 @@ public static class ArcDPSEnums
         return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
     }*/
     // WIP
-    public enum SkillAction : byte
+    public enum TriggerType : ulong
     {
         EffectHappened = 4,
         AnimationCompleted = 5,
-        Unknown = byte.MaxValue,
+        Unknown = ulong.MaxValue,
     }
-    public static SkillAction GetSkillAction(byte bt)
+    public static TriggerType GetSkillTrigger(ulong bt)
     {
-        return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
+        return Enum.IsDefined(typeof(TriggerType), bt) ? (TriggerType)bt : TriggerType.Unknown;
     }
 
     // Squad Marker index
@@ -730,7 +731,7 @@ public static class ArcDPSEnums
         NotApplicable,
     }
 
-    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, EvtcVersionEvent evtcVersion)
+    public static GadgetTypeEnum GetGadgetType(uint unsignedInt, int evtcBuild)
     {
         return unsignedInt < (uint)GadgetTypeEnum.NotApplicable ? (GadgetTypeEnum)unsignedInt
             : GadgetTypeEnum.NotApplicable;

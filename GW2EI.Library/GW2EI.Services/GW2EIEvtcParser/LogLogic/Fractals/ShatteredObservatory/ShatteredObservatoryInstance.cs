@@ -263,7 +263,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Skorvald.DetectUnknownAnomalies(agentData, combatData);
-        Artsariiv.DetectCloneArtsariivs(evtcVersion, agentData, combatData);
+        Artsariiv.DetectCloneArtsariivs(agentData, combatData);
         Arkk.IdentifyGadgets(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Skorvald.RenameAnomalies(Targets);

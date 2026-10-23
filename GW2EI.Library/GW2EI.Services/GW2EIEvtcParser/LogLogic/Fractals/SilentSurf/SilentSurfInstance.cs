@@ -3,7 +3,6 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIGW2API;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -44,7 +43,7 @@ internal class SilentSurfInstance : SilentSurf
             var determinedBuffs = combatData.GetBuffDataByIDByDst(SkillIDs.Determined762, lastKanaxai);
             var enterCombat = combatData.GetEnterCombatEvents(lastKanaxai).First();
             var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent && x.Time > enterCombat.Time);
-            if (determinedApply != null && !combatData.GetDespawnEvents(lastKanaxai).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
+            if (determinedApply != null && !combatData.GetDespawnEvents(lastKanaxai).Any(x => x.IsAtTime(determinedApply)))
             {
                 successHandler.SetSuccess(true, determinedApply.Time);
             }
@@ -74,7 +73,7 @@ internal class SilentSurfInstance : SilentSurf
                 bool success = false;
                 long end = kanaxai.LastAware;
                 var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent && x.Time > start);
-                if (determinedApply != null && !log.CombatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
+                if (determinedApply != null && !log.CombatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => x.IsAtTime(determinedApply)))
                 {
                     success = true;
                     end = determinedApply.Time;

@@ -20,7 +20,7 @@ internal static class VirtuosoHelper
                 if(evt.Src.Spec != Spec.Virtuoso) {
                     return false;
                 }
-                if (!combatData.GetBuffDataByIDByDst(DistortionBuff, evt.Src).Any(buffEvt => buffEvt is BuffApplyEvent && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffDataByIDByDst(DistortionBuff, evt.Src).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.IsAtTime(evt)))
                 {
                     return false;
                 }

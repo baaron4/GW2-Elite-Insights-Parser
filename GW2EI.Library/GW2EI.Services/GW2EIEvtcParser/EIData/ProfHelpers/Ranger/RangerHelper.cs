@@ -778,7 +778,7 @@ internal static class RangerHelper
             {
                 foreach (EffectEvent effect in sublimeConversions1)
                 {
-                    if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (sublimeConversions2.Any(x => x.IsAtTime(effect)))
                     {
                         (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                         var connector = new PositionConnector(effect.Position);

@@ -667,7 +667,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 environmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
                 if (hasDetonates && effect.Dst.TryGetCurrentPosition(log, end, out var endPos))
                 {
-                    EffectEvent? detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && (x.Position - endPos.Value).XY().Length() < maxDist);
+                    EffectEvent? detonate = detonates.FirstOrDefault(x => x.IsAtTime(end) && (x.Position - endPos.Value).XY().Length() < maxDist);
                     if (detonate != null)
                     {
                         environmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));

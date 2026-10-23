@@ -105,7 +105,7 @@ internal static class EngineerHelper
         {
             foreach (EffectEvent e in mineFields)
             {
-                if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
+                if (e.HasDynamicEndTime && effect.IsAtTime(e.DynamicEndTime))
                 {
                     return ifFound;
                 }
@@ -406,7 +406,7 @@ internal static class EngineerHelper
                 {
                     foreach (EffectEvent mine in throwMines)
                     {
-                        if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
+                        if (mine.HasDynamicEndTime && detonation.IsAtTime(mine.DynamicEndTime))
                         {
                             isThrowMine = true;
                             AddMineDecoration(log, replay, mine, color, throwMine, EffectImages.EffectThrowMine);
@@ -421,7 +421,7 @@ internal static class EngineerHelper
                     // The mine field has 10 events, all using the same GUID, 5 with 0 duration and 5 with infinite duration, filter out half of them.
                     foreach (EffectEvent mine in mineFields.Where(x => x.Duration > 0))
                     {
-                        if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
+                        if (mine.HasDynamicEndTime && detonation.IsAtTime(mine.DynamicEndTime))
                         {
                             isMineField = true;
                             AddMineDecoration(log, replay, mine, color, mineField, EffectImages.EffectMineField);

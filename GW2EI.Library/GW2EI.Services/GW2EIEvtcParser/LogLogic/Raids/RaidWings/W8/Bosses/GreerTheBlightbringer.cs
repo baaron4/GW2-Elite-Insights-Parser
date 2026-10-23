@@ -807,14 +807,11 @@ internal class GreerTheBlightbringer : MountBalrior
         var blobOfBlightMiniOrbs = blobOfBlightOrbs.Where(x => x.LaunchEvents.Any(x => x.Speed == 0.4f || x.Speed == 0.5f));
 
         // Main Orbs
-        foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
+        CombatReplayDecorationContainer.AddHomingMissiles(log, blobOfBlightMainOrbs, (launch, lifespan, connector) =>
         {
-            CombatReplayDecorationContainer.AddHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
-            {
-                replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, connector));
-                replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, connector));
-            });
-        }
+            replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, connector));
+            replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, connector));
+        });
 
         // Mini Orbs
         replay.Decorations.AddNonHomingMissiles(log, blobOfBlightMiniOrbs, Colors.GreenishYellow, 0.3, 25);

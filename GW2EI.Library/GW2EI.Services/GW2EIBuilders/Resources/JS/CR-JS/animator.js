@@ -78,19 +78,11 @@ const Types = {
     CustomPolygon: 24,
 };
 
-function getDefaultCombatReplayTime() {
-    const time = EIUrlParams.get("crTime");
-    if (!time) {
-        return 0;
-    }
-    return Math.max(parseFloat(time), 0.0) * 1000;
-}
-
 let animator = null;
 let animationControlComponent = null;
 // reactive structures
 const reactiveAnimationData = {
-    time: getDefaultCombatReplayTime(),
+    time: 0,
     selectedActorID: null,
     animated: false,
     range: {
@@ -105,12 +97,6 @@ const reactiveAnimationData = {
         times: [],
     }
 };
-
-const sliderDelimiter = {
-    min: -1,
-    max: -1,
-    name: logData.phases[0].name
-}
 //
 
 let InchToPixel = 10;
@@ -370,10 +356,7 @@ class Animator {
         this.reactiveDataStatus.range.max = this.times[this.times.length - 1];
     }
 
-    attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
-        // animation
-        this.timeSlider = document.getElementById(timeRangeID);
-        this.timeSliderDisplay = document.getElementById(timeRangeDisplayID);
+    attachDOM(mainCanvasID, bgCanvasID, pickCanvasID) {
         // main canvas
         this.mainCanvas = document.getElementById(mainCanvasID);
         this.mainCanvas.style.width = this.mainCanvas.width + "px";
@@ -634,10 +617,6 @@ class Animator {
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
         }
-    }
-
-    updateTextInput() {
-        this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
     }
 
     updateInputTime(value, offset) {
@@ -1396,10 +1375,6 @@ function animateCanvas(noRequest) {
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === firstTime && animator.backwards)) {
         animator.stopAnimate(true);
-    }
-    animator.timeSlider.value = (animator.reactiveDataStatus.time - animator.reactiveDataStatus.range.min).toString()
-    if (noRequest > updateText) {
-        animator.updateTextInput();
     }
     animator.draw();
     if (noRequest > noUpdateTime && animator.animation !== null) {

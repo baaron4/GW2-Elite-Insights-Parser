@@ -92,8 +92,8 @@ if (!String.prototype.includes) {
 }
 
 const themes = {
-    "yeti": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/yeti/bootstrap.min.css",
-    "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/slate/bootstrap.min.css"
+    "yeti": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/yeti/bootstrap.min.css",
+    "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/slate/bootstrap.min.css"
 };
 
 const WeaponIcons = {

@@ -5,10 +5,10 @@ public class GadgetInfoEvent : AgentInfoEvent
     public readonly ArcDPSEnums.GadgetTypeEnum GadgetType = ArcDPSEnums.GadgetTypeEnum.NotApplicable;
     public readonly uint GadgetTypeValue = uint.MaxValue;
 
-    internal GadgetInfoEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, evtcVersion)
+    internal GadgetInfoEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         GadgetTypeValue = (uint)evtcItem.Value;
-        GadgetType = ArcDPSEnums.GetGadgetType(GadgetTypeValue, evtcVersion);
+        GadgetType = ArcDPSEnums.GetGadgetType(GadgetTypeValue, evtcItem.Build);
     }
 
 }

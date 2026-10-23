@@ -186,13 +186,13 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    internal static void FindLamps(EvtcVersionEvent evtcVersion, IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
+    internal static void FindLamps(IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
     {
         var qadimLampMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
                 MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent, true))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .Select(x => new MarkerGUIDEvent(x))
             .FirstOrDefault();
         if (qadimLampMarkerGUID != null)
         {
@@ -255,7 +255,7 @@ internal class Qadim : MythwrightGambit
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
             .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
         FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
-        FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
+        FindLamps(maxHPUpdates, agentData, combatData);
         FindPyres(gw2Build, agentData, combatData);
         // Pyres
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);

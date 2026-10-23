@@ -16,6 +16,14 @@ public class NPC : SingleActor
         }
     }
 
+    internal NPC(AgentItem agent, ParsedEvtcLog log) : this(agent)
+    {
+        if (log.CombatData.HasAgentInfo)
+        {
+            ParsedEvtcLog.AddRankToSpecies(log.CombatData, this);
+        }
+    }
+
     internal override void OverrideName(string name)
     {
         Character = name;

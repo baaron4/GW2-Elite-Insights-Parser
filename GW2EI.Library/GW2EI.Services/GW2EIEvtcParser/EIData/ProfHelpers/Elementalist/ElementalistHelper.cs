@@ -485,7 +485,7 @@ internal static class ElementalistHelper
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in geysers)
                 {
-                    if (!geyserSplash.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (!geyserSplash.Any(x => x.IsAtTime(effect)))
                     {
                         continue;
                     }

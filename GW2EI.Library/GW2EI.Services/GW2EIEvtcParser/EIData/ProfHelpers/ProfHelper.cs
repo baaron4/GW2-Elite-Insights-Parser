@@ -119,7 +119,7 @@ internal static class ProfHelper
         new DamageCastFinder(RelicOfTheLastTyrantDamage, RelicOfTheLastTyrantDamage)
             .UsingChecker((hde, combatData, agentData, skillData) =>
             {
-                return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant && x.RemovedStacks == 5) != null;
+                return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => x.IsAtTime(hde) && x.RemovedStacks == 5) != null;
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)

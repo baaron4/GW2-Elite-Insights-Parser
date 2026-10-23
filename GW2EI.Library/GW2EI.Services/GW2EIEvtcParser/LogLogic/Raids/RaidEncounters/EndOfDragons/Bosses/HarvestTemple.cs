@@ -751,7 +751,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         return res;
     }
 
-    private static void LegacyHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private static void LegacyHandleCriticalAgents(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         List<TargetID> idsToUse =
         [
@@ -866,7 +866,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         }
     }
 
-    internal static void PostMissilesHandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void PostMissilesHandleCriticalAgents(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         HashSet<long> usefulMissileIDs =
         [
@@ -901,7 +901,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
                 usefulEffectGUIDs.Any(y => y.Equals(x.SrcAgent, x.DstAgent, true)))
-            .Select(x => new EffectGUIDEvent(x, evtcVersion))
+            .Select(x => new EffectGUIDEvent(x))
             .DistinctBy(x => x.EffectID)
             .Select(effectGUIDEvent => (effectGUIDEvent, combatData.Where(y => y.IsEffect && y.SkillID == effectGUIDEvent.EffectID)))
             .GroupBy(x => x.effectGUIDEvent)
@@ -1183,11 +1183,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
     {
         if (evtcVersion.Build >= ArcDPSBuilds.MissilesIntroduced)
         {
-            PostMissilesHandleCriticalAgents(evtcVersion, logData, agentData, combatData, extensions);
+            PostMissilesHandleCriticalAgents(agentData, combatData, extensions);
         }
         else
         {
-            LegacyHandleCriticalAgents(evtcVersion, logData, agentData, combatData, extensions);
+            LegacyHandleCriticalAgents(logData, agentData, combatData, extensions);
         }
     }
 
@@ -1197,7 +1197,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
                 (EffectGUIDs.HarvestTempleFailedGreen.Equals(x.SrcAgent, x.DstAgent, true) || EffectGUIDs.HarvestTempleSuccessGreen.Equals(x.SrcAgent, x.DstAgent, true) || EffectGUIDs.HarvestTempleGreen.Equals(x.SrcAgent, x.DstAgent, true)))
-            .Select(x => new EffectGUIDEvent(x, evtcVersion));
+            .Select(x => new EffectGUIDEvent(x));
         Dictionary<TargetID, AgentItem> greenAgents = new(16);
         Dictionary<long, EffectGUIDEvent> dummyEffectGUIDs = [];
         List<CombatItem> toAdd = [];
