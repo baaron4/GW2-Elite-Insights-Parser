@@ -246,7 +246,7 @@ function getDamageGraphName(damageMode, graphMode) {
 
 function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
     if (rotationData) {
-        var rotaTrace = {
+        const rotaTrace = {
             x: [],
             base: [],
             y: [],
@@ -272,17 +272,17 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             },
             showlegend: false
         };
-        for (var i = 0; i < rotationData.length; i++) {
-            var item = rotationData[i];
-            var x = item[0];
-            var skillId = item[1];
-            var duration = item[2];
-            var endType = item[3];
-            var quick = item[4];
-            var skill = findSkill(false, skillId);
-            var aa = false;
-            var icon;
-            var name = '???';
+        for (let i = 0; i < rotationData.length; i++) {
+            const item = rotationData[i];
+            const x = item[0];
+            const skillId = item[1];
+            let duration = item[2];
+            const endType = item[3];
+            const quick = item[4];
+            const skill = findSkill(false, skillId);
+            let aa = false;
+            let icon;
+            let name = '???';
             if (skill) {
                 aa = skill.aa;
                 icon = skill.icon;
@@ -293,24 +293,31 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
                 icon = null;
             }
 
-            var fillColor;
-            var originalDuration = duration;
+            let fillColor;
+            const originalDuration = duration;
+            let yOffset = 1.2;
+            let width = aa ? 0.5 : 1.0;
             if (endType === RotationStatus.REDUCED) { 
                 fillColor = 'rgb(0,0,255)'; 
             } else if (endType === RotationStatus.CANCEL) { 
                 fillColor = 'rgb(255,0,0)'; 
-            } else if (endType === RotationStatus.FULL) { 
+            } else if (endType === RotationStatus.FULL || endType === RotationStatus.CUSTOM_MOVEMENT) { 
                 fillColor = 'rgb(0,255,0)'; 
+                if (endType === RotationStatus.CUSTOM_MOVEMENT) {
+                    width = 0.3;
+                    yOffset = 1;
+                }
             } else if (endType === RotationStatus.INSTANT) { 
                 fillColor = 'rgb(0,255,255)'; 
                 duration = 50; // so that the quad is visible
+                width = 0.7;
             } else { // UNKNOWN
                 fillColor = 'rgb(255,255,0)'; 
             }
 
-            var clampedX = Math.max(x, 0);
-            var diffX = clampedX - x;
-            var clampedWidth = Math.min(x + duration / 1000.0, phase.duration / 1000.0) - x - diffX;
+            const clampedX = Math.max(x, 0);
+            const diffX = clampedX - x;
+            const clampedWidth = Math.min(x + duration / 1000.0, phase.duration / 1000.0) - x - diffX;
             if (!aa && icon) {
                 images.push({
                     source: icon,
@@ -327,15 +334,15 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
 
             rotaTrace.x.push(clampedWidth - 0.001);
             rotaTrace.base.push(clampedX);
-            rotaTrace.y.push(1.2);
-            var text = `${name} at ${x}s`;
+            rotaTrace.y.push(yOffset);
+            const text = `${name} at ${x}s`;
             rotaTrace.text.push(endType === RotationStatus.INSTANT ? text : text + ` for ${originalDuration}ms`);
-            rotaTrace.width.push(aa ? 0.5 : 1.0);
+            rotaTrace.width.push(width);
             rotaTrace.marker.color.push(fillColor);
 
-            var outlineR = quick > 0.0 ? quick * quickColor.r + (1.0 - quick) * normalColor.r : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
-            var outlineG = quick > 0.0 ? quick * quickColor.g + (1.0 - quick) * normalColor.g : -quick * slowColor.g + (1.0 + quick) * normalColor.g;
-            var outlineB = quick > 0.0 ? quick * quickColor.b + (1.0 - quick) * normalColor.b : -quick * slowColor.b + (1.0 + quick) * normalColor.b;
+            const outlineR = quick > 0.0 ? quick * quickColor.r + (1.0 - quick) * normalColor.r : -quick * slowColor.r + (1.0 + quick) * normalColor.r;
+            const outlineG = quick > 0.0 ? quick * quickColor.g + (1.0 - quick) * normalColor.g : -quick * slowColor.g + (1.0 + quick) * normalColor.g;
+            const outlineB = quick > 0.0 ? quick * quickColor.b + (1.0 - quick) * normalColor.b : -quick * slowColor.b + (1.0 + quick) * normalColor.b;
             rotaTrace.marker.line.color.push('rgb(' + outlineR + ',' + outlineG + ',' + outlineB + ')');
         }
         data.push(rotaTrace);
