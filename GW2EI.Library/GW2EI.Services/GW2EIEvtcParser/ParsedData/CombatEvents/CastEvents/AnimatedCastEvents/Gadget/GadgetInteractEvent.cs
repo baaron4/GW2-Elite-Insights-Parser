@@ -31,7 +31,7 @@ public class GadgetInteractEvent : AnimatedCastEvent
         }
     }
 
-    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : base(caster, skill, start, dur, effectTarget)
+    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, effectTarget, status)
     {
     }
 }
