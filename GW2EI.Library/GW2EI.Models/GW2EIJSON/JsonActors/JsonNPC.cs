@@ -34,7 +34,8 @@ public class JsonNPC : JsonActor
     }
 
     /// <summary>
-    /// Species ID of the target
+    /// Species ID of the target \n
+    /// Negative IDs are EI's custom species IDs
     /// </summary>
     public int Id;
 

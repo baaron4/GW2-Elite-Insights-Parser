@@ -492,13 +492,15 @@ public class JsonLog
     public IReadOnlyList<string>? UploadLinks;
 
     /// <summary>
-    /// Dictionary of skills' description, the key is in "'s' + id" format
+    /// Dictionary of skills' description, the key is in "'s' + id" format \n
+    /// Negative ids are EI's custom skill ids.
     /// </summary>
     /// <seealso cref="SkillDesc"/>
     public IReadOnlyDictionary<string, SkillDesc>? SkillMap;
 
     /// <summary>
-    /// Dictionary of buffs' description, the key is in "'b' + id" format
+    /// Dictionary of buffs' description, the key is in "'b' + id" format \n
+    /// Negative ids are EI's custom buff ids.
     /// </summary>
     /// <seealso cref="BuffDesc"/>
     public IReadOnlyDictionary<string, BuffDesc>? BuffMap;
