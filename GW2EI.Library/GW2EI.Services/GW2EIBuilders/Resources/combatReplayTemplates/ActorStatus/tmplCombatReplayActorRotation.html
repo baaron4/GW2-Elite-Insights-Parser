@@ -33,7 +33,13 @@
             getTooltip(cast) {
                 let tooltip = `${cast.skill.name} at ${cast.time}s`;
                 if (cast.type !== RotationStatus.INSTANT) {
-                    tooltip += ` for ${cast.duration}ms`;
+                    tooltip += `\nCast duration: ${cast.duration}ms`;
+                }
+                if (cast.expected != 0) {
+                    tooltip += `\nExpected duration: ${cast.expected}ms`;
+                }
+                if (cast.duration > cast.expected) {
+                    tooltip += `\nAftercast: ${cast.duration - cast.expected}ms`;
                 }
                 if (cast.target) {
                     tooltip += `\nTarget: ${findTargetName(cast.target)}`;
