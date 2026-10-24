@@ -36,8 +36,7 @@ internal class MinionCastCastFinder : CheckedCastFinder<AnimatedCastEvent>
                         lastTime = cast.Time;
                         continue;
                     }
-                    var instant = new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster(), Target ? cast.Target : ParserHelper._unknownAgent);
-                    result.Add(instant);
+                    result.Add(new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster(), Target ? cast.Target : ParserHelper._unknownAgent));
                 }
             }
         }
