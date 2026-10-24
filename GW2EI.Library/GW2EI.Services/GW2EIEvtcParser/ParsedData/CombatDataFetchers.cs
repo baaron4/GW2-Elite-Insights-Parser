@@ -392,7 +392,7 @@ partial class CombatData
         return _metaDataEvents.BuffInfoEventByBuffID.GetValueOrDefault(buffID);
     }
 
-    public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvents(byte category)
+    public IReadOnlyList<BuffInfoEvent> GetBuffInfoEventsByCategory(byte category)
     {
         return _metaDataEvents.BuffInfoEventsByCategory.GetValueOrEmpty(category);
     }
