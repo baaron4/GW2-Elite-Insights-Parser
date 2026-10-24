@@ -1,8 +1,9 @@
-﻿using GW2EIEvtcParser.Interfaces;
+﻿// May not be needed but have it ready in case the skill in game enums are updated
+/*
+using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -161,7 +162,7 @@ internal static class SkillInfoSolver
                 flagToCheck &= ~pair.Key;
             }
             // We determine only one flag per call
-            if (ParserHelper.GetIndividualFlagsAsValue(flagToCheck).Count > 0)
+            if (ParserHelper.GetIndividualFlagsAsValue(flagToCheck).Count > 1)
             {
                 return false;
             }
@@ -177,12 +178,13 @@ internal static class SkillInfoSolver
         }
     }
 
-    // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
     private static readonly Dictionary<SkillTimingDescriptor, long> _recognizerTiming = new()
     {
        
     };
     // Make sure LoopStart and LoopEnd are detected first via skill steps only containing those flags
+    // Each found flag is then removed from the flag value of the next steps, making it possible to detect combined values
+    // Eeach recognizer will try to recognize exactly one flag
     private static readonly Dictionary<SkillStepDescriptor, long> _recognizerStep = new()
     {
 
@@ -265,3 +267,4 @@ internal static class SkillInfoSolver
         }
     }
 }
+*/
