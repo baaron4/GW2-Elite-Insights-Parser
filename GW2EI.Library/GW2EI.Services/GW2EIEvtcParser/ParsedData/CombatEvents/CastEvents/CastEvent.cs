@@ -38,6 +38,7 @@ public abstract class CastEvent : TimeCombatEvent
     public int ExpectedScaledExecute => ApplyTimeScale(ExpectedExecute);
 
     public int ActualDuration { get; protected set; }
+    public int ActualUnscaledDuration => UnapplyTimeScale(ActualDuration);
 
     public long EndTime => Time + ActualDuration;
     public long ExpectedEndTime => Time + ExpectedDuration;
@@ -79,6 +80,11 @@ public abstract class CastEvent : TimeCombatEvent
     public int ApplyTimeScale(int duration)
     {
         return (int)(duration / TimeScale);
+    }
+
+    public int UnapplyTimeScale(int duration)
+    {
+        return (int)(duration * TimeScale);
     }
 }
 

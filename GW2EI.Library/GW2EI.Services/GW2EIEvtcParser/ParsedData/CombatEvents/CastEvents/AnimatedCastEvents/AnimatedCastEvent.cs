@@ -8,12 +8,12 @@ public abstract class AnimatedCastEvent : CastEvent
     public readonly AnimationStart AnimStart;
     public readonly AnimationStop AnimStop;
 
-    private void SetAcceleration(CombatItem endItem, int scaledActualDuration)
+    private void SetAcceleration(CombatItem endItem, int unscaledActualDuration)
     {
         TimeScale = 1.0;
-        if (scaledActualDuration > 0)
+        if (unscaledActualDuration > 0)
         {
-            TimeScale = (double)scaledActualDuration / ActualDuration;
+            TimeScale = (double)unscaledActualDuration / ActualDuration;
             if (TimeScale > 1.0)
             {
                 // faster, convert to quickness percent
@@ -94,7 +94,7 @@ public abstract class AnimatedCastEvent : CastEvent
         if (endItem != null)
         {
             ActualDuration = endItem.Value;
-            var scaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
+            var unscaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
             // Start missing
             if (startItem == null)
             {
@@ -108,16 +108,16 @@ public abstract class AnimatedCastEvent : CastEvent
                 if (Math.Abs(ActualDuration - expectedActualDuration) > ParserHelper.ServerDelayConstant)
                 {
                     ActualDuration = expectedActualDuration;
-                    scaledActualDuration = 0;
+                    unscaledActualDuration = 0;
                 }
             }
             if (animatedDodge)
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;
-                scaledActualDuration = 0;
+                unscaledActualDuration = 0;
             }
-            SetAcceleration(endItem, scaledActualDuration);
+            SetAcceleration(endItem, unscaledActualDuration);
             AnimStop = GetAnimationStop(endItem.Result);
 
         }
