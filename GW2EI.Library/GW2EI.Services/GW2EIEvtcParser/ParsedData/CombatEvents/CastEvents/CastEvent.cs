@@ -33,8 +33,8 @@ public abstract class CastEvent : TimeCombatEvent
     public int ExpectedDuration { get; protected set; }
     public int ExpectedScaledDuration => ApplyTimeScale(ExpectedDuration);
 
-    protected int? _expectedExecuteOverride = null;
-    public int ExpectedExecute => _expectedExecuteOverride ?? ExpectedDuration;
+    protected int? _expectedExecute = null;
+    public int ExpectedExecute => _expectedExecute ?? ExpectedDuration;
     public int ExpectedScaledExecute => ApplyTimeScale(ExpectedExecute);
 
     public int ActualDuration { get; protected set; }

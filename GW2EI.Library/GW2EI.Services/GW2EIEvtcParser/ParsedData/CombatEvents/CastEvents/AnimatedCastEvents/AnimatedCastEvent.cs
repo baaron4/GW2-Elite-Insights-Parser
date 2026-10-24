@@ -59,7 +59,7 @@ public abstract class AnimatedCastEvent : CastEvent
             if (animWithScaledDurations)
             {
                 ExpectedDuration = startItem.BuffDmg;
-                _expectedExecuteOverride = startItem.Value;
+                _expectedExecute = startItem.Value;
             }
             else
             {
