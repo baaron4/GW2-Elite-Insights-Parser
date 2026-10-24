@@ -9,6 +9,10 @@ public class InstantCastEvent : CastEvent
         ActualDuration = 0;
         ExpectedDuration = 0;
     }
+    internal InstantCastEvent(long time, SkillItem skill, AgentItem caster, AgentItem target) : this(time, skill, caster)
+    {
+        Target = target;
+    }
 
     internal InstantCastEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
@@ -16,6 +20,7 @@ public class InstantCastEvent : CastEvent
         ActualDuration = 0;
         ExpectedDuration = 0;
     }
+
     public override bool IgnoreOnRotationRender()
     {
         return false;

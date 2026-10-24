@@ -328,19 +328,9 @@ internal class QadimThePeerless : TheKeyOfAhdashim
                         // Caustic Chaos - Arrow Projectile
                         case CausticChaosProjectile:
                             {
-                                double acceleration = cast.Acceleration;
-                                double ratio = 1.0;
-                                if (acceleration > 0)
-                                {
-                                    ratio = acceleration * 0.5 + 1;
-                                }
-                                else
-                                {
-                                    ratio = acceleration * 0.6 + 1;
-                                }
                                 uint chaosLength = 2600;
                                 uint chaosWidth = 100;
-                                int aimTime = (int)(cast.ExpectedDuration * ratio);
+                                int aimTime = cast.ExpectedScaledDuration;
                                 lifespan = (cast.Time, cast.EndTime);
                                 (long start, long end) lifespanProj = (lifespan.start + aimTime, lifespan.end);
                                 if (replay.Rotations.Count != 0)

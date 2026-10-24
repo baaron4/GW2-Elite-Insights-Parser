@@ -1,12 +1,17 @@
 <template>
-    <div class="d-flex align-items-center actor-rotation">
-        <div v-if="castingSkill">
-            <img class="icon-cur-cr-rota" :class="getIconClass(castingSkill)" :src="castingSkill.skill.icon" :title="getTooltip(castingSkill)" />
+    <div class="actor-rotation">
+        <div v-if="isAnimated(castingSkill)" class="actor-rotation-castbar" :style="getCastbarStyle(castingSkill)">
+            {{ getCastbarTimes(castingSkill) }}
         </div>
-        <div v-else class="empty-icon-cur-cr-rota"></div>
+        <div class="d-flex align-items-end actor-rotation-casts">
+            <div v-if="castingSkill">
+                <img class="icon-cur-cr-rota" :class="getIconClass(castingSkill)" :src="castingSkill.skill.icon" :title="getTooltip(castingSkill)" />
+            </div>
+            <div v-else class="empty-icon-cur-cr-rota"></div>
 
-        <div v-for="next in nextSkills">
-            <img class="icon-next-cr-rota" :class="getIconClass(next)" :src="next.skill.icon" :title="getTooltip(next)" />
+            <div v-for="next in nextSkills">
+                <img class="icon-next-cr-rota" :class="getIconClass(next)" :src="next.skill.icon" :title="getTooltip(next)" />
+            </div>
         </div>
     </div>
 </template>
@@ -21,18 +26,44 @@
                 return {
                     'rot-cancelled': cast.type === RotationStatus.CANCEL,
                     'rot-unknown': cast.type === RotationStatus.UNKNOWN,
-                    'rot-animfull': cast.type === RotationStatus.FULL,
-                    'rot-animfull': cast.type === RotationStatus.CUSTOM_MOVEMENT,
+                    'rot-animfull': cast.type === RotationStatus.FULL || cast.type === RotationStatus.CUSTOM_MOVEMENT,
                     'rot-instant': cast.type === RotationStatus.INSTANT
                 };
             },
             getTooltip(cast) {
-                const tooltip = `${cast.skill.name} at ${cast.time}s`;
-                if (cast.type === RotationStatus.INSTANT) {
-                    return tooltip;
-                } else {
-                    return tooltip + ` for ${cast.duration}ms`;
+                let tooltip = `${cast.skill.name} at ${cast.time}s`;
+                if (cast.type !== RotationStatus.INSTANT) {
+                    tooltip += ` for ${cast.duration}ms`;
                 }
+                if (cast.target) {
+                    tooltip += `\nTarget: ${findTargetName(cast.target)}`;
+                }
+                return tooltip;
+            },
+            isAnimated(cast) {
+                return cast && cast.type !== RotationStatus.INSTANT;
+            },
+            getCastbarStyle(cast) {
+                const start = 1000 * cast.time;
+                const passed = this.time - start;
+                const cancel = cast.type === RotationStatus.CANCEL;
+                if (!cancel && passed >= cast.expected) {
+                    return "background: #0c0";
+                } else {
+                    const progress = 100 * passed / cast.expected;
+                    let fill = "#e70";
+                    let bg = "#840";
+                    if (cancel) {
+                        fill = "#e00";
+                        bg = "#600";
+                    }
+                    return `background: linear-gradient(to right, ${fill} ${progress}%, ${progress}%, ${bg} ${100 - progress}%`;
+                }
+            },
+            getCastbarTimes(cast) {
+                const expected = cast.expected / 1000;
+                const passed = this.time / 1000 - cast.time;
+                return `${passed.toFixed(2)} / ${expected.toFixed(2)}`;
             }
         },
         computed: {
@@ -44,7 +75,9 @@
                     time: skill[0],
                     skill: findSkill(false, skill[1]),
                     duration: skill[3] === RotationStatus.CUSTOM_MOVEMENT ? 0 : skill[2],
-                    type: skill[3]
+                    type: skill[3],
+                    expected: skill[5],
+                    target: skill[6]
                 }));
             },
             actorRotationDurationIndexes: function () {
@@ -88,7 +121,6 @@
                 const time = this.time / 1000.0;
                 const result = candidates.findLast(c => c.time <= time && c.time + c.duration / 1000.0 >= time);
                 return result;
-
             },
             nextSkills: function () {
                 return this.actorRotation.slice(this.nextSkillIndex, this.nextSkillIndex + 8);

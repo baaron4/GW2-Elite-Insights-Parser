@@ -8,13 +8,20 @@ internal class BuffGiveCastFinder : BuffCastFinder<BuffApplyEvent>
     {
         throw new InvalidOperationException("BuffGiveCastFinder is always with minions");
     }
+
     public BuffGiveCastFinder(long skillID, long buffID) : base(skillID, buffID)
     {
         Minions = true;
         UsingChecker((bae, combatData, agentData, skillData) => !bae.Initial);
     }
+
     protected override AgentItem GetKeyAgent(BuffApplyEvent evt)
     {
         return evt.By;
+    }
+
+    protected override AgentItem GetOtherKeyAgent(BuffApplyEvent evt)
+    {
+        return evt.To;
     }
 }

@@ -70,7 +70,7 @@
         </div>
         <div style="z-index: 1;" class="mb-4 mt-2">
             <a href="#" class="dropdown-toggle rot-font-dropdown" data-toggle="dropdown" title="Filter Skills">
-                Skills <span class="caret"></span>           
+                Skills <span class="caret"></span>
             </a>
             <img class="icon ml-2" :src="UIIcons.QuestionMark"
                 data-original-title="Use Skills dropdown to hide unwanted skills or click on a specific skill below to make all other skills transparent" />
@@ -87,7 +87,7 @@
                         Deselect all
                     </button>
                 </li>
-                <li v-for="(skill, index) in skillList" :key="index">               
+                <li v-for="(skill, index) in skillList" :key="index">
                     <div style="width: max-content;">
                         <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
                             v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
@@ -122,7 +122,7 @@
                 for (var i = 0; i < rotation.length; i++) {
                     const rota = rotation[i];
                     const skillID = rota[1];
-                    const skill = this.getSkill(skillID);                
+                    const skill = this.getSkill(skillID);
                     const isInstant = rota[3] === RotationStatus.INSTANT;
                     if (isInstant && skill.unconditionalProc) {
                         hasInstantCastUnconditional = true;
@@ -183,6 +183,7 @@
                         skill: this.getSkill(cast[1]),
                         duration: cast[2],
                         type: cast[3],
+                        target: cast[6],
                         globalCast: globalCast,
                         individualCast: individualCasts[skillID]
                     };
@@ -259,19 +260,21 @@
             getIconClass(cast) {
                 return {
                     'rot-cancelled': this.interruptedBorder && cast.type === RotationStatus.CANCEL,
-                    'rot-animfull': this.aftercastBorder && cast.type === RotationStatus.FULL,
-                    'rot-animfull': this.aftercastBorder && cast.type === RotationStatus.CUSTOM_MOVEMENT,
+                    'rot-animfull': this.aftercastBorder && (cast.type === RotationStatus.FULL || cast.type === RotationStatus.CUSTOM_MOVEMENT),
                     'rot-unknown': this.unknownBorder && cast.type === RotationStatus.UNKNOWN,
                     'rot-instant': this.instantBorder && cast.type === RotationStatus.INSTANT
                 };
             },
             getTooltip(cast) {
-                var tooltip = `${cast.skill.name} at ${cast.time}s`;
+                let tooltip = `${cast.skill.name} at ${cast.time}s`;
                 if (cast.type !== RotationStatus.INSTANT) {
                     tooltip += ` for ${cast.duration}ms`;
                 }
                 tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
                 tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
+                if (cast.target) {
+                    tooltip += `<br>Target: ${findTargetName(cast.target)}`;
+                }
                 return tooltip;
             },
             setAllSelectedSkills(selected) {

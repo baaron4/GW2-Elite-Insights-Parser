@@ -30,6 +30,7 @@ internal static class GuardianHelper
 
         // Meditations
         new DamageCastFinder(JudgesIntervention, JudgesIntervention)
+            .WithTarget()
             .UsingDisableWithEffectData(),
         new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffectDst(EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
@@ -101,6 +102,7 @@ internal static class GuardianHelper
 
         //new DamageCastFinder(9097,9097), // Symbol of Blades
         new DamageCastFinder(GlacialHeart, GlacialHeart)
+            .WithTarget()
             .UsingOrigin(InstantCastOrigin.Trait)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
         new EXTHealingCastFinder(GlacialHeartHeal, GlacialHeartHeal)

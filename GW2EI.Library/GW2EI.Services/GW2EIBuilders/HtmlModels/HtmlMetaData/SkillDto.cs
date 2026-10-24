@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
@@ -15,7 +16,9 @@ public struct SkillCastDto
     public long SkillId;
     public int ActualDuration;
     public int Status;
-    public double Acceleration;
+    public double Quickness;
+    public int Expected;
+    public string? Target;
 
     public class Converter : JsonConverter<SkillCastDto>
     {
@@ -31,7 +34,9 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.SkillId);
             writer.WriteNumberValue(value.ActualDuration);
             writer.WriteNumberValue(value.Status);
-            writer.WriteNumberValue(value.Acceleration);
+            writer.WriteNumberValue(value.Quickness);
+            writer.WriteNumberValue(value.Expected);
+            writer.WriteStringValue(value.Target);
             writer.WriteEndArray();
         }
     }
@@ -57,6 +62,20 @@ internal class SkillDto : IDItemDto
         UnconditionalProc = log.SkillData.IsUnconditionalProc(skill.ID);
     }
 
+    private static readonly Dictionary<long, int?> ComputedControlReturns = new();
+
+    private static int? ComputeControlReturn(ParsedEvtcLog log, long skillID)
+    {
+        if (!ComputedControlReturns.TryGetValue(skillID, out var controlReturn))
+        {
+            var water = false; // TODO: handle underwater
+            var info = log.SkillData.Get(skillID).SkillInfo;
+            controlReturn = info?.GetAnimation(water).ComputeControlReturn();
+            ComputedControlReturns.Add(skillID, controlReturn);
+        }
+        return controlReturn;
+    }
+
     public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + skills.Count);
@@ -67,19 +86,7 @@ internal class SkillDto : IDItemDto
         }
     }
 
-    private static SkillCastDto GetSkillData(CastEvent cl, long phaseStart)
-    {
-        return new SkillCastDto()
-        {
-            Start = (cl.Time - phaseStart) / 1000.0,
-            SkillId = cl.SkillID,
-            ActualDuration = cl.ActualDuration,
-            Status = (int)cl.Status,
-            Acceleration = cl.Acceleration,
-        };
-    }
-
-    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, UsedData used)
     {
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
         var list = new List<SkillCastDto>(casting.Count);
@@ -89,12 +96,47 @@ internal class SkillDto : IDItemDto
             {
                 continue;
             }
-            if (!usedSkills.ContainsKey(cl.SkillID))
+            if (!used.skills.ContainsKey(cl.SkillID))
             {
-                usedSkills.Add(cl.SkillID, cl.Skill);
+                used.skills.Add(cl.SkillID, cl.Skill);
             }
 
-            list.Add(GetSkillData(cl, phase.Start));
+            var target = cl.Target;
+            string? targetKey = null;
+            if (target.IsPlayer || log.LogData.Logic.TargetAgents.Contains(target))
+            {
+                targetKey = "u" + target.UniqueID;
+            }
+            else if (target.IsNPC && !target.IsUnamedSpecies())
+            {
+                var prefix = target.IsVolatileSpecies() ? "v" : "s";
+                targetKey = prefix + target.ID;
+                used.npcs.TryAdd(targetKey, target);
+            }
+            // Pre skill steps
+            // For non interrupt, simply take actual
+            // For interrupt take the max between actual duration and expected return control as a security
+            var expectedControlReturn = cl.ExpectedScaledDuration;
+            var expected = cl.IsInterrupted ? Math.Max(cl.ActualDuration, expectedControlReturn) : cl.ActualDuration;
+            var computedExpected = ComputeControlReturn(log, cl.SkillID);
+            if (computedExpected != null)
+            {
+                // take computed on interrupt, min between actual and computed otherwise for security
+                expected = Math.Min(cl.IsInterrupted ? int.MaxValue : cl.ActualDuration, cl.ApplyTimeScale(computedExpected.Value));
+            }
+
+
+            var cast = new SkillCastDto()
+            {
+                Start = (cl.Time - phase.Start) / 1000.0,
+                SkillId = cl.SkillID,
+                ActualDuration = cl.ActualDuration,
+                Status = (int)cl.Status,
+                Quickness = cl.AccelerationQuicknessSlow,
+                Expected = expected,
+                Target = targetKey,
+            };
+            list.Add(cast);
         }
         return list;
     }

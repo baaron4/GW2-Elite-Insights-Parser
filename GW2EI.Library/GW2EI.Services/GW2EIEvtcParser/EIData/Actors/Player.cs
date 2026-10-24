@@ -19,7 +19,7 @@ public class Player : PlayerActor
         {
             throw new InvalidDataException("Agent is not a Player");
         }
-        string[] name = agent.Name.Split('\0');
+        string[] name = agent.SplitName;
         if (name.Length < 2)
         {
             throw new EvtcAgentException("Name problem on Player");
@@ -95,7 +95,7 @@ public class Player : PlayerActor
     /// <summary>
     /// Return commander status list, the value of the segment is currently active commander tag ID.
     /// Player had said tag between every segment.Start and segment.End.
-    /// 
+    ///
     /// The value of the segment is the GUID of the specific commander tag.
     /// </summary>
     public IReadOnlyList<GenericSegment<Guid>> GetCommanderStates(ParsedEvtcLog log)

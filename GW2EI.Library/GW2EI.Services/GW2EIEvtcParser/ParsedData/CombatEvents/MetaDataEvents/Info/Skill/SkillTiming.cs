@@ -4,16 +4,41 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 public abstract class SkillTiming
 {
-    internal readonly SkillInfoEvent SkillInfo;
-    public readonly ulong TriggerUlong;
+    internal readonly SkillAnimation Animation;
+    public readonly byte TriggerByte;
+    public readonly SkillTrigger Trigger;
+    public int Time { get; protected set; }
 
-    public readonly TriggerType Trigger;
+    public bool IsControlReturn => Trigger == SkillTrigger.ControlReturn;
+    public bool IsExecute => Trigger == SkillTrigger.Execute3 || Trigger == SkillTrigger.Execute4 || Trigger == SkillTrigger.Execute5;
 
-    internal SkillTiming(CombatItem evtcItem, SkillInfoEvent skillInfo)
+    protected SkillTiming(CombatItem evtcItem, SkillAnimation animation)
     {
-        SkillInfo = skillInfo;
-        TriggerUlong = evtcItem.SrcAgent;
-        Trigger = GetSkillTrigger(TriggerUlong);
+        Animation = animation;
+        TriggerByte = (byte)evtcItem.SrcAgent;
+        Trigger = GetSkillTrigger(TriggerByte);
     }
 
+
+    internal static SkillTiming Build(CombatItem evtcItem, SkillAnimation animation)
+    {
+        if (SupportsSteps(evtcItem))
+        {
+            return new SkillTimingWithSteps(evtcItem, animation);
+        }
+        else
+        {
+            return new SkillTimingNoSteps(evtcItem, animation);
+        }
+    }
+
+    private static bool SupportsSteps(CombatItem evtcItem)
+    {
+        return evtcItem.Build >= ArcDPSBuilds.SkillInfoRework;
+    }
+
+    internal static bool IsUnderwater(CombatItem evtcItem)
+    {
+        return SupportsSteps(evtcItem) && SkillTimingWithSteps.IsUnderwater(evtcItem);
+    }
 }

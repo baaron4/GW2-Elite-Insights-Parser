@@ -36,8 +36,7 @@ public abstract class Actor
 
     protected Actor(AgentItem agent)
     {
-        string[] name = agent.Name.Split('\0');
-        Character = name[0];
+        Character = agent.FirstName;
         AgentItem = agent;
     }
     #region Initializers

@@ -4,11 +4,19 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class DamageCastFinder : CheckedCastFinder<HealthDamageEvent>
 {
+    protected bool Target = false;
     private readonly long _damageSkillID;
+
     public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
         UsingNotAccurate();
         _damageSkillID = damageSkillID;
+    }
+
+    public DamageCastFinder WithTarget()
+    {
+        Target = true;
+        return this;
     }
 
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -28,7 +36,7 @@ internal class DamageCastFinder : CheckedCastFinder<HealthDamageEvent>
                         continue;
                     }
                     lastTime = de.Time;
-                    res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));
+                    res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From, Target ? de.To : ParserHelper._unknownAgent));
                 }
             }
         }

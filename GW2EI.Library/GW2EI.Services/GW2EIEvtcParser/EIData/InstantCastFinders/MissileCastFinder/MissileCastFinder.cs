@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
 {
     protected bool Minions = false;
+    protected bool Target = false;
     private readonly long _missileSkillID;
     public MissileCastFinder(long skillID, long missileSkillID) : base(skillID)
     {
@@ -14,6 +15,12 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
     public MissileCastFinder WithMinions()
     {
         Minions = true;
+        return this;
+    }
+
+    public MissileCastFinder WithTarget()
+    {
+        Target = true;
         return this;
     }
 
@@ -40,7 +47,7 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
                     }
                     lastTime = missileEvent.Time;
                     var caster = group.Key;
-                    res.Add(new InstantCastEvent(GetTime(missileEvent, missileEvent.Src, combatData), skillData.Get(SkillID), caster));
+                    res.Add(new InstantCastEvent(GetTime(missileEvent, missileEvent.Src, combatData), skillData.Get(SkillID), caster, Target ? missileEvent.GetInitialTarget() : ParserHelper._unknownAgent));
                 }
             }
         }

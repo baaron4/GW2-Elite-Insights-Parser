@@ -1,6 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
@@ -12,7 +12,7 @@ internal class BarrierStatsExtension
 
     public readonly List<List<EXTBarrierStatsPlayerChartDto>> PlayerBarrierCharts;
 
-    public BarrierStatsExtension(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public BarrierStatsExtension(ParsedEvtcLog log, UsedData used)
     {
         var phases = log.LogData.GetPhases(log);
         BarrierPhases = new(phases.Count);
@@ -26,7 +26,7 @@ internal class BarrierStatsExtension
         PlayerBarrierDetails = new(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
-            PlayerBarrierDetails.Add(EXTBarrierStatsPlayerDetailsDto.BuildPlayerBarrierData(log, actor, usedSkills, usedBuffs));
+            PlayerBarrierDetails.Add(EXTBarrierStatsPlayerDetailsDto.BuildPlayerBarrierData(log, actor, used));
         }
     }
 }

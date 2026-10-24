@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
@@ -22,14 +23,14 @@ internal class FoodDto
         UniqueSlot = consume.Buff.Classification == Buff.BuffClassification.Enhancement ? 2 : (consume.Buff.Classification == Buff.BuffClassification.Nourishment ? 1 : 0);
     }
 
-    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, Buff> usedBuffs)
+    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, UsedData used)
     {
         var consumables = actor.GetConsumablesList(log);
         var list = new List<FoodDto>(consumables.Count);
 
         foreach (var consumable in consumables)
         {
-            usedBuffs[consumable.Buff.ID] = consumable.Buff;
+            used.buffs[consumable.Buff.ID] = consumable.Buff;
             list.Add(new FoodDto(consumable));
         }
 

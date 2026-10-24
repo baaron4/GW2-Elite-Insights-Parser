@@ -27,7 +27,7 @@ internal class Slothasor : SalvationPass
             new PlayerDstHealthDamageHitMechanic(Halitosis, Mech_Halitosis, new (Symbols.TriangleRightOpen,Colors.LightOrange), new("Breath", "Halitosis (Flame Breath)","Flame Breath"), Sev2),
             new PlayerDstHealthDamageHitMechanic(SporeRelease, Mech_SporeRelease, new (Symbols.Pentagon,Colors.Red), new("Shake", "Spore Release (Coconut Shake)","Shake"), Sev0),
             new PlayerDstBuffApplyMechanic(MagicTransformation, Mech_MagicTransformation, new (Symbols.Hexagram,Colors.Teal), new("Slub", "Magic Transformation (Ate Magic Mushroom)","Slub Transform"), Sev1)
-                    .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)), 
+                    .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)),
             //new Mechanic(Nauseated, "Nauseated", ParseEnum.BossIDS.Slothasor, new ("diamond-tall-open",Colors.LightPurple), new("Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
             new PlayerDstBuffApplyMechanic(FixatedTimed, Mech_SlothFixated, new (Symbols.Star,Colors.Magenta), new("Fixate", "Fixated by Slothasor","Fixated"), Sev1),
             new PlayerDstHealthDamageHitMechanic([ToxicCloud1, ToxicCloud2], Mech_ToxicCloud, new (Symbols.PentagonOpen,Colors.DarkGreen), new("Floor", "Toxic Cloud (stood in green floor poison)","Toxic Floor"), Sev3),
@@ -226,7 +226,7 @@ internal class Slothasor : SalvationPass
                 continue;
             }
             transformedPlayer = transformedPlayer.EnglobingAgentItem;
-            AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.Name.Split('\0')[0], Spec.NPC, TargetID.PlayerSlubling, false, 0, 0, 0, 0, transformedPlayer.HitboxWidth, transformedPlayer.HitboxHeight);
+            AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.FirstName, Spec.NPC, TargetID.PlayerSlubling, false, 0, 0, 0, 0, transformedPlayer.HitboxWidth, transformedPlayer.HitboxHeight);
             AgentManipulationHelper.RedirectDamageAndCopyRemainingFromSrcToDst(slubling, transformedPlayer, copies, combatData, extensions);
         }
         if (copies.Count != 0)

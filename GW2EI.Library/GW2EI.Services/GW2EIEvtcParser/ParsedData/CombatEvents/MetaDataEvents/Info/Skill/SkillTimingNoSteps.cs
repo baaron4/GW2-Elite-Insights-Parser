@@ -2,11 +2,8 @@
 
 public class SkillTimingNoSteps : SkillTiming
 {
-    public readonly ulong AtMillisecond;
-
-    internal SkillTimingNoSteps(CombatItem evtcItem, SkillInfoEvent skillInfo) : base(evtcItem, skillInfo)
+    internal SkillTimingNoSteps(CombatItem evtcItem, SkillAnimation animation) : base(evtcItem, animation)
     {
-        AtMillisecond = evtcItem.DstAgent;
+        Time = (int)evtcItem.DstAgent;
     }
-
 }

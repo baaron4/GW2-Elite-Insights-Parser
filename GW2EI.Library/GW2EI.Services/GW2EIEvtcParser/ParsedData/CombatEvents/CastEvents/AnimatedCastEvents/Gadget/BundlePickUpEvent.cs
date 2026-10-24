@@ -3,7 +3,7 @@
 public class BundlePickUpEvent : AnimatedCastEvent
 {
     public readonly long BundleID;
-    public AgentItem BundleGadget => EffectTarget;
+    public AgentItem BundleGadget => Target;
     internal BundlePickUpEvent(CombatItem? startItem, AgentData agentData, SkillData skillData,
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
@@ -14,7 +14,7 @@ public class BundlePickUpEvent : AnimatedCastEvent
             BundleID = startItem.OverstackValue;
         }
     }
-    internal BundlePickUpEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, effectTarget, status)
+    internal BundlePickUpEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, target, status)
     {
     }
 

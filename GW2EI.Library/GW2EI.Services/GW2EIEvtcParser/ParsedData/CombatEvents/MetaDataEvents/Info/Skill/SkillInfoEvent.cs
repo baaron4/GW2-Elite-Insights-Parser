@@ -15,19 +15,16 @@ public class SkillInfoEvent : MetaDataEvent
 
     public float TooltipTime { get; protected set; }
 
-    public (uint lower, uint upper) LandLoopSteps { get; protected set; }
-    public (uint lower, uint upper) UnderwaterLoopSteps { get; protected set; }
-    public IReadOnlyList<SkillTiming> SkillTimings => _SkillTimings;
-    public IReadOnlyList<SkillStep> SkillSteps => _SkillSteps;
-
-    private readonly List<SkillTiming> _SkillTimings = [];
-
-    private readonly List<SkillStep> _SkillSteps = [];
+    public SkillAnimation LandAnimation { get; protected set; }
+    public SkillAnimation UnderwaterAnimation { get; protected set; }
 
     internal SkillInfoEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem)
     {
         Skill = skillData.Get(evtcItem.SkillID);
+        LandAnimation = new SkillAnimation(this);
+        UnderwaterAnimation = new SkillAnimation(this);
         CompleteSkillInfoEvent(evtcItem);
+        Skill.AttachSkillInfoEvent(this);
     }
 
     internal void CompleteSkillInfoEvent(CombatItem evtcItem)
@@ -45,6 +42,7 @@ public class SkillInfoEvent : MetaDataEvent
                 BuildFromSkillInfo(evtcItem);
                 break;
             case StateChange.SkillStep:
+                BuildFromSkillStep(evtcItem);
                 break;
             default:
                 throw new InvalidDataException("Invalid combat event in SkillInfoEvent complete method");
@@ -53,7 +51,7 @@ public class SkillInfoEvent : MetaDataEvent
 
     private unsafe void BuildFromSkillInfo(CombatItem evtcItem)
     {
-        // 2 
+        // 2
         var time = evtcItem.Time;
         // 2
         var srcAgent = evtcItem.SrcAgent;
@@ -67,27 +65,23 @@ public class SkillInfoEvent : MetaDataEvent
         {
             // 2
             var dstAgent = evtcItem.DstAgent;
-            LandLoopSteps = (*(uint*)&dstAgent, *((uint*)&dstAgent + 1));
-
-            UnderwaterLoopSteps = ((uint)evtcItem.BuffDmg, (uint)evtcItem.Value);
+            LandAnimation.SetLoopSteps(*(uint*)&dstAgent, *((uint*)&dstAgent + 1));
+            UnderwaterAnimation.SetLoopSteps((uint)evtcItem.BuffDmg, (uint)evtcItem.Value);
         }
     }
 
     private void BuildFromSkillTiming(CombatItem evtcItem)
     {
-        if (evtcItem.Build >= ArcDPSBuilds.SkillInfoRework)
-        {
-            _SkillTimings.Add(new SkillTimingWithSteps(evtcItem, this));
-        }
-        else
-        {
-            _SkillTimings.Add(new SkillTimingNoSteps(evtcItem, this));
-        }
+        GetAnimation(SkillTiming.IsUnderwater(evtcItem)).AddTiming(evtcItem);
     }
 
     private void BuildFromSkillStep(CombatItem evtcItem)
     {
-        _SkillSteps.Add(new SkillStep(evtcItem, this));
+        GetAnimation(SkillStep.IsUnderwater(evtcItem)).AddStep(evtcItem);
     }
 
+    public SkillAnimation GetAnimation(bool water)
+    {
+        return water ? UnderwaterAnimation : LandAnimation;
+    }
 }
