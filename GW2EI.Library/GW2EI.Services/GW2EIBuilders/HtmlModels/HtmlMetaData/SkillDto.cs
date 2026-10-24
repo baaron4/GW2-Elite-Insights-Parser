@@ -113,12 +113,16 @@ internal class SkillDto : IDItemDto
                 targetKey = prefix + target.ID;
                 used.npcs.TryAdd(targetKey, target);
             }
-
-            var expected = cl.IsInterrupted ? cl.ExpectedScaledDuration : cl.ActualDuration;
+            // Pre skill steps
+            // For non interrupt, simply take actual, return control not reliable
+            // For interrupt take the max between actual duration and expected scaled as a security
+            var expectedScaledDuration = Math.Min(cl.ExpectedScaledDuration, cl.ExpectedScaledExecute);
+            var expected = cl.IsInterrupted ? Math.Max(cl.ActualDuration, expectedScaledDuration) : cl.ActualDuration;
             var controlReturn = ComputeControlReturn(log, cl.SkillID);
             if (controlReturn != null)
             {
-                expected = Math.Min(cl.ActualDuration, cl.ApplyTimeScale(controlReturn.Value));
+                // take control return on interrupt, min between actual and control return otherwise for security
+                expected = Math.Min(cl.IsInterrupted ? int.MaxValue : cl.ActualDuration, cl.ApplyTimeScale(controlReturn.Value));
             }
 
 
