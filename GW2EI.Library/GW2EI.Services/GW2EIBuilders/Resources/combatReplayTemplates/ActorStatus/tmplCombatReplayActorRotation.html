@@ -22,6 +22,7 @@
                     'rot-cancelled': cast.type === RotationStatus.CANCEL,
                     'rot-unknown': cast.type === RotationStatus.UNKNOWN,
                     'rot-animfull': cast.type === RotationStatus.FULL,
+                    'rot-animfull': cast.type === RotationStatus.CUSTOM_MOVEMENT,
                     'rot-instant': cast.type === RotationStatus.INSTANT
                 };
             },
@@ -42,7 +43,7 @@
                 return this.actor.details.rotation[this.encounterPhase.id].map(skill => ({
                     time: skill[0],
                     skill: findSkill(false, skill[1]),
-                    duration: skill[2],
+                    duration: skill[3] === RotationStatus.CUSTOM_MOVEMENT ? 0 : skill[2],
                     type: skill[3]
                 }));
             },
