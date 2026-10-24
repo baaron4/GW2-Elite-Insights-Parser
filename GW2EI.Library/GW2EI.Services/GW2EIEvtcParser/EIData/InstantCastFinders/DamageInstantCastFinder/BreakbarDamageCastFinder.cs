@@ -36,11 +36,7 @@ internal class BreakbarDamageCastFinder : CheckedCastFinder<BreakbarDamageEvent>
                         continue;
                     }
                     lastTime = de.Time;
-                    var instant = new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From);
-                    if (Target)
-                    {
-                        instant.OverrideTarget(de.To);
-                    }
+                    var instant = new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From, Target ? de.To : ParserHelper._unknownAgent);
                     res.Add(instant);
                 }
             }

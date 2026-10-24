@@ -371,11 +371,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                             caster = agent;
                         }
                     }
-                    var instant = new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster);
-                    if (Target)
-                    {
-                        instant.OverrideTarget(GetOtherKeyAgent(effectEvent));
-                    }
+                    var instant = new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster, Target ? GetOtherKeyAgent(effectEvent) : _unknownAgent);
                     res.Add(instant);
                 }
             }

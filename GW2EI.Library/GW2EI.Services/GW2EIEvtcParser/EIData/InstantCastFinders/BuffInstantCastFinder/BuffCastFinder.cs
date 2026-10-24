@@ -107,11 +107,7 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
                         continue;
                     }
                     lastTime = evt.Time;
-                    var instant = new InstantCastEvent(GetTime(evt, GetKeyAgent(evt), combatData), skillData.Get(SkillID), group.Key);
-                    if (Target)
-                    {
-                        instant.OverrideTarget(GetOtherKeyAgent(evt));
-                    }
+                    var instant = new InstantCastEvent(GetTime(evt, GetKeyAgent(evt), combatData), skillData.Get(SkillID), group.Key, Target ? GetOtherKeyAgent(evt) : _unknownAgent);
                     res.Add(instant);
                 }
             }

@@ -47,11 +47,7 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
                     }
                     lastTime = missileEvent.Time;
                     var caster = group.Key;
-                    var instant = new InstantCastEvent(GetTime(missileEvent, missileEvent.Src, combatData), skillData.Get(SkillID), caster);
-                    if (Target && missileEvent.TargetedAgent != null)
-                    {
-                        instant.OverrideTarget(missileEvent.TargetedAgent);
-                    }
+                    var instant = new InstantCastEvent(GetTime(missileEvent, missileEvent.Src, combatData), skillData.Get(SkillID), caster, Target ? missileEvent.GetInitialTarget() : ParserHelper._unknownAgent);
                     res.Add(instant);
                 }
             }

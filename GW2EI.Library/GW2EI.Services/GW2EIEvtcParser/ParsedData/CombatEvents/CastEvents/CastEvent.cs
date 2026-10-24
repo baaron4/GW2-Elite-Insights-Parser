@@ -31,11 +31,11 @@ public abstract class CastEvent : TimeCombatEvent
     public int SavedDuration { get; protected set; }
 
     public int ExpectedDuration { get; protected set; }
-    public int ExpectedScaledDuration => Scale(ExpectedDuration);
+    public int ExpectedScaledDuration => ApplyTimeScale(ExpectedDuration);
 
     protected int? _expectedExecuteOverride = null;
     public int ExpectedExecute => _expectedExecuteOverride ?? ExpectedDuration;
-    public int ExpectedScaledExecute => Scale(ExpectedExecute);
+    public int ExpectedScaledExecute => ApplyTimeScale(ExpectedExecute);
 
     public int ActualDuration { get; protected set; }
 
@@ -74,14 +74,9 @@ public abstract class CastEvent : TimeCombatEvent
         Skill = skill;
     }
 
-    internal void OverrideTarget(AgentItem target)
-    {
-        Target = target;
-    }
-
     public abstract bool IgnoreOnRotationRender();
 
-    public int Scale(int duration)
+    public int ApplyTimeScale(int duration)
     {
         return (int)(duration / TimeScale);
     }

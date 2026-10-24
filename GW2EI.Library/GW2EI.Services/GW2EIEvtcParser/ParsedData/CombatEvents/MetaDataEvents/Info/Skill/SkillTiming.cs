@@ -32,13 +32,13 @@ public abstract class SkillTiming
         }
     }
 
-    public static bool SupportsSteps(CombatItem evtcItem)
+    private static bool SupportsSteps(CombatItem evtcItem)
     {
         return evtcItem.Build >= ArcDPSBuilds.SkillInfoRework;
     }
 
-    public static bool IsUnderwater(CombatItem evtcItem)
+    internal static bool IsUnderwater(CombatItem evtcItem)
     {
-        return SupportsSteps(evtcItem) ? SkillTimingWithSteps.IsUnderwater(evtcItem) : false;
+        return SupportsSteps(evtcItem) && SkillTimingWithSteps.IsUnderwater(evtcItem);
     }
 }

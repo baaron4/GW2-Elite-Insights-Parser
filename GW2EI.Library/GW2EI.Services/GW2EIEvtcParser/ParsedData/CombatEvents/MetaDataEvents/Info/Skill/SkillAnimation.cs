@@ -1,3 +1,5 @@
+﻿using System.Diagnostics.CodeAnalysis;
+
 namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillAnimation
@@ -42,7 +44,7 @@ public class SkillAnimation
         return minLoop ? MinLoopSteps : MaxLoopSteps;
     }
 
-    public bool TryFindTriggerStep(int triggerTime, out SkillStep triggerStep, out int triggerDelay)
+    public bool TryFindTriggerStep(int triggerTime, [NotNullWhen(true)] out SkillStep? triggerStep, [NotNullWhen(true)] out int? triggerDelay)
     {
         int stepTime = 0;
         foreach (var step in Steps)
@@ -56,12 +58,12 @@ public class SkillAnimation
             }
             stepTime = stepEnd;
         }
-        triggerStep = Steps[-1];
-        triggerDelay = 0;
+        triggerStep = null;
+        triggerDelay = null;
         return false;
     }
 
-    public bool TryFindTriggerStep(SkillTiming timing, out SkillStep triggerStep, out int triggerDelay)
+    public bool TryFindTriggerStep(SkillTiming timing, [NotNullWhen(true)] out SkillStep? triggerStep, [NotNullWhen(true)] out int? triggerDelay)
     {
         return TryFindTriggerStep(timing.Time, out triggerStep, out triggerDelay);
     }
@@ -99,12 +101,16 @@ public class SkillAnimation
         }
     }
 
-    public int ComputeFullStepDuration(bool minLoop = false)
+    public int? ComputeFullStepDuration(bool minLoop = false)
     {
+        if (Steps.Count == 0)
+        {
+            return null;
+        }
         return Simulate(minLoop).Sum(step => step.Duration);
     }
 
-    public int ComputeControlReturn(bool minLoop = false)
+    public int? ComputeControlReturn(bool minLoop = false)
     {
         var controlReturn = Timings.FirstOrDefault(timing => timing.IsControlReturn);
         if (controlReturn != null && TryFindTriggerStep(controlReturn, out var triggerStep, out var triggerDelay))
@@ -114,7 +120,7 @@ public class SkillAnimation
             {
                 if (step == triggerStep)
                 {
-                    return passed + triggerDelay;
+                    return passed + triggerDelay.Value;
                 }
                 passed += step.Duration;
             }

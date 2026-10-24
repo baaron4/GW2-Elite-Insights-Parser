@@ -114,15 +114,13 @@ internal class SkillDto : IDItemDto
                 used.npcs.TryAdd(targetKey, target);
             }
 
-            var expected = cl.ActualDuration;
-            if (log.LogMetadata.EvtcBuild >= ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
+            var expected = cl.IsInterrupted ? cl.ExpectedScaledDuration : cl.ActualDuration;
+            var controlReturn = ComputeControlReturn(log, cl.SkillID);
+            if (controlReturn != null)
             {
-                var controlReturn = ComputeControlReturn(log, cl.SkillID);
-                if (controlReturn != null)
-                {
-                    expected = Math.Min(cl.ActualDuration, cl.Scale(controlReturn.Value));
-                }
+                expected = Math.Min(cl.ActualDuration, cl.ApplyTimeScale(controlReturn.Value));
             }
+
 
             var cast = new SkillCastDto()
             {

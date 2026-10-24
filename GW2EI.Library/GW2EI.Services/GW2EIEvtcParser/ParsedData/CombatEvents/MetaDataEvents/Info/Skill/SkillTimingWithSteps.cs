@@ -13,7 +13,7 @@ public class SkillTimingWithSteps : SkillTiming
         Index = evtcItem.Value;
     }
 
-    public static new bool IsUnderwater(CombatItem evtcItem)
+    internal static new bool IsUnderwater(CombatItem evtcItem)
     {
         return evtcItem.IFFByte != 0;
     }

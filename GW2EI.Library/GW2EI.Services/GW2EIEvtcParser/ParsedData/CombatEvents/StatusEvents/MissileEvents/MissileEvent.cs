@@ -34,10 +34,7 @@ public class MissileEvent : StatusEvent
 
     private readonly List<MissileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
-    public MissileLaunchEvent? InitialLaunch => LaunchEvents.FirstOrDefault();
     public MissileRemoveEvent? RemoveEvent { get; private set; }
-
-    public AgentItem? TargetedAgent => InitialLaunch != null && InitialLaunch.HasTargetAgent ? InitialLaunch.TargetedAgent : null;
     public bool MaybeReflected => LaunchEvents.Any(x => x.MaybeReflected);
 
     internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
@@ -88,6 +85,12 @@ public class MissileEvent : StatusEvent
     {
         RemoveEvent = removeEvent;
         removeEvent.Missile = this;
+    }
+
+    public AgentItem GetInitialTarget()
+    {
+        var InitialLaunch = LaunchEvents.FirstOrDefault();
+        return InitialLaunch != null ? InitialLaunch.TargetedAgent : ParserHelper._unknownAgent;
     }
 
 }
