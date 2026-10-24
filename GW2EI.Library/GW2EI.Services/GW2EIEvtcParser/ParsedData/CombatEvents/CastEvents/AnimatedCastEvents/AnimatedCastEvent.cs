@@ -131,8 +131,8 @@ public abstract class AnimatedCastEvent : CastEvent
     // Custom
     protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AnimationStatus status = AnimationStatus.Full) : base(start, skill, caster)
     {
-        if (status == AnimationStatus.Instant || 
-            status == AnimationStatus.Reduced || 
+        if (status == AnimationStatus.Instant ||
+            status == AnimationStatus.Reduced ||
             status == AnimationStatus.Interrupted)
         {
             throw new InvalidDataException("Custom Animated casts can't be instant, reduced or interrupted");
