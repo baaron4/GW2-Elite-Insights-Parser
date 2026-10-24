@@ -145,7 +145,7 @@ public abstract class AnimatedCastEvent : CastEvent
         }
         ActualDuration = (int)dur;
         ExpectedDuration = ActualDuration;
-        Acceleration = 0;
+        AccelerationQuicknessSlow = 0;
         Status = status;
         SavedDuration = 0;
     }
