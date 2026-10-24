@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 public abstract class CastEvent : TimeCombatEvent
 {
 
-    public enum AnimationStatus { Unknown, Reduced, Interrupted, Full, Instant };
+    public enum AnimationStatus { Unknown, Reduced, Interrupted, Full, Instant, CustomMovement };
 
     // start item
     public SkillItem Skill { get; protected set; }
@@ -18,6 +18,7 @@ public abstract class CastEvent : TimeCombatEvent
     public bool IsInterrupted => Status == AnimationStatus.Interrupted;
     public bool IsFull => Status == AnimationStatus.Full;
     public bool IsInstant => Status == AnimationStatus.Instant;
+    public bool IsCustomMovement => Status == AnimationStatus.CustomMovement;
 
     public int SavedDuration { get; protected set; }
 
