@@ -4,18 +4,16 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class AnimatedCastEvent : CastEvent
 {
-    private readonly int _scaledActualDuration;
-    //private readonly int _effectHappenedDuration;
 
     public readonly AnimationStart AnimStart;
     public readonly AnimationStop AnimStop;
 
-    private void SetAcceleration(CombatItem endItem)
+    private void SetAcceleration(CombatItem endItem, int scaledActualDuration)
     {
         TimeScale = 1.0;
-        if (_scaledActualDuration > 0)
+        if (scaledActualDuration > 0)
         {
-            TimeScale = (double)_scaledActualDuration / ActualDuration;
+            TimeScale = (double)scaledActualDuration / ActualDuration;
             if (TimeScale > 1.0)
             {
                 // faster, convert to quickness percent
@@ -41,8 +39,7 @@ public abstract class AnimatedCastEvent : CastEvent
                     break;
                 case Activation.Minimum:
                 case Activation.NoData:
-                    int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / TimeScale);
-                    SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+                    SavedDuration = Math.Max(ExpectedScaledDuration - ActualDuration, 0);
                     Status = AnimationStatus.Reduced;
                     break;
             }
@@ -97,7 +94,7 @@ public abstract class AnimatedCastEvent : CastEvent
         if (endItem != null)
         {
             ActualDuration = endItem.Value;
-            _scaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
+            var scaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
             // Start missing
             if (startItem == null)
             {
@@ -111,16 +108,16 @@ public abstract class AnimatedCastEvent : CastEvent
                 if (Math.Abs(ActualDuration - expectedActualDuration) > ParserHelper.ServerDelayConstant)
                 {
                     ActualDuration = expectedActualDuration;
-                    _scaledActualDuration = 0;
+                    scaledActualDuration = 0;
                 }
             }
             if (animatedDodge)
             {
                 // dodge animation start item has always 0 as expected duration
                 ExpectedDuration = ActualDuration;
-                _scaledActualDuration = 0;
+                scaledActualDuration = 0;
             }
-            SetAcceleration(endItem);
+            SetAcceleration(endItem, scaledActualDuration);
             AnimStop = GetAnimationStop(endItem.Result);
 
         }

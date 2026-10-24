@@ -25,8 +25,7 @@ public class GadgetInteractEvent : AnimatedCastEvent
             ExpectedDuration = (int)(ExpectedDuration * TimeScale);
             if (Status == AnimationStatus.Reduced)
             {
-                int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / TimeScale);
-                SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+                SavedDuration = Math.Max(ExpectedScaledDuration - ActualDuration, 0);
             }
         }
     }
