@@ -26,8 +26,7 @@
                 return {
                     'rot-cancelled': cast.type === RotationStatus.CANCEL,
                     'rot-unknown': cast.type === RotationStatus.UNKNOWN,
-                    'rot-animfull': cast.type === RotationStatus.FULL,
-                    'rot-animfull': cast.type === RotationStatus.CUSTOM_MOVEMENT,
+                    'rot-animfull': cast.type === RotationStatus.FULL || cast.type === RotationStatus.CUSTOM_MOVEMENT,
                     'rot-instant': cast.type === RotationStatus.INSTANT
                 };
             },
