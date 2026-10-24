@@ -24,6 +24,7 @@ public class SkillInfoEvent : MetaDataEvent
         LandAnimation = new SkillAnimation(this);
         UnderwaterAnimation = new SkillAnimation(this);
         CompleteSkillInfoEvent(evtcItem);
+        Skill.AttachSkillInfoEvent(this);
     }
 
     internal void CompleteSkillInfoEvent(CombatItem evtcItem)

@@ -28,6 +28,7 @@ public class BuffInfoEvent : MetaDataEvent
     {
         BuffSkill = skillData.Get(evtcItem.SkillID);
         CompleteBuffInfoEvent(evtcItem);
+        BuffSkill.AttachBuffInfoEvent(this);
     }
 
     internal void CompleteBuffInfoEvent(CombatItem evtcItem)

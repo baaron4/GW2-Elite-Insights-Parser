@@ -60,7 +60,9 @@ public class CombatItem : ITimeComparable
         || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.Tick
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart
         || IsStateChange == StateChange.TickRate || IsStateChange == StateChange.WvWTeams
-        || IsStateChange == StateChange.AgentInfo;
+        || IsStateChange == StateChange.AgentInfo
+        || IsStateChange == StateChange.BuffInfo || IsStateChange == StateChange.BuffFormula
+        || IsStateChange == StateChange.SkillInfo || IsStateChange == StateChange.SkillStep || IsStateChange == StateChange.SkillTiming;
 
     internal readonly EvtcVersionEvent _version;
 
