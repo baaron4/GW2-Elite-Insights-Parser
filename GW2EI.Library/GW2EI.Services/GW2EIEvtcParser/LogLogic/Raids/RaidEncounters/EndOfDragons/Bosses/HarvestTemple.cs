@@ -558,11 +558,11 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
     {
         if (effect.IsAroundDst)
         {
-            res.Add(new CustomAnimatedGadgetCastEvent(target.AgentItem, skill, effect.Time - startOffset, dur, effect.Dst));
+            res.Add(new AnimatedGadgetCastEvent(target.AgentItem, skill, effect.Time - startOffset, dur, effect.Dst));
         }
         else
         {
-            res.Add(new CustomAnimatedGadgetCastEvent(target.AgentItem, skill, effect.Time - startOffset, dur));
+            res.Add(new AnimatedGadgetCastEvent(target.AgentItem, skill, effect.Time - startOffset, dur));
         }
     }
 
