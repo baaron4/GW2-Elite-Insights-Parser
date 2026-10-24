@@ -305,7 +305,8 @@ const RotationStatus = {
     REDUCED: 1,
     CANCEL: 2,
     FULL: 3,
-    INSTANT: 4
+    INSTANT: 4,
+    CUSTOM_MOVEMENT: 5
 };
 
 const PhaseTypes = {
