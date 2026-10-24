@@ -14,7 +14,7 @@ public class BundlePickUpEvent : AnimatedCastEvent
             BundleID = startItem.OverstackValue;
         }
     }
-    internal BundlePickUpEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : base(caster, skill, start, dur, target)
+    internal BundlePickUpEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, target, status)
     {
     }
 

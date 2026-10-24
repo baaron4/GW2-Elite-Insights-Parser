@@ -36,7 +36,7 @@ public class BuffsContainer
         if (foodIDs.Count == 1)
         {
             var foodID = foodIDs[0];
-            foreach (BuffInfoEvent buffInfoEvent in combatData.GetBuffInfoEvent(foodID))
+            foreach (BuffInfoEvent buffInfoEvent in combatData.GetBuffInfoEventsByCategory(foodID))
             {
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
@@ -52,7 +52,7 @@ public class BuffsContainer
         if (enhancementIDs.Count == 1)
         {
             var enhancementID = enhancementIDs[0];
-            foreach (BuffInfoEvent buffInfoEvent in combatData.GetBuffInfoEvent(enhancementID))
+            foreach (BuffInfoEvent buffInfoEvent in combatData.GetBuffInfoEventsByCategory(enhancementID))
             {
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {

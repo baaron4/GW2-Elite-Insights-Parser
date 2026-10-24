@@ -189,9 +189,6 @@
                     };
                 });
             },
-            RotationStatus: function () {
-                return RotationStatus;
-            },
             skillList: function () {
                 return this.phaseData[this.phaseindex].skillList;
             },
@@ -264,6 +261,7 @@
                 return {
                     'rot-cancelled': this.interruptedBorder && cast.type === RotationStatus.CANCEL,
                     'rot-animfull': this.aftercastBorder && cast.type === RotationStatus.FULL,
+                    'rot-animfull': this.aftercastBorder && cast.type === RotationStatus.CUSTOM_MOVEMENT,
                     'rot-unknown': this.unknownBorder && cast.type === RotationStatus.UNKNOWN,
                     'rot-instant': this.instantBorder && cast.type === RotationStatus.INSTANT
                 };

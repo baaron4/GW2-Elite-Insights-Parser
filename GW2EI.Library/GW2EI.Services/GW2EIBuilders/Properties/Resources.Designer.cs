@@ -178,7 +178,9 @@ namespace GW2EIBuilders.Properties {
         ///.scrollable-y {
         ///    overflow-x: hidden;
         ///    overflow-y: auto;
-        ///    s [rest of string was truncated]&quot;;.
+        ///}
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string css {
             get {
@@ -354,22 +356,22 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &quot;use strict&quot;;
         ///
-        ///
-        ///var numberComponent = {
-        ///    methods: {
-        ///        // https://stackoverflow.com/questions/16637051/adding-space-between-numbers
-        ///        integerWithSpaces: function(x) {
-        ///            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, &quot; &quot;);
-        ///        },
-        ///
-        ///        round: function (value) {
-        ///            if (isNaN(value) || !isFinite(value)) {
-        ///                return 0;
-        ///            }
-        ///            return Math.round(value);
-        ///        },
-        ///        round1: function (value) {
-        ///            if (isNaN [rest of string was truncated]&quot;;.
+        ///const formatterCache = {
+        ///    zeroZero: new Intl.NumberFormat(undefined, {
+        ///        minimumFractionDigits: 0,
+        ///        maximumFractionDigits: 0
+        ///    }),
+        ///    zeroOne: new Intl.NumberFormat(undefined, {
+        ///        minimumFractionDigits: 0,
+        ///        maximumFractionDigits: 1
+        ///    }),
+        ///    zeroTwo: new Intl.NumberFormat(undefined, {
+        ///        minimumFractionDigits: 0,
+        ///        maximumFractionDigits: 2
+        ///    }),
+        ///    zeroThree: new Intl.NumberFormat(undefined, {
+        ///        minimumFractionDigits: 0,
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mixins {
             get {
@@ -762,12 +764,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-column align-items-center&quot;&gt;
-        ///        &lt;ul v-if=&quot;showNormalPhases &amp;&amp; isTouchDevice&quot;
-        ///            class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot; :style=&quot;{ &apos;max-width&apos;: (timelineWidth - 30) + &apos;px&apos; }&quot;&gt;
-        ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in normalPhases&quot;
-        ///                :data-original-title=&quot;phase.durationS + &apos; seconds &lt;br /&gt; Start: &apos; + phase.start + &apos;&lt;br /&gt; End: &apos; + phase.end&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;updatePhaseTi [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;
+        ///        &lt;div class=&quot;d-flex align-items-center justify-content-center mb-1&quot;&gt;
+        ///            &lt;ul v-if=&quot;showNormalPhases &amp;&amp; isTouchDevice&quot;
+        ///                class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1 mx-auto&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in normalPhases&quot;
+        ///                    :data-original-title=&quot;phase.durationS + &apos; seconds &lt;br /&gt; Start: &apos; + phase.start + &apos;&lt;br /&gt; End: &apos; + phase.end&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;updatePh [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -778,12 +781,12 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center mb-2&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills&quot; :class=&quot;{&apos;flex-row&apos;: !column, &apos;flex-column&apos;: column}&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot; data-original-title=&quot;Power + Condition&quot;&gt;
         ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;data.damagemode = damageModeEnum.All&quot; :class=&quot;{active: data.damagemode === damageModeEnum.All}&quot;&gt;
         ///                        &lt;img :src=&quot;UIIcons.Damage&quot; alt=&quot;All&quot; class=&quot;icon&quot;&gt;
-        ///              [rest of string was truncated]&quot;;.
+        ///         [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageSelector {
             get {
@@ -794,11 +797,11 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;rowPageCount &gt; 0&quot; style=&quot;width:25px;&quot;&gt;
-        ///            &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;rowPageCount&quot; :width=&quot;&apos;230px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;colPageCount &gt; 0 ? &apos;translate(-100px, 210px) rotate(90deg)&apos; : &apos;translate(-100px, 185px) rotate(90deg)&apos; &quot; :pagestructure=&quot;rowStructure&quot;&gt;&lt;/table-scroll-component&gt;
+        ///        &lt;div v-if=&quot;rowPageCount &gt; 0&quot; style=&quot;width:25px; height: 0px;&quot;&gt;
+        ///            &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;rowPageCount&quot; :width=&quot;&apos;230px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;colPageCount &gt; 0 ? &apos;translate(-100px, 220px) rotate(90deg)&apos; : &apos;translate(-100px, 205px) rotate(90deg)&apos; &quot; :pagestructure=&quot;rowStructure&quot;&gt;&lt;/table-scroll-component&gt;
         ///        &lt;/div&gt;
-        ///
-        ///        &lt;table-scroll-component v-if=&quot;colPageCount &gt; 0&quot; :min=&quot;0&quot; :max=&quot;colPageCount&quot; :width=&quot;&apos;200px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;&apos;transla [rest of string was truncated]&quot;;.
+        ///        
+        ///        &lt;table-scroll-component v-if=&quot;colPageCount &gt; 0&quot; :min=&quot;0&quot; :max=&quot;colPageCount&quot; :width=&quot;&apos;200px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayDamageTable {
             get {
@@ -882,12 +885,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex my-2&quot;&gt;
-        ///        &lt;div class=&quot;ml-auto&quot; style=&quot; width: 650px;&quot;&gt;
-        ///            &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;phaseduration&quot; :phasehassubphases=&quot;false&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot; /&gt;
+        ///    &lt;div class=&quot;combat-replay&quot;&gt;
+        ///        &lt;div&gt;
+        ///            &lt;combat-replay-damage-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;phaseduration&quot; :phasehassubphases=&quot;false&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot; /&gt;
         ///            &lt;combat-replay-damage-stats-component :time=&quot;animationStatus.time&quot; :playerid=&quot;animationStatus.selectedActorID&quot; :graphdata=&quot;graphdata&quot; /&gt;
         ///            &lt;combat-replay-extra-decorations-component :light=&quot;light&quot; class=&quot;mx-auto&quot; /&gt;
-        ///         [rest of string was truncated]&quot;;.
+        ///        &lt;/div&gt;
+        ///        &lt;combat-replay- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayUI {
             get {
@@ -1571,7 +1575,7 @@ namespace GW2EIBuilders.Properties {
         ///
         ///&lt;head&gt;
         ///    &lt;meta charset=&quot;utf-8&quot;&gt;
-        ///    &lt;link id=&quot;theme&quot; rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;
+        ///    &lt;link id=&quot;theme&quot; rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/${bootstrapTheme}/bootstrap.min.css&quot;
         ///          crossorigin=&quot;anonymous&quot;&gt;
         ///    &lt;!--${Css}--&gt;
         ///    &lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
@@ -2114,13 +2118,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot; :style=&quot;{&apos;width&apos;: totalWidth}&quot;&gt;
-        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center flex-wrap&quot; style=&quot;max-width: 408px;&quot;&gt;
+        ///    &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot; style=&quot;max-width: 650px; min-width: 450px;&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center flex-wrap&quot; :style=&quot;{&apos;max-width&apos;: totalWidths.targets}&quot;&gt;
         ///            &lt;div v-for=&quot;target in mainTargets&quot;&gt;
         ///                &lt;img class=&quot;icon-lg mr-2 ml-2 target-cell&quot; 
         ///                    :src=&quot;getTargetData(target.id).icon&quot; 
         ///                    :alt=&quot;getTargetData(target.id).name&quot;
-        ///                    :data-original-title=&quot;getTargetData(t [rest of string was truncated]&quot;;.
+        ///                    :data- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargets {
             get {

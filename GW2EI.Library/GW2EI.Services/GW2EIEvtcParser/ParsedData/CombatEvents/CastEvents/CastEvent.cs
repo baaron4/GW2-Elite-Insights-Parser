@@ -5,7 +5,15 @@ namespace GW2EIEvtcParser.ParsedData;
 public abstract class CastEvent : TimeCombatEvent
 {
 
-    public enum AnimationStatus { Unknown, Reduced, Interrupted, Full, Instant };
+    public enum AnimationStatus
+    {
+        Unknown,
+        Reduced,
+        Interrupted,
+        Full,
+        Instant,
+        CustomMovement, // Not in game data 
+    };
 
     // start item
     public SkillItem Skill { get; protected set; }

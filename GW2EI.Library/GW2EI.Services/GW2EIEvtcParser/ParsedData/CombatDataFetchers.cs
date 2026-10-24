@@ -389,17 +389,22 @@ partial class CombatData
 
     public BuffInfoEvent? GetBuffInfoEvent(long buffID)
     {
-        return _metaDataEvents.BuffInfoEvents.GetValueOrDefault(buffID);
+        return _metaDataEvents.BuffInfoEventByBuffID.GetValueOrDefault(buffID);
     }
 
-    public IReadOnlyList<BuffInfoEvent> GetBuffInfoEvent(byte category)
+    public IReadOnlyList<BuffInfoEvent> GetBuffInfoEventsByCategory(byte category)
     {
         return _metaDataEvents.BuffInfoEventsByCategory.GetValueOrEmpty(category);
     }
 
     public SkillInfoEvent? GetSkillInfoEvent(long skillID)
     {
-        return _metaDataEvents.SkillInfoEvents.GetValueOrDefault(skillID);
+        return _metaDataEvents.SkillInfoEventBySkillID.GetValueOrDefault(skillID);
+    }
+
+    public IReadOnlyList<SkillInfoEvent> GetSkillInfoEvents()
+    {
+        return _metaDataEvents.SkillInfoEvents;
     }
 
     public IReadOnlyList<GadgetModelInfoEvent> GetGadgetModelInfoEvents(AgentItem src)
@@ -1558,9 +1563,9 @@ partial class CombatData
         FillFromRangeUnique(events, seen, _metaDataEvents.GuildEvents.Values.SelectMany(x => x));
 
         // INFO
-        FillFromRangeUnique(events, seen, _metaDataEvents.BuffInfoEvents.Values);
+        FillFromRangeUnique(events, seen, _metaDataEvents.BuffInfoEventByBuffID.Values);
         FillFromRangeUnique(events, seen, _metaDataEvents.BuffInfoEventsByCategory.Values.SelectMany(x => x));
-        FillFromRangeUnique(events, seen, _metaDataEvents.SkillInfoEvents.Values);
+        FillFromRangeUnique(events, seen, _metaDataEvents.SkillInfoEventBySkillID.Values);
 
         // ERRORS
         FillFromRangeUnique(events, seen, _metaDataEvents.ErrorEvents);

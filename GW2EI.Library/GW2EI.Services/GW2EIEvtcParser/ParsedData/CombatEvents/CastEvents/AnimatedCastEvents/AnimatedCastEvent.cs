@@ -135,16 +135,22 @@ public abstract class AnimatedCastEvent : CastEvent
     }
 
     // Custom
-    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur) : base(start, skill, caster)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AnimationStatus status = AnimationStatus.Full) : base(start, skill, caster)
     {
+        if (status == AnimationStatus.Instant ||
+            status == AnimationStatus.Reduced ||
+            status == AnimationStatus.Interrupted)
+        {
+            throw new InvalidDataException("Custom Animated casts can't be instant, reduced or interrupted");
+        }
         ActualDuration = (int)dur;
         ExpectedDuration = ActualDuration;
-        AccelerationQuicknessSlow = 0;
-        Status = AnimationStatus.Full;
+        Acceleration = 0;
+        Status = status;
         SavedDuration = 0;
     }
 
-    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target) : this(caster, skill, start, dur)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : this(caster, skill, start, dur, status)
     {
         Target = target;
     }
