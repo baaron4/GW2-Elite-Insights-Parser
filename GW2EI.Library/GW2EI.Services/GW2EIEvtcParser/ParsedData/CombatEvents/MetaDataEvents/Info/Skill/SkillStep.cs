@@ -1,6 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
 
-using static GW2EIEvtcParser.ArcDPSEnums;
+namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillStep
 {

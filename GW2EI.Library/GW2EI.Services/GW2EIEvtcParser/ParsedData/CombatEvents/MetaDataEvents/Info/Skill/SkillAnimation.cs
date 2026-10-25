@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParserHelpers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -13,6 +14,9 @@ public class SkillAnimation
     private readonly List<SkillStep> _steps = [];
     public IReadOnlyList<SkillTiming> Timings => _timings;
     public IReadOnlyList<SkillStep> Steps => _steps;
+
+    private Dictionary<SkillTiming, (SkillStep Step, int Delay)>? _timingToStep = null;
+    private Dictionary<SkillStep, List<SkillTiming>>? _stepToTimings = null;
 
     internal int LoopStartIndex => _steps.FindIndex(step => step.IsLoopStart);
     internal int LoopEndIndex => _steps.FindIndex(step => step.IsLoopEnd);
@@ -32,11 +36,13 @@ public class SkillAnimation
     internal void AddTiming(CombatItem evtcItem)
     {
         _timings.Add(SkillTiming.Build(evtcItem, this));
+        DiscardTimingData();
     }
 
     internal void AddStep(CombatItem evtcItem)
     {
         _steps.Add(new SkillStep(evtcItem, this));
+        DiscardTimingData();
     }
 
     public uint GetLoopSteps(bool minLoop)
@@ -44,34 +50,84 @@ public class SkillAnimation
         return minLoop ? MinLoopSteps : MaxLoopSteps;
     }
 
-    public bool TryFindTriggerStep(int triggerTime, [NotNullWhen(true)] out SkillStep? triggerStep, [NotNullWhen(true)] out int? triggerDelay)
+    [MemberNotNull(nameof(_stepToTimings), nameof(_timingToStep))]
+    private void InitTimingData()
     {
-        int stepTime = 0;
-        foreach (var step in Steps)
+        if (_timingToStep == null || _stepToTimings == null)
         {
-            var stepEnd = stepTime + step.Duration;
-            if (triggerTime < stepEnd)
+            _timingToStep = new(Timings.Count);
+            _stepToTimings = new(Steps.Count);
+
+            var stepTime = 0;
+            var timingIndex = 0;
+            foreach (var step in Steps)
             {
-                triggerStep = step;
-                triggerDelay = triggerTime - stepTime;
-                return true;
+                var attached = new List<SkillTiming>();
+                var stepEnd = stepTime + step.Duration;
+                while (timingIndex < Timings.Count)
+                {
+                    var timing = Timings[timingIndex];
+                    if (timing.Time >= stepEnd)
+                    {
+                        break;
+                    }
+                    var delay = timing.Time - stepTime;
+                    _timingToStep.Add(timing, (step, delay));
+                    attached.Add(timing);
+                    timingIndex++;
+                }
+                _stepToTimings.Add(step, attached);
+                stepTime = stepEnd;
             }
-            stepTime = stepEnd;
         }
-        triggerStep = null;
-        triggerDelay = null;
+    }
+
+    private void DiscardTimingData()
+    {
+        _timingToStep = null;
+        _stepToTimings = null;
+    }
+
+    public SkillStep GetTriggerStep(SkillTiming timing)
+    {
+        InitTimingData();
+        return _timingToStep[timing].Step;
+    }
+
+    public bool TryGetTriggerStep(SkillTiming timing, [NotNullWhen(true)] out SkillStep? step)
+    {
+        InitTimingData();
+        if (_timingToStep.TryGetValue(timing, out var info))
+        {
+            step = info.Step;
+            return true;
+        }
+        step = null;
         return false;
     }
 
-    public bool TryFindTriggerStep(SkillTiming timing, [NotNullWhen(true)] out SkillStep? triggerStep, [NotNullWhen(true)] out int? triggerDelay)
+    public int GetTriggerDelay(SkillTiming timing)
     {
-        return TryFindTriggerStep(timing.Time, out triggerStep, out triggerDelay);
+        InitTimingData();
+        return _timingToStep[timing].Delay;
     }
 
-    public IEnumerable<SkillStep> Simulate(bool minLoop)
+    public bool TryGetTriggerDelay(SkillTiming timing, [NotNullWhen(true)] out int? delay)
+    {
+        InitTimingData();
+        if (_timingToStep.TryGetValue(timing, out var info))
+        {
+            delay = info.Delay;
+            return true;
+        }
+        delay = null;
+        return false;
+    }
+
+    public IEnumerable<SkillStep> SimulateSteps(bool minLoop)
     {
         var loopSteps = GetLoopSteps(minLoop);
-        bool inLoop = false;
+        var inLoop = false;
         var i = 0;
         while (i < Steps.Count)
         {
@@ -101,34 +157,68 @@ public class SkillAnimation
         }
     }
 
-    public int? ComputeFullStepDuration(bool minLoop = false)
+    public delegate bool StepPredicate(SkillStep step);
+    public delegate bool TimingPredicate(SkillTiming timing);
+
+    public int? ComputeFullStepDuration(TimeScale.Scaling? scaling = null, bool minLoop = false)
     {
         if (Steps.Count == 0)
         {
             return null;
         }
-        return Simulate(minLoop).Sum(step => step.Duration);
+        return SimulateSteps(minLoop).Sum(step => TimeScale.ApplyScaling(step.Duration, scaling));
     }
 
-    public int? ComputeControlReturn(bool minLoop = false)
+    public int? ComputeStepTime(Func<SkillStep, bool> predicate, bool last, TimeScale.Scaling? scaling = null, bool minLoop = false)
     {
-        var controlReturn = Timings.FirstOrDefault(timing => timing.IsControlReturn);
-        if (controlReturn != null && TryFindTriggerStep(controlReturn, out var triggerStep, out var triggerDelay))
+        var passed = 0;
+        int? stepTime = null;
+        foreach (var step in SimulateSteps(minLoop))
         {
-            var passed = 0;
-            foreach (var step in Simulate(minLoop))
+            if (predicate(step))
             {
-                if (step == triggerStep)
+                stepTime = passed;
+                if (!last)
                 {
-                    return passed + triggerDelay.Value;
+                    return stepTime;
                 }
-                passed += step.Duration;
             }
-            return passed;
+            passed += TimeScale.ApplyScaling(step.Duration, scaling);
         }
-        else
+        return stepTime;
+    }
+
+    public int? ComputeTriggerTime(Func<SkillTiming, bool> predicate, bool last, TimeScale.Scaling? scaling = null, bool minLoop = false)
+    {
+        InitTimingData();
+        var passed = 0;
+        int? triggerTime = null;
+        foreach (var step in SimulateSteps(minLoop))
         {
-            return ComputeFullStepDuration(minLoop);
+            foreach (var timing in _stepToTimings[step])
+            {
+                if (predicate(timing))
+                {
+                    var delay = GetTriggerDelay(timing);
+                    triggerTime = passed + TimeScale.ApplyScaling(delay, scaling);
+                    if (!last)
+                    {
+                        return triggerTime;
+                    }
+                }
+            }
+            passed += TimeScale.ApplyScaling(step.Duration, scaling);
         }
+        return triggerTime;
+    }
+
+    public int? ComputeControlReturn(TimeScale.Scaling? scaling = null, bool minLoop = false)
+    {
+        return ComputeTriggerTime(timing => timing.IsControlReturn, false, scaling, minLoop) ?? ComputeFullStepDuration(scaling, minLoop);
+    }
+
+    public int? ComputeAnyExecute(bool last = false, TimeScale.Scaling? scaling = null, bool minLoop = false)
+    {
+        return ComputeTriggerTime(timing => timing.IsAnyExecute, last, scaling, minLoop);
     }
 }

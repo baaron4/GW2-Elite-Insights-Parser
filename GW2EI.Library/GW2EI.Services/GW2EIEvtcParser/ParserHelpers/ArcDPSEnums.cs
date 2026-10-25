@@ -577,7 +577,7 @@ public static class ArcDPSEnums
         return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
     }*/
 
-    // Unstable, ingame enum
+    // Stable ingame enum
     public enum SkillTrigger : byte
     {
         ControlReturn = 0,
@@ -597,7 +597,7 @@ public static class ArcDPSEnums
         return Enum.IsDefined(typeof(SkillTrigger), bt) ? (SkillTrigger)bt : SkillTrigger.Unknown;
     }
 
-    // Unstable, ingame enum
+    // Stable ingame enum
     [Flags]
     public enum SkillStepFlags : uint
     {
