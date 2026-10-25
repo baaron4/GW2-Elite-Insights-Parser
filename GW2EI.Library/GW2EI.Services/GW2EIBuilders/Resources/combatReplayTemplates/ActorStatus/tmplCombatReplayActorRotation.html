@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex align-items-center actor-rotation">
         <div v-if="castingSkill">
-            <img class="icon-cur-cr-rota" :class="getIconClass(castingSkill)" :src="castingSkill.skill.icon" :title="getTooltip(castingSkill)" />
+            <img class="icon-cur-cr-rota" :class="getIconClass(castingSkill)" :src="castingSkill.skill.icon" :data-original-title="getTooltip(castingSkill)" />
         </div>
         <div v-else class="empty-icon-cur-cr-rota"></div>
 
         <div v-for="next in nextSkills">
-            <img class="icon-next-cr-rota" :class="getIconClass(next)" :src="next.skill.icon" :title="getTooltip(next)" />
+            <img class="icon-next-cr-rota" :class="getIconClass(next)" :src="next.skill.icon" :data-original-title="getTooltip(next)" />
         </div>
     </div>
 </template>
