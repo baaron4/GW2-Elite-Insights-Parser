@@ -46,7 +46,7 @@ function _buildFallBackURL(url) {
         var signature = splitIcon[splitIcon.length - 2];
         return "https://icons-gw2.darthmaim-cdn.com/" + signature + "/" + id;
     } else {
-        return "https://assets.gw2dat.com/"+ id;
+        return "https://assets.gw2dat.com/" + id;
     }
 }
 
@@ -81,7 +81,7 @@ function getTargetCacheID(activetargets) {
 }
 
 function getDPSGraphCacheID(dpsmode, damagemode, graphmode, activetargets, phaseIndex, extra) {
-    return "dps" + dpsmode + '-'+ damagemode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
+    return "dps" + dpsmode + '-' + damagemode + '-' + graphmode + '-' + getTargetCacheID(activetargets) + '-' + phaseIndex + (extra !== null ? '-' + extra : '');
 }
 
 function graphTypeEnumToString(mode) {
@@ -297,22 +297,22 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             const originalDuration = duration;
             let yOffset = 1.2;
             let width = aa ? 0.5 : 1.0;
-            if (endType === RotationStatus.REDUCED) { 
-                fillColor = 'rgb(0,0,255)'; 
-            } else if (endType === RotationStatus.CANCEL) { 
-                fillColor = 'rgb(255,0,0)'; 
-            } else if (endType === RotationStatus.FULL || endType === RotationStatus.CUSTOM_MOVEMENT) { 
-                fillColor = 'rgb(0,255,0)'; 
+            if (endType === RotationStatus.REDUCED) {
+                fillColor = 'rgb(0,0,255)';
+            } else if (endType === RotationStatus.CANCEL) {
+                fillColor = 'rgb(255,0,0)';
+            } else if (endType === RotationStatus.FULL || endType === RotationStatus.CUSTOM_MOVEMENT) {
+                fillColor = 'rgb(0,255,0)';
                 if (endType === RotationStatus.CUSTOM_MOVEMENT) {
                     width = 0.3;
                     yOffset = 1;
                 }
-            } else if (endType === RotationStatus.INSTANT) { 
-                fillColor = 'rgb(0,255,255)'; 
+            } else if (endType === RotationStatus.INSTANT) {
+                fillColor = 'rgb(0,255,255)';
                 duration = 50; // so that the quad is visible
                 width = 0.7;
             } else { // UNKNOWN
-                fillColor = 'rgb(255,255,0)'; 
+                fillColor = 'rgb(255,255,0)';
             }
 
             const clampedX = Math.max(x, 0);
@@ -472,7 +472,7 @@ function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets,
         } else if (phasebreaks && phasebreaks[j]) {
             left = j;
         }
-        right = j;    
+        right = j;
         if (centeredDPS) {
             if (lim > 0) {
                 right = Math.min(Math.round(time + lim), end - 1);
@@ -486,7 +486,7 @@ function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets,
             } else {
                 right = end - 1;
             }
-        }          
+        }
         var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
         totalDamage = damageGraphs.total[right] - damageGraphs.total[left];
         totalDamageTaken = damageGraphs.taken[right] - damageGraphs.taken[left];
@@ -549,7 +549,7 @@ function findState(states, timeS, start, end) {
 }
 
 function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
-    let layout =  {
+    let layout = {
         barmode: 'stack',
         yaxis2: {
             title: 'Rotation',
@@ -559,7 +559,7 @@ function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
             showticklabels: false,
             color: color,
             range: [0, 2]
-        },      
+        },
         legend: {
             traceorder: 'reversed'
         },
@@ -655,20 +655,20 @@ function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphNa
         var times = [];
         var target = targets[phase.targets[i]];
         for (var j = 0; j < graphData.length; j++) {
-          texts[j] = graphData[j][1] + "% " + percentName + " - " + target.name;
-          times[j] = graphData[j][0];
+            texts[j] = graphData[j][1] + "% " + percentName + " - " + target.name;
+            times[j] = graphData[j][0];
         }
         var res = {
-          x: times,
-          text: texts,
-          mode: "lines",
-          line: {
-            dash: "dashdot",
-            shape: "hv",
-          },
-          hoverinfo: "text",
-          visible: visible ? true : "legendonly",
-          name: target.name + " " + graphName,
+            x: times,
+            text: texts,
+            mode: "lines",
+            line: {
+                dash: "dashdot",
+                shape: "hv",
+            },
+            hoverinfo: "text",
+            visible: visible ? true : "legendonly",
+            name: target.name + " " + graphName,
         };
         if (yaxis) {
             res.yaxis = yaxis;
@@ -965,7 +965,7 @@ function hasOutgoingDamageMods() {
 }
 
 function hasIncomingDamageMods() {
-    return Object.keys(logData.damageIncModMap).length !== 0 ;
+    return Object.keys(logData.damageIncModMap).length !== 0;
 }
 
 function hasDamageMods() {
@@ -1018,7 +1018,7 @@ function hasMechanics() {
 }
 
 function hasTargets() {
-    return !logData.targetless ;
+    return !logData.targetless;
 }
 
 function hasOffBuffs() {
@@ -1074,7 +1074,7 @@ function hasBarrierExtension() {
     return !!barrierStatsExtension;
 }
 
-function validateStartPath(path) {  
+function validateStartPath(path) {
     const setting = EIUrlParams.get("startPage");
     if (!setting) {
         return false;
@@ -1086,16 +1086,16 @@ function getActivePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if ( 
+        if (
             (
-                player.notInSquad && 
+                player.notInSquad &&
                 (
-                    player.firstAware > time || 
+                    player.firstAware > time ||
                     player.lastAware < time
                 )
-            ) || 
+            ) ||
             (
-                    player.isEnglobed && 
+                player.isEnglobed &&
                 (
                     (!player.isFirstEnglobed && player.firstAware > time) ||
                     (!player.isLastEnglobed && player.lastAware < time)
@@ -1114,17 +1114,17 @@ function getActiveNonFakePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isFake || 
+        if (player.isFake ||
             (
-                player.notInSquad && 
+                player.notInSquad &&
                 (
-                    player.firstAware > time || 
+                    player.firstAware > time ||
                     player.lastAware < time
                 )
-            ) || 
+            ) ||
             (
-                player.isEnglobed && 
-                (            
+                player.isEnglobed &&
+                (
                     (!player.isFirstEnglobed && player.firstAware > time) ||
                     (!player.isLastEnglobed && player.lastAware < time)
                 )
@@ -1295,3 +1295,86 @@ function binarySearchFirstIndex(arr, predicate) {
 
     return result;
 }
+
+// Currently verbose and called on request animation frame, later we can restrict the calls on vuejs update cycle on
+// relevant components
+function sweepOrphanedOrRefreshedTooltips() {
+    if (!window.jQuery) return;
+
+    const $triggers = $('[data-original-title], [data-toggle="tooltip"]').filter(':visible');
+
+    $triggers.each(function () {
+        const $el = $(this);
+        const bsTooltip = $el.data('bs.tooltip');
+
+        if (bsTooltip && bsTooltip.element) {
+            const isTriggerAlive = document.body.contains(bsTooltip.element);
+
+            if (isTriggerAlive) {
+                const isOpen = $el.attr('aria-describedby');
+
+                // EARLY EXIT: If the tooltip isn't open, do nothing! 
+                // Bootstrap will automatically read the fresh `:data-original-title` attribute when opened later.
+                if (!isOpen) {
+                    return;
+                }
+
+                // --- RUNS ONLY FOR OPEN TOOLTIPS ---
+                const latestTitle = $el.attr('data-original-title') || $el.attr('title');
+                const isTriggerHovered = $el.is(':hover');
+                const isTipHovered = bsTooltip.tip && $(bsTooltip.tip).is(':hover');
+                const isPhysicallyHovered = isTriggerHovered || isTipHovered;
+                const bsThinksHovered = bsTooltip.inState && bsTooltip.inState.hover;
+
+                // 1. Refresh content if it changed *while* the tooltip was open
+                if (latestTitle && bsTooltip.config.title !== latestTitle) {
+                    console.log('[Tooltip Fix] Refreshing active tooltip content. New:', latestTitle);
+                    bsTooltip.config.title = latestTitle;
+                    if (isPhysicallyHovered) {
+                        $el.tooltip('hide').tooltip('show');
+                    }
+                }
+
+                // 2. Force hide if desynced (missed mouseleave event)
+                if (bsThinksHovered && !isPhysicallyHovered) {
+                    console.log('[Tooltip Fix] Force hiding desynced tooltip:', $el[0]);
+                    if (bsTooltip.inState) {
+                        bsTooltip.inState.hover = false;
+                    }
+                    $el.tooltip('hide');
+                }
+
+            } else {
+                // Clean up orphaned tooltips whose trigger was deleted
+                console.log('[Tooltip Fix] Cleaning up orphaned tooltip because trigger element was deleted:', bsTooltip.element);
+                $el.tooltip('dispose');
+
+                if (bsTooltip.tip) {
+                    $(bsTooltip.tip).remove();
+                }
+            }
+        }
+    });
+
+    // Final Sweep: Remove any stray ghost tooltips floating in the body with no active owner
+    const $strayTooltips = $('body > .tooltip');
+    $strayTooltips.each(function () {
+        const tooltipEl = this;
+        let hasOwner = false;
+
+        $triggers.each(function () {
+            const bsTooltip = $(this).data('bs.tooltip');
+            if (bsTooltip && bsTooltip.tip === tooltipEl) {
+                hasOwner = true;
+                return false;
+            }
+        });
+
+        if (!hasOwner) {
+            console.log('[Tooltip Fix] Removing stray ghost tooltip from body:', tooltipEl);
+            $(tooltipEl).remove();
+        }
+    });
+    requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
+}
+requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
