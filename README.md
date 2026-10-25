@@ -26,12 +26,9 @@ We suggest following [this guide](https://snowcrows.com/guides/arcdps/arcdps) wr
 ## Set Up
 
 ### Requirements
-- .NET8.0 
+- .NET10.0 
 
-You will be prompted to install .NET on Windows if you don't already have it, on Linux and MacOS please follow the instructions [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) you only need the ASP.NET Core Runtime.
-
-> [!IMPORTANT]  
-> .NET8.0 will reach end of life in November 2026. The November release will start using .NET10.0 you can find it [here](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+You will be prompted to install .NET on Windows if you don't already have it, on Linux and MacOS please follow the instructions [here](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) you only need the ASP.NET Core Runtime.
 
 ### UI
 #### Windows
@@ -43,7 +40,7 @@ You will be prompted to install .NET on Windows if you don't already have it, on
 > ArcDPS EVTC log files are located by default at `"C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"`.
 
 #### Linux
-There are `.deb` and `.rpm` packages available for Debian and Fedora based distros, .NET8.0 will be installed automatically, simply download the package of your choice and double click it to install.
+There are `.deb` and `.rpm` packages available for Debian and Fedora based distros, .NET10.0 will be installed automatically, simply download the package of your choice and double click it to install.
 
 For Arch users updates must be done via your AUR package manager:
 - Desktop: `elite-insights-bin` run it with `elite-insights` 
@@ -83,6 +80,22 @@ These are instructions for the `.zip`:
 3. Click `Open` when parsing done.
 
 You can use the Settings window to modify the parser output. The settings changes will not be applied to logs already parsing.
+
+### UI Console Arguments
+
+You can pass a configuration file with `-c [config path]`.
+
+`-p` disable windows specific functions.
+
+The inspect arguments will launch an inspector window on the first given log file, if no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.
+
+With `-inspect_raw` content will be the raw data as present in the evtc.
+
+With `-inspect_ei_partial` will launch an inspector window on the first given log file, content will be pre-processed by ei (gadget identifications, buff formula deduction, etc). 
+
+With `-inspect_ei_full` will launch an inspector window on the first given log file, content will be fully processed by ei (partial + custom events and agents). 
+
+Use `-h` to display the help message.
 
 ## Console Usage
 
