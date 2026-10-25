@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
@@ -62,18 +63,24 @@ internal class SkillDto : IDItemDto
         UnconditionalProc = log.SkillData.IsUnconditionalProc(skill.ID);
     }
 
-    private static readonly Dictionary<long, int?> ComputedControlReturns = new();
+    private static readonly Dictionary<(long, double, bool), int?> ComputedExpectedDurations = new();
 
-    private static int? ComputeControlReturn(ParsedEvtcLog log, long skillID)
+    private static int? ComputeExpectedDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
     {
-        if (!ComputedControlReturns.TryGetValue(skillID, out var controlReturn))
+        if (log.LogMetadata.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
         {
-            var water = false; // TODO: handle underwater
-            var info = log.SkillData.Get(skillID).SkillInfo;
-            controlReturn = info?.GetAnimation(water).ComputeControlReturn();
-            ComputedControlReturns.Add(skillID, controlReturn);
+            return null;
         }
-        return controlReturn;
+        var approxTimeScale = Math.Round(10.0 * timeScale) / 10.0; // group timescales to multiples of 10%
+        var key = (skillID, approxTimeScale, water);
+        if (!ComputedExpectedDurations.TryGetValue(key, out var lastExecute))
+        {
+            var info = log.SkillData.Get(skillID).SkillInfo;
+            var scaling = TimeScale.GetTickScaling(approxTimeScale);
+            lastExecute = info?.GetAnimation(water).ComputeAnyExecute(true, scaling);
+            ComputedExpectedDurations.Add(key, lastExecute);
+        }
+        return lastExecute;
     }
 
     public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
@@ -113,18 +120,10 @@ internal class SkillDto : IDItemDto
                 targetKey = prefix + target.ID;
                 used.npcs.TryAdd(targetKey, target);
             }
-            // Pre skill steps
-            // For non interrupt, simply take actual
-            // For interrupt take the max between actual duration and expected return control as a security
-            var expectedControlReturn = cl.ExpectedScaledDuration;
-            var expected = cl.IsInterrupted ? Math.Max(cl.ActualDuration, expectedControlReturn) : cl.ActualDuration;
-            var computedExpected = ComputeControlReturn(log, cl.SkillID);
-            if (computedExpected != null)
-            {
-                // take computed on interrupt, min between actual and computed otherwise for security
-                expected = Math.Min(cl.IsInterrupted ? int.MaxValue : cl.ActualDuration, cl.ApplyTimeScale(computedExpected.Value));
-            }
 
+            // prefer our computed expected durations (cant trust arcs expected durations), fallback to actual duration
+            var water = false; // TODO: handle underwater
+            var expected = ComputeExpectedDuration(log, cl.SkillID, cl.TimeScale, water) ?? cl.ActualDuration;
 
             var cast = new SkillCastDto()
             {
