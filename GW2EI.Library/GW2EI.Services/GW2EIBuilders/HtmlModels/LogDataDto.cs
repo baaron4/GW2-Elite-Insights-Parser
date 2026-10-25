@@ -10,6 +10,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -478,11 +479,32 @@ internal class LogDataDto
     internal class UsedData
     {
         //TODO_PERF(Rennorb) @find capacity dependencies
-        public Dictionary<long, Buff> buffs = new(128);
-        public HashSet<OutgoingDamageModifier> damageMods = new(32);
-        public HashSet<IncomingDamageModifier> incDamageMods = new(16);
-        public Dictionary<long, SkillItem> skills = new(256);
-        public Dictionary<string, AgentItem> npcs = new(16);
+        public readonly Dictionary<long, Buff> buffs = new(128);
+        public readonly HashSet<OutgoingDamageModifier> damageMods = new(32);
+        public readonly HashSet<IncomingDamageModifier> incDamageMods = new(16);
+        public readonly Dictionary<long, SkillItem> skills = new(256);
+        public readonly Dictionary<string, AgentItem> npcs = new(16);
+
+        private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastExecute, int? ControlReturn)> skillDurations = new(32);
+
+        public (int? LastExecute, int? ControlReturn) GetComputedSkillDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
+        {
+            if (log.LogMetadata.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
+            {
+                return (null, null);
+            }
+            var approxTimeScale = Math.Round(10.0 * timeScale) / 10.0; // group timescales to multiples of 10%
+            var key = (skillID, approxTimeScale, water);
+            if (!skillDurations.TryGetValue(key, out var duration))
+            {
+                var animation = log.SkillData.Get(skillID).SkillInfo?.GetAnimation(water);
+                var scaling = TimeScale.GetTickScaling(approxTimeScale);
+                duration.LastExecute = animation?.ComputeAnyExecute(true, scaling);
+                duration.ControlReturn = animation?.ComputeControlReturn(scaling);
+                skillDurations.Add(key, duration);
+            }
+            return duration;
+        }
     };
 
     public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)

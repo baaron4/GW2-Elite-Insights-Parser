@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
@@ -19,6 +18,7 @@ public struct SkillCastDto
     public int Status;
     public double Quickness;
     public int Expected;
+    public int Executed;
     public string? Target;
 
     public class Converter : JsonConverter<SkillCastDto>
@@ -37,12 +37,12 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.Status);
             writer.WriteNumberValue(value.Quickness);
             writer.WriteNumberValue(value.Expected);
+            writer.WriteNumberValue(value.Executed);
             writer.WriteStringValue(value.Target);
             writer.WriteEndArray();
         }
     }
 }
-
 
 internal class SkillDto : IDItemDto
 {
@@ -61,26 +61,6 @@ internal class SkillDto : IDItemDto
         GearProc = log.SkillData.IsGearProc(skill.ID);
         TraitProc = log.SkillData.IsTraitProc(skill.ID);
         UnconditionalProc = log.SkillData.IsUnconditionalProc(skill.ID);
-    }
-
-    private static readonly Dictionary<(long, double, bool), int?> ComputedExpectedDurations = new();
-
-    private static int? ComputeExpectedDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
-    {
-        if (log.LogMetadata.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
-        {
-            return null;
-        }
-        var approxTimeScale = Math.Round(10.0 * timeScale) / 10.0; // group timescales to multiples of 10%
-        var key = (skillID, approxTimeScale, water);
-        if (!ComputedExpectedDurations.TryGetValue(key, out var lastExecute))
-        {
-            var info = log.SkillData.Get(skillID).SkillInfo;
-            var scaling = TimeScale.GetTickScaling(approxTimeScale);
-            lastExecute = info?.GetAnimation(water).ComputeAnyExecute(true, scaling);
-            ComputedExpectedDurations.Add(key, lastExecute);
-        }
-        return lastExecute;
     }
 
     public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
@@ -121,9 +101,8 @@ internal class SkillDto : IDItemDto
                 used.npcs.TryAdd(targetKey, target);
             }
 
-            // prefer our computed expected durations (cant trust arcs expected durations), fallback to actual duration
             var water = false; // TODO: handle underwater
-            var expected = ComputeExpectedDuration(log, cl.SkillID, cl.TimeScale, water) ?? cl.ActualDuration;
+            var (LastExecute, ControlReturn) = used.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, water);
 
             var cast = new SkillCastDto()
             {
@@ -132,7 +111,8 @@ internal class SkillDto : IDItemDto
                 ActualDuration = cl.ActualDuration,
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
-                Expected = expected,
+                Expected = ControlReturn ?? 0,
+                Executed = LastExecute ?? 0,
                 Target = targetKey,
             };
             list.Add(cast);

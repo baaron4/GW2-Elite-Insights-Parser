@@ -33,13 +33,13 @@
             getTooltip(cast) {
                 let tooltip = `${cast.skill.name} at ${cast.time}s`;
                 if (cast.type !== RotationStatus.INSTANT) {
-                    tooltip += `\nCast duration: ${cast.duration}ms`;
+                    tooltip += `\nDuration: ${cast.duration}ms`;
                 }
-                if (cast.expected != 0) {
-                    tooltip += `\nExpected duration: ${cast.expected}ms`;
-                }
-                if (cast.duration > cast.expected) {
-                    tooltip += `\nAftercast: ${cast.duration - cast.expected}ms`;
+                if (cast.expected) {
+                    tooltip += `\nExpected: ${cast.expected}ms`;
+                    if (cast.executed && cast.executed != cast.expected) {
+                        tooltip += ` (fire at ${cast.executed}ms)`;
+                    }
                 }
                 if (cast.target) {
                     tooltip += `\nTarget: ${findTargetName(cast.target)}`;
@@ -52,11 +52,12 @@
             getCastbarStyle(cast) {
                 const start = 1000 * cast.time;
                 const passed = this.time - start;
+                const executed = cast.executed ?? cast.duration;
                 const cancel = cast.type === RotationStatus.CANCEL;
-                if (!cancel && passed >= cast.expected) {
+                if (!cancel && passed >= executed) {
                     return "background: #0c0";
                 } else {
-                    const progress = 100 * passed / cast.expected;
+                    const progress = 100 * passed / executed;
                     let fill = "#e70";
                     let bg = "#840";
                     if (cancel) {
@@ -67,7 +68,7 @@
                 }
             },
             getCastbarTimes(cast) {
-                const expected = cast.expected / 1000;
+                const expected = (cast.expected ?? cast.duration) / 1000;
                 const passed = this.time / 1000 - cast.time;
                 return `${passed.toFixed(2)} / ${expected.toFixed(2)}`;
             }
@@ -77,13 +78,14 @@
                 return this.isTarget ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             actorRotation: function () {
-                return this.actor.details.rotation[this.encounterPhase.id].map(skill => ({
-                    time: skill[0],
-                    skill: findSkill(false, skill[1]),
-                    duration: skill[3] === RotationStatus.CUSTOM_MOVEMENT ? 0 : skill[2],
-                    type: skill[3],
-                    expected: skill[5],
-                    target: skill[6]
+                return this.actor.details.rotation[this.encounterPhase.id].map(cast => ({
+                    time: cast[0],
+                    skill: findSkill(false, cast[1]),
+                    duration: cast[3] === RotationStatus.CUSTOM_MOVEMENT ? 0 : cast[2],
+                    type: cast[3],
+                    expected: cast[5],
+                    executed: cast[6],
+                    target: cast[7]
                 }));
             },
             actorRotationDurationIndexes: function () {

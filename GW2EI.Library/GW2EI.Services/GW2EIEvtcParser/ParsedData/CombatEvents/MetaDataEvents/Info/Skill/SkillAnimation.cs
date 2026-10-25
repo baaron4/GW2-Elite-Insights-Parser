@@ -88,12 +88,6 @@ public class SkillAnimation
         _stepToTimings = null;
     }
 
-    public SkillStep GetTriggerStep(SkillTiming timing)
-    {
-        InitTimingData();
-        return _timingToStep[timing].Step;
-    }
-
     public bool TryGetTriggerStep(SkillTiming timing, [NotNullWhen(true)] out SkillStep? step)
     {
         InitTimingData();
@@ -104,12 +98,6 @@ public class SkillAnimation
         }
         step = null;
         return false;
-    }
-
-    public int GetTriggerDelay(SkillTiming timing)
-    {
-        InitTimingData();
-        return _timingToStep[timing].Delay;
     }
 
     public bool TryGetTriggerDelay(SkillTiming timing, [NotNullWhen(true)] out int? delay)
@@ -199,7 +187,7 @@ public class SkillAnimation
             {
                 if (predicate(timing))
                 {
-                    var delay = GetTriggerDelay(timing);
+                    var delay = _timingToStep[timing].Delay;
                     triggerTime = passed + TimeScale.ApplyScaling(delay, scaling);
                     if (!last)
                     {
