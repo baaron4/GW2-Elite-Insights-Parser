@@ -347,37 +347,6 @@ internal static class LogLogicUtils
     }
 
     /// <summary>
-    /// Compute the cast duration while the target has <see cref="MistlockInstabilitySugarRush"/>.
-    /// </summary>
-    /// <param name="castDuration">Duration of the cast.</param>
-    /// <returns>The duration of the cast.</returns>
-    internal static double ComputeCastTimeWithSugarRush(long castDuration)
-    {
-        return castDuration * 0.8;
-    }
-
-    /// <summary>
-    /// Compute the cast duration while the target has <see cref="Quickness"/> and <see cref="MistlockInstabilitySugarRush"/>.
-    /// </summary>
-    /// <param name="log">The log.</param>
-    /// <param name="actor">Actor casting.</param>
-    /// <param name="startCastTime">Starting time of the cast.</param>
-    /// <param name="castDuration">Duration of the cast.</param>
-    /// <returns>The duration of the cast.</returns>
-    internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, SingleActor actor, long startCastTime, long castDuration)
-    {
-        long expectedEndCastTime = startCastTime + castDuration;
-        Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in x) => x.Value == 1);
-        if (quickness != null)
-        {
-            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.Value.End) - Math.Max(startCastTime, quickness.Value.Start);
-            double castTimeWithSugarRush = ComputeCastTimeWithSugarRush(castDuration);
-            return castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
-        }
-        return 0;
-    }
-
-    /// <summary>
     /// Compute the end time of a cast.<br></br>
     /// If <paramref name="buffID"/> is present before the end of the cast, return the <paramref name="buffID"/> application time.
     /// </summary>
