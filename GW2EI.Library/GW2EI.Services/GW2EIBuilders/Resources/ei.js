@@ -228,7 +228,7 @@ function mainLoad() {
     new Vue({
         el: "#content",
         data: {
-            light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
+            light: logData.lightTheme,
             mode: getDefaultMainComponent(),
             cr: !!crData,
             healingExtShow: !!healingStatsExtension || logData.evtcBuild >= 20210701,
@@ -244,8 +244,8 @@ function mainLoad() {
                 this.light = state;
                 const newStyle = this.light ? 'yeti' : 'slate';
                 document.body.classList.remove("theme-" + style);
-                document.body.classList.add("theme-" + newStyle);
-                if (storeTheme) storeTheme(newStyle);
+                document.body.classList.add("theme-" + newStyle);             
+                setValueToLocalStorage("theme", newStyle);
                 const theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
             },
@@ -339,6 +339,7 @@ function checkImgurAccess() {
 
 window.onload = function () {
     Vue.config.devtools = true;
+    initTheme();
     checkImgurAccess().then(notBlocked => {
         replaceImgur = !notBlocked;
         // trick from

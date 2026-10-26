@@ -629,10 +629,7 @@ const localStoragedSettings = function (settings) {
     settingNames.forEach((settingName) => {
         data[settingName] = settings[settingName].defaultValue;
         watch[settingName] = function (newValue) {
-            const localStorageName = "ei_" + settingName;
-            if (window.localStorage) {
-                window.localStorage.setItem(localStorageName, newValue);
-            }
+            setValueToLocalStorage(settingName, newValue);
             if (settings[settingName].fn) {
                 settings[settingName].fn(newValue);
             }

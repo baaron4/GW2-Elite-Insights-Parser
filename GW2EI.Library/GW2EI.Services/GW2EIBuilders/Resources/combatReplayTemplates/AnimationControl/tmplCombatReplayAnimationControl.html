@@ -308,10 +308,7 @@
         template: `${template}`,
         mixins: [encounterPhaseComponent, numberComponent, UIIconsComponent, localStoragedSettings({
             useAdvancedTimeline: {
-                defaultValue: !isTouchDevice &&
-                    window.localStorage &&
-                    (window.localStorage.getItem("ei_useAdvancedTimeline") === null ||
-                        window.localStorage.getItem("ei_useAdvancedTimeline") === "true"),
+                defaultValue: !isTouchDevice && getValueFromLocalStorage("useAdvancedTimeline") !== "false",
                 cb: (iOnOff) => {
                     if (iOnOff) {
                         this.hideSimpleTimelineTooltip();

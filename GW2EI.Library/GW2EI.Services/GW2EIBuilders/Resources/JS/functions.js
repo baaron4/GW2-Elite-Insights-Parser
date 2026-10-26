@@ -1306,6 +1306,19 @@ function binarySearchFirstIndex(arr, predicate) {
     return result;
 }
 
+function getValueFromLocalStorage(key) {
+    if (window.localStorage) {
+        return window.localStorage.getItem("ei_" + key);
+    }
+    return null;
+}
+
+function setValueToLocalStorage(key, value) {
+    if (window.localStorage) {
+        return window.localStorage.setItem("ei_" + key, value);
+    }
+}
+
 function getCastTooltip(cast) {
     let tooltip = `${cast.skill.name} at ${cast.time}s`;
     if (cast.type !== RotationStatus.INSTANT) {
@@ -1405,3 +1418,12 @@ function sweepOrphanedOrRefreshedTooltips() {
     requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
 }
 requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
+
+function initTheme() {
+    const localStorageTheme = getValueFromLocalStorage("theme");
+    if (localStorageTheme && themes[localStorageTheme]) {
+        $('#theme').attr('href', themes[localStorageTheme]);
+        logData.lightTheme = localStorageTheme === "yeti";
+        document.body.classList.add("theme-" + localStorageTheme);  
+    }
+}
