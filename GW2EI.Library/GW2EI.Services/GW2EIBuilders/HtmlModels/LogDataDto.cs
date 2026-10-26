@@ -493,12 +493,12 @@ internal class LogDataDto
             {
                 return (null, null);
             }
-            var approxTimeScale = Math.Round(10.0 * timeScale) / 10.0; // group timescales to multiples of 10%
-            var key = (skillID, approxTimeScale, water);
+            timeScale = TimeScale.NormalizeCommonScales(timeScale);
+            var key = (skillID, timeScale, water);
             if (!skillDurations.TryGetValue(key, out var duration))
             {
                 var animation = log.SkillData.Get(skillID).SkillInfo?.GetAnimation(water);
-                var scaling = TimeScale.GetTickScaling(approxTimeScale);
+                var scaling = TimeScale.GetTickScaling(timeScale);
                 duration.LastExecute = animation?.ComputeAnyExecute(true, scaling);
                 duration.ControlReturn = animation?.ComputeControlReturn(scaling);
                 skillDurations.Add(key, duration);

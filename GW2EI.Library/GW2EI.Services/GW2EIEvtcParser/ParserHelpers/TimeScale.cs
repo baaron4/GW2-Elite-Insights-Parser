@@ -11,6 +11,8 @@ public static class TimeScale
     }
 
     public const int Tick = 40;
+    public const double Quickness = 1.0 / 0.67;
+    public const double Slow = 1.0 / 1.5;
 
     public static int ToTickCount(int duration)
     {
@@ -69,5 +71,22 @@ public static class TimeScale
     public static Scaling GetTickScaling(double timeScale = 1.0, Behavior behavior = Behavior.RoundToEven)
     {
         return duration => ToScaledTickTime(duration, timeScale, behavior);
+    }
+
+    public static double NormalizeCommonScales(double timeScale, double epsilon = 0.06)
+    {
+        if (Math.Abs(timeScale - 1.0) < epsilon)
+        {
+            return 1.0;
+        }
+        else if (Math.Abs(timeScale - Quickness) < epsilon)
+        {
+            return Quickness;
+        }
+        else if (Math.Abs(timeScale - Slow) < epsilon)
+        {
+            return Slow;
+        }
+        return timeScale;
     }
 }
