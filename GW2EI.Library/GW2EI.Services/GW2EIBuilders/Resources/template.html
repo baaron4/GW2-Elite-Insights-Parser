@@ -16,13 +16,18 @@
     <!--${CompressionUtils}-->
     <script>
 
+        const themes = {
+            "yeti": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/yeti/bootstrap.min.css",
+            "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/slate/bootstrap.min.css"
+        };
+
         function initTheme() {
             window.theme = '${bootstrapTheme}';
             if (window.localStorage) {
                 var theme = window.localStorage.getItem('ei_theme');
                 if (theme) {
                     window.theme = theme;
-                    $('#theme').attr('href', 'https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/' + theme + '/bootstrap.min.css');
+                    $('#theme').attr('href', themes[theme]);
                 }
             }
         }

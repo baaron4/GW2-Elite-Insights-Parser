@@ -91,11 +91,6 @@ if (!String.prototype.includes) {
     });
 }
 
-const themes = {
-    "yeti": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/yeti/bootstrap.min.css",
-    "slate": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.2.1/slate/bootstrap.min.css"
-};
-
 const WeaponIcons = {
     Unknown: "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png",
     Axe: "https://render.guildwars2.com/file/AE4909124900E1A3006CEA394670603D5B0C15EE/631536.png",
