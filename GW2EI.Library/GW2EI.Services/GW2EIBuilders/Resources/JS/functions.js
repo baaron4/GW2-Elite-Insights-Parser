@@ -1312,7 +1312,7 @@ function getCastTooltip(cast) {
         tooltip += `<br>Duration: ${cast.duration}ms`;
     }
     if (cast.executed != 0) {
-        tooltip += `<br>Fires at: ${cast.executed}ms`;
+        tooltip += `<br>Cast bar duration: ${cast.executed}ms`;
         if (cast.expected != 0 && cast.executed < cast.expected) {
             tooltip += ` (expected at ${cast.expected}ms)`;
         }
