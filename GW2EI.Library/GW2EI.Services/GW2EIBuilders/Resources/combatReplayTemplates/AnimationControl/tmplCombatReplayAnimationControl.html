@@ -306,11 +306,22 @@
     Vue.component("combat-replay-animation-control-component", {
         props: ["time", "light", "animated", "range"],
         template: `${template}`,
-        mixins: [encounterPhaseComponent, numberComponent, UIIconsComponent],
+        mixins: [encounterPhaseComponent, numberComponent, UIIconsComponent, localStoragedSettings({
+            useAdvancedTimeline: {
+                defaultValue: !isTouchDevice &&
+                    window.localStorage &&
+                    (window.localStorage.getItem("ei_useAdvancedTimeline") === null ||
+                        window.localStorage.getItem("ei_useAdvancedTimeline") === "true"),
+                cb: (iOnOff) => {
+                    if (iOnOff) {
+                        this.hideSimpleTimelineTooltip();
+                    }
+                }
+            }
+        })],
         data: function () {
             return {
                 isTouchDevice: isTouchDevice,
-                useAdvancedTimeline: !isTouchDevice && window.localStorage && (window.localStorage.getItem("ei_useAdvancedTimeline") === null || window.localStorage.getItem("ei_useAdvancedTimeline") === "true"),
                 backwards: false,
                 sliderDelimiter: {
                     min: -1,
@@ -341,14 +352,6 @@
                     }
                 },
                 deep: true
-            },
-            useAdvancedTimeline: function (value) {
-                if (window.localStorage) {
-                    window.localStorage.setItem("ei_useAdvancedTimeline", value);
-                }
-                if (value) {
-                    this.hideSimpleTimelineTooltip();
-                }
             },
         },
         mounted() {
