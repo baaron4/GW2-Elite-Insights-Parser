@@ -1,5 +1,5 @@
+﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.ParserHelpers;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser.ParsedData;
 

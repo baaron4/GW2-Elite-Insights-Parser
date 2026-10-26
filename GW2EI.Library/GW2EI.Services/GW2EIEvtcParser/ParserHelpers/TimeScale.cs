@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser.ParserHelpers;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 public static class TimeScale
 {
