@@ -268,21 +268,9 @@
                 };
             },
             getTooltip(cast) {
-                let tooltip = `${cast.skill.name} at ${cast.time}s`;
-                if (cast.type !== RotationStatus.INSTANT) {
-                    tooltip += ` for ${cast.duration}ms`;
-                }
-                if (cast.expected != 0) {
-                    tooltip += `<br>Expected: ${cast.expected}ms`;
-                    if (cast.executed != 0 && cast.executed != cast.expected) {
-                        tooltip += ` (fire at ${cast.executed}ms)`;
-                    }
-                }
+                let tooltip = getCastTooltip(cast);
                 tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
                 tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
-                if (cast.target) {
-                    tooltip += `<br>Target: ${findTargetName(cast.target)}`;
-                }
                 return tooltip;
             },
             setAllSelectedSkills(selected) {

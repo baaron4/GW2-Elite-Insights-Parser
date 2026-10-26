@@ -30,20 +30,7 @@
                 };
             },
             getTooltip(cast) {
-                let tooltip = `${cast.skill.name} at ${cast.time}s`;
-                if (cast.type !== RotationStatus.INSTANT) {
-                    tooltip += `<br>Duration: ${cast.duration}ms`;
-                }
-                if (cast.expected != 0) {
-                    tooltip += `<br>Expected: ${cast.expected}ms`;
-                    if (cast.executed != 0 && cast.executed != cast.expected) {
-                        tooltip += ` (fire at ${cast.executed}ms)`;
-                    }
-                }
-                if (cast.target) {
-                    tooltip += `<br>Target: ${findTargetName(cast.target)}`;
-                }
-                return tooltip;
+                return getCastTooltip(cast);
             },
             isAnimated(cast) {
                 return cast && cast.type !== RotationStatus.INSTANT;
@@ -93,7 +80,7 @@
                 const executed = (cast.executed != 0 ? cast.executed : cast.duration) / 1000;
                 const expected = (cast.expected != 0 ? cast.expected : cast.duration) / 1000;
                 const passed = this.time / 1000 - cast.time;
-                return `${passed.toFixed(2)} / ${executed.toFixed(2)}${expected !== executed ? ` (${expected.toFixed(2)})` : ''}`;
+                return `${passed.toFixed(2)} / ${executed.toFixed(2)}${expected > executed ? ` (${expected.toFixed(2)})` : ''}`;
             }
         },
         computed: {

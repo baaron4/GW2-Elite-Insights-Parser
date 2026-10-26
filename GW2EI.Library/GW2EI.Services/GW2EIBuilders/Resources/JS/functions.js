@@ -1306,6 +1306,23 @@ function binarySearchFirstIndex(arr, predicate) {
     return result;
 }
 
+function getCastTooltip(cast) {
+    let tooltip = `${cast.skill.name} at ${cast.time}s`;
+    if (cast.type !== RotationStatus.INSTANT) {
+        tooltip += `<br>Duration: ${cast.duration}ms`;
+    }
+    if (cast.executed != 0) {
+        tooltip += `<br>Fires at: ${cast.executed}ms`;
+        if (cast.expected != 0 && cast.executed < cast.expected) {
+            tooltip += ` (expected at ${cast.expected}ms)`;
+        }
+    }
+    if (cast.target) {
+        tooltip += `<br>Target: ${findTargetName(cast.target)}`;
+    }
+    return tooltip;
+}
+
 // Currently verbose and called on request animation frame, later we can restrict the calls on vuejs update cycle on
 // relevant components
 function sweepOrphanedOrRefreshedTooltips() {
