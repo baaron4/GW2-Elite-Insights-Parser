@@ -19,9 +19,9 @@ internal static class SkillInfoSolver
         private ulong _maxBuild = GW2Builds.EndOfLife;
         private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
         private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
-        protected readonly TriggerType _result;
+        protected readonly SkillTrigger _result;
 
-        public SkillTimingDescriptor(int index, int time, TriggerType result)
+        public SkillTimingDescriptor(int index, int time, SkillTrigger result)
         {
             _index = time;
             _time = index;
@@ -56,7 +56,7 @@ internal static class SkillInfoSolver
             return false;
         }
 
-        protected bool ConditionMatches(SkillTimingWithSteps skillTiming)
+        protected bool ConditionMatches(SkillTimingWithFlags skillTiming)
         {
             if (skillTiming.Time == _time || (skillTiming.Time > 0 && _time == AnyPositive) || (skillTiming.Time < 0 && _time == AnyNegative))
             {
@@ -68,18 +68,18 @@ internal static class SkillInfoSolver
             return false;
         }
 
-        public bool Match(SkillTimingWithSteps formula, Dictionary<byte, TriggerType> toFill)
+        public bool Match(SkillTimingWithFlags formula, Dictionary<byte, SkillTrigger> toFill)
         {
             // No need to match anything if we already associated the result
             if (toFill.ContainsValue(_result))
             {
                 return true;
             }
-            if (formula.Trigger == TriggerType.Unknown && !toFill.ContainsKey(formula.TriggerUlong))
+            if (formula.Trigger == SkillTrigger.Unknown && !toFill.ContainsKey(formula.TriggerByte))
             {
                 if (ConditionMatches(formula))
                 {
-                    toFill[formula.TriggerUlong] = _result;
+                    toFill[formula.TriggerByte] = _result;
                     return true;
                 }
             }
@@ -190,9 +190,9 @@ internal static class SkillInfoSolver
 
     };
 
-    private static Dictionary<byte, TriggerType> RecognizeTriggers(CombatData combatData, ParserController operation)
+    private static Dictionary<byte, SkillTrigger> RecognizeTriggers(CombatData combatData, ParserController operation)
     {
-        var solvedTriggers = new Dictionary<byte, TriggerType>();
+        var solvedTriggers = new Dictionary<byte, SkillTrigger>();
         foreach (KeyValuePair<SkillTimingDescriptor, long> pair in _recognizerTiming)
         {
             if (!pair.Key.Available(combatData))
@@ -202,9 +202,10 @@ internal static class SkillInfoSolver
             var skillInfoEvent = combatData.GetSkillInfoEvent(pair.Value);
             if (skillInfoEvent != null)
             {
-                foreach (var skillTiming in skillInfoEvent.SkillTimings)
+                List<SkillTiming> skillTimings = [..skillInfoEvent.LandAnimation.Timings, ..skillInfoEvent.UnderwaterAnimation.Timings];
+                foreach (var skillTiming in skillTimings)
                 {
-                    if (skillTiming is SkillTimingWithSteps skillTimingWithSteps && pair.Key.Match(skillTimingWithSteps, solvedTriggers))
+                    if (skillTiming is SkillTimingWithFlags skillTimingWithSteps && pair.Key.Match(skillTimingWithSteps, solvedTriggers))
                     {
                         break;
                     }
@@ -236,7 +237,8 @@ internal static class SkillInfoSolver
             var skillInfoEvent = combatData.GetSkillInfoEvent(pair.Value);
             if (skillInfoEvent != null)
             {
-                foreach (var skillStep in skillInfoEvent.SkillSteps)
+                List<SkillStep> skillSteps = [.. skillInfoEvent.LandAnimation.Steps, .. skillInfoEvent.UnderwaterAnimation.Steps];
+                foreach (var skillStep in skillSteps)
                 {
                     if (pair.Key.Match(skillStep, solvedStepFlags))
                     {
