@@ -1,4 +1,4 @@
-namespace GW2EIEvtcParser.ParserHelpers;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 public static class TimeScale
 {
@@ -14,22 +14,22 @@ public static class TimeScale
     public const double Quickness = 1.0 / 0.67;
     public const double Slow = 1.0 / 1.5;
 
-    public static int ToTickCount(int duration)
+    private static int ToTickCount(int duration)
     {
         return (duration + Tick - 1) / Tick;
     }
 
-    public static int ToTickTime(int duration)
+    private static int ToTickTime(int duration)
     {
         return ToTickCount(duration) * Tick;
     }
 
-    public static int ToScaledTickTime(int duration, double timeScale, Behavior behavior)
+    private static int ToScaledTickTime(int duration, double timeScale, Behavior behavior)
     {
         return ToTickTime(Scale(duration, timeScale, behavior));
     }
 
-    public static int Scale(int duration, double timeScale, Behavior behavior)
+    private static int Scale(int duration, double timeScale, Behavior behavior)
     {
         return behavior switch
         {
@@ -41,22 +41,22 @@ public static class TimeScale
         };
     }
 
-    public static int ScaleRoundedAwayFromZero(int duration, double timeScale)
+    private static int ScaleRoundedAwayFromZero(int duration, double timeScale)
     {
         return (int)Math.Round(duration / timeScale, MidpointRounding.AwayFromZero);
     }
 
-    public static int ScaleRoundedToEven(int duration, double timeScale)
+    private static int ScaleRoundedToEven(int duration, double timeScale)
     {
         return (int)Math.Round(duration / timeScale, MidpointRounding.ToEven);
     }
 
-    public static int ScaleFloored(int duration, double timeScale)
+    private static int ScaleFloored(int duration, double timeScale)
     {
         return (int)(duration / timeScale);
     }
 
-    public static int ScaleCeiled(int duration, double timeScale)
+    private static int ScaleCeiled(int duration, double timeScale)
     {
         return (int)Math.Ceiling(duration / timeScale);
     }
