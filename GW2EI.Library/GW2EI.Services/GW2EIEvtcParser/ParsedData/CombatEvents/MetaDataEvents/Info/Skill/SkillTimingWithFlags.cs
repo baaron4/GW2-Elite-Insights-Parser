@@ -1,11 +1,11 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class SkillTimingWithSteps : SkillTiming
+public class SkillTimingWithFlags : SkillTiming
 {
     public readonly int Index;
     public readonly uint Flags;
 
-    internal SkillTimingWithSteps(CombatItem evtcItem, SkillAnimation animation) : base(evtcItem, animation)
+    internal SkillTimingWithFlags(CombatItem evtcItem, SkillAnimation animation) : base(evtcItem, animation)
     {
         var data = BitConverter.GetBytes(evtcItem.DstAgent);
         Time = BitConverter.ToInt32(data.AsSpan()[..4]);

@@ -25,11 +25,11 @@ public abstract class SkillTiming
     {
         if (SupportsSteps(evtcItem))
         {
-            return new SkillTimingWithSteps(evtcItem, animation);
+            return new SkillTimingWithFlags(evtcItem, animation);
         }
         else
         {
-            return new SkillTimingNoSteps(evtcItem, animation);
+            return new SkillTimingNoFlags(evtcItem, animation);
         }
     }
 
@@ -40,6 +40,6 @@ public abstract class SkillTiming
 
     internal static bool IsUnderwater(CombatItem evtcItem)
     {
-        return SupportsSteps(evtcItem) && SkillTimingWithSteps.IsUnderwater(evtcItem);
+        return SupportsSteps(evtcItem) && SkillTimingWithFlags.IsUnderwater(evtcItem);
     }
 }
