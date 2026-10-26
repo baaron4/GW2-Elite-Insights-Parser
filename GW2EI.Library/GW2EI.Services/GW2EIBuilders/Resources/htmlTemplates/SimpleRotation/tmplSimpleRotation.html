@@ -272,9 +272,9 @@
                 if (cast.type !== RotationStatus.INSTANT) {
                     tooltip += ` for ${cast.duration}ms`;
                 }
-                if (cast.expected) {
+                if (cast.expected != 0) {
                     tooltip += `<br>Expected: ${cast.expected}ms`;
-                    if (cast.executed && cast.executed != cast.expected) {
+                    if (cast.executed != 0 && cast.executed != cast.expected) {
                         tooltip += ` (fire at ${cast.executed}ms)`;
                     }
                 }

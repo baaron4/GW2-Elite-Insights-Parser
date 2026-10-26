@@ -34,9 +34,9 @@
                 if (cast.type !== RotationStatus.INSTANT) {
                     tooltip += `<br>Duration: ${cast.duration}ms`;
                 }
-                if (cast.expected) {
+                if (cast.expected != 0) {
                     tooltip += `<br>Expected: ${cast.expected}ms`;
-                    if (cast.executed && cast.executed != cast.expected) {
+                    if (cast.executed != 0 && cast.executed != cast.expected) {
                         tooltip += ` (fire at ${cast.executed}ms)`;
                     }
                 }
@@ -51,7 +51,7 @@
             getCastbarStyle(cast) {
                 const start = 1000 * cast.time;
                 const passed = this.time - start;
-                const executed = cast.executed ?? cast.duration;
+                const executed = cast.executed != 0 ? cast.executed : cast.duration;
                 const cancel = cast.type === RotationStatus.CANCEL;
                 if (!cancel && passed >= executed) {
                     return "background: #0c0";
@@ -67,7 +67,7 @@
                 }
             },
             getCastbarTimes(cast) {
-                const expected = (cast.expected ?? cast.duration) / 1000;
+                const expected = (cast.expected != 0 ? cast.expected : cast.duration) / 1000;
                 const passed = this.time / 1000 - cast.time;
                 return `${passed.toFixed(2)} / ${expected.toFixed(2)}`;
             }
