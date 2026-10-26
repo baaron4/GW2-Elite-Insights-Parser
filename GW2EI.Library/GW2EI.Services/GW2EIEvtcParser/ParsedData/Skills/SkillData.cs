@@ -67,19 +67,4 @@ public class SkillData
         }
     }
 
-    internal void CombineWithInfoEvents(IReadOnlyDictionary<long, SkillInfoEvent> skillInfoEvents, IReadOnlyDictionary<long, BuffInfoEvent> buffInfoEvents)
-    {
-        foreach (KeyValuePair<long, SkillItem> pair in _skills)
-        {
-            if (skillInfoEvents.TryGetValue(pair.Key, out var skillInfoEvent))
-            {
-                pair.Value.AttachSkillInfoEvent(skillInfoEvent);
-            }
-            if (buffInfoEvents.TryGetValue(pair.Key, out var buffInfoEvent))
-            {
-                pair.Value.AttachBuffInfoEvent(buffInfoEvent);
-            }
-        }
-    }
-
 }

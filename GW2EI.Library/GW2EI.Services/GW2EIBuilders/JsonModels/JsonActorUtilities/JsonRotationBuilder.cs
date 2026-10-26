@@ -17,7 +17,7 @@ internal static class JsonRotationBuilder
             CastTime = (int)cl.Time,
             Duration = cl.ActualDuration,
             TimeGained = cl.SavedDuration,
-            Quickness = cl.Acceleration
+            Quickness = cl.AccelerationQuicknessSlow
         };
         if (cl.IgnoreOnRotationRender())
         {

@@ -6,12 +6,19 @@ namespace GW2EIEvtcParser.EIData;
 internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
     protected bool Minions = false;
+    protected bool Target = false;
     private readonly Guid _effectGUID;
     private int _speciesID = 0;
 
     public EffectCastFinder WithMinions()
     {
         Minions = true;
+        return this;
+    }
+
+    public EffectCastFinder WithTarget()
+    {
+        Target = true;
         return this;
     }
 
@@ -143,7 +150,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -155,7 +162,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -168,7 +175,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -181,7 +188,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -194,7 +201,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -207,7 +214,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return false;
         });
@@ -220,7 +227,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -233,7 +240,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon && (other.Position - evt.Position).LengthSquared() < 1e-6);
+                return !effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon) && (other.Position - evt.Position).LengthSquared() < 1e-6);
             }
             return true;
         });
@@ -245,7 +252,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -258,7 +265,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -271,7 +278,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && evt.IsAroundDst != other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -284,7 +291,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -297,7 +304,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return !effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return !effectEvents.Any(other => other != evt && evt.IsAroundDst == other.IsAroundDst && GetOtherAgent(other).Is(GetAgent(evt)) && other.IsAtTime(evt.Time + timeOffset, epsilon));
             }
             return true;
         });
@@ -313,9 +320,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 #if DEBUG
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
+        var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => x.IsAtTime(evt) && x.EffectID != evt.EffectID);
         var testGUIDs = test.Select(x => x.GUIDEvent);
-        var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
+        var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => x.IsAtTime(evt) && x.EffectID != evt.EffectID);
         var test2GUIDs = test2.Select(x => x.GUIDEvent);
         return true;
     }
@@ -364,7 +371,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                             caster = agent;
                         }
                     }
-                    res.Add(new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster));
+                    res.Add(new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster, Target ? GetOtherKeyAgent(effectEvent) : _unknownAgent));
                 }
             }
         }

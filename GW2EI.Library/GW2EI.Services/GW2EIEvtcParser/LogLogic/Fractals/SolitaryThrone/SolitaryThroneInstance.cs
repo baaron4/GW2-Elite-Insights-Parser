@@ -14,7 +14,6 @@ internal class SolitaryThroneInstance : SolitaryThrone
 
     public SolitaryThroneInstance(int triggerID) : base(triggerID)
     {
-        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconSolitaryThrone;
         Extension = "throne";
 

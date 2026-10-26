@@ -23,7 +23,10 @@ public class JsonRotation
         public int Duration;
 
         /// <summary>
-        /// Gained time from the animation, could be negative, which means time was lost
+        /// Gained time from the animation, could be negative \n
+        /// Strictly Negative indicates that the cast was interrupted, considered as time wasted \n
+        /// Strictly Positive indicates that the after cast was interrupted, considered as time gained \n
+        /// Zero indicates that the animation was fully executed, after cast included
         /// </summary>
         public int TimeGained;
 

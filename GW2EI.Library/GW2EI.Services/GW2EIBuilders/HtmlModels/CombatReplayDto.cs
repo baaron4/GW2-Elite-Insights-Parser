@@ -1,6 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels;
 
@@ -14,10 +14,10 @@ internal class CombatReplayDto
     public float InchToPixel { get; set; }
     public int PollingRate { get; set; }
 
-    public CombatReplayDto(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public CombatReplayDto(ParsedEvtcLog log, UsedData used)
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
-        (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(usedSkills, usedBuffs);
+        (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(used.skills, used.buffs);
         (int width, int height) = map.GetPixelMapSize();
         Sizes = [width, height];
         InchToPixel = map.GetInchToPixel();

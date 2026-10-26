@@ -25,8 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.28.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.31.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -103,13 +104,13 @@ long&#160;</td><td class="memItemRight"><b>Time</b></td></tr>
 <tr class="memdesc:a690120eb7fe9774cc4abf162a0f2db2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which the event happened. <br /></td></tr>
 <tr class="memitem:a0798a326d98721471a1edb868e992630" id="r_a0798a326d98721471a1edb868e992630"><td class="memItemLeft"><a id="a0798a326d98721471a1edb868e992630" name="a0798a326d98721471a1edb868e992630"></a>
 string?&#160;</td><td class="memItemRight"><b>Actor</b></td></tr>
-<tr class="memdesc:a0798a326d98721471a1edb868e992630"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actor who is concerned by the mechanic. <br /></td></tr>
+<tr class="memdesc:a0798a326d98721471a1edb868e992630"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actor who is concerned by the mechanic, if actor is not a player or a target, mechanics are regrouped by species id. <br /></td></tr>
 <tr class="memitem:a29151b5bcef4494f74be8b6b4ead56a4" id="r_a29151b5bcef4494f74be8b6b4ead56a4"><td class="memItemLeft"><a id="a29151b5bcef4494f74be8b6b4ead56a4" name="a29151b5bcef4494f74be8b6b4ead56a4"></a>
 int&#160;</td><td class="memItemRight"><b>Id</b></td></tr>
 <tr class="memdesc:a29151b5bcef4494f74be8b6b4ead56a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Species ID of the Actor, 0 for players. <br /></td></tr>
 <tr class="memitem:a774c7a747ffc21326ba757a60bd60907" id="r_a774c7a747ffc21326ba757a60bd60907"><td class="memItemLeft"><a id="a774c7a747ffc21326ba757a60bd60907" name="a774c7a747ffc21326ba757a60bd60907"></a>
 int&#160;</td><td class="memItemRight"><b>Instid</b></td></tr>
-<tr class="memdesc:a774c7a747ffc21326ba757a60bd60907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instance ID of the Actor. <br /></td></tr>
+<tr class="memdesc:a774c7a747ffc21326ba757a60bd60907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instance ID of the Actor, only relevant is actor is a player or a target. <br /></td></tr>
 <tr class="memitem:a8ba73d409d2f1a5fee932aa632dffdfd" id="r_a8ba73d409d2f1a5fee932aa632dffdfd"><td class="memItemLeft"><a id="a8ba73d409d2f1a5fee932aa632dffdfd" name="a8ba73d409d2f1a5fee932aa632dffdfd"></a>
 double&#160;</td><td class="memItemRight"><b>Weight</b></td></tr>
 <tr class="memdesc:a8ba73d409d2f1a5fee932aa632dffdfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weight of the event. <br /></td></tr>

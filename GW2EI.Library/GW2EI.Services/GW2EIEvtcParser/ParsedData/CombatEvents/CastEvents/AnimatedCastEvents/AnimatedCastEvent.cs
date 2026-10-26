@@ -4,29 +4,27 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class AnimatedCastEvent : CastEvent
 {
-    private readonly int _scaledActualDuration;
-    //private readonly int _effectHappenedDuration;
-    public AgentItem EffectTarget { get; protected set; } = ParserHelper._unknownAgent;
 
     public readonly AnimationStart AnimStart;
     public readonly AnimationStop AnimStop;
 
-    private void SetAcceleration(CombatItem endItem)
+    private void SetAcceleration(CombatItem endItem, int unscaledActualDuration)
     {
-        double nonScaledToScaledRatio = 1.0;
-        if (_scaledActualDuration > 0)
+        TimeScale = 1.0;
+        if (unscaledActualDuration > 0)
         {
-            nonScaledToScaledRatio = (double)_scaledActualDuration / ActualDuration;
-            if (nonScaledToScaledRatio > 1.0)
+            TimeScale = (double)unscaledActualDuration / ActualDuration;
+            if (TimeScale > 1.0)
             {
-                // faster
-                Acceleration = (nonScaledToScaledRatio - 1.0) / 0.5;
+                // faster, convert to quickness percent
+                AccelerationQuicknessSlow = (TimeScale - 1.0) / 0.5;
             }
             else
             {
-                Acceleration = -(1.0 - nonScaledToScaledRatio) / 0.6;
+                // slower, convert to slow percent
+                AccelerationQuicknessSlow = -(1.0 - TimeScale) / 0.6;
             }
-            Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
+            AccelerationQuicknessSlow = Math.Max(Math.Min(AccelerationQuicknessSlow, 1.0), -1.0);
         }
         if (SkillID != SkillIDs.Resurrect)
         {
@@ -41,35 +39,41 @@ public abstract class AnimatedCastEvent : CastEvent
                     break;
                 case Activation.Minimum:
                 case Activation.NoData:
-                    int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
-                    SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+                    SavedDuration = Math.Max(ExpectedScaledDuration - ActualDuration, 0);
                     Status = AnimationStatus.Reduced;
                     break;
             }
         }
-        AcceleratedToNonAcceleratedRatio = 1.0 / nonScaledToScaledRatio;
-        Acceleration = Math.Round(Acceleration, ParserHelper.AccelerationDigit);
+        AccelerationQuicknessSlow = Math.Round(AccelerationQuicknessSlow, ParserHelper.AccelerationDigit);
     }
-
-    protected const float PositionConvertConstant = 10.0f;
     protected AnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, CombatItem? endItem, long maxEnd) : base(startItem ?? endItem ?? throw new InvalidOperationException("Either start or end item must be non null"), agentData, skillData)
     {
+        var animWithScaledDurations = (startItem ?? endItem)?.Build >= ArcDPSBuilds.AnimWithScaledDurations;
+        var animatedDodge = Skill.IsAnimatedDodge(skillData);
         // Start is present
         if (startItem != null)
         {
-            ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
+            if (animWithScaledDurations)
+            {
+                ExpectedDuration = startItem.BuffDmg;
+                _expectedExecute = startItem.Value;
+            }
+            else
+            {
+                ExpectedDuration = startItem.Value;
+            }
             if (startItem.IsStateChange == StateChange.AnimationStart)
             {
                 if (startItem.DstAgent != 0)
                 {
-                    EffectTarget = agentData.GetAgent(startItem.DstAgent, startItem.Time);
+                    Target = agentData.GetAgent(startItem.DstAgent, startItem.Time);
                 }
             }
             else
             {
                 if (startItem.IsActivation == Activation.Quickness)
                 {
-                    Acceleration = 1;
+                    AccelerationQuicknessSlow = 1;
                 }
             }
             //_effectHappenedDuration = startItem.Value;
@@ -77,7 +81,7 @@ public abstract class AnimatedCastEvent : CastEvent
             // End item missing
             if (endItem == null)
             {
-                if (Skill.ID == skillData.DodgeID)
+                if (animatedDodge)
                 {
                     ExpectedDuration = 750;
                 }
@@ -90,19 +94,12 @@ public abstract class AnimatedCastEvent : CastEvent
         if (endItem != null)
         {
             ActualDuration = endItem.Value;
-            _scaledActualDuration = endItem.BuffDmg;
+            var unscaledActualDuration = animWithScaledDurations ? endItem.BuffDmg : 0;
             // Start missing
             if (startItem == null)
             {
                 ExpectedDuration = ActualDuration;
-                if (Skill.IsAnimatedDodge(skillData))
-                {
-                    // dodge animation start item has always 0 as expected duration
-                    ExpectedDuration = ActualDuration;
-                    _scaledActualDuration = 0;
-                }
                 Time -= ActualDuration;
-                SetAcceleration(endItem);
             }
             else
             {
@@ -111,16 +108,16 @@ public abstract class AnimatedCastEvent : CastEvent
                 if (Math.Abs(ActualDuration - expectedActualDuration) > ParserHelper.ServerDelayConstant)
                 {
                     ActualDuration = expectedActualDuration;
-                    _scaledActualDuration = 0;
+                    unscaledActualDuration = 0;
                 }
-                if (Skill.IsAnimatedDodge(skillData))
-                {
-                    // dodge animation start item has always 0 as expected duration
-                    ExpectedDuration = ActualDuration;
-                    _scaledActualDuration = 0;
-                }
-                SetAcceleration(endItem);
             }
+            if (animatedDodge)
+            {
+                // dodge animation start item has always 0 as expected duration
+                ExpectedDuration = ActualDuration;
+                unscaledActualDuration = 0;
+            }
+            SetAcceleration(endItem, unscaledActualDuration);
             AnimStop = GetAnimationStop(endItem.Result);
 
         }
@@ -135,18 +132,24 @@ public abstract class AnimatedCastEvent : CastEvent
     }
 
     // Custom
-    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur) : base(start, skill, caster)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AnimationStatus status = AnimationStatus.Full) : base(start, skill, caster)
     {
+        if (status == AnimationStatus.Instant ||
+            status == AnimationStatus.Reduced ||
+            status == AnimationStatus.Interrupted)
+        {
+            throw new InvalidDataException("Custom Animated casts can't be instant, reduced or interrupted");
+        }
         ActualDuration = (int)dur;
         ExpectedDuration = ActualDuration;
-        Acceleration = 0;
-        Status = AnimationStatus.Full;
+        AccelerationQuicknessSlow = 0;
+        Status = status;
         SavedDuration = 0;
     }
 
-    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : this(caster, skill, start, dur)
+    protected AnimatedCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : this(caster, skill, start, dur, status)
     {
-        EffectTarget = effectTarget;
+        Target = target;
     }
 
     public override long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)

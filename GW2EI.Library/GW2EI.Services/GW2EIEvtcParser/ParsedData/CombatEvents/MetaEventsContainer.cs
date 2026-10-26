@@ -22,10 +22,12 @@ internal class MetaEventsContainer
 
     public readonly Dictionary<AgentItem, List<GuildEvent>> GuildEvents = [];
 
-    public readonly Dictionary<long, BuffInfoEvent> BuffInfoEvents = [];
+    public readonly Dictionary<long, BuffInfoEvent> BuffInfoEventByBuffID = [];
     public readonly Dictionary<byte, List<BuffInfoEvent>> BuffInfoEventsByCategory = [];
 
-    public readonly Dictionary<long, SkillInfoEvent> SkillInfoEvents = [];
+    public readonly List<SkillInfoEvent> SkillInfoEvents = [];
+
+    public readonly Dictionary<long, SkillInfoEvent> SkillInfoEventBySkillID = [];
 
     public readonly List<ErrorEvent> ErrorEvents = [];
 

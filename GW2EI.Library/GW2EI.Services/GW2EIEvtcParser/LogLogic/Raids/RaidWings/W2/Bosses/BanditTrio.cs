@@ -156,7 +156,7 @@ internal class BanditTrio : SalvationPass
         return startToUse;
     }
 
-    internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
+    internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData)
     {
         var banditTrioBosses = agentData.GetStableSpeciesByIDs([TargetID.Berg, TargetID.Narella, TargetID.Zane]);
         if (banditTrioBosses.Count == 0)
@@ -171,7 +171,7 @@ internal class BanditTrio : SalvationPass
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
                 GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
                 MarkerGUIDs.BanditTrioCageMarker.Equals(x.SrcAgent, x.DstAgent, true))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .Select(x => new MarkerGUIDEvent(x))
             .FirstOrDefault();
         if (cageMarkerGUID != null)
         {
@@ -225,7 +225,7 @@ internal class BanditTrio : SalvationPass
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindCageAndBombs(agentData, combatData, evtcVersion);
+        FindCageAndBombs(agentData, combatData);
         var insectSwarms = CreateCustomInsectSwarmMasterAgent(logData, agentData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RedirectInsectSwarmsToCustomMaster(insectSwarms, agentData);

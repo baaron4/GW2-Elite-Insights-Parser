@@ -16,7 +16,7 @@ public class MissileEvent : StatusEvent
         ev->skillid = skillid;
         *(float*)&ev->iff = something_range;
         ev->is_statechange = CBTS_MISSILECREATE;
-        ev->is_shields = flags0; 
+        ev->is_shields = flags0;
         ev->is_offcycle = flags1;
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
@@ -24,20 +24,23 @@ public class MissileEvent : StatusEvent
     public readonly SkillItem Skill;
     public long SkillID => Skill.ID;
 
-    public readonly byte Flag0;
-    public readonly byte Flag1;
+    public readonly byte Flags0;
+
+    public IReadOnlyList<int> Flags0AsBits => ParserHelper.GetIndividualFlagsAsBits(Flags0);
+    public readonly byte Flags1;
+
+    public IReadOnlyList<int> Flags1AsBits => ParserHelper.GetIndividualFlagsAsBits(Flags1);
     public readonly float SomethingRange;
 
     private readonly List<MissileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
     public MissileRemoveEvent? RemoveEvent { get; private set; }
-
     public bool MaybeReflected => LaunchEvents.Any(x => x.MaybeReflected);
 
     internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);
-        // 1 
+        // 1
         originBytes.PushNative(evtcItem.Value);
         // 1
         originBytes.PushNative(evtcItem.BuffDmg);
@@ -54,8 +57,8 @@ public class MissileEvent : StatusEvent
             }
         }
         Skill = skillData.Get(evtcItem.SkillID);
-        Flag0 = evtcItem.IsShields;
-        Flag1 = evtcItem.IsOffcycle;
+        Flags0 = evtcItem.IsShields;
+        Flags1 = evtcItem.IsOffcycle;
         var somethingRangeBytes = new ByteBuffer(stackalloc byte[sizeof(float)]);
         // 0.25
         somethingRangeBytes.PushNative(evtcItem.IFFByte);
@@ -82,6 +85,12 @@ public class MissileEvent : StatusEvent
     {
         RemoveEvent = removeEvent;
         removeEvent.Missile = this;
+    }
+
+    public AgentItem GetInitialTarget()
+    {
+        var InitialLaunch = LaunchEvents.FirstOrDefault();
+        return InitialLaunch != null ? InitialLaunch.TargetedAgent : ParserHelper._unknownAgent;
     }
 
 }

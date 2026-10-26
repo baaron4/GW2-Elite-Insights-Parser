@@ -709,9 +709,9 @@ internal class CombatReplayDecorationContainer
     /// </summary>
     /// <param name="player"></param>
     /// <param name="castEvent"></param>
-    internal void AddPlayerCastBar(PlayerActor player, AnimatedCastEvent castEvent, long expectedDuration = 0)
+    internal void AddPlayerCastBar(PlayerActor player, AnimatedCastEvent castEvent, int expectedDuration = 0)
     {
-        long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + (long)(expectedDuration * castEvent.AcceleratedToNonAcceleratedRatio);
+        long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + castEvent.ApplyTimeScale(expectedDuration);
         Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (castEvent.Time, castEvent.EndTime),
                         castEvent.IsInterrupted ? Colors.LightRed : Colors.DarkYellow, 0.8, Colors.Black, 0.6,
                         [(castEvent.Time, 0), (expectedScaledEndTime, 100)], new AgentConnector(player))
@@ -741,6 +741,85 @@ internal class CombatReplayDecorationContainer
     internal delegate void MissileDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector);
     internal delegate void MissileRotatingDecorationHandler(MissileLaunchEvent launch, (long start, long end) lifespan, GeographicalConnector connector, RotationConnector rotationConnector);
 
+
+    #region HOMING
+    /// <summary>
+    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="handler">Handler that will create the decoration</param>
+    /// <param name="handler"></param>
+    internal static void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
+    {
+        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
+        var launchEvents = missileEvent.LaunchEvents;
+        for (int i = 0; i < launchEvents.Count; i++)
+        {
+            var launch = launchEvents[i];
+            (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
+            if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
+            {
+                handler(launch, trajectoryLifeSpan, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed));
+            }
+            else
+            {
+                AddNonHomingLaunch(missileEvent, i, end, handler);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches, uses CircleDecoration
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    internal void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
+    {
+        AddHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
+        {
+            Add(new CircleDecoration(radius, lifespan, color, opacity, connector));
+        });
+    }
+
+    /// <summary>
+    /// Add missiles going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvents">Missile events to process</param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    internal void AddHomingMissiles(ParsedEvtcLog log, IEnumerable<MissileEvent> missileEvents, Color color, double opacity, uint radius)
+    {
+        foreach (MissileEvent missileEvent in missileEvents)
+        {
+            AddHomingMissile(log, missileEvent, color, opacity, radius);
+        }
+    }
+
+    /// <summary>
+    /// Add missiles going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvents">Missile events to process</param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    /// <param name="handler"></param>
+    internal static void AddHomingMissiles(ParsedEvtcLog log, IEnumerable<MissileEvent> missileEvents, MissileDecorationHandler handler)
+    {
+        foreach (MissileEvent missileEvent in missileEvents)
+        {
+            AddHomingMissile(log, missileEvent, handler);
+        }
+    }
+
+    #endregion HOMING
+
+    #region NON HOMING 
     private static void AddNonHomingLaunch(MissileEvent missileEvent, int i, long end, MissileDecorationHandler handler)
     {
         var launchEvents = missileEvent.LaunchEvents;
@@ -771,7 +850,6 @@ internal class CombatReplayDecorationContainer
     /// <param name="log"></param>
     /// <param name="missileEvent"></param>
     /// <param name="handler">Handler that will create the decoration</param>
-    /// <param name="endOverride"></param>
     internal static void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
     {
         long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
@@ -831,104 +909,6 @@ internal class CombatReplayDecorationContainer
             Add(new IconDecoration(imageUrl, 0, worldSize, opacity, lifespan, connector));
         });
     }
-
-    /// <summary>
-    /// Add a missile rotating around Targeted Agent
-    /// </summary>
-    /// <param name="log"></param>
-    /// <param name="missileEvent"></param>
-    /// <param name="angleOffset"></param>
-    /// <param name="handler">Handler that will create the decoration</param>
-    /// <param name="useTargetOrientation"></param>
-    internal static void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, float angleOffset, MissileRotatingDecorationHandler handler, bool useTargetOrientation = false)
-    {
-        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
-        var launchEvents = missileEvent.LaunchEvents;
-        for (int i = 0; i < launchEvents.Count; i++)
-        {
-            var launch = launchEvents[i];
-            var rotationCenterTarget = launch.TargetedAgent;
-            var trajectoryRadius = launch.MotionRadius;
-            var initialAngle = 0.0f;
-            if (useTargetOrientation)
-            {
-                if (rotationCenterTarget.TryGetCurrentFacingDirection(log, launch.Time, out var facing))
-                {
-                    initialAngle = facing.Value.GetZRotationRadians();
-                }
-                else
-                {
-                    continue;
-                }
-            }
-            if (trajectoryRadius > 0)
-            {
-                (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
-                long duration = trajectoryLifeSpan.end - trajectoryLifeSpan.start;
-                var orientation = (launch.LaunchFlags & (1 << 16)) > 0 ? -1 : 1; // Keep an eye on this, may be unstable.
-                handler(launch, trajectoryLifeSpan, new AgentConnector(rotationCenterTarget).WithOffset(initialAngle + angleOffset, trajectoryRadius, true), new SpinningConnector(0, RadianToDegreeF(orientation * duration * launch.Speed / trajectoryRadius)));
-            }
-        }
-    }
-    /// <summary>
-    /// Add a missile rotating around Targeted Agent, supports multi launches, uses CircleDecoration
-    /// </summary>
-    /// <param name="log">Evtc log</param>
-    /// <param name="missileEvent"></param>
-    /// <param name="color"></param>
-    /// <param name="opacity"></param>
-    /// <param name="radius"></param>
-    /// <param name="angleOffset"></param>
-    /// <param name="useTargetOrientation"></param>
-    internal void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius, float angleOffset, bool useTargetOrientation = false)
-    {
-        AddRotatingAroundTargetMissile(log, missileEvent, angleOffset, (launch, lifespan, connector, rotationConnector) =>
-        {
-            Add(new CircleDecoration(radius, lifespan, color, opacity, connector).UsingRotationConnector(rotationConnector));
-        }, useTargetOrientation);
-    }
-
-    /// <summary>
-    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
-    /// </summary>
-    /// <param name="log"></param>
-    /// <param name="handler">Handler that will create the decoration</param>
-    /// <param name="handler"></param>
-    internal static void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, MissileDecorationHandler handler)
-    {
-        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
-        var launchEvents = missileEvent.LaunchEvents;
-        for (int i = 0; i < launchEvents.Count; i++)
-        {
-            var launch = launchEvents[i];
-            (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
-            if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
-            {
-                handler(launch, trajectoryLifeSpan, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed));
-            }
-            else
-            {
-                AddNonHomingLaunch(missileEvent, i, end, handler);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches, uses CircleDecoration
-    /// </summary>
-    /// <param name="log">Evtc log</param>
-    /// <param name="missileEvent"></param>
-    /// <param name="color"></param>
-    /// <param name="opacity"></param>
-    /// <param name="radius"></param>
-    internal void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
-    {
-        AddHomingMissile(log, missileEvent, (launch, lifespan, connector) =>
-        {
-            Add(new CircleDecoration(radius, lifespan, color, opacity, connector));
-        });
-    }
-
     /// <summary>
     /// Add missiles going from a Point A to Point B, supports multi launches, uses CircleDecoration
     /// </summary>
@@ -983,6 +963,67 @@ internal class CombatReplayDecorationContainer
         }
     }
 
+    #endregion NON HOMING
+
+    #region ROTATING
+
+    /// <summary>
+    /// Add a missile rotating around Targeted Agent
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="missileEvent"></param>
+    /// <param name="angleOffset"></param>
+    /// <param name="handler">Handler that will create the decoration</param>
+    /// <param name="useTargetOrientation"></param>
+    internal static void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, float angleOffset, MissileRotatingDecorationHandler handler, bool useTargetOrientation = false)
+    {
+        long end = missileEvent.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, missileEvent.Src.LastAware);
+        var launchEvents = missileEvent.LaunchEvents;
+        for (int i = 0; i < launchEvents.Count; i++)
+        {
+            var launch = launchEvents[i];
+            var rotationCenterTarget = launch.TargetedAgent;
+            var trajectoryRadius = launch.MotionRadius;
+            var initialAngle = 0.0f;
+            if (useTargetOrientation)
+            {
+                if (rotationCenterTarget.TryGetCurrentFacingDirection(log, launch.Time, out var facing))
+                {
+                    initialAngle = facing.Value.GetZRotationRadians();
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            if (trajectoryRadius > 0)
+            {
+                (long start, long end) trajectoryLifeSpan = (launch.Time, i != launchEvents.Count - 1 ? launchEvents[i + 1].Time : end);
+                long duration = trajectoryLifeSpan.end - trajectoryLifeSpan.start;
+                var orientation = (launch.LaunchFlags & (1 << 16)) > 0 ? -1 : 1; // Keep an eye on this, may be unstable.
+                handler(launch, trajectoryLifeSpan, new AgentConnector(rotationCenterTarget).WithOffset(initialAngle + angleOffset, trajectoryRadius, true), new SpinningConnector(0, RadianToDegreeF(orientation * duration * launch.Speed / trajectoryRadius)));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Add a missile rotating around Targeted Agent, supports multi launches, uses CircleDecoration
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    /// <param name="angleOffset"></param>
+    /// <param name="useTargetOrientation"></param>
+    internal void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius, float angleOffset, bool useTargetOrientation = false)
+    {
+        AddRotatingAroundTargetMissile(log, missileEvent, angleOffset, (launch, lifespan, connector, rotationConnector) =>
+        {
+            Add(new CircleDecoration(radius, lifespan, color, opacity, connector).UsingRotationConnector(rotationConnector));
+        }, useTargetOrientation);
+    }
+
     /// <summary>
     /// Add missiles rotating around TargetedAgent, supports multi launches
     /// </summary>
@@ -1001,21 +1042,7 @@ internal class CombatReplayDecorationContainer
         }
     }
 
-    /// <summary>
-    /// Add missiles going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
-    /// </summary>
-    /// <param name="log">Evtc log</param>
-    /// <param name="missileEvents">Missile events to process</param>
-    /// <param name="color"></param>
-    /// <param name="opacity"></param>
-    /// <param name="radius"></param>
-    internal void AddHomingMissiles(ParsedEvtcLog log, IEnumerable<MissileEvent> missileEvents, Color color, double opacity, uint radius)
-    {
-        foreach (MissileEvent missileEvent in missileEvents)
-        {
-            AddHomingMissile(log, missileEvent, color, opacity, radius);
-        }
-    }
+    #endregion ROTATING
     #endregion MISSILE
 
     #region FRONT AND FLIP

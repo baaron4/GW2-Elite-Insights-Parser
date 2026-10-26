@@ -10,7 +10,6 @@ using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.MechanicIDs;
-using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -105,7 +104,7 @@ internal class Sabir : TheKeyOfAhdashim
                 {
                     BuffRemoveAllEvent? buffRemove = combatData
                         .GetBuffRemoveAllDataByIDByDst(ViolentCurrents, effect.Src)
-                        .FirstOrDefault(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant);
+                        .FirstOrDefault(x => x.IsAtTime(effect));
                     return buffRemove != null;
                 }),
         ];

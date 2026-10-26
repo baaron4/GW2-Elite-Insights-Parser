@@ -41,7 +41,7 @@ public class AgentItem
     public AgentItem? PositionAttachedAgentItem { get; private set; }
     public bool IsEnglobingAgent => _englobedAgentItems != null;
 
-    private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
+    private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic?
     public enum AgentType { StableSpecies, VolatileSpecies, Player, NonSquadPlayer }
 
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
@@ -62,6 +62,8 @@ public class AgentItem
 
     public long HalfAware => (FirstAware + LastAware) / 2;
     public string Name { get; protected set; } = "UNKNOWN";
+    public string[] SplitName => Name.Split('\0');
+    public string FirstName => SplitName[0];
     public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
     public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;
     public ushort Toughness { get; protected set; }
@@ -629,6 +631,16 @@ public class AgentItem
     public bool IsAnySpecies(IEnumerable<ChestID> ids)
     {
         return ids.Any(IsSpecies);
+    }
+
+    public bool IsVolatileSpecies()
+    {
+        return Type == AgentType.VolatileSpecies;
+    }
+
+    public bool IsCustomSpecies()
+    {
+        return Type == AgentType.StableSpecies && ID < 0;
     }
     #endregion SPECIES
     #region INTERNAL UTILS

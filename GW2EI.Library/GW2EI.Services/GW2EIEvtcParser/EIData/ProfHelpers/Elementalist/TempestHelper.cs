@@ -82,7 +82,7 @@ internal static class TempestHelper
                 var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadFire);
                 foreach (EffectEvent effect in overloadsFire)
                 {
-                    if (!overloadsFireAux.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (!overloadsFireAux.Any(x => x.IsAtTime(effect)))
                     {
                         continue;
                     }
@@ -100,7 +100,7 @@ internal static class TempestHelper
                 var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadAir);
                 foreach (EffectEvent effect in overloadsAir)
                 {
-                    if (!overloadsAirAux.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (!overloadsAirAux.Any(x => x.IsAtTime(effect)))
                     {
                         continue;
                     }

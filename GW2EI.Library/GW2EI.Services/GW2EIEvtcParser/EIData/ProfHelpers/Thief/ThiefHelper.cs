@@ -199,7 +199,7 @@ internal static class ThiefHelper
                 var connector = new PositionConnector(exit.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                 AttachedDecoration icon = new IconDecoration(EffectImages.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
-                AttachedDecoration? entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
+                AttachedDecoration? entranceDecoration = entranceDecorations.FirstOrDefault(x => exit.IsAtTime(x.Lifespan.start));
                 if (entranceDecoration != null)
                 {
                     replay.Decorations.Add(entranceDecoration.LineTo(icon, color, 0.5).UsingSkillMode(skill));

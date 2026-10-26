@@ -10,8 +10,7 @@ partial class CombatData
 
     internal void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData,
         SkillData skillData, List<WeaponSwapEvent> wepSwaps,
-        List<BuffEvent> buffEvents, List<StunBreakEvent> stunBreakEvents,
-        EvtcVersionEvent evtcVersion, EvtcParserSettings settings,
+        List<BuffEvent> buffEvents, List<StunBreakEvent> stunBreakEvents, EvtcParserSettings settings,
         GW2APIController apiController)
     {
         var statusEvents = _statusEvents;
@@ -113,7 +112,7 @@ partial class CombatData
 #endif
                 break;
             case StateChange.TeamChange:
-                var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData, evtcVersion);
+                var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData);
                 Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                 break;
             case StateChange.AttackTarget:
@@ -139,7 +138,7 @@ partial class CombatData
                         Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
                     }
                 }
-                if (evtcVersion.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && evtcVersion.Build < ArcDPSBuilds.VisibilityOnStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
+                if (stateChangeEvent.Build >= ArcDPSBuilds.VisibilityInTargetableStateChange && stateChangeEvent.Build < ArcDPSBuilds.VisibilityOnStateChange && stateChangeEvent.Value < 2) // 2 means unsupported, we ignore those
                 {
                     var visEvt = new VisibilityEvent(stateChangeEvent, agentData);
                     if (statusEvents.VisibilityEventsBySrc.TryGetValue(visEvt.Src, out var visibilityEvents))
@@ -172,14 +171,14 @@ partial class CombatData
                 break;
             case StateChange.BuffInfo:
             case StateChange.BuffFormula:
-                if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var buffInfoEvent))
+                if (metaDataEvents.BuffInfoEventByBuffID.TryGetValue(stateChangeEvent.SkillID, out var buffInfoEvent))
                 {
-                    buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent, evtcVersion);
+                    buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent);
                 }
                 else
                 {
-                    buffInfoEvent = new BuffInfoEvent(stateChangeEvent, skillData, evtcVersion);
-                    metaDataEvents.BuffInfoEvents[stateChangeEvent.SkillID] = buffInfoEvent;
+                    buffInfoEvent = new BuffInfoEvent(stateChangeEvent, skillData);
+                    metaDataEvents.BuffInfoEventByBuffID[stateChangeEvent.SkillID] = buffInfoEvent;
                 }
                 if (stateChangeEvent.IsStateChange == StateChange.BuffInfo)
                 {
@@ -195,14 +194,16 @@ partial class CombatData
                 break;
             case StateChange.SkillInfo:
             case StateChange.SkillTiming:
-                if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
+            case StateChange.SkillStep:
+                if (metaDataEvents.SkillInfoEventBySkillID.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
                 {
                     skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent);
                 }
                 else
                 {
                     skillInfoEvent = new SkillInfoEvent(stateChangeEvent, skillData);
-                    metaDataEvents.SkillInfoEvents[stateChangeEvent.SkillID] = skillInfoEvent;
+                    metaDataEvents.SkillInfoEventBySkillID[stateChangeEvent.SkillID] = skillInfoEvent;
+                    metaDataEvents.SkillInfoEvents.Add(skillInfoEvent);
                 }
                 break;
             case StateChange.BreakbarState:
@@ -218,7 +219,7 @@ partial class CombatData
                 break;
             case StateChange.Marker:
                 var markerEvent = new MarkerEvent(stateChangeEvent, agentData, metaDataEvents.MarkerGUIDEventsByMarkerID);
-                if (evtcVersion.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
+                if (stateChangeEvent.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
                 {
                     // End event
                     if (markerEvent.IsEnd)
@@ -303,7 +304,7 @@ partial class CombatData
                 Add(statusEvents.MovementEvents, tpEvt.Src, tpEvt);
                 break;
             case StateChange.WeaponSwap:
-                wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData, evtcVersion));
+                wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData));
                 break;
             case StateChange.StackActive:
                 buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
@@ -361,42 +362,42 @@ partial class CombatData
                 }
                 break;
             case StateChange.IDToGUID:
-                if (evtcVersion.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                if (stateChangeEvent.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                 {
                     switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))
                     {
                         case ContentLocal.Effect:
-                            var effectGUID = new EffectGUIDEvent(stateChangeEvent, evtcVersion);
+                            var effectGUID = new EffectGUIDEvent(stateChangeEvent);
                             metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.EffectID] = effectGUID;
                             metaDataEvents.EffectGUIDEventsByGUID[effectGUID.GUID] = effectGUID;
                             break;
                         case ContentLocal.Marker:
-                            var markerGUID = new MarkerGUIDEvent(stateChangeEvent, evtcVersion);
+                            var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
                             metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.MarkerID] = markerGUID;
                             metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.GUID] = markerGUID;
                             break;
                         case ContentLocal.Skill:
-                            var skillGUID = new SkillGUIDEvent(stateChangeEvent, evtcVersion);
+                            var skillGUID = new SkillGUIDEvent(stateChangeEvent);
                             metaDataEvents.SkillGUIDEventsBySkillID[skillGUID.SkillID] = skillGUID;
                             metaDataEvents.SkillGUIDEventsByGUID[skillGUID.GUID] = skillGUID;
                             break;
                         case ContentLocal.Species:
-                            var speciesGUID = new SpeciesGUIDEvent(stateChangeEvent, evtcVersion);
+                            var speciesGUID = new SpeciesGUIDEvent(stateChangeEvent);
                             metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.SpeciesID] = speciesGUID;
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.GUID] = speciesGUID;
                             break;
                         case ContentLocal.Team:
-                            var teamGUID = new TeamGUIDEvent(stateChangeEvent, evtcVersion);
+                            var teamGUID = new TeamGUIDEvent(stateChangeEvent);
                             metaDataEvents.TeamGUIDEventsByTeamID[teamGUID.TeamID] = teamGUID;
                             metaDataEvents.TeamGUIDEventsByGUID[teamGUID.GUID] = teamGUID;
                             break;
                         case ContentLocal.Emote:
-                            var emoteGUID = new EmoteGUIDEvent(stateChangeEvent, evtcVersion);
+                            var emoteGUID = new EmoteGUIDEvent(stateChangeEvent);
                             metaDataEvents.EmoteGUIDEventsByEmoteID[emoteGUID.EmoteID] = emoteGUID;
                             metaDataEvents.EmoteGUIDEventsByGUID[emoteGUID.GUID] = emoteGUID;
                             break;
                         case ContentLocal.Transformation:
-                            var transformationGUID = new TransformationGUIDEvent(stateChangeEvent, evtcVersion);
+                            var transformationGUID = new TransformationGUIDEvent(stateChangeEvent);
                             metaDataEvents.TransformationGUIDEventsByTransformationID[transformationGUID.TransformationID] = transformationGUID;
                             metaDataEvents.TransformationGUIDEventsByGUID[transformationGUID.GUID] = transformationGUID;
                             break;
@@ -688,11 +689,11 @@ partial class CombatData
                 switch (agentInfoAgent.Spec)
                 {
                     case Spec.NPC:
-                        var npcInfoEvent = new NPCInfoEvent(stateChangeEvent, agentData, evtcVersion);
+                        var npcInfoEvent = new NPCInfoEvent(stateChangeEvent, agentData);
                         Add(_statusEvents.NPCInfoEventsBySrc, npcInfoEvent.Src, npcInfoEvent);
                         break;
                     case Spec.Gadget:
-                        var gadgetInfoEvent = new GadgetInfoEvent(stateChangeEvent, agentData, evtcVersion);
+                        var gadgetInfoEvent = new GadgetInfoEvent(stateChangeEvent, agentData);
                         Add(_statusEvents.GadgetInfoEventsBySrc, gadgetInfoEvent.Src, gadgetInfoEvent);
                         break;
                 }
@@ -707,9 +708,9 @@ partial class CombatData
         }
     }
 
-    internal static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData)
     {
-        if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        if (buffEvent.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
             if (buffEvent.IsStateChange == StateChange.BuffChange)
             {
@@ -717,7 +718,7 @@ partial class CombatData
             }
             else
             {
-                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData));
             }
         }
         else
@@ -725,21 +726,21 @@ partial class CombatData
             if (buffEvent.IsOffcycle > 0)
             {
                 var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
-                if (evtcVersion.Build > ArcDPSBuilds.BuffExtensionBroken || extensionEvent.ExtendedDuration > 0)
+                if (buffEvent.Build > ArcDPSBuilds.BuffExtensionBroken || extensionEvent.ExtendedDuration > 0)
                 {
                     buffEvents.Add(extensionEvent);
                 }
             }
             else
             {
-                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData, evtcVersion));
+                buffEvents.Add(new BuffApplyEvent(buffEvent, agentData, skillData));
             }
         }
     }
 
-    internal static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    internal static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData)
     {
-        if (evtcVersion.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
+        if (buffEvent.Build >= ArcDPSBuilds.BuffAppliesAndRemovesAsStateChanges)
         {
             if (buffEvent.IsStateChange == StateChange.BuffRemoveAll)
             {
@@ -775,9 +776,9 @@ partial class CombatData
         }
     }
 
-    private static AnimatedCastEvent CreateAnimatedCastEvent(EvtcVersionEvent evtcVersion, CombatItem? startItem, AgentData agentData, SkillData skillData, LogData logData, CombatItem? endItem, long id, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
+    private static AnimatedCastEvent CreateAnimatedCastEvent(CombatItem? startItem, AgentData agentData, SkillData skillData, LogData logData, CombatItem? endItem, long id, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
-        if (evtcVersion.Build < ArcDPSBuilds.EmoteAndGadgetInteractionAdded)
+        if ((startItem ?? endItem)?.Build < ArcDPSBuilds.EmoteAndGadgetInteractionAdded)
         {
             return new AnimatedSkillCastEvent(startItem, agentData, skillData, endItem, logData.EvtcLogEnd);
         }
@@ -790,7 +791,7 @@ partial class CombatData
         };
     }
 
-    internal static List<AnimatedCastEvent> CreateCastEvents(EvtcVersionEvent evtcVersion, Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
+    internal static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData, IReadOnlyDictionary<long, EmoteGUIDEvent> emoteGUIDict)
     {
         using var _t = new AutoTrace("CreateCastEvents");
         //TODO_PERF(Rennorb)
@@ -810,7 +811,7 @@ partial class CombatData
                         // missing end
                         if (startItem != null)
                         {
-                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
                         }
                         startItem = c;
                     }
@@ -818,13 +819,13 @@ partial class CombatData
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {
-                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, c, skillID, emoteGUIDict));
+                            resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, c, skillID, emoteGUIDict));
                             startItem = null;
                         }
                         // missing start
                         else
                         {
-                            var toCheck = CreateAnimatedCastEvent(evtcVersion, null, agentData, skillData, logData, c, skillID, emoteGUIDict);
+                            var toCheck = CreateAnimatedCastEvent(null, agentData, skillData, logData, c, skillID, emoteGUIDict);
                             // we are only interested in animations started before log starts
                             if (toCheck.Time < logData.EvtcLogStart)
                             {
@@ -837,7 +838,7 @@ partial class CombatData
                 // missing end
                 if (startItem != null)
                 {
-                    resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(evtcVersion, startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
+                    resBySrcAgentBySkillID.Add(CreateAnimatedCastEvent(startItem, agentData, skillData, logData, null, skillID, emoteGUIDict));
                 }
                 resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                 resBySrcAgent.AddRange(resBySrcAgentBySkillID);
@@ -919,9 +920,9 @@ partial class CombatData
     internal static void AddBuffDamageDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage,
         List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents,
         List<StunBreakEvent> stunBreakEvents,
-        AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+        AgentData agentData, SkillData skillData)
     {
-        if (evtcVersion.Build >= ArcDPSBuilds.ResultEnumRework)
+        if (damageEvent.Build >= ArcDPSBuilds.ResultEnumRework)
         {
             DamageResult result = GetDamageResult(damageEvent.Result);
             switch (result)

@@ -278,9 +278,11 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
-            .WithMinions(),
+            .WithMinions()
+            .WithTarget(),
         new BuffGainCastFinder(LesserSicEm, LesserSicEm)
             .WithMinions()
+            .WithTarget()
             .WithBuilds(GW2Builds.January2026Balance),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
             .WithMinions(),
@@ -308,6 +310,7 @@ internal static class RangerHelper
             .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
+            .WithTarget()
             .UsingICD(1100)
             .UsingNotAccurate(),
         new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
@@ -496,7 +499,7 @@ internal static class RangerHelper
         // Nature Magic
         // - Bountiful Hunter
         new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1% per boon (player and pet)", DamageSource.All, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
-        
+
         // Wilderness Survival
         // - Survival Instincts
         new DamageLogDamageModifier(Mod_SurvivalInstinctsOutgoing5_Incoming10, "Survival Instincts (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, FromHPChecker(0, 50), DamageModifierMode.All)
@@ -539,7 +542,7 @@ internal static class RangerHelper
                 return !a.GetMinions(log).Any(x => IsJuvenilePet(x.ReferenceAgentItem));
             })
             .WithBuilds(GW2Builds.January2026Balance),
-        
+
         // Mace
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
@@ -775,7 +778,7 @@ internal static class RangerHelper
             {
                 foreach (EffectEvent effect in sublimeConversions1)
                 {
-                    if (sublimeConversions2.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (sublimeConversions2.Any(x => x.IsAtTime(effect)))
                     {
                         (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                         var connector = new PositionConnector(effect.Position);

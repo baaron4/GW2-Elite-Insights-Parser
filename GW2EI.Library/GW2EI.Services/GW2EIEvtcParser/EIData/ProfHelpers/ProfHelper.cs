@@ -119,7 +119,7 @@ internal static class ProfHelper
         new DamageCastFinder(RelicOfTheLastTyrantDamage, RelicOfTheLastTyrantDamage)
             .UsingChecker((hde, combatData, agentData, skillData) =>
             {
-                return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => Math.Abs(x.Time - hde.Time) < ServerDelayConstant && x.RemovedStacks == 5) != null;
+                return combatData.GetBuffRemoveAllData(TyrantsFuryBuff).FirstOrDefault(x => x.IsAtTime(hde) && x.RemovedStacks == 5) != null;
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
@@ -139,8 +139,10 @@ internal static class ProfHelper
         new BuffGainCastFinder(RelicOfTheCoralHeartBuff, RelicOfTheCoralHeartBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
+            .WithTarget()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
+            .WithTarget()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -233,6 +235,7 @@ internal static class ProfHelper
             .UsingICD(1000)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new MissileCastFinder(RelicOfPeithaBlade, RelicOfPeithaBlade)
+            .WithTarget()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new MissileCastFinder(RelicOfTheForestDwellerMissileDamage, RelicOfTheForestDwellerMissileDamage)
             .UsingICD(100)
@@ -269,7 +272,8 @@ internal static class ProfHelper
         new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
         new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
             .UsingBeforeWeaponSwap(),
-        new BreakbarDamageCastFinder(Technobabble, Technobabble),
+        new BreakbarDamageCastFinder(Technobabble, Technobabble)
+            .WithTarget(),
         #endregion Misc
     ];
 

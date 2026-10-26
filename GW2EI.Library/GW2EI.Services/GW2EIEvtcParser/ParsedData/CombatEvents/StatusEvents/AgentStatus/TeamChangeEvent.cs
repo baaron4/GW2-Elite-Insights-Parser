@@ -8,10 +8,10 @@ public class TeamChangeEvent : StatusEvent
 
     public readonly ulong TeamIDInto;
 
-    internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
+    internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         TeamIDInto = GetTeamIDInto(evtcItem);
-        if (evtcVersion.Build >= ArcDPSBuilds.TeamChangeOnDespawn)
+        if (evtcItem.Build >= ArcDPSBuilds.TeamChangeOnDespawn)
         {
             TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
         }

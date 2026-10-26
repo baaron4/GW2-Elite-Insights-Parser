@@ -16,10 +16,14 @@ internal static class EvokerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         // Familiar Skills
-        new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill),
-        new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill),
-        new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill),
-        new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
+        new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill)
+            .WithTarget(),
         // Meditations
         new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.EvokerOttersCompassion2),
@@ -139,6 +143,8 @@ internal static class EvokerHelper
 
     ];
 
+    private static GainComputerByExactlyNStacksPresent ToadAndOtherPresent = new(2);
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Elemental Balance
@@ -155,16 +161,16 @@ internal static class EvokerHelper
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-15% after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-10% after familiar skill", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // 
-        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, ToadAndOtherPresent, TraitImages.FamiliarsProwess, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
-        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.PvEWvW)
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-33% under Protection while Toad active", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Evoker, ToadAndOtherPresent, TraitImages.FamiliarsProwess, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
-        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-10% under Protection while Toad active", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_FamiliarsEnhancedPotencyToad, [ToadPassive, Protection], "Enhanced Potency (Toad)", "-10% under Protection while Toad active", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Evoker, ToadAndOtherPresent, TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.February2026GuardiansGladeCMReleaseAndMinorBalance),
         // Stone Heart - special behavior for Evokers in PvP  
-        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-25% damage", DamageSource.Incoming, -25, DamageType.Strike, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.StoneHeart, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-25% damage", DamageSource.Incoming, -25, DamageType.Strike, DamageType.All, Source.Evoker, ToadAndOtherPresent, TraitImages.StoneHeart, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.September2026PvPBalanceAndCMReleases),
-        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-15% damage", DamageSource.Incoming, -15, DamageType.Strike, DamageType.All, Source.Evoker, new GainComputerByExactNumberOfBuffsPresent(2), TraitImages.StoneHeart, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_StoneHeart_EvokerToad, [StoneHeart, ToadPassive], "Stone Heart (Toad)", "-15% damage", DamageSource.Incoming, -15, DamageType.Strike, DamageType.All, Source.Evoker, ToadAndOtherPresent, TraitImages.StoneHeart, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.September2026PvPBalanceAndCMReleases),
         new BuffOnActorDamageModifier(Mod_StoneHeart_Evoker, StoneHeart, "Stone Heart (No Toad)", "-40% damage", DamageSource.Incoming, -40, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.StoneHeart, DamageModifierMode.sPvP)
             .UsingChecker((evt, log) => !evt.To.HasBuff(log, ToadPassive, evt.Time))

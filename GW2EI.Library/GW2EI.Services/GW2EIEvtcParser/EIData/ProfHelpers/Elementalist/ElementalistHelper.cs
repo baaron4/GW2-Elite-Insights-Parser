@@ -29,7 +29,8 @@ internal static class ElementalistHelper
         new BuffGainCastFinder(GlyphOfElementalPowerAirSkill, GlyphOfElementalPowerAirBuff),
         new BuffGainCastFinder(GlyphOfElementalPowerEarthSkill, GlyphOfElementalPowerEarthBuff),
         // Arcane
-        new DamageCastFinder(ArcaneBlast, ArcaneBlast),
+        new DamageCastFinder(ArcaneBlast, ArcaneBlast)
+            .WithTarget(),
         new BuffGiveCastFinder(ArcanePower_ArcaneEcho_Skill, ArcanePowerBuff)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
         new BuffGainCastFinder(ArcaneShieldSkill, ArcaneShieldBuff),
@@ -90,6 +91,7 @@ internal static class ElementalistHelper
         // Scepter
         new DamageCastFinder(LightningStrike, LightningStrike),
         new MissileCastFinder(Hurl, Hurl)
+            .WithTarget()
             .UsingICD(900), // Projectiles shoot in 800ms
         // Spear
         new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
@@ -483,7 +485,7 @@ internal static class ElementalistHelper
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in geysers)
                 {
-                    if (!geyserSplash.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))
+                    if (!geyserSplash.Any(x => x.IsAtTime(effect)))
                     {
                         continue;
                     }

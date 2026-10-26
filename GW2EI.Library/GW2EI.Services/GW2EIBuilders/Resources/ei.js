@@ -296,7 +296,10 @@ function mainLoad() {
     $("body").tooltip({
         selector: "[data-original-title]",
         html: true,
-        boundary: "window"
+        boundary: "window",
+        trigger: 'hover',
+        animation: false,
+        container: 'body'
     });
 };
 

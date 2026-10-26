@@ -52,9 +52,9 @@ internal class Matthias : SalvationPass
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(MatthiasSacrifice, Mech_MatthiasSacrifice, new (Symbols.DiamondTall,Colors.DarkTeal), new("Sacrifice", "Sacrifice (Breakbar)","Sacrifice"), Sev1),
                 new PlayerDstBuffRemoveMechanic(MatthiasSacrifice, Mech_MatthiasSacrificeSuccess, new (Symbols.DiamondTall,Colors.DarkGreen), new("CC.End","Sacrifice (Breakbar) ended", "Sacrifice End"), Sev0)
-                    .UsingChecker((br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ServerDelayConstant)),
+                    .UsingChecker((br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => br.IsAtTime(x))),
                 new PlayerDstBuffRemoveMechanic(MatthiasSacrifice, Mech_MatthiasSacrificeFail, new (Symbols.DiamondTall,Colors.Red), new("CC.Fail","Sacrifice time ran out", "Sacrificed"), Sev0)
-                    .UsingChecker( (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ServerDelayConstant)),
+                    .UsingChecker( (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => br.IsAtTime(x))),
             ]),
             //new Mechanic(Unbalanced, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new (Symbols.Square,"rgb(0,140,0)"), new("KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(Unbalanced, "Unbalanced", ParseEnum.BossIDS.Matthias, new (Symbols.Square,"rgb(0,140,0)"), new("KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
@@ -220,7 +220,7 @@ internal class Matthias : SalvationPass
                 continue;
             }
             sacrifice = sacrifice.EnglobingAgentItem;
-            AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
+            AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.FirstName, Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
             AgentManipulationHelper.RedirectDamageAndCopyRemainingFromSrcToDst(sacrificeCrystal, sacrifice, copies, combatData, extensions);
         }
         if (copies.Count != 0)

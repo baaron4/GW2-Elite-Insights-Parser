@@ -27,25 +27,10 @@ public class ParsedEvtcLog : EvtcLog
 
     internal static void AddRankToSpecies(CombatData combatData, SingleActor singleActor)
     {
-        var agentInfo = combatData.GetNPCInfoEvents(singleActor.AgentItem).FirstOrDefault();
-        if (agentInfo != null && agentInfo.SpeciesFlags != 0 && agentInfo.DecorateName)
+        var rank = combatData.GetNPCRankPrefix(singleActor.AgentItem);
+        if (rank != null)
         {
-            if (agentInfo.IsVeteran)
-            {
-                singleActor.OverrideName("Veteran " + singleActor.Character);
-            }
-            else if (agentInfo.IsElite)
-            {
-                singleActor.OverrideName("Elite " + singleActor.Character);
-            }
-            else if (agentInfo.IsChampion)
-            {
-                singleActor.OverrideName("Champion " + singleActor.Character);
-            }
-            else if (agentInfo.IsLegendary)
-            {
-                singleActor.OverrideName("Legendary " + singleActor.Character);
-            }
+            singleActor.OverrideName(rank + singleActor.Character);
         }
     }
 

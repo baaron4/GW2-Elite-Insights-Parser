@@ -5,14 +5,14 @@ namespace GW2EIEvtcParser.ParsedData;
 public class GadgetInteractEvent : AnimatedCastEvent
 {
 
-    public AgentItem Gadget => EffectTarget;
+    public AgentItem Gadget => Target;
 
     internal GadgetInteractEvent(CombatItem? startItem, AgentData agentData, SkillData skillData,
         CombatItem? endItem, long maxEnd) : base(startItem, agentData, skillData, endItem, maxEnd)
     {
         if (startItem != null && startItem.IsStateChange != StateChange.AnimationStart)
         {
-            EffectTarget = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
+            Target = agentData.GetAgentByInstID((ushort)startItem.Pad, startItem.Time);
         }
         // Bandaid, may not be perfect
         if (AnimStart == AnimationStart.GadgetInteract) // Sanity check
@@ -22,16 +22,15 @@ public class GadgetInteractEvent : AnimatedCastEvent
                 Status = AnimationStatus.Interrupted;
                 SavedDuration = -ActualDuration;
             }
-            ExpectedDuration = (int)(ExpectedDuration / AcceleratedToNonAcceleratedRatio);
+            ExpectedDuration = UnapplyTimeScale(ExpectedDuration);
             if (Status == AnimationStatus.Reduced)
             {
-                int scaledExpectedDuration = (int)Math.Round(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
-                SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
+                SavedDuration = Math.Max(ExpectedScaledDuration - ActualDuration, 0);
             }
         }
     }
 
-    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget) : base(caster, skill, start, dur, effectTarget)
+    internal GadgetInteractEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, target, status)
     {
     }
 }

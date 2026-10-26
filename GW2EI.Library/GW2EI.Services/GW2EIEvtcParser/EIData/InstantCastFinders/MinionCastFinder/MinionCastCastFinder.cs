@@ -4,11 +4,18 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class MinionCastCastFinder : CheckedCastFinder<AnimatedCastEvent>
 {
+    protected bool Target = false;
     protected readonly long MinionSkillID;
 
     public MinionCastCastFinder(long skillID, long minionSkillID) : base(skillID)
     {
         MinionSkillID = minionSkillID;
+    }
+
+    public MinionCastCastFinder WithTarget()
+    {
+        Target = true;
+        return this;
     }
 
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -29,7 +36,7 @@ internal class MinionCastCastFinder : CheckedCastFinder<AnimatedCastEvent>
                         lastTime = cast.Time;
                         continue;
                     }
-                    result.Add(new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster()));
+                    result.Add(new InstantCastEvent(cast.Time, skillData.Get(SkillID), cast.Caster.GetFinalMaster(), Target ? cast.Target : ParserHelper._unknownAgent));
                 }
             }
         }

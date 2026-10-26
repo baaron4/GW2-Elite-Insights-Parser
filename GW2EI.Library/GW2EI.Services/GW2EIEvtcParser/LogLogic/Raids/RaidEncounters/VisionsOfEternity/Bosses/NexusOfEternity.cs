@@ -349,7 +349,7 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 {
                     // The effect is not unique and collides with other mechanics.
                     // We check for Ascension remove events happening at the time of green effect ending and at the time of the explosion effect.
-                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => Math.Abs(x.Time - lifespan.end) < ServerDelayConstant);
+                    var explosion = ascensionsSacrificeFailFromVloxx.FirstOrDefault(x => x.IsAtTime(lifespan.end));
                     if (explosion != null)
                     {
                         lifespan = explosion.ComputeLifespan(log, 1666);
@@ -912,11 +912,11 @@ internal class NexusOfEternity : VisionsOfEternityRaidEncounter
                 var pie = (PieDecoration)new PieDecoration(radius, 135, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.AddWithBorder(pie, Colors.LightOrange, 0.2);
             }
-
-            // Decoration above indicator
-            var thousandStrikes = log.CombatData.GetMissileEventsBySkillID(skill);
-            replay.Decorations.AddNonHomingMissiles(log, thousandStrikes, Colors.LightBlue, 0.3, 20);
         }
+
+        // Decoration above indicator
+        var thousandStrikes = log.CombatData.GetMissileEventsBySrcBySkillID(agent, skill);
+        replay.Decorations.AddNonHomingMissiles(log, thousandStrikes, Colors.LightBlue, 0.4, 20);
     }
 
     private static void AddRagingStorm(ParsedEvtcLog log, CombatReplay replay, AgentItem agent)

@@ -5,12 +5,21 @@ namespace GW2EIEvtcParser.ParsedData;
 public abstract class CastEvent : TimeCombatEvent
 {
 
-    public enum AnimationStatus { Unknown, Reduced, Interrupted, Full, Instant };
+    public enum AnimationStatus
+    {
+        Unknown,
+        Reduced,
+        Interrupted,
+        Full,
+        Instant,
+        CustomMovement, // Not in game data 
+    };
 
     // start item
     public SkillItem Skill { get; protected set; }
     public long SkillID => Skill.ID;
     public AgentItem Caster { get; protected set; }
+    public AgentItem Target { get; protected set; } = ParserHelper._unknownAgent;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public bool IsUnknown => Status == AnimationStatus.Unknown;
@@ -22,16 +31,24 @@ public abstract class CastEvent : TimeCombatEvent
     public int SavedDuration { get; protected set; }
 
     public int ExpectedDuration { get; protected set; }
-    public int ExpectedScaledDuration => (int)(ExpectedDuration * AcceleratedToNonAcceleratedRatio);
+    public int ExpectedScaledDuration => ApplyTimeScale(ExpectedDuration);
+
+    protected int? _expectedExecute = null;
+    public int ExpectedExecute => _expectedExecute ?? ExpectedDuration;
+    public int ExpectedScaledExecute => ApplyTimeScale(ExpectedExecute);
 
     public int ActualDuration { get; protected set; }
+    public int ActualUnscaledDuration => UnapplyTimeScale(ActualDuration);
 
     public long EndTime => Time + ActualDuration;
     public long ExpectedEndTime => Time + ExpectedDuration;
     public long ExpectedScaledEndTime => Time + ExpectedScaledDuration;
 
-    public double Acceleration { get; protected set; } = 0;
-    public double AcceleratedToNonAcceleratedRatio = 1.0;
+    /// <summary>Cast speed as precentage with 100% = normal.</summary>
+    public double TimeScale { get; protected set; } = 1.0;
+
+    /// <summary>Cast acceleration mapped to 100% = Quickness, 0% = none, -100% = Slow.</summary>
+    public double AccelerationQuicknessSlow { get; protected set; } = 0;
 
     internal CastEvent(CombatItem baseItem, AgentData agentData, SkillData skillData) : base(baseItem.Time)
     {
@@ -59,6 +76,16 @@ public abstract class CastEvent : TimeCombatEvent
     }
 
     public abstract bool IgnoreOnRotationRender();
+
+    public int ApplyTimeScale(int duration)
+    {
+        return (int)(duration / TimeScale);
+    }
+
+    public int UnapplyTimeScale(int duration)
+    {
+        return (int)(duration * TimeScale);
+    }
 }
 
 public static partial class ListExt

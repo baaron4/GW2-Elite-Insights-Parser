@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -148,7 +149,7 @@ public static class ParserHelper
         var groupByTime = new Dictionary<long, List<T>>();
         foreach (T c in list)
         {
-            long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < ServerDelayConstant);
+            long key = groupByTime.Keys.FirstOrDefault(x => c.IsAtTime(x));
             if (key != 0)
             {
                 groupByTime[key].Add(c);
@@ -720,5 +721,43 @@ public static class ParserHelper
             i++;
         }
         return -1;
+    }
+
+    public static unsafe IReadOnlyList<T> GetIndividualFlagsAsValue<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    {
+        var activeFlags = new List<T>();
+
+        int bitCount = sizeof(T) * 8;
+
+        for (int i = 0; i < bitCount; i++)
+        {
+            T bit = T.One << i;
+
+            if ((toDeFlag & bit) != T.Zero)
+            {
+                activeFlags.Add(bit);
+            }
+        }
+
+        return activeFlags;
+    }
+
+    public static unsafe IReadOnlyList<int> GetIndividualFlagsAsBits<T>(T toDeFlag) where T : unmanaged, IBinaryInteger<T>
+    {
+        var activeFlags = new List<int>();
+
+        int bitCount = sizeof(T) * 8;
+
+        for (int i = 0; i < bitCount; i++)
+        {
+            T bit = T.One << i;
+
+            if ((toDeFlag & bit) != T.Zero)
+            {
+                activeFlags.Add(i);
+            }
+        }
+
+        return activeFlags;
     }
 }
