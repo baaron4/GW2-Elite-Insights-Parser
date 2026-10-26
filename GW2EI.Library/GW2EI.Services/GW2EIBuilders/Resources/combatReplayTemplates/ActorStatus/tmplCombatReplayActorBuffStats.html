@@ -1,7 +1,7 @@
 <template>
     <div class="actor-buff-container">
         <span v-for="buffData in buffarray" class="d-inline-block position-relative">
-            <img :src="buffData.buff.icon" :title="buffData.buff.name + ' - ' + buffData.buff.id" :alt="buffData.buff.name + ' - ' + buffData.buff.id" class="icon-s" />
+            <img :src="buffData.buff.icon" :data-original-title="buffData.buff.name + ' - ' + buffData.buff.id" :alt="buffData.buff.name + ' - ' + buffData.buff.id" class="icon-s" />
             <span v-if="buffData.state > 1" class="buff-number">{{buffData.state}}</span>
         </span>
     </div>

@@ -967,11 +967,11 @@ class Animator {
 
         document.body.addEventListener('mouseup', function (evt) {
             if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
-                _this._drawPickCanvas();
                 const downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
                     y: Math.round(_this.lastY * resolutionMultiplier)
                 };
+                _this._drawPickCanvas(downPt);
                 const pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
                 uint32ToUint8[0] = pickedColor[0];
                 uint32ToUint8[1] = pickedColor[1];
@@ -1161,21 +1161,25 @@ class Animator {
         }
     }
 
-    _drawPickCanvas() {
+    _drawPickCanvas(pt = null) {
         const _this = this;
         const mainCtx = this.mainContext;
         const mainTransform = mainCtx.getTransform();
         const ctx = this.pickContext;
-        const canvas = this.pickCanvas;
-        const p1 = ctx.transformedPoint(0, 0);
-        const p2 = ctx.transformedPoint(canvas.width, canvas.height);
-        ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-        ctx.save();
-        {
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const canvas = this.pickCanvas;       
+        if (pt) {
+            ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
+        } else {
+            const p1 = ctx.transformedPoint(0, 0);
+            const p2 = ctx.transformedPoint(canvas.width, canvas.height);
+            ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            ctx.restore();
         }
-        ctx.restore();
 
         //ctx.save();
         {
