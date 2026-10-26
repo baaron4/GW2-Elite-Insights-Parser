@@ -485,9 +485,9 @@ internal class LogDataDto
         public readonly Dictionary<long, SkillItem> skills = new(256);
         public readonly Dictionary<string, AgentItem> npcs = new(16);
 
-        private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastExecute, int? ControlReturn)> skillDurations = new(32);
+        private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastCastBarExecute, int? ControlReturn)> skillDurations = new(32);
 
-        public (int? LastExecute, int? ControlReturn) GetComputedSkillDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
+        public (int? LastCastBarExecute, int? ControlReturn) GetComputedSkillDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
         {
             if (log.LogMetadata.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
             {
@@ -499,7 +499,7 @@ internal class LogDataDto
             {
                 var animation = log.SkillData.Get(skillID).SkillInfo?.GetAnimation(water);
                 var scaling = TimeScale.GetTickScaling(timeScale);
-                duration.LastExecute = animation?.ComputeAnyExecute(true, scaling);
+                duration.LastCastBarExecute = animation?.ComputeCastBarExecute(true, scaling);
                 duration.ControlReturn = animation?.ComputeControlReturn(scaling);
                 skillDurations.Add(key, duration);
             }

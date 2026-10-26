@@ -10,7 +10,8 @@ public abstract class SkillTiming
     public int Time { get; protected set; }
 
     public bool IsControlReturn => Trigger == SkillTrigger.ControlReturn;
-    public bool IsAnyExecute => Trigger == SkillTrigger.Execute3 || Trigger == SkillTrigger.Execute4 || Trigger == SkillTrigger.Execute5;
+    public bool IsAnyExecute => IsCastBarExecute || Trigger == SkillTrigger.Execute4 || Trigger == SkillTrigger.Execute5;
+    public bool IsCastBarExecute => Trigger == SkillTrigger.Execute3;
 
     protected SkillTiming(CombatItem evtcItem, SkillAnimation animation)
     {

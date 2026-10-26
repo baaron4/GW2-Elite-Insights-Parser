@@ -209,4 +209,9 @@ public class SkillAnimation
     {
         return ComputeTriggerTime(timing => timing.IsAnyExecute, last, scaling, minLoop);
     }
+
+    public int? ComputeCastBarExecute(bool last = false, TimeScale.Scaling? scaling = null, bool minLoop = false)
+    {
+        return ComputeTriggerTime(timing => timing.IsCastBarExecute, last, scaling, minLoop);
+    }
 }

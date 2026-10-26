@@ -102,7 +102,7 @@ internal class SkillDto : IDItemDto
             }
 
             var water = false; // TODO: handle underwater
-            var (LastExecute, ControlReturn) = used.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, water);
+            var (LastCastBarExecute, ControlReturn) = used.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, water);
 
             var cast = new SkillCastDto()
             {
@@ -112,7 +112,7 @@ internal class SkillDto : IDItemDto
                 Status = (int)cl.Status,
                 Quickness = cl.AccelerationQuicknessSlow,
                 Expected = ControlReturn ?? 0,
-                Executed = LastExecute ?? 0,
+                Executed = LastCastBarExecute ?? 0,
                 Target = targetKey,
             };
             list.Add(cast);
