@@ -259,7 +259,7 @@ public static class ArcDPSEnums
         return bt < (byte)ConditionResult.Unknown ? (ConditionResult)bt : ConditionResult.Unknown;
     }
 
-    // State Change    
+    // State Change
     public enum StateChange : byte
     {
         Combat = 0,
@@ -515,7 +515,7 @@ public static class ArcDPSEnums
         // Current max value for type seems to be in the range's of 20
         if (type >= ATTR_FORM_CUSTOM_STAT_TO_STAT)
         {
-            // Writs TBC? 
+            // Writs TBC?
             if (type == ATTR_WRITS_TO_STAT && bt == 2)
             {
                 return BuffAttribute.AboveHealth;
@@ -576,16 +576,37 @@ public static class ArcDPSEnums
     {
         return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
     }*/
-    // WIP
-    public enum TriggerType : ulong
+
+    // Stable ingame enum
+    public enum SkillTrigger : byte
     {
-        EffectHappened = 4,
-        AnimationCompleted = 5,
-        Unknown = ulong.MaxValue,
+        ControlReturn = 0,
+        CastEffect1 = 1,
+        CastEffect2 = 2,
+        Execute3 = 3,
+        Execute4 = 4,
+        Execute5 = 5,
+        StreakEffect7 = 7,
+        StreakEffect8 = 8,
+        StreakEffect9 = 9,
+        StreakEffect10 = 10,
+        Unknown = byte.MaxValue,
     }
-    public static TriggerType GetSkillTrigger(ulong bt)
+    public static SkillTrigger GetSkillTrigger(byte bt)
     {
-        return Enum.IsDefined(typeof(TriggerType), bt) ? (TriggerType)bt : TriggerType.Unknown;
+        return Enum.IsDefined(typeof(SkillTrigger), bt) ? (SkillTrigger)bt : SkillTrigger.Unknown;
+    }
+
+    // Stable ingame enum
+    [Flags]
+    public enum SkillStepFlags : uint
+    {
+        Evade0 = 1 << 0,
+        Evade1 = 1 << 1,
+        Evade2 = 1 << 2,
+        Evade3 = 1 << 3,
+        LoopStart = 1 << 4,
+        LoopEnd = 1 << 5,
     }
 
     // Squad Marker index

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
@@ -15,7 +16,10 @@ public struct SkillCastDto
     public long SkillId;
     public int ActualDuration;
     public int Status;
-    public double Acceleration;
+    public double Quickness;
+    public int Expected;
+    public int Executed;
+    public string? Target;
 
     public class Converter : JsonConverter<SkillCastDto>
     {
@@ -31,12 +35,14 @@ public struct SkillCastDto
             writer.WriteNumberValue(value.SkillId);
             writer.WriteNumberValue(value.ActualDuration);
             writer.WriteNumberValue(value.Status);
-            writer.WriteNumberValue(value.Acceleration);
+            writer.WriteNumberValue(value.Quickness);
+            writer.WriteNumberValue(value.Expected);
+            writer.WriteNumberValue(value.Executed);
+            writer.WriteStringValue(value.Target);
             writer.WriteEndArray();
         }
     }
 }
-
 
 internal class SkillDto : IDItemDto
 {
@@ -67,19 +73,7 @@ internal class SkillDto : IDItemDto
         }
     }
 
-    private static SkillCastDto GetSkillData(CastEvent cl, long phaseStart)
-    {
-        return new SkillCastDto()
-        {
-            Start = (cl.Time - phaseStart) / 1000.0,
-            SkillId = cl.SkillID,
-            ActualDuration = cl.ActualDuration,
-            Status = (int)cl.Status,
-            Acceleration = cl.Acceleration,
-        };
-    }
-
-    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, UsedData used)
     {
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
         var list = new List<SkillCastDto>(casting.Count);
@@ -89,12 +83,39 @@ internal class SkillDto : IDItemDto
             {
                 continue;
             }
-            if (!usedSkills.ContainsKey(cl.SkillID))
+            if (!used.skills.ContainsKey(cl.SkillID))
             {
-                usedSkills.Add(cl.SkillID, cl.Skill);
+                used.skills.Add(cl.SkillID, cl.Skill);
             }
 
-            list.Add(GetSkillData(cl, phase.Start));
+            var target = cl.Target;
+            string? targetKey = null;
+            if (target.IsPlayer || log.LogData.Logic.TargetAgents.Contains(target))
+            {
+                targetKey = "u" + target.UniqueID;
+            }
+            else if (target.IsNPC && !target.IsUnamedSpecies())
+            {
+                var prefix = target.IsVolatileSpecies() ? "v" : "s";
+                targetKey = prefix + target.ID;
+                used.npcs.TryAdd(targetKey, target);
+            }
+
+            var water = false; // TODO: handle underwater
+            var (LastExecute, ControlReturn) = used.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, water);
+
+            var cast = new SkillCastDto()
+            {
+                Start = (cl.Time - phase.Start) / 1000.0,
+                SkillId = cl.SkillID,
+                ActualDuration = cl.ActualDuration,
+                Status = (int)cl.Status,
+                Quickness = cl.AccelerationQuicknessSlow,
+                Expected = ControlReturn ?? 0,
+                Executed = LastExecute ?? 0,
+                Target = targetKey,
+            };
+            list.Add(cast);
         }
         return list;
     }

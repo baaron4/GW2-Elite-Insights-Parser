@@ -28,7 +28,8 @@ internal static class HolosmithHelper
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2)
             .UsingDisableWithMissileData(),
         new MissileCastFinder(BladeBurst, BladeBurst),
-        new MissileCastFinder(ParticleAccelerator, ParticleAccelerator),
+        new MissileCastFinder(ParticleAccelerator, ParticleAccelerator)
+            .WithTarget(),
     ];
 
     private static readonly HashSet<long> _photonForgeCast =

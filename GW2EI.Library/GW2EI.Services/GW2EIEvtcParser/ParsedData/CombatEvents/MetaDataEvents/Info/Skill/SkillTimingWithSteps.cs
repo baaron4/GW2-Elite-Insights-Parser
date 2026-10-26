@@ -2,18 +2,19 @@
 
 public class SkillTimingWithSteps : SkillTiming
 {
-    public readonly ulong TriggerData;
-    public byte[] TriggerDataBytes => BitConverter.GetBytes(TriggerData);
-
     public readonly int Index;
+    public readonly uint Flags;
 
-    public readonly bool Underwater;
-
-    internal SkillTimingWithSteps(CombatItem evtcItem, SkillInfoEvent skillInfo) : base(evtcItem, skillInfo)
+    internal SkillTimingWithSteps(CombatItem evtcItem, SkillAnimation animation) : base(evtcItem, animation)
     {
-        TriggerData = evtcItem.DstAgent;
+        var data = BitConverter.GetBytes(evtcItem.DstAgent);
+        Time = BitConverter.ToInt32(data.AsSpan()[..4]);
+        Flags = BitConverter.ToUInt32(data.AsSpan()[4..]);
         Index = evtcItem.Value;
-        Underwater = evtcItem.IFFByte > 0;
     }
 
+    internal static new bool IsUnderwater(CombatItem evtcItem)
+    {
+        return evtcItem.IFFByte != 0;
+    }
 }

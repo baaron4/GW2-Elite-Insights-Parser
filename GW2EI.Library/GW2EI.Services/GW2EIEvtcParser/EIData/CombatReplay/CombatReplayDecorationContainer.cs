@@ -709,9 +709,9 @@ internal class CombatReplayDecorationContainer
     /// </summary>
     /// <param name="player"></param>
     /// <param name="castEvent"></param>
-    internal void AddPlayerCastBar(PlayerActor player, AnimatedCastEvent castEvent, long expectedDuration = 0)
+    internal void AddPlayerCastBar(PlayerActor player, AnimatedCastEvent castEvent, int expectedDuration = 0)
     {
-        long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + (long)(expectedDuration * castEvent.AcceleratedToNonAcceleratedRatio);
+        long expectedScaledEndTime = expectedDuration == 0 ? castEvent.ExpectedScaledEndTime : castEvent.Time + castEvent.ApplyTimeScale(expectedDuration);
         Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (castEvent.Time, castEvent.EndTime),
                         castEvent.IsInterrupted ? Colors.LightRed : Colors.DarkYellow, 0.8, Colors.Black, 0.6,
                         [(castEvent.Time, 0), (expectedScaledEndTime, 100)], new AgentConnector(player))

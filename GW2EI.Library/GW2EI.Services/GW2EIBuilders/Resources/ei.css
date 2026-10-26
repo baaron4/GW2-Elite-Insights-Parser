@@ -163,7 +163,7 @@
 .actor-status {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: end; 
+    align-items: end;
     gap: 8px;
     cursor: pointer;
     user-select: none;
@@ -529,11 +529,11 @@ th:hover img.icon-hover,
     text-overflow: ellipsis;
 }
 
-.damage-cr-cell .cr-ellipsis {  
+.damage-cr-cell .cr-ellipsis {
     width: 100px;
 }
 
-.combat-replay-mechanics-list-row .cr-ellipsis {  
+.combat-replay-mechanics-list-row .cr-ellipsis {
     width: 120px;
 }
 
@@ -558,7 +558,7 @@ th:hover img.icon-hover,
 }
 
 .mech-cell span {
-    width: 178px;  
+    width: 178px;
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -1270,4 +1270,21 @@ td.approximate::before {
 
 .left-0 {
     left: 0;
+}
+
+.actor-rotation-casts > :first-child {
+    margin-right: 1px;
+}
+
+.actor-rotation-castbar {
+    width: calc(100% - 37px);
+    height: 12px;
+    margin-top: 1px;
+    margin-left: 37px;
+    margin-bottom: -13px;
+    text-align: center;
+    color: #fff;
+    font-size: 65%;
+    line-height: 12px;
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 }

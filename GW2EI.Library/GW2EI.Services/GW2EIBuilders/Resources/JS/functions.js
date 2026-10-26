@@ -72,6 +72,16 @@ function findSkill(isBuff, id) {
     return skill;
 }
 
+function findTargetName(target) {
+    if (target.startsWith("u")) {
+        const id = Number.parseInt(target.slice(1));
+        const actor = logData.players.find((actor) => actor.uniqueID == id) || logData.targets.find((actor) => actor.uniqueID == id);
+        return actor ? actor.name : "unknown";
+    } else {
+        return logData.npcMap[target];
+    }
+}
+
 function getTargetCacheID(activetargets) {
     var id = 0;
     for (var i = 0; i < activetargets.length; i++) {

@@ -7,8 +7,7 @@ public class AnimatedGadgetCastEvent : AnimatedCastEvent
     {
     }
 
-    internal AnimatedGadgetCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem effectTarget, AnimationStatus status = AnimationStatus.Full) : this(caster, skill, start, dur, status)
+    internal AnimatedGadgetCastEvent(AgentItem caster, SkillItem skill, long start, long dur, AgentItem target, AnimationStatus status = AnimationStatus.Full) : base(caster, skill, start, dur, target, status)
     {
-        EffectTarget = effectTarget;
     }
 }

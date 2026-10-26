@@ -1,27 +1,38 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
+
+namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillStep
 {
-    internal readonly SkillInfoEvent SkillInfo;
+    internal readonly SkillAnimation Animation;
+    public readonly byte Type;
     public readonly int Index;
+    public readonly uint Flags;
+    public readonly int ActionDuration;
+    public readonly int MoveDuration;
 
-    public readonly byte[] ClientData;
-    public readonly byte[] Ptr0;
-    public readonly byte[] Ptr1;
+    public int Duration => Math.Max(ActionDuration, MoveDuration); // technically also distinguishable by type
+    public bool IsLoopStart => (Flags & (uint)SkillStepFlags.LoopStart) > 0;
+    public bool IsLoopEnd => (Flags & (uint)SkillStepFlags.LoopEnd) > 0;
 
-    internal SkillStep(CombatItem evtcItem, SkillInfoEvent skillInfo)
+    internal SkillStep(CombatItem evtcItem, SkillAnimation animation)
     {
-        SkillInfo = skillInfo;
+        Animation = animation;
         Index = evtcItem.Value;
 
-        ClientData = new byte[9];
-        var clientData1Span = ClientData.AsSpan();
-        BitConverter.TryWriteBytes(clientData1Span, evtcItem.SrcAgent);
-        ClientData[8] = BitConverter.GetBytes(evtcItem.DstAgent)[7];
+        var data = new byte[9];
+        BitConverter.TryWriteBytes(data.AsSpan(), evtcItem.SrcAgent);
+        data[8] = BitConverter.GetBytes(evtcItem.DstAgent)[7];
 
-        Ptr0 = evtcItem.BuffDmg != -1 ? BitConverter.GetBytes(evtcItem.BuffDmg) : [];
-
-        Ptr1 = (int)evtcItem.OverstackValue != -1 ? BitConverter.GetBytes(evtcItem.OverstackValue) : [];
+        Type = data[0];
+        Flags = BitConverter.ToUInt32(data.AsSpan()[5..]);
+        Index = evtcItem.Value;
+        ActionDuration = evtcItem.BuffDmg;
+        MoveDuration = BitConverter.ToInt32(BitConverter.GetBytes(evtcItem.OverstackValue));
     }
 
+    public static bool IsUnderwater(CombatItem evtcItem)
+    {
+        return evtcItem.IFFByte != 0;
+    }
 }

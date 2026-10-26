@@ -16,10 +16,14 @@ internal static class EvokerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         // Familiar Skills
-        new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill),
-        new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill),
-        new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill),
-        new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
+        new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill)
+            .WithTarget(),
+        new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill)
+            .WithTarget(),
         // Meditations
         new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
             .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.EvokerOttersCompassion2),

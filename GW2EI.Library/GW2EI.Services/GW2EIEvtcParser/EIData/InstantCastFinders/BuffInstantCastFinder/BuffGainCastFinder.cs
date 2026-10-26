@@ -10,9 +10,15 @@ internal class BuffGainCastFinder : BuffCastFinder<BuffApplyEvent>
     {
         UsingChecker((bae, combatData, agentData, skillData) => !bae.Initial);
     }
+
     protected override AgentItem GetKeyAgent(BuffApplyEvent evt)
     {
         return evt.To;
+    }
+
+    protected override AgentItem GetOtherKeyAgent(BuffApplyEvent evt)
+    {
+        return evt.By;
     }
 
     internal BuffGainCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)

@@ -151,8 +151,10 @@ internal static class EngineerHelper
             // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
             .UsingChecker((effect, combatData, agentData, skillData) => MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ])),
         new DamageCastFinder(FocusedDevastation, FocusedDevastation)
+            .WithTarget()
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
         new MissileCastFinder(AimAssistedRocket, AimAssistedRocket)
+            .WithTarget()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(OrbitalCommandStrike, OrbitalCommandStrike)
             .UsingTimeOffset(-2000) // Effect has duration 3000ms but the damage happens after 2000ms
@@ -160,7 +162,8 @@ internal static class EngineerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(OrbitalCommandStrike, EffectGUIDs.EngineerOrbitalCommandStrike)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new MissileCastFinder(SurpriseShot, SurpriseShot),
+        new MissileCastFinder(SurpriseShot, SurpriseShot)
+            .WithTarget(),
     ];
 
     private static DamageLogChecker HeavyMetalChecker(double lower, double higher = 101)
@@ -220,7 +223,7 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, FromHigherThanToHPChecker, DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.August2022Balance),
-        
+
         // Firearms
         // - Thermal Vision
         new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, TraitImages.ThermalVision, DamageModifierMode.All)
@@ -248,7 +251,7 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_HeavyMetal_25, "Heavy Metal (25%)", "15% on crit if target hp% lower than 25%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.HeavyMetal, HeavyMetalChecker(0, 25), DamageModifierMode.PvE )
             .UsingApproximate()
             .WithBuilds(GW2Builds.January2026Balance),
-        
+
         // Tools
         // - Excessive Energy
         new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExcessiveEnergy, DamageModifierMode.All),

@@ -630,9 +630,6 @@ public partial class CombatData
         HasGadgetAnimData = _gadgetAnimationEventsByGadget.Count > 0;
         HasAgentInfo = evtcVersion.Build >= ArcDPSBuilds.AgentInfoAdded;
 
-        operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo/BuffInfo with SkillData");
-        skillData.CombineWithInfoEvents(_metaDataEvents.SkillInfoEventBySkillID, _metaDataEvents.BuffInfoEventByBuffID);
-
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
         List<AnimatedCastEvent> animatedCastData = CreateCastEvents(castCombatEvents, agentData, skillData, logData, _metaDataEvents.EmoteGUIDEventsByEmoteID);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());

@@ -6,12 +6,19 @@ namespace GW2EIEvtcParser.EIData;
 internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
     protected bool Minions = false;
+    protected bool Target = false;
     private readonly Guid _effectGUID;
     private int _speciesID = 0;
 
     public EffectCastFinder WithMinions()
     {
         Minions = true;
+        return this;
+    }
+
+    public EffectCastFinder WithTarget()
+    {
+        Target = true;
         return this;
     }
 
@@ -364,7 +371,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                             caster = agent;
                         }
                     }
-                    res.Add(new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster));
+                    res.Add(new InstantCastEvent(GetTime(effectEvent, GetKeyAgent(effectEvent), combatData), skillData.Get(SkillID), caster, Target ? GetOtherKeyAgent(effectEvent) : _unknownAgent));
                 }
             }
         }
