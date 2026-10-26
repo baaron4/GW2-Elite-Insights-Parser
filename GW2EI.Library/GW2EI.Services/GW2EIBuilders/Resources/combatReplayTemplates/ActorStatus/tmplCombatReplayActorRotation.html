@@ -1,6 +1,6 @@
 <template>
     <div class="actor-rotation">
-        <div v-if="isAnimated(castingSkill)" class="actor-rotation-castbar" :style="getCastbarStyle(castingSkill)">
+        <div v-if="isAnimated(castingSkill)" class="actor-rotation-castbar" :style="{'background': getCastbarGradient(castingSkill)}">
             {{ getCastbarTimes(castingSkill) }}
         </div>
         <div class="d-flex align-items-end actor-rotation-casts">
@@ -48,13 +48,35 @@
             isAnimated(cast) {
                 return cast && cast.type !== RotationStatus.INSTANT;
             },
-            getCastbarStyle(cast) {
+            getCastbarGradient(cast) {
                 const start = 1000 * cast.time;
                 const passed = this.time - start;
                 const executed = cast.executed != 0 ? cast.executed : cast.duration;
+                const expected = cast.expected != 0 ? cast.expected : cast.duration;
                 const cancel = cast.type === RotationStatus.CANCEL;
-                if (!cancel && passed >= executed) {
-                    return "background: #0c0";
+                if (!cancel && expected > executed) {
+
+                    const totalPercent = 100 * passed / expected;
+                    const executeEndPercent = 100 * executed / expected;
+
+                    const executeBG = "#840";
+                    const executeFill = "#e70";
+                    const controlBG = "#060 ";
+                    const controlFill = "#090 ";
+
+                    if (totalPercent >= executeEndPercent) {
+                        return `linear-gradient(to right,
+                                ${executeFill} 0%, ${executeFill} ${executeEndPercent}%,
+                                ${controlFill} ${executeEndPercent}%, ${controlFill} ${totalPercent}%,
+                                ${controlBG} ${totalPercent}%, ${controlBG} 100%
+                        )`;
+                    } else {
+                        return `linear-gradient(to right,
+                                ${executeFill} 0%, ${executeFill} ${totalPercent}%,
+                                ${executeBG} ${totalPercent}%, ${executeBG} ${executeEndPercent}%,
+                                ${controlBG} ${executeEndPercent}%, ${controlBG} 100%
+                        )`;
+                    }
                 } else {
                     const progress = 100 * passed / executed;
                     let fill = "#e70";
@@ -62,14 +84,16 @@
                     if (cancel) {
                         fill = "#e00";
                         bg = "#600";
-                    }
-                    return `background: linear-gradient(to right, ${fill} ${progress}%, ${progress}%, ${bg} ${100 - progress}%`;
+                    } 
+                    return `linear-gradient(to right, ${fill} ${progress}%, ${progress}%, ${bg} ${100 - progress}%)`;
                 }
+
             },
             getCastbarTimes(cast) {
+                const executed = (cast.executed != 0 ? cast.executed : cast.duration) / 1000;
                 const expected = (cast.expected != 0 ? cast.expected : cast.duration) / 1000;
                 const passed = this.time / 1000 - cast.time;
-                return `${passed.toFixed(2)} / ${expected.toFixed(2)}`;
+                return `${passed.toFixed(2)} / ${executed.toFixed(2)}${expected !== executed ? ` (${expected.toFixed(2)})` : ''}`;
             }
         },
         computed: {
