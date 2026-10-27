@@ -1421,9 +1421,11 @@ requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
 
 function initTheme() {
     const localStorageTheme = getValueFromLocalStorage("theme");
+    let theme = logData.lightTheme ? "yeti" : "slate";
     if (localStorageTheme && themes[localStorageTheme]) {
+        theme = localStorageTheme;
         $('#theme').attr('href', themes[localStorageTheme]);
         logData.lightTheme = localStorageTheme === "yeti";
-        document.body.classList.add("theme-" + localStorageTheme);  
     }
+    document.body.classList.add("theme-" + theme);  
 }
