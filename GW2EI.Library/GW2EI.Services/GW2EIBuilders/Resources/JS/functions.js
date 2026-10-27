@@ -1327,7 +1327,7 @@ function getCastTooltip(cast) {
     if (cast.executed != 0) {
         tooltip += `<br>Cast bar duration: ${cast.executed}ms`;
         if (cast.expected != 0 && cast.executed < cast.expected) {
-            tooltip += ` (expected at ${cast.expected}ms)`;
+            tooltip += ` (control returned at ${cast.expected}ms)`;
         }
     }
     if (cast.target) {
