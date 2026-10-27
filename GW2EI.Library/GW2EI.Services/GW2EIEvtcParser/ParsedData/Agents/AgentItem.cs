@@ -312,12 +312,29 @@ public class AgentItem
     }
     #endregion MASTER
     #region ATTACK TARGET
-    internal AgentItem GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
+    public bool IsAttackTarget(EvtcLog log)
+    {
+        return log.CombatData.GetAttackTargetEventByAttackTarget(this) != null;
+    }
+    public AgentItem GetAttackTargetOwner(EvtcLog log)
+    {
+        return log.CombatData.GetAttackTargetEventByAttackTarget(this)?.Src ?? ParserHelper._unknownAgent;
+    }
+    public bool HasAttackTargets(EvtcLog log)
+    {
+        return log.CombatData.GetAttackTargetEventsBySrc(this).Count > 0;
+    }
+    public IReadOnlyList<AgentItem> GetAttackTargets(EvtcLog log)
+    {
+        var attackTargets = log.CombatData.GetAttackTargetEventsBySrc(this);
+        return attackTargets.Count > 0 ? attackTargets.Select(x => x.AttackTarget).ToList() : [];
+    }
+    public AgentItem GetMainAgentWhenAttackTarget(EvtcLog log)
     {
         var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
         return atEvent?.Src ?? this;
     }
-    internal SingleActor GetMainSingleActorWhenAttackTarget(ParsedEvtcLog log)
+    public SingleActor GetMainSingleActorWhenAttackTarget(ParsedEvtcLog log)
     {
         var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
         return log.FindActor(atEvent?.Src ?? this);
@@ -673,7 +690,7 @@ public class AgentItem
         parent.AddEnglobedAgentItem(this, agentData);
     }
 
-    internal AgentItem FindEnglobedAgentItem(long time)
+    public AgentItem FindEnglobedAgentItem(long time)
     {
         if (!IsEnglobingAgent)
         {

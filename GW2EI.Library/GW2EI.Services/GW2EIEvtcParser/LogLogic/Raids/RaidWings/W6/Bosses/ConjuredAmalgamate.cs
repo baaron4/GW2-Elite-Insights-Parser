@@ -265,7 +265,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 break;
             case (int)TargetID.CABodyAttackTarget:
                 var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
-                var body = log.CombatData.GetAttackTargetEventByAttackTarget(target.AgentItem)?.Src;
+                var body = target.AgentItem.GetAttackTargetOwner(log);
                 var bodyInvulStatus = body?.GetBuffStatus(log, CAInvul).Where(x => x.Value == 0) ?? [];
                 var bodyAtHideStart = log.LogData.LogStart;
                 foreach (var noInvul in bodyInvulStatus)

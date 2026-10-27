@@ -20,6 +20,7 @@ public abstract class CastEvent : TimeCombatEvent
     public long SkillID => Skill.ID;
     public AgentItem Caster { get; protected set; }
     public AgentItem Target { get; protected set; } = ParserHelper._unknownAgent;
+    private AgentItem? _ActualTarget = null;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public bool IsUnknown => Status == AnimationStatus.Unknown;
@@ -85,6 +86,17 @@ public abstract class CastEvent : TimeCombatEvent
     public int UnapplyTimeScale(int duration)
     {
         return (int)(duration * TimeScale);
+    }
+    /// <summary>
+    /// Target of a cast event can be an englobing agent (EI concept to support agent splitting/ multi spec players) or an attack target (when hitting structures)
+    /// This method returns the appropriate agent, either by finding the englobed agent or returning the owner of the attack target.
+    /// </summary>
+    /// <param name="log"></param>
+    /// <returns></returns>
+    public AgentItem GetActualTarget(EvtcLog log)
+    {
+        _ActualTarget ??= Target.GetMainAgentWhenAttackTarget(log).FindEnglobedAgentItem(Time);
+        return _ActualTarget;
     }
 }
 

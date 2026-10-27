@@ -88,7 +88,7 @@ internal class SkillDto : IDItemDto
                 used.skills.Add(cl.SkillID, cl.Skill);
             }
 
-            var target = cl.Target;
+            var target = cl.GetActualTarget(log);
             string? targetKey = null;
             if (target.IsPlayer || log.LogData.Logic.TargetAgents.Contains(target))
             {
