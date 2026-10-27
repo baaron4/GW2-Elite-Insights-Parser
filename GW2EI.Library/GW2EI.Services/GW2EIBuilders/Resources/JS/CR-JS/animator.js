@@ -269,7 +269,7 @@ class Animator {
         this.backwards = false;
         this.extraDecorationMap = new Map();
         this.displaySettings = {
-            highlightSelectedGroup: true,
+            highlightSelectedGroup: getValueFromLocalStorage('highlightSelectedGroup') !== "false",
             displayAllMinions: false,
             displaySelectedMinions: true,
             displayMechanics: true,
@@ -277,7 +277,7 @@ class Animator {
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
-            useActorHitboxWidth: false,
+            useActorHitboxWidth: getValueFromLocalStorage('useActorHitboxWidth') !== "false",
             followSelected: false,
             rotateSelected: false
         };
@@ -806,6 +806,7 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.displaySettings.highlightSelectedGroup = !this.displaySettings.highlightSelectedGroup;
+        setValueToLocalStorage(highlightSelectedGroup, this.displaySettings.highlightSelectedGroup);
         animateCanvas(noUpdateTime);
     }
 
@@ -821,6 +822,7 @@ class Animator {
 
     toggleUseActorHitboxWidth() {
         this.displaySettings.useActorHitboxWidth = !this.displaySettings.useActorHitboxWidth;
+        setValueToLocalStorage(useActorHitboxWidth, this.displaySettings.useActorHitboxWidth);
         animateCanvas(noUpdateTime);
     }
 

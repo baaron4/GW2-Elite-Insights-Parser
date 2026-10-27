@@ -43,12 +43,17 @@
 <script>
     Vue.component("combat-replay-actors-stats-component", {
         props: ["time", "selectedactorid"],
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, localStoragedSettings({
+            buffs: {
+                defaultValue:getValueFromLocalStorage("buffs") === "true"
+            },
+            rotation: {
+                defaultValue:getValueFromLocalStorage("rotation") !== "false"
+            },
+        })],
         template: `${template}`,
         data: function () {
             return {
-                buffs: false,
-                rotation: true,
                 buffsToShow: ["Boons", "Encounter Specifics", "Conditions"],
                 possibleBuffs: ["Boons", "Conditions", "Encounter Specifics", "Shared", "Consumables", "Others"]
             };
