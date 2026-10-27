@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
 
@@ -44,7 +45,7 @@ internal class CommandWindow
         return fileType == FileType.Disk || fileType == FileType.Pipe;
     }
 
-    internal static readonly CommandLineOptions HelpCommandLineOptions = new();
+    internal static readonly CommandLineOptions TextOutputCommandLineOptions = new();
 
     private readonly string[] _args;
 
@@ -102,12 +103,19 @@ internal class CommandWindow
             Console.WriteLine($"{_args[0]} [arguments] [logs...]");
             Console.WriteLine("");
             Console.WriteLine("-c [config path] : use another config file");
+            Console.WriteLine("-h : help");
+            Console.WriteLine("-v : show current version");
             Console.WriteLine("-p : disable windows specific functions");
             Console.WriteLine("-inspect_raw : will launch an inspector window on the first given log file, content will be the raw data as present in the evtc. If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
             Console.WriteLine("-inspect_ei_partial : will launch an inspector window on the first given log file, content will be pre-processed by ei (gadget identifications, buff formula deduction, etc). If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
             Console.WriteLine("-inspect_ei_full : will launch an inspector window on the first given log file, content will be fully processed by ei (partial + custom events and agents). If no log files are provided, the default app will launch instead. If the parsing is faulty, application will close. Log files after the first are ignored.");
-            Console.WriteLine("-h : help");
-            return HelpCommandLineOptions;
+            return TextOutputCommandLineOptions;
+        }
+
+        if (_args.Contains("-v"))
+        {
+            Console.WriteLine($"v{Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty}");
+            return TextOutputCommandLineOptions;
         }
 
         if (_args.Contains("-c"))

@@ -39,7 +39,7 @@ internal partial class App : Application
                 EarlyShutdown(desktop, ArgFaulty);
                 return;
             }
-            else if (CommandLineOptions == CommandWindow.HelpCommandLineOptions)
+            else if (CommandLineOptions == CommandWindow.TextOutputCommandLineOptions)
             {
                 EarlyShutdown(desktop, 0);
                 return;
