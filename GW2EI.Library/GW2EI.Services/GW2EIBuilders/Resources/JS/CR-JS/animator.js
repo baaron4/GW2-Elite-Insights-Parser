@@ -1270,7 +1270,12 @@ class Animator {
         const ctx = this.pickContext;
         const canvas = this.pickCanvas;       
         if (pt) {
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
+            }
+            ctx.restore();
         } else {
             const p1 = ctx.transformedPoint(0, 0);
             const p2 = ctx.transformedPoint(canvas.width, canvas.height);
