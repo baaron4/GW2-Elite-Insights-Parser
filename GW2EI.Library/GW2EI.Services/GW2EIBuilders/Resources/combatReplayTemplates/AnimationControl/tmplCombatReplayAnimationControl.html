@@ -33,7 +33,8 @@
                 <canvas class="replay position-relative" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"></canvas>
-                <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" v-show="!!hoveredActor" :class="{ show: !!hoveredActor }">
+                <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" :style="{ 'opacity': hoveredActor ? '1.0' : '0.0' }"
+                    style="pointer-events: none; will-change: transform;">
                     <div class="arrow"></div>
                     <div class="tooltip-inner">
                         {{ hoveredActor }}
@@ -564,7 +565,11 @@
                 if (logActor && logActor.name) {
                     return logActor.name;
                 }
+                return null;
             },
+        },
+        updated() {
+            animator._updateAgentTooltipPopper();
         },
         methods: {
             updateAnimatorTimes(encounterPhase) {
