@@ -112,6 +112,27 @@ const reactiveAnimationData = {
 let InchToPixel = 10;
 let PollingRate = 150;
 
+const CanvasTooltipData = {
+    posX: 0,
+    posY: 0,
+    canvasX: 0,
+    canvasY: 0,
+    updateRequested: false
+};
+
+const CanvasTooltipVirtualElement = {
+    getBoundingClientRect() {
+        return {
+            width: 0,
+            height: 0,
+            top: CanvasTooltipData.posY,
+            right: CanvasTooltipData.posX,
+            bottom: CanvasTooltipData.posY,
+            left: CanvasTooltipData.posX,
+        };
+    }
+};
+
 // Scenegraph
 
 function standardDraw(drawable) {
@@ -398,29 +419,12 @@ class Animator {
             this.agentTooltipPopper = null;
         }
 
-        if (this.agentTooltipAnchor && this.agentTooltipAnchor.parentNode) {
-            this.agentTooltipAnchor.parentNode.removeChild(this.agentTooltipAnchor);
-        }
-
         this.agentTooltip = document.getElementById("combat-replay-agent-tooltip");
-        this.agentTooltipAnchor = null;
 
         if (this.agentTooltip && typeof Popper !== "undefined") {
-            // Invisible reference element positioned at the mouse cursor.
-            this.agentTooltipAnchor = document.createElement("span");
-
-            this.agentTooltipAnchor.style.position = "fixed";
-            this.agentTooltipAnchor.style.left = "0px";
-            this.agentTooltipAnchor.style.top = "0px";
-            this.agentTooltipAnchor.style.width = "0px";
-            this.agentTooltipAnchor.style.height = "0px";
-            this.agentTooltipAnchor.style.pointerEvents = "none";
-            this.agentTooltipAnchor.style.opacity = "0";
-
-            document.body.appendChild(this.agentTooltipAnchor);
 
             this.agentTooltipPopper = new Popper(
-                this.agentTooltipAnchor,
+                CanvasTooltipVirtualElement,
                 this.agentTooltip,
                 {
                     placement: "top",
@@ -993,41 +997,60 @@ class Animator {
             this.reactiveDataStatus.hoveredActorID = null;
         }
     }
-
     _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
-        if (!this.agentTooltip || !this.agentTooltipPopper || !this.agentTooltipAnchor) {
+        if (!this.agentTooltip || !this.agentTooltipPopper) {
             return;
         }
-
-        const x = Math.round(canvasX * resolutionMultiplier);
-        const y = Math.round(canvasY * resolutionMultiplier);
-
-        if (x < 0 || y < 0 || x >= this.pickCanvas.width || y >= this.pickCanvas.height) {
-            this._hideAgentTooltip();
+        CanvasTooltipData.posX = clientX;
+        CanvasTooltipData.posY = clientY;
+        CanvasTooltipData.canvasX = canvasX;
+        CanvasTooltipData.canvasY = canvasY;
+        if (CanvasTooltipData.updateRequested) {
             return;
         }
+        CanvasTooltipData.updateRequested = true;
 
-        this._drawPickCanvas({
-            x: x,
-            y: y
-        });
+        // Avoid high frequency picking calls when mouse DPI is higher than monitor refresh rate, which is very often the case
+        requestAnimationFrame(() => {
+            // To make sure to update on latest seen values and not the one seen on first request, if mouse in movement
+            canvasX = CanvasTooltipData.canvasX;
+            canvasY = CanvasTooltipData.canvasY;
+            clientX = CanvasTooltipData.posX;
+            clientY = CanvasTooltipData.posY;
+            const x = Math.round(canvasX * resolutionMultiplier);
+            const y = Math.round(canvasY * resolutionMultiplier);
+         
+            CanvasTooltipData.updateRequested = false;
 
-        const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
+            if (x < 0 || y < 0 || x >= this.pickCanvas.width || y >= this.pickCanvas.height) {
+                this._hideAgentTooltip();
+                return;
+            }
+
+            this._drawPickCanvas({
+                x: x,
+                y: y
+            });
+
+            const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
 
             const actorId = getUniqueIDFromPixel(pixel);
 
-        if (!this.getActorData(actorId)) {
-            this._hideAgentTooltip();
-            return;
-        }
+            if (!this.getActorData(actorId)) {
+                this._hideAgentTooltip();
+                return;
+            }
 
-        this.reactiveDataStatus.hoveredActorID = actorId;
-
-        this.agentTooltipAnchor.style.left = clientX + "px";
-        this.agentTooltipAnchor.style.top = clientY + "px";
-
-        this.agentTooltipPopper.scheduleUpdate();
+            this.reactiveDataStatus.hoveredActorID = actorId;
+            this._updateAgentTooltipPopper;
+        });
     }
+    _updateAgentTooltipPopper() {
+        if (this.agentTooltipPopper) {
+            this.agentTooltipPopper.update();
+        }
+    }
+
     _initMouseEvents() {
         const _this = this;
         const canvas = this.mainCanvas;
@@ -1273,7 +1296,7 @@ class Animator {
             ctx.save();
             {
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
+                ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
             }
             ctx.restore();
         } else {
