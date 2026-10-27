@@ -33,7 +33,12 @@
                 <canvas class="replay position-relative" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"></canvas>
-
+                <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" v-show="!!hoveredActor" :class="{ show: !!hoveredActor }">
+                    <div class="arrow"></div>
+                    <div class="tooltip-inner">
+                        {{ hoveredActor }}
+                    </div>
+                </div>
                 <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Reset canvas position">
@@ -538,7 +543,28 @@
             },
             isMechanicSelected() {
                 return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
-            }
+            },
+            hoveredActor() {
+                const actorId = this.animationData.hoveredActorID;
+
+                if (actorId === null) {
+                    return null;
+                }
+
+                const findById = (items) => {
+                   if (!Array.isArray(items)) {
+                       return null;
+                   }
+
+                   return items.find(item => item.uniqueID === actorId) || null;
+                };
+
+                const logActor = findById(logData.players) || findById(logData.targets);
+
+                if (logActor && logActor.name) {
+                    return logActor.name;
+                }
+            },
         },
         methods: {
             updateAnimatorTimes(encounterPhase) {

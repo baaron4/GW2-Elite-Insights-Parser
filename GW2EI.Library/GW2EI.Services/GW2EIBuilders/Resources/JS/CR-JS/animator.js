@@ -84,6 +84,7 @@ let animationControlComponent = null;
 const reactiveAnimationData = {
     time: 0,
     selectedActorID: null,
+    hoveredActorID: null,
     animated: false,
     range: {
         min: 0,
@@ -382,6 +383,53 @@ class Animator {
         this.pickContext = this.pickCanvas.getContext('2d', {
             willReadFrequently: true,
         });
+        // Agent tooltip
+        if (this.agentTooltipPopper) {
+            this.agentTooltipPopper.destroy();
+            this.agentTooltipPopper = null;
+        }
+
+        if (this.agentTooltipAnchor && this.agentTooltipAnchor.parentNode) {
+            this.agentTooltipAnchor.parentNode.removeChild(this.agentTooltipAnchor);
+        }
+
+        this.agentTooltip = document.getElementById("combat-replay-agent-tooltip");
+        this.agentTooltipAnchor = null;
+
+        if (this.agentTooltip && typeof Popper !== "undefined") {
+            // Invisible reference element positioned at the mouse cursor.
+            this.agentTooltipAnchor = document.createElement("span");
+
+            this.agentTooltipAnchor.style.position = "fixed";
+            this.agentTooltipAnchor.style.left = "0px";
+            this.agentTooltipAnchor.style.top = "0px";
+            this.agentTooltipAnchor.style.width = "0px";
+            this.agentTooltipAnchor.style.height = "0px";
+            this.agentTooltipAnchor.style.pointerEvents = "none";
+            this.agentTooltipAnchor.style.opacity = "0";
+
+            document.body.appendChild(this.agentTooltipAnchor);
+
+            this.agentTooltipPopper = new Popper(
+                this.agentTooltipAnchor,
+                this.agentTooltip,
+                {
+                    placement: "top",
+                    positionFixed: true,
+                    modifiers: {
+                        offset: {
+                            offset: "0, 8"
+                        },
+                        arrow: {
+                            element: ".arrow"
+                        },
+                        preventOverflow: {
+                            boundariesElement: "viewport"
+                        }
+                    }
+                }
+            );
+        }
         // manipulation
         this.lastX = this.mainCanvas.width / 2;
         this.lastY = this.mainCanvas.height / 2;
@@ -930,6 +978,52 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+
+    _hideAgentTooltip() {
+        if (this.reactiveDataStatus.hoveredActorID !== null) {
+            this.reactiveDataStatus.hoveredActorID = null;
+        }
+    }
+
+    _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
+        if (!this.agentTooltip || !this.agentTooltipPopper || !this.agentTooltipAnchor) {
+            return;
+        }
+
+        const x = Math.round(canvasX * resolutionMultiplier);
+        const y = Math.round(canvasY * resolutionMultiplier);
+
+        if (x < 0 || y < 0 || x >= this.pickCanvas.width || y >= this.pickCanvas.height) {
+            this._hideAgentTooltip();
+            return;
+        }
+
+        this._drawPickCanvas({
+            x: x,
+            y: y
+        });
+
+        const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
+
+        uint32ToUint8[0] = pixel[0];
+        uint32ToUint8[1] = pixel[1];
+        uint32ToUint8[2] = pixel[2];
+        uint32ToUint8[3] = 0;
+
+        const actorId = uint32[0];
+
+        if (!this.getActorData(actorId)) {
+            this._hideAgentTooltip();
+            return;
+        }
+
+        this.reactiveDataStatus.hoveredActorID = actorId;
+
+        this.agentTooltipAnchor.style.left = clientX + "px";
+        this.agentTooltipAnchor.style.top = clientY + "px";
+
+        this.agentTooltipPopper.scheduleUpdate();
+    }
     _initMouseEvents() {
         const _this = this;
         const canvas = this.mainCanvas;
@@ -939,6 +1033,7 @@ class Animator {
 
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
+            _this._hideAgentTooltip();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.mouseDown = {
@@ -954,6 +1049,7 @@ class Animator {
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
             if (_this.mouseDown) {
+                _this._hideAgentTooltip();
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 const downPt = _this.mouseDown.pt;
                 ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
@@ -962,7 +1058,13 @@ class Animator {
                 if (_this.animation === null) {
                     animateCanvas(noUpdateTime);
                 }
+            } else {
+                _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
             }
+        }, false);
+
+        canvas.addEventListener('mouseleave', function () {
+            _this._hideAgentTooltip();
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
