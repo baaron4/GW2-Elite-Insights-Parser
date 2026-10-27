@@ -48,6 +48,15 @@ let overheadAnimationIncrement = 1;
 const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
+function getUniqueIDFromPixel(pixel) {
+    uint32ToUint8[0] = pixel[0];
+    uint32ToUint8[1] = pixel[1];
+    uint32ToUint8[2] = pixel[2];
+    uint32ToUint8[3] = 0;
+
+    return uint32[0];
+}
+
 
 // Define the type of the decoration. Must match ordering of the enum in CombatReplayDescription.cs
 const Types = {
@@ -820,13 +829,13 @@ class Animator {
     }
 
     getSelectableActorData(actorId) {
-        return animator.targetData.get(actorId) || animator.playerData.get(actorId) || 
-                animator.friendlyMobData.get(actorId) || animator.friendlyPlayerData.get(actorId) || 
-                animator.targetPlayerData.get(actorId);
+        return this.targetData.get(actorId) || this.playerData.get(actorId) || 
+                this.friendlyMobData.get(actorId) || this.friendlyPlayerData.get(actorId) || 
+                this.targetPlayerData.get(actorId);
     }
 
     getActorData(actorId) {
-        return this.getSelectableActorData(actorId) || animator.trashMobData.get(actorId);
+        return this.getSelectableActorData(actorId) || this.trashMobData.get(actorId);
     }
 
     getActiveActorMarkers(actorID) {
@@ -1005,12 +1014,7 @@ class Animator {
 
         const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
 
-        uint32ToUint8[0] = pixel[0];
-        uint32ToUint8[1] = pixel[1];
-        uint32ToUint8[2] = pixel[2];
-        uint32ToUint8[3] = 0;
-
-        const actorId = uint32[0];
+            const actorId = getUniqueIDFromPixel(pixel);
 
         if (!this.getActorData(actorId)) {
             this._hideAgentTooltip();
@@ -1075,11 +1079,7 @@ class Animator {
                 };
                 _this._drawPickCanvas(downPt);
                 const pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
-                uint32ToUint8[0] = pickedColor[0];
-                uint32ToUint8[1] = pickedColor[1];
-                uint32ToUint8[2] = pickedColor[2];
-                uint32ToUint8[3] = 0;
-                const actorID = uint32[0];
+                const actorID = getUniqueIDFromPixel(pickedColor);
                 _this.selectActor(actorID, true);
             }
             _this.mouseDown = null;
@@ -1336,9 +1336,9 @@ class Animator {
             }
             // Background items commonly overlap so they need to be drawn in the correct order by height
             // This is sorted in reverse order because the z axis is inverted
-            animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
-            for (let i = 0; i < animator.backgroundActorData.length; i++) {
-                animator.backgroundActorData[i].draw();
+            this.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+            for (let i = 0; i < this.backgroundActorData.length; i++) {
+                this.backgroundActorData[i].draw();
             }
             if (this.displaySettings.displayMechanics) {
                 this.mechanicActorData.draw(standardDraw);
