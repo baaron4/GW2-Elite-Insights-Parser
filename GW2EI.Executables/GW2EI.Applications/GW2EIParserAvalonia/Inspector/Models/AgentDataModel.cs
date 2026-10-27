@@ -81,7 +81,7 @@ internal sealed class AgentDataModel
             {
                 Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged, log, depth)).ToList();
             }
-            AgentInfoEvents = log.CombatData.GetAgentInfoEvents(agent);
         }
+        AgentInfoEvents = log.CombatData.GetAgentInfoEvents(agent);
     }
 }
