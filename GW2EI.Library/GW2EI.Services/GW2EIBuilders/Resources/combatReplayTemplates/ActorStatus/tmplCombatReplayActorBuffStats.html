@@ -9,6 +9,7 @@
 
 <script>
     Vue.component("combat-replay-actor-buff", {
+        mixins: [tooltipSweepComponent],
         props: ["buffarray"],
         template: `${template}`
     });

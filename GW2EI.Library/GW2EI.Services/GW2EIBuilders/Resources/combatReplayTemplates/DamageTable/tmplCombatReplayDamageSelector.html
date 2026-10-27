@@ -73,7 +73,7 @@
     Vue.component("combat-replay-damage-selector-component", {
         props: ['data', 'phaseduration', 'phasehassubphases', 'ignorebreakbar', "column"],
         template: `${template}`,
-        mixins: [UIIconsComponent],
+        mixins: [UIIconsComponent, tooltipSweepComponent],
         mounted() {
             var _this = this;
             $('#customDPS').on("input ", function () {

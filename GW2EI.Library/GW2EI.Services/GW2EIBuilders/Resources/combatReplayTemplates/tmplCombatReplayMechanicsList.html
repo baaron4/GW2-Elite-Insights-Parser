@@ -119,7 +119,7 @@
     const mechanicDataCache = new Map();
     Vue.component("combat-replay-mechanics-list-component", {
         props: ['time', 'light', 'selectedactorid'],
-        mixins: [encounterPhaseComponent, numberComponent],
+        mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
         template: `${template}`,
         data: function () {
             return {

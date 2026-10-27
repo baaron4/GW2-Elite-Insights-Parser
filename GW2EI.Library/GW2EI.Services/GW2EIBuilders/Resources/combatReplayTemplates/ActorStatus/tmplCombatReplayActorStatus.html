@@ -27,7 +27,7 @@
 
 <script>
     Vue.component("combat-replay-actor-status-component", {
-        mixins: [encounterPhaseComponent, numberComponent],
+        mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
         props: ["isTarget", "actorIndex", "time"],
         template: `${template}`,
         methods: {

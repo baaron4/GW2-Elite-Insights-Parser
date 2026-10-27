@@ -303,6 +303,13 @@ var timeRefreshComponent = {
         },
     },
 };
+
+const tooltipSweepComponent = {
+    updated() {
+        sweepOrphanedOrRefreshedTooltips();
+    },
+};
+
 // Depends on encounter phase component
 var buffComponent = {
     props: ["phaseindex"],

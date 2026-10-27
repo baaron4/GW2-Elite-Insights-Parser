@@ -1336,88 +1336,93 @@ function getCastTooltip(cast) {
     return tooltip;
 }
 
-// Currently verbose and called on request animation frame, later we can restrict the calls on vuejs update cycle on
-// relevant components
+// TODO: remove console.logs when satisfied
+let awaitingTooltipSweep = false;
 function sweepOrphanedOrRefreshedTooltips() {
+    if (awaitingTooltipSweep) {
+        return;
+    }
     if (!window.jQuery) return;
+    awaitingTooltipSweep = true;
 
-    const $triggers = $('[data-original-title], [data-toggle="tooltip"]').filter(':visible');
-
-    $triggers.each(function () {
-        const $el = $(this);
-        const bsTooltip = $el.data('bs.tooltip');
-
-        if (bsTooltip && bsTooltip.element) {
-            const isTriggerAlive = document.body.contains(bsTooltip.element);
-
-            if (isTriggerAlive) {
-                const isOpen = $el.attr('aria-describedby');
-
-                // EARLY EXIT: If the tooltip isn't open, do nothing! 
-                // Bootstrap will automatically read the fresh `:data-original-title` attribute when opened later.
-                if (!isOpen) {
-                    return;
-                }
-
-                // --- RUNS ONLY FOR OPEN TOOLTIPS ---
-                const latestTitle = $el.attr('data-original-title') || $el.attr('title');
-                const isTriggerHovered = $el.is(':hover');
-                const isTipHovered = bsTooltip.tip && $(bsTooltip.tip).is(':hover');
-                const isPhysicallyHovered = isTriggerHovered || isTipHovered;
-                const bsThinksHovered = bsTooltip.inState && bsTooltip.inState.hover;
-
-                // 1. Refresh content if it changed *while* the tooltip was open
-                if (latestTitle && bsTooltip.config.title !== latestTitle) {
-                    console.log('[Tooltip Fix] Refreshing active tooltip content. New:', latestTitle);
-                    bsTooltip.config.title = latestTitle;
-                    if (isPhysicallyHovered) {
-                        $el.tooltip('hide').tooltip('show');
-                    }
-                }
-
-                // 2. Force hide if desynced (missed mouseleave event)
-                if (bsThinksHovered && !isPhysicallyHovered) {
-                    console.log('[Tooltip Fix] Force hiding desynced tooltip:', $el[0]);
-                    if (bsTooltip.inState) {
-                        bsTooltip.inState.hover = false;
-                    }
-                    $el.tooltip('hide');
-                }
-
-            } else {
-                // Clean up orphaned tooltips whose trigger was deleted
-                console.log('[Tooltip Fix] Cleaning up orphaned tooltip because trigger element was deleted:', bsTooltip.element);
-                $el.tooltip('dispose');
-
-                if (bsTooltip.tip) {
-                    $(bsTooltip.tip).remove();
-                }
-            }
-        }
-    });
-
-    // Final Sweep: Remove any stray ghost tooltips floating in the body with no active owner
-    const $strayTooltips = $('body > .tooltip');
-    $strayTooltips.each(function () {
-        const tooltipEl = this;
-        let hasOwner = false;
+    requestAnimationFrame(() => {
+        const $triggers = $('[data-original-title], [data-toggle="tooltip"]').filter(':visible');
 
         $triggers.each(function () {
-            const bsTooltip = $(this).data('bs.tooltip');
-            if (bsTooltip && bsTooltip.tip === tooltipEl) {
-                hasOwner = true;
-                return false;
+            const $el = $(this);
+            const bsTooltip = $el.data('bs.tooltip');
+
+            if (bsTooltip && bsTooltip.element) {
+                const isTriggerAlive = document.body.contains(bsTooltip.element);
+
+                if (isTriggerAlive) {
+                    const isOpen = $el.attr('aria-describedby');
+
+                    // EARLY EXIT: If the tooltip isn't open, do nothing! 
+                    // Bootstrap will automatically read the fresh `:data-original-title` attribute when opened later.
+                    if (!isOpen) {
+                        return;
+                    }
+
+                    // --- RUNS ONLY FOR OPEN TOOLTIPS ---
+                    const latestTitle = $el.attr('data-original-title') || $el.attr('title');
+                    const isTriggerHovered = $el.is(':hover');
+                    const isTipHovered = bsTooltip.tip && $(bsTooltip.tip).is(':hover');
+                    const isPhysicallyHovered = isTriggerHovered || isTipHovered;
+                    const bsThinksHovered = bsTooltip.inState && bsTooltip.inState.hover;
+
+                    // 1. Refresh content if it changed *while* the tooltip was open
+                    if (latestTitle && bsTooltip.config.title !== latestTitle) {
+                        console.log('[Tooltip Fix] Refreshing active tooltip content. New:', latestTitle);
+                        bsTooltip.config.title = latestTitle;
+                        if (isPhysicallyHovered) {
+                            $el.tooltip('hide').tooltip('show');
+                        }
+                    }
+
+                    // 2. Force hide if desynced (missed mouseleave event)
+                    if (bsThinksHovered && !isPhysicallyHovered) {
+                        console.log('[Tooltip Fix] Force hiding desynced tooltip:', $el[0]);
+                        if (bsTooltip.inState) {
+                            bsTooltip.inState.hover = false;
+                        }
+                        $el.tooltip('hide');
+                    }
+
+                } else {
+                    // Clean up orphaned tooltips whose trigger was deleted
+                    console.log('[Tooltip Fix] Cleaning up orphaned tooltip because trigger element was deleted:', bsTooltip.element);
+                    $el.tooltip('dispose');
+
+                    if (bsTooltip.tip) {
+                        $(bsTooltip.tip).remove();
+                    }
+                }
             }
         });
 
-        if (!hasOwner) {
-            console.log('[Tooltip Fix] Removing stray ghost tooltip from body:', tooltipEl);
-            $(tooltipEl).remove();
-        }
+        // Final Sweep: Remove any stray ghost tooltips floating in the body with no active owner
+        const $strayTooltips = $('body > .tooltip');
+        $strayTooltips.each(function () {
+            const tooltipEl = this;
+            let hasOwner = false;
+
+            $triggers.each(function () {
+                const bsTooltip = $(this).data('bs.tooltip');
+                if (bsTooltip && bsTooltip.tip === tooltipEl) {
+                    hasOwner = true;
+                    return false;
+                }
+            });
+
+            if (!hasOwner) {
+                console.log('[Tooltip Fix] Removing stray ghost tooltip from body:', tooltipEl);
+                $(tooltipEl).remove();
+            }
+        });
+        awaitingTooltipSweep = false;
     });
-    requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
 }
-requestAnimationFrame(sweepOrphanedOrRefreshedTooltips);
 
 function initTheme() {
     const localStorageTheme = getValueFromLocalStorage("theme");
@@ -1427,5 +1432,5 @@ function initTheme() {
         $('#theme').attr('href', themes[localStorageTheme]);
         logData.lightTheme = localStorageTheme === "yeti";
     }
-    document.body.classList.add("theme-" + theme);  
+    document.body.classList.add("theme-" + theme);
 }

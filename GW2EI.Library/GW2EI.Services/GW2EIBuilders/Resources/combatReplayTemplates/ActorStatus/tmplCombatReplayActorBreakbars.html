@@ -12,7 +12,7 @@
 
 <script>
     Vue.component("combat-replay-actor-breakbars-component", {
-        mixins: [encounterPhaseComponent, numberComponent],
+        mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
         props: ["actorIndex", "isTarget"],
         template: `${template}`,
         methods: {
