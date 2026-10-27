@@ -1046,7 +1046,7 @@ class Animator {
         });
     }
     _updateAgentTooltipPopper() {
-        if (this.agentTooltipPopper) {
+        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActorID) {
             this.agentTooltipPopper.update();
         }
     }
