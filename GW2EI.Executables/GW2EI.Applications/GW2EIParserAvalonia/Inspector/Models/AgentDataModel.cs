@@ -42,34 +42,46 @@ internal sealed class AgentDataModel
     public readonly List<AgentDataModel>? Regrouped;
     private readonly AgentItem _agentItem;
 
+    public readonly AgentDataModel? AttackTargetOwner;
+    public readonly List<AgentDataModel>? AttackTargets;
+
     public readonly IReadOnlyList<AgentInfoEvent> AgentInfoEvents;
 
-    public AgentDataModel(AgentItem agent, EvtcLog log, bool skipEnglobing = false)
+    public AgentDataModel(AgentItem agent, EvtcLog log, int depth = -1)
     {
+        depth++;
         _agentItem = agent;
-        if (agent.Master != null)
+        if (depth < 5)
         {
-            Master = new AgentDataModel(agent.Master, log);
-        }
-        if (!skipEnglobing)
-        {
+            if (agent.Master != null)
+            {
+                Master = new AgentDataModel(agent.Master, log, depth);
+            }
             if (agent.IsEnglobingAgent)
             {
-                EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x, log, true)).ToList();
+                EnglobedAgents = agent.EnglobedAgentItems.Select(x => new AgentDataModel(x, log, depth)).ToList();
             }
             if (agent.IsEnglobedAgent)
             {
-                EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem, log, true);
+                EnglobingAgent = new AgentDataModel(agent.EnglobingAgentItem, log, depth);
             }
+            if (agent.IsAttackTarget(log))
+            {
+                AttackTargetOwner = new AgentDataModel(agent.GetAttackTargetOwner(log), log, depth);
+            }
+            if (agent.HasAttackTargets(log))
+            {
+                AttackTargets = agent.GetAttackTargets(log).Select(x => new AgentDataModel(x, log, depth)).ToList();
+            }
+            if (MergeCount > 0)
+            {
+                Merges = agent.Merges.Where(x => x.Merged != agent).Select(x => new AgentDataModel(x.Merged, log, depth)).ToList();
+            }
+            if (RegroupedCount > 0)
+            {
+                Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged, log, depth)).ToList();
+            }
+            AgentInfoEvents = log.CombatData.GetAgentInfoEvents(agent);
         }
-        if (MergeCount > 0)
-        {
-            Merges = agent.Merges.Where(x => x.Merged != agent).Select(x => new AgentDataModel(x.Merged, log)).ToList();
-        }
-        if (RegroupedCount > 0)
-        {
-            Regrouped = agent.Regrouped.Select(x => new AgentDataModel(x.Merged, log)).ToList();
-        }
-        AgentInfoEvents = log.CombatData.GetAgentInfoEvents(agent);
     }
 }
