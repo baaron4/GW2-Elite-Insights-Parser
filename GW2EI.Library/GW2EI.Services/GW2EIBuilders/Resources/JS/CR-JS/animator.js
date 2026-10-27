@@ -1042,7 +1042,7 @@ class Animator {
             }
 
             this.reactiveDataStatus.hoveredActorID = actorId;
-            this._updateAgentTooltipPopper;
+            this._updateAgentTooltipPopper();
         });
     }
     _updateAgentTooltipPopper() {
