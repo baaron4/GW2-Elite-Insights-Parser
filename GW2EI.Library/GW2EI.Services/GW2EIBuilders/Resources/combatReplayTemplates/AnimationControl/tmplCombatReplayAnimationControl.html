@@ -63,22 +63,12 @@
                             </div>
                             <div class="coordinate-row">
                                 <span class="coordinate-label">Y</span>
-                                <span class="coordinate-value">                             
+                                <span class="coordinate-value">
                                     {{formatterCache.twoTwo.format(animationData.gameCoordinates.y)}}
                                 </span>
                             </div>
                         </div>
-                    </div>           
-                </div>
-                <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
-                     :class="{'btn-dark': !light, 'btn-light': light}"
-                     data-original-title="Reset canvas position">
-                    &#9974; Reset Viewpoint
-                </div>
-                <div v-show="!isTouchDevice && isMechanicSelected" @click="resetMechanic();"
-                     class="btn btn-small position-bottom-right opacity-90 top-of-canvas m-2" :class="{'btn-dark': !light, 'btn-light': light}"
-                     data-original-title="Remove mechanic ticks from timeline">
-                    &#128295; Reset Mechanic
+                    </div>
                 </div>
             </div>
         </div>
@@ -269,6 +259,54 @@
                 </div>
 
                 <combat-replay-time-speed-picker-component />
+            </div>
+        </div>
+        <div class="replay-controls-panel mt-1 rounded" ref="canvasControls">
+            <div class="replay-reset-controls">
+                <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                        @click="resetViewpoint()" data-original-title="Reset canvas position">
+                    &#9974; Reset Viewpoint
+                </button>
+                <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                        @click="resetMechanic()" data-original-title="Deselect mechanic">
+                    &#128295; Reset Mechanic
+                </button>
+            </div>
+            <div class="replay-movement-controls">
+                <span class="replay-controls-label">Movement</span>
+                <div class="movement-arrow-grid">
+                    <span></span>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move up" @click.stop="panView(0, -10)">
+                        &#9651;
+                    </button>
+                    <span></span>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move left" @click.stop="panView(-10, 0)">
+                        &#9665;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move down" @click.stop="panView(0, 10)">
+                        &#9661;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move right" @click.stop="panView(10, 0)">
+                        &#9655;
+                    </button>
+                </div>
+            </div>
+            <div class="replay-zoom-controls">
+                <span class="replay-controls-label">Zoom</span>
+                <div class="zoom-controls">
+                    <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Zoom in" @click.stop="zoomIn">
+                        +
+                    </button>
+                    <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Zoom out" @click.stop="zoomOut">
+                        -
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -608,6 +646,15 @@
             },
             resetViewpoint: function () {
                 animator.resetViewpoint(this.normalPhases[0].eiid);
+            },
+            panView: function (dx, dy) {
+                animator.panByPixels(dx, dy);
+            },
+            zoomIn: function() {
+                animator.zoomIn();
+            },
+            zoomOut: function() {
+                animator.zoomOut();
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();

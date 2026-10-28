@@ -40,7 +40,7 @@ function ToDegrees(radians) {
 }
 
 const resolutionMultiplier = 2.0;
-
+const zoomStep = 1.1;
 const maxOverheadAnimationFrame = 50;
 let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
 let overheadAnimationIncrement = 1;
@@ -984,6 +984,37 @@ class Animator {
         }
     }
 
+    panByPixels(dx, dy) {
+        const panContext = (ctx) => {
+            const transform = ctx.getTransform();
+
+            ctx.setTransform(
+                transform.a,
+                transform.b,
+                transform.c,
+                transform.d,
+                transform.e + dx * resolutionMultiplier,
+                transform.f + dy * resolutionMultiplier
+            );
+        };
+
+        panContext(this.mainContext);
+        panContext(this.bgContext);
+
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
+
+    zoomIn() {
+        this._setScaleOnPoint(zoomStep, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
+    }
+
+    zoomOut() {
+        this._setScaleOnPoint(1 / zoomStep, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
+    }
+
     computeCurrentScale() {
         return 50 / (InchToPixel * this.globalScale);
     }
@@ -1174,7 +1205,7 @@ class Animator {
             evt.preventDefault();
             const delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
             if (delta) {
-                const factor = Math.pow(1.1, delta);
+                const factor = Math.pow(zoomStep, delta);
                 _this._setScaleOnPoint(factor, _this.lastX, _this.lastY);
             }
         };
