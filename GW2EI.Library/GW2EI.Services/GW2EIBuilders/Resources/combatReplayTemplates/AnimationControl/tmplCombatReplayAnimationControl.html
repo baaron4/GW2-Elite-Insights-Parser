@@ -53,11 +53,23 @@
                             <div class="scale-units-label">Units</div>
                         </div>
                     </div>
-                    <div>
-                        IG : <span class="scale-coords-bold">{{ animationData.gameCoordinates.x }}</span>x <span class="scale-coords-bold">{{ animationData.gameCoordinates.y }}</span>y
-                    </div>
-                    <div>
-                        PX : <span class="scale-coords-bold">{{ animationData.canvasCoordinates.x }}</span>x <span class="scale-coords-bold">{{ animationData.canvasCoordinates.y }}</span>y
+                    <div class="coordinates">
+                        <div class="coordinate-row">
+                            <span class="coordinate-label">X</span>
+                            <span class="coordinate-value">
+                                <span class="coordinate-integer">{{ animationData.gameCoordinates.x.toFixed(2).split('.')[0] }}</span>
+                                <span class="coordinate-dot">.</span>
+                                <span class="coordinate-decimal">{{ animationData.gameCoordinates.x.toFixed(2).split('.')[1] }}</span>
+                            </span>
+                        </div>
+                        <div class="coordinate-row">
+                            <span class="coordinate-label">Y</span>
+                            <span class="coordinate-value">
+                                <span class="coordinate-integer">{{ animationData.gameCoordinates.y.toFixed(2).split('.')[0] }}</span>
+                                <span class="coordinate-dot">.</span>
+                                <span class="coordinate-decimal">{{ animationData.gameCoordinates.y.toFixed(2).split('.')[1] }}</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
@@ -222,8 +234,8 @@
                 </div>
                 <div class="d-flex justify-content-center slidercontainer my-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range"
-                           @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip" 
-                           :min="minTime" :max="maxTime" :value="time * 1000 - range.min" 
+                           @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip"
+                           :min="minTime" :max="maxTime" :value="time * 1000 - range.min"
                            class="slider" :id="htmlElementIDs.simpleTimelineID"
                            :style="{'background': getSliderGradient()}">
                     <div v-if="selectedPhase" class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
@@ -291,7 +303,7 @@
         const timeS = EIUrlParams.get("crTime");
         if (!timeS) {
             const timeMS = EIUrlParams.get("crTimeMS")
-            if (!timeMS) {          
+            if (!timeMS) {
                 const timeStr = EIUrlParams.get("crTimeStr")
                 return parseCRDuration(timeStr);
             }
@@ -573,11 +585,11 @@
                 }
 
                 const findById = (items) => {
-                   if (!Array.isArray(items)) {
-                       return null;
-                   }
+                    if (!Array.isArray(items)) {
+                        return null;
+                    }
 
-                   return items.find(item => item.uniqueID === actorId) || null;
+                    return items.find(item => item.uniqueID === actorId) || null;
                 };
 
                 const logActor = findById(logData.players) || findById(logData.targets);

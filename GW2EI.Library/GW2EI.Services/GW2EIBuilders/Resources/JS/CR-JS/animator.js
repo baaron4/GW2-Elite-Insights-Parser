@@ -106,10 +106,6 @@ const reactiveAnimationData = {
         name: null,
         times: [],
     },
-    canvasCoordinates: {
-        x: 0,
-        y: 0
-    },
     gameCoordinates: {
         x: 0,
         y: 0
@@ -1013,10 +1009,6 @@ class Animator {
     }
     _updateCanvasCoordinates(canvasX, canvasY) {
         const ctx = this.mainContext;
-
-        // canvas coordinates
-        this.reactiveDataStatus.canvasCoordinates.x = Number(canvasX.toFixed(2));
-        this.reactiveDataStatus.canvasCoordinates.y = Number(canvasY.toFixed(2));
 
         const point = ctx.transformedPoint(canvasX, canvasY);
 
