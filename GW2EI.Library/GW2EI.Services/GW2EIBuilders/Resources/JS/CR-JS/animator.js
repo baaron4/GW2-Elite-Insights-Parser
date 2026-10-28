@@ -308,7 +308,7 @@ class Animator {
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
-            useActorHitboxWidth: getValueFromLocalStorage('useActorHitboxWidth') !== "false",
+            useActorHitboxWidth: false,
             followSelected: false,
             rotateSelected: false
         };
@@ -867,7 +867,7 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.displaySettings.highlightSelectedGroup = !this.displaySettings.highlightSelectedGroup;
-        setValueToLocalStorage(highlightSelectedGroup, this.displaySettings.highlightSelectedGroup);
+        setValueToLocalStorage("highlightSelectedGroup", this.displaySettings.highlightSelectedGroup);
         animateCanvas(noUpdateTime);
     }
 
@@ -883,7 +883,6 @@ class Animator {
 
     toggleUseActorHitboxWidth() {
         this.displaySettings.useActorHitboxWidth = !this.displaySettings.useActorHitboxWidth;
-        setValueToLocalStorage(useActorHitboxWidth, this.displaySettings.useActorHitboxWidth);
         animateCanvas(noUpdateTime);
     }
 
