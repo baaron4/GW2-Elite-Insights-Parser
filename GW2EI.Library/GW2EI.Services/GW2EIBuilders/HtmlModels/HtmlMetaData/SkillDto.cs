@@ -90,8 +90,8 @@ internal class SkillDto : IDItemDto
 
             var target = cl.GetActualTarget(log);
             string? targetKey = null;
-            if (target.IsPlayer || 
-                log.LogData.Logic.TargetAgents.Contains(target) || 
+            if (target.IsPlayer ||
+                log.LogData.Logic.TargetAgents.Contains(target) ||
                 log.LogData.Logic.TrashMobAgents.Contains(target))
             {
                 targetKey = "u" + target.UniqueID;
