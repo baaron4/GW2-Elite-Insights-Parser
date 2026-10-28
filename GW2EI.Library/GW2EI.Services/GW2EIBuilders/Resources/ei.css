@@ -1289,6 +1289,11 @@ td.approximate::before {
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 }
 
+.scale-container {
+    width: 90px;
+    height: 85px;
+}
+
 .scale-info {
     position: absolute;
     top: 0;
@@ -1304,10 +1309,10 @@ td.approximate::before {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    margin-bottom: 4px;
 }
 
 .scale-end-label {
+    font-size: 12px;
     position: absolute;
     top: 0;
     line-height: 1;
@@ -1320,7 +1325,7 @@ td.approximate::before {
 }
 
 .scale-end-label-right {
-    left: 100%;
+    left: 90%;
 }
 
 .scale-line-container {
@@ -1333,11 +1338,12 @@ td.approximate::before {
 
 .scale-units-label {
     position: absolute;
-    top: 31px;
+    top: 22px;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
     text-align: center;
+    font-size: 12px;
 }
 
 .scale-line {
@@ -1369,7 +1375,6 @@ td.approximate::before {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-top: 10px;
 }
 
 .coordinate-row {
@@ -1392,16 +1397,4 @@ td.approximate::before {
     font-size: 12px;
     font-variant-numeric: tabular-nums;
     line-height: 1.4;
-}
-
-.coordinate-integer {
-    text-align: right;
-}
-
-.coordinate-dot {
-    text-align: center;
-}
-
-.coordinate-decimal {
-    text-align: left;
 }

@@ -1,44 +1,5 @@
 "use strict";
 
-const formatterCache = {
-    zeroZero: new Intl.NumberFormat(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }),
-    zeroOne: new Intl.NumberFormat(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 1
-    }),
-    zeroTwo: new Intl.NumberFormat(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    }),
-    zeroThree: new Intl.NumberFormat(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3
-    }),
-    percentZeroZero: new Intl.NumberFormat(undefined, {
-        style: "percent",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }),
-    percentZeroOne: new Intl.NumberFormat(undefined, {
-        style: "percent",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 1
-    }),
-    percentZeroTwo: new Intl.NumberFormat(undefined, {
-        style: "percent",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    }),
-    percentZeroThree: new Intl.NumberFormat(undefined, {
-        style: "percent",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3
-    }),
-}
-
 var numberComponent = {
     methods: {
         // https://stackoverflow.com/questions/16637051/adding-space-between-numbers

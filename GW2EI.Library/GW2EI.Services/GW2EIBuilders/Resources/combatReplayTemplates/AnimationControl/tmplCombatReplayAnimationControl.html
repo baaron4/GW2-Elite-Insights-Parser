@@ -41,36 +41,34 @@
                     </div>
                 </div>
                 <div class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
-                    <div class="scale-ruler">
-                        <div class="scale-line-container">
-                            <div class="scale-end-label scale-end-label-left">0</div>
-                            <div class="scale-end-label scale-end-label-right">
-                                {{ animationData.scaleUnits }}
+                    <div class="d-flex flex-column justify-content-center align-items-center scale-container">
+                        <div class="scale-ruler">
+                            <div class="scale-line-container">
+                                <div class="scale-end-label scale-end-label-left">0</div>
+                                <div class="scale-end-label scale-end-label-right">
+                                    {{ formatterCache.twoTwo.format(animationData.scaleUnits)}}
+                                </div>
+                                <div class="scale-line"></div>
+                                <div class="scale-marker scale-marker-left"></div>
+                                <div class="scale-marker scale-marker-right"></div>
+                                <div class="scale-units-label">Units</div>
                             </div>
-                            <div class="scale-line"></div>
-                            <div class="scale-marker scale-marker-left"></div>
-                            <div class="scale-marker scale-marker-right"></div>
-                            <div class="scale-units-label">Units</div>
                         </div>
-                    </div>
-                    <div class="coordinates">
-                        <div class="coordinate-row">
-                            <span class="coordinate-label">X</span>
-                            <span class="coordinate-value">
-                                <span class="coordinate-integer">{{ animationData.gameCoordinates.x.toFixed(2).split('.')[0] }}</span>
-                                <span class="coordinate-dot">.</span>
-                                <span class="coordinate-decimal">{{ animationData.gameCoordinates.x.toFixed(2).split('.')[1] }}</span>
-                            </span>
+                        <div class="coordinates">
+                            <div class="coordinate-row">
+                                <span class="coordinate-label">X</span>
+                                <span class="coordinate-value">
+                                    {{formatterCache.twoTwo.format(animationData.gameCoordinates.x)}}
+                                </span>
+                            </div>
+                            <div class="coordinate-row">
+                                <span class="coordinate-label">Y</span>
+                                <span class="coordinate-value">                             
+                                    {{formatterCache.twoTwo.format(animationData.gameCoordinates.y)}}
+                                </span>
+                            </div>
                         </div>
-                        <div class="coordinate-row">
-                            <span class="coordinate-label">Y</span>
-                            <span class="coordinate-value">
-                                <span class="coordinate-integer">{{ animationData.gameCoordinates.y.toFixed(2).split('.')[0] }}</span>
-                                <span class="coordinate-dot">.</span>
-                                <span class="coordinate-decimal">{{ animationData.gameCoordinates.y.toFixed(2).split('.')[1] }}</span>
-                            </span>
-                        </div>
-                    </div>
+                    </div>           
                 </div>
                 <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
                      :class="{'btn-dark': !light, 'btn-light': light}"
