@@ -1017,18 +1017,18 @@ class Animator {
         const point = ctx.transformedPoint(canvasX, canvasY);
 
         // world boundries coordinates
-        const topX = this.mapBounds[0];
-        const topY = this.mapBounds[1];
-        const bottomX = this.mapBounds[2];
-        const bottomY = this.mapBounds[3];
+        const minX = this.mapBounds[0];
+        const minY = this.mapBounds[1];
+        const maxX = this.mapBounds[2];
+        const maxY = this.mapBounds[3];
 
         // map pixels
         const mapWidth = this.mapSize[0];
         const mapHeight = this.mapSize[1];
 
         // map pixels -> game coordinates
-        const gameX = topX + (point.x / mapWidth) * (bottomX - topX);
-        const gameY = topY + (1 - point.y / mapHeight) * (bottomY - topY); // 1 - because gw2 is Z down not Y down
+        const gameX = minX + (point.x / mapWidth) * (maxX - minX);
+        const gameY = minY + (1 - point.y / mapHeight) * (maxY - minY); // 1 - because gw2 is Z down not Y down
 
         this.reactiveDataStatus.gameCoordinates.x = Number(gameX.toFixed(2));
         this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));
