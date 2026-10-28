@@ -317,7 +317,7 @@ class Animator {
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
-            useActorHitboxWidth: getValueFromLocalStorage('useActorHitboxWidth') !== "false",
+            useActorHitboxWidth: false,
             followSelected: false,
             rotateSelected: false
         };
@@ -878,7 +878,7 @@ class Animator {
 
     toggleHighlightSelectedGroup() {
         this.displaySettings.highlightSelectedGroup = !this.displaySettings.highlightSelectedGroup;
-        setValueToLocalStorage(highlightSelectedGroup, this.displaySettings.highlightSelectedGroup);
+        setValueToLocalStorage("highlightSelectedGroup", this.displaySettings.highlightSelectedGroup);
         animateCanvas(noUpdateTime);
     }
 
@@ -894,7 +894,6 @@ class Animator {
 
     toggleUseActorHitboxWidth() {
         this.displaySettings.useActorHitboxWidth = !this.displaySettings.useActorHitboxWidth;
-        setValueToLocalStorage(useActorHitboxWidth, this.displaySettings.useActorHitboxWidth);
         animateCanvas(noUpdateTime);
     }
 
@@ -984,6 +983,11 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+
+    computeCurrentScale() {
+        return 50 / (InchToPixel * this.globalScale);
+    }
+
     _setScaleOnPoint(factor, ptX, ptY) {
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
@@ -992,7 +996,10 @@ class Animator {
         ctx.translate(pt.x, pt.y);
         bgCtx.translate(pt.x, pt.y);
         ctx.scale(factor, factor);
-        if ((50 / (InchToPixel * this.globalScale) < 10)) {
+
+        const currentScale = this.computeCurrentScale();
+        // Restrict zoom levels to a reasonable scale
+        if (currentScale < 10 || currentScale > 15000) {
             ctx.scale(1.0 / factor, 1.0 / factor);
             factor = 1.0;
         }
@@ -1317,6 +1324,7 @@ class Animator {
             }
             //ctx.restore();
             //ctx.globalCompositeOperation = 'normal';
+            this.reactiveDataStatus.scaleUnits = this.computeCurrentScale().toFixed(1);
         }
     }
 
@@ -1452,7 +1460,6 @@ class Animator {
                 this.screenSpaceActorData.draw(standardDraw);
             }
             ctx.restore()
-            this.reactiveDataStatus.scaleUnits = (50 / (InchToPixel * this.globalScale)).toFixed(1);
         }
         //ctx.restore();  
     }
