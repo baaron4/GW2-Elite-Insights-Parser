@@ -55,7 +55,7 @@ internal class ArenaDecoration : AttachedDecoration
     {
 
     }
-    public ArenaDecoration((long, long) lifespan, string imageUrl, CombatReplayMap crMap) : this(new ArenaDecorationMetadata(imageUrl, crMap.Width, crMap.Height), new ArenaDecorationRenderingData(lifespan, new PositionConnector(new Vector3(crMap.TopX, crMap.BottomY, 0))))
+    public ArenaDecoration((long, long) lifespan, string imageUrl, CombatReplayMap crMap) : this(new ArenaDecorationMetadata(imageUrl, crMap.Width, crMap.Height), new ArenaDecorationRenderingData(lifespan, new PositionConnector(new Vector3(crMap.MinX, crMap.MaxY, 0))))
     {
 
     }

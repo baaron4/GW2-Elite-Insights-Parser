@@ -13,16 +13,16 @@
                         <img :src="player.icon" :alt="player.profession" class="icon"
                             :data-original-title="player.profession">
                         <img v-if="player.health > 0" :src="UIIcons.VitalityChar"
-                            alt="Health" class="icon" :data-original-title="'Health: ' + player.health">
+                            alt="Health" class="icon" :data-original-title="'Health: ' + numberFormater0(player.health)">
                         <img v-if="player.condi > 0" :src="UIIcons.ConditionDamageChar"
                             alt="Condition Damage" class="icon"
-                            :data-original-title="scoreV2 ? 'Condition Damage' : 'Condition Damage: ' + player.condi">
+                            :data-original-title="scoreV2 ? 'Condition Damage' : 'Condition Damage: ' + numberFormater0(player.condi)">
                         <img v-if="player.conc > 0" :src="UIIcons.BoonDurationChar"
-                            alt="Concentration" class="icon" :data-original-title="scoreV2 ? 'Concentration' : 'Concentration: ' + player.conc">
+                            alt="Concentration" class="icon" :data-original-title="scoreV2 ? 'Concentration' : 'Concentration: ' + numberFormater0(player.conc)">
                         <img v-if="player.heal > 0" :src="UIIcons.HealingPowerChar"
-                            alt="Healing Power" class="icon" :data-original-title="scoreV2 ? 'Healing Power' : 'Healing Power: ' + player.heal">
+                            alt="Healing Power" class="icon" :data-original-title="scoreV2 ? 'Healing Power' : 'Healing Power: ' + numberFormater0(player.heal)">
                         <img v-if="player.tough > 0" :src="UIIcons.ToughnessChar"
-                            alt="Toughness" class="icon" :data-original-title="scoreV2 ? 'Toughness' : 'Toughness: ' + player.tough">
+                            alt="Toughness" class="icon" :data-original-title="scoreV2 ? 'Toughness' : 'Toughness: ' + numberFormater0(player.tough)">
                     </div>
                     <div v-for="(weaponSet, weaponSetIndex) in player.weaponSets">
                         <div v-show="showWeaponSet(weaponSetIndex, player.weaponSets, encounterPhase)">
@@ -60,7 +60,7 @@
 
     Vue.component("player-component", {
         props: ["players", "phaseindex"],
-        mixins: [encounterPhaseComponent, playerHeaderComponent, UIIconsComponent],
+        mixins: [encounterPhaseComponent, playerHeaderComponent, UIIconsComponent, numberComponent],
         template: `${template}`,
         methods: {
             select: function (id) {

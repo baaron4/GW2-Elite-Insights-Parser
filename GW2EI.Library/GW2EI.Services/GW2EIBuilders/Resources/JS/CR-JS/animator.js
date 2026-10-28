@@ -49,6 +49,10 @@ const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
 function getUniqueIDFromPixel(pixel) {
+    // Blending, applied to color so we get wrong ID if not fully opaque
+    if (pixel[3] !== 255) {
+        return 0;
+    }
     uint32ToUint8[0] = pixel[0];
     uint32ToUint8[1] = pixel[1];
     uint32ToUint8[2] = pixel[2];
@@ -93,7 +97,7 @@ let animationControlComponent = null;
 const reactiveAnimationData = {
     time: 0,
     selectedActorID: null,
-    hoveredActorID: null,
+    hoveredActor: null,
     animated: false,
     range: {
         min: 0,
@@ -1030,8 +1034,8 @@ class Animator {
         this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));
     }
     _hideAgentTooltip() {
-        if (this.reactiveDataStatus.hoveredActorID !== null) {
-            this.reactiveDataStatus.hoveredActorID = null;
+        if (this.reactiveDataStatus.hoveredActor !== null) {
+            this.reactiveDataStatus.hoveredActor = null;
         }
     }
     _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
@@ -1072,18 +1076,19 @@ class Animator {
             const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
 
             const actorId = getUniqueIDFromPixel(pixel);
+            const name = findTargetName("u" + actorId, false);
 
-            if (!this.getActorData(actorId)) {
+            if (!name) {
                 this._hideAgentTooltip();
                 return;
             }
 
-            this.reactiveDataStatus.hoveredActorID = actorId;
+            this.reactiveDataStatus.hoveredActor = name;
             this._updateAgentTooltipPopper();
         });
     }
     _updateAgentTooltipPopper() {
-        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActorID) {
+        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActor) {
             this.agentTooltipPopper.update();
         }
     }

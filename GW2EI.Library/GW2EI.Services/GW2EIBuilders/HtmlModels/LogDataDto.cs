@@ -24,7 +24,7 @@ internal class LogDataDto
 {
     public List<TargetDto>? Targets;
     public List<PlayerDto>? Players;
-    public List<EnemyDto>? Enemies;
+    public List<EnemyDto>? MechanicEnemies;
     public List<PhaseDto>? Phases;
     // Present buffs and damamge modifiers
     public List<long>? Boons;
@@ -536,12 +536,17 @@ internal class LogDataDto
         _t.Log("built player data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
-        var enemies = log.MechanicData.GetEnemyList(log, log.LogData.LogStart, log.LogData.LogEnd);
-        logData.Enemies = new(enemies.Count);
-        foreach (SingleActor enemy in enemies)
+        var mechanicEnemies = log.MechanicData.GetEnemyList(log, log.LogData.LogStart, log.LogData.LogEnd);
+        logData.MechanicEnemies = new(mechanicEnemies.Count);
+        foreach (SingleActor enemy in mechanicEnemies)
         {
-            logData.Enemies.Add(new EnemyDto() { Name = enemy.Character, FirstAware = enemy.FirstAware / 1000.0, LastAware = enemy.LastAware / 1000.0 });
+            logData.MechanicEnemies.Add(new EnemyDto() { Name = enemy.Character, FirstAware = enemy.FirstAware / 1000.0, LastAware = enemy.LastAware / 1000.0 });
         }
+        foreach (SingleActor enemy in log.LogData.Logic.TrashMobs)
+        {
+            used.npcs.TryAdd("u" + enemy.AgentItem.UniqueID, enemy.AgentItem);
+        }
+        var tst = log.AgentData.GetAgentByUniqueID(166);
         _t.Log("built enemy data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Targets");
