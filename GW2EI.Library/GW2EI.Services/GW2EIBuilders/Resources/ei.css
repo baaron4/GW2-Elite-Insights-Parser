@@ -1392,9 +1392,9 @@ td.approximate::before {
 
 .coordinate-value {
     display: grid;
-    grid-template-columns: 6ch 1ch 2ch;
     justify-content: end;
     font-size: 12px;
     font-variant-numeric: tabular-nums;
     line-height: 1.4;
+    width: 55px;
 }
