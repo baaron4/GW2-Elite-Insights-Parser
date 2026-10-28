@@ -34,11 +34,41 @@
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"></canvas>
                 <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" :style="{ 'opacity': hoveredActor ? '1.0' : '0.0' }"
-                    style="pointer-events: none; will-change: transform;">
+                     style="pointer-events: none; will-change: transform;">
                     <div class="arrow"></div>
                     <div class="tooltip-inner">
                         {{ hoveredActor }}
                     </div>
+                </div>
+                <div class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
+                    <div class="d-flex flex-column justify-content-center align-items-center scale-container">
+                        <div class="scale-ruler">
+                            <div class="scale-line-container">
+                                <div class="scale-end-label scale-end-label-left">0</div>
+                                <div class="scale-end-label scale-end-label-right">
+                                    {{ formatterCache.twoTwo.format(animationData.scaleUnits)}}
+                                </div>
+                                <div class="scale-line"></div>
+                                <div class="scale-marker scale-marker-left"></div>
+                                <div class="scale-marker scale-marker-right"></div>
+                                <div class="scale-units-label">Units</div>
+                            </div>
+                        </div>
+                        <div class="coordinates">
+                            <div class="coordinate-row">
+                                <span class="coordinate-label">X</span>
+                                <span class="coordinate-value">
+                                    {{formatterCache.twoTwo.format(animationData.gameCoordinates.x)}}
+                                </span>
+                            </div>
+                            <div class="coordinate-row">
+                                <span class="coordinate-label">Y</span>
+                                <span class="coordinate-value">                             
+                                    {{formatterCache.twoTwo.format(animationData.gameCoordinates.y)}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>           
                 </div>
                 <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
                      :class="{'btn-dark': !light, 'btn-light': light}"
@@ -202,8 +232,8 @@
                 </div>
                 <div class="d-flex justify-content-center slidercontainer my-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range"
-                           @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip" 
-                           :min="minTime" :max="maxTime" :value="time * 1000 - range.min" 
+                           @mousemove="onSimpleTimelineSliderMouseMove" @mouseleave="hideSimpleTimelineTooltip"
+                           :min="minTime" :max="maxTime" :value="time * 1000 - range.min"
                            class="slider" :id="htmlElementIDs.simpleTimelineID"
                            :style="{'background': getSliderGradient()}">
                     <div v-if="selectedPhase" class="cr-slide-delimiter text-center" :style="{ width: (timelineWidth + 20) + 'px' }">
@@ -271,7 +301,7 @@
         const timeS = EIUrlParams.get("crTime");
         if (!timeS) {
             const timeMS = EIUrlParams.get("crTimeMS")
-            if (!timeMS) {          
+            if (!timeMS) {
                 const timeStr = EIUrlParams.get("crTimeStr")
                 return parseCRDuration(timeStr);
             }

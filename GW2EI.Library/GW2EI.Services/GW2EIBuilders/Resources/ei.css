@@ -1288,3 +1288,113 @@ td.approximate::before {
     line-height: 12px;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 }
+
+.scale-container {
+    width: 90px;
+    height: 85px;
+}
+
+.scale-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    pointer-events: none;
+    text-align: left;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.scale-ruler {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.scale-end-label {
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    line-height: 1;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.scale-end-label-left {
+    left: 0;
+}
+
+.scale-end-label-right {
+    left: 90%;
+}
+
+.scale-line-container {
+    position: relative;
+    width: 50px;
+    height: 44px;
+    margin-left: 2px;
+    flex: 0 0 50px;
+}
+
+.scale-units-label {
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    text-align: center;
+    font-size: 12px;
+}
+
+.scale-line {
+    position: absolute;
+    top: 21px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #CC2200;
+}
+
+.scale-marker {
+    position: absolute;
+    top: 17px;
+    width: 2px;
+    height: 12px;
+    background-color: #CC2200;
+}
+
+.scale-marker-left {
+    left: 0;
+}
+
+.scale-marker-right {
+    right: 0;
+}
+
+.coordinates {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.coordinate-row {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    align-items: baseline;
+    column-gap: 6px;
+}
+
+.coordinate-label {
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.coordinate-value {
+    display: grid;
+    justify-content: end;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
+    width: 55px;
+}
