@@ -1515,7 +1515,6 @@ class Animator {
         //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
-        this._updateCanvasCoordinates(this.lastX, this.lastY);
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
             overheadAnimationIncrement *= -1;
         }
