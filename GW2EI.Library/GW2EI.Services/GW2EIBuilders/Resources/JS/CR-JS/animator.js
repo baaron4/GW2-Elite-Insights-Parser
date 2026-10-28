@@ -997,9 +997,11 @@ class Animator {
         bgCtx.translate(pt.x, pt.y);
         ctx.scale(factor, factor);
 
+        const maxAxis = this._getMaxAxisSize();
+
         const currentScale = this.computeCurrentScale();
         // Restrict zoom levels to a reasonable scale
-        if (currentScale < 10 || currentScale > 15000) {
+        if (currentScale < 10 || currentScale > Math.min(15000, 0.2 * maxAxis)) {
             ctx.scale(1.0 / factor, 1.0 / factor);
             factor = 1.0;
         }
@@ -1011,10 +1013,19 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
-    _updateCanvasCoordinates(canvasX, canvasY) {
+
+    _getMaxAxisSize() {
+        const minX = this.mapBounds[0];
+        const minY = this.mapBounds[1];
+        const maxX = this.mapBounds[2];
+        const maxY = this.mapBounds[3];
+        return Math.max(maxX - minX, maxY - minY);
+    }
+
+    _computeIGCoordinates(x, y) {        
         const ctx = this.mainContext;
 
-        const point = ctx.transformedPoint(canvasX, canvasY);
+        const point = ctx.transformedPoint(x, y);
 
         // world boundries coordinates
         const minX = this.mapBounds[0];
@@ -1029,9 +1040,13 @@ class Animator {
         // map pixels -> game coordinates
         const gameX = minX + (point.x / mapWidth) * (maxX - minX);
         const gameY = minY + (1 - point.y / mapHeight) * (maxY - minY); // 1 - because gw2 is Z down not Y down
+        return {x: gameX, y: gameY};
+    }
+    _updateCanvasCoordinates(canvasX, canvasY) {
+        const pt = this._computeIGCoordinates(canvasX, canvasY);
 
-        this.reactiveDataStatus.gameCoordinates.x = Number(gameX.toFixed(2));
-        this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));
+        this.reactiveDataStatus.gameCoordinates.x = Number(pt.x.toFixed(2));
+        this.reactiveDataStatus.gameCoordinates.y = Number(pt.y.toFixed(2));
     }
     _hideAgentTooltip() {
         if (this.reactiveDataStatus.hoveredActor !== null) {
@@ -1123,7 +1138,7 @@ class Animator {
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 const downPt = _this.mouseDown.pt;
                 ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
-                bgCtx.translate(pt.x - downPt.x, pt.y - downPt.y);
+                bgCtx.translate(pt.x - downPt.x, pt.y - downPt.y);               
                 _this.needBGUpdate = true;
                 if (_this.animation === null) {
                     animateCanvas(noUpdateTime);
