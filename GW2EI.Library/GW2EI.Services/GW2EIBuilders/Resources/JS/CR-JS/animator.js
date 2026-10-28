@@ -1067,6 +1067,7 @@ class Animator {
 
     _initMouseEvents() {
         const _this = this;
+        this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
@@ -1086,6 +1087,7 @@ class Animator {
 
         canvas.addEventListener('mousemove', function (evt) {
             evt.preventDefault();
+            _this._mouseInside = true;
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
@@ -1106,6 +1108,7 @@ class Animator {
 
         canvas.addEventListener('mouseleave', function () {
             _this._hideAgentTooltip();
+            _this._mouseInside = false;
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
@@ -1504,6 +1507,9 @@ class Animator {
         this._drawMainCanvas();
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
             overheadAnimationIncrement *= -1;
+        }
+        if (this._mouseInside && !CanvasTooltipData.updateRequested) {
+            this._updateAgentTooltip(CanvasTooltipData.canvasX, CanvasTooltipData.canvasY, CanvasTooltipData.clientX, CanvasTooltipData.clientY);
         }
         overheadAnimationFrame += overheadAnimationIncrement;
     }
