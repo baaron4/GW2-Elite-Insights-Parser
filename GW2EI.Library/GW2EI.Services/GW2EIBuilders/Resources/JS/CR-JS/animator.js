@@ -48,6 +48,15 @@ let overheadAnimationIncrement = 1;
 const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
+function getUniqueIDFromPixel(pixel) {
+    uint32ToUint8[0] = pixel[0];
+    uint32ToUint8[1] = pixel[1];
+    uint32ToUint8[2] = pixel[2];
+    uint32ToUint8[3] = 0;
+
+    return uint32[0];
+}
+
 
 // Define the type of the decoration. Must match ordering of the enum in CombatReplayDescription.cs
 const Types = {
@@ -84,6 +93,7 @@ let animationControlComponent = null;
 const reactiveAnimationData = {
     time: 0,
     selectedActorID: null,
+    hoveredActorID: null,
     animated: false,
     range: {
         min: 0,
@@ -101,6 +111,27 @@ const reactiveAnimationData = {
 
 let InchToPixel = 10;
 let PollingRate = 150;
+
+const CanvasTooltipData = {
+    posX: 0,
+    posY: 0,
+    canvasX: 0,
+    canvasY: 0,
+    updateRequested: false
+};
+
+const CanvasTooltipVirtualElement = {
+    getBoundingClientRect() {
+        return {
+            width: 0,
+            height: 0,
+            top: CanvasTooltipData.posY,
+            right: CanvasTooltipData.posX,
+            bottom: CanvasTooltipData.posY,
+            left: CanvasTooltipData.posX,
+        };
+    }
+};
 
 // Scenegraph
 
@@ -382,6 +413,36 @@ class Animator {
         this.pickContext = this.pickCanvas.getContext('2d', {
             willReadFrequently: true,
         });
+        // Agent tooltip
+        if (this.agentTooltipPopper) {
+            this.agentTooltipPopper.destroy();
+            this.agentTooltipPopper = null;
+        }
+
+        this.agentTooltip = document.getElementById("combat-replay-agent-tooltip");
+
+        if (this.agentTooltip && typeof Popper !== "undefined") {
+
+            this.agentTooltipPopper = new Popper(
+                CanvasTooltipVirtualElement,
+                this.agentTooltip,
+                {
+                    placement: "top",
+                    positionFixed: true,
+                    modifiers: {
+                        offset: {
+                            offset: "0, 8"
+                        },
+                        arrow: {
+                            element: ".arrow"
+                        },
+                        preventOverflow: {
+                            boundariesElement: "viewport"
+                        }
+                    }
+                }
+            );
+        }
         // manipulation
         this.lastX = this.mainCanvas.width / 2;
         this.lastY = this.mainCanvas.height / 2;
@@ -772,13 +833,13 @@ class Animator {
     }
 
     getSelectableActorData(actorId) {
-        return animator.targetData.get(actorId) || animator.playerData.get(actorId) || 
-                animator.friendlyMobData.get(actorId) || animator.friendlyPlayerData.get(actorId) || 
-                animator.targetPlayerData.get(actorId);
+        return this.targetData.get(actorId) || this.playerData.get(actorId) || 
+                this.friendlyMobData.get(actorId) || this.friendlyPlayerData.get(actorId) || 
+                this.targetPlayerData.get(actorId);
     }
 
     getActorData(actorId) {
-        return this.getSelectableActorData(actorId) || animator.trashMobData.get(actorId);
+        return this.getSelectableActorData(actorId) || this.trashMobData.get(actorId);
     }
 
     getActiveActorMarkers(actorID) {
@@ -932,6 +993,66 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+
+    _hideAgentTooltip() {
+        if (this.reactiveDataStatus.hoveredActorID !== null) {
+            this.reactiveDataStatus.hoveredActorID = null;
+        }
+    }
+    _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
+        if (!this.agentTooltip || !this.agentTooltipPopper) {
+            return;
+        }
+        CanvasTooltipData.posX = clientX;
+        CanvasTooltipData.posY = clientY;
+        CanvasTooltipData.canvasX = canvasX;
+        CanvasTooltipData.canvasY = canvasY;
+        if (CanvasTooltipData.updateRequested) {
+            return;
+        }
+        CanvasTooltipData.updateRequested = true;
+
+        // Avoid high frequency picking calls when mouse DPI is higher than monitor refresh rate, which is very often the case
+        requestAnimationFrame(() => {
+            // To make sure to update on latest seen values and not the one seen on first request, if mouse in movement
+            canvasX = CanvasTooltipData.canvasX;
+            canvasY = CanvasTooltipData.canvasY;
+            clientX = CanvasTooltipData.posX;
+            clientY = CanvasTooltipData.posY;
+            const x = Math.round(canvasX * resolutionMultiplier);
+            const y = Math.round(canvasY * resolutionMultiplier);
+         
+            CanvasTooltipData.updateRequested = false;
+
+            if (x < 0 || y < 0 || x >= this.pickCanvas.width || y >= this.pickCanvas.height) {
+                this._hideAgentTooltip();
+                return;
+            }
+
+            this._drawPickCanvas({
+                x: x,
+                y: y
+            });
+
+            const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
+
+            const actorId = getUniqueIDFromPixel(pixel);
+
+            if (!this.getActorData(actorId)) {
+                this._hideAgentTooltip();
+                return;
+            }
+
+            this.reactiveDataStatus.hoveredActorID = actorId;
+            this._updateAgentTooltipPopper();
+        });
+    }
+    _updateAgentTooltipPopper() {
+        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActorID) {
+            this.agentTooltipPopper.update();
+        }
+    }
+
     _initMouseEvents() {
         const _this = this;
         const canvas = this.mainCanvas;
@@ -941,6 +1062,7 @@ class Animator {
 
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
+            _this._hideAgentTooltip();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.mouseDown = {
@@ -956,6 +1078,7 @@ class Animator {
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
             if (_this.mouseDown) {
+                _this._hideAgentTooltip();
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 const downPt = _this.mouseDown.pt;
                 ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
@@ -964,7 +1087,13 @@ class Animator {
                 if (_this.animation === null) {
                     animateCanvas(noUpdateTime);
                 }
+            } else {
+                _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
             }
+        }, false);
+
+        canvas.addEventListener('mouseleave', function () {
+            _this._hideAgentTooltip();
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
@@ -975,11 +1104,7 @@ class Animator {
                 };
                 _this._drawPickCanvas(downPt);
                 const pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
-                uint32ToUint8[0] = pickedColor[0];
-                uint32ToUint8[1] = pickedColor[1];
-                uint32ToUint8[2] = pickedColor[2];
-                uint32ToUint8[3] = 0;
-                const actorID = uint32[0];
+                const actorID = getUniqueIDFromPixel(pickedColor);
                 _this.selectActor(actorID, true);
             }
             _this.mouseDown = null;
@@ -1170,7 +1295,12 @@ class Animator {
         const ctx = this.pickContext;
         const canvas = this.pickCanvas;       
         if (pt) {
-            ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(pt.x - 2, pt.y - 2, 4, 4);
+            }
+            ctx.restore();
         } else {
             const p1 = ctx.transformedPoint(0, 0);
             const p2 = ctx.transformedPoint(canvas.width, canvas.height);
@@ -1236,9 +1366,9 @@ class Animator {
             }
             // Background items commonly overlap so they need to be drawn in the correct order by height
             // This is sorted in reverse order because the z axis is inverted
-            animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
-            for (let i = 0; i < animator.backgroundActorData.length; i++) {
-                animator.backgroundActorData[i].draw();
+            this.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+            for (let i = 0; i < this.backgroundActorData.length; i++) {
+                this.backgroundActorData[i].draw();
             }
             if (this.displaySettings.displayMechanics) {
                 this.mechanicActorData.draw(standardDraw);
