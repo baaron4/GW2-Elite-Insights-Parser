@@ -1,13 +1,13 @@
 <template>
     <div class="d-flex flex-row justify-content-center align-items-center mb-2">
         <img v-if="target.health > 0" :src="UIIcons.VitalityChar" alt="Health"
-            class="icon" :data-original-title="'Health: ' + target.health">
+            class="icon" :data-original-title="'Health: ' + numberFormater0(target.health)">
         <img v-if="target.tough > 0" :src="UIIcons.ToughnessChar" alt="Toughness"
-            class="icon" hbHeight :data-original-title="'Toughness: ' + target.tough">
+            class="icon" hbHeight :data-original-title="'Toughness: ' + numberFormater0(target.tough)">
         <img v-if="target.hbWidth > 0" :src="UIIcons.HitboxWidth" alt="Hitbox Width"
-            class="icon" :data-original-title="'Hitbox Width: ' + target.hbWidth">
+            class="icon" :data-original-title="'Hitbox Width: ' + numberFormater0(target.hbWidth)">
         <img v-if="target.hbHeight > 0" :src="UIIcons.HitboxHeight" alt="Hitbox Half-Height"
-            class="icon" :data-original-title="'Hitbox Half-Height: ' + 0.5 * target.hbHeight">
+            class="icon" :data-original-title="'Hitbox Half-Height: ' + numberFormater0(0.5 * target.hbHeight)">
     </div>
 </template>
 
@@ -15,7 +15,7 @@
     Vue.component('target-data-component', {
         props: ['targetid'],
         template: `${template}`,
-        mixins: [UIIconsComponent],
+        mixins: [UIIconsComponent, numberComponent],
         computed: {
             target: function () {
                 return logData.targets[this.targetid];
