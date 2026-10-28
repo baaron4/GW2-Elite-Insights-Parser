@@ -52,15 +52,16 @@ internal static class LogLogicUtils
 
     internal static void AddDefaultViewpointOnParentFromChild(CombatReplayMap crMap, CombatReplayMap parentMap, long logID)
     {
-        var xStart = crMap.TopX;
-        var parentXStart = parentMap.TopX;
-        var parentXEnd = parentMap.BottomX;
-        var yStart = crMap.BottomY;
-        var parentYStart = parentMap.BottomY;
-        var parentYEnd = parentMap.TopY;
+        var xStart = crMap.MinX;
+        var parentXStart = parentMap.MinX;
+        var parentXEnd = parentMap.MaxX;
+        // Canvas is Y down
+        var yStart = crMap.MaxY;
+        var parentYStart = parentMap.MaxY;
+        var parentYEnd = parentMap.MinY;
 
-        var xSize = crMap.BottomX - crMap.TopX;
-        var ySize = crMap.BottomY - crMap.TopY;
+        var xSize = crMap.MaxX - crMap.MinX;
+        var ySize = crMap.MaxY - crMap.MinY;
         var delta = xSize - ySize;
 
         if (delta > 0)
@@ -75,8 +76,8 @@ internal static class LogLogicUtils
         var percentX = (xStart - parentXStart) / (parentXEnd - parentXStart) * 100;
         var percentY = (yStart - parentYStart) / (parentYEnd - parentYStart) * 100;
         // scale
-        var scaleX = 1 / ((crMap.TopX - crMap.BottomX) / (parentMap.TopX - parentMap.BottomX));
-        var scaleY = 1 / ((crMap.TopY - crMap.BottomY) / (parentMap.TopY - parentMap.BottomY));
+        var scaleX = 1 / ((crMap.MaxX - crMap.MinX) / (parentMap.MaxX - parentMap.MinX));
+        var scaleY = 1 / ((crMap.MaxY - crMap.MinY) / (parentMap.MaxY - parentMap.MinY));
         parentMap.AddDefaultViewpoint(percentX, percentY, Math.Min(scaleX, scaleY), logID);
     }
 

@@ -21,7 +21,7 @@ internal class CombatReplayDto
         (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(used.skills, used.buffs);
         (int width, int height) = map.GetPixelMapSize();
         Sizes = [width, height];
-        MapBounds = [map.TopX, map.TopY, map.BottomX, map.BottomY];
+        MapBounds = [map.MinX, map.MinY, map.MaxX, map.MaxY];
         InchToPixel = map.GetInchToPixel();
         PollingRate = ParserHelper.CombatReplayPollingRate;
         if (map.DefaultViewpoints != null)

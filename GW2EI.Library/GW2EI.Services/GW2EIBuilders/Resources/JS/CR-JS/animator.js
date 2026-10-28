@@ -49,6 +49,10 @@ const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
 function getUniqueIDFromPixel(pixel) {
+    // Blending, applied to color so we get wrong ID if not fully opaque
+    if (pixel[3] !== 255) {
+        return 0;
+    }
     uint32ToUint8[0] = pixel[0];
     uint32ToUint8[1] = pixel[1];
     uint32ToUint8[2] = pixel[2];
@@ -93,7 +97,7 @@ let animationControlComponent = null;
 const reactiveAnimationData = {
     time: 0,
     selectedActorID: null,
-    hoveredActorID: null,
+    hoveredActor: null,
     animated: false,
     range: {
         min: 0,
@@ -1013,25 +1017,25 @@ class Animator {
         const point = ctx.transformedPoint(canvasX, canvasY);
 
         // world boundries coordinates
-        const topX = this.mapBounds[0];
-        const topY = this.mapBounds[1];
-        const bottomX = this.mapBounds[2];
-        const bottomY = this.mapBounds[3];
+        const minX = this.mapBounds[0];
+        const minY = this.mapBounds[1];
+        const maxX = this.mapBounds[2];
+        const maxY = this.mapBounds[3];
 
         // map pixels
         const mapWidth = this.mapSize[0];
         const mapHeight = this.mapSize[1];
 
         // map pixels -> game coordinates
-        const gameX = topX + (point.x / mapWidth) * (bottomX - topX);
-        const gameY = topY + (1 - point.y / mapHeight) * (bottomY - topY); // 1 - because gw2 is Z down not Y down
+        const gameX = minX + (point.x / mapWidth) * (maxX - minX);
+        const gameY = minY + (1 - point.y / mapHeight) * (maxY - minY); // 1 - because gw2 is Z down not Y down
 
         this.reactiveDataStatus.gameCoordinates.x = Number(gameX.toFixed(2));
         this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));
     }
     _hideAgentTooltip() {
-        if (this.reactiveDataStatus.hoveredActorID !== null) {
-            this.reactiveDataStatus.hoveredActorID = null;
+        if (this.reactiveDataStatus.hoveredActor !== null) {
+            this.reactiveDataStatus.hoveredActor = null;
         }
     }
     _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
@@ -1072,18 +1076,19 @@ class Animator {
             const pixel = this.pickContext.getImageData(x, y, 1, 1).data;
 
             const actorId = getUniqueIDFromPixel(pixel);
+            const name = findTargetName("u" + actorId, false);
 
-            if (!this.getActorData(actorId)) {
+            if (!name) {
                 this._hideAgentTooltip();
                 return;
             }
 
-            this.reactiveDataStatus.hoveredActorID = actorId;
+            this.reactiveDataStatus.hoveredActor = name;
             this._updateAgentTooltipPopper();
         });
     }
     _updateAgentTooltipPopper() {
-        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActorID) {
+        if (this.agentTooltipPopper && this.reactiveDataStatus.hoveredActor) {
             this.agentTooltipPopper.update();
         }
     }
