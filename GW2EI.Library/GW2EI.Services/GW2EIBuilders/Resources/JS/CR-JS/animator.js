@@ -972,6 +972,11 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+
+    computeCurrentScale() {
+        return 50 / (InchToPixel * this.globalScale);
+    }
+
     _setScaleOnPoint(factor, ptX, ptY) {
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
@@ -980,7 +985,10 @@ class Animator {
         ctx.translate(pt.x, pt.y);
         bgCtx.translate(pt.x, pt.y);
         ctx.scale(factor, factor);
-        if ((50 / (InchToPixel * this.globalScale) < 10)) {
+
+        const currentScale = this.computeCurrentScale();
+        // Restrict zoom levels to a reasonable scale
+        if (currentScale < 10 || currentScale > 15000) {
             ctx.scale(1.0 / factor, 1.0 / factor);
             factor = 1.0;
         }
@@ -1443,7 +1451,7 @@ class Animator {
                 ctx.font = "bold " + fontSize + "px Comic Sans MS";
                 ctx.fillStyle = "#CC2200";
                 ctx.textAlign = "center";
-                ctx.fillText((50 / (InchToPixel * this.globalScale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+                ctx.fillText(this.computeCurrentScale().toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
             }
             ctx.restore();
         }
