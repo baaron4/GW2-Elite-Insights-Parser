@@ -1288,3 +1288,63 @@ td.approximate::before {
     line-height: 12px;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 }
+
+.scale-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    pointer-events: none;
+    text-align: left;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.scale-ruler {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.scale-label {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.scale-line-container {
+    position: relative;
+    width: 50px;
+    height: 12px;
+    margin-left: 2px;
+}
+
+.scale-line {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #CC2200;
+}
+
+.scale-marker {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 12px;
+    background-color: #CC2200;
+}
+
+.scale-marker-left {
+    left: 0;
+}
+
+.scale-marker-right {
+    right: 0;
+}
+
+.scale-coords-bold {
+    font-weight: bold;
+}

@@ -105,7 +105,16 @@ const reactiveAnimationData = {
         actorName: null,
         name: null,
         times: [],
-    }
+    },
+    canvasCoordinates: {
+        x: 0,
+        y: 0
+    },
+    gameCoordinates: {
+        x: 0,
+        y: 0
+    },
+    scaleUnits: "5.0",
 };
 //
 
@@ -335,6 +344,8 @@ class Animator {
         this.selectedActor = null;
         // maps
         this.backgroundImages = new RenderablesRoot(start, end);
+        this.mapBounds = options.mapBounds;
+        this.mapSize = options.sizes;
         // animation
         this.needBGUpdate = false;
         this.animation = null;
@@ -993,7 +1004,32 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+    _updateCanvasCoordinates(canvasX, canvasY) {
+        const ctx = this.mainContext;
 
+        // canvas coordinates
+        this.reactiveDataStatus.canvasCoordinates.x = Number(canvasX.toFixed(2));
+        this.reactiveDataStatus.canvasCoordinates.y = Number(canvasY.toFixed(2));
+
+        const point = ctx.transformedPoint(canvasX, canvasY);
+
+        // world boundries coordinates
+        const topX = this.mapBounds[0];
+        const topY = this.mapBounds[1];
+        const bottomX = this.mapBounds[2];
+        const bottomY = this.mapBounds[3];
+
+        // map pixels
+        const mapWidth = this.mapSize[0];
+        const mapHeight = this.mapSize[1];
+
+        // map pixels -> game coordinates
+        const gameX = topX + (point.x / mapWidth) * (bottomX - topX);
+        const gameY = topY + (1 - point.y / mapHeight) * (bottomY - topY);
+
+        this.reactiveDataStatus.gameCoordinates.x = Number(gameX.toFixed(2));
+        this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));
+    }
     _hideAgentTooltip() {
         if (this.reactiveDataStatus.hoveredActorID !== null) {
             this.reactiveDataStatus.hoveredActorID = null;
@@ -1063,6 +1099,7 @@ class Animator {
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
             _this._hideAgentTooltip();
+            _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.mouseDown = {
@@ -1089,6 +1126,7 @@ class Animator {
                 }
             } else {
                 _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
+                _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
             }
         }, false);
 
@@ -1414,39 +1452,7 @@ class Animator {
                 this.screenSpaceActorData.draw(standardDraw);
             }
             ctx.restore()
-            ctx.save();
-            {
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-                // draw scale
-                ctx.lineWidth = 3 * resolutionMultiplier;
-                ctx.strokeStyle = "#CC2200";
-                const pos = resolutionMultiplier * 70;
-                const width = resolutionMultiplier * 50;
-                const height = resolutionMultiplier * 6;
-                // main line
-                ctx.beginPath();
-                ctx.moveTo(pos, pos);
-                ctx.lineTo(pos + width, pos);
-                ctx.stroke();
-                ctx.lineWidth = 2 * resolutionMultiplier;
-                // right border
-                ctx.beginPath();
-                ctx.moveTo(pos - resolutionMultiplier, pos + height);
-                ctx.lineTo(pos - resolutionMultiplier, pos - height);
-                ctx.stroke();
-                // left border
-                ctx.beginPath();
-                ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
-                ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
-                ctx.stroke();
-                // text
-                const fontSize = 13 * resolutionMultiplier;
-                ctx.font = "bold " + fontSize + "px Comic Sans MS";
-                ctx.fillStyle = "#CC2200";
-                ctx.textAlign = "center";
-                ctx.fillText((50 / (InchToPixel * this.globalScale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
-            }
-            ctx.restore();
+            this.reactiveDataStatus.scaleUnits = (50 / (InchToPixel * this.globalScale)).toFixed(1);
         }
         //ctx.restore();  
     }
@@ -1490,6 +1496,7 @@ class Animator {
         //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
+        this._updateCanvasCoordinates(this.lastX, this.lastY);
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
             overheadAnimationIncrement *= -1;
         }

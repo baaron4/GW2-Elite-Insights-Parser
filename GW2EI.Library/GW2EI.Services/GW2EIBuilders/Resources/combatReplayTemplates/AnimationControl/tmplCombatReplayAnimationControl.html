@@ -34,10 +34,28 @@
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"></canvas>
                 <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" :style="{ 'opacity': hoveredActor ? '1.0' : '0.0' }"
-                    style="pointer-events: none; will-change: transform;">
+                     style="pointer-events: none; will-change: transform;">
                     <div class="arrow"></div>
                     <div class="tooltip-inner">
                         {{ hoveredActor }}
+                    </div>
+                </div>
+                <div class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
+                    <div class="scale-ruler">
+                        <div class="scale-line-container">
+                            <div class="scale-line"></div>
+                            <div class="scale-marker scale-marker-left"></div>
+                            <div class="scale-marker scale-marker-right"></div>
+                        </div>
+                        <div class="scale-label">
+                            <span><span class="scale-coords-bold">{{ animationData.scaleUnits }}</span> units</span>
+                        </div>
+                    </div>
+                    <div>
+                        IG : <span class="scale-coords-bold">{{ animationData.gameCoordinates.x }}</span>x <span class="scale-coords-bold">{{ animationData.gameCoordinates.y }}</span>y
+                    </div>
+                    <div>
+                        PX : <span class="scale-coords-bold">{{ animationData.canvasCoordinates.x }}</span>x <span class="scale-coords-bold">{{ animationData.canvasCoordinates.y }}</span>y
                     </div>
                 </div>
                 <div @click="resetViewpoint();" class="btn btn-small position-bottom-left opacity-90 top-of-canvas m-2"
