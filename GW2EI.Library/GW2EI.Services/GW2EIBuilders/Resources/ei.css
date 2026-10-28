@@ -1302,27 +1302,47 @@ td.approximate::before {
 
 .scale-ruler {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     margin-bottom: 4px;
 }
 
-.scale-label {
-    display: flex;
-    align-items: center;
-    margin: 0;
+.scale-end-label {
+    position: absolute;
+    top: 0;
+    line-height: 1;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.scale-end-label-left {
+    left: 0;
+}
+
+.scale-end-label-right {
+    left: 100%;
 }
 
 .scale-line-container {
     position: relative;
     width: 50px;
-    height: 12px;
+    height: 44px;
     margin-left: 2px;
+    flex: 0 0 50px;
+}
+
+.scale-units-label {
+    position: absolute;
+    top: 31px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    text-align: center;
 }
 
 .scale-line {
     position: absolute;
-    top: 5px;
+    top: 21px;
     left: 0;
     width: 50px;
     height: 3px;
@@ -1331,7 +1351,7 @@ td.approximate::before {
 
 .scale-marker {
     position: absolute;
-    top: 0;
+    top: 17px;
     width: 2px;
     height: 12px;
     background-color: #CC2200;

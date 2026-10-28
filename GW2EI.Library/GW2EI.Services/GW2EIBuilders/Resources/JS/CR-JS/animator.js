@@ -1032,7 +1032,7 @@ class Animator {
 
         // map pixels -> game coordinates
         const gameX = topX + (point.x / mapWidth) * (bottomX - topX);
-        const gameY = topY + (1 - point.y / mapHeight) * (bottomY - topY);
+        const gameY = topY + (1 - point.y / mapHeight) * (bottomY - topY); // 1 - because gw2 is Z down not Y down
 
         this.reactiveDataStatus.gameCoordinates.x = Number(gameX.toFixed(2));
         this.reactiveDataStatus.gameCoordinates.y = Number(gameY.toFixed(2));

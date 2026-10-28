@@ -43,12 +43,14 @@
                 <div class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
                     <div class="scale-ruler">
                         <div class="scale-line-container">
+                            <div class="scale-end-label scale-end-label-left">0</div>
+                            <div class="scale-end-label scale-end-label-right">
+                                {{ animationData.scaleUnits }}
+                            </div>
                             <div class="scale-line"></div>
                             <div class="scale-marker scale-marker-left"></div>
                             <div class="scale-marker scale-marker-right"></div>
-                        </div>
-                        <div class="scale-label">
-                            <span><span class="scale-coords-bold">{{ animationData.scaleUnits }}</span> units</span>
+                            <div class="scale-units-label">Units</div>
                         </div>
                     </div>
                     <div>
