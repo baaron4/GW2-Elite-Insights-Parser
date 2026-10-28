@@ -260,7 +260,7 @@
             enemyMechHeader: function () { 
                 const allEnemyMechs = enemyMechanics();
                 var res = [];
-                var enemies = logData.enemies;
+                var enemies = logData.mechanicEnemies;
                 let encounterPhase = this.encounterPhase;
                 for (let j = 0; j < allEnemyMechs.length; j++) {
                     const mech = allEnemyMechs[j];
@@ -282,7 +282,7 @@
                 return res;
             },
             enemyMechRows: function () {
-                var enemies = logData.enemies;
+                var enemies = logData.mechanicEnemies;
                 var rows = [];
                 let encounterPhase = this.encounterPhase;
                 for (var i = 0; i < enemies.length; i++) {

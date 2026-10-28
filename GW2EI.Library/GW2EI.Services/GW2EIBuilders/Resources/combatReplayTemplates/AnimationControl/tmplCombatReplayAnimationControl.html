@@ -546,26 +546,7 @@
                 return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
             },
             hoveredActor() {
-                const actorId = this.animationData.hoveredActorID;
-
-                if (actorId === null) {
-                    return null;
-                }
-
-                const findById = (items) => {
-                   if (!Array.isArray(items)) {
-                       return null;
-                   }
-
-                   return items.find(item => item.uniqueID === actorId) || null;
-                };
-
-                const logActor = findById(logData.players) || findById(logData.targets);
-
-                if (logActor && logActor.name) {
-                    return logActor.name;
-                }
-                return null;
+                return this.animationData.hoveredActor;
             },
         },
         updated() {

@@ -63,7 +63,7 @@ internal abstract class ActorDto
         {
             var name = agent.FirstName;
             var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
-            if (agents.Count == 1)
+            if (agents.Count == 1 || log.LogData.Logic.TrashMobAgents.Contains(agent))
             {
                 // prefer actor name for unique NPCs
                 name = log.FindActor(agent).Character;

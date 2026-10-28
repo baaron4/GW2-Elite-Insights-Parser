@@ -282,7 +282,7 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal static void RenameFumarollersAndVentshots(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
+    internal static void RenameFumarollersAndVentshotsAndShards(IReadOnlyList<SingleActor> targets, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build < ArcDPSBuilds.AgentInfoAdded)
         {
@@ -299,6 +299,9 @@ internal class UraTheSteamshrieker : MountBalrior
                     case (int)TargetID.LegendaryVentshot:
                         target.OverrideName("Legendary " + target.Character);
                         break;
+                    case (int)TargetID.UraGadget_BloodstoneShard:
+                        target.OverrideName("Bloodstone Shard " + target.Character);
+                        break;
                     default:
                         break;
                 }
@@ -310,8 +313,8 @@ internal class UraTheSteamshrieker : MountBalrior
             {
                 switch (target.ID)
                 {
-                    case (int)TargetID.LegendaryVentshot:
-                        target.OverrideName("Legendary " + target.Character);
+                    case (int)TargetID.UraGadget_BloodstoneShard:
+                        target.OverrideName("Bloodstone Shard " + target.Character);
                         break;
                     default:
                         break;
@@ -344,8 +347,8 @@ internal class UraTheSteamshrieker : MountBalrior
         FindGeysers(agentData, combatData);
         FindBloodstoneShards(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        RenameFumarollersAndVentshots(Targets, evtcVersion);
-        RenameFumarollersAndVentshots(TrashMobs, evtcVersion);
+        RenameFumarollersAndVentshotsAndShards(Targets, evtcVersion);
+        RenameFumarollersAndVentshotsAndShards(TrashMobs, evtcVersion);
     }
 
     internal static BuffEvent? GetHealedPhaseStartEvent(CombatData combatData, SingleActor ura, long start, long end)
