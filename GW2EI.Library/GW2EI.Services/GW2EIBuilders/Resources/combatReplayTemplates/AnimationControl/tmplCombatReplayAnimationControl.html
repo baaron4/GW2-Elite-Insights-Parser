@@ -243,7 +243,7 @@
                         @click="resetViewpoint()" data-original-title="Reset canvas position">
                     &#9974; Reset Viewpoint
                 </button>
-                <button type="button" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light }" style="width: 105px;"
+                <button v-if="!isTouchDevice" type="button" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light }" style="width: 105px;"
                         @click="useAdvancedTimeline = !useAdvancedTimeline"
                         :data-original-title="useAdvancedTimeline ? 'Switch to simple timeline' : 'Switch to advanced timeline'">
                     {{ useAdvancedTimeline ? '&#8211;&#9679;&#8211; Simple' : '&#8211;&#9679;&#8211; Advanced' }}
