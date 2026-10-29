@@ -23,10 +23,6 @@
                     </li>
                 </ul>
             </div>
-            <div v-if="!isTouchDevice" class="custom-control custom-switch ml-3">
-                <input type="checkbox" class="custom-control-input" id="timelineModeSwitch" v-model="useAdvancedTimeline">
-                <label class="custom-control-label" for="timelineModeSwitch">Advanced timeline</label>
-            </div>
         </div>
         <div class="d-flex mt-1">
             <div class="position-relative mx-auto">
@@ -247,8 +243,13 @@
                         @click="resetViewpoint()" data-original-title="Reset canvas position">
                     &#9974; Reset Viewpoint
                 </button>
+                <button type="button" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light }" style="width: 105px;"
+                        @click="useAdvancedTimeline = !useAdvancedTimeline"
+                        :data-original-title="useAdvancedTimeline ? 'Switch to simple timeline' : 'Switch to advanced timeline'">
+                    {{ useAdvancedTimeline ? '&#8211;&#9679;&#8211; Simple' : '&#8211;&#9679;&#8211; Advanced' }}
+                </button>
                 <button v-show="useAdvancedTimeline" type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                        @click="resetMechanic()" data-original-title="Deselect mechanic">
+                        @click="resetMechanic()" data-original-title="Deselect mechanic from the timeline">
                     &#128295; Reset Mechanic
                 </button>
             </div>
