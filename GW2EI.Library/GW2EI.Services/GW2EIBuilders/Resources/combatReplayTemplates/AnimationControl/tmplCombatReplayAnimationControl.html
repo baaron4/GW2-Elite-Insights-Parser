@@ -414,82 +414,11 @@
         return returnDepth;
     }
 
-    Vue.component("combat-replay-animation-control-component", {
-        props: ["time", "light", "animated", "range"],
-        template: `${template}`,
-        mixins: [encounterPhaseComponent, numberComponent, UIIconsComponent, localStoragedSettings({
-            useAdvancedTimeline: {
-                defaultValue: !isTouchDevice && getValueFromLocalStorage("useAdvancedTimeline") !== "false",
-                cb: (iOnOff) => {
-                    if (iOnOff) {
-                        this.hideSimpleTimelineTooltip();
-                    }
-                }
-            }
-        })],
-        data: function () {
+    const crAnimationPhaseMixin = {
+        data: function() {
             return {
-                isTouchDevice: isTouchDevice,
-                backwards: false,
-                sliderDelimiter: {
-                    min: -1,
-                    max: -1,
-                },
                 selectedPhaseId: -1,
-                hoveredPhaseId: null,
-                draggingCursor: false,
-                hoverTime: 0,
-                isHoveringTimeline: false,
-                clickThroughDragCursor: false,
-                blockDragCursor: false,
-                phaseDoubleClickTimeout: null,
-                dragThroughPhaseBlockTimeout: null,
-                simpleTimelineTooltip: null,
-                animationData: reactiveAnimationData,
-                panStep: 10,
-                zoomEvent: null,
-                panEvent: null,
             };
-        },
-        watch: {
-            encounters: {
-                handler: function () {
-                    // make sure DOM is attached
-                    if (animator.mainCanvas) {
-                        const encounterPhase = this.encounterPhase;
-                        this.updateAnimatorTimes(encounterPhase);
-                        this.resetViewpoint();
-                        this.selectedPhaseId = this.phases[0].id;
-                    }
-                },
-                deep: true
-            },
-        },
-        mounted() {
-            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID);
-            const encounterPhase = this.encounterPhase;
-            this.updateAnimatorTimes(encounterPhase);
-            this.resetViewpoint();
-            this.selectedPhaseId = this.normalPhases[0].id;
-            animationControlComponent = this;
-            const defaultCombatReplayTime = getDefaultCombatReplayTime();
-            if (defaultCombatReplayTime !== null) {
-                const startTime = defaultCombatReplayTime - encounterPhase.start * 1000;
-                if (startTime >= 0 && startTime <= (encounterPhase.end - encounterPhase.start) * 1000) {
-                    this.updateTime(startTime);
-                }
-            }
-            $('#zoom-step-input').on("input ", function () {
-                animator.zoomStep = (Number.parseFloat($(this).val()) / 500) + 1;
-            });
-        },
-        beforeDestroy() {
-            if (this.simpleTimelineTooltip) {
-                this.simpleTimelineTooltip.remove();
-                this.simpleTimelineTooltip = null;
-            }
-            this.stopPan();
-            this.stopZoom();
         },
         computed: {
             selectedPhase: function () {
@@ -574,31 +503,52 @@
                 const depths = this.phasesByDepth.map(phaseBloc => phaseBloc.depth);
                 return Math.max(Math.max(...depths) + 1, 2);
             },
+        },
+        methods: {
+            getPhaseData: function (id) {
+                return logData.phases[id];
+            },
+            getPhaseName: function (phase) {
+                return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
+            },
+            getFormattedPhaseText: function (phase) {
+                const offset = (this.range.min / 1000);
+                var res = this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
+                if (this.useAdvancedTimeline && this.animationData.selectedMechanic.name != null) {
+                    res += ' | ' + this.animationData.selectedMechanic.name + ' (' + this.animationData.selectedMechanic.actorName + ')';
+                }
+                return res;
+            },
+        },
+    }
+
+    const crTimelineMixin = {
+        data: function() {
+            return {
+                sliderDelimiter: {
+                    min: -1,
+                    max: -1,
+                },
+                hoveredPhaseId: null,
+                draggingCursor: false,
+                hoverTime: 0,
+                isHoveringTimeline: false,
+                clickThroughDragCursor: false,
+                blockDragCursor: false,
+                phaseDoubleClickTimeout: null,
+                dragThroughPhaseBlockTimeout: null,
+                simpleTimelineTooltip: null,
+            };
+        },
+        computed: {
             maxTime: function () {
                 return this.range.max - this.range.min;
             },
             minTime: function () {
                 return 0;
             },
-            canvasSize: function () {
-                return {
-                    x: crData.sizes[0],
-                    y: crData.sizes[1]
-                };
-            },
-            htmlElementIDs: function () {
-                return {
-                    mainCanvasID: "main-canvas",
-                    bgCanvasID: "bg-canvas",
-                    pickCanvasID: "picking-canvas",
-                    simpleTimelineID: 'simple-timeline'
-                };
-            },
             timelineWidth() {
                 return 750 - 20; // remove p-2 padding (0.5rem = 8px x 2)
-            },
-            fightDuration() {
-                return (this.maxTime - this.minTime) / 1000;
             },
             ticks() {
                 const interval = this.getTickInterval();
@@ -655,22 +605,8 @@
                     })
                 );
             },
-            isMechanicSelected() {
-                return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
-            },
-            hoveredActor() {
-                return this.animationData.hoveredActor;
-            },
-        },
-        updated() {
-            animator._updateAgentTooltipPopper();
         },
         methods: {
-            updateAnimatorTimes(encounterPhase) {
-                animator.updateRange(encounterPhase);
-                this.updatePhaseTime(encounterPhase);
-                animator._reselectIfEnglobed();
-            },
             getSliderGradient: function () {
                 var startPercent, endPercent;
                 if (this.sliderDelimiter.min === -1) {
@@ -682,97 +618,6 @@
                     endPercent = this.sliderDelimiter.max / max * 100;
                 }
                 return computeSliderGradient("#888888", "#F3F3F3", startPercent, endPercent);
-            },
-            getPhaseData: function (id) {
-                return logData.phases[id];
-            },
-            toggleBackwards: function () {
-                this.backwards = animator.toggleBackwards();
-            },
-            resetViewpoint: function () {
-                animator.resetViewpoint(this.normalPhases[0].eiid);
-            },
-            panView: function (dx, dy) {
-                animator.pan(dx, dy);
-                if (!this.panEvent) {
-                    this.panEvent = setInterval(() => {
-                        this.panView(dx, dy);
-                    }, 100);
-                }
-            },
-            stopPan: function() {
-                if (this.panEvent) {
-                    clearInterval(this.panEvent);
-                    this.panEvent = null;
-                }
-            },
-            zoomIn: function() {
-                animator.zoomCenter(3);
-                if (!this.zoomEvent) {
-                    this.zoomEvent = setInterval(() => {
-                        this.zoomIn();
-                    }, 100);
-                }
-            },
-            zoomOut: function() {
-                animator.zoomCenter(-3);
-                if (!this.zoomEvent) {
-                    this.zoomEvent = setInterval(() => {
-                        this.zoomOut();
-                    }, 100);
-                }
-            },
-            stopZoom: function() {
-                if (this.zoomEvent) {
-                    clearInterval(this.zoomEvent);
-                    this.zoomEvent = null;
-                }
-            },
-            toggleAnimate: function () {
-                animator.toggleAnimate();
-            },
-            restartAnimate: function () {
-                animator.restartAnimate();
-            },
-            updateTime: function (value) {
-                const offset = this.range.min;
-                const t = parseInt(value) + offset;
-                animator.updateTime(t);
-            },
-            getPhaseName: function (phase) {
-                return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
-            },
-            getFormattedPhaseText: function (phase) {
-                const offset = (this.range.min / 1000);
-                var res = this.getPhaseName(phase) + ' (' + this.round3(phase.start - offset) + 's - ' + this.round3(phase.end - offset) + 's)';
-                if (this.useAdvancedTimeline && this.animationData.selectedMechanic.name != null) {
-                    res += ' | ' + this.animationData.selectedMechanic.name + ' (' + this.animationData.selectedMechanic.actorName + ')';
-                }
-                return res;
-            },
-            resetMechanic: function () {
-                this.isMechanicSelected = false;
-
-                this.animationData.selectedMechanic = {
-                    actorId: null,
-                    actorName: null,
-                    name: null,
-                    times: [],
-                };
-            },
-            updatePhaseTime: function (phase) {
-                this.selectedPhaseId = phase.id;
-                var min = phase.start * 1000;
-                var max = phase.end * 1000;
-                var name = this.getPhaseName(phase);
-                const offset = this.range.min;
-                this.sliderDelimiter.min = min - offset;
-                this.sliderDelimiter.max = max - offset;
-                this.updateTime(min - offset);
-            },
-            updateInputTime: function (value) {
-                const offset = this.range.min;
-                animator.updateInputTime(value, offset);
             },
             timeToX(time) {
                 time = time || this.minTime;
@@ -856,7 +701,7 @@
                 if (this.phaseDoubleClickTimeout) {
                     return;
                 }
-                this.selectedPhaseId = phase.id;
+                this.updateSelectedPhase(phase);
                 this.dragThroughPhaseBlockTimeout = this.dragThroughPhaseBlockTimeout || setTimeout(() => {
                     this.clearPhaseMouseEvents();
                     let time = this.getTimeFromEvent(e);
@@ -968,6 +813,193 @@
                     this.simpleTimelineTooltip.style.display = "none";
                 }
             },
+        },
+    };
+
+    Vue.component("combat-replay-animation-control-component", {
+        props: ["time", "light", "animated", "range"],
+        template: `${template}`,
+        mixins: [crAnimationPhaseMixin, crTimelineMixin, encounterPhaseComponent, numberComponent, UIIconsComponent, localStoragedSettings({
+            useAdvancedTimeline: {
+                defaultValue: !isTouchDevice && getValueFromLocalStorage("useAdvancedTimeline") !== "false",
+                cb: (iOnOff) => {
+                    if (iOnOff) {
+                        this.hideSimpleTimelineTooltip();
+                    }
+                }
+            }
+        })],
+        data: function () {
+            return {
+                isTouchDevice: isTouchDevice,
+                backwards: false,
+                animationData: reactiveAnimationData,
+                panStep: 10,
+                zoomEvent: null,
+                panEvent: null,
+            };
+        },
+        watch: {
+            encounters: {
+                handler: function () {
+                    // make sure DOM is attached
+                    if (animator.mainCanvas) {
+                        const encounterPhase = this.encounterPhase;
+                        this.updateAnimatorTimes(encounterPhase);
+                        this.resetViewpoint();
+                        this.updateSelectedPhase(this.phases[0]);
+                    }
+                },
+                deep: true
+            },
+        },
+        mounted() {
+            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID);
+            const encounterPhase = this.encounterPhase;
+            this.updateAnimatorTimes(encounterPhase);
+            this.resetViewpoint();
+            this.updateSelectedPhase(this.normalPhases[0]);
+            animationControlComponent = this;
+            const defaultCombatReplayTime = getDefaultCombatReplayTime();
+            if (defaultCombatReplayTime !== null) {
+                const startTime = defaultCombatReplayTime - encounterPhase.start * 1000;
+                if (startTime >= 0 && startTime <= (encounterPhase.end - encounterPhase.start) * 1000) {
+                    this.updateTime(startTime);
+                }
+            }
+            $('#zoom-step-input').on("input ", function () {
+                animator.zoomStep = (Number.parseFloat($(this).val()) / 500) + 1;
+            });
+        },
+        beforeDestroy() {
+            if (this.simpleTimelineTooltip) {
+                this.simpleTimelineTooltip.remove();
+                this.simpleTimelineTooltip = null;
+            }
+            this.stopPan();
+            this.stopZoom();
+        },
+        computed: {
+
+
+            canvasSize: function () {
+                return {
+                    x: crData.sizes[0],
+                    y: crData.sizes[1]
+                };
+            },
+            htmlElementIDs: function () {
+                return {
+                    mainCanvasID: "main-canvas",
+                    bgCanvasID: "bg-canvas",
+                    pickCanvasID: "picking-canvas",
+                    simpleTimelineID: 'simple-timeline'
+                };
+            },
+
+            fightDuration() {
+                return (this.maxTime - this.minTime) / 1000;
+            },
+
+            isMechanicSelected() {
+                return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
+            },
+            hoveredActor() {
+                return this.animationData.hoveredActor;
+            },
+        },
+        updated() {
+            animator._updateAgentTooltipPopper();
+        },
+        methods: {
+            updateAnimatorTimes(encounterPhase) {
+                animator.updateRange(encounterPhase);
+                this.updatePhaseTime(encounterPhase);
+                animator._reselectIfEnglobed();
+            },
+
+            toggleBackwards: function () {
+                this.backwards = animator.toggleBackwards();
+            },
+            resetViewpoint: function () {
+                animator.resetViewpoint(this.normalPhases[0].eiid);
+            },
+            panView: function (dx, dy) {
+                animator.pan(dx, dy);
+                if (!this.panEvent) {
+                    this.panEvent = setInterval(() => {
+                        this.panView(dx, dy);
+                    }, 100);
+                }
+            },
+            stopPan: function () {
+                if (this.panEvent) {
+                    clearInterval(this.panEvent);
+                    this.panEvent = null;
+                }
+            },
+            zoomIn: function () {
+                animator.zoomCenter(3);
+                if (!this.zoomEvent) {
+                    this.zoomEvent = setInterval(() => {
+                        this.zoomIn();
+                    }, 100);
+                }
+            },
+            zoomOut: function () {
+                animator.zoomCenter(-3);
+                if (!this.zoomEvent) {
+                    this.zoomEvent = setInterval(() => {
+                        this.zoomOut();
+                    }, 100);
+                }
+            },
+            stopZoom: function () {
+                if (this.zoomEvent) {
+                    clearInterval(this.zoomEvent);
+                    this.zoomEvent = null;
+                }
+            },
+            toggleAnimate: function () {
+                animator.toggleAnimate();
+            },
+            restartAnimate: function () {
+                animator.restartAnimate();
+            },
+            updateTime: function (value) {
+                const offset = this.range.min;
+                const t = parseInt(value) + offset;
+                animator.updateTime(t);
+            },
+            resetMechanic: function () {
+                this.isMechanicSelected = false;
+
+                this.animationData.selectedMechanic = {
+                    actorId: null,
+                    actorName: null,
+                    name: null,
+                    times: [],
+                };
+            },
+            updateSelectedPhase: function (phase) {
+                this.selectedPhaseId = phase.id;
+                const min = phase.start * 1000;
+                const max = phase.end * 1000;
+                const offset = this.range.min;
+                this.sliderDelimiter.min = min - offset;
+                this.sliderDelimiter.max = max - offset;
+            },
+            updatePhaseTime: function (phase) {
+                this.updateSelectedPhase(phase);
+                const min = phase.start * 1000;
+                const offset = this.range.min;
+                this.updateTime(min - offset);
+            },
+            updateInputTime: function (value) {
+                const offset = this.range.min;
+                animator.updateInputTime(value, offset);
+            },
+
         },
     });
 </script>
