@@ -974,7 +974,7 @@ class Animator {
         ctx.scale(resolutionMultiplier, resolutionMultiplier);
         bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
         if (defaultViewpoint) {
-            this._setScaleOnPoint(defaultViewpoint.s, 0, 0);
+            this.zoom(defaultViewpoint.s, 0, 0);
         }
         this.globalTranslation = null;
         this.globalRotation = 0;
@@ -984,65 +984,8 @@ class Animator {
         }
     }
 
-    panByPixels(dx, dy) {
-        const panContext = (ctx) => {
-            const transform = ctx.getTransform();
-
-            ctx.setTransform(
-                transform.a,
-                transform.b,
-                transform.c,
-                transform.d,
-                transform.e + dx * resolutionMultiplier,
-                transform.f + dy * resolutionMultiplier
-            );
-        };
-
-        panContext(this.mainContext);
-        panContext(this.bgContext);
-
-        this.needBGUpdate = true;
-        if (this.animation === null) {
-            animateCanvas(noUpdateTime);
-        }
-    }
-
-    zoomIn() {
-        this._setScaleOnPoint(zoomStep, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
-    }
-
-    zoomOut() {
-        this._setScaleOnPoint(1 / zoomStep, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
-    }
-
     computeCurrentScale() {
         return 50 / (InchToPixel * this.globalScale);
-    }
-
-    _setScaleOnPoint(factor, ptX, ptY) {
-        const ctx = this.mainContext;
-        const bgCtx = this.bgContext;
-
-        const pt = ctx.transformedPoint(ptX, ptY);
-        ctx.translate(pt.x, pt.y);
-        bgCtx.translate(pt.x, pt.y);
-        ctx.scale(factor, factor);
-
-        const maxAxis = this._getMaxAxisSize();
-
-        const currentScale = this.computeCurrentScale();
-        // Restrict zoom levels to a reasonable scale
-        if (currentScale < 10 || currentScale > Math.min(15000, 0.2 * maxAxis)) {
-            ctx.scale(1.0 / factor, 1.0 / factor);
-            factor = 1.0;
-        }
-        ctx.translate(-pt.x, -pt.y);
-        bgCtx.scale(factor, factor);
-        bgCtx.translate(-pt.x, -pt.y);
-        this.needBGUpdate = true;
-        if (this.animation === null) {
-            animateCanvas(noUpdateTime);
-        }
     }
 
     _getMaxAxisSize() {
@@ -1139,8 +1082,51 @@ class Animator {
         }
     }
 
+    pan(dx, dy) {
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
+        ctx.translate(dx, dy);
+        bgCtx.translate(dx, dy);
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
+
+    zoomCenter(delta) {
+        this.zoom(delta, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
+    }
+
+    zoom(delta, ptX, ptY) {
+        const factor = Math.pow(this.zoomStep, delta);
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
+
+        const pt = ctx.transformedPoint(ptX, ptY);
+        ctx.translate(pt.x, pt.y);
+        bgCtx.translate(pt.x, pt.y);
+        ctx.scale(factor, factor);
+
+        const maxAxis = this._getMaxAxisSize();
+
+        const currentScale = this.computeCurrentScale();
+        // Restrict zoom levels to a reasonable scale
+        if (currentScale < 10 || currentScale > Math.min(15000, 0.2 * maxAxis)) {
+            ctx.scale(1.0 / factor, 1.0 / factor);
+            factor = 1.0;
+        }
+        ctx.translate(-pt.x, -pt.y);
+        bgCtx.scale(factor, factor);
+        bgCtx.translate(-pt.x, -pt.y);
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
+
     _initMouseEvents() {
         const _this = this;
+        this.zoomStep = 1.1;
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
@@ -1170,12 +1156,7 @@ class Animator {
                 _this._hideAgentTooltip();
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 const downPt = _this.mouseDown.pt;
-                ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
-                bgCtx.translate(pt.x - downPt.x, pt.y - downPt.y);               
-                _this.needBGUpdate = true;
-                if (_this.animation === null) {
-                    animateCanvas(noUpdateTime);
-                }
+                _this.pan(pt.x - downPt.x, pt.y - downPt.y);
             } else {
                 _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
                 _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
@@ -1205,8 +1186,7 @@ class Animator {
             evt.preventDefault();
             const delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
             if (delta) {
-                const factor = Math.pow(zoomStep, delta);
-                _this._setScaleOnPoint(factor, _this.lastX, _this.lastY);
+                _this.zoom(delta, _this.lastX, _this.lastY);
             }
         };
 
