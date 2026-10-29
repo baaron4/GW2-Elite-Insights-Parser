@@ -354,7 +354,8 @@ class Animator {
         this.dragged = false;
         this.globalScale = 1.0;
         this.globalRotation = 0;
-        this.globalTranslation = null;
+        this.followRotation = null;
+        this.followTranslation = null;
         // options
         if (options) {
             if (options.inchToPixel) {
@@ -458,12 +459,12 @@ class Animator {
         this.lastX = this.mainCanvas.width / 2;
         this.lastY = this.mainCanvas.height / 2;
         //
-        this._trackTransforms(this.mainContext);
-        this._trackTransforms(this.bgContext);
-        this._trackTransforms(this.pickContext);
-        this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
-        this.bgContext.scale(resolutionMultiplier, resolutionMultiplier);
-        this.pickContext.scale(resolutionMultiplier, resolutionMultiplier);
+        this._trackTransforms(this.mainContext, true);
+        this._trackTransforms(this.bgContext, false);
+        this._trackTransforms(this.pickContext, false);
+        this.mainContext.globalScale(resolutionMultiplier, resolutionMultiplier);
+        this.bgContext.globalScale(resolutionMultiplier, resolutionMultiplier);
+        this.pickContext.globalScale(resolutionMultiplier, resolutionMultiplier);
         this._initMouseEvents();
         this._initTouchEvents();
     }
@@ -971,13 +972,14 @@ class Animator {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             bgCtx.setTransform(1, 0, 0, 1, 0, 0);
         }
-        ctx.scale(resolutionMultiplier, resolutionMultiplier);
-        bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
+        this.globalRotation = 0;
+        ctx.globalScale(resolutionMultiplier, resolutionMultiplier);
+        bgCtx.globalScale(resolutionMultiplier, resolutionMultiplier);
         if (defaultViewpoint) {
             this.zoom(defaultViewpoint.s, 0, 0);
         }
-        this.globalTranslation = null;
-        this.globalRotation = 0;
+        this.followTranslation = null;
+        this.followRotation = null;
         this.needBGUpdate = true;
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
@@ -1093,6 +1095,27 @@ class Animator {
         }
     }
 
+    rotate(delta, ptX, ptY) {    
+        const angle = delta * this.rotationStep;   
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
+
+        const pt = ctx.transformedPoint(ptX, ptY);
+        ctx.translate(pt.x, pt.y);
+        bgCtx.translate(pt.x, pt.y);
+
+        ctx.globalRotate(angle);
+        bgCtx.globalRotate(angle);
+
+        ctx.translate(-pt.x, -pt.y);
+        bgCtx.translate(-pt.x, -pt.y);
+
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
+
     zoomCenter(delta) {
         this.zoom(delta, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
     }
@@ -1105,18 +1128,18 @@ class Animator {
         const pt = ctx.transformedPoint(ptX, ptY);
         ctx.translate(pt.x, pt.y);
         bgCtx.translate(pt.x, pt.y);
-        ctx.scale(factor, factor);
+        ctx.globalScale(factor, factor);
 
         const maxAxis = this._getMaxAxisSize();
 
         const currentScale = this.computeCurrentScale();
         // Restrict zoom levels to a reasonable scale
         if (currentScale < 10 || currentScale > Math.min(15000, 0.2 * maxAxis)) {
-            ctx.scale(1.0 / factor, 1.0 / factor);
+            ctx.globalScale(1.0 / factor, 1.0 / factor);
             factor = 1.0;
         }
         ctx.translate(-pt.x, -pt.y);
-        bgCtx.scale(factor, factor);
+        bgCtx.globalScale(factor, factor);
         bgCtx.translate(-pt.x, -pt.y);
         this.needBGUpdate = true;
         if (this.animation === null) {
@@ -1127,6 +1150,7 @@ class Animator {
     _initMouseEvents() {
         const _this = this;
         this.zoomStep = 1.06;
+        this.rotationStep = 0.015;
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
@@ -1186,16 +1210,21 @@ class Animator {
             _this.mouseDown = null;
         }, false);
 
-        const zoom = function (evt) {
+        const wheel = function (evt) {
             evt.preventDefault();
             const delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
-            if (delta) {
+            if (!delta) {
+                return;
+            }
+            if (evt.shiftKey) {
+                _this.rotate(delta, _this.lastX, _this.lastY);
+            } else {
                 _this.zoom(delta, _this.lastX, _this.lastY);
             }
         };
 
-        canvas.addEventListener('DOMMouseScroll', zoom, false);
-        canvas.addEventListener('mousewheel', zoom, false);
+        canvas.addEventListener('DOMMouseScroll', wheel, false);
+        canvas.addEventListener('mousewheel', wheel, false);
     }
 
     _initTouchEvents() {
@@ -1235,7 +1264,7 @@ class Animator {
     }
 
     // https://codepen.io/anon/pen/KrExzG
-    _trackTransforms(ctx) {
+    _trackTransforms(ctx, controlGlobals) {
         const svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
         let xform = svg.createSVGMatrix();
         ctx.getTransform = function () {
@@ -1268,10 +1297,16 @@ class Animator {
         const _this = this;
         ctx.scale = function (sx, sy) {
             xform = xform.scale(sx, sy);
-            const xAxis = Math.sqrt(xform.a * xform.a + xform.b * xform.b);
-            const yAxis = Math.sqrt(xform.c * xform.c + xform.d * xform.d);
-            _this.globalScale = Math.max(xAxis, yAxis) / resolutionMultiplier;
             return scale.call(ctx, sx, sy);
+        };
+        ctx.globalScale = function (sx, sy) {
+            const result = this.scale(sx, sy);
+            if (controlGlobals) {
+                const xAxis = Math.sqrt(xform.a * xform.a + xform.b * xform.b);
+                const yAxis = Math.sqrt(xform.c * xform.c + xform.d * xform.d);
+                _this.globalScale = Math.max(xAxis, yAxis) / resolutionMultiplier;
+            }
+            return result;
         };
         
 
@@ -1279,6 +1314,12 @@ class Animator {
         ctx.rotate = function (radians) {
             xform = xform.rotate(radians * 180 / Math.PI);
             return rotate.call(ctx, radians);
+        };
+        ctx.globalRotate = function (radians) {
+            if (controlGlobals) {
+                _this.globalRotation += radians;
+            }
+            return this.rotate(radians);
         };
 
         const translate = ctx.translate;
@@ -1437,8 +1478,8 @@ class Animator {
 
             this._moveToSelected(ctx);
             if (!this.displaySettings.followSelected || !this.displaySettings.rotateSelected) {
-                this.globalTranslation = null;
-                this.globalRotation = 0;
+                this.followTranslation = null;
+                this.followRotation = null;
             }
             // Background items commonly overlap so they need to be drawn in the correct order by height
             // This is sorted in reverse order because the z axis is inverted
@@ -1505,23 +1546,23 @@ class Animator {
             if (pos !== null) {
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
                 const translateScale = 0.5 / resolutionMultiplier / this.globalScale
-                ctx.scale(this.globalScale * resolutionMultiplier, this.globalScale * resolutionMultiplier);
+                ctx.globalScale(this.globalScale * resolutionMultiplier, this.globalScale * resolutionMultiplier);
                 ctx.translate(this.mainCanvas.width * translateScale, this.mainCanvas.height * translateScale);
                 if (this.displaySettings.rotateSelected) {               
                     const rot = this.selectedActor.getRotation();
                     const angle = rot != null ? ToRadians(rot + 90) : 0;
                     ctx.rotate(-angle);
-                    this.globalRotation = -angle;
-                    this.globalTranslation = pos;
+                    this.followRotation = -angle;
+                    this.followTranslation = pos;
                 }
                 ctx.translate(-pos.x, -pos.y);
             }
         }
         // We need to restore orientation 
-        else if (this.globalTranslation) {
-            ctx.translate(this.globalTranslation.x, this.globalTranslation.y);
-            ctx.rotate(-this.globalRotation);
-            ctx.translate(-this.globalTranslation.x, -this.globalTranslation.y);
+        else if (this.followTranslation) {
+            ctx.translate(this.followTranslation.x, this.followTranslation.y);
+            ctx.rotate(-this.followRotation);
+            ctx.translate(-this.followTranslation.x, -this.followTranslation.y);
         }
     }
     draw() {

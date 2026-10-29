@@ -498,7 +498,7 @@ class MechanicDrawable {
         return this.positionFetcher(this.connectedTo, this.master, this.start, this.end);
     }
 
-    moveContext(ctx, pos, rot, useGlobalRotation = false) {
+    moveContext(ctx, pos, rot, counterGlobalRotation = false) {
         const angle = ToRadians(rot);
         const offsetAngle = ToRadians(this.rotationOffset);
         const offset = this.getOffset();
@@ -507,8 +507,12 @@ class MechanicDrawable {
         if (!offsetAfterRotation) {       
             ctx.translate(offset.x, offset.y);   
         }
-        if (useGlobalRotation) {
-            ctx.rotate(-animator.globalRotation);
+        if (counterGlobalRotation) {
+            if (animator.followRotation !== null) {
+                ctx.rotate(-animator.followRotation);
+            } else {
+                ctx.rotate(-animator.globalRotation);
+            }
         }
         ctx.rotate(angle);
         if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.addToMaster) {

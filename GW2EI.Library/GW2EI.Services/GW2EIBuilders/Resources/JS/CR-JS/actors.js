@@ -240,7 +240,11 @@ class IconDrawable {
         } 
         ctx.save();
         ctx.translate(pos.x, pos.y);
-        ctx.rotate(-animator.globalRotation);
+        if (animator.followRotation) {
+            ctx.rotate(-animator.followRotation);
+        } else {
+            ctx.rotate(-animator.globalRotation);
+        }
         ctx.drawImage(this.getIcon(), -halfSize, -halfSize, fullSize, fullSize); 
         ctx.restore();
     }
