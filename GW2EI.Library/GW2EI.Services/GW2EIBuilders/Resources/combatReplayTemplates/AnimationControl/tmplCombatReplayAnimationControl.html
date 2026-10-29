@@ -276,20 +276,20 @@
                 <div class="movement-arrow-grid">
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move up" @click.stop="panView(0, -panStep)">
+                            data-original-title="Move up" @click.stop="panView(0, panStep)">
                         &#9651;
                     </button>
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move left" @click.stop="panView(-panStep, 0)">
+                            data-original-title="Move left" @click.stop="panView(panStep, 0)">
                         &#9665;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move down" @click.stop="panView(0, panStep)">
+                            data-original-title="Move down" @click.stop="panView(0, -panStep)">
                         &#9661;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move right" @click.stop="panView(panStep, 0)">
+                            data-original-title="Move right" @click.stop="panView(-panStep, 0)">
                         &#9655;
                     </button>
                 </div>
