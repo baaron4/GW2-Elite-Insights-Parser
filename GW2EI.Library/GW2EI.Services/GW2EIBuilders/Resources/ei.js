@@ -2,11 +2,11 @@
 "use strict";
 function compileTemplates() {
     Vue.component("custom-numberform-component", {
-        props: ["minValue", "maxValue", "id", "placeholderValue"],
+        props: ["minValue", "maxValue", "id", "placeholderValue", "step"],
         template: `
         <div>
             <input class="form-control" type="number" :id="id"
-                @onkeypress="return isNumber(event)" onpaste="return false;" step="2" 
+                @onkeypress="return isNumber(event)" onpaste="return false;" :step="step ? step : 2" 
                     :value="placeholderValue" data-bind="value:replyNumber, fireChange: true"
                     :min="minValue" :max="maxValue">
         </div>
