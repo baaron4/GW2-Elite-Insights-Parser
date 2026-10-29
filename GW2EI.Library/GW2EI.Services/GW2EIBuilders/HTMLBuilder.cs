@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
 using Tracing;
-using static System.Net.Mime.MediaTypeNames;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIBuilders;
