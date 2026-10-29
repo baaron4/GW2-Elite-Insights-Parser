@@ -261,7 +261,7 @@
                 <combat-replay-time-speed-picker-component />
             </div>
         </div>
-        <div class="d-flex align-items-center justify-content-start replay-controls-panel mt-1 rounded" ref="canvasControls">
+        <div class="d-flex align-items-center justify-content-between replay-controls-panel mt-1 rounded" ref="canvasControls">
             <div class="d-flex align-items-start replay-reset-controls" :class="isTouchDevice ? 'flex-column' : null">
                 <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
                         @click="resetViewpoint()" data-original-title="Reset canvas position">
