@@ -272,47 +272,77 @@
                     &#128295; Reset Mechanic
                 </button>
             </div>
-            <div v-if="isTouchDevice" class="d-flex flex-column align-items-center justify-content-center replay-movement-controls">
+            <div v-if="isTouchDevice" class="d-flex flex-row align-items-center justify-content-center replay-movement-controls">
                 <div class="movement-arrow-grid">
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move up" @click.stop="panView(0, panStep)">
+                            data-original-title="Move up"
+                            @mousedown.stop="panView(0, panStep)" 
+                            @mouseup.stop="stopPan" 
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(0, panStep)"
+                            @touchend.stop="stopPan">
                         &#9651;
                     </button>
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move left" @click.stop="panView(panStep, 0)">
+                            data-original-title="Move left"
+                            @mousedown.stop="panView(panStep, 0)" 
+                            @mouseup.stop="stopPan" 
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(panStep, 0)"
+                            @touchend.stop="stopPan">
                         &#9665;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move down" @click.stop="panView(0, -panStep)">
+                            data-original-title="Move down"
+                            @mousedown.stop="panView(0, -panStep)" 
+                            @mouseup.stop="stopPan" 
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(0, -panStep)"
+                            @touchend.stop="stopPan">
                         &#9661;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move right" @click.stop="panView(-panStep, 0)">
+                            data-original-title="Move right"
+                            @mousedown.stop="panView(-panStep, 0)" 
+                            @mouseup.stop="stopPan" 
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(-panStep, 0)"
+                            @touchend.stop="stopPan">
                         &#9655;
                     </button>
                 </div>
-            </div>
-            <input v-if="isTouchDevice" id="pan-step-input" type="number" class="form-control" data-original-title="Pixels moved per click"
+                <input v-if="isTouchDevice" id="pan-step-input" type="number" class="form-control ml-2" data-original-title="Pixels moved per click"
                    style="width: 75px; text-align: center; padding: 2px; flex-shrink: 0;"
                    min="1" step="1" v-model.number="panStep">
-            <div class="d-flex align-items-center justify-content-center replay-zoom-controls">
+            </div>
+            <div class="d-flex align-items-center justify-content-center replay-zoom-controls" :class="isTouchDevice ? 'flex-column' : null">
                 <span v-if="!isTouchDevice" class="replay-controls-label">Zoom Speed</span>
                 <div v-if="isTouchDevice" class="d-flex align-items-center justify-content-center zoom-controls">
                     <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Zoom in" @click.stop="zoomIn">
+                            data-original-title="Zoom in" 
+                            @mousedown.stop="zoomIn" 
+                            @mouseup.stop="stopZoom" 
+                            @mouseleave.stop="stopZoom"
+                            @touchstart.prevent.stop="zoomIn"
+                            @touchend.stop="stopZoom">
                         +
                     </button>
                     <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Zoom out" @click.stop="zoomOut">
+                            data-original-title="Zoom out"
+                            @mousedown.stop="zoomOut" 
+                            @mouseup.stop="stopZoom" 
+                            @mouseleave.stop="stopZoom"
+                            @touchstart.prevent.stop="zoomOut"
+                            @touchend.stop="stopZoom">
                         -
                     </button>
                 </div>
                 
-                <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="1"
+                <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
                                                 data-original-title="Zoom multiplier per step"
-                                                :maxValue="100" :step="1" :id="'zoom-step-input'"
+                                                :maxValue="100" :step="5" :id="'zoom-step-input'"
                                                 :placeholderValue="Math.round((animator.zoomStep - 1) * 500)"></custom-numberform-component>
             </div>
         </div>
@@ -417,6 +447,8 @@
                 simpleTimelineTooltip: null,
                 animationData: reactiveAnimationData,
                 panStep: 10,
+                zoomEvent: null,
+                panEvent: null,
             };
         },
         watch: {
@@ -456,6 +488,8 @@
                 this.simpleTimelineTooltip.remove();
                 this.simpleTimelineTooltip = null;
             }
+            this.stopPan();
+            this.stopZoom();
         },
         computed: {
             selectedPhase: function () {
@@ -660,12 +694,39 @@
             },
             panView: function (dx, dy) {
                 animator.pan(dx, dy);
+                if (!this.panEvent) {
+                    this.panEvent = setInterval(() => {
+                        this.panView(dx, dy);
+                    }, 100);
+                }
+            },
+            stopPan: function() {
+                if (this.panEvent) {
+                    clearInterval(this.panEvent);
+                    this.panEvent = null;
+                }
             },
             zoomIn: function() {
                 animator.zoomCenter(3);
+                if (!this.zoomEvent) {
+                    this.zoomEvent = setInterval(() => {
+                        this.zoomIn();
+                    }, 100);
+                }
             },
             zoomOut: function() {
                 animator.zoomCenter(-3);
+                if (!this.zoomEvent) {
+                    this.zoomEvent = setInterval(() => {
+                        this.zoomOut();
+                    }, 100);
+                }
+            },
+            stopZoom: function() {
+                if (this.zoomEvent) {
+                    clearInterval(this.zoomEvent);
+                    this.zoomEvent = null;
+                }
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();

@@ -1126,7 +1126,7 @@ class Animator {
 
     _initMouseEvents() {
         const _this = this;
-        this.zoomStep = 1.1;
+        this.zoomStep = 1.06;
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
