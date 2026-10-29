@@ -1098,7 +1098,7 @@ class Animator {
     }
 
     zoom(delta, ptX, ptY) {
-        const factor = Math.pow(this.zoomStep, delta);
+        let factor = Math.pow(this.zoomStep, delta);
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
 
