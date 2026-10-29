@@ -261,7 +261,7 @@
                 <combat-replay-time-speed-picker-component />
             </div>
         </div>
-        <div class="d-flex align-items-center justify-content-between replay-controls-panel mt-1 rounded" ref="canvasControls">
+        <div class="d-flex align-items-center justify-content-start replay-controls-panel mt-1 rounded" ref="canvasControls">
             <div class="d-flex align-items-start replay-reset-controls" :class="isTouchDevice ? 'flex-column' : null">
                 <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
                         @click="resetViewpoint()" data-original-title="Reset canvas position">
@@ -273,30 +273,32 @@
                 </button>
             </div>
             <div v-if="isTouchDevice" class="d-flex flex-column align-items-center justify-content-center replay-movement-controls">
-                <span class="replay-controls-label">Movement</span>
                 <div class="movement-arrow-grid">
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move up" @click.stop="panView(0, -10)">
+                            data-original-title="Move up" @click.stop="panView(0, -panStep)">
                         &#9651;
                     </button>
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move left" @click.stop="panView(-10, 0)">
+                            data-original-title="Move left" @click.stop="panView(-panStep, 0)">
                         &#9665;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move down" @click.stop="panView(0, 10)">
+                            data-original-title="Move down" @click.stop="panView(0, panStep)">
                         &#9661;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move right" @click.stop="panView(10, 0)">
+                            data-original-title="Move right" @click.stop="panView(panStep, 0)">
                         &#9655;
                     </button>
                 </div>
             </div>
-            <div class="d-flex align-items-center justify-content-center replay-zoom-controls" :class="isTouchDevice ? 'flex-column' : null">
-                <span class="replay-controls-label">Zoom</span>
+            <input v-if="isTouchDevice" id="pan-step-input" type="number" class="form-control" data-original-title="Pixels moved per click"
+                   style="width: 75px; text-align: center; padding: 2px; flex-shrink: 0;"
+                   min="1" step="1" v-model.number="panStep">
+            <div class="d-flex align-items-center justify-content-center replay-zoom-controls">
+                <span v-if="!isTouchDevice" class="replay-controls-label">Zoom Speed</span>
                 <div v-if="isTouchDevice" class="d-flex align-items-center justify-content-center zoom-controls">
                     <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
                             data-original-title="Zoom in" @click.stop="zoomIn">
@@ -309,6 +311,7 @@
                 </div>
                 
                 <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="1"
+                                                data-original-title="Zoom multiplier per step"
                                                 :maxValue="100" :step="1" :id="'zoom-step-input'"
                                                 :placeholderValue="Math.round((animator.zoomStep - 1) * 500)"></custom-numberform-component>
             </div>
@@ -413,6 +416,7 @@
                 dragThroughPhaseBlockTimeout: null,
                 simpleTimelineTooltip: null,
                 animationData: reactiveAnimationData,
+                panStep: 10,
             };
         },
         watch: {
@@ -662,16 +666,6 @@
             },
             zoomOut: function() {
                 animator.zoomCenter(-3);
-            },
-            handleZoomStep(event) {
-                const parsed = Number(event.target.value);
-
-                if (Number.isFinite(parsed) && parsed >= 1.01) {
-                    zoomStep = parsed;
-                } else if (event.type === "change") {
-                    // Restore the last valid value when editing finishes.
-                    this.zoomStepInput = String(zoomStep);
-                }
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();

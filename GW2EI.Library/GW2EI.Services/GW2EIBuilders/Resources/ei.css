@@ -1420,8 +1420,10 @@ td.approximate::before {
 }
 
 .replay-controls-panel {
+    flex-wrap: nowrap;
     gap: 16px;
     padding: 0.1rem;
+    overflow-x: auto;
 }
 
 .theme-yeti .replay-controls-panel {
@@ -1436,12 +1438,14 @@ td.approximate::before {
 
 .replay-reset-controls {
     gap: 4px;
+    flex-shrink: 0;
 }
 
 .replay-zoom-controls {
     gap: 4px;
-    margin-left: auto;
+    margin-left: 0;
     padding: 0 8px;
+    flex-shrink: 0;
 }
 
 .replay-controls-label {
