@@ -308,9 +308,9 @@
                     </button>
                 </div>
                 
-                <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="1.01"
-                                                :maxValue="2" :step="0.01" :id="'zoom-step-input'"
-                                                :placeholderValue="animator.zoomStep"></custom-numberform-component>
+                <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="1"
+                                                :maxValue="100" :step="1" :id="'zoom-step-input'"
+                                                :placeholderValue="Math.round((animator.zoomStep - 1) * 500)"></custom-numberform-component>
             </div>
         </div>
     </div>
@@ -444,7 +444,7 @@
                 }
             }
             $('#zoom-step-input').on("input ", function () {
-                animator.zoomStep = Number.parseFloat($(this).val());
+                animator.zoomStep = (Number.parseFloat($(this).val()) / 500) + 1;
             });
         },
         beforeDestroy() {
