@@ -1,0 +1,48 @@
+.form-control {
+    padding: 0.300rem 0.4rem;
+}
+
+/* http://danielstern.ca/range.css/?ref=css-tricks#/ */
+input[type=range].slider {
+    width: 100%;
+    background-color: transparent;
+    -webkit-appearance: none;
+}
+
+input[type=range].slider::-webkit-slider-runnable-track {
+    background: rgba(0, 0, 0, 0.0);
+    border: 1px solid rgba(0, 0, 0, 0);
+    width: 100%;
+    cursor: pointer;
+}
+
+input[type=range].slider::-webkit-slider-thumb {
+    width: 25px;
+    height: 25px;
+    background: #00ff00;
+    border: 3px solid #00c800;
+    border-radius: 13px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type=range].slider::-moz-range-track {
+    background: rgba(0, 0, 0, 0.0);
+    border: 1px solid rgba(0, 0, 0, 0);
+    width: 100%;
+    cursor: pointer;
+}
+
+input[type=range].slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #00ff00;
+    border: 3px solid #00c800;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
+
+.theme-slate .custom-switch .custom-control-input:checked~.custom-control-label::before {
+    background-color: #005CC8;
+}

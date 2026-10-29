@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
 using Tracing;
+using static System.Net.Mime.MediaTypeNames;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIBuilders;
@@ -28,6 +29,7 @@ public class HTMLBuilder
     private readonly string _eiJS;
     private readonly string _eiCRJS;
     private readonly string _eiHealingExtJS;
+    private readonly string _eiCSS;
 
     private readonly string _scriptVersion;
 
@@ -64,6 +66,7 @@ public class HTMLBuilder
         _eiJS = assets.EIJavascriptCode;
         _eiCRJS = assets.EICRJavascriptCode;
         _eiHealingExtJS = assets.EIHealingExtJavascriptCode;
+        _eiCSS = assets.EICSS;
         _parserVersion = parserVersion;
         _scriptVersion = parserVersion.Major + "." + parserVersion.Minor;
 #if !DEBUG
@@ -293,7 +296,7 @@ public class HTMLBuilder
 
     private string BuildCss(string? externalPath, string? cdnPath)
     {
-        string scriptContent = Properties.Resources.css;
+        string scriptContent = _eiCSS;
         bool externalNull = string.IsNullOrEmpty(externalPath);
         bool cdnNull = string.IsNullOrEmpty(cdnPath);
         if (!externalNull || !cdnNull)

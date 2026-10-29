@@ -8,6 +8,9 @@ public class HTMLAssets
 
     internal readonly string EICRJavascriptCode;
     internal readonly string EIHealingExtJavascriptCode;
+
+    internal readonly string EICSS;
+
     private static readonly string[] separatorTemplate = ["<template>"];
     private static readonly string[] separatorScript = ["<script>"];
     private static readonly string[] separatorTemplateEnd = ["</template>"];
@@ -56,6 +59,18 @@ public class HTMLAssets
         }
         List<string> templateHealingExt = BuildHealingExtensionTemplates();
         EIHealingExtJavascriptCode = scriptHealingExtContent.Replace("TEMPLATE_HEALING_EXT_COMPILE", string.Join("\n", templateHealingExt));
+
+
+        EICSS = string.Join("", [
+            ..Properties.Resources.css,
+            ..Properties.Resources.controls_css,
+            ..Properties.Resources.cr_css,
+            ..Properties.Resources.header_footer_css,
+            ..Properties.Resources.images_css,
+            ..Properties.Resources.rotation_css,
+            ..Properties.Resources.scrollbar_css,
+            ..Properties.Resources.tables_css,
+        ]);
     }
     private static string PrepareTemplate(string template)
     {

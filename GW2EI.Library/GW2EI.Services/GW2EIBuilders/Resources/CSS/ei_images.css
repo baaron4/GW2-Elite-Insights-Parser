@@ -1,0 +1,91 @@
+img.icon-s {
+    width: 16px;
+    height: 16px;
+}
+
+img.icon {
+    width: 18px;
+    height: 18px;
+}
+
+img.icon-next-cr-rota {
+    width: 24px;
+    height: 24px;
+}
+
+img.icon-l {
+    width: 24px;
+    height: 24px;
+}
+
+
+.empty-icon-l {
+    width: 24px;
+    height: 24px;
+}
+
+img.icon-sl {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-icon-sl {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-icon-cur-cr-rota {
+    width: 38px;
+    height: 38px;
+}
+
+.empty-icon-ll {
+    width: 48px;
+    height: 48px;
+}
+
+img.icon-cur-cr-rota {
+    width: 38px;
+    height: 38px;
+}
+
+img.icon-ll {
+    width: 48px;
+    height: 48px;
+}
+
+
+img.icon-xl {
+    width: 128px;
+    height: 128px;
+}
+
+img.icon-xxl {
+    width: 196px;
+    height: 196px;
+}
+
+img.encounter-icon {
+    height: 128px;
+    object-fit: contain;
+}
+
+
+img.icon-lg {
+    width: 64px;
+    height: 64px;
+}
+
+img.icon-hover:hover,
+td:hover img.icon-hover,
+th:hover img.icon-hover,
+.table-hover tr:hover td img.icon-hover {
+    width: 36px;
+    height: 36px;
+    margin: -9px;
+    position: relative;
+    -webkit-filter: drop-shadow(3px 3px 6px #000);
+    filter: drop-shadow(3px 3px 6px #000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
+    filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
+}

@@ -149,15 +149,67 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .table th {
-        ///    border-top: 0;
-        ///}
-        ///
-        ///.form-control {
+        ///   Looks up a localized string similar to .form-control {
         ///    padding: 0.300rem 0.4rem;
         ///}
         ///
-        ///.theme-slate g.hovertext text.name {
+        ////* http://danielstern.ca/range.css/?ref=css-tricks#/ */
+        ///input[type=range].slider {
+        ///    width: 100%;
+        ///    background-color: transparent;
+        ///    -webkit-appearance: none;
+        ///}
+        ///
+        ///input[type=range].slider::-webkit-slider-runnable-track {
+        ///    background: rgba(0, 0, 0, 0.0);
+        ///    border: 1px solid rgba(0, 0, 0, 0);
+        ///    width: 100%;
+        ///    cursor: pointer;
+        ///}
+        ///
+        ///input[type=range].slider::-webkit-slider-thumb {
+        ///    width: 25px;
+        ///    height: 25px;
+        ///    background: [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string controls_css {
+            get {
+                return ResourceManager.GetString("controls_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .buff-display {
+        ///    width: 210px;
+        ///}
+        ///
+        ///.buff-number {
+        ///    position: absolute;
+        ///    pointer-events: none;
+        ///    font-size: 0.5em;
+        ///    left: 20%;
+        ///    top: 65%;
+        ///    text-shadow: -2px -2px 3px #000000, -2px 2px 3px #000000, 2px -2px 3px #000000, 0px 2px 3px #000000, 0px -2px 3px #000000, 2px 0px 3px #000000, -2px 0px 3px #000000, 2px 2px 3px #000000;
+        ///    font-weight: bold;
+        ///    color: #fff;
+        ///    width: 100%;
+        ///}
+        ///
+        ///.cr-breakbar-phase-display {
+        ///    font-size: 0.65rem;
+        ///    width: 100%;
+        ///}
+        ///
+        ///.squad-details [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string cr_css {
+            get {
+                return ResourceManager.GetString("cr_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .theme-slate g.hovertext text.name {
         ///    fill: #cccccc !important;
         ///}
         ///
@@ -175,12 +227,15 @@ namespace GW2EIBuilders.Properties {
         ///    fill-opacity: 0.9 !important;
         ///}
         ///
-        ///.scrollable-y {
-        ///    overflow-x: hidden;
-        ///    overflow-y: auto;
+        ///.ei-container-big {
+        ///    min-width: 1900px;
+        ///    margin-right: auto;
+        ///    margin-left: auto;
         ///}
         ///
-        /// [rest of string was truncated]&quot;;.
+        ///.ei-container-small {
+        ///    max-width: min(1600px, 90%);
+        ///    m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string css {
             get {
@@ -243,40 +298,61 @@ namespace GW2EIBuilders.Properties {
         ///&quot;use strict&quot;;
         ///
         ///
-        ///const isTouchDevice = window.matchMedia(&quot;(pointer: coarse)&quot;).matches;
-        ///
-        ///
-        ///let apiRenderServiceOkay = true;
-        ///let useDarthmaim = false;
-        ///let replaceImgur = false;
-        ///
-        ///const quickColor = {
-        ///    r: 220,
-        ///    g: 20,
-        ///    b: 220
-        ///};
-        ///const slowColor = {
-        ///    r: 220,
-        ///    g: 125,
-        ///    b: 30
-        ///};
-        ///const normalColor = {
-        ///    r: 125,
-        ///    g: 125,
-        ///    b: 125
-        ///};
-        ///const DamageType = {
-        ///    All: 0,
-        ///    Power: 1,
-        ///    Condition: 2,
-        ///    Breakbar: 3
-        ///};
-        ///
-        ///const GraphType = {        /// [rest of string was truncated]&quot;;.
+        ///let EIUrlParams = new URLSearchParams(window.location.search);
+        ///if (EIUrlParams.size === 0) {
+        ///    if (window.location.hash.length &gt; 0) {
+        ///        EIUrlParams = new URLSearchParams(window.location.hash.slice(1));
+        ///    } else {
+        ///        try {
+        ///            if (window.parent.location.hash.length &gt; 0) {         
+        ///                EIUrlParams = new URLSearchParams(window.parent.location.hash.slice(1));
+        ///            }
+        ///        } catch(e) {
+        ///            // nothing
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string global {
             get {
                 return ResourceManager.GetString("global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .card-header {
+        ///    padding: 0.25rem 1.25rem !important;
+        ///}
+        ///
+        ///.card-header-fightMode {
+        ///    padding: 0.10rem 1.25rem;
+        ///    margin-bottom: 0px;
+        ///}
+        ///
+        ///.card-body-encounter {
+        ///    padding: 1rem !important;
+        ///}
+        ///
+        ////* Fight Mode Header - Light Theme */
+        ///.theme-yeti .fm-story {
+        ///    background-color: #EEEEEE;
+        ///}
+        ///
+        ///.theme-yeti .fm-quickplay {
+        ///    background-color: #32FCEB;
+        ///}
+        ///
+        ///.theme-yeti .fm-emboldened {
+        ///    background-color: #39925A;
+        ///}
+        ///
+        ///.theme-yeti .fm-normal {
+        ///    background-color: #00779E;
+        ///}
+        ///
+        ///.them [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string header_footer_css {
+            get {
+                return ResourceManager.GetString("header-footer_css", resourceCulture);
             }
         }
         
@@ -335,17 +411,68 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to img.icon-s {
+        ///    width: 16px;
+        ///    height: 16px;
+        ///}
+        ///
+        ///img.icon {
+        ///    width: 18px;
+        ///    height: 18px;
+        ///}
+        ///
+        ///img.icon-next-cr-rota {
+        ///    width: 24px;
+        ///    height: 24px;
+        ///}
+        ///
+        ///img.icon-l {
+        ///    width: 24px;
+        ///    height: 24px;
+        ///}
+        ///
+        ///
+        ///.empty-icon-l {
+        ///    width: 24px;
+        ///    height: 24px;
+        ///}
+        ///
+        ///img.icon-sl {
+        ///    width: 32px;
+        ///    height: 32px;
+        ///}
+        ///
+        ///.empty-icon-sl {
+        ///    width: 32px;
+        ///    height: 32px;
+        ///}
+        ///
+        ///.empty-icon-cur-cr-rota {
+        ///    width: 38px;
+        ///    height: 38px;
+        ///}
+        ///
+        ///.empty-icon-ll {
+        ///    width: 48p [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string images_css {
+            get {
+                return ResourceManager.GetString("images_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///&quot;use strict&quot;;
         ///function compileTemplates() {
         ///    Vue.component(&quot;custom-numberform-component&quot;, {
-        ///        props: [&quot;minValue&quot;, &quot;maxValue&quot;, &quot;id&quot;, &quot;placeholderValue&quot;],
+        ///        props: [&quot;minValue&quot;, &quot;maxValue&quot;, &quot;id&quot;, &quot;placeholderValue&quot;, &quot;step&quot;],
         ///        template: `
         ///        &lt;div&gt;
         ///            &lt;input class=&quot;form-control&quot; type=&quot;number&quot; :id=&quot;id&quot;
-        ///                @onkeypress=&quot;return isNumber(event)&quot; onpaste=&quot;return false;&quot; step=&quot;2&quot; 
+        ///                @onkeypress=&quot;return isNumber(event)&quot; onpaste=&quot;return false;&quot; :step=&quot;step ? step : 2&quot; 
         ///                    :value=&quot;placeholderValue&quot; data-bind=&quot;value:replyNumber, fireChange: true&quot;
-        ///                    :min=&quot;minValue&quot; : [rest of string was truncated]&quot;;.
+        ///               [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string main_js {
             get {
@@ -356,26 +483,147 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &quot;use strict&quot;;
         ///
-        ///const formatterCache = {
-        ///    zeroZero: new Intl.NumberFormat(undefined, {
-        ///        minimumFractionDigits: 0,
-        ///        maximumFractionDigits: 0
-        ///    }),
-        ///    zeroOne: new Intl.NumberFormat(undefined, {
-        ///        minimumFractionDigits: 0,
-        ///        maximumFractionDigits: 1
-        ///    }),
-        ///    zeroTwo: new Intl.NumberFormat(undefined, {
-        ///        minimumFractionDigits: 0,
-        ///        maximumFractionDigits: 2
-        ///    }),
-        ///    zeroThree: new Intl.NumberFormat(undefined, {
-        ///        minimumFractionDigits: 0,
-        ///  [rest of string was truncated]&quot;;.
+        ///var numberComponent = {
+        ///    methods: {
+        ///        // https://stackoverflow.com/questions/16637051/adding-space-between-numbers
+        ///        integerWithSpaces: function (x) {
+        ///            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, &quot; &quot;);
+        ///        },
+        ///
+        ///        round: function (value) {
+        ///            if (isNaN(value) || !isFinite(value)) {
+        ///                return 0;
+        ///            }
+        ///            return Math.round(value);
+        ///        },
+        ///        round1: function (value) {
+        ///            if (isNaN( [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mixins {
             get {
                 return ResourceManager.GetString("mixins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .rot-icon {
+        ///  width: 30px;
+        ///  height: 30px;
+        ///}
+        ///
+        ///.rot-cancelled {
+        ///  border: 2px solid #ff0000;
+        ///}
+        ///
+        ///.rot-animfull {
+        ///  border: 2px solid #00ff00;
+        ///}
+        ///
+        ///.rot-unknown {
+        ///  border: 2px solid #ffff00;
+        ///}
+        ///
+        ///.rot-instant {
+        ///  border: 2px solid #00FFFF;
+        ///}
+        ///
+        ///.rot-small .rot-icon {
+        ///  width: 20px;
+        ///  height: 20px;
+        ///}
+        ///
+        ///.rot-small .rot-cancelled {
+        ///  border: 1px solid #ff0000;
+        ///}
+        ///
+        ///.rot-small .rot-animfull {
+        ///  border: 1px solid #00ff00;
+        ///}
+        ///
+        ///.rot-small .rot-unknown {
+        ///  border: 1px solid #ffff00;
+        ///}
+        ///
+        ///.ro [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string rotation_css {
+            get {
+                return ResourceManager.GetString("rotation_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @supports (-moz-appearance: none) {
+        ///    * {
+        ///        scrollbar-width: thin;
+        ///    }
+        ///}
+        ///
+        ///::-webkit-scrollbar {
+        ///    width: 6px;
+        ///    height: 6px;
+        ///}
+        ///
+        ///::-webkit-scrollbar-thumb {
+        ///    border-radius: 10px;
+        ///}
+        ///
+        ///::-webkit-scrollbar-track {
+        ///    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        ///}
+        ///
+        ///.theme-yeti ::-webkit-scrollbar {
+        ///    background-color: #DDDDDD;
+        ///}
+        ///
+        ///.theme-yeti ::-webkit-scrollbar-thumb {
+        ///    background-color: #888888;
+        ///}
+        ///
+        ///.theme-yeti ::-webkit-scrollbar-track {
+        ///    background- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string scrollbar_css {
+            get {
+                return ResourceManager.GetString("scrollbar_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .table th {
+        ///    border-top: 0;
+        ///}
+        ///
+        ///.target-cell,
+        ///.player-cell,
+        ///a {
+        ///    cursor: pointer !important;
+        ///}
+        ///
+        ///
+        ///.player-cell {
+        ///    width: 125px;
+        ///    min-height: 90px;
+        ///}
+        ///
+        ///.theme-yeti .player-cell {
+        ///    box-shadow:
+        ///        1px 0 0 0 #dee2e6,
+        ///        0 1px 0 0 #dee2e6,
+        ///        1px 1px 0 0 #dee2e6,
+        ///        1px 0 0 0 #dee2e6 inset,
+        ///        0 1px 0 0 #dee2e6 inset;
+        ///}
+        ///
+        ///.theme-slate .player-cell {
+        ///    box-shadow:
+        ///        1px 0 0 0 rgb(10, 10, 10),
+        ///        0 1px 0 0 rgb(10, 10, 10),
+        ///        1px 1p [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tables_css {
+            get {
+                return ResourceManager.GetString("tables_css", resourceCulture);
             }
         }
         
@@ -675,15 +923,14 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;actor-buff-container&quot;&gt;
         ///        &lt;span v-for=&quot;buffData in buffarray&quot; class=&quot;d-inline-block position-relative&quot;&gt;
-        ///            &lt;img :src=&quot;buffData.buff.icon&quot; :title=&quot;buffData.buff.name + &apos; - &apos; + buffData.buff.id&quot; :alt=&quot;buffData.buff.name + &apos; - &apos; + buffData.buff.id&quot; class=&quot;icon-s&quot; /&gt;
+        ///            &lt;img :src=&quot;buffData.buff.icon&quot; :data-original-title=&quot;buffData.buff.name + &apos; - &apos; + buffData.buff.id&quot; :alt=&quot;buffData.buff.name + &apos; - &apos; + buffData.buff.id&quot; class=&quot;icon-s&quot; /&gt;
         ///            &lt;span v-if=&quot;buffData.state &gt; 1&quot; class=&quot;buff-number&quot;&gt;{{buffData.state}}&lt;/span&gt;
         ///        &lt;/span&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
-        ///    Vue.component(&quot;combat-replay-actor-buff&quot;, {
-        ///        p [rest of string was truncated]&quot;;.
+        ///    Vue.component(&quot;combat-replay-actor-buff&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorBuffStats {
             get {
@@ -693,15 +940,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex align-items-center actor-rotation&quot;&gt;
-        ///        &lt;div v-if=&quot;castingSkill&quot;&gt;
-        ///            &lt;img class=&quot;icon-cur-cr-rota&quot; :class=&quot;getIconClass(castingSkill)&quot; :src=&quot;castingSkill.skill.icon&quot; :title=&quot;getTooltip(castingSkill)&quot; /&gt;
+        ///    &lt;div class=&quot;actor-rotation&quot;&gt;
+        ///        &lt;div v-if=&quot;isAnimated(castingSkill)&quot; class=&quot;actor-rotation-castbar&quot; :style=&quot;{&apos;background&apos;: getCastbarGradient(castingSkill)}&quot;&gt;
+        ///            {{ getCastbarTimes(castingSkill) }}
         ///        &lt;/div&gt;
-        ///        &lt;div v-else class=&quot;empty-icon-cur-cr-rota&quot;&gt;&lt;/div&gt;
-        ///
-        ///        &lt;div v-for=&quot;next in nextSkills&quot;&gt;
-        ///            &lt;img class=&quot;icon-next-cr-rota&quot; :class=&quot;getIconClass(next)&quot; :src=&quot;next.skill.icon&quot; :title=&quot;getTooltip(next)&quot; /&gt;
-        ///        &lt;/div&gt;        /// [rest of string was truncated]&quot;;.
+        ///        &lt;div class=&quot;d-flex align-items-end actor-rotation-casts&quot;&gt;
+        ///            &lt;div v-if=&quot;castingSkill&quot;&gt;
+        ///                &lt;img class=&quot;icon-cur-cr-rota&quot; :class=&quot;getIconClass(castingSkill)&quot; :src=&quot;castingSkill.skill.icon&quot; :data-original-title=&quot;getTooltip(castingSkill) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorRotation {
             get {
@@ -2083,11 +2328,10 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center mb-2&quot;&gt;
         ///        &lt;img v-if=&quot;target.health &gt; 0&quot; :src=&quot;UIIcons.VitalityChar&quot; alt=&quot;Health&quot;
-        ///            class=&quot;icon&quot; :data-original-title=&quot;&apos;Health: &apos; + target.health&quot;&gt;
+        ///            class=&quot;icon&quot; :data-original-title=&quot;&apos;Health: &apos; + numberFormater0(target.health)&quot;&gt;
         ///        &lt;img v-if=&quot;target.tough &gt; 0&quot; :src=&quot;UIIcons.ToughnessChar&quot; alt=&quot;Toughness&quot;
-        ///            class=&quot;icon&quot; hbHeight :data-original-title=&quot;&apos;Toughness: &apos; + target.tough&quot;&gt;
-        ///        &lt;img v-if=&quot;target.hbWidth &gt; 0&quot; :src=&quot;UIIcons.HitboxWidth&quot; alt=&quot;Hitbox Width&quot;
-        ///     [rest of string was truncated]&quot;;.
+        ///            class=&quot;icon&quot; hbHeight :data-original-title=&quot;&apos;Toughness: &apos; + numberFormater0(target.tough)&quot;&gt;
+        ///        &lt;img v-if=&quot;target.hbWidth &gt; 0&quot; :src=&quot;UIIcons.Hit [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetData {
             get {

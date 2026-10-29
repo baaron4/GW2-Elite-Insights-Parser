@@ -124,9 +124,30 @@
   <data name="animator" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JS\CR-JS\animator.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="css" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ei.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="controls_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CSS\ei_controls.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+    <data name="cr_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_cr.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="header-footer_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_header-footer.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="images_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_images.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="rotation_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_rotation.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="scrollbar_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_scrollbar.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
+    <data name="tables_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Resources\CSS\ei_tables.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    </data>
   <data name="decorations" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JS\CR-JS\decorations.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

@@ -1,0 +1,250 @@
+.table th {
+    border-top: 0;
+}
+
+.target-cell,
+.player-cell,
+a {
+    cursor: pointer !important;
+}
+
+
+.player-cell {
+    width: 125px;
+    min-height: 90px;
+}
+
+.theme-yeti .player-cell {
+    box-shadow:
+        1px 0 0 0 #dee2e6,
+        0 1px 0 0 #dee2e6,
+        1px 1px 0 0 #dee2e6,
+        1px 0 0 0 #dee2e6 inset,
+        0 1px 0 0 #dee2e6 inset;
+}
+
+.theme-slate .player-cell {
+    box-shadow:
+        1px 0 0 0 rgb(10, 10, 10),
+        0 1px 0 0 rgb(10, 10, 10),
+        1px 1px 0 0 rgb(10, 10, 10),
+        1px 0 0 0 rgb(10, 10, 10) inset,
+        0 1px 0 0 rgb(10, 10, 10) inset;
+}
+
+.player-cell-shorten {
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td.sorting_1 {
+    background-color: rgba(39, 128, 227, 0.05);
+}
+
+table {
+    font-size: inherit;
+}
+
+.table>tfoot>tr:first-child>td,
+.table>tfoot>tr:last-child>td {
+    border-top-width: 3px;
+}
+
+.table>tfoot>tr>td {
+    color: #888;
+}
+
+tr.condi td {
+    background-color: rgba(255, 0, 0, 0.25);
+}
+
+tr.hybridH td {
+    background-color: rgba(0, 255, 0, 0.25);
+}
+
+tr.conversionH td {
+    background-color: rgba(0, 0, 255, 0.25);
+}
+
+.sub-cell {
+    width: 20px;
+}
+
+.prof-cell {
+    width: 5px;
+}
+
+.damage-cell {
+    width: 150px;
+}
+
+.stat-cell {
+    width: 120px;
+}
+
+.mech-cell-time {
+    width: 82px;
+}
+
+.mech-cell {
+    width: 200px;
+}
+
+.mech-cell span {
+    width: 178px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.damage-dist-cell {
+    width: 100px;
+}
+
+.name-cr-cell {
+    min-width: 110px;
+}
+
+.damage-cr-cell-small {
+    min-width: 90px;
+}
+
+.damage-cr-cell {
+    min-width: 110px;
+}
+
+.sub-tabs {
+    margin-top: 10px;
+}
+
+td,
+th {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.theme-slate .player-cell.active {
+    background-color: rgba(50, 120, 0, 0.5);
+}
+
+.theme-slate .player-cell:hover:not(.active) {
+    background-color: rgba(40, 75, 0, 0.5);
+}
+
+.theme-yeti .player-cell.active {
+    background-color: rgba(100, 200, 0, 0.5);
+}
+
+.theme-yeti .player-cell:hover:not(.active) {
+    background-color: rgba(120, 240, 0, 0.5);
+}
+
+.theme-slate .target-cell.active {
+    border: 2px solid rgba(50, 120, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(50, 120, 0, 1.0));
+}
+
+.theme-slate .target-cell:hover:not(.active) {
+    border: 2px solid rgba(40, 75, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(40, 75, 0, 1.0));
+}
+
+.theme-yeti .target-cell.active {
+    border: 2px solid rgba(100, 200, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(100, 200, 0, 1.0));
+}
+
+.theme-yeti .target-cell:hover:not(.active) {
+    border: 2px solid rgba(120, 240, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 6px rgba(120, 240, 0, 1.0));
+}
+
+.theme-yeti table tbody tr.active {
+    background-color: rgba(100, 200, 0, 0.5);
+}
+
+.theme-slate table tbody tr.active {
+    background-color: rgba(50, 120, 0, 0.5);
+}
+
+table tbody td.mech-active {
+    font-weight: bold;
+}
+
+table tbody td.mech-actor-active {
+    font-weight: bold;
+}
+
+
+thead .sorted,
+thead .sorted_asc,
+thead .sorted_desc {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+}
+
+thead .sorted:before,
+thead .sorted_asc:before,
+thead .sorted_desc:before {
+    top: 5px;
+    right: 0.85em;
+    content: "\2191";
+    position: absolute;
+    display: block;
+}
+
+thead .sorted:before,
+thead .sorted_desc:before {
+    opacity: 0.3;
+}
+
+thead .sorted_asc:before {
+    opacity: 1.0;
+}
+
+thead .sorted:after,
+thead .sorted_asc:after,
+thead .sorted_desc:after {
+    top: 5px;
+    right: 0.5em;
+    content: "\2193";
+    position: absolute;
+    display: block;
+}
+
+thead .sorted:after,
+thead .sorted_asc:after {
+    opacity: 0.3;
+}
+
+thead .sorted_desc:after {
+    opacity: 1.0;
+}
+
+
+
+td.sorted {
+    background-color: rgba(39, 128, 227, 0.05);
+}
+
+td.lowerOrEqual::before {
+    content: "<=";
+}
+
+td.higherOrEqual::before {
+    content: ">=";
+}
+
+td.approximate::before {
+    content: "\2248";
+}

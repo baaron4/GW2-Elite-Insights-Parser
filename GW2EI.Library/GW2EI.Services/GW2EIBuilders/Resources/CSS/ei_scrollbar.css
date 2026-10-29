@@ -1,0 +1,65 @@
+@supports (-moz-appearance: none) {
+    * {
+        scrollbar-width: thin;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.theme-yeti ::-webkit-scrollbar {
+    background-color: #DDDDDD;
+}
+
+.theme-yeti ::-webkit-scrollbar-thumb {
+    background-color: #888888;
+}
+
+.theme-yeti ::-webkit-scrollbar-track {
+    background-color: #DDDDDD;
+}
+
+.theme-slate ::-webkit-scrollbar {
+    background-color: #888888;
+}
+
+.theme-slate ::-webkit-scrollbar-thumb {
+    background-color: #DDDDDD;
+}
+
+.theme-slate ::-webkit-scrollbar-track {
+    background-color: #888888;
+}
+
+
+.scrollable-y {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.scrollable-x {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.scrollable-x-y {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+
+.scrollabledropdown {
+    max-height: 500px;
+    overflow: auto;
+    overscroll-behavior: contain;
+}

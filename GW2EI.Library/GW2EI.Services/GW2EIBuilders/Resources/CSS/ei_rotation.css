@@ -1,0 +1,127 @@
+.rot-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.rot-cancelled {
+  border: 2px solid #ff0000;
+}
+
+.rot-animfull {
+  border: 2px solid #00ff00;
+}
+
+.rot-unknown {
+  border: 2px solid #ffff00;
+}
+
+.rot-instant {
+  border: 2px solid #00FFFF;
+}
+
+.rot-small .rot-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.rot-small .rot-cancelled {
+  border: 1px solid #ff0000;
+}
+
+.rot-small .rot-animfull {
+  border: 1px solid #00ff00;
+}
+
+.rot-small .rot-unknown {
+  border: 1px solid #ffff00;
+}
+
+.rot-swap:after {
+  content: '\A';
+  white-space: pre;
+}
+
+.rot-highlight:not(.rot-highlight-active) {
+  opacity: 0.5;
+  filter: grayscale(0.7);
+}
+
+
+/* Rotation Legend */
+/* Background filler */
+.rot-legend-bg {
+  padding: 2px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+}
+
+.rot-bg-blue {
+  background-color: #0000FF;
+  color: #FFFFFF;
+}
+
+.rot-bg-green {
+  background-color: #00FF00;
+  color: #000000;
+}
+
+.rot-bg-red {
+  background-color: #FF0000;
+  color: #FFFFFF;
+}
+
+.rot-bg-cyan {
+  background-color: #00FFFF;
+  color: #000000;
+}
+
+.rot-bg-yellow {
+  background-color: #FFFF00;
+  color: #000000;
+}
+
+/* Outlines */
+.rot-legend-border {
+  padding: 2px;
+  background-color: #999999;
+  border-style: solid;
+  border-width: 2px;
+  color: #000000;
+}
+
+.rot-border-orange {
+  border-color: rgb(220, 125, 30);
+}
+
+.rot-border-grey {
+  border-color: rgb(125, 125, 125);
+}
+
+.rot-border-pink {
+  border-color: rgb(220, 20, 220);
+}
+
+/* Rotation buttons */
+.rot-button {
+  width: 160px;
+  padding: 0.4rem 0.4rem;
+}
+
+/* Rotation font */
+.rot-font {
+  font-size: 1.0em;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.rot-font-dropdown {
+  font-size: 1.1em;
+}
+
+/* Rotation selector */
+.rot-dropdown-pos {
+  position: absolute;
+  margin-top: 60px;
+  z-index: 1;
+}

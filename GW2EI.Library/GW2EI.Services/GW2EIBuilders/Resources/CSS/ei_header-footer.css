@@ -1,0 +1,156 @@
+.card-header {
+    padding: 0.25rem 1.25rem !important;
+}
+
+.card-header-fightMode {
+    padding: 0.10rem 1.25rem;
+    margin-bottom: 0px;
+}
+
+.card-body-encounter {
+    padding: 1rem !important;
+}
+
+/* Fight Mode Header - Light Theme */
+.theme-yeti .fm-story {
+    background-color: #EEEEEE;
+}
+
+.theme-yeti .fm-quickplay {
+    background-color: #32FCEB;
+}
+
+.theme-yeti .fm-emboldened {
+    background-color: #39925A;
+}
+
+.theme-yeti .fm-normal {
+    background-color: #00779E;
+}
+
+.theme-yeti .fm-challenge {
+    background-color: #E99002;
+}
+
+.theme-yeti .fm-legendary {
+    background-color: #C9A0FF;
+}
+
+.theme-yeti .fm-unknown {
+    background-color: #EE3000;
+}
+
+/* Fight Mode Header - Dark Theme */
+.theme-slate .fm-story {
+    background-color: #515960;
+}
+
+.theme-slate .fm-quickplay {
+    background-color: #006858;
+}
+
+.theme-slate .fm-emboldened {
+    background-color: #036E09;
+}
+
+.theme-slate .fm-normal {
+    background-color: #0C5E94;
+}
+
+.theme-slate .fm-challenge {
+    background-color: #736625;
+}
+
+.theme-slate .fm-legendary {
+    background-color: #6C4DA3;
+}
+
+.theme-slate .fm-unknown {
+    background-color: #990000;
+}
+
+.health-bar {
+    height: 7px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.footer {
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    font-size: 13px;
+    padding: 16px;
+    border-top: 1px solid var(--footer-border);
+}
+
+.footer_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.footer_section {
+    flex: 1 1 260px;
+    max-width: 420px;
+    padding: 10px 12px;
+    background: var(--footer-section-bg);
+    border: 1px solid var(--footer-border);
+    border-radius: 8px;
+}
+
+.footer_item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px 0;
+}
+
+.footer_item--stack {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.label_center {
+    display: block;
+    width: 100%;
+    color: var(--footer-muted);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.label {
+    color: var(--footer-muted);
+    font-weight: 500;
+}
+
+.footer_tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.tag {
+    background: var(--footer-tag-bg);
+    color: var(--footer-text);
+    padding: 3px 8px;
+    border-radius: 50px;
+    font-size: 12px;
+    border: 1px solid var(--footer-border);
+}
+
+.footer_bottom {
+    text-align: center;
+    font-size: 12px;
+    color: var(--footer-muted);
+    padding-top: 8px;
+}
+
+.header {
+    text-align: center;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
