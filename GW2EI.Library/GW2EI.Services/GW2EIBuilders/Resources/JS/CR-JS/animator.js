@@ -40,7 +40,7 @@ function ToDegrees(radians) {
 }
 
 const resolutionMultiplier = 2.0;
-const zoomStep = 1.1;
+let zoomStep = 1.1;
 const maxOverheadAnimationFrame = 50;
 let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
 let overheadAnimationIncrement = 1;

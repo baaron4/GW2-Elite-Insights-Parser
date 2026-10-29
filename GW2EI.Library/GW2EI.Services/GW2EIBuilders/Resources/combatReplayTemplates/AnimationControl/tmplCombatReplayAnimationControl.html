@@ -307,6 +307,9 @@
                         -
                     </button>
                 </div>
+                <input id="zoom-step-input" type="number" title="Zoom multiplier per step" min="1.01" step="0.01" max="2"
+                       class="form-control" style="width: 75px; text-align: center; padding: 2px;"
+                       v-model="zoomStepInput" @input="handleZoomStep($event)" @change="handleZoomStep($event)">
             </div>
         </div>
     </div>
@@ -409,6 +412,7 @@
                 dragThroughPhaseBlockTimeout: null,
                 simpleTimelineTooltip: null,
                 animationData: reactiveAnimationData,
+                zoomStepInput: String(zoomStep),
             };
         },
         watch: {
@@ -655,6 +659,16 @@
             },
             zoomOut: function() {
                 animator.zoomOut();
+            },
+            handleZoomStep(event) {
+                const parsed = Number(event.target.value);
+
+                if (Number.isFinite(parsed) && parsed >= 1.01) {
+                    zoomStep = parsed;
+                } else if (event.type === "change") {
+                    // Restore the last valid value when editing finishes.
+                    this.zoomStepInput = String(zoomStep);
+                }
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();
