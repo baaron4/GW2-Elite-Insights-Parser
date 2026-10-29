@@ -125,7 +125,8 @@ const CanvasTooltipData = {
     posY: 0,
     canvasX: 0,
     canvasY: 0,
-    updateRequested: false
+    updateRequested: false,
+    allowed: true,
 };
 
 const CanvasTooltipVirtualElement = {
@@ -1027,7 +1028,7 @@ class Animator {
         }
     }
     _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
-        if (!this.agentTooltip || !this.agentTooltipPopper) {
+        if (!this.agentTooltip || !this.agentTooltipPopper || !CanvasTooltipData.allowed) {
             return;
         }
         CanvasTooltipData.posX = clientX;
@@ -1135,6 +1136,7 @@ class Animator {
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
             _this._hideAgentTooltip();
+            CanvasTooltipData.allowed = false;
             _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
@@ -1164,10 +1166,13 @@ class Animator {
 
         canvas.addEventListener('mouseleave', function () {
             _this._hideAgentTooltip();
+            CanvasTooltipData.allowed = true;
             _this._mouseInside = false;
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
+            CanvasTooltipData.allowed = true;
+            _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
             if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
                 const downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
