@@ -1424,10 +1424,13 @@ td.approximate::before {
 
 .replay-controls-panel {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 16px;
     padding: 0.5rem;
+    overflow-x: auto;
 }
 
 .theme-yeti .replay-controls-panel {
@@ -1442,19 +1445,21 @@ td.approximate::before {
 
 .replay-reset-controls {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .replay-zoom-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    margin-left: auto;
+    gap: 8px;
+    margin-left: 0;
     padding: 0 8px;
+    flex-shrink: 0;
 }
 
 .replay-controls-label {

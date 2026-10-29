@@ -273,30 +273,31 @@
                 </button>
             </div>
             <div class="replay-movement-controls">
-                <span class="replay-controls-label">Movement</span>
                 <div class="movement-arrow-grid">
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move up" @click.stop="panView(0, -10)">
+                            data-original-title="Move up" @click.stop="panView(0, -panStep)">
                         &#9651;
                     </button>
                     <span></span>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move left" @click.stop="panView(-10, 0)">
+                            data-original-title="Move left" @click.stop="panView(-panStep, 0)">
                         &#9665;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move down" @click.stop="panView(0, 10)">
+                            data-original-title="Move down" @click.stop="panView(0, panStep)">
                         &#9661;
                     </button>
                     <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move right" @click.stop="panView(10, 0)">
+                            data-original-title="Move right" @click.stop="panView(panStep, 0)">
                         &#9655;
                     </button>
                 </div>
             </div>
+            <input id="pan-step-input" type="number" class="form-control" data-original-title="Pixels moved per click"
+                   style="width: 75px; text-align: center; padding: 2px; flex-shrink: 0;"
+                   min="1" step="1" v-model.number="panStep">
             <div class="replay-zoom-controls">
-                <span class="replay-controls-label">Zoom</span>
                 <div class="zoom-controls">
                     <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
                             data-original-title="Zoom in" @click.stop="zoomIn">
@@ -307,10 +308,11 @@
                         -
                     </button>
                 </div>
-                <input id="zoom-step-input" type="number" title="Zoom multiplier per step" min="1.01" step="0.01" max="2"
-                       class="form-control" style="width: 75px; text-align: center; padding: 2px;"
-                       v-model="zoomStepInput" @input="handleZoomStep($event)" @change="handleZoomStep($event)">
             </div>
+                <input id="zoom-step-input" type="number" data-original-title="Zoom multiplier per step"
+                       min="1.01" step="0.01" max="2"
+                       class="form-control" style="width: 75px; text-align: center; padding: 2px;"
+                       v-model="zoomStep" @input="handleZoomStep($event)" @change="handleZoomStep($event)">
         </div>
     </div>
 </template>
@@ -412,7 +414,8 @@
                 dragThroughPhaseBlockTimeout: null,
                 simpleTimelineTooltip: null,
                 animationData: reactiveAnimationData,
-                zoomStepInput: String(zoomStep),
+                zoomStep: String(zoomStep),
+                panStep: 10,
             };
         },
         watch: {
@@ -654,10 +657,10 @@
             panView: function (dx, dy) {
                 animator.panByPixels(dx, dy);
             },
-            zoomIn: function() {
+            zoomIn: function () {
                 animator.zoomIn();
             },
-            zoomOut: function() {
+            zoomOut: function () {
                 animator.zoomOut();
             },
             handleZoomStep(event) {
@@ -667,7 +670,7 @@
                     zoomStep = parsed;
                 } else if (event.type === "change") {
                     // Restore the last valid value when editing finishes.
-                    this.zoomStepInput = String(zoomStep);
+                    this.zoomStep = zoomStep;
                 }
             },
             toggleAnimate: function () {
