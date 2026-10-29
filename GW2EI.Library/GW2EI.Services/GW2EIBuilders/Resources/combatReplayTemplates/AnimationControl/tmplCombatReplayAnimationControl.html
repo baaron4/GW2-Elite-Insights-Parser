@@ -261,8 +261,8 @@
                 <combat-replay-time-speed-picker-component />
             </div>
         </div>
-        <div class="replay-controls-panel mt-1 rounded" ref="canvasControls">
-            <div class="replay-reset-controls">
+        <div class="d-flex align-items-center justify-content-between replay-controls-panel mt-1 rounded" ref="canvasControls">
+            <div class="d-flex align-items-start replay-reset-controls" :class="isTouchDevice ? 'flex-column' : null">
                 <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
                         @click="resetViewpoint()" data-original-title="Reset canvas position">
                     &#9974; Reset Viewpoint
@@ -272,7 +272,7 @@
                     &#128295; Reset Mechanic
                 </button>
             </div>
-            <div v-if="isTouchDevice" class="replay-movement-controls">
+            <div v-if="isTouchDevice" class="d-flex flex-column align-items-center justify-content-center replay-movement-controls">
                 <span class="replay-controls-label">Movement</span>
                 <div class="movement-arrow-grid">
                     <span></span>
@@ -295,9 +295,9 @@
                     </button>
                 </div>
             </div>
-            <div class="replay-zoom-controls">
+            <div class="d-flex align-items-center justify-content-center replay-zoom-controls" :class="isTouchDevice ? 'flex-column' : null">
                 <span class="replay-controls-label">Zoom</span>
-                <div v-if="isTouchDevice" class="zoom-controls">
+                <div v-if="isTouchDevice" class="d-flex align-items-center justify-content-center zoom-controls">
                     <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
                             data-original-title="Zoom in" @click.stop="zoomIn">
                         +

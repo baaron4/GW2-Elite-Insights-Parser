@@ -1160,7 +1160,7 @@ td.approximate::before {
 
 .timeline {
     padding-right: 0.5rem !important;
-    padding-top: 0.2rem !important;
+    padding-top: 0.1rem !important;
     padding-left: 0.5rem !important;
     overflow-x: auto;
 }
@@ -1403,9 +1403,6 @@ td.approximate::before {
     position: relative;
     z-index: 21;
     pointer-events: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 4px;
 }
 
@@ -1423,11 +1420,8 @@ td.approximate::before {
 }
 
 .replay-controls-panel {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 16px;
-    padding: 0.5rem;
+    padding: 0.1rem;
 }
 
 .theme-yeti .replay-controls-panel {
@@ -1441,17 +1435,10 @@ td.approximate::before {
 }
 
 .replay-reset-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     gap: 4px;
 }
 
 .replay-zoom-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 4px;
     margin-left: auto;
     padding: 0 8px;
@@ -1464,10 +1451,6 @@ td.approximate::before {
 }
 
 .replay-movement-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 4px;
 }
 
