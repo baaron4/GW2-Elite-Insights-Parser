@@ -101,8 +101,7 @@
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"
-                             @mouseup="onPhaseMouseUp"></div>
+                             @click="onPhaseClick($event)"></div>
 
                         <!-- Visible phase line -->
                         <div class="advanced-phase-visible-line"
@@ -114,8 +113,7 @@
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"
-                             @mouseup="onPhaseMouseUp"></div>
+                             @click="onPhaseClick($event)"></div>
 
                         <!-- Phase end marker -->
                         <div class="advanced-phase-boundary"
@@ -123,8 +121,7 @@
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
                              @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"
-                             @mouseup="onPhaseMouseUp"></div>
+                             @click="onPhaseClick($event)"></div>
                     </div>
 
                     <!-- Invisible cursor drag target -->
@@ -523,7 +520,6 @@
                 hoverTime: 0,
                 isHoveringTimeline: false,
                 lastTimelineClick: null,
-                dragThroughPhaseBlockTimeout: null,
                 simpleTimelineTooltip: null,
             };
         },
@@ -696,26 +692,9 @@
             },
             onPhaseMouseDown(phase, e) {
                 this.updateSelectedPhase(phase);
-
-                clearTimeout(this.dragThroughPhaseBlockTimeout);
-
-                // Cancel a pending hold even if the mouse is released elsewhere.
-                window.removeEventListener("mouseup", this.onPhaseMouseUp);
-                window.addEventListener("mouseup", this.onPhaseMouseUp);
-
-                this.dragThroughPhaseBlockTimeout = setTimeout(() => {
-                    this.dragThroughPhaseBlockTimeout = null;
-
-                    const time = this.getTimeFromEvent(e);
-                    this.updateTime(time * 1000);
-                    this.startDragCursor(e);
-                }, 150);
-            },
-            onPhaseMouseUp() {
-                clearTimeout(this.dragThroughPhaseBlockTimeout);
-                this.dragThroughPhaseBlockTimeout = null;
-
-                window.removeEventListener("mouseup", this.onPhaseMouseUp);
+                const time = this.getTimeFromEvent(e);
+                this.updateTime(time * 1000);
+                this.startDragCursor(e);
             },
             onTimelineClick(e) {
                 const phase = this.getPhaseAtTimelinePosition(e);
@@ -772,8 +751,6 @@
                 if (e.detail > 1) {
                     return;
                 }
-                const time = this.getTimeFromEvent(e);
-                this.updateTime(time * 1000);
             },
             startDragCursorFromLine(e) {
                 if (e.detail > 1) {
