@@ -507,13 +507,6 @@ class MechanicDrawable {
         if (!offsetAfterRotation) {       
             ctx.translate(offset.x, offset.y);   
         }
-        if (counterGlobalRotation) {
-            if (animator.followRotation !== null) {
-                ctx.rotate(-animator.followRotation);
-            } else {
-                ctx.rotate(-animator.globalRotation);
-            }
-        }
         ctx.rotate(angle);
         if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.addToMaster) {
             ctx.rotate(offsetAngle);
@@ -527,6 +520,13 @@ class MechanicDrawable {
         if (offsetAngle !== 0 && this.rotationOffsetMode === RotationOffsetMode.absoluteOrientation) {
             ctx.rotate(-angle);
             ctx.rotate(offsetAngle);
+        }
+        if (counterGlobalRotation) {
+            if (animator.followRotation !== null) {
+                ctx.rotate(-animator.followRotation);
+            } else {
+                ctx.rotate(-animator.globalRotation);
+            }
         }
     }
 
