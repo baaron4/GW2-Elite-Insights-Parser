@@ -41,6 +41,10 @@ public class HTMLBuilder
     private readonly string? _externalScriptsCdn;
     private readonly bool _compressJson;
 
+    private static readonly HashSet<string> WrittenFiles = [];
+
+    private static readonly object FileLock = new object();
+
     private readonly UploadResults _uploadLink;
 
     // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
@@ -223,25 +227,25 @@ public class HTMLBuilder
         if (!externalNull)
         {
             filePath = Path.Combine(externalPath!, fileName);
-
-            // always create file in DEBUG
-#if !DEBUG
-            // if the file already exists, skip creation
-            if (!File.Exists(filePath))
+            lock (FileLock)
             {
-#endif
-            try
-            {
-                using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-                using var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8);
-                scriptWriter.Write(content);
+                if (!WrittenFiles.Contains(filePath) || !File.Exists(filePath))
+                {
+                    try
+                    {
+                        using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+                        using var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8);
+                        scriptWriter.Write(content);
+                    }
+                    catch (IOException)
+                    {
+                    }
+                    finally
+                    {
+                        WrittenFiles.Add(filePath);
+                    }
+                }
             }
-            catch (IOException)
-            {
-            }
-#if !DEBUG
-            }
-#endif
         }
         // Priority to cdn
         if (!cdnNull)
