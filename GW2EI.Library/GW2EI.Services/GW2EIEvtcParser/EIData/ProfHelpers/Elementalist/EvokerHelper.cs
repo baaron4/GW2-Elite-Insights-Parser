@@ -143,7 +143,7 @@ internal static class EvokerHelper
 
     ];
 
-    private static GainComputerByExactlyNStacksPresent ToadAndOtherPresent = new(2);
+    private static readonly GainComputerByExactlyNStacksPresent ToadAndOtherPresent = new(2);
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [

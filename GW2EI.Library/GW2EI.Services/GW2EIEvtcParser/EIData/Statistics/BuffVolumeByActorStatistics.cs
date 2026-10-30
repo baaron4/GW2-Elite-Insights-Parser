@@ -5,9 +5,9 @@ namespace GW2EIEvtcParser.EIData;
 
 public class BuffVolumeByActorStatistics
 {
-    private Dictionary<SingleActor, double> _incomingBy = [];
+    private readonly Dictionary<SingleActor, double> _incomingBy = [];
     public IReadOnlyDictionary<SingleActor, double> IncomingBy => _incomingBy;
-    private Dictionary<SingleActor, double> _incomingByExtensionBy = [];
+    private readonly Dictionary<SingleActor, double> _incomingByExtensionBy = [];
     public IReadOnlyDictionary<SingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
 
     private static void FillDictionnaries(ParsedEvtcLog log, Buff buff, AgentItem src, IEnumerable<AbstractBuffApplyEvent> group, BuffVolumeByActorStatistics buffs, BuffVolumeByActorStatistics buffsActive, long phaseDuration, long activePhaseDuration)

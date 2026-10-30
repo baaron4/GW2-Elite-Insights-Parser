@@ -288,8 +288,8 @@ public class CombatReplay
 
 #if DEBUG
     #region DEBUG EFFECTS
-    private static uint DebugRadius = 100;
-    private static uint DebugOpeningAngle = 120;
+    private const uint DebugRadius = 100;
+    private const uint DebugOpeningAngle = 120;
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
     internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<Guid> knownEffectIDs, bool ignorePlayerSrc, long start = long.MinValue, long end = long.MaxValue)
     {
@@ -560,7 +560,7 @@ public class CombatReplay
     #endregion DEBUG EFFECTS
 
     #region DEBUG MISSILES
-    private static uint DebugMissileRadius = 40;
+    private const uint DebugMissileRadius = 40;
     internal static void DebugMissiles(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownMissiles, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEventsBySrc(actor.AgentItem)

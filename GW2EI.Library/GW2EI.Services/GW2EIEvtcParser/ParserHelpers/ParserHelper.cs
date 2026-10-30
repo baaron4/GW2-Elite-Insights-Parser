@@ -270,7 +270,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Spec"/> Specialization / Profession given a <see cref="string"/> as reference.
     /// </summary>
-    private static IReadOnlyDictionary<string, Spec> ProfToSpecDictionary = new Dictionary<string, Spec>
+    private static readonly IReadOnlyDictionary<string, Spec> ProfToSpecDictionary = new Dictionary<string, Spec>
     {
         { "NPC", Spec.NPC },
         { "GDG", Spec.Gadget },
@@ -340,7 +340,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the base <see cref="Spec"/> Profession given a <see cref="Spec"/> Elite Specialization.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>
+    private static readonly IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>
     {
         { Spec.Galeshot, Spec.Ranger },
         { Spec.Untamed, Spec.Ranger },

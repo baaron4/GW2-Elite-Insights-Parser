@@ -3,7 +3,7 @@
 public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
 {
 
-    private static Settings defaultInstance = (Settings)Synchronized(new Settings());
+    private static readonly Settings defaultInstance = (Settings)Synchronized(new Settings());
 
     public static Settings Default
     {
