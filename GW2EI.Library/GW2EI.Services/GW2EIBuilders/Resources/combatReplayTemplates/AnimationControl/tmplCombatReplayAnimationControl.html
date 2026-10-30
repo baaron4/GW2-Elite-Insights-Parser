@@ -649,6 +649,19 @@
             onTimelineMouseMove(e) {
                 this.hoverTime = this.getTimeFromEvent(e);
                 this.isHoveringTimeline = true;
+
+                if (e.buttons !== 0) {
+                    this.resetHoveredPhase();
+                    return;
+                }
+
+                const phase = this.getPhaseAtTimelinePosition(e);
+
+                if (phase) {
+                    this.hoverPhase(phase);
+                } else {
+                    this.resetHoveredPhase();
+                }
             },
             onTimelineMouseLeave() {
                 this.isHoveringTimeline = false;
