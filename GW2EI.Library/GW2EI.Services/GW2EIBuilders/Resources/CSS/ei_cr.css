@@ -452,6 +452,12 @@ canvas {
     max-width: 400px;
 }
 
+.advanced-timeline-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .advanced-timeline {
     position: relative;
     flex: 0 0 auto;
@@ -594,12 +600,13 @@ canvas {
 }
 
 .advanced-phase-info {
-    position: absolute;
-    left: 0;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    min-height: 15px;
+    margin-top: 2px;
 }
 
 .advanced-phase-info-icon {
@@ -619,3 +626,4 @@ canvas {
     width: 100%;
     text-align: center;
 }
+

@@ -74,121 +74,121 @@
                 border: '1px solid ' + timelineColors.backgroundBorder
             }">
             <div v-if="useAdvancedTimeline"
-                 ref="advancedTimeline"
-                 class="advanced-timeline no-user-select"
-                 :style="getAdvancedTimelineStyle()"
-                 @mousemove="onTimelineMouseMove"
-                 @mouseleave="onTimelineMouseLeave"
-                 @click.shift="onTimelineClick">
+                 class="advanced-timeline-wrapper">
 
-                <!-- Timeline click and drag background -->
-                <div class="advanced-timeline-background"
-                     :style="getAdvancedTimelineBackgroundStyle()"
-                     @mousedown="onTimelineMouseDown"></div>
+                <div ref="advancedTimeline"
+                     class="advanced-timeline no-user-select"
+                     :style="getAdvancedTimelineStyle()"
+                     @mousemove="onTimelineMouseMove"
+                     @mouseleave="onTimelineMouseLeave"
+                     @click.shift="onTimelineClick">
 
-                <!-- Phase blocks -->
-                <div v-for="(phaseBloc, phaseIndex) in phasesByDepth"
-                     :key="phaseBloc.phase.id"
-                     class="advanced-phase-layer"
-                     :data-phase-id="phaseBloc.phase.id"
-                     :style="getPhaseLayerStyle(phaseIndex)">
+                    <!-- Timeline click and drag background -->
+                    <div class="advanced-timeline-background"
+                         :style="getAdvancedTimelineStyle()"
+                         @mousedown="onTimelineMouseDown"></div>
 
-                    <!-- Invisible phase hit area -->
-                    <div class="advanced-phase-hitbox"
-                         :style="getPhaseHitboxStyle(phaseBloc)"
-                         @mouseenter="hoverPhase(phaseBloc.phase)"
-                         @mouseleave="resetHoveredPhase"
-                         @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                         @click="onPhaseClick($event)"
-                         @mouseup="onPhaseMouseUp"></div>
+                    <!-- Phase blocks -->
+                    <div v-for="(phaseBloc, phaseIndex) in phasesByDepth"
+                         :key="phaseBloc.phase.id"
+                         class="advanced-phase-layer"
+                         :data-phase-id="phaseBloc.phase.id"
+                         :style="getPhaseLayerStyle(phaseIndex)">
 
-                    <!-- Visible phase line -->
-                    <div class="advanced-phase-visible-line"
-                         :style="getPhaseLineStyle(phaseBloc)"></div>
+                        <!-- Invisible phase hit area -->
+                        <div class="advanced-phase-hitbox"
+                             :style="getPhaseHitboxStyle(phaseBloc)"
+                             @mouseenter="hoverPhase(phaseBloc.phase)"
+                             @mouseleave="resetHoveredPhase"
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                             @click="onPhaseClick($event)"
+                             @mouseup="onPhaseMouseUp"></div>
 
-                    <!-- Phase start marker -->
-                    <div class="advanced-phase-boundary"
-                         :style="getPhaseBoundaryStyle(phaseBloc, 'start')"
-                         @mouseenter="hoverPhase(phaseBloc.phase)"
-                         @mouseleave="resetHoveredPhase"
-                         @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                         @click="onPhaseClick($event)"
-                         @mouseup="onPhaseMouseUp"></div>
+                        <!-- Visible phase line -->
+                        <div class="advanced-phase-visible-line"
+                             :style="getPhaseLineStyle(phaseBloc)"></div>
 
-                    <!-- Phase end marker -->
-                    <div class="advanced-phase-boundary"
-                         :style="getPhaseBoundaryStyle(phaseBloc, 'end')"
-                         @mouseenter="hoverPhase(phaseBloc.phase)"
-                         @mouseleave="resetHoveredPhase"
-                         @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                         @click="onPhaseClick($event)"
-                         @mouseup="onPhaseMouseUp"></div>
-                </div>
+                        <!-- Phase start marker -->
+                        <div class="advanced-phase-boundary"
+                             :style="getPhaseBoundaryStyle(phaseBloc, 'start')"
+                             @mouseenter="hoverPhase(phaseBloc.phase)"
+                             @mouseleave="resetHoveredPhase"
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                             @click="onPhaseClick($event)"
+                             @mouseup="onPhaseMouseUp"></div>
 
-                <!-- Invisible cursor drag target -->
-                <div class="advanced-cursor-hitline"
-                     :style="getCursorHitlineStyle()"
-                     @mousedown="startDragCursorFromLine"></div>
-
-                <!-- Visible cursor line -->
-                <div class="advanced-cursor-line"
-                     :style="getCursorLineStyle()"></div>
-
-                <!-- Cursor handle -->
-                <div class="advanced-cursor-circle"
-                     :style="getCursorCircleStyle()"
-                     @mousedown="startDragCursor"></div>
-
-                <!-- Fixed time ticks -->
-                <div v-for="tick in ticks"
-                     :key="tick.time"
-                     class="advanced-tick"
-                     :style="getTickStyle(tick)">
-                    <div class="advanced-tick-mark"
-                         :style="getTickMarkStyle()"></div>
-
-                    <div class="advanced-tick-label"
-                         :style="getTickLabelStyle(tick)">
-                        {{ tick.label }}
+                        <!-- Phase end marker -->
+                        <div class="advanced-phase-boundary"
+                             :style="getPhaseBoundaryStyle(phaseBloc, 'end')"
+                             @mouseenter="hoverPhase(phaseBloc.phase)"
+                             @mouseleave="resetHoveredPhase"
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
+                             @click="onPhaseClick($event)"
+                             @mouseup="onPhaseMouseUp"></div>
                     </div>
+
+                    <!-- Invisible cursor drag target -->
+                    <div class="advanced-cursor-hitline"
+                         :style="getCursorHitlineStyle()"
+                         @mousedown="startDragCursorFromLine"></div>
+
+                    <!-- Visible cursor line -->
+                    <div class="advanced-cursor-line"
+                         :style="getCursorLineStyle()"></div>
+
+                    <!-- Cursor handle -->
+                    <div class="advanced-cursor-circle"
+                         :style="getCursorCircleStyle()"
+                         @mousedown="startDragCursor"></div>
+
+                    <!-- Fixed time ticks -->
+                    <div v-for="tick in ticks"
+                         :key="tick.time"
+                         class="advanced-tick"
+                         :style="getTickStyle(tick)">
+                        <div class="advanced-tick-mark"
+                             :style="getTickMarkStyle()"></div>
+
+                        <div class="advanced-tick-label"
+                             :style="getTickLabelStyle(tick)">
+                            {{ tick.label }}
+                        </div>
+                    </div>
+
+                    <!-- Player mechanic ticks -->
+                    <div v-for="(tick, tickIndex) in playerMechanicTicks"
+                         :key="tickIndex"
+                         class="advanced-mechanic-tick"
+                         :style="getMechanicTickStyle(tick)">
+                        <div class="advanced-mechanic-tick-mark"
+                             :style="getMechanicTickMarkStyle()"></div>
+
+                        <div class="advanced-mechanic-tick-cap advanced-mechanic-tick-cap-top"
+                             :style="getMechanicTickMarkStyle()"></div>
+
+                        <div class="advanced-mechanic-tick-cap advanced-mechanic-tick-cap-bottom"
+                             :style="getMechanicTickMarkStyle()"></div>
+                    </div>
+
+                    <!-- Hovered-time background -->
+                    <div v-if="isHoveringTimeline"
+                         class="advanced-hover-time-box"
+                         :style="getHoverTimeBoxStyle()"></div>
+
+                    <!-- Hovered-time text -->
+                    <div v-if="isHoveringTimeline"
+                         class="advanced-hover-time-text"
+                         :style="getHoverTimeTextStyle()">
+                        {{ formatTime(hoverTime) }}
+                    </div>
+
                 </div>
-
-                <!-- Player mechanic ticks -->
-                <div v-for="(tick, tickIndex) in playerMechanicTicks"
-                     :key="tickIndex"
-                     class="advanced-mechanic-tick"
-                     :style="getMechanicTickStyle(tick)">
-                    <div class="advanced-mechanic-tick-mark"
-                         :style="getMechanicTickMarkStyle()"></div>
-
-                    <div class="advanced-mechanic-tick-cap advanced-mechanic-tick-cap-top"
-                         :style="getMechanicTickMarkStyle()"></div>
-
-                    <div class="advanced-mechanic-tick-cap advanced-mechanic-tick-cap-bottom"
-                         :style="getMechanicTickMarkStyle()"></div>
-                </div>
-
-                <!-- Hovered-time background -->
-                <div v-if="isHoveringTimeline"
-                     class="advanced-hover-time-box"
-                     :style="getHoverTimeBoxStyle()"></div>
-
-                <!-- Hovered-time text -->
-                <div v-if="isHoveringTimeline"
-                     class="advanced-hover-time-text"
-                     :style="getHoverTimeTextStyle()">
-                    {{ formatTime(hoverTime) }}
-                </div>
-
                 <!-- Selected or hovered phase information & information box -->
                 <div v-if="hoveredPhase || selectedPhase"
                      class="advanced-phase-info"
                      :style="getPhaseTextStyle()">
 
-                    <img class="advanced-phase-info-icon"
-                         :src="UIIcons.QuestionMark"
-                         data-original-title="Shift + Click on a phase line to go to its start"
-                         alt="" />
+                    <img class="advanced-phase-info-icon" :src="UIIcons.QuestionMark" data-original-title="Shift + Click on a phase line to go to its start" />
 
                     <span class="advanced-phase-text">
                         {{ getFormattedPhaseText(hoveredPhase || selectedPhase) }}
@@ -850,12 +850,6 @@
             getAdvancedTimelineStyle() {
                 return {
                     width: this.timelineWidth + "px",
-                    height: (20 + 10 * this.maxDepth + 30) + "px"
-                };
-            },
-            getAdvancedTimelineBackgroundStyle() {
-                return {
-                    width: this.timelineWidth + "px",
                     height: (10 * this.maxDepth + 30) + "px"
                 };
             },
@@ -974,11 +968,8 @@
             },
             getPhaseTextStyle() {
                 return {
-                    left: "0px",
-                    top: (10 * this.maxDepth + 33) + "px",
                     width: this.timelineWidth + "px",
                     color: this.timelineColors.text,
-                    zIndex: this.phasesByDepth.length + 17
                 };
             },
             getPhaseDepth(phase) {
