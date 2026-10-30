@@ -79,7 +79,7 @@
                  :style="getAdvancedTimelineStyle()"
                  @mousemove="onTimelineMouseMove"
                  @mouseleave="onTimelineMouseLeave"
-                 @click="onTimelineClick">
+                 @click.shift="onTimelineClick">
 
                 <!-- Timeline click and drag background -->
                 <div class="advanced-timeline-background"
@@ -180,11 +180,19 @@
                     {{ formatTime(hoverTime) }}
                 </div>
 
-                <!-- Selected or hovered phase information -->
+                <!-- Selected or hovered phase information & information box -->
                 <div v-if="hoveredPhase || selectedPhase"
-                     class="advanced-phase-text"
+                     class="advanced-phase-info"
                      :style="getPhaseTextStyle()">
-                    {{ getFormattedPhaseText(hoveredPhase || selectedPhase) }}
+
+                    <img class="advanced-phase-info-icon"
+                         :src="UIIcons.QuestionMark"
+                         data-original-title="Shift + Click on a phase line to go to its start"
+                         alt="" />
+
+                    <span class="advanced-phase-text">
+                        {{ getFormattedPhaseText(hoveredPhase || selectedPhase) }}
+                    </span>
                 </div>
             </div>
 
@@ -710,27 +718,6 @@
                 window.removeEventListener("mouseup", this.onPhaseMouseUp);
             },
             onTimelineClick(e) {
-                const now = Date.now();
-                const previous = this.lastTimelineClick;
-
-                // Recognize a double-click without delaying the first click.
-                const isDoubleClick =
-                    previous !== null &&
-                    now - previous.time <= 400 &&
-                    Math.abs(e.clientX - previous.x) <= 6 &&
-                    Math.abs(e.clientY - previous.y) <= 6;
-
-                this.lastTimelineClick = isDoubleClick ? null :
-                    {
-                        time: now,
-                        x: e.clientX,
-                        y: e.clientY
-                    };
-
-                if (!isDoubleClick) {
-                    return;
-                }
-
                 const phase = this.getPhaseAtTimelinePosition(e);
 
                 if (phase) {
@@ -987,6 +974,7 @@
             },
             getPhaseTextStyle() {
                 return {
+                    left: "0px",
                     top: (10 * this.maxDepth + 33) + "px",
                     width: this.timelineWidth + "px",
                     color: this.timelineColors.text,

@@ -592,3 +592,30 @@ canvas {
     -moz-user-select: text;
     -ms-user-select: text;
 }
+
+.advanced-phase-info {
+    position: absolute;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.advanced-phase-info-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.advanced-phase-info .advanced-phase-text {
+    display: block;
+    position: static;
+    width: 100%;
+    text-align: center;
+}
