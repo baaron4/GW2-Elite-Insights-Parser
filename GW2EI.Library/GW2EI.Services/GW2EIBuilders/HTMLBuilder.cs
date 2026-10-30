@@ -43,7 +43,7 @@ public class HTMLBuilder
 
     private static readonly HashSet<string> WrittenFiles = [];
 
-    private static readonly object FileLock = new object();
+    private static readonly Lock FileLock = new();
 
     private readonly UploadResults _uploadLink;
 
