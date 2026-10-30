@@ -232,6 +232,7 @@ csharp_style_expression_bodied_local_functions = false:silent
 dotnet_diagnostic.IDE0002.severity = warning
 # Mark unused usings as warnings or errors so analyzers catch them
 dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0028.severity = silent
 dotnet_diagnostic.IDE0033.severity = warning
 dotnet_diagnostic.IDE0036.severity = warning
 dotnet_diagnostic.IDE0060.severity = suggestion
