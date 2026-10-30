@@ -212,19 +212,8 @@ class IconDrawable {
         const halfSize = fullSize / 2;
         const isSelected = this.isSelected();
         const inSelectedGroup = this.inSelectedGroup();
-        if (animator.displaySettings.highlightSelectedGroup && !isSelected && inSelectedGroup) {
-            ctx.beginPath();
-            ctx.lineWidth = (2 / animator.globalScale).toString();
-            ctx.strokeStyle = 'blue';
-            ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
-            ctx.stroke();
-        } else if (isSelected) {
-            ctx.beginPath();
-            ctx.lineWidth = (4 / animator.globalScale).toString();
-            ctx.strokeStyle = 'green';
-            ctx.rect(pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
-            ctx.stroke();
-        }     
+        ctx.save();
+        ctx.translate(pos.x, pos.y); 
         if (animator.extraDecorationMap.has(this.id)) {
             let rangeControls = animator.extraDecorationMap.get(this.id).rangeControls.ranges;
             rangeControls.forEach(function (element) {
@@ -234,17 +223,28 @@ class IconDrawable {
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.globalScale).toString();
                 ctx.strokeStyle = 'green';
-                ctx.arc(pos.x, pos.y, InchToPixel * element.radius, 0, 2 * Math.PI);
+                ctx.arc(0, 0, InchToPixel * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         } 
-        ctx.save();
-        ctx.translate(pos.x, pos.y);
         if (animator.followRotation) {
             ctx.rotate(-animator.followRotation);
         } else {
             ctx.rotate(-animator.globalRotation);
         }
+        if (animator.displaySettings.highlightSelectedGroup && !isSelected && inSelectedGroup) {
+            ctx.beginPath();
+            ctx.lineWidth = (2 / animator.globalScale).toString();
+            ctx.strokeStyle = 'blue';
+            ctx.rect(- halfSize, - halfSize, fullSize, fullSize);
+            ctx.stroke();
+        } else if (isSelected) {
+            ctx.beginPath();
+            ctx.lineWidth = (4 / animator.globalScale).toString();
+            ctx.strokeStyle = 'green';
+            ctx.rect(- halfSize,- halfSize, fullSize, fullSize);
+            ctx.stroke();
+        }    
         ctx.drawImage(this.getIcon(), -halfSize, -halfSize, fullSize, fullSize); 
         ctx.restore();
     }
