@@ -5,6 +5,19 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class AgentData
 {
+    internal class UniqueAgentIDHolder
+    {
+        /// <summary>
+        /// 1 and 2 are special <see cref="ParserHelper._unknownAgent"/> and <see cref="ParserHelper._nullAgent"/>
+        /// </summary>
+        private int AgentUniqueID = 3;
+
+        public int GetNextID()
+        {
+            return ++AgentUniqueID;
+        }
+    }
+    internal readonly UniqueAgentIDHolder UniqueDHolder;
     public IReadOnlyList<AgentItem> AllAgents => _allAgentsList;
 #if DEBUG
     public readonly List<AgentItem> _allAgentsList;
@@ -36,10 +49,11 @@ public class AgentData
 
     private readonly GW2EIGW2API.GW2APIController _apiController;
 
-    internal AgentData(GW2EIGW2API.GW2APIController apiController, List<AgentItem> allAgentsList)
+    internal AgentData(GW2EIGW2API.GW2APIController apiController, List<AgentItem> allAgentsList, UniqueAgentIDHolder uniqueDHolder)
     {
         _apiController = apiController;
         _allAgentsList = allAgentsList;
+        UniqueDHolder = uniqueDHolder;
         Refresh();
     }
     internal string GetSpec(uint prof, uint elite)
@@ -60,7 +74,7 @@ public class AgentData
         {
             instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
         }
-        var agent = new AgentItem(agentValue, name, spec, ID, AgentItem.AgentType.StableSpecies, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
+        var agent = new AgentItem(agentValue, name, spec, ID, AgentItem.AgentType.StableSpecies, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake, UniqueDHolder);
         _allAgentsList.Add(agent);
         _dirty |= AgentDataDirtyStatus.AllDirty;
         return agent;
@@ -84,7 +98,7 @@ public class AgentData
         {
             instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
         }
-        var agent = new AgentItem(agentValue, from.Name, spec, 0, from.Type, instID, from.Toughness, from.Healing, from.Condition, from.Concentration, from.HitboxWidth, from.HitboxHeight, start, end, from.IsFake);
+        var agent = new AgentItem(agentValue, from.Name, spec, 0, from.Type, instID, from.Toughness, from.Healing, from.Condition, from.Concentration, from.HitboxWidth, from.HitboxHeight, start, end, from.IsFake, UniqueDHolder);
         _allAgentsList.Add(agent);
         _dirty |= AgentDataDirtyStatus.AllDirty;
         return agent;

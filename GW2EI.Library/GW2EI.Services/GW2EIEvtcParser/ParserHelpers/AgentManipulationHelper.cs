@@ -289,7 +289,7 @@ public static class AgentManipulationHelper
     {
 
         AgentItem firstItem = agentsToRegroup.First();
-        var newAgent = new AgentItem(firstItem);
+        var newAgent = new AgentItem(firstItem, agentData.UniqueDHolder);
         newAgent.OverrideAwareTimes(agentsToRegroup.Min(x => x.FirstAware), agentsToRegroup.Max(x => x.LastAware));
         foreach (AgentItem agentItem in agentsToRegroup)
         {

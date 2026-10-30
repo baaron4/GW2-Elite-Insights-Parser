@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParsedData.AgentData;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -41,7 +42,6 @@ public class AgentItem
     public AgentItem? PositionAttachedAgentItem { get; private set; }
     public bool IsEnglobingAgent => _englobedAgentItems != null;
 
-    private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic?
     public enum AgentType { StableSpecies, VolatileSpecies, Player, NonSquadPlayer }
 
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
@@ -79,9 +79,9 @@ public class AgentItem
     public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
     // Constructors
-    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
+    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, UniqueAgentIDHolder idHolder)
     {
-        UniqueID = ++AgentCount;
+        UniqueID = idHolder.GetNextID();
         Agent = agent;
         Name = name;
         Spec = spec;
@@ -115,7 +115,7 @@ public class AgentItem
         Unamed = Name.Contains("ch" + ID + "-") || Name.Contains("gd" + ID + "-");
     }
 
-    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
+    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake, UniqueAgentIDHolder idHolder) : this(agent, name, spec, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight, idHolder)
     {
         InstID = instid;
         FirstAware = firstAware;
@@ -123,9 +123,9 @@ public class AgentItem
         IsFake = isFake;
     }
 
-    internal AgentItem(AgentItem other)
+    internal AgentItem(AgentItem other, UniqueAgentIDHolder idHolder)
     {
-        UniqueID = ++AgentCount;
+        UniqueID = idHolder.GetNextID();
         Agent = other.Agent;
         Name = other.Name;
         Spec = other.Spec;
@@ -145,9 +145,13 @@ public class AgentItem
         IsNotInSquadFriendlyPlayer = other.IsNotInSquadFriendlyPlayer;
     }
 
-    internal AgentItem()
+    internal AgentItem(int uniqueID)
     {
-        UniqueID = ++AgentCount;
+        if (uniqueID > 2 || uniqueID < 0)
+        {
+            throw new InvalidOperationException("Parser helper custom agents are restricted to 1 and 2 as unique ID");
+        }
+        UniqueID = uniqueID;
         IsUnknown = true;
     }
 
@@ -192,12 +196,12 @@ public class AgentItem
         {
             return;
         }
-        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.SpeciesDirty);
+        agentData.FlagAsDirty(AgentDataDirtyStatus.SpeciesDirty);
         ID = id;
         if (Type != AgentType.StableSpecies)
         {
             Type = AgentType.StableSpecies;
-            agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
+            agentData.FlagAsDirty(AgentDataDirtyStatus.TypesDirty);
         }
     }
 
@@ -677,7 +681,7 @@ public class AgentItem
     {
         _englobedAgentItems ??= [];
         _englobedAgentItems.Add(child);
-        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty | AgentData.AgentDataDirtyStatus.SpeciesDirty);
+        agentData.FlagAsDirty(AgentDataDirtyStatus.TypesDirty | AgentDataDirtyStatus.SpeciesDirty);
     }
 
     internal void PositionAttachTo(AgentItem geographicallyAttached)

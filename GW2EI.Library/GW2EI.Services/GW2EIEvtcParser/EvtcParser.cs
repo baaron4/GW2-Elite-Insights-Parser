@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using Tracing;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParsedData.AgentData;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -20,6 +21,8 @@ public class EvtcParser
     //Main data storage after binary parse
     private EvtcParserSettings _parserSettings;
     private readonly GW2APIController _apiController;
+
+    private readonly UniqueAgentIDHolder UniqueIDHolder = new();
 
     public EvtcParser(EvtcParserSettings parserSettings, GW2APIController apiController)
     {
@@ -710,7 +713,7 @@ public class EvtcParser
                     type = AgentItem.AgentType.Player;
                     break;
             }
-            allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
+            allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight, UniqueIDHolder));
         }
         return allAgentsList;
     }
@@ -1282,7 +1285,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");
         foreach (ulong missingAgentValue in allAgentValues)
         {
-            allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.StableSpecies, 0, 0, 0, 0, 0, 0));
+            allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.StableSpecies, 0, 0, 0, 0, 0, 0, UniqueIDHolder));
         }
         var agentsLookup = allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x =>
         {
@@ -1400,7 +1403,7 @@ public class EvtcParser
         }
         allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + allAgentsList.Count + " agents");
-        var agentData = new AgentData(_apiController, allAgentsList);
+        var agentData = new AgentData(_apiController, allAgentsList, UniqueIDHolder);
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
         agentData.AddCustomNPCAgent(0, logEndTime, "Environment", Spec.Gadget, TargetID.Environment, true);
 

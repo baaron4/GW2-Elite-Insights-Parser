@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser;
 public static class ParserHelper
 {
 
-    internal static readonly AgentItem _unknownAgent = new();
-    internal static readonly AgentItem _nullAgent = new();
+    internal static readonly AgentItem _unknownAgent = new(1);
+    internal static readonly AgentItem _nullAgent = new(2);
 
     public const int CombatReplayPollingRate = 300;
     internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
