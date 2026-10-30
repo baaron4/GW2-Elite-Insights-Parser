@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisLevel>10.0</AnalysisLevel>
         <AnalysisMode>Recommended</AnalysisMode>
         <Nullable>enable</Nullable>
         <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>

@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0-windows</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisLevel>10.0</AnalysisLevel>
         <AnalysisMode>Recommended</AnalysisMode>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <Nullable>disable</Nullable>
