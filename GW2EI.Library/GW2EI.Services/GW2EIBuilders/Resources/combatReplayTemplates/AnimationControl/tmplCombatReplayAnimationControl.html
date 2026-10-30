@@ -127,7 +127,7 @@
                     <!-- Invisible cursor drag target -->
                     <div class="advanced-cursor-hitline"
                          :style="getCursorHitlineStyle()"
-                         @mousedown="startDragCursorFromLine"></div>
+                         @mousedown="startDragCursor"></div>
 
                     <!-- Visible cursor line -->
                     <div class="advanced-cursor-line"
@@ -691,6 +691,9 @@
                 this.hoveredPhaseId = -1;
             },
             onPhaseMouseDown(phase, e) {
+                if (e.shiftKey) {
+                    return;
+                }
                 this.updateSelectedPhase(phase);
                 const time = this.getTimeFromEvent(e);
                 this.updateTime(time * 1000);
@@ -751,12 +754,6 @@
                 if (e.detail > 1) {
                     return;
                 }
-            },
-            startDragCursorFromLine(e) {
-                if (e.detail > 1) {
-                    return;
-                }
-                this.startDragCursor(e);
             },
             startDragCursor(e) {
                 this.draggingCursor = true;
