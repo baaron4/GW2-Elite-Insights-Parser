@@ -1554,6 +1554,8 @@ class Animator {
                     ctx.rotate(-angle);
                     this.followRotation = -angle;
                     this.followTranslation = pos;
+                } else {
+                    ctx.rotate(this.globalRotation);
                 }
                 ctx.translate(-pos.x, -pos.y);
             }
