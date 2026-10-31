@@ -1124,7 +1124,7 @@ partial class CombatData
             groupedEffectEvents = null;
             return false;
         }
-        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+        groupedEffectEvents = RegroupCombatEventsByTime(effects, epsilon);
 
         return true;
     }
@@ -1141,7 +1141,7 @@ partial class CombatData
             groupedEffectEvents = null;
             return false;
         }
-        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+        groupedEffectEvents = RegroupCombatEventsByTime(effects, epsilon);
 
         return true;
     }
@@ -1159,7 +1159,7 @@ partial class CombatData
             return false;
         }
 
-        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+        groupedEffectEvents = RegroupCombatEventsByTime(effects, epsilon);
 
         return true;
     }
@@ -1177,23 +1177,23 @@ partial class CombatData
             return false;
         }
 
-        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+        groupedEffectEvents = RegroupCombatEventsByTime(effects, epsilon);
 
         return true;
     }
 
-    static List<List<EffectEvent>> EpsilonWindowOverTime(IReadOnlyList<EffectEvent> effectEvents, long epsilon)
+    public static List<List<T>> RegroupCombatEventsByTime<T>(IReadOnlyList<T> effectEvents, long epsilon) where T : TimeCombatEvent
     {
         //NOTE(Rennorb): Has entries due to invariant on TryGetEffectEventsBySrcWithGUID
         var startTime = effectEvents[0].Time;
         var endTime = effectEvents[^1].Time;
         var slices = Math.Max(1, (int)((endTime - startTime + (epsilon - 1)) / epsilon)); // ceiling of total duration / epsilon, and at least one slice
-        var groupedEffectEvents = new List<List<EffectEvent>>(slices);
+        var groupedEffectEvents = new List<List<T>>(slices);
 
 
         var blockStart = startTime;
         var blockEnd = blockStart + epsilon;
-        var currentBlock = new List<EffectEvent>(effectEvents.Count / slices); // assume average distribution
+        var currentBlock = new List<T>(effectEvents.Count / slices); // assume average distribution
         int index = 0;
         foreach (var effectEvent in effectEvents)
         {

@@ -17,9 +17,5 @@ internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T 
     public CombatEventListMechanic(int id, MechanicPlotlySetting plotlySetting, MechanicDescription description, MechanicSeverity severity, CombatEventsGetter getter, int internalCoolDown = 0) : base(id, plotlySetting, description, severity, internalCoolDown)
     {
         _getter = getter;
-        if (_getter == null)
-        {
-            throw new InvalidOperationException("Missing getter in CombatEventListMechanic");
-        }
     }
 }

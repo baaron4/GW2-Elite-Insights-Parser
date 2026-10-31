@@ -38,6 +38,8 @@ public static class MechanicIDs
     public static readonly int Mech_PlayerLaunch = CommonMask | ++_commonCount;
     public static readonly int Mech_PlayerLockOut = CommonMask | ++_commonCount;
     public static readonly int Mech_PlayerFloatSinkWater = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerMissedQuickness = CommonMask | ++_commonCount;
+    public static readonly int Mech_PlayerMissedAlacrity = CommonMask | ++_commonCount;
     #endregion COMMONS
 
     #region RAID WINGS
