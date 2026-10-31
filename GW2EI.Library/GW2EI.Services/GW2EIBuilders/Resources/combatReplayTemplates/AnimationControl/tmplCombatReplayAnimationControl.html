@@ -68,7 +68,134 @@
                 </div>
             </div>
         </div>
-
+        <div class="d-flex align-items-center justify-content-between replay-controls-panel rounded" ref="canvasControls">
+            <div class="d-flex align-items-start replay-reset-controls" :class="isTouchDevice ? 'flex-column' : null">
+                <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                        @click="resetViewpoint()" data-original-title="Reset canvas position">
+                    &#9974; Reset Viewpoint
+                </button>
+                <button v-if="!isTouchDevice" type="button" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light }" style="width: 105px;"
+                        @click="useAdvancedTimeline = !useAdvancedTimeline"
+                        :data-original-title="useAdvancedTimeline ? 'Switch to simple timeline' : 'Switch to advanced timeline'">
+                    {{ useAdvancedTimeline ? '&#8211;&#9679;&#8211; Simple' : '&#8211;&#9679;&#8211; Advanced' }}
+                </button>
+                <button v-show="useAdvancedTimeline" type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                        @click="resetMechanic()" data-original-title="Deselect mechanic from the timeline">
+                    &#128295; Reset Mechanic
+                </button>
+            </div>
+            <div v-if="isTouchDevice" class="d-flex flex-row align-items-center justify-content-center replay-movement-controls">
+                <div class="movement-arrow-grid">                   
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Rotate counter clock wise"
+                            @mousedown.stop="rotateCounterClock" 
+                            @mouseup.stop="stopRotate" 
+                            @mouseleave.stop="stopRotate"
+                            @touchstart.prevent.stop="rotateCounterClock"
+                            @touchend.stop="stopRotate">
+                        &#10559;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move up"
+                            @mousedown.stop="panView(0, panStep)"
+                            @mouseup.stop="stopPan"
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(0, panStep)"
+                            @touchend.stop="stopPan">
+                        &#9651;
+                    </button>            
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Rotate clock wise"
+                            @mousedown.stop="rotateClock" 
+                            @mouseup.stop="stopRotate" 
+                            @mouseleave.stop="stopRotate"
+                            @touchstart.prevent.stop="rotateClock"
+                            @touchend.stop="stopRotate">
+                        &#10558;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move left"
+                            @mousedown.stop="panView(panStep, 0)"
+                            @mouseup.stop="stopPan"
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(panStep, 0)"
+                            @touchend.stop="stopPan">
+                        &#9665;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move down"
+                            @mousedown.stop="panView(0, -panStep)"
+                            @mouseup.stop="stopPan"
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(0, -panStep)"
+                            @touchend.stop="stopPan">
+                        &#9661;
+                    </button>
+                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                            data-original-title="Move right"
+                            @mousedown.stop="panView(-panStep, 0)"
+                            @mouseup.stop="stopPan"
+                            @mouseleave.stop="stopPan"
+                            @touchstart.prevent.stop="panView(-panStep, 0)"
+                            @touchend.stop="stopPan">
+                        &#9655;
+                    </button>
+                </div>
+                <div class="d-flex flex-column justify-content-center align-items-center ml-1">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <span class="replay-controls-label">R</span>
+                        <custom-numberform-component class="ml-2" style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
+                                                        data-original-title="Rotation multiplier per click"
+                                                        :maxValue="100" :step="5" :id="'rotation-step-input'"
+                                                        :placeholderValue="Math.round(animator.rotationStep * 1000)"></custom-numberform-component>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <span class="replay-controls-label">P</span>
+                        <div class="ml-2" style="width: 75px; text-align: center; padding: 2px;" 
+                                    data-original-title="Pixels moved per click">
+                            <input id="pan-step-input" type="number" class="form-control" 
+                                min="1" step="1" v-model.number="panStep">
+                        </div>          
+                    </div>  
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <div v-if="!isTouchDevice" class="d-flex align-items-center justify-content-center replay-controls">
+                    <span class="replay-controls-label mr-1">Rotation Speed</span>
+                    <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
+                                                    data-original-title="Rotation multiplier per step"
+                                                    :maxValue="100" :step="5" :id="'rotation-step-input'"
+                                                    :placeholderValue="Math.round(animator.rotationStep * 1000)"></custom-numberform-component>
+                </div>
+                <div class="d-flex align-items-center justify-content-center replay-controls" :class="isTouchDevice ? 'flex-column' : null">
+                    <span v-if="!isTouchDevice" class="replay-controls-label mr-1">Zoom Speed</span>
+                    <div v-if="isTouchDevice" class="d-flex align-items-center justify-content-center zoom-controls">
+                        <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                                data-original-title="Zoom in" 
+                                @mousedown.stop="zoomIn" 
+                                @mouseup.stop="stopZoom" 
+                                @mouseleave.stop="stopZoom"
+                                @touchstart.prevent.stop="zoomIn"
+                                @touchend.stop="stopZoom">
+                            +
+                        </button>
+                        <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
+                                data-original-title="Zoom out"
+                                @mousedown.stop="zoomOut" 
+                                @mouseup.stop="stopZoom" 
+                                @mouseleave.stop="stopZoom"
+                                @touchstart.prevent.stop="zoomOut"
+                                @touchend.stop="stopZoom">
+                            -
+                        </button>
+                    </div>           
+                    <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
+                                                    data-original-title="Zoom multiplier per step"
+                                                    :maxValue="100" :step="5" :id="'zoom-step-input'"
+                                                    :placeholderValue="Math.round((animator.zoomStep - 1) * 500)"></custom-numberform-component>
+                </div>
+            </div>    
+        </div>
         <div class="timeline mt-1 rounded" ref="timeline" :style="{
                 backgroundColor: timelineColors.background,
                 border: '1px solid ' + timelineColors.backgroundBorder
@@ -232,142 +359,11 @@
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Play animation backwards/forwards">
                     {{ backwards ? "&#9654; Forwards" : "&#9664; Backwards" }}
-
                 </div>
                 <div class="ml-auto">
                 </div>
                 <combat-replay-time-speed-picker-component />
             </div>
-        </div>
-        <div class="d-flex align-items-center justify-content-between replay-controls-panel mt-1 rounded" ref="canvasControls">
-            <div class="d-flex align-items-start replay-reset-controls" :class="isTouchDevice ? 'flex-column' : null">
-                <button type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                        @click="resetViewpoint()" data-original-title="Reset canvas position">
-                    &#9974; Reset Viewpoint
-                </button>
-                <button v-if="!isTouchDevice" type="button" class="btn btn-small" :class="{'btn-dark': !light, 'btn-light': light }" style="width: 105px;"
-                        @click="useAdvancedTimeline = !useAdvancedTimeline"
-                        :data-original-title="useAdvancedTimeline ? 'Switch to simple timeline' : 'Switch to advanced timeline'">
-                    {{ useAdvancedTimeline ? '&#8211;&#9679;&#8211; Simple' : '&#8211;&#9679;&#8211; Advanced' }}
-                </button>
-                <button v-show="useAdvancedTimeline" type="button" class="btn btn-small" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                        @click="resetMechanic()" data-original-title="Deselect mechanic from the timeline">
-                    &#128295; Reset Mechanic
-                </button>
-            </div>
-            <div v-if="isTouchDevice" class="d-flex flex-row align-items-center justify-content-center replay-movement-controls">
-                <div class="movement-arrow-grid">                   
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Rotate counter clock wise"
-                            @mousedown.stop="rotateCounterClock" 
-                            @mouseup.stop="stopRotate" 
-                            @mouseleave.stop="stopRotate"
-                            @touchstart.prevent.stop="rotateCounterClock"
-                            @touchend.stop="stopRotate">
-                        &#10559;
-                    </button>
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move up"
-                            @mousedown.stop="panView(0, panStep)"
-                            @mouseup.stop="stopPan"
-                            @mouseleave.stop="stopPan"
-                            @touchstart.prevent.stop="panView(0, panStep)"
-                            @touchend.stop="stopPan">
-                        &#9651;
-                    </button>            
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Rotate clock wise"
-                            @mousedown.stop="rotateClock" 
-                            @mouseup.stop="stopRotate" 
-                            @mouseleave.stop="stopRotate"
-                            @touchstart.prevent.stop="rotateClock"
-                            @touchend.stop="stopRotate">
-                        &#10558;
-                    </button>
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move left"
-                            @mousedown.stop="panView(panStep, 0)"
-                            @mouseup.stop="stopPan"
-                            @mouseleave.stop="stopPan"
-                            @touchstart.prevent.stop="panView(panStep, 0)"
-                            @touchend.stop="stopPan">
-                        &#9665;
-                    </button>
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move down"
-                            @mousedown.stop="panView(0, -panStep)"
-                            @mouseup.stop="stopPan"
-                            @mouseleave.stop="stopPan"
-                            @touchstart.prevent.stop="panView(0, -panStep)"
-                            @touchend.stop="stopPan">
-                        &#9661;
-                    </button>
-                    <button type="button" class="btn btn-small movement-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                            data-original-title="Move right"
-                            @mousedown.stop="panView(-panStep, 0)"
-                            @mouseup.stop="stopPan"
-                            @mouseleave.stop="stopPan"
-                            @touchstart.prevent.stop="panView(-panStep, 0)"
-                            @touchend.stop="stopPan">
-                        &#9655;
-                    </button>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-items-center ml-1">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <span class="replay-controls-label">R</span>
-                        <custom-numberform-component class="ml-2" style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
-                                                        data-original-title="Rotation multiplier per click"
-                                                        :maxValue="100" :step="5" :id="'rotation-step-input'"
-                                                        :placeholderValue="Math.round(animator.rotationStep * 1000)"></custom-numberform-component>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <span class="replay-controls-label">P</span>
-                        <div class="ml-2" style="width: 75px; text-align: center; padding: 2px;" 
-                                    data-original-title="Pixels moved per click">
-                            <input id="pan-step-input" type="number" class="form-control" 
-                                min="1" step="1" v-model.number="panStep">
-                        </div>          
-                    </div>  
-                </div>
-            </div>
-            <div class="d-flex align-items-center justify-content-center">
-                <div v-if="!isTouchDevice" class="d-flex align-items-center justify-content-center replay-controls">
-                    <span class="replay-controls-label mr-1">Rotation Speed</span>
-                    <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
-                                                    data-original-title="Rotation multiplier per step"
-                                                    :maxValue="100" :step="5" :id="'rotation-step-input'"
-                                                    :placeholderValue="Math.round(animator.rotationStep * 1000)"></custom-numberform-component>
-                </div>
-                <div class="d-flex align-items-center justify-content-center replay-controls" :class="isTouchDevice ? 'flex-column' : null">
-                    <span v-if="!isTouchDevice" class="replay-controls-label mr-1">Zoom Speed</span>
-                    <div v-if="isTouchDevice" class="d-flex align-items-center justify-content-center zoom-controls">
-                        <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                                data-original-title="Zoom in" 
-                                @mousedown.stop="zoomIn" 
-                                @mouseup.stop="stopZoom" 
-                                @mouseleave.stop="stopZoom"
-                                @touchstart.prevent.stop="zoomIn"
-                                @touchend.stop="stopZoom">
-                            +
-                        </button>
-                        <button type="button" class="btn btn-small zoom-button" :class="{ 'btn-dark': !light, 'btn-light': light }"
-                                data-original-title="Zoom out"
-                                @mousedown.stop="zoomOut" 
-                                @mouseup.stop="stopZoom" 
-                                @mouseleave.stop="stopZoom"
-                                @touchstart.prevent.stop="zoomOut"
-                                @touchend.stop="stopZoom">
-                            -
-                        </button>
-                    </div>
-                    
-                    <custom-numberform-component style="width: 75px; text-align: center; padding: 2px;" :minValue="0"
-                                                    data-original-title="Zoom multiplier per step"
-                                                    :maxValue="100" :step="5" :id="'zoom-step-input'"
-                                                    :placeholderValue="Math.round((animator.zoomStep - 1) * 500)"></custom-numberform-component>
-                </div>
-            </div>
-            
         </div>
     </div>
 </template>
