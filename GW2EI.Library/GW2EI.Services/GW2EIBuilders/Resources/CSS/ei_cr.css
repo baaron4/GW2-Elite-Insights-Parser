@@ -451,3 +451,179 @@ canvas {
 .tooltip-inner {
     max-width: 400px;
 }
+
+.advanced-timeline-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.advanced-timeline {
+    position: relative;
+    flex: 0 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.advanced-timeline-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.advanced-phase-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.advanced-phase-hitbox {
+    position: absolute;
+    z-index: 1;
+    height: 10px;
+    pointer-events: auto;
+}
+
+.advanced-phase-visible-line {
+    position: absolute;
+    z-index: 2;
+    height: 4px;
+}
+
+.advanced-phase-boundary {
+    position: absolute;
+    z-index: 3;
+    width: 2px;
+    height: 10px;
+    pointer-events: auto;
+}
+
+.advanced-cursor-hitline {
+    position: absolute;
+    top: 0;
+    width: 10px;
+    cursor: grab;
+    pointer-events: auto;
+}
+
+.advanced-cursor-line {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    pointer-events: none;
+}
+
+.advanced-cursor-circle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: grab;
+    pointer-events: auto;
+}
+
+.advanced-tick, .advanced-mechanic-tick {
+    position: absolute;
+    top: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+.advanced-tick-mark, .advanced-mechanic-tick-mark {
+    position: absolute;
+    top: 15px;
+    left: -0.5px;
+    width: 1px;
+    height: 10px;
+}
+
+.advanced-tick-label, .advanced-hover-time-text {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 10px;
+    line-height: 12px;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.advanced-tick-label {
+    font-weight: 400;
+}
+
+.advanced-hover-time-text {
+    width: 36px;
+    font-weight: 600;
+}
+
+.advanced-mechanic-tick-cap {
+    position: absolute;
+    left: -1px;
+    width: 2px;
+    height: 1px;
+}
+
+.advanced-mechanic-tick-cap-top {
+    top: 15px;
+}
+
+.advanced-mechanic-tick-cap-bottom {
+    top: 25px;
+}
+
+.advanced-hover-time-box {
+    position: absolute;
+    top: -3px;
+    width: 36px;
+    height: 16px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.advanced-phase-text {
+    position: absolute;
+    left: 0;
+    height: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    text-align: center;
+    white-space: nowrap;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+.advanced-phase-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 15px;
+    margin-top: 2px;
+}
+
+.advanced-phase-info-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.advanced-phase-info .advanced-phase-text {
+    display: block;
+    position: static;
+    width: 100%;
+    text-align: center;
+}
+
