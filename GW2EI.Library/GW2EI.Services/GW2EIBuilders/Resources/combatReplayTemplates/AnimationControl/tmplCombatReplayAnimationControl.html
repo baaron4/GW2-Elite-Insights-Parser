@@ -232,13 +232,12 @@
                 </div>
             </div>
 
-            <div class="d-flex align-items-center justify-content-center">
-                <label class="mr-auto">
-                    <input style="width: 100px;" class="form-control d-inline h-auto text-right" type="number" step="0.001"
+            <div class="d-flex align-items-center justify-content-center mt-1 mb-1">
+                <input style="width: 100px;" class="form-control d-inline h-auto text-right" type="number" step="0.001"
                            data-original-title="Time" :value="(time - range.min / 1000.0).toFixed(3)"
                            @input="updateInputTime($event.target.value);">
-                </label>
-
+                <div class="mr-auto">
+                </div>
                 <div @click="toggleAnimate();" style="width: 80px;"
                      class="btn btn-small"
                      :class="{'btn-dark': !light, 'btn-light': light}"
@@ -257,7 +256,8 @@
                     {{ backwards ? "&#9654; Forwards" : "&#9664; Backwards" }}
 
                 </div>
-
+                <div class="ml-auto">
+                </div>
                 <combat-replay-time-speed-picker-component />
             </div>
         </div>

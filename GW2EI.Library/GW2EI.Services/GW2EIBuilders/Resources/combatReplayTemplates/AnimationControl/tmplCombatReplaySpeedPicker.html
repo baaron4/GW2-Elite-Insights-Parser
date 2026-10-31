@@ -1,13 +1,10 @@
 ﻿<template>
-    <label class="ml-auto">
-        <select class="form-control d-inline w-auto h-auto" :value="defaultSpeed" 
-                data-original-title="Speed"
-                @change="updateSelectedSpeed($event.target.value)">
-            <option v-for="speed in speeds" :key="speed" :value="speed">
-                {{ speed }}x
-            </option>
-        </select>
-    </label>
+    <select class="form-control d-inline w-auto h-auto" :value="defaultSpeed" data-original-title="Speed"
+        @change="updateSelectedSpeed($event.target.value)">
+        <option v-for="speed in speeds" :key="speed" :value="speed">
+            {{ speed }}x
+        </option>
+    </select>
 </template>
 
 <script>
