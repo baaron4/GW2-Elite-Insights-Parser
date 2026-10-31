@@ -315,7 +315,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
             } else if (endType === RotationStatus.CANCEL) {
                 fillColor = 'rgb(255,0,0)';
             } else if (endType === RotationStatus.FULL || endType === RotationStatus.CUSTOM_MOVEMENT) {
-                fillColor = 'rgb(0,255,0)';
+                fillColor = 'rgb(147, 112, 219)';
                 if (endType === RotationStatus.CUSTOM_MOVEMENT) {
                     width = 0.3;
                     yOffset = 1;

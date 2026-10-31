@@ -8,7 +8,7 @@
 }
 
 .rot-animfull {
-  border: 2px solid #00ff00;
+  border: 2px solid #9370DB;
 }
 
 .rot-unknown {
@@ -29,7 +29,7 @@
 }
 
 .rot-small .rot-animfull {
-  border: 1px solid #00ff00;
+  border: 1px solid #9370DB;
 }
 
 .rot-small .rot-unknown {
@@ -61,9 +61,9 @@
   color: #FFFFFF;
 }
 
-.rot-bg-green {
-  background-color: #00FF00;
-  color: #000000;
+.rot-bg-purple {
+  background-color: #9370DB;
+  color: #FFFFFF;
 }
 
 .rot-bg-red {
