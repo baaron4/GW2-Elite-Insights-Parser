@@ -1116,6 +1116,10 @@ class Animator {
         }
     }
 
+    rotateCenter(delta) {    
+        this.rotate(delta, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2)
+    }
+
     zoomCenter(delta) {
         this.zoom(delta, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
     }
@@ -1150,7 +1154,7 @@ class Animator {
     _initMouseEvents() {
         const _this = this;
         this.zoomStep = 1.06;
-        this.rotationStep = 0.015;
+        this.rotationStep = 0.03;
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;

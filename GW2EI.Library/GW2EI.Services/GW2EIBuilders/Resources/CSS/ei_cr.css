@@ -411,7 +411,7 @@ canvas {
     flex-shrink: 0;
 }
 
-.replay-zoom-controls {
+.replay-controls {
     gap: 4px;
     margin-left: 0;
     padding: 0 8px;
