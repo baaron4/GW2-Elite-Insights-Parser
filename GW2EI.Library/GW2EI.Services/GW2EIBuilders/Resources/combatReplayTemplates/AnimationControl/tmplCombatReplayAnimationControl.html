@@ -100,8 +100,7 @@
                              :style="getPhaseHitboxStyle(phaseBloc)"
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
-                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"></div>
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"></div>
 
                         <!-- Visible phase line -->
                         <div class="advanced-phase-visible-line"
@@ -112,16 +111,14 @@
                              :style="getPhaseBoundaryStyle(phaseBloc, 'start')"
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
-                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"></div>
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"></div>
 
                         <!-- Phase end marker -->
                         <div class="advanced-phase-boundary"
                              :style="getPhaseBoundaryStyle(phaseBloc, 'end')"
                              @mouseenter="hoverPhase(phaseBloc.phase)"
                              @mouseleave="resetHoveredPhase"
-                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"
-                             @click="onPhaseClick($event)"></div>
+                             @mousedown="onPhaseMouseDown(phaseBloc.phase, $event)"></div>
                     </div>
 
                     <!-- Invisible cursor drag target -->
@@ -508,57 +505,8 @@
         },
     }
 
-    const crTimelineMixin = {
-        data: function () {
-            return {
-                sliderDelimiter: {
-                    min: -1,
-                    max: -1,
-                },
-                hoveredPhaseId: null,
-                draggingCursor: false,
-                hoverTime: 0,
-                isHoveringTimeline: false,
-                lastTimelineClick: null,
-                simpleTimelineTooltip: null,
-            };
-        },
+    const crTimeLineStyleMixin = {
         computed: {
-            maxTime: function () {
-                return this.range.max - this.range.min;
-            },
-            minTime: function () {
-                return 0;
-            },
-            timelineWidth() {
-                return 750 - 20; // remove p-2 padding (0.5rem = 8px x 2)
-            },
-            ticks() {
-                const interval = this.getTickInterval();
-                const ticks = [];
-
-                // Ticks every set time based on max fight length
-                let t;
-                for (t = 0; t <= this.fightDuration; t += interval) {
-                    ticks.push({
-                        time: t,
-                        x: this.timeToX(t),
-                        label: this.formatTime(t),
-                    });
-                }
-
-                // Always display the end tick
-                const end = this.fightDuration;
-                if (this.timeToX(end) - this.timeToX(t - interval) > 30) {
-                    ticks.push({
-                        time: end,
-                        x: this.timeToX(end),
-                        label: this.formatTime(end),
-                    });
-                }
-
-                return ticks;
-            },
             timelineColors() {
                 if (this.light) {
                     return {
@@ -580,14 +528,6 @@
                     };
                 }
             },
-            playerMechanicTicks() {
-                return this.animationData.selectedMechanic.times.map(
-                    time => ({
-                        x: this.timeOffsetedToX(time / 1000),
-                        time: time
-                    })
-                );
-            },
         },
         methods: {
             getSliderGradient: function () {
@@ -602,226 +542,12 @@
                 }
                 return computeSliderGradient("#888888", "#F3F3F3", startPercent, endPercent);
             },
-            timeToX(time) {
-                time = time || this.minTime;
-                var t = Math.max(this.minTime, Math.min(this.fightDuration, time));
-                return (t / this.fightDuration) * this.timelineWidth;
-            },
-            timeOffsetedToX(time) {
-                return this.timeToX(time - (this.range.min / 1000));
-            },
-            xToTime(x) {
-                return (x / this.timelineWidth) * this.fightDuration;
-            },
-            getTickInterval() {
-                const numberOfTicks = 6;
-                const steps = [5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 14400]; // up to 24h, max evtc length accepted
-                let interval = this.fightDuration / numberOfTicks;
-
-                // pick smallest step >= interval
-                for (let i = 0; i < steps.length; i++) {
-                    if (interval <= steps[i]) {
-                        return steps[i];
-                    }
-                }
-            },
-            getTickX(tick) {
-                const pad = 10;
-
-                if (tick.x <= pad) return tick.x + pad;
-                if (tick.x >= this.timelineWidth - pad) return tick.x - pad;
-
-                return tick.x;
-            },
-            formatTime(t) {
-                const minutes = Math.floor(t / 60);
-                const seconds = Math.floor(t % 60);
-                return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-            },
-            getTimeFromEvent(e) {
-                const timeline = this.$refs.advancedTimeline;
-
-                if (!timeline) {
-                    return this.minTime;
-                }
-
-                const rect = timeline.getBoundingClientRect();
-                const x = Math.max(0, Math.min(this.timelineWidth, e.clientX - rect.left));
-
-                return this.xToTime(x);
-            },
-            onTimelineMouseMove(e) {
-                this.hoverTime = this.getTimeFromEvent(e);
-                this.isHoveringTimeline = true;
-
-                if (e.buttons !== 0) {
-                    this.resetHoveredPhase();
-                    return;
-                }
-
-                const phase = this.getPhaseAtTimelinePosition(e);
-
-                if (phase) {
-                    this.hoverPhase(phase);
-                } else {
-                    this.resetHoveredPhase();
-                }
-            },
-            onTimelineMouseLeave() {
-                this.isHoveringTimeline = false;
-                this.hoveredPhaseId = -1;
-            },
-            onTimelineMouseDown(e) {
-                let time = this.getTimeFromEvent(e);
-                this.updateTime(time * 1000);
-                if (e.detail === 1) {
-                    this.startDragCursor(e);
-                }
-            },
             getPhaseOpacity(phase) {
                 if (phase.id === this.hoveredPhaseId) {
                     return 1.0;
                 }
                 return this.selectedPhaseId === phase.id ? 0.75 : 0.4;
-            },
-            hoverPhase(phase) {
-                this.hoveredPhaseId = phase.id;
-            },
-            resetHoveredPhase() {
-                this.hoveredPhaseId = -1;
-            },
-            onPhaseMouseDown(phase, e) {
-                if (e.shiftKey) {
-                    return;
-                }
-                this.updateSelectedPhase(phase);
-                const time = this.getTimeFromEvent(e);
-                this.updateTime(time * 1000);
-                this.startDragCursor(e);
-            },
-            onTimelineClick(e) {
-                const phase = this.getPhaseAtTimelinePosition(e);
-
-                if (phase) {
-                    this.updatePhaseTime(phase);
-                }
-            },
-            getPhaseAtTimelinePosition(e) {
-                const timeline = this.$refs.advancedTimeline;
-
-                if (!timeline) {
-                    return null;
-                }
-
-                // Prefer the actual phase element when the click targets one.
-                const layer = e.target.closest ? e.target.closest(".advanced-phase-layer") : null;
-
-                if (layer) {
-                    const phaseId = layer.getAttribute("data-phase-id");
-                    const phaseBloc = this.phasesByDepth.find(item => String(item.phase.id) === phaseId);
-
-                    if (phaseBloc) {
-                        return phaseBloc.phase;
-                    }
-                }
-
-                // The cursor can cover a phase, so hit-test its position as a fallback.
-                const rect = timeline.getBoundingClientRect();
-                const x = Math.max(0, Math.min(this.timelineWidth, e.clientX - rect.left));
-                const y = e.clientY - rect.top;
-
-                const candidates = this.phasesByDepth.filter(({ phase, depth }) => {
-                    const left = this.timeOffsetedToX(phase.start);
-                    const right = this.timeOffsetedToX(phase.end);
-                    const top = 15 + depth * 10;
-
-                    return x >= left - 2
-                        && x <= right + 2
-                        && y >= top
-                        && y <= top + 10;
-                });
-
-                if (candidates.length === 0) {
-                    return null;
-                }
-
-                // Prefer the most deeply nested phase when intervals overlap.
-                candidates.sort((a, b) => b.depth - a.depth);
-
-                return candidates[0].phase;
-            },
-            onPhaseClick(e) {
-                if (e.detail > 1) {
-                    return;
-                }
-            },
-            startDragCursor(e) {
-                this.draggingCursor = true;
-                window.addEventListener("mousemove", this.onDragCursor);
-                window.addEventListener("mouseup", this.stopDragCursor);
-            },
-            onDragCursor(e) {
-                if (!this.draggingCursor) return;
-                let time = this.getTimeFromEvent(e);
-                time = Math.max(this.minTime, Math.min(this.maxTime, time));
-                this.updateTime(time * 1000);
-            },
-            stopDragCursor() {
-                this.draggingCursor = false;
-                window.removeEventListener("mousemove", this.onDragCursor);
-                window.removeEventListener("mouseup", this.stopDragCursor);
-            },
-            onSimpleTimelineSliderMouseMove(e) {
-                const slider = document.getElementById(this.htmlElementIDs.simpleTimelineID);
-
-                if (this.useAdvancedTimeline || !slider || !slider.classList.contains("slider")) {
-                    this.hideSimpleTimelineTooltip();
-                    return;
-                }
-
-                const rect = slider.getBoundingClientRect();
-
-                // Show the tooltip while the pointer is inside the slider on both axes.
-                if (rect.width <= 0 ||
-                    rect.height <= 0 ||
-                    e.clientX < rect.left ||
-                    e.clientX > rect.right ||
-                    e.clientY < rect.top ||
-                    e.clientY > rect.bottom) {
-                    this.hideSimpleTimelineTooltip();
-                    return;
-                }
-
-                if (!this.simpleTimelineTooltip) {
-                    this.simpleTimelineTooltip = document.createElement("div");
-                    this.simpleTimelineTooltip.className = "simple-timeline-time-tooltip";
-                    document.body.appendChild(this.simpleTimelineTooltip);
-                }
-
-                const clampedX = Math.max(rect.left, Math.min(e.clientX, rect.right));
-                const ratio = (clampedX - rect.left) / rect.width;
-                const min = Number(slider.min) || 0;
-                const max = Number(slider.max) || 0;
-                const time = (min + ratio * (max - min)) / 1000;
-
-                this.simpleTimelineTooltip.textContent = this.formatTime(time);
-
-                const tooltipWidth = this.simpleTimelineTooltip.offsetWidth;
-                const tooltipHalfWidth = tooltipWidth / 2;
-
-                const tooltipX = Math.max(rect.left + tooltipHalfWidth, Math.min(clampedX, rect.right - tooltipHalfWidth));
-
-                this.simpleTimelineTooltip.style.left = `${tooltipX}px`;
-                this.simpleTimelineTooltip.style.top = `${rect.top - 24}px`;
-                this.simpleTimelineTooltip.style.display = "block";
-            },
-
-            hideSimpleTimelineTooltip() {
-                if (this.simpleTimelineTooltip) {
-                    this.simpleTimelineTooltip.style.display = "none";
-                }
-            },
-            getAdvancedTimelineStyle() {
+            },getAdvancedTimelineStyle() {
                 return {
                     width: this.timelineWidth + "px",
                     height: (10 * this.maxDepth + 30) + "px"
@@ -866,11 +592,7 @@
                     backgroundColor: phaseBloc.color,
                     opacity: this.getPhaseOpacity(phase)
                 };
-            },
-            getCursorX() {
-                return Math.round(this.timeOffsetedToX(this.time));
-            },
-            getCursorHitlineStyle() {
+            }, getCursorHitlineStyle() {
                 return {
                     left: (this.getCursorX() - 5) + "px",
                     height: (10 * this.maxDepth + 30) + "px",
@@ -946,6 +668,287 @@
                     color: this.timelineColors.text,
                 };
             },
+        },
+    }
+
+    const crTimeLineEventsMixin = {
+        methods: {           
+            getTimeFromEvent(e) {
+                const timeline = this.$refs.advancedTimeline;
+
+                if (!timeline) {
+                    return this.minTime;
+                }
+
+                const rect = timeline.getBoundingClientRect();
+                const x = Math.max(0, Math.min(this.timelineWidth, e.clientX - rect.left));
+
+                return this.xToTime(x);
+            },
+            onTimelineMouseMove(e) {
+                this.hoverTime = this.getTimeFromEvent(e);
+                this.isHoveringTimeline = true;
+
+                if (e.buttons !== 0) {
+                    this.resetHoveredPhase();
+                    return;
+                }
+
+                const phase = this.getPhaseAtTimelinePosition(e);
+
+                if (phase) {
+                    this.hoverPhase(phase);
+                } else {
+                    this.resetHoveredPhase();
+                }
+            },
+            onTimelineMouseLeave() {
+                this.isHoveringTimeline = false;
+                this.hoveredPhaseId = -1;
+            },
+            onTimelineMouseDown(e) {
+                let time = this.getTimeFromEvent(e);
+                this.updateTime(time * 1000);
+                if (e.detail === 1) {
+                    this.startDragCursor(e);
+                }
+            },
+            onPhaseMouseDown(phase, e) {
+                if (e.shiftKey) {
+                    return;
+                }
+                this.updateSelectedPhase(phase);
+                const time = this.getTimeFromEvent(e);
+                this.updateTime(time * 1000);
+                this.startDragCursor(e);
+            },
+            onTimelineClick(e) {
+                const phase = this.getPhaseAtTimelinePosition(e);
+
+                if (phase) {
+                    this.updatePhaseTime(phase);
+                }
+            },
+            getPhaseAtTimelinePosition(e) {
+                const timeline = this.$refs.advancedTimeline;
+
+                if (!timeline) {
+                    return null;
+                }
+
+                // Prefer the actual phase element when the click targets one.
+                const layer = e.target.closest ? e.target.closest(".advanced-phase-layer") : null;
+
+                if (layer) {
+                    const phaseId = layer.getAttribute("data-phase-id");
+                    const phaseBloc = this.phasesByDepth.find(item => String(item.phase.id) === phaseId);
+
+                    if (phaseBloc) {
+                        return phaseBloc.phase;
+                    }
+                }
+
+                // The cursor can cover a phase, so hit-test its position as a fallback.
+                const rect = timeline.getBoundingClientRect();
+                const x = Math.max(0, Math.min(this.timelineWidth, e.clientX - rect.left));
+                const y = e.clientY - rect.top;
+
+                const candidates = this.phasesByDepth.filter(({ phase, depth }) => {
+                    const left = this.timeOffsetedToX(phase.start);
+                    const right = this.timeOffsetedToX(phase.end);
+                    const top = 15 + depth * 10;
+
+                    return x >= left - 2
+                        && x <= right + 2
+                        && y >= top
+                        && y <= top + 10;
+                });
+
+                if (candidates.length === 0) {
+                    return null;
+                }
+
+                // Prefer the most deeply nested phase when intervals overlap.
+                candidates.sort((a, b) => b.depth - a.depth);
+
+                return candidates[0].phase;
+            },
+            
+            startDragCursor(e) {
+                this.draggingCursor = true;
+                window.addEventListener("mousemove", this.onDragCursor);
+                window.addEventListener("mouseup", this.stopDragCursor);
+            },
+            onDragCursor(e) {
+                if (!this.draggingCursor) return;
+                let time = this.getTimeFromEvent(e);
+                time = Math.max(this.minTime, Math.min(this.maxTime, time));
+                this.updateTime(time * 1000);
+            },
+            stopDragCursor() {
+                this.draggingCursor = false;
+                window.removeEventListener("mousemove", this.onDragCursor);
+                window.removeEventListener("mouseup", this.stopDragCursor);
+            },
+            onSimpleTimelineSliderMouseMove(e) {
+                const slider = document.getElementById(this.htmlElementIDs.simpleTimelineID);
+
+                if (this.useAdvancedTimeline || !slider || !slider.classList.contains("slider")) {
+                    this.hideSimpleTimelineTooltip();
+                    return;
+                }
+
+                const rect = slider.getBoundingClientRect();
+
+                // Show the tooltip while the pointer is inside the slider on both axes.
+                if (rect.width <= 0 ||
+                    rect.height <= 0 ||
+                    e.clientX < rect.left ||
+                    e.clientX > rect.right ||
+                    e.clientY < rect.top ||
+                    e.clientY > rect.bottom) {
+                    this.hideSimpleTimelineTooltip();
+                    return;
+                }
+
+                if (!this.simpleTimelineTooltip) {
+                    this.simpleTimelineTooltip = document.createElement("div");
+                    this.simpleTimelineTooltip.className = "simple-timeline-time-tooltip";
+                    document.body.appendChild(this.simpleTimelineTooltip);
+                }
+
+                const clampedX = Math.max(rect.left, Math.min(e.clientX, rect.right));
+                const ratio = (clampedX - rect.left) / rect.width;
+                const min = Number(slider.min) || 0;
+                const max = Number(slider.max) || 0;
+                const time = (min + ratio * (max - min)) / 1000;
+
+                this.simpleTimelineTooltip.textContent = this.formatTime(time);
+
+                const tooltipWidth = this.simpleTimelineTooltip.offsetWidth;
+                const tooltipHalfWidth = tooltipWidth / 2;
+
+                const tooltipX = Math.max(rect.left + tooltipHalfWidth, Math.min(clampedX, rect.right - tooltipHalfWidth));
+
+                this.simpleTimelineTooltip.style.left = `${tooltipX}px`;
+                this.simpleTimelineTooltip.style.top = `${rect.top - 24}px`;
+                this.simpleTimelineTooltip.style.display = "block";
+            },
+        }
+    };
+
+    const crTimelineMixin = {
+        mixins: [crTimeLineStyleMixin, crTimeLineEventsMixin],
+        data: function () {
+            return {
+                sliderDelimiter: {
+                    min: -1,
+                    max: -1,
+                },
+                hoveredPhaseId: null,
+                draggingCursor: false,
+                hoverTime: 0,
+                isHoveringTimeline: false,
+                lastTimelineClick: null,
+                simpleTimelineTooltip: null,
+            };
+        },
+        computed: {
+            maxTime: function () {
+                return this.range.max - this.range.min;
+            },
+            minTime: function () {
+                return 0;
+            },
+            timelineWidth() {
+                return 750 - 20; // remove p-2 padding (0.5rem = 8px x 2)
+            },
+            ticks() {
+                const interval = this.getTickInterval();
+                const ticks = [];
+
+                // Ticks every set time based on max fight length
+                let t;
+                for (t = 0; t <= this.fightDuration; t += interval) {
+                    ticks.push({
+                        time: t,
+                        x: this.timeToX(t),
+                        label: this.formatTime(t),
+                    });
+                }
+
+                // Always display the end tick
+                const end = this.fightDuration;
+                if (this.timeToX(end) - this.timeToX(t - interval) > 30) {
+                    ticks.push({
+                        time: end,
+                        x: this.timeToX(end),
+                        label: this.formatTime(end),
+                    });
+                }
+
+                return ticks;
+            },        
+            playerMechanicTicks() {
+                return this.animationData.selectedMechanic.times.map(
+                    time => ({
+                        x: this.timeOffsetedToX(time / 1000),
+                        time: time
+                    })
+                );
+            },
+        },
+        methods: {     
+            timeToX(time) {
+                time = time || this.minTime;
+                var t = Math.max(this.minTime, Math.min(this.fightDuration, time));
+                return (t / this.fightDuration) * this.timelineWidth;
+            },
+            timeOffsetedToX(time) {
+                return this.timeToX(time - (this.range.min / 1000));
+            },
+            xToTime(x) {
+                return (x / this.timelineWidth) * this.fightDuration;
+            },
+            getTickInterval() {
+                const numberOfTicks = 6;
+                const steps = [5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 14400]; // up to 24h, max evtc length accepted
+                let interval = this.fightDuration / numberOfTicks;
+
+                // pick smallest step >= interval
+                for (let i = 0; i < steps.length; i++) {
+                    if (interval <= steps[i]) {
+                        return steps[i];
+                    }
+                }
+            },
+            getTickX(tick) {
+                const pad = 10;
+
+                if (tick.x <= pad) return tick.x + pad;
+                if (tick.x >= this.timelineWidth - pad) return tick.x - pad;
+
+                return tick.x;
+            },
+            formatTime(t) {
+                const minutes = Math.floor(t / 60);
+                const seconds = Math.floor(t % 60);
+                return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+            },         
+            hoverPhase(phase) {
+                this.hoveredPhaseId = phase.id;
+            },
+            resetHoveredPhase() {
+                this.hoveredPhaseId = -1;
+            },
+            hideSimpleTimelineTooltip() {
+                if (this.simpleTimelineTooltip) {
+                    this.simpleTimelineTooltip.style.display = "none";
+                }
+            },      
+            getCursorX() {
+                return Math.round(this.timeOffsetedToX(this.time));
+            },          
             getPhaseDepth(phase) {
                 const phaseBloc = this.phasesByDepth.find(item => item.phase.id === phase.id);
                 return phaseBloc ? phaseBloc.depth : 0;
@@ -1017,8 +1020,6 @@
             this.stopZoom();
         },
         computed: {
-
-
             canvasSize: function () {
                 return {
                     x: crData.sizes[0],
@@ -1033,11 +1034,9 @@
                     simpleTimelineID: 'simple-timeline'
                 };
             },
-
             fightDuration() {
                 return (this.maxTime - this.minTime) / 1000;
             },
-
             isMechanicSelected() {
                 return this.animationData.selectedMechanic.name != null && this.animationData.selectedMechanic.actorId != null;
             },
@@ -1054,7 +1053,6 @@
                 this.updatePhaseTime(encounterPhase);
                 animator._reselectIfEnglobed();
             },
-
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
             },
