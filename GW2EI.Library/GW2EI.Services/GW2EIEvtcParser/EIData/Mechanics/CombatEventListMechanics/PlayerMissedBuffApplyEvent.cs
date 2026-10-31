@@ -7,12 +7,13 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
 
     private readonly long BuffID;
 
-    private List<BuffApplyEvent> GetBuffApplyEventsForExpectedProvider(ParsedEvtcLog log, AgentItem playerAgent)
+    private List<BuffApplyEvent> GetBuffApplyEventsForExpectedProvider(ParsedEvtcLog log, SingleActor player)
     {
-        var actor = log.FindActor(playerAgent);
-        if (!_noBuffAppliesPerGivers.TryGetValue(actor, out var noBuffApplies))
+        if (!_noBuffAppliesPerGivers.TryGetValue(player, out var noBuffApplies))
         {
-            var sameGroupPlayers = log.PlayerList.Where(x => x.Group == actor.Group && x.InAwareTimes(actor)).ToList();
+            noBuffApplies = [];
+            // Find buff applies to other players from the same subroup + current player
+            var sameGroupPlayers = log.PlayerList.Where(x => x.Group == player.Group && x.InAwareTimes(player)).ToList();
             List<BuffApplyEvent> buffApplies = [];
             foreach (var sameGroupPlayer in sameGroupPlayers)
             {
@@ -20,18 +21,20 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                 buffApplies.AddRange(buffAppliesToSameGroupPlayer);
             }
             buffApplies.SortByTime();
-            // Group by Src first, and then by application sequences. Ignore sources only giving the buff to themselves or sources from another subgroup
+            // Group by Src Single Actor first, and then by application sequences.
             var groupedBySrc = buffApplies.Select(buffApply => (log.FindActor(buffApply.By.FindEnglobedAgentItem(buffApply.Time)), buffApply)).GroupBy(x => x.Item1).ToDictionary(x => x.Key, x => x.ToList().Select(y => y.buffApply).ToList());
             var groupedBySrcByApplicationSequence = new Dictionary<SingleActor, Dictionary<long, List<BuffApplyEvent>>>();
             foreach (var groupBySrc in groupedBySrc)
             {
                 var applierActor = groupBySrc.Key;
-                if (applierActor.Group != actor.Group)
+                // Ignore sources from another subgroup
+                if (applierActor.Group != player.Group)
                 {
                     continue;
                 }
                 var groupedApplies = new Dictionary<long, List<BuffApplyEvent>>();
                 var epsilonPacked = CombatData.RegroupCombatEventsByTime(groupBySrc.Value, ParserHelper.BuffSimulatorDelayConstant);
+                // Ignore sources only giving the buff to themselves
                 if (epsilonPacked.All(x => x.Count <= 1))
                 {
                     continue;
@@ -42,12 +45,12 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                     groupedApplies[list.First().Time] = list;
                 }
             }
-            noBuffApplies = [];
             var livelyLuteCasts = BuffID == SkillIDs.Quickness ? log.CombatData.GetAnimatedCastData(SkillIDs.LivelyLute).GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList()) : [];
-            foreach (var player in sameGroupPlayers)
+            // Prepare the dictionary for every players from the same subgroup
+            foreach (var sameGroupPlayer in sameGroupPlayers)
             {
                 var noBuffAppliesPerPlayer = new List<BuffApplyEvent>();
-                if (player == actor)
+                if (sameGroupPlayer == player)
                 {
                     noBuffApplies = noBuffAppliesPerPlayer;
                 }
@@ -56,7 +59,7 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                     foreach (var buffAppliesSequence in groupBySrcByApplicationSequence.Value)
                     {
                         // Check if player is present as dst in the sequence
-                        if (!buffAppliesSequence.Value.Any(x => x.To.Is(player.AgentItem)))
+                        if (!buffAppliesSequence.Value.Any(x => x.To.Is(sameGroupPlayer.AgentItem)))
                         {
                             var firstBuffApplyFromSequence = buffAppliesSequence.Value.First();
                             var applier = firstBuffApplyFromSequence.By;
@@ -66,7 +69,7 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                                 continue;
                             }
                             // Verify that the player is not dead nor dc
-                            if (!player.IsDead(log, firstBuffApplyFromSequence.Time) && !player.IsDC(log, firstBuffApplyFromSequence.Time))
+                            if (!sameGroupPlayer.IsDead(log, firstBuffApplyFromSequence.Time) && !sameGroupPlayer.IsDC(log, firstBuffApplyFromSequence.Time))
                             {
                                 noBuffAppliesPerPlayer.Add(firstBuffApplyFromSequence);
                             }
@@ -74,9 +77,10 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                     }
                 }
                 noBuffApplies.SortByTime();
-                _noBuffAppliesPerGivers[player] = noBuffAppliesPerPlayer;
+                _noBuffAppliesPerGivers[sameGroupPlayer] = noBuffAppliesPerPlayer;
             }
-            _noBuffAppliesPerGivers[actor] = noBuffApplies;
+            // Sanity add, just in case
+            _noBuffAppliesPerGivers[player] = noBuffApplies;
         }
         return noBuffApplies;
     }
@@ -95,7 +99,7 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
     {
         foreach (Player p in log.PlayerList)
         {
-            foreach (BuffApplyEvent c in GetBuffApplyEventsForExpectedProvider(log, p.AgentItem))
+            foreach (BuffApplyEvent c in GetBuffApplyEventsForExpectedProvider(log, p))
             {
                 if (Keep(c, log))
                 {
