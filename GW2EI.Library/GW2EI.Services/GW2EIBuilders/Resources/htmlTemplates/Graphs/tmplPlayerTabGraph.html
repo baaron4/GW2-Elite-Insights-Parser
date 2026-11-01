@@ -1,24 +1,38 @@
 <template>
     <div>
         <dps-graph-mode-selector-component :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
-            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
+                                           :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
+        <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
+            <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">Buff graph source</label>
+            <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
+                <option value="">Player</option>
+                <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'graph-minion-group-' + groupIndex"
+                          :label="player.minions[groupIndex].name">
+                    <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'graph-minion-' + groupIndex + '-' + minionIndex"
+                            :value="groupIndex + ':' + minionIndex">
+                        {{minion.name}} #{{minionIndex + 1}}
+                    </option>
+                </optgroup>
+            </select>
+        </div>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <rotation-legend-component></rotation-legend-component>
     </div>
 </template>
 
 <script>
-
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
         mixins: [graphComponent, damageGraphComponent, encounterPhaseComponent],
-        data: function () {
+        data: function() {
             return {
+                data: [],
                 playerOffset: 0,
-                graphOffset: 0
+                graphOffset: 0,
+                selectedMinionKey: "",
             };
         },
         watch: {
@@ -49,7 +63,7 @@
                 handler: function() {
                     this.computeLayout();
                 }
-            }
+            },
         },
         created: function () {
             this.computeLayout();
@@ -82,6 +96,16 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
+            hasMinions: function () {
+                return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+            },
+            selectedMinion: function () {
+                if (!this.selectedMinionKey) {
+                    return null;
+                }
+                const indexes = this.selectedMinionKey.split(':').map(Number);
+                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+            },
             damageGraphName: function () {
                 switch (this.graphdata.damagemode) {
                     case DamageType.All:
@@ -112,6 +136,13 @@
                 return name;
             },
             computeData: function () {
+                if (!this.data) {
+                    return [];
+                }
+                var requiredTraceCount = this.playerOffset + (logData.targetless ? 2 : 4);
+                if (this.data.length < requiredTraceCount) {
+                    return this.data;
+                }
                 this.layout.datarevision = new Date().getTime();
                 //this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var res = this.data;
@@ -137,7 +168,11 @@
                 this.data = [];
                 this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
                 var oldOffset = this.playerOffset;
-                this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
+                const boonGraph = this.selectedMinion ? this.selectedMinion.boonGraph?.[this.phaseindex] : this.player.details.boonGraph?.[this.phaseindex];
+                const buffTraceStartOffset = this.playerOffset;
+                this.playerOffset += computeBuffData(boonGraph, this.data);
+                const traceCountBefore = this.data.length;
+                this.playerOffset += computeBuffData(boonGraph, this.data);
                 var hasBuffs = oldOffset !== this.playerOffset;
                 this.graphOffset = this.playerOffset;
                 this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');

@@ -1,5 +1,5 @@
 <template>
-    <div>    
+    <div>
         <div :key="'activedurationplayer'" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
@@ -8,13 +8,26 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="activeduration = 1" data-original-title="Buffs volumes applied by each player to the selected player based on currently selected phase. Removed dead and disconnected times."
-                        :class="{active: activeduration === 1 }">Phase active duration</a>
+                       :class="{active: activeduration === 1 }">Phase active duration</a>
                 </li>
             </ul>
         </div>
+        <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
+            <label class="mr-2 mb-0" :for="'boon-volume-minion-select-' + player.id">Buff recipient</label>
+            <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-volume-minion-select-' + player.id" v-model="selectedMinionKey">
+                <option value="">Player</option>
+                <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'volume-minion-group-' + groupIndex"
+                          :label="player.minions[groupIndex].name">
+                    <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'volume-minion-' + groupIndex + '-' + minionIndex"
+                            :value="groupIndex + ':' + minionIndex">
+                        {{minion.name}} #{{minionIndex + 1}}
+                    </option>
+                </optgroup>
+            </select>
+        </div>
         <div class="mt-1 mb-1">
-            <buff-volume-table-component  :outgoing="true" :id="'boon-volume-stats-player-table-' + player.id" :buffs="boons"
-                :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-volume-table-component>
+            <buff-volume-table-component :outgoing="true" :id="'boon-volume-stats-player-table-' + player.id" :buffs="boons"
+                                         :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-volume-table-component>
         </div>
     </div>
 </template>
@@ -27,6 +40,7 @@
         data: function () {
             return {
                 activeduration: 1,
+                selectedMinionKey: "",
                 cacheBoon: new Map(),
                 cacheBoonSums: new Map(),
             };
@@ -35,15 +49,36 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
-            boonData: function () {
-                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
+            hasMinions: function () {
+                return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+            },
+            selectedMinion: function () {
+                if (!this.selectedMinionKey) {
+                    return null;
+                }
+                const indexes = this.selectedMinionKey.split(':').map(Number);
+                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+            },
+            boonData: function() {
+                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
                 const res = [];
                 const activeTimes = this.phase.playerActiveTimes;
-                const activeduration = this.activeduration;        
+                const activeduration = this.activeduration;
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
+                if (this.selectedMinion) {
+                    const dictionaries = activeduration ? this.selectedMinion.boonVolumeActiveDictionaries[this.phaseindex] : this.selectedMinion.boonVolumeDictionaries[this.phaseindex];
+                    for (let i = 0; i < players.length; i++) {
+                        if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
+                            continue;
+                        }
+                        res.push({ player: players[i], data: dictionaries[i] });
+                    }
+                    this.cacheBoon.set(id, res);
+                    return res;
+                }
                 for (let i = 0; i < players.length; i++) {
                     if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                         continue;
@@ -56,13 +91,23 @@
                 this.cacheBoon.set(id, res);
                 return res;
             },
-            boonSums: function () {
-                const id = this.phaseindex + '-' + this.activeduration;
+            boonSums: function() {
+                const id = this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
                 const activeduration = this.activeduration;
                 const res = [];
+                if (this.selectedMinion) {
+                    const minionData = activeduration ? this.selectedMinion.boonVolumeActiveStats[this.phaseindex] : this.selectedMinion.boonVolumeStats[this.phaseindex];
+                    res.push({
+                        icon: this.selectedMinion.icon,
+                        name: this.selectedMinion.name,
+                        data: minionData.data
+                    });
+                    this.cacheBoonSums.set(id, res);
+                    return res;
+                }
                 const playerData = activeduration ? this.buffVolumesStatContainer.boonVolumeActiveStats[this.playerindex] : this.buffVolumesStatContainer.boonVolumeStats[this.playerindex];
                 const activeTimes = this.phase.playerActiveTimes;
                 if (activeduration && activeTimes[this.playerindex] < 1e-6) {
