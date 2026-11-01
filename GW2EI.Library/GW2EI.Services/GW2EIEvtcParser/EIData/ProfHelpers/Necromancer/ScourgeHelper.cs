@@ -54,6 +54,27 @@ internal static class ScourgeHelper
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];
 
+    private static int GetExpectedShadeDuration(LogData logData, GW2BuildEvent gw2Build)
+    {
+        int expectedDuration;
+        if (gw2Build.Build >= GW2Builds.July2026Balance)
+        {
+            expectedDuration = 15000;
+        }
+        else
+        {
+            if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
+            {
+                expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+            }
+            else
+            {
+                expectedDuration = gw2Build.Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+            }
+        }
+        return expectedDuration;
+    }
+
     public static List<BuffEvent> AddShadeBuffsFromEffects(IReadOnlyList<EffectEvent> shadeEffects, LogData logData, SkillData skillData, GW2BuildEvent gw2Build, EvtcVersionEvent evtcVersion)
     {
         var res = new List<BuffEvent>();
@@ -66,22 +87,7 @@ internal static class ScourgeHelper
                 continue;
             }
             SkillItem skill = shade.GUIDEvent.GUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
-            int expectedDuration;
-            if (gw2Build.Build >= GW2Builds.July2026Balance)
-            {
-                expectedDuration = 15000;
-            }
-            else
-            {
-                if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
-                {
-                    expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
-                }
-                else
-                {
-                    expectedDuration = gw2Build.Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
-                }
-            }
+            int expectedDuration = GetExpectedShadeDuration(logData, gw2Build);
             int duration = shade.HasDynamicEndTime ? Math.Min((int)(shade.DynamicEndTime - shade.Time), expectedDuration) : expectedDuration;
             res.Add(new BuffApplyEvent(shade.Src, shade.Src, shade.Time, duration, skill, IFF.Friend, buffInstance, true));
             res.Add(new BuffRemoveSingleEvent(shade.Src, shade.Src, shade.Time + duration, Math.Max(expectedDuration - duration, 0), skill, IFF.Friend, buffInstance++));
@@ -136,16 +142,9 @@ internal static class ScourgeHelper
             foreach (EffectEvent effect in scourgeShades)
             {
                 uint radius = (uint)(effect.GUIDEvent.GUID == EffectGUIDs.ScourgeShadeSandSavant ? 300 : 180);
-                long duration;
-                if (log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
-                {
-                    duration = log.LogMetadata.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
-                }
-                else
-                {
-                    duration = log.LogMetadata.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
-                }
-                (long, long) lifespan = effect.ComputeLifespan(log, duration);
+
+                int expectedDuration = GetExpectedShadeDuration(log.LogData, log.CombatData.GetGW2BuildEvent());
+                (long, long) lifespan = effect.ComputeLifespan(log, expectedDuration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectShade);
             }
         }
