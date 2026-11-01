@@ -45,8 +45,8 @@ partial class SingleActor
         }
     }
 
-    private delegate List<DamageModifier> GetDamageModifiers(ParsedEvtcLog log, SingleActor actor);
-    private static void FillDamageModifierEventsDict(CachingCollectionWithAgentTarget<Dictionary<int, List<DamageModifierEvent>>> dict, ParsedEvtcLog log, SingleActor src, long start, long end, bool useDst, GetDamageModifiers damageModifierFetcher)
+    private delegate List<DamageModifier> DamageModifierFetcher(ParsedEvtcLog log, SingleActor actor);
+    private static void FillDamageModifierEventsDict(CachingCollectionWithAgentTarget<Dictionary<int, List<DamageModifierEvent>>> dict, ParsedEvtcLog log, SingleActor src, long start, long end, bool useDst, DamageModifierFetcher damageModifierFetcher)
     {
         if (dict.IsEmpty())
         {
@@ -90,15 +90,15 @@ partial class SingleActor
         }
     }
 
-    private delegate Dictionary<int, List<DamageModifierEvent>> GetDamageModifierEventsDict(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    private Dictionary<int, DamageModifierStat> ComputeDamageModifierStats(CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>> dict, SingleActor? target, ParsedEvtcLog log, long start, long end, GetDamageModifierEventsDict dictFetcher)
+    private delegate Dictionary<int, List<DamageModifierEvent>> DamageModifierEventsFetcher(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    private Dictionary<int, DamageModifierStat> ComputeDamageModifierStats(CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>> dict, SingleActor? target, ParsedEvtcLog log, long start, long end, DamageModifierEventsFetcher damageModifierEventsFetcher)
     {
         if (dict.TryGetValue(start, end, target, out var res))
         {
             return res;
         }
         res = new Dictionary<int, DamageModifierStat>();
-        foreach (var pair in dictFetcher(target, log, start, end))
+        foreach (var pair in damageModifierEventsFetcher(target, log, start, end))
         {
             DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
             if (damageMod != null)
