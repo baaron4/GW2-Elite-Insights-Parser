@@ -12,6 +12,8 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
         if (!_noBuffAppliesPerGivers.TryGetValue(player, out var noBuffApplies))
         {
             noBuffApplies = [];
+            // Lively lute necessary for quickness, only multi timestamp quickness application currently in game
+            var livelyLuteCastsByActor = BuffID == SkillIDs.Quickness ? log.CombatData.GetAnimatedCastData(SkillIDs.LivelyLute).GroupBy(x => log.FindActor(x.Caster.FindEnglobedAgentItem(x.Time))).ToDictionary(x => x.Key, x => x.ToList()) : [];
             // Find buff applies to other players from the same subroup + current player
             var sameGroupPlayers = log.PlayerList.Where(x => x.Group == player.Group && x.InAwareTimes(player)).ToList();
             List<BuffApplyEvent> buffApplies = [];
@@ -44,8 +46,28 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                 {
                     groupedApplies[list.First().Time] = list;
                 }
+                if (livelyLuteCastsByActor.TryGetValue(applierActor, out var livelyLuteCasts))
+                {
+                    // Regroup lists during lively lute cast windows
+                    foreach (var livelyLuteCast in livelyLuteCasts)
+                    {
+                        var candidateKeys = groupedApplies.Keys.Where(x => x >= livelyLuteCast.Time && x <= livelyLuteCast.Time + 1100).ToList();
+                        candidateKeys.Sort();
+                        if (candidateKeys.Count > 1)
+                        {
+                            var first = candidateKeys[0];
+                            var firstList = groupedApplies[first];
+                            for (int i = 1; i < candidateKeys.Count; i++)
+                            {
+                                if (groupedApplies.Remove(candidateKeys[i], out var removedList))
+                                {
+                                    firstList.AddRange(removedList);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            var livelyLuteCasts = BuffID == SkillIDs.Quickness ? log.CombatData.GetAnimatedCastData(SkillIDs.LivelyLute).GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList()) : [];
             // Prepare the dictionary for every players from the same subgroup
             foreach (var sameGroupPlayer in sameGroupPlayers)
             {
@@ -63,11 +85,6 @@ internal class PlayerMissedBuffApplyEvent : CheckedMechanic<BuffApplyEvent>
                         {
                             var firstBuffApplyFromSequence = buffAppliesSequence.Value.First();
                             var applier = firstBuffApplyFromSequence.By;
-                            // Security window for lively lute
-                            if (livelyLuteCasts.TryGetValue(applier, out var casts) && casts.Any(x => x.Time < firstBuffApplyFromSequence.Time && x.Time + 1100 > firstBuffApplyFromSequence.Time))
-                            {
-                                continue;
-                            }
                             // Verify that the player is not dead nor dc
                             if (!sameGroupPlayer.IsDead(log, firstBuffApplyFromSequence.Time) && !sameGroupPlayer.IsDC(log, firstBuffApplyFromSequence.Time))
                             {
