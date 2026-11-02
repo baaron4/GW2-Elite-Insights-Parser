@@ -16,7 +16,7 @@
             <label class="mr-2 mb-0" :for="'boon-minion-select-' + player.id">Buff recipient</label>
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
-                <optgroup v-if="minionGroup.isUniquePerTimeFrame && minionGroup.instances && minionGroup.instances.length > 0"
+                <optgroup v-if="minionGroup.instances && minionGroup.instances.length > 0"
                           v-for="(minionGroup, groupIndex) in player.details.minions" :key="'uptime-minion-group-' + groupIndex"
                           :label="player.minions[groupIndex].name">
                     <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'uptime-minion-' + groupIndex + '-' + minionIndex"
@@ -60,7 +60,6 @@
             hasMinions: function () {
                 return this.player.details.minions &&
                     this.player.details.minions.some(group =>
-                        group.isUniquePerTimeFrame &&
                         group.instances &&
                         group.instances.length > 0
                     );

@@ -114,7 +114,7 @@
                 const minionGroups = this.player.details.minions || [];
                 for (let groupIndex = 0; groupIndex < minionGroups.length; groupIndex++) {
                     const group = minionGroups[groupIndex];
-                    if (!group.isUniquePerTimeFrame || !group.instances) {
+                    if (!group.instances) {
                         continue;
                     }
                     const instances = [];

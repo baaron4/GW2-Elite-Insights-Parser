@@ -61,20 +61,18 @@ internal class ActorDetailsDto
         var phases = log.LogData.GetPhases(log);
         var dto = new MinionsDetailsDto
         {
-            IsUniquePerTimeFrame = minion.IsUniquePerTimeFrame,
             DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
-            Instances = new(minion.MinionList.Count),
         };
-
-        foreach (NPC minionInstance in minion.MinionList)
-        {
-            dto.Instances.Add(MinionInstanceDetailsDto.Build(log, minionInstance, used, minion.IsUniquePerTimeFrame));
-        }
 
         if (minion.IsUniquePerTimeFrame)
         {
+            dto.Instances = new(minion.MinionList.Count);
+            foreach (NPC minionInstance in minion.MinionList)
+            {
+                dto.Instances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
+            }
             dto.Rotation = new(phases.Count);
         }
 
@@ -174,7 +172,6 @@ internal class ActorDetailsDto
 
             dto.Minions.Add(new MinionsDetailsDto
             {
-                IsUniquePerTimeFrame = minion.IsUniquePerTimeFrame,
                 DmgDistributions = dmgDistributions,
                 DmgDistributionsTaken = dmgTakenDistributions
             });
