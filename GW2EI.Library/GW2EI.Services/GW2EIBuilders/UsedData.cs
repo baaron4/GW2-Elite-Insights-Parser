@@ -2,7 +2,7 @@
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParserHelpers;
 
-internal abstract class BaseUsedData
+internal abstract class UsedData
 {
     private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastCastBarExecute, int? ControlReturn)> skillDurations = new(32);
 
