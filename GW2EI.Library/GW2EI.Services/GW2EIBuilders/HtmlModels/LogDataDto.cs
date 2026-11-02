@@ -476,14 +476,11 @@ internal class LogDataDto
         }
     }
 
-    internal class UsedHtmlData : BaseUsedData
+    internal class UsedHtmlData : UsedData
     {
         //TODO_PERF(Rennorb) @find capacity dependencies
-        public readonly Dictionary<long, Buff> buffs = new(128);
         public readonly HashSet<OutgoingDamageModifier> damageMods = new(32);
         public readonly HashSet<IncomingDamageModifier> incDamageMods = new(16);
-        public readonly Dictionary<long, SkillItem> skills = new(256);
-        public readonly Dictionary<string, AgentItem> npcs = new(16);
     };
 
     public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)

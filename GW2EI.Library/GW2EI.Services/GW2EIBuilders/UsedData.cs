@@ -1,9 +1,14 @@
 ﻿
 using GW2EIEvtcParser;
+using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 
 internal abstract class UsedData
 {
+    public readonly Dictionary<long, Buff> buffs = new(128);
+    public readonly Dictionary<long, SkillItem> skills = new(256);
+    public readonly Dictionary<string, AgentItem> npcs = new(16);
     private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastCastBarExecute, int? ControlReturn)> skillDurations = new(32);
 
     public (int? LastCastBarExecute, int? ControlReturn) GetComputedSkillDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
