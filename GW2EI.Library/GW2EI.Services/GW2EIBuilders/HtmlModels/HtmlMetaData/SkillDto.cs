@@ -91,6 +91,7 @@ internal class SkillDto : IDItemDto
             var target = cl.GetActualTarget(log);
             string? targetKey = null;
             if (target.IsPlayer ||
+                log.FriendlyAgents.Contains(target) ||
                 log.LogData.Logic.TargetAgents.Contains(target) ||
                 log.LogData.Logic.TrashMobAgents.Contains(target))
             {
