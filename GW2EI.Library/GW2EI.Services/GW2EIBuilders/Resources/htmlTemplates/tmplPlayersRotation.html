@@ -157,10 +157,10 @@
         created: function () {
             this.computeLayout();
         },
-        activated: function () {
+        mounted: function () {
             var div = document.getElementById(this.graphid);
-            var _this = this;
-            div.on('plotly_relayout', function (evt) {
+            var _this = this;  
+            div._relayoutCB = function(evt) {
                 var layout = _this.layout;
                 var images = layout.images;
                 var x0 = layout.xaxis.range[0];
@@ -170,7 +170,7 @@
                     layout.datarevision = new Date().getTime();
                     //console.log("re-drawing");
                 }
-            });
+            }
         },
         methods: {
             stopClickEvent: function (event) {
