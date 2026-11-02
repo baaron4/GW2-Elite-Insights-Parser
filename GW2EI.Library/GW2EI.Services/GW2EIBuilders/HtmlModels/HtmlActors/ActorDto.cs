@@ -76,7 +76,8 @@ internal abstract class ActorDto
                 // that means uniquely identified but not part of friendlies/targets
                 // Trash mobs, minions, etc
                 dict.TryAdd(key, log.FindActor(agent).Character);
-            } else
+            }
+            else
             {
                 dict.TryAdd(key, agent.GetDecoratedFirstName(log));
             }
