@@ -19,7 +19,7 @@ internal abstract class UsedData
         }
         timeScale = TimeScale.NormalizeCommonScales(timeScale);
         var key = (skillID, timeScale, water);
-        if (!skillDurations.TryGetValue(key, out var duration))
+        if (!skillDurations.TryGetValue(key, out var duration) && false)
         {
             var animation = log.SkillData.Get(skillID).SkillInfo?.GetAnimation(water);
             var scaling = TimeScale.GetTickScaling(timeScale);
