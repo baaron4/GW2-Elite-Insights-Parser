@@ -132,10 +132,10 @@ internal static class JsonLogBuilder
 
     internal class UsedJsonData : UsedData
     {
-        public readonly Dictionary<string, HashSet<long>> personalBuffs = new (20); //TODO_PERF(Rennorb)
-        public readonly Dictionary<string, HashSet<long>> personalDamageMods = new (20); //TODO_PERF(Rennorb)
-        public readonly Dictionary<int, DamageModifier> damageMods = new (50); //TODO_PERF(Rennorb)
-        public readonly HashSet<ulong> teams = new (5);
+        public readonly Dictionary<string, HashSet<long>> personalBuffs = new(20); //TODO_PERF(Rennorb)
+        public readonly Dictionary<string, HashSet<long>> personalDamageMods = new(20); //TODO_PERF(Rennorb)
+        public readonly Dictionary<int, DamageModifier> damageMods = new(50); //TODO_PERF(Rennorb)
+        public readonly HashSet<ulong> teams = new(5);
     };
 
     public static JsonLog BuildJsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadLinks)
