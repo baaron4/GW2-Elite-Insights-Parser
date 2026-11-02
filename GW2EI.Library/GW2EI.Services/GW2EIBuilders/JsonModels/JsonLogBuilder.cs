@@ -341,6 +341,15 @@ internal static class JsonLogBuilder
         {
             jsonLog.TeamMap = teamDesc;
         }
+        var agentNameMap = new Dictionary<string, string>(usedData.npcs.Count);
+        foreach (var (key, agent) in usedData.npcs)
+        {
+            agentNameMap[key] = agent?.GetDecoratedFirstName(log) ?? "";
+        }
+        if (agentNameMap.Count > 0)
+        {
+            jsonLog.AgentNameMap = agentNameMap;
+        }
         //
         return jsonLog;
     }

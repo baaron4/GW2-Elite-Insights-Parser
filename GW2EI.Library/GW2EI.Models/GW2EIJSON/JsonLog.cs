@@ -517,6 +517,15 @@ public class JsonLog
     public IReadOnlyDictionary<string, TeamDesc>? TeamMap;
 
     /// <summary>
+    /// Dictionary of encountered agents, used for <see cref="JsonRotation.JsonSkill.Target"/> \n
+    /// If key starts with "u", it matches a <see cref="JsonActor.UniqueID"/>, the corresponding result in the dictionary will also be an empty string. \n
+    /// If key starts with "v", target is a volatile (gadget, structure, etc) species id. \n
+    /// If key starts with "s", species id is stable.
+    /// </summary>
+    /// <seealso cref="DamageModDesc"/>
+    public IReadOnlyDictionary<string, string>? AgentNameMap;
+
+    /// <summary>
     /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
     /// </summary>
     /// <seealso cref="BuffMap"/>

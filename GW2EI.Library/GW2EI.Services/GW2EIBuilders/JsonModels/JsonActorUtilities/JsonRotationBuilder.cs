@@ -14,6 +14,22 @@ internal static class JsonRotationBuilder
     private static JsonSkill BuildJsonSkill(ParsedEvtcLog log, CastEvent cl, UsedJsonData usedData)
     {
         var (LastCastBarExecute, ControlReturn) = usedData.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, false);
+
+        var target = cl.GetActualTarget(log);
+        string? targetKey = null;
+        if (target.IsPlayer ||
+            log.FriendlyAgents.Contains(target) ||
+            log.LogData.Logic.TargetAgents.Contains(target))
+        {
+            targetKey = "u" + target.UniqueID;
+            usedData.npcs.TryAdd(targetKey, null);
+        }
+        else if (target.IsNPC && !target.IsUnamedSpecies())
+        {
+            var prefix = target.IsVolatileSpecies() ? "v" : "s";
+            targetKey = prefix + target.ID;
+            usedData.npcs.TryAdd(targetKey, target);
+        }
         var jsonSkill = new JsonSkill
         {
             CastTime = (int)cl.Time,
@@ -22,6 +38,7 @@ internal static class JsonRotationBuilder
             Quickness = cl.AccelerationQuicknessSlow,
             ExpectedCastBarDuration = LastCastBarExecute ?? null,
             ExpectedReturnControlDuration = ControlReturn ?? null,
+            Target = targetKey
         };
         if (cl.IgnoreOnRotationRender())
         {

@@ -49,6 +49,12 @@ public class JsonRotation
         public double Quickness;
 
         /// <summary>	
+        /// If set, the skill was targeting the specified 
+        /// </summary>	
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Target = null;
+
+        /// <summary>	
         /// If true, the EI html will ignore this event when displaying rotations. The cast itself remains relevant for statistical purposes. This is only for visual convenience on rotation display. \n
         /// </summary>	
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
