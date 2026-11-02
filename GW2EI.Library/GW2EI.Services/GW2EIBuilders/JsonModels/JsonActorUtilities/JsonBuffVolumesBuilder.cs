@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 using static GW2EIJSON.JsonBuffVolumes;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
@@ -34,17 +35,14 @@ internal static class JsonBuffVolumesBuilder
     }
 
 
-    public static JsonBuffVolumes BuildJsonBuffVolumes(long buffID, ParsedEvtcLog log, List<JsonBuffVolumesData> buffVolumeData, Dictionary<long, Buff> buffMap)
+    public static JsonBuffVolumes BuildJsonBuffVolumes(long buffID, ParsedEvtcLog log, List<JsonBuffVolumesData> buffVolumeData, UsedJsonData usedData)
     {
         var jsonBuffVolumes = new JsonBuffVolumes
         {
             Id = buffID,
             BuffVolumeData = buffVolumeData
         };
-        if (!buffMap.ContainsKey(buffID))
-        {
-            buffMap[buffID] = log.Buffs.BuffsByIDs[buffID];
-        }
+        usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
         return jsonBuffVolumes;
     }
 }

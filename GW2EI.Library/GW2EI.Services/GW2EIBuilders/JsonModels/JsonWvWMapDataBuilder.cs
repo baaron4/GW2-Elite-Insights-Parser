@@ -1,12 +1,13 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels;
 
 internal static class JsonWvWMapDataBuilder
 {
-    public static JsonWvWMapData BuildJsonWvWMapData(ParsedEvtcLog log, WvWTeamsEvent wvwTeamsEvent, HashSet<ulong> teampMap)
+    public static JsonWvWMapData BuildJsonWvWMapData(ParsedEvtcLog log, WvWTeamsEvent wvwTeamsEvent, UsedJsonData usedData)
     {
         var jsonWvWMapData = new JsonWvWMapData
         {
@@ -19,7 +20,7 @@ internal static class JsonWvWMapDataBuilder
             RedTeamID = wvwTeamsEvent.RedTeamID,
         };
 
-        teampMap.UnionWith([wvwTeamsEvent.BlueTeamID, wvwTeamsEvent.GreenTeamID, wvwTeamsEvent.RedTeamID]);
+        usedData.teams.UnionWith([wvwTeamsEvent.BlueTeamID, wvwTeamsEvent.GreenTeamID, wvwTeamsEvent.RedTeamID]);
 
         var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
         foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)

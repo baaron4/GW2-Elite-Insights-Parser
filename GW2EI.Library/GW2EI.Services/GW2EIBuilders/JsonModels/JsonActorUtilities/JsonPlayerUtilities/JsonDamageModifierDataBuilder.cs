@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 using static GW2EIJSON.JsonDamageModifierData;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities;
@@ -34,7 +35,7 @@ internal static class JsonDamageModifierDataBuilder
     }
 
 
-    public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
@@ -44,19 +45,16 @@ internal static class JsonDamageModifierDataBuilder
             {
                 DamageModifier dMod = log.DamageModifiers.OutgoingDamageModifiersByID[key];
                 int iKey = dMod.ID;
-                if (!damageModMap.ContainsKey(iKey))
-                {
-                    damageModMap[iKey] = dMod;
-                }
+                usedData.damageMods.TryAdd(iKey, dMod);
                 if (!dMod.SpecSpecificShared && profEnums.Intersect(dMod.Srcs).Any())
                 {
-                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
+                    if (usedData.personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {
                         personalDamageModSet.Add(iKey);
                     }
                     else
                     {
-                        personalDamageMods[player.Spec.ToString()] =
+                        usedData.personalDamageMods[player.Spec.ToString()] =
                             [
                                 iKey
                             ];
@@ -84,7 +82,7 @@ internal static class JsonDamageModifierDataBuilder
         return res;
     }
 
-    public static List<JsonDamageModifierData> GetIncomingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static List<JsonDamageModifierData> GetIncomingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
@@ -94,19 +92,16 @@ internal static class JsonDamageModifierDataBuilder
             {
                 DamageModifier dMod = log.DamageModifiers.IncomingDamageModifiersByID[key];
                 int iKey = dMod.ID;
-                if (!damageModMap.ContainsKey(iKey))
-                {
-                    damageModMap[iKey] = dMod;
-                }
+                usedData.damageMods.TryAdd(iKey, dMod);
                 if (!dMod.SpecSpecificShared && profEnums.Intersect(dMod.Srcs).Any())
                 {
-                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
+                    if (usedData.personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {
                         personalDamageModSet.Add(iKey);
                     }
                     else
                     {
-                        personalDamageMods[player.Spec.ToString()] =
+                        usedData.personalDamageMods[player.Spec.ToString()] =
                             [
                                 iKey
                             ];
@@ -134,24 +129,24 @@ internal static class JsonDamageModifierDataBuilder
         return res;
     }
 
-    public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
+    public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, UsedJsonData usedData, IReadOnlyList<PhaseData> phases)
     {
         var res = new List<JsonDamageModifierData>[log.LogData.Logic.Targets.Count];
         for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
         {
             SingleActor tar = log.LogData.Logic.Targets[i];
-            res[i] = GetOutgoingDamageModifiers(player, phases.Select(x => player.GetOutgoingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModMap, personalDamageMods);
+            res[i] = GetOutgoingDamageModifiers(player, phases.Select(x => player.GetOutgoingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, usedData);
         }
         return res;
     }
 
-    public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
+    public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, UsedJsonData usedData, IReadOnlyList<PhaseData> phases)
     {
         var res = new List<JsonDamageModifierData>[log.LogData.Logic.Targets.Count];
         for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
         {
             SingleActor tar = log.LogData.Logic.Targets[i];
-            res[i] = GetIncomingDamageModifiers(player, phases.Select(x => player.GetIncomingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModMap, personalDamageMods);
+            res[i] = GetIncomingDamageModifiers(player, phases.Select(x => player.GetIncomingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, usedData);
         }
         return res;
     }

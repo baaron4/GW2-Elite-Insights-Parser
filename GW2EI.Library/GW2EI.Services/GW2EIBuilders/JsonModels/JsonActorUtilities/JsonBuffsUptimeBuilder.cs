@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 using static GW2EIJSON.JsonBuffsUptime;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
@@ -38,17 +39,14 @@ internal static class JsonBuffsUptimeBuilder
     }
 
 
-    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<long, Buff> buffMap)
+    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData)
     {
         var jsonBuffsUptime = new JsonBuffsUptime
         {
             Id = buffID,
             BuffData = buffData
         };
-        if (!buffMap.ContainsKey(buffID))
-        {
-            buffMap[buffID] = log.Buffs.BuffsByIDs[buffID];
-        }
+        usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
         if (settings.RawFormatTimelineArrays)
         {
             jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);

@@ -23,6 +23,18 @@ public class JsonRotation
         public int Duration;
 
         /// <summary>
+        /// Expected cast bar duration of the skill
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ExpectedCastBarDuration;
+
+        /// <summary>
+        /// Expected duration after which control is returned to the caster
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ExpectedReturnControlDuration;
+
+        /// <summary>
         /// Gained time from the animation, could be negative \n
         /// Strictly Negative indicates that the cast was interrupted, considered as time wasted \n
         /// Strictly Positive indicates that the after cast was interrupted, considered as time gained \n

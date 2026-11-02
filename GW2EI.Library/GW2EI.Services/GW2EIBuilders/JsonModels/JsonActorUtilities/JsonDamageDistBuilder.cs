@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 
@@ -10,7 +11,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonDamageDistBuilder
 {
-    private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var jsonDamageDist = new JsonDamageDist
         {
@@ -18,27 +19,23 @@ internal static class JsonDamageDistBuilder
         };
         if (jsonDamageDist.IndirectDamage)
         {
-            if (!buffMap.ContainsKey(id))
+            if (!usedData.buffs.ContainsKey(id))
             {
                 if (log.Buffs.BuffsByIDs.TryGetValue(id, out var buff))
                 {
-                    buffMap[id] = buff;
+                    usedData.buffs[id] = buff;
                 }
                 else
                 {
                     SkillItem skill = log.SkillData.Get(id);
                     var auxBuff = new Buff(skill.Name, id, skill.Icon);
-                    buffMap[id] = auxBuff;
+                    usedData.buffs[id] = auxBuff;
                 }
             }
         }
         else
         {
-            if (!skillMap.ContainsKey(id))
-            {
-                SkillItem skill = log.SkillData.Get(id);
-                skillMap[id] = skill;
-            }
+            usedData.skills.TryAdd(id, log.SkillData.Get(id));
         }
         jsonDamageDist.Id = id;
         if (downContributionPerSkillID != null && downContributionPerSkillID.TryGetValue(id, out var downContribution))
@@ -81,14 +78,10 @@ internal static class JsonDamageDistBuilder
         return jsonDamageDist;
     }
 
-    private static JsonDamageDist BuildJsonDamageDist(long id, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static JsonDamageDist BuildJsonDamageDist(long id, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var jsonDamageDist = new JsonDamageDist();
-        if (!skillMap.ContainsKey(id))
-        {
-            SkillItem skill = log.SkillData.Get(id);
-            skillMap[id] = skill;
-        }
+        usedData.skills.TryAdd(id, log.SkillData.Get(id));
         jsonDamageDist.Id = id;
         foreach (BreakbarDamageEvent brkEvent in brList)
         {
@@ -99,7 +92,7 @@ internal static class JsonDamageDistBuilder
         return jsonDamageDist;
     }
 
-    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var res = new List<JsonDamageDist>(dlsByID.Count + brlsByID.Count);
 
@@ -110,7 +103,7 @@ internal static class JsonDamageDistBuilder
                 brls = [];
             }
 
-            res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, downContributionPerSkillID, log, skillMap, buffMap));
+            res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, downContributionPerSkillID, log, usedData));
         }
 
         foreach (var (key, brls) in brlsByID)
@@ -119,7 +112,7 @@ internal static class JsonDamageDistBuilder
             {
                 continue;
             }
-            res.Add(BuildJsonDamageDist(key, brls, log, skillMap, buffMap));
+            res.Add(BuildJsonDamageDist(key, brls, log, usedData));
         }
         return res;
     }

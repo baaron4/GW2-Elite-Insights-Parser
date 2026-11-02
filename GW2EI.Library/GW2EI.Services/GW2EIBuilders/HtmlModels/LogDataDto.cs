@@ -10,7 +10,6 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -74,7 +73,7 @@ internal class LogDataDto
     public string LogEnd;
     public string? InstanceStart;
     public string? InstanceIP;
-    public string InstancePrivacy;
+    public string? InstancePrivacy;
     public string ArcVersion;
     public long EvtcBuild;
     public ulong Gw2Build;

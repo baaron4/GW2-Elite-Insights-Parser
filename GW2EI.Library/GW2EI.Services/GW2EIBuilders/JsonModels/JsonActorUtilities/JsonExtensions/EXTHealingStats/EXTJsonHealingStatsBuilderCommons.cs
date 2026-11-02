@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 
@@ -49,7 +50,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
     }
 
     //TODO_PERF(Rennorb)
-    private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTHealingEvent> list, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var jsonHealingDist = new EXTJsonHealingDist
         {
@@ -57,27 +58,23 @@ internal static class EXTJsonHealingStatsBuilderCommons
         };
         if (jsonHealingDist.IndirectHealing)
         {
-            if (!buffMap.ContainsKey(id))
+            if (!usedData.buffs.ContainsKey(id))
             {
                 if (log.Buffs.BuffsByIDs.TryGetValue(id, out var buff))
                 {
-                    buffMap[id] = buff;
+                    usedData.buffs[id] = buff;
                 }
                 else
                 {
                     SkillItem skill = list.First().Skill;
                     var auxBuff = new Buff(skill.Name, id, skill.Icon);
-                    buffMap[id] = auxBuff;
+                    usedData.buffs[id] = auxBuff;
                 }
             }
         }
         else
         {
-            if (!skillMap.ContainsKey(id))
-            {
-                SkillItem skill = list.First().Skill;
-                skillMap[id] = skill;
-            }
+            usedData.skills.TryAdd(id, list.First().Skill);
         }
         jsonHealingDist.Id = id;
         jsonHealingDist.Min = int.MaxValue;
@@ -99,12 +96,12 @@ internal static class EXTJsonHealingStatsBuilderCommons
     }
 
     //TODO_PERF(Rennorb)
-    internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTHealingEvent>> dlsByID, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var res = new List<EXTJsonHealingDist>();
         foreach (var pair in dlsByID)
         {
-            res.Add(BuildHealingDist(pair.Key, pair.ToList(), log, skillMap, buffMap));
+            res.Add(BuildHealingDist(pair.Key, pair.ToList(), log, usedData));
         }
         return res;
     }

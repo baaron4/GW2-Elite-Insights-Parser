@@ -1,8 +1,8 @@
 ﻿using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 using static GW2EIJSON.JsonBuffsUptime;
 using static GW2EIJSON.JsonBuffVolumes;
 
@@ -14,10 +14,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonNPCBuilder
 {
 
-    public static JsonNPC BuildJsonNPC(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, HashSet<ulong> teampMap)
+    public static JsonNPC BuildJsonNPC(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
     {
         var jsonNPC = new JsonNPC();
-        JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap, teampMap);
+        JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, usedData);
         //
         jsonNPC.Id = npc.ID;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
@@ -76,8 +76,8 @@ internal static class JsonNPCBuilder
         jsonNPC.BarrierPercent = barrierLeftPercent;
         jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeftPercent, log.LogData.LogEnd);
         //
-        jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffMap);
-        jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, buffMap);
+        jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, usedData);
+        jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, usedData);
         // Breakbar
         if (settings.RawFormatTimelineArrays)
         {
@@ -86,7 +86,7 @@ internal static class JsonNPCBuilder
         return jsonNPC;
     }
 
-    private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
+    private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffs = phases.Select(x => npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
@@ -113,11 +113,11 @@ internal static class JsonNPCBuilder
                     data.Add(value);
                 }
             }
-            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffMap));
+            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, usedData));
         }
         return res;
     }
-    private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
+    private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, UsedJsonData usedData)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffVolumes = phases.Select(x => npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
@@ -144,7 +144,7 @@ internal static class JsonNPCBuilder
                     data.Add(value);
                 }
             }
-            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, buffMap));
+            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, usedData));
         }
         return res;
     }
