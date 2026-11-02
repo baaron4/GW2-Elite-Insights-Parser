@@ -23,7 +23,7 @@ internal class FoodDto
         UniqueSlot = consume.Buff.Classification == Buff.BuffClassification.Enhancement ? 2 : (consume.Buff.Classification == Buff.BuffClassification.Nourishment ? 1 : 0);
     }
 
-    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, UsedData used)
+    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, UsedHtmlData used)
     {
         var consumables = actor.GetConsumablesList(log);
         var list = new List<FoodDto>(consumables.Count);

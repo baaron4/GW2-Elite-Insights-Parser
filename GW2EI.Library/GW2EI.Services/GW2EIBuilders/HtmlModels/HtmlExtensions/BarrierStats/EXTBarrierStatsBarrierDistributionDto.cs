@@ -17,7 +17,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
     public long TotalCasting { get; set; }
     public List<BarrierDistributionItem>? Distribution { get; set; }
 
-    private static BarrierDistributionItem GetBarrierToItem(SkillItem skill, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, UsedData used, BuffsContainer boons, PhaseData phase)
+    private static BarrierDistributionItem GetBarrierToItem(SkillItem skill, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, UsedHtmlData used, BuffsContainer boons, PhaseData phase)
     {
         int totalbarrier = 0,
             minbarrier = int.MaxValue,
@@ -87,7 +87,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
         ];
     }
 
-    public static EXTBarrierStatsBarrierDistributionDto BuildIncomingBarrierDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedData used)
+    public static EXTBarrierStatsBarrierDistributionDto BuildIncomingBarrierDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedHtmlData used)
     {
         var barrierLogs = p.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End);
         var distribution = barrierLogs.GroupBy(x => x.Skill)
@@ -102,7 +102,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
     }
 
 
-    private static List<BarrierDistributionItem> BuildBarrierDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTBarrierEvent> barrierLogs, UsedData used, PhaseData phase)
+    private static List<BarrierDistributionItem> BuildBarrierDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTBarrierEvent> barrierLogs, UsedHtmlData used, PhaseData phase)
     {
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         var list = barrierLogs.GroupBy(x => x.Skill)
@@ -111,7 +111,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
         return list;
     }
 
-    private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, SingleActor p, SingleActor? target, PhaseData phase, UsedData used)
+    private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, SingleActor p, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
         var barrierLogs = p.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, phase.Start, phase.End);
@@ -126,13 +126,13 @@ internal class EXTBarrierStatsBarrierDistributionDto
     }
 
 
-    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyBarrierDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyBarrierDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         EXTFinalOutgoingBarrierStat outgoingBarrierStats = actor.EXTBarrier.GetOutgoingBarrierStats(target, log, phase.Start, phase.End);
         return BuildBarrierDistDataInternal(log, outgoingBarrierStats, actor, target, phase, used);
     }
 
-    private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var dto = new EXTBarrierStatsBarrierDistributionDto();
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
@@ -144,14 +144,14 @@ internal class EXTBarrierStatsBarrierDistributionDto
         return dto;
     }
 
-    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyMinionBarrierDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyMinionBarrierDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         EXTFinalOutgoingBarrierStat outgoingBarrierStats = actor.EXTBarrier.GetOutgoingBarrierStats(target, log, phase.Start, phase.End);
 
         return BuildBarrierDistDataMinionsInternal(log, outgoingBarrierStats, minions, target, phase, used);
     }
 
-    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyMinionIncomingBarrierDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyMinionIncomingBarrierDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var dto = new EXTBarrierStatsBarrierDistributionDto();
         var barrierLogs = minions.EXTBarrier.GetIncomingBarrierEvents(target, log, phase.Start, phase.End);

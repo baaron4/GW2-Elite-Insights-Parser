@@ -166,7 +166,7 @@ internal class LogDataDto
         }
     }
 
-    private static Dictionary<Spec, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> persBuffDict, UsedData used)
+    private static Dictionary<Spec, IReadOnlyList<Buff>> BuildPersonalBuffData(ParsedEvtcLog log, Dictionary<string, List<long>> persBuffDict, UsedHtmlData used)
     {
         var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>(log.FriendliesListBySpec.Count);
         // Collect all personal buffs by spec
@@ -206,7 +206,7 @@ internal class LogDataDto
         return boonsBySpec;
     }
 
-    private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalOutgoingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedData used)
+    private static Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> BuildPersonalOutgoingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedHtmlData used)
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>(log.FriendliesListBySpec.Count);
         // Collect all personal damage mods by spec
@@ -236,7 +236,7 @@ internal class LogDataDto
         return damageModBySpecs;
     }
 
-    private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncomingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedData used)
+    private static Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> BuildPersonalIncomingDamageModData(ParsedEvtcLog log, Dictionary<string, List<long>> dgmModDict, UsedHtmlData used)
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>(log.FriendliesListBySpec.Count);
         // Collect all personal damage mods by spec
@@ -278,7 +278,7 @@ internal class LogDataDto
     [MemberNotNull(nameof(Enhancements))]
     [MemberNotNull(nameof(OtherConsumables))]
     [MemberNotNull(nameof(InstanceBuffs))]
-    private void BuildBuffDictionaries(ParsedEvtcLog log, UsedData used)
+    private void BuildBuffDictionaries(ParsedEvtcLog log, UsedHtmlData used)
     {
         StatisticsHelper statistics = log.StatisticsHelper;
         Boons = new(statistics.PresentBoons.Count);
@@ -362,7 +362,7 @@ internal class LogDataDto
         }
     }
 
-    private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, UsedData used,
+    private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, UsedHtmlData used,
         HashSet<int> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
@@ -419,7 +419,7 @@ internal class LogDataDto
         }
     }
 
-    private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, UsedData used,
+    private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, UsedHtmlData used,
         HashSet<int> allIncDamageMods, List<IncomingDamageModifier> commonIncDamageModifiers, List<IncomingDamageModifier> itemIncDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
@@ -476,7 +476,7 @@ internal class LogDataDto
         }
     }
 
-    internal class UsedData
+    internal class UsedHtmlData : BaseUsedData
     {
         //TODO_PERF(Rennorb) @find capacity dependencies
         public readonly Dictionary<long, Buff> buffs = new(128);
@@ -484,34 +484,13 @@ internal class LogDataDto
         public readonly HashSet<IncomingDamageModifier> incDamageMods = new(16);
         public readonly Dictionary<long, SkillItem> skills = new(256);
         public readonly Dictionary<string, AgentItem> npcs = new(16);
-
-        private readonly Dictionary<(long Skill, double TimeScale, bool Water), (int? LastCastBarExecute, int? ControlReturn)> skillDurations = new(32);
-
-        public (int? LastCastBarExecute, int? ControlReturn) GetComputedSkillDuration(ParsedEvtcLog log, long skillID, double timeScale, bool water)
-        {
-            if (log.LogMetadata.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.SkillInfoRework)
-            {
-                return (null, null);
-            }
-            timeScale = TimeScale.NormalizeCommonScales(timeScale);
-            var key = (skillID, timeScale, water);
-            if (!skillDurations.TryGetValue(key, out var duration))
-            {
-                var animation = log.SkillData.Get(skillID).SkillInfo?.GetAnimation(water);
-                var scaling = TimeScale.GetTickScaling(timeScale);
-                duration.LastCastBarExecute = animation?.ComputeCastBarExecute(true, scaling);
-                duration.ControlReturn = animation?.ComputeControlReturn(scaling);
-                skillDurations.Add(key, duration);
-            }
-            return duration;
-        }
     };
 
     public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)
     {
         using var _t = new AutoTrace("BuildLogData");
 
-        var used = new UsedData();
+        var used = new UsedHtmlData();
 
         log.UpdateProgressWithCancellationCheck("HTML: building Log Data");
         var logData = new LogDataDto(log, light, parserVersion, uploadLinks);

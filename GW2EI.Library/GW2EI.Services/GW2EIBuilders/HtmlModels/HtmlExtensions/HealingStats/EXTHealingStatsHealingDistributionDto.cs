@@ -17,7 +17,7 @@ internal class EXTHealingStatsHealingDistributionDto
     public long TotalCasting { get; set; }
     public List<HealingDistributionItem>? Distribution { get; set; }
 
-    private static HealingDistributionItem GetHealingToItem(SkillItem skill, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, UsedData used, BuffsContainer boons, PhaseData phase)
+    private static HealingDistributionItem GetHealingToItem(SkillItem skill, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, UsedHtmlData used, BuffsContainer boons, PhaseData phase)
     {
         int totalhealing = 0,
             totaldownedhealing = 0,
@@ -92,7 +92,7 @@ internal class EXTHealingStatsHealingDistributionDto
            ];
     }
 
-    public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedData used)
+    public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedHtmlData used)
     {
         EXTFinalIncomingHealingStat incomingHealingStats = p.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
         var dto = new EXTHealingStatsHealingDistributionDto
@@ -110,7 +110,7 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    private static List<HealingDistributionItem> BuildHealingDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTHealingEvent> healingLogs, UsedData used, PhaseData phase)
+    private static List<HealingDistributionItem> BuildHealingDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTHealingEvent> healingLogs, UsedHtmlData used, PhaseData phase)
     {
         var list = new List<HealingDistributionItem>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -121,7 +121,7 @@ internal class EXTHealingStatsHealingDistributionDto
         return list;
     }
 
-    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, SingleActor p, SingleActor? target, PhaseData phase, UsedData used)
+    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, SingleActor p, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
@@ -135,13 +135,13 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    public static EXTHealingStatsHealingDistributionDto BuildFriendlyHealingDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyHealingDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End);
         return BuildHealingDistDataInternal(log, outgoingHealingStats, actor, target, phase, used);
     }
 
-    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
@@ -154,14 +154,14 @@ internal class EXTHealingStatsHealingDistributionDto
         return dto;
     }
 
-    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionHealingDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionHealingDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End);
 
         return BuildHealingDistDataMinionsInternal(log, outgoingHealingStats, minions, target, phase, used);
     }
 
-    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionIncomingHealingDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, UsedData used)
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionIncomingHealingDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, UsedHtmlData used)
     {
         var healingLogs = minions.EXTHealing.GetIncomingHealEvents(target, log, phase.Start, phase.End);
         var dto = new EXTHealingStatsHealingDistributionDto

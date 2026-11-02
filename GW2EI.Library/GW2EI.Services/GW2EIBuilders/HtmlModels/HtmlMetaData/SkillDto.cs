@@ -73,7 +73,7 @@ internal class SkillDto : IDItemDto
         }
     }
 
-    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, UsedData used)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, Actor p, PhaseData phase, UsedHtmlData used)
     {
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
         var list = new List<SkillCastDto>(casting.Count);
