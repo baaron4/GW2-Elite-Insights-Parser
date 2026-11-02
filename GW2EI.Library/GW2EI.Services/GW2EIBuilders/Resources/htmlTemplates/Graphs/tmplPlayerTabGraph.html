@@ -64,9 +64,6 @@
                     this.computeLayout();
                 }
             },
-            selectedMinionKey: function () {
-                this.$nextTick(this.attachGraphRelayoutHandler);
-            },
             minionSelectGroups: function (groups) {
                 if (this.selectedMinionKey &&
                     !groups.some(group =>
@@ -81,8 +78,20 @@
         created: function () {
             this.computeLayout();
         },
-        activated: function () {
-            this.$nextTick(this.attachGraphRelayoutHandler);
+        mounted: function () {
+            var div = document.getElementById(this.graphid);
+            var layout = this.layout;
+            var images = layout.images;
+            var _this = this;         
+            div._relayoutCB = function(evt) {
+                var x0 = layout.xaxis.range[0];
+                var x1 = layout.xaxis.range[1];
+                //console.log("re-layout " + x0 + " " + x1);
+                if (_this.updateVisibily(images, x0, x1)) {
+                    layout.datarevision = new Date().getTime();
+                    //console.log("re-drawing");
+                }
+            }
         },
         computed: {
             healthGraph: function () {
@@ -345,27 +354,6 @@
                 addPointsToGraph(res, this.healthGraph, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
-            },
-            attachGraphRelayoutHandler: function () {
-                const div = document.getElementById(this.graphid);
-
-                if (!div || typeof div.on !== "function" || div._eiRelayoutHandlerAttached) {
-                    return;
-                }
-
-                div._eiRelayoutHandlerAttached = true;
-                div.on('plotly_relayout', () => {
-                    const layout = this.selectedGraph.layout;
-                    const range = layout.xaxis.range;
-
-                    if (!range || range.length < 2) {
-                        return;
-                    }
-
-                    if (this.updateVisibily(layout.images || [], range[0], range[1])) {
-                        layout.datarevision = Date.now();
-                    }
-                });
             },
         }
     });

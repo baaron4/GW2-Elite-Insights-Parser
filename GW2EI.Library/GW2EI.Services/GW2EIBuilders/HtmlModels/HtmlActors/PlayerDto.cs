@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
@@ -62,7 +63,7 @@ internal class PlayerDto : ActorDto
 
     }
 
-    public PlayerDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details) : base(actor, log, details)
+    public PlayerDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData) : base(actor, log, details, usedData)
     {
         Group = actor.Group;
         Acc = actor.Account;

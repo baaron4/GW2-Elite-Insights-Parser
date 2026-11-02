@@ -5,6 +5,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActors;
 
@@ -14,7 +15,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonMinionsBuilder
 {
 
-    public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
     {
         var jsonMinions = new JsonMinions
         {
@@ -98,7 +99,7 @@ internal static class JsonMinionsBuilder
         var minionCastEvents = minions.GetIntersectingCastEvents(log);
         if (minionCastEvents.Count > 0)
         {
-            jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), skillMap).ToList();
+            jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), usedData).ToList();
         }
         //
         var totalDamageDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
@@ -111,16 +112,14 @@ internal static class JsonMinionsBuilder
                 minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 null,
                 log,
-                skillMap,
-                buffMap
+                usedData
             );
             totalDamageTakenDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
                 minions.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 minions.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 null,
                 log,
-                skillMap,
-                buffMap
+                usedData
             );
         }
         jsonMinions.TotalDamageDist = totalDamageDist;
@@ -140,8 +139,7 @@ internal static class JsonMinionsBuilder
                         minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                         null,
                         log,
-                        skillMap,
-                        buffMap
+                        usedData
                     );
                 }
             }
@@ -150,11 +148,11 @@ internal static class JsonMinionsBuilder
         //
         if (log.CombatData.HasEXTHealing && !isEnemyMinion)
         {
-            jsonMinions.EXTHealingStats = EXTJsonMinionsHealingStatsBuilder.BuildMinionsHealingStats(minions, log, skillMap, buffMap);
+            jsonMinions.EXTHealingStats = EXTJsonMinionsHealingStatsBuilder.BuildMinionsHealingStats(minions, log, usedData);
         }
         if (log.CombatData.HasEXTBarrier && !isEnemyMinion)
         {
-            jsonMinions.EXTBarrierStats = EXTJsonMinionsBarrierStatsBuilder.BuildMinionsBarrierStats(minions, log, skillMap, buffMap);
+            jsonMinions.EXTBarrierStats = EXTJsonMinionsBarrierStatsBuilder.BuildMinionsBarrierStats(minions, log, usedData);
         }
         if (log.CanCombatReplay)
         {

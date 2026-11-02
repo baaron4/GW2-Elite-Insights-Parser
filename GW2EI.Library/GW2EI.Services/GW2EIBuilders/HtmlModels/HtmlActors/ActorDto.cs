@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
@@ -24,7 +25,7 @@ internal abstract class ActorDto
     public List<MinionDto> Minions;
     public ActorDetailsDto Details;
 
-    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
+    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData)
     {
         Health = actor.GetHealth(log.CombatData);
         Condi = actor.Condition;
@@ -53,22 +54,33 @@ internal abstract class ActorDto
                 Id = i,
                 Name = minions[i].Character
             });
+            foreach (var minion in minions[i].MinionList)
+            {
+                usedData.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
+            }
         }
     }
 
-    public static void AssembleNPCs(Dictionary<string, AgentItem> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
+    public static void AssembleNPCs(Dictionary<string, AgentItem?> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + npcs.Count);
         foreach (var (key, agent) in npcs)
         {
-            var name = agent.FirstName;
-            var agents = agent.IsVolatileSpecies() ? log.AgentData.GetVolatileSpeciesByID(agent.ID) : log.AgentData.GetStableSpeciesByID(agent.ID);
-            if (agents.Count == 1 || log.LogData.Logic.TrashMobAgents.Contains(agent))
+            if (agent == null)
             {
-                // prefer actor name for unique NPCs
-                name = log.FindActor(agent).Character;
+                continue;
             }
-            dict.Add(key, name);
+            if (key.StartsWith('u'))
+            {
+                // used proper log name for ids that start with "u",
+                // that means uniquely identified but not part of friendlies/targets
+                // Trash mobs, minions, etc
+                dict.TryAdd(key, log.FindActor(agent).Character);
+            }
+            else
+            {
+                dict.TryAdd(key, agent.GetDecoratedFirstName(log));
+            }
         }
     }
 }

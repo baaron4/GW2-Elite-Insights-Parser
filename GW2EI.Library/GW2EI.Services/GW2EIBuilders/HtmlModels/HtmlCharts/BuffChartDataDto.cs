@@ -46,7 +46,7 @@ internal class BuffChartDataDto
         States = bChart.ToObjectList(phase.Start, phase.End);
     }
 
-    private static BuffChartDataDto? BuildBuffGraph(BuffGraph bgm, PhaseData phase, UsedData used)
+    private static BuffChartDataDto? BuildBuffGraph(BuffGraph bgm, PhaseData phase, UsedHtmlData used)
     {
         var bChart = bgm.Values.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
         if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
@@ -57,7 +57,7 @@ internal class BuffChartDataDto
         return new BuffChartDataDto(bgm, bChart, phase);
     }
 
-    private static void BuildBoonGraphData(List<BuffChartDataDto> list, IReadOnlyList<Buff> listToUse, Dictionary<long, BuffGraph> boonGraphData, PhaseData phase, UsedData used)
+    private static void BuildBoonGraphData(List<BuffChartDataDto> list, IReadOnlyList<Buff> listToUse, Dictionary<long, BuffGraph> boonGraphData, PhaseData phase, UsedHtmlData used)
     {
         foreach (Buff buff in listToUse)
         {
@@ -72,7 +72,7 @@ internal class BuffChartDataDto
         }
     }
 
-    private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, PhaseData phase, Dictionary<long, BuffGraph> buffGraphData, UsedData used)
+    private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, PhaseData phase, Dictionary<long, BuffGraph> buffGraphData, UsedHtmlData used)
     {
         var list = new List<BuffChartDataDto>(
             log.StatisticsHelper.PresentBoons.Count +
@@ -115,12 +115,12 @@ internal class BuffChartDataDto
         return list;
     }
 
-    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedData used)
+    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, PhaseData phase, UsedHtmlData used)
     {
         return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value), used);
     }
 
-    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, SingleActor by, PhaseData phase, UsedData used)
+    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, SingleActor by, PhaseData phase, UsedHtmlData used)
     {
         return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log, by).ToDictionary(x => x.Key, x => x.Value), used);
     }

@@ -32,7 +32,7 @@ public class Minions : Actor
 
     public bool IsUniquePerTimeFrame => RangerHelper.IsJuvenilePet(ReferenceAgentItem) ||
             MechanistHelper.IsJadeMech(ReferenceAgentItem) ||
-            NecromancerHelper.IsUndeadMinion(ReferenceAgentItem) ||
+            NecromancerHelper.IsUniqueUndeadMinion(ReferenceAgentItem) ||
             RitualistHelper.IsSpiritMinion(ReferenceAgentItem);
 
     #region DAMAGE

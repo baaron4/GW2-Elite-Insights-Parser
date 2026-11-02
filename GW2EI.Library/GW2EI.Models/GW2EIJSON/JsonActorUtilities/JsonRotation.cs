@@ -23,6 +23,18 @@ public class JsonRotation
         public int Duration;
 
         /// <summary>
+        /// Expected cast bar duration of the skill
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ExpectedCastBarDuration;
+
+        /// <summary>
+        /// Expected duration after which control is returned to the caster
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ExpectedReturnControlDuration;
+
+        /// <summary>
         /// Gained time from the animation, could be negative \n
         /// Strictly Negative indicates that the cast was interrupted, considered as time wasted \n
         /// Strictly Positive indicates that the after cast was interrupted, considered as time gained \n
@@ -35,6 +47,12 @@ public class JsonRotation
         /// Prior arcdps activation update (nov 07 2019) this value can only be 0 or 1
         /// </summary>	
         public double Quickness;
+
+        /// <summary>	
+        /// If set, the skill was targeting the specified 
+        /// </summary>	
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Target = null;
 
         /// <summary>	
         /// If true, the EI html will ignore this event when displaying rotations. The cast itself remains relevant for statistical purposes. This is only for visual convenience on rotation display. \n

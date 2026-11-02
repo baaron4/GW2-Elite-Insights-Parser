@@ -10,7 +10,7 @@ internal class HealingStatsExtension
     public readonly List<EXTHealingStatsPlayerDetailsDto> PlayerHealingDetails;
     public readonly List<List<EXTHealingStatsPlayerChartDto>> PlayerHealingCharts;
 
-    public HealingStatsExtension(ParsedEvtcLog log, UsedData used)
+    public HealingStatsExtension(ParsedEvtcLog log, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         HealingPhases = new(phases.Count);

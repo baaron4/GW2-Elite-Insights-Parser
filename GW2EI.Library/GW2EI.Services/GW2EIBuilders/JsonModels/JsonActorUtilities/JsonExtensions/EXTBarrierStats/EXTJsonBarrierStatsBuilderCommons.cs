@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
 
@@ -29,7 +30,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
     }
 
     //TODO_PERF(Rennorb)
-    private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTBarrierEvent> list, ParsedEvtcLog log, UsedJsonData usedData)
     {
         var jsonBarrierDist = new EXTJsonBarrierDist
         {
@@ -37,27 +38,23 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         };
         if (jsonBarrierDist.IndirectBarrier)
         {
-            if (!buffMap.ContainsKey(id))
+            if (!usedData.buffs.ContainsKey(id))
             {
                 if (log.Buffs.BuffsByIDs.TryGetValue(id, out var buff))
                 {
-                    buffMap[id] = buff;
+                    usedData.buffs[id] = buff;
                 }
                 else
                 {
                     SkillItem skill = list.First().Skill;
                     var auxBuff = new Buff(skill.Name, id, skill.Icon);
-                    buffMap[id] = auxBuff;
+                    usedData.buffs[id] = auxBuff;
                 }
             }
         }
         else
         {
-            if (!skillMap.ContainsKey(id))
-            {
-                SkillItem skill = list.First().Skill;
-                skillMap[id] = skill;
-            }
+            usedData.skills.TryAdd(id, list.First().Skill);
         }
         jsonBarrierDist.Id = id;
         jsonBarrierDist.Min = int.MaxValue;
@@ -74,8 +71,8 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         return jsonBarrierDist;
     }
 
-    internal static IEnumerable<EXTJsonBarrierDist> BuildBarrierDistList(IEnumerable<IGrouping<long, EXTBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static IEnumerable<EXTJsonBarrierDist> BuildBarrierDistList(IEnumerable<IGrouping<long, EXTBarrierEvent>> dlsByID, ParsedEvtcLog log, UsedJsonData usedData)
     {
-        return dlsByID.Select(group => BuildBarrierDist(group.Key, group.ToList(), log, skillMap, buffMap));
+        return dlsByID.Select(group => BuildBarrierDist(group.Key, group.ToList(), log, usedData));
     }
 }

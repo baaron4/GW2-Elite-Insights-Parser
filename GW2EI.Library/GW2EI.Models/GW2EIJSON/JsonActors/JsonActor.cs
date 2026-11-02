@@ -53,6 +53,10 @@ public abstract class JsonActor
     /// ID of the actor in the instance
     /// </summary>
     public ushort InstanceID;
+    /// <summary>
+    /// Unique EI ID of the actor
+    /// </summary>
+    public int UniqueID;
 
     /// <summary>
     /// The team ID of the actor. \n

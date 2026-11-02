@@ -713,6 +713,11 @@ public class AgentItem
     {
         return FindEnglobedAgentItem(time).BaseSpec;
     }
+
+    public string GetDecoratedFirstName(EvtcLog log)
+    {
+        return (log.CombatData.GetNPCRankPrefix(EnglobingAgentItem) ?? "") + FirstName;
+    }
 }
 
 public static partial class ListExt

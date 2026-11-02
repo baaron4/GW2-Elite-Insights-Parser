@@ -18,9 +18,11 @@ public class SkillAnimation
     private Dictionary<SkillTiming, (SkillStep Step, int Delay)>? _timingToStep = null;
     private Dictionary<SkillStep, List<SkillTiming>>? _stepToTimings = null;
 
-    internal int LoopStartIndex => _steps.FindIndex(step => step.IsLoopStart);
-    internal int LoopEndIndex => _steps.FindIndex(step => step.IsLoopEnd);
+    internal int LoopStartIndex => _steps.FindLastIndex(step => step.IsLoopStart);
+    internal int LoopEndIndex => _steps.FindLastIndex(step => step.IsLoopEnd);
     internal int LoopTermIndex => LoopEndIndex + 1;
+
+    internal bool IsValidLoop => LoopStartIndex >= 0 && LoopStartIndex <= LoopEndIndex;
 
     internal SkillAnimation(SkillInfoEvent skillInfo)
     {
@@ -114,6 +116,10 @@ public class SkillAnimation
 
     public IEnumerable<SkillStep> SimulateSteps(bool minLoop)
     {
+        if (!IsValidLoop)
+        {
+            yield break;
+        }
         var loopSteps = GetLoopSteps(minLoop);
         var inLoop = false;
         var i = 0;
@@ -150,7 +156,7 @@ public class SkillAnimation
 
     public int? ComputeFullStepDuration(TimeScale.Scaling? scaling = null, bool minLoop = false)
     {
-        if (Steps.Count == 0)
+        if (Steps.Count == 0 || !IsValidLoop)
         {
             return null;
         }

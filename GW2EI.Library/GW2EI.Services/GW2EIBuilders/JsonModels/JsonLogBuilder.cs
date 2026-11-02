@@ -130,6 +130,14 @@ internal static class JsonLogBuilder
         return teamDesc;
     }
 
+    internal class UsedJsonData : UsedData
+    {
+        public readonly Dictionary<string, HashSet<long>> personalBuffs = new(20); //TODO_PERF(Rennorb)
+        public readonly Dictionary<string, HashSet<long>> personalDamageMods = new(20); //TODO_PERF(Rennorb)
+        public readonly Dictionary<int, DamageModifier> damageMods = new(50); //TODO_PERF(Rennorb)
+        public readonly HashSet<ulong> teams = new(5);
+    };
+
     public static JsonLog BuildJsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadLinks)
     {
         var jsonLog = new JsonLog();
@@ -215,16 +223,8 @@ internal static class JsonLogBuilder
             ComputePhases = log.ParserSettings.ComputePhases,
             ParseExtensions = log.ParserSettings.ParseExtensions,
         };
-        var personalBuffs = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
-        var personalDamageMods = new Dictionary<string, HashSet<long>>(20); //TODO_PERF(Rennorb)
-        var skillMap = new Dictionary<long, SkillItem>(200); //TODO_PERF(Rennorb)
-        var skillDescs = new Dictionary<string, SkillDesc>(200); //TODO_PERF(Rennorb)
-        var buffMap = new Dictionary<long, Buff>(100); //TODO_PERF(Rennorb)
-        var buffDescs = new Dictionary<string, BuffDesc>(100); //TODO_PERF(Rennorb)
-        var damageModMap = new Dictionary<int, DamageModifier>(50); //TODO_PERF(Rennorb)
-        var damageModDesc = new Dictionary<string, DamageModDesc>(50); //TODO_PERF(Rennorb)
-        var teamMap = new HashSet<ulong>(5);
-        var teamDesc = new Dictionary<string, TeamDesc>(5);
+
+        var usedData = new UsedJsonData();
 
         var instanceBuffs = log.LogData.Logic.GetInstanceBuffs(log);
         if (instanceBuffs.Any())
@@ -234,10 +234,7 @@ internal static class JsonLogBuilder
             foreach (var instanceBuff in instanceBuffs)
             {
                 var buff = instanceBuff.Buff;
-                if (!buffMap.ContainsKey(buff.ID))
-                {
-                    buffMap[buff.ID] = buff;
-                }
+                usedData.buffs.TryAdd(buff.ID, buff);
                 if (buff.Sources.Contains(ParserHelper.Source.FractalInstability))
                 {
                     presentFractalInstabilities.Add(buff.ID);
@@ -267,10 +264,10 @@ internal static class JsonLogBuilder
         jsonLog.Phases = log.LogData.GetPhases(log).Select(x => JsonPhaseBuilder.BuildJsonPhase(x, log)).ToList();
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Targets");
-        jsonLog.Targets = log.LogData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap, teamMap)).ToList();
+        jsonLog.Targets = log.LogData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, usedData)).ToList();
         //
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-        jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods, teamMap)).ToList();
+        jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, usedData)).ToList();
         //
         if (log.LogMetadata.LogErrors.Any())
         {
@@ -308,27 +305,31 @@ internal static class JsonLogBuilder
         var wvwTeams = log.CombatData.GetWvWTeamsEvent();
         if (wvwTeams != null)
         {
-            jsonLog.WvWMapData = JsonWvWMapDataBuilder.BuildJsonWvWMapData(log, wvwTeams, teamMap);
+            jsonLog.WvWMapData = JsonWvWMapDataBuilder.BuildJsonWvWMapData(log, wvwTeams, usedData);
         }
-        //
-        jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
-        jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
-        foreach (KeyValuePair<long, SkillItem> pair in skillMap)
+        // Map assembling
+        jsonLog.PersonalBuffs = usedData.personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
+        jsonLog.PersonalDamageMods = usedData.personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
+        var skillDescs = new Dictionary<string, SkillDesc>(usedData.skills.Count);
+        foreach (KeyValuePair<long, SkillItem> pair in usedData.skills)
         {
             skillDescs["s" + pair.Key] = BuildSkillDesc(pair.Value, log);
         }
         jsonLog.SkillMap = skillDescs;
-        foreach (KeyValuePair<long, Buff> pair in buffMap)
+        var buffDescs = new Dictionary<string, BuffDesc>(usedData.buffs.Count);
+        foreach (KeyValuePair<long, Buff> pair in usedData.buffs)
         {
             buffDescs["b" + pair.Key] = BuildBuffDesc(pair.Value, log);
         }
         jsonLog.BuffMap = buffDescs;
-        foreach (KeyValuePair<int, DamageModifier> pair in damageModMap)
+        var damageModDesc = new Dictionary<string, DamageModDesc>(usedData.damageMods.Count);
+        foreach (KeyValuePair<int, DamageModifier> pair in usedData.damageMods)
         {
             damageModDesc["d" + pair.Key] = BuildDamageModDesc(pair.Value);
         }
         jsonLog.DamageModMap = damageModDesc;
-        foreach (var teamID in teamMap)
+        var teamDesc = new Dictionary<string, TeamDesc>(usedData.teams.Count);
+        foreach (var teamID in usedData.teams)
         {
             var teamGUIDEvent = log.CombatData.GetTeamGUIDEventByTeamID(teamID);
             if (teamGUIDEvent != null)
@@ -339,6 +340,15 @@ internal static class JsonLogBuilder
         if (teamDesc.Count > 0)
         {
             jsonLog.TeamMap = teamDesc;
+        }
+        var agentNameMap = new Dictionary<string, string>(usedData.npcs.Count);
+        foreach (var (key, agent) in usedData.npcs)
+        {
+            agentNameMap[key] = agent?.GetDecoratedFirstName(log) ?? "";
+        }
+        if (agentNameMap.Count > 0)
+        {
+            jsonLog.AgentNameMap = agentNameMap;
         }
         //
         return jsonLog;

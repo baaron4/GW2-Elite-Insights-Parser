@@ -13,7 +13,7 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     // helpers
 
-    public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, SingleActor actor, UsedData used)
+    public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, SingleActor actor, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
@@ -43,7 +43,7 @@ internal class EXTHealingStatsPlayerDetailsDto
         return dto;
     }
 
-    private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedData used)
+    private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         var dto = new EXTHealingStatsPlayerDetailsDto

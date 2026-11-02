@@ -15,7 +15,7 @@ internal class CombatReplayDto
     public float InchToPixel { get; set; }
     public int PollingRate { get; set; }
 
-    public CombatReplayDto(ParsedEvtcLog log, UsedData used)
+    public CombatReplayDto(ParsedEvtcLog log, UsedHtmlData used)
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
         (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(used.skills, used.buffs);

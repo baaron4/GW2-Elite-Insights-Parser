@@ -12,7 +12,7 @@ internal class BarrierStatsExtension
 
     public readonly List<List<EXTBarrierStatsPlayerChartDto>> PlayerBarrierCharts;
 
-    public BarrierStatsExtension(ParsedEvtcLog log, UsedData used)
+    public BarrierStatsExtension(ParsedEvtcLog log, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         BarrierPhases = new(phases.Count);

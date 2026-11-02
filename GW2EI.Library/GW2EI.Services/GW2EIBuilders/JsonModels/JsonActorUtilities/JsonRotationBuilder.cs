@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 using static GW2EIJSON.JsonRotation;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
@@ -10,14 +11,34 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonRotationBuilder
 {
-    private static JsonSkill BuildJsonSkill(CastEvent cl)
+    private static JsonSkill BuildJsonSkill(ParsedEvtcLog log, CastEvent cl, UsedJsonData usedData)
     {
+        var (LastCastBarExecute, ControlReturn) = usedData.GetComputedSkillDuration(log, cl.SkillID, cl.TimeScale, false);
+
+        var target = cl.GetActualTarget(log);
+        string? targetKey = null;
+        if (target.IsPlayer ||
+            log.FriendlyAgents.Contains(target) ||
+            log.LogData.Logic.TargetAgents.Contains(target))
+        {
+            targetKey = "u" + target.UniqueID;
+            usedData.npcs.TryAdd(targetKey, null);
+        }
+        else if (target.IsNPC && !target.IsUnamedSpecies())
+        {
+            var prefix = target.IsVolatileSpecies() ? "v" : "s";
+            targetKey = prefix + target.ID;
+            usedData.npcs.TryAdd(targetKey, target);
+        }
         var jsonSkill = new JsonSkill
         {
             CastTime = (int)cl.Time,
             Duration = cl.ActualDuration,
             TimeGained = cl.SavedDuration,
-            Quickness = cl.AccelerationQuicknessSlow
+            Quickness = cl.AccelerationQuicknessSlow,
+            ExpectedCastBarDuration = LastCastBarExecute ?? null,
+            ExpectedReturnControlDuration = ControlReturn ?? null,
+            Target = targetKey
         };
         if (cl.IgnoreOnRotationRender())
         {
@@ -25,21 +46,17 @@ internal static class JsonRotationBuilder
         }
         return jsonSkill;
     }
-    private static JsonRotation BuildJsonRotation(ParsedEvtcLog log, long skillID, List<CastEvent> skillCasts, Dictionary<long, SkillItem> skillMap)
+    private static JsonRotation BuildJsonRotation(ParsedEvtcLog log, long skillID, List<CastEvent> skillCasts, UsedJsonData usedData)
     {
         var jsonRotation = new JsonRotation();
-        if (!skillMap.ContainsKey(skillID))
-        {
-            SkillItem skill = skillCasts.First().Skill;
-            skillMap[skillID] = skill;
-        }
+        usedData.skills.TryAdd(skillID, skillCasts.First().Skill);
         jsonRotation.Id = skillID;
-        jsonRotation.Skills = skillCasts.Select(x => BuildJsonSkill(x)).ToList();
+        jsonRotation.Skills = skillCasts.Select(x => BuildJsonSkill(log, x, usedData)).ToList();
         return jsonRotation;
     }
 
-    public static IEnumerable<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, IEnumerable<IGrouping<long, CastEvent>> skillByID, Dictionary<long, SkillItem> skillMap)
+    public static IEnumerable<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, IEnumerable<IGrouping<long, CastEvent>> skillByID, UsedJsonData usedData)
     {
-        return skillByID.Select(group => BuildJsonRotation(log, group.Key, group.ToList(), skillMap));
+        return skillByID.Select(group => BuildJsonRotation(log, group.Key, group.ToList(), usedData));
     }
 }

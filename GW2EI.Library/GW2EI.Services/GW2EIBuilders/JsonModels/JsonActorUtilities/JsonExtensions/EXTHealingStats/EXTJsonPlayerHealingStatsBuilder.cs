@@ -1,15 +1,15 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 
 internal static class EXTJsonPlayerHealingStatsBuilder
 {
 
-    public static EXTJsonPlayerHealingStats BuildPlayerHealingStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static EXTJsonPlayerHealingStats BuildPlayerHealingStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         int phasesCountIfRawFormatRequested = settings.RawFormatTimelineArrays ? phases.Count : 0;
@@ -79,7 +79,7 @@ internal static class EXTJsonPlayerHealingStatsBuilder
                     allyConversionHealingHealing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, friendly, HealingStatsExtensionHandler.EXTHealingType.ConversionBased));
                     allyHybridHealing1S.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, friendly, HealingStatsExtensionHandler.EXTHealingType.Hybrid));
                 }
-                allyHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetOutgoingHealEvents(friendly, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, skillMap, buffMap));
+                allyHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetOutgoingHealEvents(friendly, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, usedData));
             }
 
             outgoingHealingAllies.Add(outgoingHealingAlly);
@@ -111,8 +111,8 @@ internal static class EXTJsonPlayerHealingStatsBuilder
                 hybridHealing1S!.Add(a.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.Hybrid));
                 hybridHealingReceived1S.Add(a.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.Hybrid));
             }
-            totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetOutgoingHealEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, skillMap, buffMap));
-            totalIncomingHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, skillMap, buffMap));
+            totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetOutgoingHealEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, usedData));
+            totalIncomingHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(a.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID), log, usedData));
         }
 
         return new EXTJsonPlayerHealingStats()

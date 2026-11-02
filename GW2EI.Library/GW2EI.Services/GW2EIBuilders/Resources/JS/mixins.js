@@ -641,12 +641,12 @@ var targetTabGraphComponent = {
     created: function () {
         this.computeLayout();
     },
-    activated: function () {
+    mounted: function () {
         var div = document.getElementById(this.graphid);
         var layout = this.layout;
         var images = layout.images;
         var _this = this;
-        div.on('plotly_relayout', function (evt) {
+        div._relayoutCB = function (evt) {
             var x0 = layout.xaxis.range[0];
             var x1 = layout.xaxis.range[1];
             //console.log("re-layout " + x0 + " " + x1);
@@ -654,7 +654,7 @@ var targetTabGraphComponent = {
                 layout.datarevision = new Date().getTime();
                 //console.log("re-drawing");
             }
-        });
+        }
     },
     computed: {
         healthStates: function () {

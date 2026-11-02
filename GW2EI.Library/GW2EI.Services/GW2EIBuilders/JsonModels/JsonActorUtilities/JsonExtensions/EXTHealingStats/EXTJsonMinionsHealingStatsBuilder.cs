@@ -1,14 +1,14 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 
 internal static class EXTJsonMinionsHealingStatsBuilder
 {
 
-    public static EXTJsonMinionsHealingStats BuildMinionsHealingStats(Minions minions, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static EXTJsonMinionsHealingStats BuildMinionsHealingStats(Minions minions, ParsedEvtcLog log, UsedJsonData usedData)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var totalHealing = new List<int>(phases.Count);
@@ -37,17 +37,17 @@ internal static class EXTJsonMinionsHealingStatsBuilder
             {
                 var list = minions.EXTHealing.GetOutgoingHealEvents(friendly, log, phase.Start, phase.End);
                 totalAllyHealing.Add(list.Sum(x => x.HealingDone));
-                allyHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillID), log, skillMap, buffMap));
+                allyHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillID), log, usedData));
             }
         }
         foreach (PhaseData phase in phases)
         {
             var list = minions.EXTHealing.GetOutgoingHealEvents(null, log, phase.Start, phase.End);
             totalHealing.Add(list.Sum(x => x.HealingDone));
-            totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillID), log, skillMap, buffMap));
+            totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillID), log, usedData));
             var listInc = minions.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End);
             totalIncomingHealing.Add(listInc.Sum(x => x.HealingDone));
-            totalIncomingHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(listInc.GroupBy(x => x.SkillID), log, skillMap, buffMap));
+            totalIncomingHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(listInc.GroupBy(x => x.SkillID), log, usedData));
         }
         return res;
     }

@@ -20,7 +20,7 @@ internal class ActorDetailsDto
     public List<DeathRecapDto>? DeathRecap;
 
 
-    public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, UsedData used)
+    public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
@@ -56,7 +56,7 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    private static MinionsDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedData used)
+    private static MinionsDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
         var dto = new MinionsDetailsDto
@@ -101,7 +101,7 @@ internal class ActorDetailsDto
     static readonly List<SkillCastDto> EmptyRotationList = [];
     static readonly List<BuffChartDataDto> EmptyBoonGraphList = [];
 
-    public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, UsedData used, bool cr)
+    public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, UsedHtmlData used, bool cr)
     {
         var phases = log.LogData.GetPhases(log);
         var minions = target.GetMinions(log);

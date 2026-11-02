@@ -21,10 +21,16 @@
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data', 'removerangecontrol'],
         template: `${template}`,
-        activated: function () {
+        computed: {
+            queryID: function () {
+                return "#" + this.id;
+            },
+        },
+        mounted() {
+            const _this = this;
+            const layout = this.layout;    
             var div = document.querySelector(this.queryID);
             Plotly.react(div, this.data, this.layout, plotlyConfig);
-            var _this = this;
             div.on('plotly_animated', function () {
                 $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
                 $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);
@@ -68,16 +74,9 @@
                 $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
                 $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);          
             });
-        },
-        computed: {
-            queryID: function () {
-                return "#" + this.id;
-            },
-        },
-        mounted() {
-            const _this = this;
-            const layout = this.layout;
-            const div = document.querySelector(this.queryID);
+            div.on('plotly_relayout', function (evt) {
+                div._relayoutCB && div._relayoutCB(evt);
+            });
             $(this.queryID + 'xMin').on("input ", function () {
                 let value = Number.parseFloat($(this).val());
                 layout.xaxis.autorange = false;

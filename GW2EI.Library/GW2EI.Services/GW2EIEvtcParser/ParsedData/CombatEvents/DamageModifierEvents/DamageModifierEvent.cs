@@ -11,8 +11,8 @@ internal class DamageModifierEvent : TimeCombatEvent
 
     internal DamageModifierEvent(HealthDamageEvent evt, DamageModifier damageModifier, double damageGain) : base(evt.Time)
     {
-        Src = evt.From.FindEnglobedAgentItem(Time);
-        Dst = evt.To.FindEnglobedAgentItem(Time);
+        Src = evt.From.EnglobingAgentItem;
+        Dst = evt.To.EnglobingAgentItem;
         DamageGain = damageGain;
         DamageModifier = damageModifier;
     }
