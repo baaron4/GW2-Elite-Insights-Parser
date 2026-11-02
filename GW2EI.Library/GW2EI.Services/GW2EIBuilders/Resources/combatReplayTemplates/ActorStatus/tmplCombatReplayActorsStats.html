@@ -10,7 +10,12 @@
                 <li class="nav-item">
                     <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Rotation</a>
                 </li>
-            </ul>                    
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: minions}" @click="minions = !minions">
+                        Minions
+                    </a>
+                </li>
+            </ul>
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale65" style="width: 250px;">
                 <li v-for="(buffType, index) in possibleBuffs" class="ml-1 mr-1">
                     <input :id="'crpl-possibleBuffs-' + index" type="checkbox" :value="buffType" v-model="buffsToShow" />
@@ -21,19 +26,38 @@
 
         <div class="d-flex">
             <div class="combat-actor-status-container scrollable-y mr-2" :class="{'mt-2' : singleGroup}">
-                <fieldset v-for="(group, id) in groups" v-if="group" class="border">
-                    <legend v-if="!singleGroup" class="scale85 ml-1 px-1 w-auto">Group {{id}}</legend>
-                    <combat-replay-actor-stats-component v-for="(player, index) in group"
-                        :class="{active: selectedactorid === player.uniqueID}"
-                        :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow" :isTarget="false" :buffs="buffs" :rotation="rotation" />
+                <fieldset v-for="(group, id) in groups" v-if="group"
+                          :key="'player-group-' + id" class="border">
+                    <legend v-if="!singleGroup" class="scale85 ml-1 px-1 w-auto">
+                        Group {{id}}
+                    </legend>
+                    <div v-for="(player, index) in group"
+                         :key="'player-status-' + player.uniqueID"
+                         style="display: contents;">
+                        <combat-replay-actor-stats-component :class="{active: selectedactorid === player.uniqueID, 'cr-player-with-minions': minions && hasActiveMinions(player)}"
+                                                             :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow" :isTarget="false" :buffs="buffs" :rotation="rotation" />
+                        <div v-if="minions && hasActiveMinions(player)"
+                             :key="'minion-branch-' + player.uniqueID"
+                             class="cr-minion-branch">
+                            <div v-for="(minionGroup, minionGroupIndex) in player.details.minions"
+                                 :key="'minion-group-' + player.uniqueID + '-' + minionGroupIndex"
+                                 style="display: contents;">
+                                <combat-replay-actor-stats-component v-for="(minion, minionIndex) in minionGroup.instances" v-if="isMinionActive(minion)"
+                                                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minion.uniqueID}"
+                                                                     :minion="minion" :minionLabel="player.minions[minionGroupIndex].name + ' #' + (minionIndex + 1)"
+                                                                     :actorIndex="-1" :time="time" :buffstoshow="buffsToShow"
+                                                                     :isTarget="false" :buffs="buffs" :rotation="rotation" />
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
 
             <div class="combat-actor-status-container scrollable-y mt-2 ">
                 <fieldset class="border">
                     <combat-replay-actor-stats-component v-for="target in targets"
-                        :class="{active: selectedactorid === target.uniqueID}"
-                        :actorIndex="target.id" :time="time" :buffstoshow="buffsToShowTarget" :isTarget="true" :buffs="true" :rotation="true" />
+                                                         :class="{active: selectedactorid === target.uniqueID}"
+                                                         :actorIndex="target.id" :time="time" :buffstoshow="buffsToShowTarget" :isTarget="true" :buffs="true" :rotation="true" />
                 </fieldset>
             </div>
         </div>
@@ -45,13 +69,32 @@
         props: ["time", "selectedactorid"],
         mixins: [encounterPhaseComponent, localStoragedSettings({
             buffs: {
-                defaultValue:getValueFromLocalStorage("buffs") === "true"
+                defaultValue: getValueFromLocalStorage("buffs") === "true"
             },
             rotation: {
-                defaultValue:getValueFromLocalStorage("rotation") !== "false"
+                defaultValue: getValueFromLocalStorage("rotation") !== "false"
+            },
+            minions: {
+                defaultValue: getValueFromLocalStorage("minions") !== "false"
             },
         })],
         template: `${template}`,
+        methods: {
+            isMinionActive: function (minion) {
+                const actorData = animator ? animator.getActorData(minion.uniqueID) : null;
+                if (!actorData) {
+                    return false;
+                }
+                return (actorData.start === -1 && actorData.end === -1) ||
+                    (actorData.start <= this.time && actorData.end >= this.time);
+            },
+            hasActiveMinions: function (player) {
+                const minionGroups = player.details && player.details.minions;
+                return !!minionGroups && minionGroups.some(group =>
+                    group.instances && group.instances.some(minion => this.isMinionActive(minion))
+                );
+            },
+        },
         data: function () {
             return {
                 buffsToShow: ["Boons", "Encounter Specifics", "Conditions"],
@@ -59,7 +102,7 @@
             };
         },
         computed: {
-            buffsToShowTarget: function() {
+            buffsToShowTarget: function () {
                 return this.buffsToShow.filter(b => !["Shared", "Consumables"].includes(b));
             },
             singleGroup: function () {
@@ -74,7 +117,7 @@
                     const crTarget = animator.getActorData(target.uniqueID);
                     return crTarget?.canDraw() &&
                         ((crTarget.start === -1 && crTarget.end === -1) ||
-                        (crTarget.start <= this.time && crTarget.end >= this.time));
+                            (crTarget.start <= this.time && crTarget.end >= this.time));
                 });
                 return result;
             },

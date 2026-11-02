@@ -1,18 +1,18 @@
 ﻿<template>
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
-             :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
-            <p class="mb-0 scale65 cr-status-percent text-left">
+             :data-original-title="isTarget ? actor.name : (isMinion ? minionLabel : actor.name + ' - ' + actor.acc)">
+            <p v-if="!isMinion || hasHealth" class="mb-0 scale65 cr-status-percent text-left">
                 {{ percentFormater2(getPercent(healths, time) / 100) }}
             </p>
 
             <h6 class="text-center mb-0 ellipis align-self-center">
                 <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
                 <img :src="actor.icon" :alt="actor.profession" height="16" width="16">
-                {{actor.name}}
+                {{isMinion ? minionLabel : actor.name}}
             </h6>
 
-            <p class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
+            <p v-if="!isMinion || hasBarrier" class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
                 {{ percentFormater2(getPercent(barriers, time) / 100) }}
             </p>
         </div>
@@ -28,7 +28,7 @@
 <script>
     Vue.component("combat-replay-actor-status-component", {
         mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
-        props: ["isTarget", "actorIndex", "time"],
+        props: ["isTarget", "actorIndex", "time", "minion", "minionLabel"],
         template: `${template}`,
         methods: {
             activeMarkers: function () {
@@ -82,20 +82,25 @@
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downAllyIcon || icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
+            isMinion: function () {
+                return !this.isTarget && !!this.minion;
+            },
             actor: function () {
                 if (this.isTarget) {
                     return logData.targets[this.actorIndex];
                 }
-
-                return logData.players[this.actorIndex];
+                return this.isMinion ? this.minion : logData.players[this.actorIndex];
             },
-            actorPhaseTargetIndex: function() {
+            actorPhaseTargetIndex: function () {
                 if (this.isTarget) {
                     return this.encounterPhase.targets.indexOf(this.actorIndex);
                 }
                 return -1;
             },
             healths: function () {
+                if (this.isMinion) {
+                    return this.minion.healthStates?.[this.encounterPhase.id] || null;
+                }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {
                         return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].healthStates;
@@ -106,6 +111,9 @@
                 return graphData.phases[this.encounterPhase.id].players[this.actorIndex].healthStates;
             },
             barriers: function () {
+                if (this.isMinion) {
+                    return this.minion.barrierStates?.[this.encounterPhase.id] || null;
+                }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {
                         return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].barrierStates;
@@ -129,12 +137,12 @@
                 return !!this.healths && this.healths.length > 0;
             },
             hasBarrier: function () {
-                return this.barriers && this.barriers.length > 0 ;
+                return this.barriers && this.barriers.length > 0;
             },
             hasBreakbar: function () {
                 return !!this.breakbar && this.breakbar.length > 0;
             },
-            
+
         }
     });
 </script>
