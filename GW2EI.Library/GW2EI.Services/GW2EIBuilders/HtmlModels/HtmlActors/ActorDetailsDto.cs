@@ -16,8 +16,7 @@ internal class ActorDetailsDto
     public List<List<BuffChartDataDto>>? BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>? Food;
-    public List<ActorDetailsDto>? Minions;
-    public List<MinionInstanceDetailsDto>? Instances;
+    public List<MinionsDetailsDto>? Minions;
     public List<DeathRecapDto>? DeathRecap;
 
 
@@ -57,11 +56,12 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedData used)
+    private static MinionsDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedData used)
     {
         var phases = log.LogData.GetPhases(log);
-        var dto = new ActorDetailsDto
+        var dto = new MinionsDetailsDto
         {
+            IsUniquePerTimeFrame = minion.IsUniquePerTimeFrame,
             DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
@@ -70,7 +70,7 @@ internal class ActorDetailsDto
 
         foreach (NPC minionInstance in minion.MinionList)
         {
-            dto.Instances.Add(MinionInstanceDetailsDto.Build(log, minionInstance, used));
+            dto.Instances.Add(MinionInstanceDetailsDto.Build(log, minionInstance, used, minion.IsUniquePerTimeFrame));
         }
 
         if (minion.IsUniquePerTimeFrame)
@@ -172,8 +172,9 @@ internal class ActorDetailsDto
                 }
             }
 
-            dto.Minions.Add(new()
+            dto.Minions.Add(new MinionsDetailsDto
             {
+                IsUniquePerTimeFrame = minion.IsUniquePerTimeFrame,
                 DmgDistributions = dmgDistributions,
                 DmgDistributionsTaken = dmgTakenDistributions
             });

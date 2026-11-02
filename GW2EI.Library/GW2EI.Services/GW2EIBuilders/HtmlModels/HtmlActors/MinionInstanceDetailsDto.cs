@@ -41,10 +41,14 @@ internal class MinionInstanceDetailsDto
         BoonVolumeActiveDictionaries = new(phaseCount);
     }
 
-    public static MinionInstanceDetailsDto Build(ParsedEvtcLog log, NPC minion, UsedData used)
+    public static MinionInstanceDetailsDto Build(ParsedEvtcLog log, NPC minion, UsedData used, bool includeDetailedData)
     {
         var phases = log.LogData.GetPhases(log);
         var dto = new MinionInstanceDetailsDto(minion, phases.Count);
+        if (!includeDetailedData)
+        {
+            return dto;
+        }
         foreach (PhaseData phase in phases)
         {
             dto.HealthStates.Add(ChartDataDto.BuildHealthStates(log, minion, phase, true));

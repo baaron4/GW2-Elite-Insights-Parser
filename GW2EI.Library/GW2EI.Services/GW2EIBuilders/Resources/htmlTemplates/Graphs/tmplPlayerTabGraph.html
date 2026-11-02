@@ -5,21 +5,21 @@
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
-            <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">Buff graph source</label>
+            <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">
+                Source
+            </label>
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
-                <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'graph-minion-group-' + groupIndex"
-                          :label="player.minions[groupIndex].name">
-                    <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'graph-minion-' + groupIndex + '-' + minionIndex"
-                            :value="groupIndex + ':' + minionIndex">
-                        {{minion.name}} #{{minionIndex + 1}}
+                <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.groupIndex" :label="group.name">
+                    <option v-for="minion in group.instances" :key="minion.id" :value="minion.selectionKey">
+                        {{minion.label}}
                     </option>
                 </optgroup>
             </select>
         </div>
-        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
-        <rotation-legend-component></rotation-legend-component>
-    </div>
+            <graph-component :id="graphid" :layout="selectedGraph.layout" :data="selectedGraph.data"></graph-component>
+            <rotation-legend-component></rotation-legend-component>
+        </div>
 </template>
 
 <script>
@@ -64,24 +64,25 @@
                     this.computeLayout();
                 }
             },
+            selectedMinionKey: function () {
+                this.$nextTick(this.attachGraphRelayoutHandler);
+            },
+            minionSelectGroups: function (groups) {
+                if (this.selectedMinionKey &&
+                    !groups.some(group =>
+                        group.instances.some(
+                            minion => minion.selectionKey === this.selectedMinionKey
+                        )
+                    )) {
+                    this.selectedMinionKey = "";
+                }
+            },
         },
         created: function () {
             this.computeLayout();
         },
         activated: function () {
-            var div = document.getElementById(this.graphid);
-            var layout = this.layout;
-            var images = layout.images;
-            var _this = this;
-            div.on('plotly_relayout', function (evt) {
-                var x0 = layout.xaxis.range[0];
-                var x1 = layout.xaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            });
+            this.$nextTick(this.attachGraphRelayoutHandler);
         },
         computed: {
             healthGraph: function () {
@@ -97,14 +98,79 @@
                 return logData.players[this.playerindex];
             },
             hasMinions: function () {
-                return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+                return this.minionSelectGroups.length > 0;
             },
-            selectedMinion: function () {
-                if (!this.selectedMinionKey) {
-                    return null;
+            minionSelectGroups: function () {
+                const result = [];
+                const minionGroups = this.player.details.minions || [];
+                for (let groupIndex = 0; groupIndex < minionGroups.length; groupIndex++) {
+                    const group = minionGroups[groupIndex];
+                    if (!group.isUniquePerTimeFrame || !group.instances) {
+                        continue;
+                    }
+                    const instances = [];
+                    for (let minionIndex = 0; minionIndex < group.instances.length; minionIndex++) {
+                        const minion = group.instances[minionIndex];
+                        const boonGraph = minion.boonGraph?.[this.phaseindex];
+                        if (!boonGraph || boonGraph.length === 0) {
+                            continue;
+                        }
+                        const data = [];
+
+                        if (computeBuffData(boonGraph, data) === 0) {
+                            continue;
+                        }
+
+                        instances.push({
+                            id: minion.uniqueID,
+                            selectionKey: groupIndex + ':' + minionIndex,
+                            label: minion.name + ' #' + (minionIndex + 1),
+                            data: data
+                        });
+                    }
+
+                    if (instances.length > 0) {
+                        result.push({
+                            groupIndex: groupIndex,
+                            name: this.player.minions[groupIndex].name,
+                            instances: instances
+                        });
+                    }
                 }
-                const indexes = this.selectedMinionKey.split(':').map(Number);
-                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+
+                return result;
+            },
+
+            selectedGraph: function () {
+                if (this.selectedMinionKey) {
+                    for (const group of this.minionSelectGroups) {
+                        const minion = group.instances.find(instance => instance.selectionKey === this.selectedMinionKey);
+                        if (minion) {
+                            const color = this.light ? '#495057' : '#cccccc';
+                            const layout = getActorGraphLayout([], color, true, true);
+
+                            delete layout.yaxis2;
+                            delete layout.yaxis3;
+                            delete layout.yaxis5;
+
+                            layout.yaxis.domain = [0.0, 1.0];
+                            layout.yaxis4.domain = [0.0, 1.0];
+                            layout.yaxis.title = 'Buffs';
+                            layout.height = 320;
+
+                            computePhaseMarkups(layout.shapes,layout.annotations,this.phase,color);
+
+                            return {
+                                layout: layout,
+                                data: minion.data
+                            };
+                        }
+                    }
+                }
+                return {
+                    layout: this.layout,
+                    data: this.computeData
+                };
             },
             damageGraphName: function () {
                 switch (this.graphdata.damagemode) {
@@ -168,7 +234,7 @@
                 this.data = [];
                 this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
                 var oldOffset = this.playerOffset;
-                const boonGraph = this.selectedMinion ? this.selectedMinion.boonGraph?.[this.phaseindex] : this.player.details.boonGraph?.[this.phaseindex];
+                const boonGraph = this.player.details.boonGraph[this.phaseindex];
                 const buffTraceStartOffset = this.playerOffset;
                 this.playerOffset += computeBuffData(boonGraph, this.data);
                 const traceCountBefore = this.data.length;
@@ -279,6 +345,27 @@
                 addPointsToGraph(res, this.healthGraph, dpsData.maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
+            },
+            attachGraphRelayoutHandler: function () {
+                const div = document.getElementById(this.graphid);
+
+                if (!div || typeof div.on !== "function" || div._eiRelayoutHandlerAttached) {
+                    return;
+                }
+
+                div._eiRelayoutHandlerAttached = true;
+                div.on('plotly_relayout', () => {
+                    const layout = this.selectedGraph.layout;
+                    const range = layout.xaxis.range;
+
+                    if (!range || range.length < 2) {
+                        return;
+                    }
+
+                    if (this.updateVisibily(layout.images || [], range[0], range[1])) {
+                        layout.datarevision = Date.now();
+                    }
+                });
             },
         }
     });
