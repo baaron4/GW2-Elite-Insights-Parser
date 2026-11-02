@@ -18,8 +18,8 @@ public class SkillAnimation
     private Dictionary<SkillTiming, (SkillStep Step, int Delay)>? _timingToStep = null;
     private Dictionary<SkillStep, List<SkillTiming>>? _stepToTimings = null;
 
-    internal int LoopStartIndex => _steps.FindIndex(step => step.IsLoopStart);
-    internal int LoopEndIndex => _steps.FindIndex(step => step.IsLoopEnd);
+    internal int LoopStartIndex => _steps.FindLastIndex(step => step.IsLoopStart);
+    internal int LoopEndIndex => _steps.FindLastIndex(step => step.IsLoopEnd);
     internal int LoopTermIndex => LoopEndIndex + 1;
 
     internal SkillAnimation(SkillInfoEvent skillInfo)
