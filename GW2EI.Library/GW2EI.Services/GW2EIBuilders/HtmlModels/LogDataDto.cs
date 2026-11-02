@@ -506,7 +506,7 @@ internal class LogDataDto
         foreach (SingleActor actor in log.Friendlies)
         {
             logData.HasCommander = logData.HasCommander || (actor is Player p && p.IsCommander(log));
-            logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, used)));
+            logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, used), used));
         }
         _t.Log("built player data");
 
@@ -528,7 +528,7 @@ internal class LogDataDto
         logData.Targets = new(log.LogData.Logic.Targets.Count);
         foreach (SingleActor target in log.LogData.Logic.Targets)
         {
-            var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, used, cr));
+            var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, used, cr), used);
             logData.Targets.Add(targetDto);
         }
         _t.Log("built target data");

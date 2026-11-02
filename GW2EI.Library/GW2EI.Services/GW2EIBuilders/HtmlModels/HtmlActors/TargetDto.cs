@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
@@ -18,7 +19,7 @@ internal class TargetDto : ActorDto
     private const int HPBarActive = 1;
     private const int HPBarUntouched = 2;
 
-    public TargetDto(SingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
+    public TargetDto(SingleActor target, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData) : base(target, log, details, usedData)
     {
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;

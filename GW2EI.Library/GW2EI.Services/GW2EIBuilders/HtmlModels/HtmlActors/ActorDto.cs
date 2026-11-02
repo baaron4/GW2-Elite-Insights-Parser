@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIBuilders.HtmlModels.LogDataDto;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
@@ -24,7 +25,7 @@ internal abstract class ActorDto
     public List<MinionDto> Minions;
     public ActorDetailsDto Details;
 
-    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
+    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData)
     {
         Health = actor.GetHealth(log.CombatData);
         Condi = actor.Condition;
@@ -53,6 +54,10 @@ internal abstract class ActorDto
                 Id = i,
                 Name = minions[i].Character
             });
+            foreach (var minion in minions[i].MinionList)
+            {
+                usedData.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
+            }
         }
     }
 
@@ -65,13 +70,16 @@ internal abstract class ActorDto
             {
                 continue;
             }
-            var name = agent.GetDecoratedFirstName(log);
-            if (log.LogData.Logic.TrashMobAgents.Contains(agent))
+            if (key.StartsWith('u'))
             {
-                // used proper log name for trash mobs
-                name = log.FindActor(agent).Character;
+                // used proper log name for ids that start with "u",
+                // that means uniquely identified but not part of friendlies/targets
+                // Trash mobs, minions, etc
+                dict.TryAdd(key, log.FindActor(agent).Character);
+            } else
+            {
+                dict.TryAdd(key, agent.GetDecoratedFirstName(log));
             }
-            dict.Add(key, name);
         }
     }
 }
