@@ -1325,7 +1325,7 @@ function setValueToLocalStorage(key, value) {
 function getCastTooltip(cast) {
     let tooltip = `${cast.skill.name} at ${cast.time}s`;
     if (cast.type !== RotationStatus.INSTANT) {
-        tooltip += `<br>Duration: ${cast.duration}ms`;
+        tooltip += `<br>Duration: ${cast._tooltipDuration || cast.duration}ms`;
     }
     if (cast.executed != 0) {
         tooltip += `<br>Cast bar duration: ${cast.executed}ms`;
