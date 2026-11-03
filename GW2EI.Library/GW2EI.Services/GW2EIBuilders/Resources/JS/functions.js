@@ -1339,7 +1339,6 @@ function getCastTooltip(cast) {
     return tooltip;
 }
 
-// TODO: remove console.logs when satisfied
 let awaitingTooltipSweep = false;
 function sweepOrphanedOrRefreshedTooltips() {
     if (awaitingTooltipSweep) {
@@ -1376,7 +1375,7 @@ function sweepOrphanedOrRefreshedTooltips() {
 
                     // 1. Refresh content if it changed *while* the tooltip was open
                     if (latestTitle && bsTooltip.config.title !== latestTitle) {
-                        console.log('[Tooltip Fix] Refreshing active tooltip content. New:', latestTitle);
+                        //console.log('[Tooltip Fix] Refreshing active tooltip content. New:', latestTitle);
                         bsTooltip.config.title = latestTitle;
                         if (isPhysicallyHovered) {
                             $el.tooltip('hide').tooltip('show');
@@ -1385,7 +1384,7 @@ function sweepOrphanedOrRefreshedTooltips() {
 
                     // 2. Force hide if desynced (missed mouseleave event)
                     if (bsThinksHovered && !isPhysicallyHovered) {
-                        console.log('[Tooltip Fix] Force hiding desynced tooltip:', $el[0]);
+                        //console.log('[Tooltip Fix] Force hiding desynced tooltip:', $el[0]);
                         if (bsTooltip.inState) {
                             bsTooltip.inState.hover = false;
                         }
@@ -1394,7 +1393,7 @@ function sweepOrphanedOrRefreshedTooltips() {
 
                 } else {
                     // Clean up orphaned tooltips whose trigger was deleted
-                    console.log('[Tooltip Fix] Cleaning up orphaned tooltip because trigger element was deleted:', bsTooltip.element);
+                    //console.log('[Tooltip Fix] Cleaning up orphaned tooltip because trigger element was deleted:', bsTooltip.element);
                     $el.tooltip('dispose');
 
                     if (bsTooltip.tip) {
@@ -1419,7 +1418,7 @@ function sweepOrphanedOrRefreshedTooltips() {
             });
 
             if (!hasOwner) {
-                console.log('[Tooltip Fix] Removing stray ghost tooltip from body:', tooltipEl);
+                //console.log('[Tooltip Fix] Removing stray ghost tooltip from body:', tooltipEl);
                 $(tooltipEl).remove();
             }
         });
