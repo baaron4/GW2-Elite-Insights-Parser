@@ -399,6 +399,24 @@ class Animator {
         this.reactiveDataStatus.range.max = this.times[this.times.length - 1];
     }
 
+    get zoomStep() {
+        return this._zoomStep;
+    }
+
+    set zoomStep(value) {
+        this._zoomStep = value;
+        setValueToLocalStorage("zoomStep", value);
+    }
+
+    get rotationStep() {
+        return this._rotationStep;
+    }
+
+    set rotationStep(value) {
+        this._rotationStep = value;
+        setValueToLocalStorage("rotationStep", value);
+    }
+
     attachDOM(mainCanvasID, bgCanvasID, pickCanvasID) {
         // main canvas
         this.mainCanvas = document.getElementById(mainCanvasID);
@@ -1096,7 +1114,7 @@ class Animator {
     }
 
     rotate(delta, ptX, ptY) {    
-        const angle = delta * this.rotationStep;   
+        const angle = delta * this._rotationStep;   
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
 
@@ -1125,7 +1143,7 @@ class Animator {
     }
 
     zoom(delta, ptX, ptY) {
-        let factor = Math.pow(this.zoomStep, delta);
+        let factor = Math.pow(this._zoomStep, delta);
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
 
@@ -1153,8 +1171,8 @@ class Animator {
 
     _initMouseEvents() {
         const _this = this;
-        this.zoomStep = 1.06;
-        this.rotationStep = 0.03;
+        this._zoomStep = getNumericalValueFromLocalStorage("zoomStep", 1.06);
+        this._rotationStep = getNumericalValueFromLocalStorage("rotationStep", 0.03);
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
