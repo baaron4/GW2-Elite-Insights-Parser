@@ -7,7 +7,7 @@ internal abstract class ActorChartDataDto
 {
     public readonly List<double[]>? HealthStates;
     public readonly List<double[]>? BarrierStates;
-    public readonly Dictionary<int, MinionChartDto> MinionCharts;
+    public readonly Dictionary<int, List<MinionChartDto>> MinionCharts;
 
     public ActorChartDataDto(ParsedEvtcLog log, PhaseData phase, SingleActor actor, bool nullableHPStates)
     {
@@ -25,10 +25,13 @@ internal abstract class ActorChartDataDto
                 continue;
             }
 
+            var minionCharts = new List<MinionChartDto>(minionGroup.MinionList.Count);
             foreach (NPC minion in minionGroup.MinionList)
             {
-                MinionCharts.Add(minionGroupIndex, new MinionChartDto(log, phase, minion));
+                minionCharts.Add(new MinionChartDto(log, phase, minion));
             }
+
+            MinionCharts.Add(minionGroupIndex, minionCharts);
         }
     }
 }

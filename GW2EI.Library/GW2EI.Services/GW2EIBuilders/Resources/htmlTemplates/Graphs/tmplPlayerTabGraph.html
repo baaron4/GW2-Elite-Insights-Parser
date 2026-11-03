@@ -22,7 +22,7 @@
     </div>-->
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <template v-for="(minionGroup, groupIndex) in (player.details.minions || [])">
-            <player-minion-graph-tab-component v-for="(minionInstance, instanceIndex) in minionGroup.minionInstances"
+            <player-minion-graph-tab-component v-for="(minionInstance, instanceIndex) in minionGroup.instances"
                                                :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + groupIndex + '-' + instanceIndex"
                                                :playerindex="playerindex"
                                                :phaseindex="phaseindex"

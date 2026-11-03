@@ -18,7 +18,6 @@ internal class ActorDetailsDto
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>? Food;
     public List<MinionDetailsDto>? Minions;
-    public List<MinionInstanceDetailsDto>? MinionInstances;
     public List<DeathRecapDto>? DeathRecap;
 
 
@@ -70,10 +69,10 @@ internal class ActorDetailsDto
 
         if (minion.IsUniquePerTimeFrame)
         {
-            dto.MinionInstances = new(minion.MinionList.Count);
+            dto.Instances = new(minion.MinionList.Count);
             foreach (NPC minionInstance in minion.MinionList)
             {
-                dto.MinionInstances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
+                dto.Instances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
             }
             dto.Rotation = new(phases.Count);
         }

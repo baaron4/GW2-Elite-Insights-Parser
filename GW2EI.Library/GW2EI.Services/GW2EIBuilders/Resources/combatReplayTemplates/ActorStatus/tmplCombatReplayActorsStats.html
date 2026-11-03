@@ -44,11 +44,10 @@
                             <div v-for="(minionGroup, minionGroupIndex) in player.details.minions"
                                  :key="'minion-group-' + player.uniqueID + '-' + minionGroupIndex"
                                  style="display: contents;">
-                                <combat-replay-actor-stats-component v-for="(minion, minionIndex) in minionGroup.minionInstances" v-if="isMinionActive(minion)"
+                                <combat-replay-actor-stats-component v-for="(minion, minionIndex) in minionGroup.instances" v-if="isMinionActive(minion)"
                                                                      :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minion.uniqueID}"
-                                                                     :minion="minion" :minionInfo="player.minions[minionGroupIndex]" :minionOwnerIndex="player.id" 
-                                                                     :minionLabel="player.minions[minionGroupIndex].name + ' #' + (minionIndex + 1)"
-                                                                     :actorIndex="-1" :time="time" :buffstoshow="buffsToShow"
+                                                                     :minionGroupIndex="minionGroupIndex" :minionIndex="minionIndex"
+                                                                     :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow"
                                                                      :isTarget="false" :buffs="buffs" :rotation="rotation" />
                             </div>
                         </div>
@@ -94,7 +93,7 @@
             hasActiveMinions: function (player) {
                 const minionGroups = player.details && player.details.minions;
                 return !!minionGroups && minionGroups.some(group =>
-                    group.minionInstances && group.minionInstances.some(minion => this.isMinionActive(minion))
+                    group.instances && group.instances.some(minion => this.isMinionActive(minion))
                 );
             },
         },

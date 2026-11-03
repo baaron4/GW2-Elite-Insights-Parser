@@ -9,8 +9,8 @@
             <combat-replay-actor-buff v-if="isPresent('Consumables')" :buffarray="data.consumables" class="pb-1" />
         </div>
 
-        <combat-replay-actor-status-component :time="time" :actorIndex="actorIndex" :isTarget="isTarget" 
-                                              :minion="isMinion ? minion : null" :minionInfo="isMinion ? minionInfo : null" :minionLabel="minionLabel" />
+        <combat-replay-actor-status-component :time="time" :actorIndex="actorIndex" :isTarget="isTarget"
+                                              :minionGroupIndex="isMinion ? minionGroupIndex : null" :minionIndex="isMinion ? minionIndex : null" />
         <combat-replay-actor-rotation-component v-if="rotation && !isMinion" :time="time" :actorindex="actorIndex" :isTarget="isTarget" />
         <combat-replay-actor-breakbars-component v-if="!isMinion" :actorIndex="actorIndex" :isTarget="isTarget" />
     </div>
@@ -19,7 +19,7 @@
 <script>
     Vue.component("combat-replay-actor-stats-component", {
         mixins: [timeRefreshComponent, encounterPhaseComponent],
-        props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation", "minion", "minionInfo", "minionOwnerIndex", "minionLabel"],
+        props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation", "minionGroupIndex", "minionIndex"],
         template: `${template}`,
         methods: {
             isPresent: function (type) {
@@ -28,7 +28,31 @@
         },
         computed: {
             isMinion: function () {
-                return !this.isTarget && !!this.minion;
+                return !this.isTarget && this.minionGroupIndex != null && this.minionIndex != null;
+            },
+            minionOwner: function () {
+                if (!this.isMinion) {
+                    return null;
+                }
+                return logData.players[this.actorIndex];
+            },
+            minion: function () {
+                if (!this.isMinion) {
+                    return null;
+                }
+                return this.minionOwner.details.minions[this.minionGroupIndex].instances[this.minionIndex];
+            },
+            minionInfo: function () {
+                if (!this.isMinion) {
+                    return null;
+                }
+                return this.minionOwner.minions[this.minionGroupIndex];
+            },
+            minionLabel: function () {
+                if (!this.isMinion || !this.minionInfo) {
+                    return "";
+                }
+                return this.minionInfo.name + "#" + (this.minionIndex + 1);
             },
             actor: function () {
                 if (this.isTarget) {
@@ -36,9 +60,11 @@
                 }
                 return this.isMinion ? this.minion : logData.players[this.actorIndex];
             },
-            boonGraph: function () {
-                const graphs = this.isMinion ? this.minion.boonGraph : this.actor.details.boonGraph;
-                return graphs?.[this.encounterPhase.id] || [];
+            boonGraph: function() {
+                if (this.isMinion) {
+                    return this.minion.boonGraph[this.encounterPhase.id] || [];
+                }
+                return this.actor.details.boonGraph[this.encounterPhase.id] || [];
             },
             data: function () {
                 const res = {
