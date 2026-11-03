@@ -1,4 +1,5 @@
-﻿using GW2EIBuilders.HtmlModels.HTMLCharts;
+﻿using GW2EIBuilders.HtmlModels.HtmlActors;
+using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
@@ -16,7 +17,7 @@ internal class ActorDetailsDto
     public List<List<BuffChartDataDto>>? BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>? Food;
-    public List<ActorDetailsDto>? Minions;
+    public List<MinionDetailsDto>? Minions;
     public List<MinionInstanceDetailsDto>? MinionInstances;
     public List<DeathRecapDto>? DeathRecap;
 
@@ -57,23 +58,24 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
+    private static MinionDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
-        var dto = new ActorDetailsDto
+        var dto = new MinionDetailsDto
         {
             DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
-            MinionInstances = minion.IsUniquePerTimeFrame ? new(minion.MinionList.Count) : null,
         };
 
-        if (dto.MinionInstances != null)
+        if (minion.IsUniquePerTimeFrame)
         {
+            dto.MinionInstances = new(minion.MinionList.Count);
             foreach (NPC minionInstance in minion.MinionList)
             {
                 dto.MinionInstances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
             }
+            dto.Rotation = new(phases.Count);
         }
 
         foreach (PhaseData phase in phases)
@@ -89,7 +91,7 @@ internal class ActorDetailsDto
             dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildMinionsDamageTakenDistributionData(log, minion, phase, used));
             if (minion.IsUniquePerTimeFrame)
             {
-                dto.Rotation = new(phases.Count);
+                dto.Rotation!.Add(SkillDto.BuildRotationData(log, minion, phase, used));
             }
         }
         return dto;
