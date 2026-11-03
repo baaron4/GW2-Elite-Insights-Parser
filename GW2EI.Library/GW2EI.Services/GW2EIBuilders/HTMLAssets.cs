@@ -151,6 +151,7 @@ public class HTMLAssets
             Properties.Resources.tmplGraphStats,
             Properties.Resources.tmplPlayerBuffTab,
             Properties.Resources.tmplPlayerTabGraph,
+            Properties.Resources.tmplPlayerTabMinionGraph,
             Properties.Resources.tmplPlayersRotation,
             Properties.Resources.tmplPlayersRotationTab,
             Properties.Resources.tmplRotationLegend,

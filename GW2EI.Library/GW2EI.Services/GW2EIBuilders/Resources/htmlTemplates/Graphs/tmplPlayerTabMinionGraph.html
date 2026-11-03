@@ -1,0 +1,66 @@
+﻿<template>
+    <div>
+        <h4 class="text-center mt-1 mb-1">{{graphname}}</h4>
+        <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("player-minion-graph-tab-component", {
+        props: ["playerindex", "phaseindex", "miniongroupindex", "minioninstanceindex", "light"],
+        template: `${template}`,
+        mixins: [graphComponent, encounterPhaseComponent],
+        data: function () {
+            return {
+                data: [],
+                layout: {},
+            };
+        },
+        watch: {
+            light: function () {
+                this.computeLayout();
+            },
+            encounters: {
+                deep: true,
+                handler: function () {
+                    this.computeLayout();
+                }
+            }
+        },
+        created: function () {
+            this.computeLayout();
+        },
+        computed: {
+            player: function () {
+                return logData.players[this.playerindex];
+            },
+            minionGroup: function () {
+                return this.player.details.minions[this.miniongroupindex];
+            },
+            minionInstance: function () {
+                return this.minionGroup.minionInstances[this.minioninstanceindex];
+            },
+            graphid: function () {
+                return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.miniongroupindex + "-" + this.minionInstance.uniqueID;
+            },
+            graphname: function () {
+                var groupName = this.player.minions[this.miniongroupindex]?.name || "Minion";
+                return groupName + " #" + (this.minioninstanceindex + 1) + " boon graph";
+            }
+        },
+        methods: {
+            computeLayout: function () {
+                this.data = [];
+                var color = this.light ? '#495057' : '#cccccc';
+                var boonGraph = this.minionInstance.boonGraph[this.phaseindex];
+                var hasBuffs = computeBuffData(boonGraph, this.data) > 0;
+                this.layout = getActorGraphLayout([], color, hasBuffs, true);
+                this.layout.yaxis.domain = hasBuffs ? [0, 1] : [0, 0];
+                this.layout.yaxis4.domain = hasBuffs ? [0, 1] : [0, 0];
+                this.layout.xaxis.domain = [0, 0.95];
+                this.layout.height = 450;
+                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
+            }
+        }
+    });
+</script>

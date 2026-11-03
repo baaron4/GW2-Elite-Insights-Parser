@@ -16,7 +16,8 @@ internal class ActorDetailsDto
     public List<List<BuffChartDataDto>>? BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>? Food;
-    public List<MinionsDetailsDto>? Minions;
+    public List<ActorDetailsDto>? Minions;
+    public List<MinionInstanceDetailsDto>? MinionInstances;
     public List<DeathRecapDto>? DeathRecap;
 
 
@@ -56,24 +57,23 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    private static MinionsDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
+    private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
-        var dto = new MinionsDetailsDto
+        var dto = new ActorDetailsDto
         {
             DmgDistributions = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
             DmgDistributionsTaken = new(phases.Count),
+            MinionInstances = minion.IsUniquePerTimeFrame ? new(minion.MinionList.Count) : null,
         };
 
-        if (minion.IsUniquePerTimeFrame)
+        if (dto.MinionInstances != null)
         {
-            dto.Instances = new(minion.MinionList.Count);
             foreach (NPC minionInstance in minion.MinionList)
             {
-                dto.Instances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
+                dto.MinionInstances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
             }
-            dto.Rotation = new(phases.Count);
         }
 
         foreach (PhaseData phase in phases)
@@ -89,7 +89,7 @@ internal class ActorDetailsDto
             dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildMinionsDamageTakenDistributionData(log, minion, phase, used));
             if (minion.IsUniquePerTimeFrame)
             {
-                dto.Rotation!.Add(SkillDto.BuildRotationData(log, minion, phase, used));
+                dto.Rotation = new(phases.Count);
             }
         }
         return dto;
@@ -170,7 +170,7 @@ internal class ActorDetailsDto
                 }
             }
 
-            dto.Minions.Add(new MinionsDetailsDto
+            dto.Minions.Add(new()
             {
                 DmgDistributions = dmgDistributions,
                 DmgDistributionsTaken = dmgTakenDistributions

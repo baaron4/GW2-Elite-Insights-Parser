@@ -4,22 +4,35 @@
                                            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
-        <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
-            <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">
-                Source
-            </label>
-            <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
-                <option value="">Player</option>
-                <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.groupIndex" :label="group.name">
-                    <option v-for="minion in group.instances" :key="minion.id" :value="minion.selectionKey">
-                        {{minion.label}}
-                    </option>
-                </optgroup>
-            </select>
-        </div>
-            <graph-component :id="graphid" :layout="selectedGraph.layout" :data="selectedGraph.data"></graph-component>
-            <rotation-legend-component></rotation-legend-component>
-        </div>
+        <!--<div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
+        <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">
+            Source
+        </label>
+        <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
+            <option value="">Player</option>
+            <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.groupIndex" :label="group.name">
+                <option v-for="minion in group.instances" :key="minion.id" :value="minion.selectionKey">
+                    {{minion.label}}
+                </option>
+            </optgroup>
+        </select>
+    </div>
+        <graph-component :id="graphid" :layout="selectedGraph.layout" :data="selectedGraph.data"></graph-component>
+        <rotation-legend-component></rotation-legend-component>
+    </div>-->
+        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
+        <template v-for="(minionGroup, groupIndex) in (player.details.minions || [])">
+            <player-minion-graph-tab-component v-for="(minionInstance, instanceIndex) in minionGroup.minionInstances"
+                                               :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + groupIndex + '-' + instanceIndex"
+                                               :playerindex="playerindex"
+                                               :phaseindex="phaseindex"
+                                               :miniongroupindex="groupIndex"
+                                               :minioninstanceindex="instanceIndex"
+                                               :light="light">
+            </player-minion-graph-tab-component>
+        </template>
+        <rotation-legend-component></rotation-legend-component>
+    </div>
 </template>
 
 <script>
@@ -29,10 +42,8 @@
         mixins: [graphComponent, damageGraphComponent, encounterPhaseComponent],
         data: function() {
             return {
-                data: [],
                 playerOffset: 0,
                 graphOffset: 0,
-                selectedMinionKey: "",
             };
         },
         watch: {
@@ -64,18 +75,18 @@
                     this.computeLayout();
                 }
             },
-            minionSelectGroups: function (groups) {
-                if (this.selectedMinionKey &&
-                    !groups.some(group =>
-                        group.instances.some(
-                            minion => minion.selectionKey === this.selectedMinionKey
-                        )
-                    )) {
-                    this.selectedMinionKey = "";
-                }
-            },
         },
         created: function () {
+            console.log("PARENT CREATED");
+
+            console.log("PLAYER INDEX:", this.playerindex);
+            console.log("PLAYER:", this.player);
+            console.log("MINION GROUPS:", this.player.details.minions);
+
+            this.player.details.minions.forEach(function (group, index) {
+                console.log("GROUP:", index);
+                console.log("INSTANCES:", group.minionInstances);
+            });
             this.computeLayout();
         },
         mounted: function () {
@@ -105,81 +116,6 @@
             },
             player: function() {
                 return logData.players[this.playerindex];
-            },
-            hasMinions: function () {
-                return this.minionSelectGroups.length > 0;
-            },
-            minionSelectGroups: function () {
-                const result = [];
-                const minionGroups = this.player.details.minions || [];
-                for (let groupIndex = 0; groupIndex < minionGroups.length; groupIndex++) {
-                    const group = minionGroups[groupIndex];
-                    if (!group.instances) {
-                        continue;
-                    }
-                    const instances = [];
-                    for (let minionIndex = 0; minionIndex < group.instances.length; minionIndex++) {
-                        const minion = group.instances[minionIndex];
-                        const boonGraph = minion.boonGraph?.[this.phaseindex];
-                        if (!boonGraph || boonGraph.length === 0) {
-                            continue;
-                        }
-                        const data = [];
-
-                        if (computeBuffData(boonGraph, data) === 0) {
-                            continue;
-                        }
-
-                        instances.push({
-                            id: minion.uniqueID,
-                            selectionKey: groupIndex + ':' + minionIndex,
-                            label: minion.name + ' #' + (minionIndex + 1),
-                            data: data
-                        });
-                    }
-
-                    if (instances.length > 0) {
-                        result.push({
-                            groupIndex: groupIndex,
-                            name: this.player.minions[groupIndex].name,
-                            instances: instances
-                        });
-                    }
-                }
-
-                return result;
-            },
-
-            selectedGraph: function () {
-                if (this.selectedMinionKey) {
-                    for (const group of this.minionSelectGroups) {
-                        const minion = group.instances.find(instance => instance.selectionKey === this.selectedMinionKey);
-                        if (minion) {
-                            const color = this.light ? '#495057' : '#cccccc';
-                            const layout = getActorGraphLayout([], color, true, true);
-
-                            delete layout.yaxis2;
-                            delete layout.yaxis3;
-                            delete layout.yaxis5;
-
-                            layout.yaxis.domain = [0.0, 1.0];
-                            layout.yaxis4.domain = [0.0, 1.0];
-                            layout.yaxis.title = 'Buffs';
-                            layout.height = 320;
-
-                            computePhaseMarkups(layout.shapes,layout.annotations,this.phase,color);
-
-                            return {
-                                layout: layout,
-                                data: minion.data
-                            };
-                        }
-                    }
-                }
-                return {
-                    layout: this.layout,
-                    data: this.computeData
-                };
             },
             damageGraphName: function () {
                 switch (this.graphdata.damagemode) {
@@ -337,7 +273,7 @@
                 }
                 var dpsData = this.computeDPSData();
                 var res = [];
-                res.push(dpsData.playerDPS.total);            
+                res.push(dpsData.playerDPS.total);
                 res.push(dpsData.playerDPS.target);
                 res.push(dpsData.playerDPS.cleave);
                 res.push(dpsData.playerDPS.taken);

@@ -17,10 +17,11 @@
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-volume-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
                 <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'volume-minion-group-' + groupIndex"
+                          v-if="minionGroup.minionInstances && minionGroup.minionInstances.length > 0"
                           :label="player.minions[groupIndex].name">
-                    <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'volume-minion-' + groupIndex + '-' + minionIndex"
+                    <option v-for="(minion, minionIndex) in minionGroup.minionInstances" :key="'volume-minion-' + groupIndex + '-' + minionIndex"
                             :value="groupIndex + ':' + minionIndex">
-                        {{minion.name}} #{{minionIndex + 1}}
+                        {{player.minions[groupIndex].name}} #{{minionIndex + 1}}
                     </option>
                 </optgroup>
             </select>
@@ -50,14 +51,35 @@
                 return logData.players[this.playerindex];
             },
             hasMinions: function () {
-                return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+                return this.player.details.minions && this.player.details.minions.some(group => group.minionInstances && group.minionInstances.length > 0);
             },
             selectedMinion: function () {
                 if (!this.selectedMinionKey) {
                     return null;
                 }
                 const indexes = this.selectedMinionKey.split(':').map(Number);
-                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+                return this.player.details.minions[indexes[0]]?.minionInstances?.[indexes[1]] ?? null;
+            },
+            selectedMinionIndexes: function () {
+                if (!this.selectedMinionKey) {
+                    return null;
+                }
+
+                const [groupIndex, minionIndex] =
+                    this.selectedMinionKey.split(':').map(Number);
+
+                return { groupIndex, minionIndex };
+            },
+            selectedMinionVolumeContainer: function () {
+                const indexes = this.selectedMinionIndexes;
+
+                if (!indexes) {
+                    return null;
+                }
+
+                return this.buffVolumesStatContainer.minionBuffs
+                    ?.[this.playerindex]
+                    ?.[indexes.groupIndex] ?? null;
             },
             boonData: function() {
                 const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
@@ -69,7 +91,8 @@
                 const activeduration = this.activeduration;
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 if (this.selectedMinion) {
-                    const dictionaries = activeduration ? this.selectedMinion.boonVolumeActiveDictionaries[this.phaseindex] : this.selectedMinion.boonVolumeDictionaries[this.phaseindex];
+                    const minionIndex = this.selectedMinionIndexes.minionIndex;
+                    const dictionaries = activeduration ? this.selectedMinionVolumeContainer?.boonVolumeActiveDictionaries?.[minionIndex] : this.selectedMinionVolumeContainer?.boonVolumeDictionaries?.[minionIndex];
                     for (let i = 0; i < players.length; i++) {
                         if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                             continue;
@@ -99,7 +122,8 @@
                 const activeduration = this.activeduration;
                 const res = [];
                 if (this.selectedMinion) {
-                    const minionData = activeduration ? this.selectedMinion.boonVolumeActiveStats[this.phaseindex] : this.selectedMinion.boonVolumeStats[this.phaseindex];
+                    const minionIndex = this.selectedMinionIndexes.minionIndex;
+                    const minionData = activeduration ? this.selectedMinionVolumeContainer?.boonVolumeActiveStats?.[minionIndex] : this.selectedMinionVolumeContainer?.boonVolumeStats?.[minionIndex];
                     res.push({
                         icon: this.selectedMinion.icon,
                         name: this.selectedMinion.name,

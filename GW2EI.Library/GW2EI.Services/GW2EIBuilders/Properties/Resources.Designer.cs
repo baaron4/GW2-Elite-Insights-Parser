@@ -516,7 +516,7 @@ namespace GW2EIBuilders.Properties {
         ///}
         ///
         ///.rot-animfull {
-        ///  border: 2px solid #00ff00;
+        ///  border: 2px solid #9370DB;
         ///}
         ///
         ///.rot-unknown {
@@ -537,7 +537,7 @@ namespace GW2EIBuilders.Properties {
         ///}
         ///
         ///.rot-small .rot-animfull {
-        ///  border: 1px solid #00ff00;
+        ///  border: 1px solid #9370DB;
         ///}
         ///
         ///.rot-small .rot-unknown {
@@ -720,12 +720,12 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;    
+        ///    &lt;div&gt;
         ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
         ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; data-original-title=&quot;Buffs upkeep applied by each player to the selected player based on currently selected phase.&quot;
-        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase dur [rest of string was truncated]&quot;;.
+        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase duratio [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffStatsPlayer {
             get {
@@ -829,12 +829,12 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;    
+        ///    &lt;div&gt;
         ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
         ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; data-original-title=&quot;Buffs volumes applied by each player to the selected player based on currently selected phase.&quot;
-        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase du [rest of string was truncated]&quot;;.
+        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase durati [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffVolumeStatsPlayer {
             get {
@@ -965,7 +965,7 @@ namespace GW2EIBuilders.Properties {
         ///                    &lt;/a&gt;
         ///                &lt;/li&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; [rest of string was truncated]&quot;;.
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorsStats {
             get {
@@ -981,7 +981,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Others&apos;)&quot; :buffarray=&quot;data.others&quot; /&gt;
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Conditions&apos;)&quot; :buffarray=&quot;data.conditions&quot; /&gt;
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Shared&apos;)&quot; :buffarray=&quot;data.shared&quot; /&gt;
-        ///            &lt;com [rest of string was truncated]&quot;;.
+        ///            &lt;combat-rep [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorStats {
             get {
@@ -993,13 +993,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;text-white&quot; @click=&quot;select&quot;&gt;
         ///        &lt;div class=&quot;actor-status&quot; :style=&quot;{&apos;background&apos;: getActorGradient(time, status), &apos;height&apos;: getActorHeight()}&quot;
-        ///             :data-original-title=&quot;isTarget ? actor.name : actor.name + &apos; - &apos; + actor.acc&quot;&gt;
-        ///            &lt;p class=&quot;mb-0 scale65 cr-status-percent text-left&quot;&gt;
+        ///             :data-original-title=&quot;isTarget ? actor.name : (isMinion ? minionLabel : actor.name + &apos; - &apos; + actor.acc)&quot;&gt;
+        ///            &lt;p v-if=&quot;!isMinion || hasHealth&quot; class=&quot;mb-0 scale65 cr-status-percent text-left&quot;&gt;
         ///                {{ percentFormater2(getPercent(healths, time) / 100) }}
         ///            &lt;/p&gt;
         ///
-        ///            &lt;h6 class=&quot;text-center mb-0 ellipis align-self-center&quot;&gt;
-        ///               [rest of string was truncated]&quot;;.
+        ///            &lt;h6 class=&quot;text-center [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorStatus {
             get {
@@ -1087,20 +1086,21 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;label class=&quot;ml-auto&quot;&gt;
-        ///        &lt;select class=&quot;form-control d-inline w-auto h-auto&quot; :value=&quot;defaultSpeed&quot; 
-        ///                data-original-title=&quot;Speed&quot;
-        ///                @change=&quot;updateSelectedSpeed($event.target.value)&quot;&gt;
-        ///            &lt;option v-for=&quot;speed in speeds&quot; :key=&quot;speed&quot; :value=&quot;speed&quot;&gt;
-        ///                {{ speed }}x
-        ///            &lt;/option&gt;
-        ///        &lt;/select&gt;
-        ///    &lt;/label&gt;
+        ///    &lt;select class=&quot;form-control d-inline w-auto h-auto&quot; :value=&quot;defaultSpeed&quot; data-original-title=&quot;Speed&quot;
+        ///        @change=&quot;updateSelectedSpeed($event.target.value)&quot;&gt;
+        ///        &lt;option v-for=&quot;speed in speeds&quot; :key=&quot;speed&quot; :value=&quot;speed&quot;&gt;
+        ///            {{ speed }}x
+        ///        &lt;/option&gt;
+        ///    &lt;/select&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
         ///    Vue.component(&quot;combat-replay-time-speed-picker-component&quot;, {
-        ///        template: `${t [rest of string was truncated]&quot;;.
+        ///        template: `${template}`,
+        ///        data() {
+        ///            return {
+        ///                defaultSpeed: 1,
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplaySpeedPicker {
             get {
@@ -2188,12 +2188,11 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
-        ///            :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
+        ///                                           :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
-        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
-        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
-        ///    &lt;/div [rest of string was truncated]&quot;;.
+        ///        &lt;!--&lt;div v-if=&quot;hasMinions&quot; class=&quot;d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85&quot;&gt;
+        ///        &lt;label cla [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
@@ -2203,21 +2202,42 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;h4 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h4&gt;
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;data&quot;&gt;&lt;/graph-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;player-minion-graph-tab-component&quot;, {
+        ///        props: [&quot;playerindex&quot;, &quot;phaseindex&quot;, &quot;miniongroupindex&quot;, &quot;minioninstanceindex&quot;, &quot;light&quot;],
+        ///        template: `${template}`,
+        ///        mixins: [graphComponent, encounterPhaseComponent],
+        ///        data: function () {
+        ///            return {
+        ///              [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerTabMinionGraph {
+            get {
+                return ResourceManager.GetString("tmplPlayerTabMinionGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;card&quot;&gt;
         ///        &lt;div class=&quot;card-body container&quot;&gt;
         ///            &lt;p&gt;&lt;u&gt;Fill&lt;/u&gt;&lt;/p&gt;
-        ///            &lt;span class=&quot;rot-legend-bg rot-bg-blue&quot;&gt;
-        ///                Hit
-        ///                without aftercast
+        ///            &lt;span class=&quot;rot-legend-bg rot-bg-blue mr-1&quot;&gt;
+        ///                Hit without aftercast
         ///            &lt;/span&gt;
-        ///            &lt;span class=&quot;rot-legend-bg rot-bg-green&quot;&gt;
-        ///                Hit
-        ///                with full aftercast
+        ///            &lt;span class=&quot;rot-legend-bg rot-bg-purple mr-1&quot;&gt;
+        ///                Hit with full aftercast
         ///            &lt;/span&gt;
-        ///            &lt;span class=&quot;rot-legend-bg rot-bg-red&quot;&gt;
-        ///                Attack
-        ///                canceled before completing
-        ///            &lt;/s [rest of string was truncated]&quot;;.
+        ///            &lt;span class=&quot;rot-legend-bg rot-bg-red mr-1&quot;&gt;
+        ///                Attack canceled before completing
+        ///            &lt;/span&gt;
+        ///            &lt;span class=&quot;rot- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplRotationLegend {
             get {

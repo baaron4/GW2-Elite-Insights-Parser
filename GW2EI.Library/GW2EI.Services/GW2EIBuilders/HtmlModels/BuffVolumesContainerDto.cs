@@ -74,6 +74,8 @@ internal class BuffVolumesContainerDto
     public List<BuffVolumeData> TargetsCondiIncomingVolumeTotals { get; set; }
     public List<BuffVolumeData> TargetsBoonIncomingVolumeTotals { get; set; }
 
+    public List<Dictionary<long, MinionBuffVolumesContainerDto>> MinionBuffVolumes;
+
     public BuffVolumesContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
     {
         StatisticsHelper statistics = log.StatisticsHelper;
@@ -139,6 +141,23 @@ internal class BuffVolumesContainerDto
             TargetsCondiVolumeStats.Add(BuffVolumeData.BuildTargetConditionVolumeData(log, phase, target));
             TargetsCondiIncomingVolumeTotals.Add(BuffVolumeData.BuildTargetConditionIncomingVolumeData(log, phase, target));
             TargetsBoonIncomingVolumeTotals.Add(BuffVolumeData.BuildTargetBoonIncomingVolumeData(log, phase, target));
+        }
+
+        MinionBuffVolumes = new(log.Friendlies.Count);
+        foreach (var friendly in log.Friendlies)
+        {
+            var minionData = new Dictionary<long, MinionBuffVolumesContainerDto>();
+            IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
+            for (int minionGroupIndex = 0; minionGroupIndex < minionGroups.Count; minionGroupIndex++)
+            {
+                Minions minionGroup = minionGroups[minionGroupIndex];
+                if (!minionGroup.IsUniquePerTimeFrame)
+                {
+                    continue;
+                }
+                minionData.Add(minionGroupIndex, new MinionBuffVolumesContainerDto(log, minionGroup, phase));
+            }
+            MinionBuffVolumes.Add(minionData);
         }
     }
 }

@@ -8,7 +8,7 @@
 
             <h6 class="text-center mb-0 ellipis align-self-center">
                 <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
-                <img :src="actor.icon" :alt="actor.profession" height="16" width="16">
+                <img :src="isMinion ? minionInfo.icon : actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16">
                 {{isMinion ? minionLabel : actor.name}}
             </h6>
 
@@ -28,7 +28,7 @@
 <script>
     Vue.component("combat-replay-actor-status-component", {
         mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
-        props: ["isTarget", "actorIndex", "time", "minion", "minionLabel"],
+        props: ["isTarget", "actorIndex", "time", "minion", "minionInfo", "minionOwnerIndex", "minionLabel"],
         template: `${template}`,
         methods: {
             activeMarkers: function () {
@@ -99,7 +99,8 @@
             },
             healths: function () {
                 if (this.isMinion) {
-                    return this.minion.healthStates?.[this.encounterPhase.id] || null;
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.minionOwnerIndex];
+                    return playerChart?.minionCharts?.[this.minion.uniqueID]?.healthStates || null;
                 }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {
@@ -112,7 +113,8 @@
             },
             barriers: function () {
                 if (this.isMinion) {
-                    return this.minion.barrierStates?.[this.encounterPhase.id] || null;
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.minionOwnerIndex];
+                    return playerChart?.minionCharts?.[this.minion.uniqueID]?.barrierStates || null;
                 }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {

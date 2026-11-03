@@ -16,12 +16,12 @@
             <label class="mr-2 mb-0" :for="'boon-minion-select-' + player.id">Buff recipient</label>
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
-                <optgroup v-if="minionGroup.instances && minionGroup.instances.length > 0"
+                <optgroup v-if="minionGroup.minionInstances && minionGroup.minionInstances.length > 0"
                           v-for="(minionGroup, groupIndex) in player.details.minions" :key="'uptime-minion-group-' + groupIndex"
                           :label="player.minions[groupIndex].name">
-                    <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'uptime-minion-' + groupIndex + '-' + minionIndex"
+                    <option v-for="(minion, minionIndex) in minionGroup.minionInstances" :key="'uptime-minion-' + groupIndex + '-' + minionIndex"
                             :value="groupIndex + ':' + minionIndex">
-                        {{minion.name}} #{{minionIndex + 1}}
+                        {{player.minions[groupIndex].name}} #{{minionIndex + 1}}
                     </option>
                 </optgroup>
             </select>
@@ -60,8 +60,8 @@
             hasMinions: function () {
                 return this.player.details.minions &&
                     this.player.details.minions.some(group =>
-                        group.instances &&
-                        group.instances.length > 0
+                        group.minionInstances &&
+                        group.minionInstances.length > 0
                     );
             },
             selectedMinion: function () {
@@ -69,7 +69,21 @@
                     return null;
                 }
                 const indexes = this.selectedMinionKey.split(':').map(Number);
-                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+                return this.player.details.minions[indexes[0]]?.minionInstances?.[indexes[1]] ?? null;
+            },
+            selectedMinionIndexes: function () {
+                if (!this.selectedMinionKey) {
+                    return null;
+                }
+                const [groupIndex, minionIndex] = this.selectedMinionKey.split(':').map(Number);
+                return { groupIndex, minionIndex };
+            },
+            selectedMinionBuffs: function () {
+                const indexes = this.selectedMinionIndexes;
+                if (!indexes) {
+                    return null;
+                }
+                return this.buffsStatContainer.minionBuffs ?.[this.playerindex] ?.[indexes.groupIndex] ?? null;
             },
             boonData: function() {
                 const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
@@ -81,16 +95,13 @@
                 const activeduration = this.activeduration;
                 const players = getActivePlayersForPhase(this.encounterPhase);
                 if (this.selectedMinion) {
-                    const dictionaries = activeduration ? this.selectedMinion.boonActiveDictionaries[this.phaseindex] : this.selectedMinion.boonDictionaries[this.phaseindex];
+                    const minionIndex = this.selectedMinionIndexes.minionIndex;
+                    const dictionaries = activeduration ? this.selectedMinionBuffs?.boonActiveDictionaries?.[minionIndex] : this.selectedMinionBuffs?.boonDictionaries?.[minionIndex];
                     for (let i = 0; i < players.length; i++) {
                         if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                             continue;
                         }
-
-                        const data = dictionaries[i];
-                        if (data) {
-                            res.push({ player: players[i], data: data });
-                        }
+                        res.push({ player: players[i], data: dictionaries[i] });
                     }
                     this.cacheBoon.set(id, res);
                     return res;
@@ -116,7 +127,8 @@
                 const minion = this.selectedMinion;
                 const activeduration = this.activeduration;
                 if (this.selectedMinion) {
-                    const minionData = activeduration ? this.selectedMinion.boonActiveStats?.[this.phaseindex] : this.selectedMinion.boonStats?.[this.phaseindex];
+                    const minionIndex = this.selectedMinionIndexes.minionIndex;
+                    const minionData = activeduration ? this.selectedMinionBuffs?.boonActiveStats?.[minionIndex] : this.selectedMinionBuffs?.boonStats?.[minionIndex];
                     if (!minionData) {
                         this.cacheBoonSums.set(id, res);
                         return res;

@@ -52,7 +52,8 @@ internal abstract class ActorDto
             Minions.Add(new MinionDto()
             {
                 Id = i,
-                Name = minions[i].Character
+                Name = minions[i].Character,
+                Icon = minions[i].GetIcon(),
             });
             foreach (var minion in minions[i].MinionList)
             {
