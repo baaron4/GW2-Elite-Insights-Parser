@@ -1103,7 +1103,7 @@
                 animator.resetViewpoint(this.normalPhases[0].eiid);
             },
             panView: function (dx, dy) {
-                animator.pan(dx, dy);
+                animator.panAbsolute(dx, dy);
                 if (!this.panEvent) {
                     this.panEvent = setInterval(() => {
                         this.panView(dx, dy);

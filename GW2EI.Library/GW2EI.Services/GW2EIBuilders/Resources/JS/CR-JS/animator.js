@@ -1112,6 +1112,13 @@ class Animator {
         }
     }
 
+    panAbsolute(dx, dy) {
+        const ctx = this.mainContext;
+        const pt = ctx.transformedPoint(this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2);
+        const deltaPt = ctx.transformedPoint(this.mainCanvas.clientWidth / 2 + dx, this.mainCanvas.clientHeight / 2 + dy);
+        this.pan(deltaPt.x - pt.x, deltaPt.y - pt.y);
+    }
+
     pan(dx, dy) {
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
