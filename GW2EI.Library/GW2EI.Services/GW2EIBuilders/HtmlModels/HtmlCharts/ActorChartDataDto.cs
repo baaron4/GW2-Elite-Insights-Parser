@@ -17,8 +17,9 @@ internal abstract class ActorChartDataDto
         var minionGroups = actor.GetMinions(log);
         MinionCharts = new();
 
-        foreach (Minions minionGroup in minionGroups)
+        for (int minionGroupIndex = 0; minionGroupIndex < minionGroups.Count; minionGroupIndex++)
         {
+            Minions minionGroup = minionGroups[minionGroupIndex];
             if (!minionGroup.IsUniquePerTimeFrame)
             {
                 continue;
@@ -26,7 +27,7 @@ internal abstract class ActorChartDataDto
 
             foreach (NPC minion in minionGroup.MinionList)
             {
-                MinionCharts.Add(minion.UniqueID, new MinionChartDto(log, phase, minion));
+                MinionCharts.Add(minionGroupIndex, new MinionChartDto(log, phase, minion));
             }
         }
     }
