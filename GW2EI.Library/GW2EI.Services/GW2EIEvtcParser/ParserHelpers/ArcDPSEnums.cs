@@ -354,6 +354,7 @@ public static class ArcDPSEnums
         AgentInfo = 89,
         PvPScoreUpdate = 90,
         SkillStep = 91,
+        AnimationSpeed = 92,
         Unknown
     };
 

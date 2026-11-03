@@ -300,6 +300,7 @@ public class CombatItem : ITimeComparable
             || IsStateChange == StateChange.GadgetModelInfo
             || IsStateChange == StateChange.FlyTo
             || IsStateChange == StateChange.AgentInfo
+            || IsStateChange == StateChange.AnimationSpeed
             ;
     }
 
