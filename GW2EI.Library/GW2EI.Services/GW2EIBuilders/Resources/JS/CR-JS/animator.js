@@ -95,6 +95,7 @@ let animationControlComponent = null;
 // reactive structures
 const reactiveAnimationData = {
     time: 0,
+    _isInteractive: false, // for touch events
     selectedActorID: null,
     hoveredActor: null,
     animated: false,
@@ -483,6 +484,9 @@ class Animator {
         this.mainContext.globalScale(resolutionMultiplier, resolutionMultiplier);
         this.bgContext.globalScale(resolutionMultiplier, resolutionMultiplier);
         this.pickContext.globalScale(resolutionMultiplier, resolutionMultiplier);
+        //
+        this._zoomStep = getNumericalValueFromLocalStorage("zoomStep", 1.06);
+        this._rotationStep = getNumericalValueFromLocalStorage("rotationStep", 0.03);
         this._initMouseEvents();
         this._initTouchEvents();
     }
@@ -1042,12 +1046,18 @@ class Animator {
         this.reactiveDataStatus.gameCoordinates.x = Number(pt.x.toFixed(2));
         this.reactiveDataStatus.gameCoordinates.y = Number(pt.y.toFixed(2));
     }
-    _hideAgentTooltip() {
+    _hideAgentTooltip(forceDisallow = false) {
         if (this.reactiveDataStatus.hoveredActor !== null) {
             this.reactiveDataStatus.hoveredActor = null;
         }
+        if (forceDisallow) {
+            CanvasTooltipData.allowed = false;
+        }
     }
-    _updateAgentTooltip(canvasX, canvasY, clientX, clientY) {
+    _updateAgentTooltip(canvasX, canvasY, clientX, clientY, forceAllow = false) {
+        if (forceAllow) {
+            CanvasTooltipData.allowed = true;
+        }
         if (!this.agentTooltip || !this.agentTooltipPopper || !CanvasTooltipData.allowed) {
             return;
         }
@@ -1171,8 +1181,6 @@ class Animator {
 
     _initMouseEvents() {
         const _this = this;
-        this._zoomStep = getNumericalValueFromLocalStorage("zoomStep", 1.06);
-        this._rotationStep = getNumericalValueFromLocalStorage("rotationStep", 0.03);
         this._mouseInside = false;
         const canvas = this.mainCanvas;
         const ctx = this.mainContext;
@@ -1181,8 +1189,7 @@ class Animator {
 
         canvas.addEventListener('mousedown', function (evt) {
             evt.preventDefault();
-            _this._hideAgentTooltip();
-            CanvasTooltipData.allowed = false;
+            _this._hideAgentTooltip(true);
             _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
@@ -1200,12 +1207,12 @@ class Animator {
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
             if (_this.mouseDown) {
-                _this._hideAgentTooltip();
+                _this._hideAgentTooltip(true);
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
                 const downPt = _this.mouseDown.pt;
                 _this.pan(pt.x - downPt.x, pt.y - downPt.y);
             } else {
-                _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
+                _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY, true);
                 _this._updateCanvasCoordinates(_this.lastX, _this.lastY);
             }
         }, false);
@@ -1217,8 +1224,7 @@ class Animator {
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
-            CanvasTooltipData.allowed = true;
-            _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY);
+            _this._updateAgentTooltip(_this.lastX, _this.lastY, evt.clientX, evt.clientY, true);
             if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
                 const downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
@@ -1250,7 +1256,141 @@ class Animator {
     }
 
     _initTouchEvents() {
-        // todo
+        if (!isTouchDevice) {
+            return;
+        }
+        const _this = this;
+        this.reactiveDataStatus._isInteractive = false;
+
+        const promptBox = document.getElementById('canvas-overlay-prompt');
+
+        // 1. User taps prompt to activate canvas
+        promptBox.addEventListener('touchstart', () => {
+            _this.reactiveDataStatus._isInteractive = !_this.reactiveDataStatus._isInteractive;
+        });
+        // TO be tested
+        const canvas = this.mainCanvas;
+        const ctx = this.mainContext;
+        const bgCtx = this.bgContext;
+        const pickCtx = this.pickContext;
+
+        const rect = canvas.getBoundingClientRect();
+        // Helper to get relative canvas coordinates from a touch object
+        const getTouchPos = (touch) => {
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+        };
+
+        // Helper to calculate distance between two touches (for pinch-to-zoom)
+        const getTouchDistance = (t1, t2) => {
+            const dx = t1.clientX - t2.clientX;
+            const dy = t1.clientY - t2.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        };
+
+        // Helper to calculate angle between two touches (for rotation)
+        const getTouchAngle = (t1, t2) => {
+            return Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX);
+        };
+
+        let initialPinchDist = null;
+        let initialPinchAngle = null;
+
+        // --- TOUCH START ---
+        canvas.addEventListener('touchstart', function (evt) {
+            if (!_this.reactiveDataStatus._isInteractive) return;
+            evt.preventDefault();
+            // Touch disables tooltip, mouse will enable it on hybrid devices
+            _this._hideAgentTooltip(true);
+
+            if (evt.touches.length === 1) {
+                // Single touch: behaves like mousedown
+                const pos = getTouchPos(evt.touches[0]);
+                _this._updateCanvasCoordinates(pos.x, pos.y);
+                _this.lastX = pos.x;
+                _this.lastY = pos.y;
+                _this.mouseDown = {
+                    pt: ctx.transformedPoint(_this.lastX, _this.lastY),
+                    time: Date.now()
+                };
+                _this.dragged = false;
+            } else if (evt.touches.length === 2) {
+                // Two fingers: initialize pinch-zoom and rotation tracking
+                _this.mouseDown = null; // Cancel single-touch drag if second finger lands
+                initialPinchDist = getTouchDistance(evt.touches[0], evt.touches[1]);
+                initialPinchAngle = getTouchAngle(evt.touches[0], evt.touches[1]);
+
+                // Use the midpoint between the two fingers as the zoom/rotate center
+                _this.lastX = ((evt.touches[0].clientX + evt.touches[1].clientX) / 2) - rect.left;
+                _this.lastY = ((evt.touches[0].clientY + evt.touches[1].clientY) / 2) - rect.top;
+            }
+        }, { passive: false });
+
+        // --- TOUCH MOVE ---
+        canvas.addEventListener('touchmove', function (evt) {
+            if (!_this.reactiveDataStatus._isInteractive) return;
+            evt.preventDefault();
+
+            if (evt.touches.length === 1 && _this.mouseDown) {
+                // Single touch drag (Panning)
+                const pos = getTouchPos(evt.touches[0]);
+                _this.lastX = pos.x;
+                _this.lastY = pos.y;
+                _this.dragged = true;
+
+                const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
+                const downPt = _this.mouseDown.pt;
+                _this.pan(pt.x - downPt.x, pt.y - downPt.y);
+
+            } else if (evt.touches.length === 2 && initialPinchDist !== null) {
+                // Two-finger pinch-to-zoom & rotation
+                const currentDist = getTouchDistance(evt.touches[0], evt.touches[1]);
+                const currentAngle = getTouchAngle(evt.touches[0], evt.touches[1]);
+
+                // Handle Zoom based on distance change ratio
+                const scaleDelta = currentDist / initialPinchDist;
+                if (Math.abs(1 - scaleDelta) > 0.01) {
+                    // Translate scale factor into a delta compatible with your zoom function
+                    const zoomDelta = scaleDelta > 1 ? 1 : -1;
+                    _this.zoom(zoomDelta * 2, _this.lastX, _this.lastY);
+                    initialPinchDist = currentDist; // Reset baseline for smooth continuous scaling
+                }
+
+                // Handle Rotation based on angle difference
+                const angleDelta = currentAngle - initialPinchAngle;
+                if (Math.abs(angleDelta) > 0.01) {
+                    _this.rotate(angleDelta * 10, _this.lastX, _this.lastY);
+                    initialPinchAngle = currentAngle;
+                }
+            }
+        }, { passive: false });
+
+        // --- TOUCH END / CANCEL ---
+        const handleTouchEnd = function (evt) {
+            if (!_this.reactiveDataStatus._isInteractive) return;
+            evt.preventDefault();
+
+            // If it was a quick single tap (less than 150ms and minimal movement), treat it as a click/pick
+            if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
+                const downPt = {
+                    x: Math.round(_this.lastX * resolutionMultiplier),
+                    y: Math.round(_this.lastY * resolutionMultiplier)
+                };
+                _this._drawPickCanvas(downPt);
+                const pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
+                const actorID = getUniqueIDFromPixel(pickedColor);
+                _this.selectActor(actorID, true);
+            }
+
+            _this.mouseDown = null;
+            initialPinchDist = null;
+            initialPinchAngle = null;
+        };
+
+        canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+        canvas.addEventListener('touchcancel', handleTouchEnd, { passive: false });
     }
 
     setSpeed(value) {

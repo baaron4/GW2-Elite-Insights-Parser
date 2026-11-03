@@ -29,6 +29,9 @@
                 <canvas class="replay position-relative" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.mainCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"></canvas>
                 <canvas class="replay top-0 left-0" :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"></canvas>
+                <div v-if="isTouchDevice" id="canvas-overlay" class="canvas-overlay">
+                    <div id="canvas-overlay-prompt" class="canvas-overlay-prompt">{{animationData._isInteractive ? 'Disable touch manipulation' : 'Enable touch manipulation'}}</div>
+                </div>
                 <div id="combat-replay-agent-tooltip" class="tooltip bs-tooltip-auto" :style="{ 'opacity': hoveredActor ? '1.0' : '0.0' }"
                      style="pointer-events: none; will-change: transform;">
                     <div class="arrow"></div>
