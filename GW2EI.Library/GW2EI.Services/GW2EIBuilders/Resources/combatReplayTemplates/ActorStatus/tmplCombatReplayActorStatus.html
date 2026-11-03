@@ -2,7 +2,7 @@
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
              :data-original-title="isTarget ? actor.name : (isMinion ? minionLabel : actor.name + ' - ' + actor.acc)">
-            <p v-if="!isMinion || hasHealth" class="mb-0 scale65 cr-status-percent text-left">
+            <p class="mb-0 scale65 cr-status-percent text-left">
                 {{ percentFormater2(getPercent(healths, time) / 100) }}
             </p>
 
@@ -12,7 +12,7 @@
                 {{isMinion ? minionLabel : actor.name}}
             </h6>
 
-            <p v-if="!isMinion || hasBarrier" class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
+            <p class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
                 {{ percentFormater2(getPercent(barriers, time) / 100) }}
             </p>
         </div>
