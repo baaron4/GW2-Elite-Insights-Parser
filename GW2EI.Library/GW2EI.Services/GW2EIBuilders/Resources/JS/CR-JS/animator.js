@@ -352,7 +352,7 @@ class Animator {
         this.animation = null;
         // manipulation
         this.mouseDown = null;
-        this.dragged = false;
+        this.touchDown = null;
         this.globalScale = 1.0;
         this.globalRotation = 0;
         this.followRotation = null;
@@ -979,7 +979,7 @@ class Animator {
         const bgCtx = this.bgContext;
 
         this.mouseDown = null;
-        this.dragged = false;
+        this.touchDown = null;
 
         let defaultViewpoint = this.defaultViewpoints.filter(x => x.eiid === eiid)[0];
         this.lastX = canvas.width / 2;
@@ -1204,7 +1204,6 @@ class Animator {
                 pt: ctx.transformedPoint(_this.lastX, _this.lastY),
                 time: Date.now()
             }
-            _this.dragged = false;
         }, false);
 
         canvas.addEventListener('mousemove', function (evt) {
@@ -1212,7 +1211,6 @@ class Animator {
             _this._mouseInside = true;
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
-            _this.dragged = true;
             if (_this.mouseDown) {
                 _this._hideAgentTooltip(true);
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
@@ -1318,14 +1316,13 @@ class Animator {
                 _this._updateCanvasCoordinates(pos.x, pos.y);
                 _this.lastX = pos.x;
                 _this.lastY = pos.y;
-                _this.mouseDown = {
+                _this.touchDown = {
                     pt: ctx.transformedPoint(_this.lastX, _this.lastY),
                     time: Date.now()
                 };
-                _this.dragged = false;
             } else if (evt.touches.length === 2) {
                 // Two fingers: initialize pinch-zoom and rotation tracking
-                _this.mouseDown = null; // Cancel single-touch drag if second finger lands
+                _this.touchDown = null; // Cancel single-touch drag if second finger lands
                 initialPinchDist = getTouchDistance(evt.touches[0], evt.touches[1]);
                 initialPinchAngle = getTouchAngle(evt.touches[0], evt.touches[1]);
 
@@ -1340,15 +1337,14 @@ class Animator {
             if (!_this.reactiveDataStatus._isInteractive) return;
             evt.preventDefault();
 
-            if (evt.touches.length === 1 && _this.mouseDown) {
+            if (evt.touches.length === 1 && _this.touchDown) {
                 // Single touch drag (Panning)
                 const pos = getTouchPos(evt.touches[0]);
                 _this.lastX = pos.x;
                 _this.lastY = pos.y;
-                _this.dragged = true;
 
                 const pt = ctx.transformedPoint(_this.lastX, _this.lastY);
-                const downPt = _this.mouseDown.pt;
+                const downPt = _this.touchDown.pt;
                 _this.pan(pt.x - downPt.x, pt.y - downPt.y);
 
             } else if (evt.touches.length === 2 && initialPinchDist !== null) {
@@ -1380,7 +1376,7 @@ class Animator {
             evt.preventDefault();
 
             // If it was a quick single tap (less than 150ms and minimal movement), treat it as a click/pick
-            if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
+            if (_this.touchDown && Date.now() - _this.touchDown.time < 150) {
                 const downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
                     y: Math.round(_this.lastY * resolutionMultiplier)
@@ -1391,7 +1387,7 @@ class Animator {
                 _this.selectActor(actorID, true);
             }
 
-            _this.mouseDown = null;
+            _this.touchDown = null;
             initialPinchDist = null;
             initialPinchAngle = null;
         };
@@ -1775,38 +1771,3 @@ function animateCanvas(noRequest) {
         animator.animation = requestAnimationFrame(animateCanvas);
     }
 }
-/*
-function initCombatReplay(actors, options) {
-    // manipulation events
-    canvas.addEventListener('touchstart', function (evt) {
-        const touch = evt.changedTouches[0];
-        if (!touch) {
-            return;
-        }
-        lastX = (touch.pageX - canvas.offsetLeft);
-        lastY = (touch.pageY - canvas.offsetTop);
-        mouseDown = ctx.transformedPoint(lastX, lastY);
-        dragged = false;
-        return evt.preventDefault() && false;
-    }, false);
-
-    canvas.addEventListener('touchmove', function (evt) {
-        const touch = evt.changedTouches[0];
-        if (!touch) {
-            return;
-        }
-        lastX = (touch.pageX - canvas.offsetLeft);
-        lastY = (touch.pageY - canvas.offsetTop);
-        dragged = true;
-        if (mouseDown) {
-            const pt = ctx.transformedPoint(lastX, lastY);
-            ctx.translate(pt.x - mouseDown.x, pt.y - mouseDown.y);
-            animateCanvas(noUpdateTime);
-        }
-        return evt.preventDefault() && false;
-    }, false);
-    document.body.addEventListener('touchend', function (evt) {
-        mouseDown = null;
-    }, false);
-}
-*/
