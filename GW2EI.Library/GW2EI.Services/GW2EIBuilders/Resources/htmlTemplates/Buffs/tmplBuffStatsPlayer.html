@@ -38,13 +38,6 @@
         props: ['playerindex'],
         mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
-        watch: {
-            playerindex: function () {
-                this.selectedMinionKey = "";
-                this.cacheBoon.clear();
-                this.cacheBoonSums.clear();
-            }
-        },
         data: function () {
             return {
                 activeduration: 1,
@@ -58,11 +51,7 @@
                 return logData.players[this.playerindex];
             },
             hasMinions: function () {
-                return this.player.details.minions &&
-                    this.player.details.minions.some(group =>
-                        group.minionInstances &&
-                        group.minionInstances.length > 0
-                    );
+                return this.player.details.minions && this.player.details.minions.some(group => group.minionInstances && group.minionInstances.length > 0);
             },
             selectedMinion: function () {
                 if (!this.selectedMinionKey) {
@@ -124,15 +113,10 @@
                     return this.cacheBoonSums.get(id);
                 }
                 const res = [];
-                const minion = this.selectedMinion;
                 const activeduration = this.activeduration;
                 if (this.selectedMinion) {
                     const minionIndex = this.selectedMinionIndexes.minionIndex;
                     const minionData = activeduration ? this.selectedMinionBuffs?.boonActiveStats?.[minionIndex] : this.selectedMinionBuffs?.boonStats?.[minionIndex];
-                    if (!minionData) {
-                        this.cacheBoonSums.set(id, res);
-                        return res;
-                    }
                     res.push({
                         icon: this.selectedMinion.icon,
                         name: this.selectedMinion.name,

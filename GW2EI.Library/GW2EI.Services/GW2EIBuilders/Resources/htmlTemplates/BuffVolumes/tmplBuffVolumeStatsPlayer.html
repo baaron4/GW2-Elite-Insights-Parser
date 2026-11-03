@@ -64,22 +64,15 @@
                 if (!this.selectedMinionKey) {
                     return null;
                 }
-
-                const [groupIndex, minionIndex] =
-                    this.selectedMinionKey.split(':').map(Number);
-
+                const [groupIndex, minionIndex] = this.selectedMinionKey.split(':').map(Number);
                 return { groupIndex, minionIndex };
             },
             selectedMinionVolumeContainer: function () {
                 const indexes = this.selectedMinionIndexes;
-
                 if (!indexes) {
                     return null;
                 }
-
-                return this.buffVolumesStatContainer.minionBuffs
-                    ?.[this.playerindex]
-                    ?.[indexes.groupIndex] ?? null;
+                return this.buffVolumesStatContainer.minionBuffs?.[this.playerindex]?.[indexes.groupIndex] ?? null;
             },
             boonData: function() {
                 const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
@@ -119,8 +112,8 @@
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
-                const activeduration = this.activeduration;
                 const res = [];
+                const activeduration = this.activeduration;
                 if (this.selectedMinion) {
                     const minionIndex = this.selectedMinionIndexes.minionIndex;
                     const minionData = activeduration ? this.selectedMinionVolumeContainer?.boonVolumeActiveStats?.[minionIndex] : this.selectedMinionVolumeContainer?.boonVolumeStats?.[minionIndex];
