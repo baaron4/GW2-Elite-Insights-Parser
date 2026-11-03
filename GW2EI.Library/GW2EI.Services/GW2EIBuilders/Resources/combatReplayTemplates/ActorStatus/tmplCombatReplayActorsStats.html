@@ -35,7 +35,8 @@
                     </legend>
                     <div v-for="(player, index) in group"
                          :key="'player-status-' + player.uniqueID"
-                         style="display: contents;">
+                         class="cr-player-minion-group"
+                         :style="{ '--spec-color': player.colTarget || '#aaaaaa' }">
                         <combat-replay-actor-stats-component :class="{active: selectedactorid === player.uniqueID, 'cr-player-with-minions': minions && hasActiveMinions(player)}"
                                                              :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow" :isTarget="false" :buffs="buffs" :rotation="rotation" />
                         <div v-if="minions && hasActiveMinions(player)"
@@ -45,7 +46,7 @@
                                  :key="'minion-group-' + player.uniqueID + '-' + minionGroupIndex"
                                  style="display: contents;">
                                 <combat-replay-actor-stats-component v-for="(minion, minionIndex) in minionGroup.instances" v-if="isMinionActive(minion)"
-                                                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minion.uniqueID}"
+                                                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minion.uniqueID, 'cr-minion-row-last': isLastActiveMinion(player, minion)}"
                                                                      :minionGroupIndex="minionGroupIndex" :minionIndex="minionIndex"
                                                                      :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow"
                                                                      :isTarget="false" :buffs="buffs" :rotation="rotation" />
@@ -95,6 +96,24 @@
                 return !!minionGroups && minionGroups.some(group =>
                     group.instances && group.instances.some(minion => this.isMinionActive(minion))
                 );
+            },
+            isLastActiveMinion: function (player, minion) {
+                const minionGroups = player.details && player.details.minions;
+                if (!minionGroups) {
+                    return false;
+                }
+                let lastActiveMinionID = null;
+                minionGroups.forEach(group => {
+                    if (!group.instances) {
+                        return;
+                    }
+                    group.instances.forEach(instance => {
+                        if (this.isMinionActive(instance)) {
+                            lastActiveMinionID = instance.uniqueID;
+                        }
+                    });
+                });
+                return lastActiveMinionID === minion.uniqueID;
             },
         },
         data: function () {

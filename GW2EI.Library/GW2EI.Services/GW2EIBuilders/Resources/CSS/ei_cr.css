@@ -631,17 +631,21 @@ canvas {
     border-bottom: none !important;
 }
 
+.cr-player-minion-group {
+    --spec-color: #aaaaaa;
+    border: 2px solid var(--spec-color);
+    border-radius: 4px;
+    margin: 2px;
+    padding: 1px 2px;
+}
+
 .cr-minion-branch {
     position: relative;
     margin: 1px 4px 5px 16px;
     padding: 3px 0 3px 12px;
-    border-left: 2px solid rgba(110, 170, 220, 0.58);
+    border-left: 2px solid var(--spec-color);
     border-radius: 0 4px 4px 0;
-    background: linear-gradient( 90deg, rgba(110, 170, 220, 0.07), transparent 88% );
-}
-
-.cr-minion-branch::before {
-    content: none;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--spec-color) 8%, transparent), transparent 88% );
 }
 
 .cr-minion-row .actor-status {
@@ -654,6 +658,13 @@ canvas {
     left: -17px;
     top: 50%;
     width: 15px;
-    border-top: 1px solid rgba(110, 170, 220, 0.68);
+    border-top: 1px solid var(--spec-color);
     pointer-events: none;
+}
+
+.cr-minion-row-last .actor-status::before {
+    top: auto;
+    bottom: 0;
+    border-top: none;
+    border-bottom: 1px solid var(--spec-color);
 }
