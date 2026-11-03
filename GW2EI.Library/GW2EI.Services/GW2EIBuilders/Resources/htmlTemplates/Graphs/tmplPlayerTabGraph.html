@@ -77,16 +77,6 @@
             },
         },
         created: function () {
-            console.log("PARENT CREATED");
-
-            console.log("PLAYER INDEX:", this.playerindex);
-            console.log("PLAYER:", this.player);
-            console.log("MINION GROUPS:", this.player.details.minions);
-
-            this.player.details.minions.forEach(function (group, index) {
-                console.log("GROUP:", index);
-                console.log("INSTANCES:", group.minionInstances);
-            });
             this.computeLayout();
         },
         mounted: function () {
