@@ -8,7 +8,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">Rotation</a>
+                    <a class="nav-link" :class="{active: rotation}" @click="rotation = !rotation">
+                        Rotation
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" :class="{active: minions}" @click="minions = !minions">
@@ -76,7 +78,7 @@
                 defaultValue: getValueFromLocalStorage("rotation") !== "false"
             },
             minions: {
-                defaultValue: getValueFromLocalStorage("minions") !== "false"
+                defaultValue: getValueFromLocalStorage("minions") === "true"
             },
         })],
         template: `${template}`,

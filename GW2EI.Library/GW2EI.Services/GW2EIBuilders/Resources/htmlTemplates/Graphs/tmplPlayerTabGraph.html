@@ -137,13 +137,6 @@
                 return name;
             },
             computeData: function () {
-                if (!this.data) {
-                    return [];
-                }
-                var requiredTraceCount = this.playerOffset + (logData.targetless ? 2 : 4);
-                if (this.data.length < requiredTraceCount) {
-                    return this.data;
-                }
                 this.layout.datarevision = new Date().getTime();
                 //this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var res = this.data;
@@ -169,11 +162,7 @@
                 this.data = [];
                 this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
                 var oldOffset = this.playerOffset;
-                const boonGraph = this.player.details.boonGraph[this.phaseindex];
-                const buffTraceStartOffset = this.playerOffset;
-                this.playerOffset += computeBuffData(boonGraph, this.data);
-                const traceCountBefore = this.data.length;
-                this.playerOffset += computeBuffData(boonGraph, this.data);
+                this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
                 var hasBuffs = oldOffset !== this.playerOffset;
                 this.graphOffset = this.playerOffset;
                 this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');

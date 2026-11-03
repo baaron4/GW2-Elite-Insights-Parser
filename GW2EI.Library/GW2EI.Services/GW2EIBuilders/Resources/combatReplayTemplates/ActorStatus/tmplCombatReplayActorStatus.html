@@ -28,7 +28,7 @@
 <script>
     Vue.component("combat-replay-actor-status-component", {
         mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
-        props: ["isTarget", "actorIndex", "time", "minion", "minionInfo", "minionOwnerIndex", "minionLabel"],
+        props: ["isTarget", "actorIndex", "time", "minion", "minionInfo", "minionLabel"],
         template: `${template}`,
         methods: {
             activeMarkers: function () {
@@ -99,7 +99,7 @@
             },
             healths: function () {
                 if (this.isMinion) {
-                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.minionOwnerIndex];
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.actorIndex];
                     return playerChart?.minionCharts?.[this.minion.uniqueID]?.healthStates || null;
                 }
                 if (this.isTarget) {
@@ -113,7 +113,7 @@
             },
             barriers: function () {
                 if (this.isMinion) {
-                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.minionOwnerIndex];
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.actorIndex];
                     return playerChart?.minionCharts?.[this.minion.uniqueID]?.barrierStates || null;
                 }
                 if (this.isTarget) {
