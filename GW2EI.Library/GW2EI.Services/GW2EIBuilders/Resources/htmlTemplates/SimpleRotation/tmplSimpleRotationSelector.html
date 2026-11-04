@@ -13,12 +13,12 @@
         </div>
             <simplerotation-component
                 v-show="minionMode === -1"
-                :actorindex="actorindex"
+                :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="-1">
             </simplerotation-component>  
             <simplerotation-component v-for="minionStruct in minionsToUse" 
                 v-show="minionMode === minionStruct.minionIndex"
-                :actorindex="actorindex"
+                :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="minionStruct.minionIndex">
             </simplerotation-component>  
     </div>
@@ -26,7 +26,7 @@
 
 <script>
     Vue.component("simplerotation-selector-component", {
-        props: ["actorindex", "phaseindex", "target"],
+        props: ["actorIndex", "phaseindex", "target"],
         template: `${template}`,
         data: function () {
             return {
@@ -36,7 +36,7 @@
         computed: {
            actor: function(){         
                 const data = this.target ? logData.targets : logData.players;
-                return data[this.actorindex];
+                return data[this.actorIndex];
            },
            minionsToUse: function() {
                 let result = [];

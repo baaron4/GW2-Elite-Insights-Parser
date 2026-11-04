@@ -108,7 +108,7 @@
 
 <script>
     Vue.component("simplerotation-component", {
-        props: ["actorindex", "minionIndex", "phaseindex", "target"],
+        props: ["actorIndex", "minionIndex", "phaseindex", "target"],
         template: `${template}`,
         mixins: [UIIconsComponent],
         data: function () {
@@ -200,7 +200,7 @@
         },
         methods: {
             getActor: function() {
-                return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                return this.target ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
             },
             getRotationData(phaseIndex) {
                 // TODO show rotation per instance instead of consolidated
@@ -209,7 +209,7 @@
                     let rotation = [];
                     let instances = this.getActor().minions[minionIndex].instances ?? [];
                     for (let i = 0; i < instances.length ; i ++) {
-                        let instanceRotation = instances.details.rotation ?? [];
+                        let instanceRotation = instances[i].details.rotation[phaseIndex] ?? [];
                         for (let j = 0; j < instanceRotation.length; j ++) {
                             rotation.push(instanceRotation[j]);
                         }

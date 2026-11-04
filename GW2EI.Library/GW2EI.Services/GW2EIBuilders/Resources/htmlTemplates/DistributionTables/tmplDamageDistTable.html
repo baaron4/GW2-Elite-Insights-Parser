@@ -287,7 +287,7 @@
 
 <script>
     Vue.component("damagedist-table-component", {
-        props: ["dmgdist", "tableid", "actorindex", "minionIndex", "istarget", "phaseindex", "player"],
+        props: ["dmgdist", "tableid", "actorIndex", "minionIndex", "istarget", "phaseindex", "player"],
         template: `${template}`,
         data: function () {
             return {
@@ -392,10 +392,10 @@
                 return this.minionIndex > -1;
             },
             actor: function() {
-                if (this.actorindex < 0) {
+                if (this.actorIndex < 0) {
                     return null;
                 }
-                var master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                var master = !this.player ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
                 if (this.isminion) {
                     return master.minions[this.minionIndex];
                 }

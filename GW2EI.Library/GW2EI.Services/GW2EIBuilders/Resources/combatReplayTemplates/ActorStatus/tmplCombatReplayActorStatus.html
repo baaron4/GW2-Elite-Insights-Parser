@@ -27,8 +27,8 @@
 
 <script>
     Vue.component("combat-replay-actor-status-component", {
-        mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
-        props: ["isTarget", "actorIndex", "time", "minionIndex", "minionInstanceIndex"],
+        mixins: [encounterPhaseComponent, crActorComponent, numberComponent, tooltipSweepComponent],
+        props: ["time"],
         template: `${template}`,
         methods: {
             activeMarkers: function () {
@@ -81,39 +81,6 @@
                 var crPData = animator.getActorData(this.actor.uniqueID);
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downAllyIcon || icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
-            },
-            isMinion: function () {
-                return !this.isTarget && this.minionIndex != null && this.minionInstanceIndex != null;
-            },
-            minionOwner: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return logData.players[this.actorIndex];
-            },
-            minionInstance: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return this.minionInfo.instances[this.minionInstanceIndex];
-            },
-            minionInfo: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return this.minionOwner.minions[this.minionIndex];
-            },
-            minionLabel: function () {
-                if (!this.isMinion || !this.minionInfo || !this.minion) {
-                    return "Minion";
-                }
-                return this.minionInfo.name + "#" + (this.minionInstanceIndex + 1);
-            },
-            actor: function () {
-                if (this.isTarget) {
-                    return logData.targets[this.actorIndex];
-                }
-                return this.isMinion ? this.minionInstance : logData.players[this.actorIndex];
             },
             actorPhaseTargetIndex: function () {
                 if (this.isTarget) {

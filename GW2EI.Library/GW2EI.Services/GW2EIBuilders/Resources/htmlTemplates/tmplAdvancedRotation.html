@@ -200,7 +200,7 @@
 }
 
     Vue.component("advancedrotation-component", {
-        props: ["phaseindex", "light", "actorindex", "target"],
+        props: ["phaseindex", "light", "actorIndex", "target"],
         template: `${template}`,
         mixins: [graphComponent, UIIconsComponent],
         watch: {
@@ -228,7 +228,7 @@
         data: function () {
             var selectedSkills = {};
             var skillList = [];
-            var rotation = this.target ? logData.targets[this.actorindex].details.rotation[this.phaseindex] : logData.players[this.actorindex].details.rotation[this.phaseindex];
+            var rotation = this.target ? logData.targets[this.actorIndex].details.rotation[this.phaseindex] : logData.players[this.actorIndex].details.rotation[this.phaseindex];
             for (var i = 0; i < rotation.length; i++) {
                 var rota = rotation[i];
                 var skillID = rota[1];
@@ -278,10 +278,10 @@
                 return logData.phases[this.phaseindex];
             },
             actor: function () {
-                return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                return this.target ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
             },
             graphid: function () {
-                return (this.target ? "target" : "player") + "advancedrotation-" + this.actorindex + '-' + this.phaseindex;
+                return (this.target ? "target" : "player") + "advancedrotation-" + this.actorIndex + '-' + this.phaseindex;
             },
             rotation: function () {
                 return this.actor.details.rotation[this.phaseindex];

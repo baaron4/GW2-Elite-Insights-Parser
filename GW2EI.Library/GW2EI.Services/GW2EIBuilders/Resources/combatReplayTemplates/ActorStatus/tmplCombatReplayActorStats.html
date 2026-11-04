@@ -11,15 +11,15 @@
 
         <combat-replay-actor-status-component :time="time" :actorIndex="actorIndex" :isTarget="isTarget"
                                               :minionIndex="isMinion ? minionIndex : null" :minionInstanceIndex="isMinion ? minionInstanceIndex : null" />
-        <combat-replay-actor-rotation-component v-if="rotation && !isMinion" :time="time" :actorindex="actorIndex" :isTarget="isTarget" />
+        <combat-replay-actor-rotation-component v-if="rotation" :time="time" :actorIndex="actorIndex" :isTarget="isTarget" :minionIndex="isMinion ? minionIndex : null" :minionInstanceIndex="isMinion ? minionInstanceIndex : null"/>
         <combat-replay-actor-breakbars-component v-if="!isMinion" :actorIndex="actorIndex" :isTarget="isTarget" />
     </div>
 </template>
 
 <script>
     Vue.component("combat-replay-actor-stats-component", {
-        mixins: [timeRefreshComponent, encounterPhaseComponent],
-        props: ["actorIndex", "time", "buffstoshow", "isTarget", "buffs", "rotation", "minionIndex", "minionInstanceIndex"],
+        mixins: [timeRefreshComponent, crActorComponent, encounterPhaseComponent],
+        props: ["time", "buffstoshow", "buffs", "rotation"],
         template: `${template}`,
         methods: {
             isPresent: function (type) {
@@ -27,39 +27,6 @@
             }
         },
         computed: {
-            isMinion: function () {
-                return !this.isTarget && this.minionIndex != null && this.minionInstanceIndex != null;
-            },
-            minionOwner: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return logData.players[this.actorIndex];
-            },
-            minionInstance: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return this.minionInfo.instances[this.minionInstanceIndex];
-            },
-            minionInfo: function () {
-                if (!this.isMinion) {
-                    return null;
-                }
-                return this.minionOwner.minions[this.minionIndex];
-            },
-            minionLabel: function () {
-                if (!this.isMinion || !this.minionInfo) {
-                    return "";
-                }
-                return this.minionInfo.name + "#" + (this.minionInstanceIndex + 1);
-            },
-            actor: function () {
-                if (this.isTarget) {
-                    return logData.targets[this.actorIndex];
-                }
-                return this.isMinion ? this.minionInstance : logData.players[this.actorIndex];
-            },
             boonGraph: function() {
                 return this.actor.details.boonGraph[this.encounterPhase.id] || [];
             },

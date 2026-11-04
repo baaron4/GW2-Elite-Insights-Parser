@@ -36,7 +36,7 @@
 <script>
     Vue.component("buff-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, buffMinionsComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffPlayerMinionsComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -65,9 +65,9 @@
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
                     dictionaries = activeduration ? 
-                        this.selectedMinionBuffs?.boonActiveDictionaries?.[minionInstanceIndex] 
+                        this.selectedMinionBuffs.boonActiveDictionaries[minionInstanceIndex] 
                         : 
-                        this.selectedMinionBuffs?.boonDictionaries?.[minionInstanceIndex];
+                        this.selectedMinionBuffs.boonDictionaries[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
                     if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {

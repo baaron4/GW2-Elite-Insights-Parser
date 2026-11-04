@@ -17,8 +17,8 @@
 
 <script>
     Vue.component("combat-replay-actor-rotation-component", {
-        mixins: [encounterPhaseComponent, tooltipSweepComponent],
-        props: ["time", "actorindex", "isTarget"],
+        mixins: [encounterPhaseComponent, crActorComponent, tooltipSweepComponent],
+        props: ["time"],
         template: `${template}`,
         methods: {
             getIconClass(cast) {
@@ -84,9 +84,6 @@
             }
         },
         computed: {
-            actor: function () {
-                return this.isTarget ? logData.targets[this.actorindex] : logData.players[this.actorindex];
-            },
             actorRotation: function () {
                 return this.actor.details.rotation[this.encounterPhase.id].map(cast => ({
                     time: cast[0],

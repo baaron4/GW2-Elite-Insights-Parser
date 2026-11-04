@@ -411,7 +411,7 @@ var buffComponent = {
     }
 };
 
-var buffMinionsComponent = {
+var buffPlayerMinionsComponent = {
     data: function() {
         return {      
             selectedMinionKey: "",
@@ -451,6 +451,45 @@ var buffMinionsComponent = {
         },
     }
 };
+
+var crActorComponent = {
+    props: ["actorIndex", "isTarget", "minionIndex", "minionInstanceIndex"],
+    computed: {
+        isMinion: function () {
+            return this.minionIndex != null && this.minionInstanceIndex != null;
+        },
+        minionOwner: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.isTarget ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
+        },
+        minionInstance: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.minionInfo.instances[this.minionInstanceIndex];
+        },
+        minionInfo: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.minionOwner.minions[this.minionIndex];
+        },
+        minionLabel: function () {
+            if (!this.isMinion || !this.minionInfo) {
+                return "Minion";
+            }
+            return this.minionInfo.name + "#" + (this.minionInstanceIndex + 1);
+        },
+        actor: function () {
+            if (this.isMinion) {
+                return this.minionInstance;
+            }
+            return this.isTarget ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
+        },
+    }
+}
 
 var extensionPresentComponent = {
     methods: {
