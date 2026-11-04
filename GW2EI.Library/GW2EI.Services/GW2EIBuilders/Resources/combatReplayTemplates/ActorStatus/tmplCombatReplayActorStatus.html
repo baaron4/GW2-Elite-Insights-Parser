@@ -104,10 +104,11 @@
                 return this.minionOwner.minions[this.minionGroupIndex];
             },
             minionLabel: function () {
-                if (!this.isMinion || !this.minionInfo) {
-                    return "";
+                if (!this.isMinion || !this.minionInfo || !this.minion) {
+                    return "Minion";
                 }
-                return this.minionInfo.name + "#" + (this.minionIndex + 1);
+                var minionName = findTargetName("u" + this.minion.uniqueID, false) || "Minion";
+                return minionName + "#" + (this.minionIndex + 1);
             },
             actor: function () {
                 if (this.isTarget) {

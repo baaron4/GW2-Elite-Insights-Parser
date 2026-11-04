@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
-        <h4 class="text-center mt-1 mb-1">{{graphname}}</h4>
-        <graph-component :id="graphid" :layout="layout" :data="data"></graph-component>
+        <h4 class="text-center mt-1 mb-1">{{graphName}}</h4>
+        <graph-component :id="graphId" :layout="layout" :data="data"></graph-component>
     </div>
 </template>
 
@@ -40,12 +40,12 @@
             minionInstance: function () {
                 return this.minionGroup.instances[this.minioninstanceindex];
             },
-            graphid: function () {
+            graphId: function () {
                 return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.miniongroupindex + "-" + this.minionInstance.uniqueID;
             },
-            graphname: function () {
-                var groupName = this.player.minions[this.miniongroupindex]?.name || "Minion";
-                return groupName + " #" + (this.minioninstanceindex + 1) + " boon graph";
+            graphName: function () {
+                var minionName = findTargetName("u" + this.minionInstance.uniqueID, false);
+                return (minionName || "Minion") + " #" + (this.minioninstanceindex + 1) + " boon graph";
             }
         },
         methods: {

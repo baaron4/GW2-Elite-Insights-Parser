@@ -15,13 +15,13 @@
         <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
             <label class="mr-2 mb-0" :for="'boon-volume-minion-select-' + player.id">Buff recipient</label>
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-volume-minion-select-' + player.id" v-model="selectedMinionKey">
-                <option value="">Player</option>
+                <option value="">{{player.name}}</option>
                 <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'volume-minion-group-' + groupIndex"
                           v-if="minionGroup.instances && minionGroup.instances.length > 0"
-                          :label="player.minions[groupIndex].name">
+                          :label="minionGroupLabel(minionGroup)">
                     <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'volume-minion-' + groupIndex + '-' + minionIndex"
                             :value="groupIndex + ':' + minionIndex">
-                        {{player.minions[groupIndex].name}} #{{minionIndex + 1}}
+                        {{minionLabel(minion, minionIndex)}}
                     </option>
                 </optgroup>
             </select>
@@ -145,6 +145,28 @@
                 this.cacheBoonSums.set(id, res);
                 return res;
             },
-        }
+        },
+        methods: {
+            minionLabel: function (minion, minionIndex) {
+                if (!minion) {
+                    return "Minion";
+                }
+                var minionName = this.getMinionName(minion);
+                return minionName + " #" + (minionIndex + 1);
+            },
+            minionGroupLabel: function (minionGroup) {
+                const minion = minionGroup?.instances?.[0];
+                if (!minion) {
+                    return "Minion";
+                }
+                return this.getMinionName(minion);
+            },
+            getMinionName: function (minion) {
+                if (!minion) {
+                    return "Minion";
+                }
+                return findTargetName("u" + minion.uniqueID, false) || "Minion";
+            },
+        },
     });
 </script>
