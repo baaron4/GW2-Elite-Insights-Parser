@@ -11,7 +11,7 @@ public class JsonMinions
     public string? Name;
 
     /// <summary>
-    /// Game ID of the minion
+    /// Game speciesID of the minion
     /// </summary>
     public int Id;
 

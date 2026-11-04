@@ -74,7 +74,7 @@ internal class BuffVolumesContainerDto
     public List<BuffVolumeData> TargetsCondiIncomingVolumeTotals { get; set; }
     public List<BuffVolumeData> TargetsBoonIncomingVolumeTotals { get; set; }
 
-    public List<Dictionary<long, MinionBuffVolumesContainerDto>> MinionBuffVolumes;
+    public List<List<MinionBuffVolumesContainerDto>> MinionBuffVolumes;
 
     public BuffVolumesContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
     {
@@ -146,16 +146,15 @@ internal class BuffVolumesContainerDto
         MinionBuffVolumes = new(log.Friendlies.Count);
         foreach (var friendly in log.Friendlies)
         {
-            var minionData = new Dictionary<long, MinionBuffVolumesContainerDto>();
+            var minionData = new List<MinionBuffVolumesContainerDto>();
             IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
-            for (int minionGroupIndex = 0; minionGroupIndex < minionGroups.Count; minionGroupIndex++)
+            foreach (Minions minionGroup in minionGroups)
             {
-                Minions minionGroup = minionGroups[minionGroupIndex];
-                if (!minionGroup.IsUniquePerTimeFrame)
+                if (!minionGroup.IsWhiteListedForSomeStats)
                 {
                     continue;
                 }
-                minionData.Add(minionGroupIndex, new MinionBuffVolumesContainerDto(log, minionGroup, phase));
+                minionData.Add(new MinionBuffVolumesContainerDto(log, minionGroup, phase));
             }
             MinionBuffVolumes.Add(minionData);
         }

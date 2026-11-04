@@ -1,5 +1,4 @@
-﻿using GW2EIBuilders.HtmlModels.HtmlActors;
-using GW2EIBuilders.HtmlModels.HTMLCharts;
+﻿using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
@@ -17,14 +16,12 @@ internal class ActorDetailsDto
     public List<List<BuffChartDataDto>>? BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>? Food;
-    public List<MinionDetailsDto>? Minions;
     public List<DeathRecapDto>? DeathRecap;
 
 
     public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, UsedHtmlData used)
     {
         var phases = log.LogData.GetPhases(log);
-        var minions = actor.GetMinions(log);
         var dto = new ActorDetailsDto
         {
             DmgDistributions = new(phases.Count),
@@ -33,7 +30,6 @@ internal class ActorDetailsDto
             BoonGraph = new(phases.Count),
             Rotation = new(phases.Count),
             Food = FoodDto.BuildFoodData(log, actor, used),
-            Minions = new(minions.Count),
             DeathRecap = DeathRecapDto.BuildDeathRecap(log, actor)
         };
         foreach (PhaseData phase in phases)
@@ -49,50 +45,7 @@ internal class ActorDetailsDto
             dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildDamageTakenDistributionData(log, actor, phase, used));
             dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, actor, phase, used));
         }
-        foreach (var minion in minions)
-        {
-            dto.Minions.Add(BuildFriendlyMinionsData(log, actor, minion, used));
-        }
 
-        return dto;
-    }
-
-    private static MinionDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, UsedHtmlData used)
-    {
-        var phases = log.LogData.GetPhases(log);
-        var dto = new MinionDetailsDto
-        {
-            DmgDistributions = new(phases.Count),
-            DmgDistributionsTargets = new(phases.Count),
-            DmgDistributionsTaken = new(phases.Count),
-        };
-
-        if (minion.IsUniquePerTimeFrame)
-        {
-            dto.Instances = new(minion.MinionList.Count);
-            foreach (NPC minionInstance in minion.MinionList)
-            {
-                dto.Instances.Add(new MinionInstanceDetailsDto(log, minionInstance, used));
-            }
-            dto.Rotation = new(phases.Count);
-        }
-
-        foreach (PhaseData phase in phases)
-        {
-            var allTargets = phase.Targets;
-            var dmgTargetsDto = new List<DamageDistributionDto>(allTargets.Count);
-            foreach (SingleActor target in allTargets.Keys)
-            {
-                dmgTargetsDto.Add(DamageDistributionDto.BuildMinionsDamageDistributionData(log, minion, target, phase, used));
-            }
-            dto.DmgDistributionsTargets.Add(dmgTargetsDto);
-            dto.DmgDistributions.Add(DamageDistributionDto.BuildMinionsDamageDistributionData(log, minion, null, phase, used));
-            dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildMinionsDamageTakenDistributionData(log, minion, phase, used));
-            if (minion.IsUniquePerTimeFrame)
-            {
-                dto.Rotation!.Add(SkillDto.BuildRotationData(log, minion, phase, used));
-            }
-        }
         return dto;
     }
 
@@ -103,7 +56,6 @@ internal class ActorDetailsDto
     public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, UsedHtmlData used, bool cr)
     {
         var phases = log.LogData.GetPhases(log);
-        var minions = target.GetMinions(log);
         var dto = new ActorDetailsDto
         {
             DmgDistributions = new(phases.Count),
@@ -111,7 +63,6 @@ internal class ActorDetailsDto
             BoonGraph = new(phases.Count),
             BoonGraphPerSource = new(phases.Count),
             Rotation = new(phases.Count),
-            Minions = new(minions.Count),
         };
 
         for (int i = 0; i < phases.Count; i++)
@@ -151,33 +102,6 @@ internal class ActorDetailsDto
                 dto.BoonGraphPerSource.Add(EmptyBuffChartList);
             }
         }
-
-        foreach (var minion in minions)
-        {
-            var dmgDistributions = new List<DamageDistributionDto>(phases.Count);
-            var dmgTakenDistributions = new List<DamageDistributionDto>(phases.Count);
-
-            foreach (PhaseData phase in phases)
-            {
-                if (phase.Targets.ContainsKey(target))
-                {
-                    dmgDistributions.Add(DamageDistributionDto.BuildMinionsDamageDistributionData(log, minion, null, phase, used));
-                    dmgTakenDistributions.Add(DamageDistributionDto.BuildMinionsDamageTakenDistributionData(log, minion, phase, used));
-                }
-                else
-                {
-                    dmgDistributions.Add(DamageDistributionDto.EmptyInstance);
-                    dmgTakenDistributions.Add(DamageDistributionDto.EmptyInstance);
-                }
-            }
-
-            dto.Minions.Add(new()
-            {
-                DmgDistributions = dmgDistributions,
-                DmgDistributionsTaken = dmgTakenDistributions
-            });
-        }
-
 
         return dto;
     }

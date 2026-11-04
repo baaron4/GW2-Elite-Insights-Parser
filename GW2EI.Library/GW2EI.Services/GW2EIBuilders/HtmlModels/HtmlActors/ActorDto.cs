@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIBuilders.HtmlModels.LogDataDto;
@@ -22,10 +23,10 @@ internal abstract class ActorDto
     public bool IsEnglobed;
     public bool IsFirstEnglobed;
     public bool IsLastEnglobed;
-    public List<MinionDto> Minions;
+    public List<MinionDto> Minions = [];
     public ActorDetailsDto Details;
 
-    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData)
+    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData used)
     {
         Health = actor.GetHealth(log.CombatData);
         Condi = actor.Condition;
@@ -44,21 +45,6 @@ internal abstract class ActorDto
         {
             IsFirstEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.First() == actor.AgentItem;
             IsLastEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.Last() == actor.AgentItem;
-        }
-        var minions = actor.GetMinions(log);
-        Minions = new(minions.Count);
-        for (var i = 0; i < minions.Count; i++)
-        {
-            Minions.Add(new MinionDto()
-            {
-                Id = i,
-                Name = minions[i].Character,
-                Icon = minions[i].GetIcon(),
-            });
-            foreach (var minion in minions[i].MinionList)
-            {
-                usedData.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
-            }
         }
     }
 
