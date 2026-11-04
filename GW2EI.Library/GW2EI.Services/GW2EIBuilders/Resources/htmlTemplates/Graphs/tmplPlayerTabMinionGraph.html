@@ -17,13 +17,45 @@
             };
         },
         watch: {
-            light: function () {
-                this.computeLayout();
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.yaxis4.gridcolor = textColor;
+                    this.layout.yaxis4.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
             },
             encounters: {
                 deep: true,
                 handler: function () {
                     this.computeLayout();
+                }
+            }
+        },
+        mounted: function () {
+            var div = document.getElementById(this.graphId);
+            var layout = this.layout;
+            var images = layout.images;
+            var _this = this;         
+            div._relayoutCB = function(evt) {
+                var x0 = layout.xaxis.range[0];
+                var x1 = layout.xaxis.range[1];
+                //console.log("re-layout " + x0 + " " + x1);
+                if (_this.updateVisibily(images, x0, x1)) {
+                    layout.datarevision = new Date().getTime();
+                    //console.log("re-drawing");
                 }
             }
         },
@@ -50,16 +82,15 @@
         },
         methods: {
             computeLayout: function () {
+                var images = [];
                 this.data = [];
                 var color = this.light ? '#495057' : '#cccccc';
+                computeRotationData(this.minionInstance.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
                 var boonGraph = this.minionInstance.details.boonGraph[this.phaseindex];
                 var hasBuffs = computeBuffData(boonGraph, this.data) > 0;
-                this.layout = getActorGraphLayout([], color, hasBuffs, true);
-                this.layout.yaxis.domain = hasBuffs ? [0, 1] : [0, 0];
-                this.layout.yaxis4.domain = hasBuffs ? [0, 1] : [0, 0];
-                this.layout.xaxis.domain = [0, 0.95];
-                this.layout.height = 450;
+                this.layout = getActorGraphLayout(images, color, hasBuffs, true);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
+                this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
             }
         }
     });
