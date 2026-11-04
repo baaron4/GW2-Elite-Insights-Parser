@@ -303,7 +303,7 @@ class NonSquadIconDrawable extends IconDrawable {
                     if (minion.instances) {
                         const minionInstance = minion.instances.find(x => x.uniqueID === this.id);
                         if (minionInstance) {
-                            logData.npcMap["u" + this.id] = minion.name + " # " + (minion.instances.indexOf(minion) + 1);
+                            logData.npcMap["u" + this.id] = minion.name + " # " + (minion.instances.indexOf(minionInstance) + 1);
                             this._nameInDictInit = true;
                             return;
                         }

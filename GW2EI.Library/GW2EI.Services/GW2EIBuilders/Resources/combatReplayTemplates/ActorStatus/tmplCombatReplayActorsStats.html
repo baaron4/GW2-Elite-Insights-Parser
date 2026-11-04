@@ -45,7 +45,7 @@
                             <div v-for="(minion, minionIndex) in player.minions"
                                  :key="'minion-group-' + player.uniqueID + '-' + minionIndex"
                                  style="display: contents;">
-                                <combat-replay-actor-stats-component v-for="(minionInstance, minionInstanceIndex) in minion.instances" v-if="isMinionActive(minion)"
+                                <combat-replay-actor-stats-component v-for="(minionInstance, minionInstanceIndex) in minion.instances" v-if="isMinionActive(minionInstance)"
                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minionInstance.uniqueID, 'cr-minion-row-last': isLastActiveMinion(player, minionInstance)}"
                                     :minionIndex="minionIndex" :minionInstanceIndex="minionInstanceIndex"
                                     :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow"
