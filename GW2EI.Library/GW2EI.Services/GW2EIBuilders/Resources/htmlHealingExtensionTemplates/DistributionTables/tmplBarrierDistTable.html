@@ -4,7 +4,7 @@
             <p style="display: table-row;">
                 {{ actor.name }} did {{ percentFormater3(barrierdist.contributedBarrier / barrierdist.totalBarrier) }} 
                 {{ isminion ? "of its master's total" : 'of their total' }}
-                {{ istarget ? 'Target' : '' }} barrier ({{ numberFormater(barrierdist.contributedBarrier) }})
+                {{ isTarget ? 'Target' : '' }} barrier ({{ numberFormater(barrierdist.contributedBarrier) }})
             </p>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
@@ -177,7 +177,7 @@
 
 <script>
     Vue.component("barrierdist-table-component", {
-        props: ["barrierdist", "tableid", "actorIndex", "minionIndex", "istarget", "phaseindex", "player"],
+        props: ["barrierdist", "tableid", "actorIndex", "minionIndex", "isTarget", "phaseindex", "player"],
         template: `${template}`,
         data: function () {
             return {
