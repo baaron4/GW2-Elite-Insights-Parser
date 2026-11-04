@@ -90,7 +90,7 @@
                 const activeduration = this.activeduration;
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
-                    const minionData = activeduration ? this.selectedMinionBuffs?.boonActiveStats?.[minionInstanceIndex] : this.selectedMinionBuffs?.boonStats?.[minionInstanceIndex];
+                    const minionData = activeduration ? this.selectedMinionBuffs.boonActiveStats[minionInstanceIndex] : this.selectedMinionBuffs.boonStats[minionInstanceIndex];
                     res.push({
                         icon: this.selectedMinion.icon,
                         name: this.selectedMinion.name,

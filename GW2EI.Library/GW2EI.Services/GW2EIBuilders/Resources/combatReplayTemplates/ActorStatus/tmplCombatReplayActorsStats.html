@@ -42,7 +42,7 @@
                         <div v-if="minions && hasActiveMinions(player)"
                              :key="'minion-branch-' + player.uniqueID"
                              class="cr-minion-branch">
-                            <div v-for="(minion, minionIndex) in player.details.minions"
+                            <div v-for="(minion, minionIndex) in player.minions"
                                  :key="'minion-group-' + player.uniqueID + '-' + minionIndex"
                                  style="display: contents;">
                                 <combat-replay-actor-stats-component v-for="(minionInstance, minionInstanceIndex) in minion.instances" v-if="isMinionActive(minion)"

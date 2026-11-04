@@ -426,7 +426,7 @@ var buffMinionsComponent = {
                 return null;
             }
             const indexes = this.selectedMinionKey.split(':').map(Number);
-            return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+            return this.player.minions[indexes[0]].instances?.[indexes[1]] ?? null;
         },
         selectedMinionIndexes: function () {
             if (!this.selectedMinionKey) {
@@ -447,7 +447,7 @@ var buffMinionsComponent = {
             if (!indexes) {
                 return null;
             }
-            return this.buffsStatContainer.minionBuffs?.[this.playerindex]?.[indexes.minionIndex] ?? null;
+            return this.buffsStatContainer.minionBuffs[this.playerindex][indexes.minionIndex] ?? null;
         },
     }
 };

@@ -8,7 +8,7 @@
 
             <h6 class="text-center mb-0 ellipis align-self-center">
                 <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
-                <img :src="isMinion ? minionInfo.icon : actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16">
+                <img :src="actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16">
                 {{isMinion ? minionLabel : actor.name}}
             </h6>
 
@@ -95,7 +95,7 @@
                 if (!this.isMinion) {
                     return null;
                 }
-                return this.minionOwner.details.minions[this.minionIndex].instances[this.minionInstanceIndex];
+                return this.minionInfo.instances[this.minionInstanceIndex];
             },
             minionInfo: function () {
                 if (!this.isMinion) {

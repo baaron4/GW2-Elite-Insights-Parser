@@ -40,7 +40,7 @@
                 if (!this.isMinion) {
                     return null;
                 }
-                return this.minionOwner.details.minions[this.minionIndex].instances[this.minionInstanceIndex];
+                return this.minionInfo.instances[this.minionInstanceIndex];
             },
             minionInfo: function () {
                 if (!this.isMinion) {
@@ -61,9 +61,6 @@
                 return this.isMinion ? this.minionInstance : logData.players[this.actorIndex];
             },
             boonGraph: function() {
-                if (this.isMinion) {
-                    return this.minionInstance.boonGraph[this.encounterPhase.id] || [];
-                }
                 return this.actor.details.boonGraph[this.encounterPhase.id] || [];
             },
             data: function () {

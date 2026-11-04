@@ -90,7 +90,7 @@
                 const activeduration = this.activeduration;
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
-                    const minionData = activeduration ? this.selectedMinionVolumeContainer?.boonVolumeActiveStats?.[minionInstanceIndex] : this.selectedMinionVolumeContainer?.boonVolumeStats?.[minionInstanceIndex];
+                    const minionData = activeduration ? this.selectedMinionVolumeContainer.boonVolumeActiveStats[minionInstanceIndex] : this.selectedMinionVolumeContainer.boonVolumeStats[minionInstanceIndex];
                     res.push({
                         icon: this.selectedMinion.icon,
                         name: this.selectedMinion.name,
@@ -105,14 +105,12 @@
                     res.push({
                         icon: this.player.icon,
                         name: this.player.name,
-                        avg: 0,
                         data: []
                     });
                 } else {
                     res.push({
                         icon: this.player.icon,
                         name: this.player.name,
-                        avg: playerData.avg,
                         data: playerData.data
                     });
                 }

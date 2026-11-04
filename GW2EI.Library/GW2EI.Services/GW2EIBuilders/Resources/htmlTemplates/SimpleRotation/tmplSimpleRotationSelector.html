@@ -43,7 +43,7 @@
                 const actor = this.actor;
                 const minions = actor.minions;
                 for (let i = 0; i < minions.length; i++) {
-                    const rotation = actor.details.minions[i].rotation;
+                    const rotation = actor.minions[i].instances?.[0].details.rotation;
                     if (rotation && rotation.length >= 0) {
                         result.push({
                             minion: minions[i],

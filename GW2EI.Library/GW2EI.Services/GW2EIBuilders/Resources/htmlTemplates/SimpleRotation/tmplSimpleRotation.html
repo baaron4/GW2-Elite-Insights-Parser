@@ -203,8 +203,21 @@
                 return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             getRotationData(phaseIndex) {
+                // TODO show rotation per instance instead of consolidated
                 const minionIndex = this.minionIndex;
-                return minionIndex >= 0 ? this.getActor().details.minions[minionIndex].rotation[phaseIndex] :  this.getActor().details.rotation[phaseIndex];
+                if (minionIndex >= 0) {
+                    let rotation = [];
+                    let instances = this.getActor().minions[minionIndex].instances ?? [];
+                    for (let i = 0; i < instances.length ; i ++) {
+                        let instanceRotation = instances.details.rotation ?? [];
+                        for (let j = 0; j < instanceRotation.length; j ++) {
+                            rotation.push(instanceRotation[j]);
+                        }
+                    }
+                    rotation.sort((x,y) => y[0] - x[0]);
+                    return rotation;
+                }
+                return this.getActor().details.rotation[phaseIndex];
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();

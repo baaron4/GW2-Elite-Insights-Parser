@@ -35,7 +35,7 @@
                 return logData.players[this.playerindex];
             },
             minion: function () {
-                return this.player.details.minions[this.minionIndex];
+                return this.player.minions[this.minionIndex];
             },
             minionInstance: function () {
                 return this.minion.instances[this.minionInstanceIndex];
@@ -52,7 +52,7 @@
             computeLayout: function () {
                 this.data = [];
                 var color = this.light ? '#495057' : '#cccccc';
-                var boonGraph = this.minionInstance.boonGraph[this.phaseindex];
+                var boonGraph = this.minionInstance.details.boonGraph[this.phaseindex];
                 var hasBuffs = computeBuffData(boonGraph, this.data) > 0;
                 this.layout = getActorGraphLayout([], color, hasBuffs, true);
                 this.layout.yaxis.domain = hasBuffs ? [0, 1] : [0, 0];

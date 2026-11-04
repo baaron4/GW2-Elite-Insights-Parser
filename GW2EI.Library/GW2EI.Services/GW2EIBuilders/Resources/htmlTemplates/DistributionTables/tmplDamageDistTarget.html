@@ -37,7 +37,7 @@
                 if (this.minionIndex === -1) {
                     return this.target.details.dmgDistributions[this.phaseindex];
                 }
-                return this.target.details.minions[this.minionIndex].dmgDistributions[this.phaseindex];
+                return this.target.minions[this.minionIndex].details.dmgDistributions[this.phaseindex];
             }
         },
     });

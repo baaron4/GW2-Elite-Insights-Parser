@@ -55,7 +55,13 @@
                 if (this.minionIndex === -1) {
                     return this.player.details.dmgDistributions[this.phaseindex];
                 }
-                return this.player.details.minions[this.minionIndex].dmgDistributions[this.phaseindex];
+                return this.player.minions[this.minionIndex].details.dmgDistributions[this.phaseindex];
+            },
+            _dmgdisttarget: function() {  
+                if (this.minionIndex === -1) {
+                    return this.player.details.dmgDistributionsTargets[this.phaseindex];
+                }
+                return this.player.minions[this.minionIndex].details.dmgDistributionsTargets[this.phaseindex];
             },
             dmgdisttarget: function () {
                 let cacheID = this.phaseindex + '-' + this.minionIndex + '-';
@@ -76,9 +82,7 @@
                 const rows = new Map();
                 for (let i = 0; i < this.activetargets.length; i++) {
                     const targetid = this.activetargets[i];
-                    const targetDist = this.minionIndex === -1 ?
-                        this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
-                        this.player.details.minions[this.minionIndex].dmgDistributionsTargets[this.phaseindex][targetid];
+                    const targetDist = this._dmgdisttarget[targetid];
                     dist.contributedDamage += targetDist.contributedDamage;
                     dist.contributedBreakbarDamage += targetDist.contributedBreakbarDamage;
                     dist.contributedDownContribution += targetDist.contributedDownContribution;
