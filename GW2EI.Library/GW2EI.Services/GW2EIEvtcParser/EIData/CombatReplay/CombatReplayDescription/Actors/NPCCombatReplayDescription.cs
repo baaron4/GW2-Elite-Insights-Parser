@@ -10,7 +10,7 @@ public class NPCCombatReplayDescription : SingleActorCombatReplayDescription
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public readonly string? MinionDtoID;
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public readonly bool MasterIsPlayer;
+    public readonly bool? MasterIsPlayer;
 
     internal NPCCombatReplayDescription(NPC npc, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay)
     {
