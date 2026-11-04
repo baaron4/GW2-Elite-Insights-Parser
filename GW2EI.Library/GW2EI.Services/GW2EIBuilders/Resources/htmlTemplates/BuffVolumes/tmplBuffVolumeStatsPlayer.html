@@ -18,10 +18,10 @@
                 <option value="">{{player.name}}</option>
                 <optgroup v-for="(minionGroup, groupIndex) in player.details.minions" :key="'volume-minion-group-' + groupIndex"
                           v-if="minionGroup.instances && minionGroup.instances.length > 0"
-                          :label="minionGroupLabel(minionGroup)">
+                          :label="player.minions[groupIndex].name">
                     <option v-for="(minion, minionIndex) in minionGroup.instances" :key="'volume-minion-' + groupIndex + '-' + minionIndex"
                             :value="groupIndex + ':' + minionIndex">
-                        {{minionLabel(minion, minionIndex)}}
+                        {{player.minions[groupIndex].name}} #{{minionIndex + 1}}
                     </option>
                 </optgroup>
             </select>
@@ -144,28 +144,6 @@
                 }
                 this.cacheBoonSums.set(id, res);
                 return res;
-            },
-        },
-        methods: {
-            minionLabel: function (minion, minionIndex) {
-                if (!minion) {
-                    return "Minion";
-                }
-                var minionName = this.getMinionName(minion);
-                return minionName + " #" + (minionIndex + 1);
-            },
-            minionGroupLabel: function (minionGroup) {
-                const minion = minionGroup?.instances?.[0];
-                if (!minion) {
-                    return "Minion";
-                }
-                return this.getMinionName(minion);
-            },
-            getMinionName: function (minion) {
-                if (!minion) {
-                    return "Minion";
-                }
-                return findTargetName("u" + minion.uniqueID, false) || "Minion";
             },
         },
     });

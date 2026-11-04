@@ -107,8 +107,7 @@
                 if (!this.isMinion || !this.minionInfo || !this.minion) {
                     return "Minion";
                 }
-                var minionName = findTargetName("u" + this.minion.uniqueID, false) || "Minion";
-                return minionName + "#" + (this.minionIndex + 1);
+                return this.minionInfo.name + " #" + (this.minionIndex + 1);
             },
             actor: function () {
                 if (this.isTarget) {

@@ -43,9 +43,9 @@
             graphId: function () {
                 return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.miniongroupindex + "-" + this.minionInstance.uniqueID;
             },
-            graphName: function () {
-                var minionName = findTargetName("u" + this.minionInstance.uniqueID, false);
-                return (minionName || "Minion") + " #" + (this.minioninstanceindex + 1) + " boon graph";
+            graphName: function() {
+                var groupName = this.player.minions[this.miniongroupindex]?.name || "Minion";
+                return groupName + " #" + (this.minioninstanceindex + 1) + " boon graph";
             }
         },
         methods: {
