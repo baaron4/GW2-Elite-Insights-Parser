@@ -5,7 +5,7 @@
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
-        <template v-for="(minion, minionIndex) in (player.details.minions || [])">
+        <template v-for="(minion, minionIndex) in (player.minions || [])">
             <player-minion-graph-tab-component v-for="(minionInstance, minionInstanceIndex) in minion.instances"
                                                :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + minionIndex + '-' + minionInstanceIndex"
                                                :playerindex="playerindex"

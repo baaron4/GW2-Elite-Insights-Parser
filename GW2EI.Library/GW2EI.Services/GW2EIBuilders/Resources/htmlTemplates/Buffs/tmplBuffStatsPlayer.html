@@ -17,7 +17,7 @@
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
                 <optgroup v-if="minion.instances && minion.instances.length > 0"
-                          v-for="(minion, minionIndex) in player.details.minions" :key="'uptime-minion-group-' + minionIndex"
+                          v-for="(minion, minionIndex) in player.minions" :key="'uptime-minion-group-' + minionIndex"
                           :label="player.minions[minionIndex].name">
                     <option v-for="(minion, minionInstanceIndex) in minion.instances" :key="'uptime-minion-' + minionIndex + '-' + minionInstanceIndex"
                             :value="minionIndex + ':' + minionInstanceIndex">

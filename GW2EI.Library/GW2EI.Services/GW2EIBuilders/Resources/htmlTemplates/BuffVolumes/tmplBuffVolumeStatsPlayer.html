@@ -16,7 +16,7 @@
             <label class="mr-2 mb-0" :for="'boon-volume-minion-select-' + player.id">Buff recipient</label>
             <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-volume-minion-select-' + player.id" v-model="selectedMinionKey">
                 <option value="">Player</option>
-                <optgroup v-for="(minion, minionIndex) in player.details.minions" :key="'volume-minion-group-' + minionIndex"
+                <optgroup v-for="(minion, minionIndex) in player.minions" :key="'volume-minion-group-' + minionIndex"
                           v-if="minion.instances && minion.instances.length > 0"
                           :label="player.minions[minionIndex].name">
                     <option v-for="(minion, minionInstanceIndex) in minion.instances" :key="'volume-minion-' + minionIndex + '-' + minionInstanceIndex"

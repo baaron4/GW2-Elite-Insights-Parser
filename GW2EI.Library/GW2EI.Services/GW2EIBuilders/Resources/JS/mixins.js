@@ -419,14 +419,14 @@ var buffPlayerMinionsComponent = {
     },
     computed: {
         hasMinions: function () {
-            return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+            return this.player.minions && this.player.minions.some(group => group.instances && group.instances.length > 0);
         },
         selectedMinion: function () {
             if (!this.selectedMinionKey) {
                 return null;
             }
             const indexes = this.selectedMinionKey.split(':').map(Number);
-            return this.player.minions[indexes[0]].instances?.[indexes[1]] ?? null;
+            return this.player.minions[indexes[0]] ?? null;
         },
         selectedMinionIndexes: function () {
             if (!this.selectedMinionKey) {
