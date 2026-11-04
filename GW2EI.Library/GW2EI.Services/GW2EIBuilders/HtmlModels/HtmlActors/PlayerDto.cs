@@ -2,7 +2,6 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIBuilders.HtmlModels.LogDataDto;
-using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
