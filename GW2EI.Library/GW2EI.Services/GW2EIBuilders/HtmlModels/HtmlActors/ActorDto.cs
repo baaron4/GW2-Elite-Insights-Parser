@@ -47,15 +47,11 @@ internal abstract class ActorDto
         }
     }
 
-    public static void AssembleNPCs(Dictionary<string, AgentItem?> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
+    public static void AssembleNPCs(Dictionary<string, AgentItem> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + npcs.Count);
         foreach (var (key, agent) in npcs)
         {
-            if (agent == null)
-            {
-                continue;
-            }
             if (key.StartsWith('u'))
             {
                 // used proper log name for ids that start with "u",

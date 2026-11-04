@@ -288,6 +288,35 @@ class NonSquadIconDrawable extends IconDrawable {
         super(params, pixelSize);
         this.masterID = typeof params.masterID !== "undefined" && params.masterID >= 0 ? params.masterID : -1;
         this.master = null;
+        this.useMasterDrawConditions = !!params.masterIsPlayer;
+        this.dtoID = params.minionDtoID ?? null;
+        this._nameInDictInit = false;
+    }
+
+    _setNameInDict() {
+        if (findTargetName("u" + this.id, false) === null && this.dtoID !== null) {
+            const curMasterID = this.master.id;
+            const inLogActor = logData.players.filter(x => x.uniqueID === curMasterID)[0] || logData.targets.filter(x => x.uniqueID === curMasterID)[0];
+            if (inLogActor && inLogActor.minions.length > 0) {
+                const minion = inLogActor.minions.find(x => x.id === this.dtoID);
+                if (minion) {
+                    if (minion.instances) {
+                        const minionInstance = minion.instances.find(x => x.uniqueID === this.id);
+                        if (minionInstance) {
+                            logData.npcMap["u" + this.id] = minion.name + " # " + (minion.instances.indexOf(minion) + 1);
+                            this._nameInDictInit = true;
+                            return;
+                        }
+                    } else {
+                        this._nameInDictInit = true;
+                        logData.npcMap["u" + this.id] = minion.name;
+                        return;
+                    }
+                }
+            }
+        } else {         
+            this._nameInDictInit = true;
+        }
     }
 
     canDraw() {
@@ -300,8 +329,13 @@ class NonSquadIconDrawable extends IconDrawable {
         } else if (this.master === null) {
             this.master = animator.getActorData(this.masterID);
         }
-        if (this.master && !animator.displaySettings.displayAllMinions) {
-            return (this.master.isSelected() || this.isSelected()) && animator.displaySettings.displaySelectedMinions;
+        if (this.master) {           
+            if (!this._nameInDictInit) {
+                this._setNameInDict();
+            }
+            if (this.useMasterDrawConditions && !animator.displaySettings.displayAllMinion) {
+                return (this.master.isSelected() || this.isSelected()) && animator.displaySettings.displaySelectedMinions;
+            }
         }
         return true;
     }

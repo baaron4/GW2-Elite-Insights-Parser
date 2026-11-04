@@ -6,6 +6,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
 internal class MinionDto
 {
+    public string? ID;
     public string? Name { get; set; }
     public string? Icon { get; set; }
     public MinionDetailsDto? Details;
@@ -16,6 +17,7 @@ internal class MinionDto
     {
         return new MinionDto()
         {
+            ID = (minions.ReferenceAgentItem.IsVolatileSpecies() ? "v" : "s") + minions.ID,
             Name = minions.Character,
             Icon = minions.GetIcon(),
         };
