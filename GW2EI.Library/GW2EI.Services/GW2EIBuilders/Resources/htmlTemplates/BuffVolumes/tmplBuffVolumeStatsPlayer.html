@@ -36,12 +36,11 @@
 <script>
     Vue.component("buff-volume-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffMinionsComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
                 activeduration: 1,
-                selectedMinionKey: "",
                 cacheBoon: new Map(),
                 cacheBoonSums: new Map(),
             };
@@ -49,31 +48,7 @@
         computed: {
             player: function() {
                 return logData.players[this.playerindex];
-            },
-            hasMinions: function () {
-                return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
-            },
-            selectedMinion: function () {
-                if (!this.selectedMinionKey) {
-                    return null;
-                }
-                const indexes = this.selectedMinionKey.split(':').map(Number);
-                return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
-            },
-            selectedMinionIndexes: function () {
-                if (!this.selectedMinionKey) {
-                    return null;
-                }
-                const [minionIndex, minionInstanceIndex] = this.selectedMinionKey.split(':').map(Number);
-                return { minionIndex, minionInstanceIndex };
-            },
-            selectedMinionVolumeContainer: function () {
-                const indexes = this.selectedMinionIndexes;
-                if (!indexes) {
-                    return null;
-                }
-                return this.buffVolumesStatContainer.minionBuffVolumes?.[this.playerindex]?.[indexes.minionIndex] ?? null;
-            },
+            },      
             boonData: function() {
                 const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
                 if (this.cacheBoon.has(id)) {
@@ -83,17 +58,16 @@
                 const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
+                let dictionaries = activeduration ? 
+                    this.buffVolumesStatContainer.boonVolumeActiveDictionaries[this.playerindex] 
+                    :  
+                    this.buffVolumesStatContainer.boonVolumeDictionaries[this.playerindex];
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
-                    const dictionaries = activeduration ? this.selectedMinionVolumeContainer?.boonVolumeActiveDictionaries?.[minionInstanceIndex] : this.selectedMinionVolumeContainer?.boonVolumeDictionaries?.[minionInstanceIndex];
-                    for (let i = 0; i < players.length; i++) {
-                        if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
-                            continue;
-                        }
-                        res.push({ player: players[i], data: dictionaries[i] });
-                    }
-                    this.cacheBoon.set(id, res);
-                    return res;
+                    dictionaries = activeduration ? 
+                        this.selectedMinionVolumeContainer?.boonVolumeActiveDictionaries?.[minionInstanceIndex] 
+                        : 
+                        this.selectedMinionVolumeContainer?.boonVolumeDictionaries?.[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
                     if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
@@ -101,7 +75,7 @@
                     }
                     res.push({
                         player: players[i],
-                        data: activeduration ? this.buffVolumesStatContainer.boonVolumeActiveDictionaries[this.playerindex][i] : this.buffVolumesStatContainer.boonVolumeDictionaries[this.playerindex][i]
+                        data: dictionaries[i]
                     });
                 }
                 this.cacheBoon.set(id, res);

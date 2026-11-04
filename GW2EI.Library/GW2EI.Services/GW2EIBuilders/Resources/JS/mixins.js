@@ -411,6 +411,47 @@ var buffComponent = {
     }
 };
 
+var buffMinionsComponent = {
+    data: function() {
+        return {      
+            selectedMinionKey: "",
+        };
+    },
+    computed: {
+        hasMinions: function () {
+            return this.player.details.minions && this.player.details.minions.some(group => group.instances && group.instances.length > 0);
+        },
+        selectedMinion: function () {
+            if (!this.selectedMinionKey) {
+                return null;
+            }
+            const indexes = this.selectedMinionKey.split(':').map(Number);
+            return this.player.details.minions[indexes[0]]?.instances?.[indexes[1]] ?? null;
+        },
+        selectedMinionIndexes: function () {
+            if (!this.selectedMinionKey) {
+                return null;
+            }
+            const [minionIndex, minionInstanceIndex] = this.selectedMinionKey.split(':').map(Number);
+            return { minionIndex, minionInstanceIndex };
+        },
+        selectedMinionVolumeContainer: function () {
+            const indexes = this.selectedMinionIndexes;
+            if (!indexes) {
+                return null;
+            }
+            return this.buffVolumesStatContainer.minionBuffVolumes[this.playerindex][indexes.minionIndex] ?? null;
+        },
+        selectedMinionBuffs: function () {
+            const indexes = this.selectedMinionIndexes;
+            if (!indexes) {
+                return null;
+            }
+            return this.buffsStatContainer.minionBuffs?.[this.playerindex]?.[indexes.minionIndex] ?? null;
+        },
+    }
+};
+
 var extensionPresentComponent = {
     methods: {
         playerIsRunningHealingExtension: function (playerData) {
