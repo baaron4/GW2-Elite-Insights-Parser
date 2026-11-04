@@ -4,22 +4,6 @@
                                            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
         </dps-graph-mode-selector-component>
         <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
-        <!--<div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
-        <label class="mr-2 mb-0" :for="'player-graph-minion-select-' + player.id">
-            Source
-        </label>
-        <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
-            <option value="">Player</option>
-            <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.minionIndex" :label="group.name">
-                <option v-for="minion in group.instances" :key="minion.id" :value="minion.selectionKey">
-                    {{minion.label}}
-                </option>
-            </optgroup>
-        </select>
-    </div>
-        <graph-component :id="graphid" :layout="selectedGraph.layout" :data="selectedGraph.data"></graph-component>
-        <rotation-legend-component></rotation-legend-component>
-    </div>-->
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
         <template v-for="(minion, minionIndex) in (player.details.minions || [])">
             <player-minion-graph-tab-component v-for="(minionInstance, minionInstanceIndex) in minion.instances"

@@ -104,8 +104,8 @@
                 return this.minionOwner.minions[this.minionIndex];
             },
             minionLabel: function () {
-                if (!this.isMinion || !this.minionInfo) {
-                    return "";
+                if (!this.isMinion || !this.minionInfo || !this.minion) {
+                    return "Minion";
                 }
                 return this.minionInfo.name + "#" + (this.minionInstanceIndex + 1);
             },
