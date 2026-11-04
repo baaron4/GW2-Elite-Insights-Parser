@@ -7,7 +7,7 @@
 
 <script>
     Vue.component("player-minion-graph-tab-component", {
-        props: ["playerindex", "phaseindex", "miniongroupindex", "minioninstanceindex", "light"],
+        props: ["playerindex", "phaseindex", "minionIndex", "minionInstanceIndex", "light"],
         template: `${template}`,
         mixins: [graphComponent, encounterPhaseComponent],
         data: function () {
@@ -34,18 +34,18 @@
             player: function () {
                 return logData.players[this.playerindex];
             },
-            minionGroup: function () {
-                return this.player.details.minions[this.miniongroupindex];
+            minion: function () {
+                return this.player.details.minions[this.minionIndex];
             },
             minionInstance: function () {
-                return this.minionGroup.instances[this.minioninstanceindex];
+                return this.minion.instances[this.minionInstanceIndex];
             },
             graphid: function () {
-                return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.miniongroupindex + "-" + this.minionInstance.uniqueID;
+                return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.minionIndex + "-" + this.minionInstance.uniqueID;
             },
             graphname: function () {
-                var groupName = this.player.minions[this.miniongroupindex]?.name || "Minion";
-                return groupName + " #" + (this.minioninstanceindex + 1) + " boon graph";
+                var groupName = this.player.minions[this.minionIndex]?.name || "Minion";
+                return groupName + " #" + (this.minionInstanceIndex + 1) + " boon graph";
             }
         },
         methods: {

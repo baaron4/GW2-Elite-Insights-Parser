@@ -42,12 +42,12 @@
                         <div v-if="minions && hasActiveMinions(player)"
                              :key="'minion-branch-' + player.uniqueID"
                              class="cr-minion-branch">
-                            <div v-for="(minionGroup, minionGroupIndex) in player.details.minions"
-                                 :key="'minion-group-' + player.uniqueID + '-' + minionGroupIndex"
+                            <div v-for="(minion, minionIndex) in player.details.minions"
+                                 :key="'minion-group-' + player.uniqueID + '-' + minionIndex"
                                  style="display: contents;">
-                                <combat-replay-actor-stats-component v-for="(minion, minionIndex) in minionGroup.instances" v-if="isMinionActive(minion)"
-                                                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minion.uniqueID, 'cr-minion-row-last': isLastActiveMinion(player, minion)}"
-                                                                     :minionGroupIndex="minionGroupIndex" :minionIndex="minionIndex"
+                                <combat-replay-actor-stats-component v-for="(minionInstance, minionInstanceIndex) in minion.instances" v-if="isMinionActive(minion)"
+                                                                     :key="'minion-status-' + minion.uniqueID" class="cr-minion-row" :class="{active: selectedactorid === minionInstance.uniqueID, 'cr-minion-row-last': isLastActiveMinion(player, minionInstance)}"
+                                                                     :minionIndex="minionIndex" :minionInstanceIndex="minionInstanceIndex"
                                                                      :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow"
                                                                      :isTarget="false" :buffs="buffs" :rotation="rotation" />
                             </div>
@@ -83,8 +83,8 @@
         })],
         template: `${template}`,
         methods: {
-            isMinionActive: function (minion) {
-                const actorData = animator ? animator.getActorData(minion.uniqueID) : null;
+            isMinionActive: function (minionInstance) {
+                const actorData = animator ? animator.getActorData(minionInstance.uniqueID) : null;
                 if (!actorData) {
                     return false;
                 }
@@ -94,10 +94,10 @@
             hasActiveMinions: function (player) {
                 const minionGroups = player.details && player.details.minions;
                 return !!minionGroups && minionGroups.some(group =>
-                    group.instances && group.instances.some(minion => this.isMinionActive(minion))
+                    group.instances && group.instances.some(minionInstance => this.isMinionActive(minionInstance))
                 );
             },
-            isLastActiveMinion: function (player, minion) {
+            isLastActiveMinion: function (player, minionInstance) {
                 const minionGroups = player.details && player.details.minions;
                 if (!minionGroups) {
                     return false;
@@ -113,7 +113,7 @@
                         }
                     });
                 });
-                return lastActiveMinionID === minion.uniqueID;
+                return lastActiveMinionID === minionInstance.uniqueID;
             },
         },
         data: function () {

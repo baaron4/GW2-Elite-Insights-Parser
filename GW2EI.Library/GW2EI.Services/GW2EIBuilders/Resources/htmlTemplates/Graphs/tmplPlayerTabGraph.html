@@ -10,7 +10,7 @@
         </label>
         <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'player-graph-minion-select-' + player.id" v-model="selectedMinionKey">
             <option value="">Player</option>
-            <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.groupIndex" :label="group.name">
+            <optgroup v-for="group in minionSelectGroups" :key="'graph-minion-group-' + group.minionIndex" :label="group.name">
                 <option v-for="minion in group.instances" :key="minion.id" :value="minion.selectionKey">
                     {{minion.label}}
                 </option>
@@ -21,13 +21,13 @@
         <rotation-legend-component></rotation-legend-component>
     </div>-->
         <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
-        <template v-for="(minionGroup, groupIndex) in (player.details.minions || [])">
-            <player-minion-graph-tab-component v-for="(minionInstance, instanceIndex) in minionGroup.instances"
-                                               :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + groupIndex + '-' + instanceIndex"
+        <template v-for="(minion, minionIndex) in (player.details.minions || [])">
+            <player-minion-graph-tab-component v-for="(minionInstance, minionInstanceIndex) in minion.instances"
+                                               :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + minionIndex + '-' + minionInstanceIndex"
                                                :playerindex="playerindex"
                                                :phaseindex="phaseindex"
-                                               :miniongroupindex="groupIndex"
-                                               :minioninstanceindex="instanceIndex"
+                                               :minionIndex="minionIndex"
+                                               :minionInstanceIndex="minionInstanceIndex"
                                                :light="light">
             </player-minion-graph-tab-component>
         </template>

@@ -3,16 +3,16 @@
         <div v-if="player.minions.length > 0">
             <ul class="nav nav-tabs">
                 <li>
-                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+                    <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{player.name}}</a>
                 </li>
                 <li v-for="(minion, mindex) in player.minions">
-                    <a class="nav-link" :class="{active: distmode === mindex}"
-                        @click="distmode = mindex">{{minion.name}}</a>
+                    <a class="nav-link" :class="{active: minionIndex === mindex}"
+                        @click="minionIndex = mindex">{{minion.name}}</a>
                 </li>
             </ul>
         </div>
         <damagedist-table-component :dmgdist="dmgtaken" :tableid="'dmgtakendist-' + playerindex" 
-            :actorindex="-1" :minionindex="distmode" :istarget="false" :player="true"
+            :actorindex="-1" :minionIndex="minionIndex" :istarget="false" :player="true"
             :phaseindex="phaseindex">
         </damagedist-table-component>
     </div>
@@ -24,7 +24,7 @@
         template: `${template}`,
         data: function () {
             return {
-                distmode: -1
+                minionIndex: -1
             };
         },
         computed: {
@@ -32,10 +32,10 @@
                 return logData.players[this.playerindex];
             },
             dmgtaken: function () {
-                if (this.distmode === -1) {
+                if (this.minionIndex === -1) {
                     return this.player.details.dmgDistributionsTaken[this.phaseindex];
                 }
-                return this.player.details.minions[this.distmode].dmgDistributionsTaken[this.phaseindex];
+                return this.player.details.minions[this.minionIndex].dmgDistributionsTaken[this.phaseindex];
             }
         },
     });

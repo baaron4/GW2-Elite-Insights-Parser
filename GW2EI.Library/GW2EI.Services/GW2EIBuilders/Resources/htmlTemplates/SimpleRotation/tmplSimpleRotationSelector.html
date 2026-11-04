@@ -14,12 +14,12 @@
             <simplerotation-component
                 v-show="minionMode === -1"
                 :actorindex="actorindex"
-                :phaseindex="phaseindex" :target="target" :minionindex="-1">
+                :phaseindex="phaseindex" :target="target" :minionIndex="-1">
             </simplerotation-component>  
             <simplerotation-component v-for="minionStruct in minionsToUse" 
                 v-show="minionMode === minionStruct.minionIndex"
                 :actorindex="actorindex"
-                :phaseindex="phaseindex" :target="target" :minionindex="minionStruct.minionIndex">
+                :phaseindex="phaseindex" :target="target" :minionIndex="minionStruct.minionIndex">
             </simplerotation-component>  
     </div>
 </template>

@@ -108,7 +108,7 @@
 
 <script>
     Vue.component("simplerotation-component", {
-        props: ["actorindex", "minionindex", "phaseindex", "target"],
+        props: ["actorindex", "minionIndex", "phaseindex", "target"],
         template: `${template}`,
         mixins: [UIIconsComponent],
         data: function () {
@@ -203,7 +203,7 @@
                 return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
             },
             getRotationData(phaseIndex) {
-                const minionIndex = this.minionindex;
+                const minionIndex = this.minionIndex;
                 return minionIndex >= 0 ? this.getActor().details.minions[minionIndex].rotation[phaseIndex] :  this.getActor().details.rotation[phaseIndex];
             },
             stopClickEvent: function (event) {

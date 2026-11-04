@@ -203,7 +203,7 @@
 
 <script>
     Vue.component("healingdist-table-component", {
-        props: ["healingdist", "tableid", "actorindex", "minionindex", "istarget", "phaseindex", "player"],
+        props: ["healingdist", "tableid", "actorindex", "minionIndex", "istarget", "phaseindex", "player"],
         template: `${template}`,
         data: function () {
             return {
@@ -280,7 +280,7 @@
                 return logData.phases[this.phaseindex];
             },
             isminion: function() {
-                return this.minionindex > -1;
+                return this.minionIndex > -1;
             },
             actor: function() {
                 if (this.actorindex < 0) {
@@ -288,7 +288,7 @@
                 }
                 const master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
                 if (this.isminion) {
-                    return master.minions[this.minionindex];
+                    return master.minions[this.minionIndex];
                 }
                 return master;
             },
