@@ -32,13 +32,6 @@ internal class MinionDto
             {
                 dto.Instances.Add(new(minion, log, used));
             }
-        } 
-        else
-        {
-            foreach (var minion in minionGroup.MinionList)
-            {
-                used.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
-            }
         }
         return dto;
     }
@@ -47,12 +40,7 @@ internal class MinionDto
 
     public static MinionDto BuildTargetMinionDto(Minions minions, ParsedEvtcLog log, UsedHtmlData used)
     {
-
         var dto = BuildBasicMinionDto(minions);
-        foreach (var minion in minions.MinionList)
-        {
-            used.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
-        }
         return dto;
     }
 }

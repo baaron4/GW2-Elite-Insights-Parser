@@ -11,7 +11,6 @@ internal class MinionInstanceDto
 
     public MinionInstanceDto(NPC minion, ParsedEvtcLog log, UsedHtmlData used)
     {
-        used.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
         UniqueID = minion.UniqueID;
         Details = new(log, minion, used);
     }
