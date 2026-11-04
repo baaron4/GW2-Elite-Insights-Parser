@@ -631,21 +631,24 @@ canvas {
     border-bottom: none !important;
 }
 
-.cr-player-minion-group {
-    --spec-color: #aaaaaa;
-    border: 2px solid var(--spec-color);
-    border-radius: 4px;
-    margin: 2px;
-    padding: 1px 2px;
-}
-
 .cr-minion-branch {
     position: relative;
     margin: 1px 4px 5px 16px;
     padding: 3px 0 3px 12px;
-    border-left: 2px solid var(--spec-color);
+    border-left: none;
     border-radius: 0 4px 4px 0;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--spec-color) 8%, transparent), transparent 88% );
+    background: linear-gradient(90deg, color-mix(in srgb, var(--spec-color) 15%, transparent), transparent 70% );
+}
+
+.cr-minion-branch::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 19px;
+    left: 0;
+    width: 2px;
+    background-color: var(--spec-color);
+    pointer-events: none;
 }
 
 .cr-minion-row .actor-status {
@@ -655,16 +658,16 @@ canvas {
 .cr-minion-row .actor-status::before {
     content: "";
     position: absolute;
-    left: -17px;
+    left: -15px;
     top: 50%;
     width: 15px;
-    border-top: 1px solid var(--spec-color);
+    border-top: 2px solid var(--spec-color);
     pointer-events: none;
 }
 
-.cr-minion-row-last .actor-status::before {
+.cr-minion-row-last.actor-status::before {
     top: auto;
-    bottom: 0;
-    border-top: none;
-    border-bottom: 1px solid var(--spec-color);
+    left: -15px;
+    width: 15px;
+    border-top: 2px solid var(--spec-color);
 }

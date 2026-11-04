@@ -36,7 +36,7 @@
                     <div v-for="(player, index) in group"
                          :key="'player-status-' + player.uniqueID"
                          class="cr-player-minion-group"
-                         :style="{ '--spec-color': player.colTarget || '#aaaaaa' }">
+                         :style="{ '--spec-color': player.colTarget || '#aaaaaa', borderBottom: index < group.length - 1 ? '1px solid #dee2e6' : 'none' }">
                         <combat-replay-actor-stats-component :class="{active: selectedactorid === player.uniqueID, 'cr-player-with-minions': minions && hasActiveMinions(player)}"
                                                              :actorIndex="player.id" :time="time" :buffstoshow="buffsToShow" :isTarget="false" :buffs="buffs" :rotation="rotation" />
                         <div v-if="minions && hasActiveMinions(player)"
