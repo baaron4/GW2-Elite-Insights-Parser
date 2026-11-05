@@ -91,6 +91,7 @@
                 layout.xaxis.range[1] = value;
                 Plotly.relayout(div, _this.layout);
             });
+            layout.datarevision = new Date().getTime();
         },
         watch: {
             layout: {
