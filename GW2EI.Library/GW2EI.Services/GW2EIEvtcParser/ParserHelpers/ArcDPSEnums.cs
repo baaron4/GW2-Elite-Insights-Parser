@@ -354,6 +354,7 @@ public static class ArcDPSEnums
         AgentInfo = 89,
         PvPScoreUpdate = 90,
         SkillStep = 91,
+        AnimationSpeed = 92,
         Unknown
     };
 
@@ -607,6 +608,45 @@ public static class ArcDPSEnums
         Evade3 = 1 << 3,
         LoopStart = 1 << 4,
         LoopEnd = 1 << 5,
+    }
+
+    // From Deathmax
+    [Flags]
+    public enum SkillFlags : uint
+    {
+        MovementSkill = 1 << 0,
+        NotAutoRepeatable = 1 << 1,
+        SwapsSkillbar2 = 1 << 2,
+        Placeholder3 = 1 << 3,
+        Channelled = 1 << 4,
+        SwapsSkillbar5 = 1 << 5,
+        Placeholder6 = 1 << 6,
+        LockedPlaceholderSlot = 1 << 7,
+        Placeholder8 = 1 << 8,
+        LineOfSightChecked = 1 << 9,
+        Teleport = 1 << 10,
+        FrontChecked = 1 << 11,
+        Placeholder12 = 1 << 12,
+        AutoTrigger = 1 << 13,
+        FormExit = 1 << 14,
+        DazeImmune = 1 << 15,
+        IgnoreCastSpeed = 1 << 16,
+        RangeChecked = 1 << 17,
+        Placeholder18 = 1 << 18,
+        Placeholder19 = 1 << 19,
+        Placeholder20 = 1 << 20,
+        Placeholder21 = 1 << 21,
+        Placeholder22 = 1 << 22,
+        Placeholder23 = 1 << 23,
+        Placeholder24 = 1 << 24,
+        CantTargetFoe = 1 << 25,
+        CantTargetAlly = 1 << 26,
+        CCOnSkillbar = 1 << 27,
+        NoCastBar = 1 << 28,
+        Placeholder29 = 1 << 29,
+        Placeholder30 = 1 << 30,
+        TooltipIgnoreWeaponStrength = ((uint)1) << 31,
+
     }
 
     // Squad Marker index

@@ -15,6 +15,12 @@ public class SkillInfoEvent : MetaDataEvent
 
     public float TooltipTime { get; protected set; }
 
+    public uint Flags1 { get; protected set; }
+    public IReadOnlyList<int> Flags1AsBits => ParserHelper.GetIndividualFlagsAsBits(Flags1);
+
+    public uint Flags2 { get; protected set; }
+    public IReadOnlyList<int> Flags2AsBits => ParserHelper.GetIndividualFlagsAsBits(Flags2);
+
     public SkillAnimation LandAnimation { get; protected set; }
     public SkillAnimation UnderwaterAnimation { get; protected set; }
 
@@ -67,6 +73,9 @@ public class SkillInfoEvent : MetaDataEvent
             var dstAgent = evtcItem.DstAgent;
             LandAnimation.SetLoopSteps(*(uint*)&dstAgent, *((uint*)&dstAgent + 1));
             UnderwaterAnimation.SetLoopSteps((uint)evtcItem.BuffDmg, (uint)evtcItem.Value);
+
+            Flags1 = evtcItem.OverstackValue;
+            Flags2 = ((uint)evtcItem.DstInstid << 16) | evtcItem.SrcInstid;
         }
     }
 

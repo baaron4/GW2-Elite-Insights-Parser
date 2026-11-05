@@ -18,11 +18,13 @@ public class SkillAnimation
     private Dictionary<SkillTiming, (SkillStep Step, int Delay)>? _timingToStep = null;
     private Dictionary<SkillStep, List<SkillTiming>>? _stepToTimings = null;
 
-    internal int LoopStartIndex => _steps.FindLastIndex(step => step.IsLoopStart);
-    internal int LoopEndIndex => _steps.FindLastIndex(step => step.IsLoopEnd);
+    internal int LoopStartIndex { get; private set; } = int.MinValue;
+    internal int LoopEndIndex { get; private set; } = int.MinValue;
     internal int LoopTermIndex => LoopEndIndex + 1;
 
-    internal bool IsValidLoop => LoopStartIndex >= 0 && LoopStartIndex <= LoopEndIndex;
+    public bool HasLoop => LoopStartIndex >= 0 && LoopEndIndex >= 0;
+    public bool IsValidLoop => LoopStartIndex >= 0 && LoopStartIndex <= LoopEndIndex;
+    public bool IsValid => Steps.Count > 0 && (!HasLoop || IsValidLoop);
 
     internal SkillAnimation(SkillInfoEvent skillInfo)
     {
@@ -43,13 +45,27 @@ public class SkillAnimation
 
     internal void AddStep(CombatItem evtcItem)
     {
-        _steps.Add(new SkillStep(evtcItem, this));
+        var step = new SkillStep(evtcItem, this);
+        if (step.IsLoopStart)
+        {
+            LoopStartIndex = _steps.Count;
+        }
+        if (step.IsLoopEnd)
+        {
+            LoopEndIndex = _steps.Count;
+        }
+        _steps.Add(step);
         DiscardTimingData();
     }
 
     public uint GetLoopSteps(bool minLoop)
     {
         return minLoop ? MinLoopSteps : MaxLoopSteps;
+    }
+
+    internal bool InLoop(int stepIndex)
+    {
+        return LoopStartIndex <= stepIndex && stepIndex <= LoopEndIndex;
     }
 
     [MemberNotNull(nameof(_stepToTimings), nameof(_timingToStep))]
@@ -116,37 +132,40 @@ public class SkillAnimation
 
     public IEnumerable<SkillStep> SimulateSteps(bool minLoop)
     {
+        return HasLoop ? SimulateStepsWithLoop(minLoop) : Steps;
+    }
+
+    protected IEnumerable<SkillStep> SimulateStepsWithLoop(bool minLoop)
+    {
         if (!IsValidLoop)
         {
             yield break;
         }
-        var loopSteps = GetLoopSteps(minLoop);
-        var inLoop = false;
+        var remainingLoopSteps = GetLoopSteps(minLoop);
         var i = 0;
         while (i < Steps.Count)
         {
             var step = Steps[i];
-            inLoop |= step.IsLoopStart;
 
-            if (inLoop)
+            // handle loop steps
+            if (InLoop(i))
             {
-                if (loopSteps == 0)
+                if (remainingLoopSteps == 0)
                 {
-                    inLoop = false;
-                    i = LoopTermIndex; // jump to loop term
+                    i = LoopTermIndex;
                     continue;
                 }
-                loopSteps--;
+                remainingLoopSteps--;
             }
 
-            yield return step; // process step
+            yield return step;
 
-            if (step.IsLoopEnd)
+            // next step
+            if (i == LoopEndIndex)
             {
-                i = LoopStartIndex; // jump to loop start
+                i = LoopStartIndex;
                 continue;
             }
-
             i++;
         }
     }
@@ -156,7 +175,7 @@ public class SkillAnimation
 
     public int? ComputeFullStepDuration(TimeScale.Scaling? scaling = null, bool minLoop = false)
     {
-        if (Steps.Count == 0 || !IsValidLoop)
+        if (!IsValid)
         {
             return null;
         }

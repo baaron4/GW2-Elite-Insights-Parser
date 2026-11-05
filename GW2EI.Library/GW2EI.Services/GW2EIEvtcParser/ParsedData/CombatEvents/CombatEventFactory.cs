@@ -703,6 +703,10 @@ partial class CombatData
                 _statusEvents.PvPScoreUpdateEvents.Add(pvpScoreUpdate);
                 Add(_statusEvents.PvPScoreUpdateEventsByTeamID, pvpScoreUpdate.TeamID, pvpScoreUpdate);
                 break;
+            case StateChange.AnimationSpeed:
+                var animationSpeed = new AnimationSpeedEvent(stateChangeEvent, agentData);
+                Add(_statusEvents.AnimationSpeedEventsBySrc, animationSpeed.Src, animationSpeed);
+                break;
             default:
                 break;
         }

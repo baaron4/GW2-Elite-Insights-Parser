@@ -80,6 +80,8 @@ internal class StatusEventsContainer
 
     public readonly Dictionary<AgentItem, List<GadgetInfoEvent>> GadgetInfoEventsBySrc = [];
 
+    public readonly Dictionary<AgentItem, List<AnimationSpeedEvent>> AnimationSpeedEventsBySrc = [];
+
 
     internal void CleanTemp()
     {

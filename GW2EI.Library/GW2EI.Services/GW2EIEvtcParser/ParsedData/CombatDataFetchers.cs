@@ -889,6 +889,13 @@ partial class CombatData
         return _gadgetAnimationEventsByToken.GetValueOrEmpty(token);
     }
     #endregion GADGET ANIMATION
+    /// <summary>
+    /// Returns list of animation speed events for src
+    /// </summary>
+    public IReadOnlyList<AnimationSpeedEvent> GetAnimationSpeedEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.AnimationSpeedEventsBySrc, src);
+    }
     #endregion CAST
     #region MOVEMENTS
     public IReadOnlyList<MovementEvent> GetMovementData(AgentItem src)
@@ -1437,6 +1444,9 @@ partial class CombatData
         // GADGET ANIMATION
         FillFromManyRangeUnique(events, seen, _gadgetAnimationEventsByGadget.Values);
         FillFromManyRangeUnique(events, seen, _gadgetAnimationEventsByToken.Values);
+
+        // ANIMATION SPEED
+        FillFromManyRangeUnique(events, seen, _statusEvents.AnimationSpeedEventsBySrc.Values);
 
         // GADGET INTERACTION
         FillFromManyRangeUnique(events, seen, _gadgetInteractCastData.Values);

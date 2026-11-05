@@ -1310,11 +1310,16 @@ function binarySearchFirstIndex(arr, predicate) {
     return result;
 }
 
-function getValueFromLocalStorage(key) {
+function getValueFromLocalStorage(key, defaultValue = null) {
     if (window.localStorage) {
         return window.localStorage.getItem("ei_" + key);
     }
-    return null;
+    return defaultValue;
+}
+
+function getNumericalValueFromLocalStorage(key, defaultValue = null) {
+    const readValue = getValueFromLocalStorage(key, null);
+    return readValue ? parseFloat(readValue) : defaultValue;
 }
 
 function setValueToLocalStorage(key, value) {
@@ -1326,7 +1331,7 @@ function setValueToLocalStorage(key, value) {
 function getCastTooltip(cast) {
     let tooltip = `${cast.skill.name} at ${cast.time}s`;
     if (cast.type !== RotationStatus.INSTANT) {
-        tooltip += `<br>Duration: ${cast.duration}ms`;
+        tooltip += `<br>Duration: ${cast._tooltipDuration || cast.duration}ms`;
     }
     if (cast.executed != 0) {
         tooltip += `<br>Cast bar duration: ${cast.executed}ms`;

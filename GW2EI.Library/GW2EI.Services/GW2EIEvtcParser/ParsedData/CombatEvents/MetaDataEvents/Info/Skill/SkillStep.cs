@@ -8,6 +8,7 @@ public class SkillStep
     public readonly byte Type;
     public readonly int Index;
     public readonly uint Flags;
+    public IReadOnlyList<int> FlagsAsBits => ParserHelper.GetIndividualFlagsAsBits(Flags);
     public readonly int ActionDuration;
     public readonly int MoveDuration;
 

@@ -4,6 +4,7 @@ public class SkillTimingWithFlags : SkillTiming
 {
     public readonly int Index;
     public readonly uint Flags;
+    public IReadOnlyList<int> FlagsAsBits => ParserHelper.GetIndividualFlagsAsBits(Flags);
 
     internal SkillTimingWithFlags(CombatItem evtcItem, SkillAnimation animation) : base(evtcItem, animation)
     {
