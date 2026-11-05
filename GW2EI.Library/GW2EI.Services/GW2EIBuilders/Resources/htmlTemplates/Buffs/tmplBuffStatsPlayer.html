@@ -22,16 +22,15 @@
                        :class="{active: activeduration === 1 }">Phase active duration</a>
                 </li>
             </ul>
-        </div>
-        
+        </div>       
         <div v-for="minionStruct in minionsWithInstanceToUse"
             v-show="minionStruct.minionIndex === minionIndex && player.minions[minionStruct.minionIndex].instances.length > 1">
             <div class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
-                <select :value="minionStruct.minionIndex + ':-1'" class="form-control form-control-sm w-auto minion-buff-selector" @change="handleMinionChange">
-                    <option :value="minionStruct.minionIndex + ':-1'" selected>Consolidated View</option>
+                <select :value="getSelectedDropdownValueForMinionIndex(minionStruct.minionIndex)" class="form-control form-control-sm w-auto minion-buff-selector" @change="handleMinionChange">
+                    <option :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, -1)">Consolidated View</option>
                     <option v-for="(minion, minionInstanceIndex) in player.minions[minionStruct.minionIndex].instances"
                         :key="'uptime-minion-' + minionStruct.minionIndex + '-' + minionInstanceIndex"
-                        :value="minionStruct.minionIndex + ':' + minionInstanceIndex">
+                        :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, minionInstanceIndex)">
                         {{player.minions[minionStruct.minionIndex].name}} #{{minionInstanceIndex + 1}}
                     </option>
                 </select>
