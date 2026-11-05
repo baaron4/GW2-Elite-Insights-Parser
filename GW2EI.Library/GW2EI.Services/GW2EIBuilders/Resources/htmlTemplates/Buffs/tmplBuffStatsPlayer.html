@@ -1,5 +1,16 @@
 <template>
-    <div>
+    <div>     
+        <div v-if="minionsToUse.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{player.name}}</a>
+                </li>
+                <li v-for="minionStruct in minionsToUse">
+                    <a class="nav-link" :class="{active: minionIndex === minionStruct.minionIndex}"
+                        @click="minionIndex = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
+                </li>
+            </ul>
+        </div>
         <div :key="'activedurationplayer'" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
@@ -12,19 +23,19 @@
                 </li>
             </ul>
         </div>
-        <div v-if="hasMinions" class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
-            <label class="mr-2 mb-0" :for="'boon-minion-select-' + player.id">Buff recipient</label>
-            <select class="form-control form-control-sm w-auto minion-buff-selector" :id="'boon-minion-select-' + player.id" v-model="selectedMinionKey">
-                <option value="">Player</option>
-                <optgroup v-if="minion.instances && minion.instances.length > 0"
-                          v-for="(minion, minionIndex) in player.minions" :key="'uptime-minion-group-' + minionIndex"
-                          :label="player.minions[minionIndex].name">
-                    <option v-for="(minion, minionInstanceIndex) in minion.instances" :key="'uptime-minion-' + minionIndex + '-' + minionInstanceIndex"
-                            :value="minionIndex + ':' + minionInstanceIndex">
-                        {{player.minions[minionIndex].name}} #{{minionInstanceIndex + 1}}
+        
+        <div v-for="minionStruct in minionsToUse"
+            v-show="minionStruct.minionIndex === minionIndex && player.minions[minionStruct.minionIndex].instances.length > 1">
+            <div class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
+                <select :value="minionStruct.minionIndex + ':-1'" class="form-control form-control-sm w-auto minion-buff-selector" @change="handleMinionChange">
+                    <option :value="minionStruct.minionIndex + ':-1'" selected>Consolidated View</option>
+                    <option v-for="(minion, minionInstanceIndex) in player.minions[minionStruct.minionIndex].instances"
+                        :key="'uptime-minion-' + minionStruct.minionIndex + '-' + minionInstanceIndex"
+                        :value="minionStruct.minionIndex + ':' + minionInstanceIndex">
+                        {{player.minions[minionStruct.minionIndex].name}} #{{minionInstanceIndex + 1}}
                     </option>
-                </optgroup>
-            </select>
+                </select>
+            </div>
         </div>
         <div class="mt-1 mb-1">
             <buff-table-component :condition="false" :generation="true" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
@@ -36,7 +47,7 @@
 <script>
     Vue.component("buff-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, buffPlayerMinionsComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -50,7 +61,7 @@
                 return logData.players[this.playerindex];
             },
             boonData: function() {
-                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
+                const id = this.getCacheID();
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
@@ -63,7 +74,7 @@
                     : 
                     this.buffsStatContainer.boonDictionaries[this.playerindex];
                 if (this.selectedMinion) {
-                    const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
+                    const minionInstanceIndex = this.minionInstanceIndex;
                     dictionaries = activeduration ? 
                         this.selectedMinionBuffs.boonActiveDictionaries[minionInstanceIndex] 
                         : 
@@ -82,14 +93,14 @@
                 return res;
             },
             boonSums: function() {
-                const id = this.playerindex + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.selectedMinionKey;
+                const id = this.getSumCacheID();
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
                 const res = [];
                 const activeduration = this.activeduration;
                 if (this.selectedMinion) {
-                    const minionInstanceIndex = this.selectedMinionIndexes.minionInstanceIndex;
+                    const minionInstanceIndex = this.minionInstanceIndex;
                     const minionData = activeduration ? this.selectedMinionBuffs.boonActiveStats[minionInstanceIndex] : this.selectedMinionBuffs.boonStats[minionInstanceIndex];
                     res.push({
                         icon: this.selectedMinion.icon,

@@ -413,45 +413,91 @@ var buffComponent = {
 };
 
 var buffPlayerMinionsComponent = {
-    data: function() {
-        return {      
-            selectedMinionKey: "",
-        };
+    methods: {
+        getCacheID: function() {
+            return this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.minionIndex + '-' + this.minionInstanceIndex;
+        },
+        getSumCacheID: function() {
+            return this.phaseindex + '-' + this.activeduration + '-' + this.minionIndex + '-' + this.minionInstanceIndex;
+        },
+        handleMinionChange: function (event) {
+            const value = event.target.value;
+            const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
+            this.minionInstanceIndices[minionIndex] = minionInstanceIndex;
+        },
     },
     computed: {
-        hasMinions: function () {
-            return this.player.minions && this.player.minions.some(group => group.instances && group.instances.length > 0);
-        },
-        selectedMinion: function () {
-            if (!this.selectedMinionKey) {
-                return null;
-            }
-            const indexes = this.selectedMinionKey.split(':').map(Number);
-            return this.player.minions[indexes[0]] ?? null;
-        },
-        selectedMinionIndexes: function () {
-            if (!this.selectedMinionKey) {
-                return null;
-            }
-            const [minionIndex, minionInstanceIndex] = this.selectedMinionKey.split(':').map(Number);
-            return { minionIndex, minionInstanceIndex };
+        actor: function() {
+            return this.player;
         },
         selectedMinionVolumeContainer: function () {
-            const indexes = this.selectedMinionIndexes;
-            if (!indexes) {
+            if (this.minionIndex < 0) {
                 return null;
             }
-            return this.buffVolumesStatContainer.minionBuffVolumes[this.playerindex][indexes.minionIndex] ?? null;
+            return this.buffVolumesStatContainer.minionBuffVolumes[this.playerindex][this.minionIndex] ?? null;
         },
         selectedMinionBuffs: function () {
-            const indexes = this.selectedMinionIndexes;
-            if (!indexes) {
+            if (this.minionIndex < 0) {
                 return null;
             }
-            return this.buffsStatContainer.minionBuffs[this.playerindex][indexes.minionIndex] ?? null;
+            return this.buffsStatContainer.minionBuffs[this.playerindex][this.minionIndex] ?? null;
         },
     }
 };
+
+var minionTabulatedComponent = {
+    data: function () {
+        return {
+            minionIndex: -1,
+            minionInstanceIndices: [],
+        };
+    },
+    minionsToUse: function () {
+        let result = [];
+        const actor = this.actor;
+        const minions = actor.minions;
+        for (let i = 0; i < minions.length; i++) {
+            result.push({
+                minion: minions[i],
+                minionIndex: i
+            });
+        }
+        return result;
+    },
+    minionsWithInstanceToUse: function () {
+        let result = [];
+        const actor = this.actor;
+        const minions = actor.minions;
+        for (let i = 0; i < minions.length; i++) {
+            if (actor.minions[i].instances) {
+                result.push({
+                    minion: minions[i],
+                    minionIndex: i
+                });
+            }
+        }
+        return result;
+    },
+    minionInstanceIndex: function () {
+        if (this.minionIndex < 0) {
+            return -1;
+        }
+        if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
+            return 0;
+        }
+        if (this.minionInstanceIndices[this.minionIndex] === - 1) {
+            // Until consolidated view is support, consolidate is first minion
+            return 0;
+        }
+        return this.minionInstanceIndices[this.minionIndex] || 0;
+    },
+    selectedMinion: function () {
+        if (this.minionIndex < 0) {
+            return null;
+        }
+        return this.player.minions[this.minionIndex] ?? null;
+    },
+}
 
 var crActorComponent = {
     props: ["actorIndex", "isTarget", "minionIndex", "minionInstanceIndex"],
