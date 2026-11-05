@@ -642,7 +642,7 @@ public static class ArcDPSEnums
         CantTargetFoe = 1 << 25,
         CantTargetAlly = 1 << 26,
         CCOnSkillbar = 1 << 27,
-        Placeholder28 = 1 << 28,
+        NoCastBar = 1 << 28,
         Placeholder29 = 1 << 29,
         Placeholder30 = 1 << 30,
         TooltipIgnoreWeaponStrength = ((uint)1) << 31,
