@@ -679,6 +679,10 @@ canvas {
     pointer-events: none;
 }
 
+.cr-minion-branch-with-rotation::before {
+    bottom: 57px;
+}
+
 .cr-minion-row .actor-status {
     position: relative;
 }
@@ -687,15 +691,8 @@ canvas {
     content: "";
     position: absolute;
     left: -15px;
-    top: 50%;
+    top: 14px;
     width: 15px;
     border-top: 2px solid var(--spec-color);
     pointer-events: none;
-}
-
-.cr-minion-row-last.actor-status::before {
-    top: auto;
-    left: -15px;
-    width: 15px;
-    border-top: 2px solid var(--spec-color);
 }
