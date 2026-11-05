@@ -1,23 +1,23 @@
 <template>
     <div>
-        <div v-if="minionsToUse.length > 0">
+        <div v-if="minionsWithInstanceToUse.length > 0">
             <ul class="nav nav-tabs">
                 <li>
-                    <a class="nav-link" :class="{active: minionMode === -1}" @click="minionMode = -1">{{actor.name}}</a>
+                    <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{actor.name}}</a>
                 </li>
-                <li v-for="minionStruct in minionsToUse">
-                    <a class="nav-link" :class="{active: minionMode === minionStruct.minionIndex}"
-                        @click="minionMode = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
+                <li v-for="minionStruct in minionsWithInstanceToUse">
+                    <a class="nav-link" :class="{active: minionIndex === minionStruct.minionIndex}"
+                        @click="minionIndex = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
                 </li>
             </ul>
         </div>
             <simplerotation-component
-                v-show="minionMode === -1"
+                v-show="minionIndex === -1"
                 :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="-1">
             </simplerotation-component>  
             <simplerotation-component v-for="minionStruct in minionsToUse" 
-                v-show="minionMode === minionStruct.minionIndex"
+                v-show="minionIndex === minionStruct.minionIndex"
                 :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="minionStruct.minionIndex">
             </simplerotation-component>  
@@ -27,31 +27,12 @@
 <script>
     Vue.component("simplerotation-selector-component", {
         props: ["actorIndex", "phaseindex", "target"],
+        mixins: [minionTabulatedComponent],
         template: `${template}`,
-        data: function () {
-            return {
-                minionMode: -1,
-            };
-        },
         computed: {
            actor: function(){         
                 const data = this.target ? logData.targets : logData.players;
                 return data[this.actorIndex];
-           },
-           minionsToUse: function() {
-                let result = [];
-                const actor = this.actor;
-                const minions = actor.minions;
-                for (let i = 0; i < minions.length; i++) {
-                    const rotation = actor.minions[i].instances?.[0].details.rotation;
-                    if (rotation && rotation.length >= 0) {
-                        result.push({
-                            minion: minions[i],
-                            minionIndex: i
-                        });
-                    }
-                }
-                return result;
            },
         },
     });

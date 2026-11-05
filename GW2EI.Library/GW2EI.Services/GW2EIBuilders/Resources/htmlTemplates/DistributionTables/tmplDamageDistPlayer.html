@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div v-if="player.minions.length > 0">
+        <div v-if="minionsToUse > 0">
             <ul class="nav nav-tabs">
                 <li>
                     <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{player.name}}</a>
                 </li>
-                <li v-for="(minion, mindex) in player.minions">
+                <li v-for="(minion, mindex) in minionsToUse">
                     <a class="nav-link" :class="{active: minionIndex === mindex}"
                         @click="minionIndex = mindex">{{minion.name}}</a>
                 </li>
@@ -35,10 +35,10 @@
         props: ['playerindex',
             'phaseindex', 'activetargets'
         ],
+        mixins: [minionTabulatedComponent],
         template: `${template}`,
         data: function () {
             return {
-                minionIndex: -1,
                 targetless: logData.targetless,
                 targetmode: logData.targetless ? 0 : 1,
                 cacheTarget: new Map()
@@ -47,6 +47,9 @@
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
+            },
+            actor: function() {
+                return this.player;
             },
             player: function () {
                 return logData.players[this.playerindex];
