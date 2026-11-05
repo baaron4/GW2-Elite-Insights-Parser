@@ -79,11 +79,14 @@
             }
         },
         computed: {
+            playerGraphData: function() {
+                return this.graph.players[this.playerindex];
+            },
             healthGraph: function () {
-                return this.graph.players[this.playerindex].healthStates;
+                return this.playerGraphData.healthStates;
             },
             barrierGraph: function () {
-                return this.graph.players[this.playerindex].barrierStates;
+                return this.playerGraphData.barrierStates;
             },
             graphid: function () {
                 return "playergraph-" + this.playerindex + '-' + this.phaseindex;
@@ -142,12 +145,15 @@
         },
         methods: {
             computeLayout() {
+                const color = this.light ? '#495057' : '#cccccc';
                 var images = [];
                 this.data = [];
+
                 this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
                 var oldOffset = this.playerOffset;
                 this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
                 var hasBuffs = oldOffset !== this.playerOffset;
+
                 this.graphOffset = this.playerOffset;
                 this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
                 this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
@@ -204,8 +210,9 @@
                     hoverinfo: 'name+y+x',
                     name: 'Total'
                 });
-                this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, false);
-                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+
+                this.layout = getActorGraphLayout(images, color, hasBuffs, false);
+                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
             },
             computeDPSData: function () {

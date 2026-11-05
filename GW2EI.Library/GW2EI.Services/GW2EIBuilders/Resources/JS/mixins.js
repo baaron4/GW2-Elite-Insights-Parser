@@ -189,6 +189,7 @@ var encounterPhaseComponent = {
 var graphComponent = {
     data: function () {
         return {
+            data: [],
             layout: {},
             dpsCache: new Map(),
             dataCache: new Map(),
