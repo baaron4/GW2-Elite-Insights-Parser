@@ -420,11 +420,6 @@ var buffPlayerMinionsComponent = {
         getSumCacheID: function() {
             return this.phaseindex + '-' + this.activeduration + '-' + this.minionIndex + '-' + this.minionInstanceIndex;
         },
-        handleMinionChange: function (event) {
-            const value = event.target.value;
-            const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
-            this.minionInstanceIndices[minionIndex] = minionInstanceIndex;
-        },
     },
     computed: {
         actor: function() {
@@ -452,6 +447,22 @@ var minionTabulatedComponent = {
             minionInstanceIndices: [],
         };
     },
+    methods: {   
+        getMinionInstanceIndexForMinionIndex: function(minionIndex) {
+            return this.minionInstanceIndices[minionIndex] || -1;
+        },
+        getSelectedDropdownValueForMinionIndex: function(minionIndex) {
+            return minionIndex + ":" + this.getMinionInstanceIndexForMinionIndex(minionIndex);
+        },
+        getDropdownValueForMinionInstance: function(minionIndex, minionInstanceIndex) {
+            return minionIndex + ":" + minionInstanceIndex;
+        },
+        handleMinionChange: function (event) {
+            const value = event.target.value;
+            const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
+            this.minionInstanceIndices[minionIndex] = minionInstanceIndex;
+        },
+    },
     computed: {
         minionsToUse: function () {
             return this.actor.minions ?? [];
@@ -477,11 +488,12 @@ var minionTabulatedComponent = {
             if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
                 return 0;
             }
-            if (this.minionInstanceIndices[this.minionIndex] === - 1) {
+            const index = this.getMinionInstanceIndexForMinionIndex(this.minionIndex);
+            if (index === - 1) {
                 // Until consolidated view is support, consolidate is first minion
                 return 0;
             }
-            return this.minionInstanceIndices[this.minionIndex] || 0;
+            return index;
         },
         selectedMinion: function () {
             if (this.minionIndex < 0) {
