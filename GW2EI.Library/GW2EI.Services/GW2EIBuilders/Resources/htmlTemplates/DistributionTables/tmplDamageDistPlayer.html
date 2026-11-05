@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="minionsToUse > 0">
+        <div v-if="minionsToUse.length > 0">
             <ul class="nav nav-tabs">
                 <li>
                     <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{player.name}}</a>

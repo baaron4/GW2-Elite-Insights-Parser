@@ -16,7 +16,7 @@
                 :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="-1">
             </simplerotation-component>  
-            <simplerotation-component v-for="minionStruct in minionsToUse" 
+            <simplerotation-component v-for="minionStruct in minionsWithInstanceToUse" 
                 v-show="minionIndex === minionStruct.minionIndex"
                 :actorIndex="actorIndex"
                 :phaseindex="phaseindex" :target="target" :minionIndex="minionStruct.minionIndex">

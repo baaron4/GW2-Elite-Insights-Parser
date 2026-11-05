@@ -1,11 +1,11 @@
 <template>
     <div>     
-        <div v-if="minionsToUse.length > 0">
+        <div v-if="minionsWithInstanceToUse.length > 0">
             <ul class="nav nav-tabs">
                 <li>
                     <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{player.name}}</a>
                 </li>
-                <li v-for="minionStruct in minionsToUse">
+                <li v-for="minionStruct in minionsWithInstanceToUse">
                     <a class="nav-link" :class="{active: minionIndex === minionStruct.minionIndex}"
                         @click="minionIndex = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
                 </li>
@@ -24,7 +24,7 @@
             </ul>
         </div>
         
-        <div v-for="minionStruct in minionsToUse"
+        <div v-for="minionStruct in minionsWithInstanceToUse"
             v-show="minionStruct.minionIndex === minionIndex && player.minions[minionStruct.minionIndex].instances.length > 1">
             <div class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
                 <select :value="minionStruct.minionIndex + ':-1'" class="form-control form-control-sm w-auto minion-buff-selector" @change="handleMinionChange">

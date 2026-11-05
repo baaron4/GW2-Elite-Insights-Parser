@@ -452,50 +452,43 @@ var minionTabulatedComponent = {
             minionInstanceIndices: [],
         };
     },
-    minionsToUse: function () {
-        let result = [];
-        const actor = this.actor;
-        const minions = actor.minions;
-        for (let i = 0; i < minions.length; i++) {
-            result.push({
-                minion: minions[i],
-                minionIndex: i
-            });
-        }
-        return result;
-    },
-    minionsWithInstanceToUse: function () {
-        let result = [];
-        const actor = this.actor;
-        const minions = actor.minions;
-        for (let i = 0; i < minions.length; i++) {
-            if (actor.minions[i].instances) {
-                result.push({
-                    minion: minions[i],
-                    minionIndex: i
-                });
+    computed: {
+        minionsToUse: function () {
+            return this.actor.minions ?? [];
+        },
+        minionsWithInstanceToUse: function () {
+            let result = [];
+            const actor = this.actor;
+            const minions = actor.minions;
+            for (let i = 0; i < minions.length; i++) {
+                if (actor.minions[i].instances) {
+                    result.push({
+                        minion: minions[i],
+                        minionIndex: i
+                    });
+                }
             }
-        }
-        return result;
-    },
-    minionInstanceIndex: function () {
-        if (this.minionIndex < 0) {
-            return -1;
-        }
-        if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
-            return 0;
-        }
-        if (this.minionInstanceIndices[this.minionIndex] === - 1) {
-            // Until consolidated view is support, consolidate is first minion
-            return 0;
-        }
-        return this.minionInstanceIndices[this.minionIndex] || 0;
-    },
-    selectedMinion: function () {
-        if (this.minionIndex < 0) {
-            return null;
-        }
-        return this.player.minions[this.minionIndex] ?? null;
+            return result;
+        },
+        minionInstanceIndex: function () {
+            if (this.minionIndex < 0) {
+                return -1;
+            }
+            if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
+                return 0;
+            }
+            if (this.minionInstanceIndices[this.minionIndex] === - 1) {
+                // Until consolidated view is support, consolidate is first minion
+                return 0;
+            }
+            return this.minionInstanceIndices[this.minionIndex] || 0;
+        },
+        selectedMinion: function () {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.actor.minions[this.minionIndex] ?? null;
+        },
     },
 }
 
