@@ -1,16 +1,22 @@
 <template>
     <div>
         <minion-nav-tab-component :source="this" :withInstances="true"></minion-nav-tab-component>
-            <simplerotation-component
-                v-show="minionIndex === -1"
-                :actorIndex="actorIndex"
-                :phaseindex="phaseindex" :target="target" :minionIndex="-1">
-            </simplerotation-component>  
-            <simplerotation-component v-for="minionStruct in minionsWithInstanceToUse" 
-                v-show="minionIndex === minionStruct.minionIndex"
-                :actorIndex="actorIndex"
-                :phaseindex="phaseindex" :target="target" :minionIndex="minionStruct.minionIndex">
-            </simplerotation-component>  
+        <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
+
+        <simplerotation-component v-show="minionIndex === -1" :actorIndex="actorIndex"      
+            :phaseindex="phaseindex" :target="target" 
+            :minionIndex="-1" :minionInstanceIndex="-1">
+        </simplerotation-component>
+
+        <div v-for="minionStruct in minionsWithInstanceToUse" v-show="minionIndex === minionStruct.minionIndex">
+            <simplerotation-component v-show="minionInstanceIndex === -1" :actorIndex="actorIndex" :phaseindex="phaseindex"
+                :target="target" :minionIndex="minionStruct.minionIndex" :minionInstanceIndex="-1">
+            </simplerotation-component>
+            <simplerotation-component v-for="(minionInstance, _minionInstanceIndex) in minionStruct.minion.instances"
+                v-show="minionInstanceIndex === _minionInstanceIndex" :actorIndex="actorIndex" :phaseindex="phaseindex"
+                :target="target" :minionIndex="minionStruct.minionIndex" :minionInstanceIndex="_minionInstanceIndex">
+            </simplerotation-component>
+        </div>
     </div>
 </template>
 
@@ -19,6 +25,9 @@
         props: ["actorIndex", "phaseindex", "target"],
         mixins: [minionTabulatedComponent],
         template: `${template}`,
+        created: function() {
+            this.allowConsolidated = true;
+        },
         computed: {
            actor: function(){         
                 const data = this.target ? logData.targets : logData.players;
