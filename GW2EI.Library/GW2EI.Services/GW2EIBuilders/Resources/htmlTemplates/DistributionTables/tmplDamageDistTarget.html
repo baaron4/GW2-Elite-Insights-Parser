@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div v-if="minionsToUse.length > 0">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{target.name}}</a>
-                </li>
-                <li v-for="(minion, mindex) in minionsToUse">
-                    <a class="nav-link" :class="{active: minionIndex === mindex}"
-                        @click="minionIndex = mindex">{{minion.name}}</a>
-                </li>
-            </ul>
-        </div>
+        <minion-nav-tab-component :source="this" :withInstances="false"></minion-nav-tab-component>
         <damagedist-table-component :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex"
             :actorIndex="targetindex" :minionIndex="minionIndex" 
             :player="false" :isTarget="false"

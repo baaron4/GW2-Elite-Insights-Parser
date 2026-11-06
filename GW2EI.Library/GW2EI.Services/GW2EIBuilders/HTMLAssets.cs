@@ -160,6 +160,8 @@ public class HTMLAssets
             Properties.Resources.tmplTargetTabPerPlayerGraph,
             Properties.Resources.tmplTargetData,
             Properties.Resources.tmplMainView,
+            //     
+            Properties.Resources.tmplMinionNavTabs,
         };
         var res = new List<string>();
         foreach (string template in templates)

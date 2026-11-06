@@ -465,7 +465,16 @@ var minionTabulatedComponent = {
     },
     computed: {
         minionsToUse: function () {
-            return this.actor.minions ?? [];
+            let result = [];
+            const actor = this.actor;
+            const minions = actor.minions;
+            for (let i = 0; i < minions.length; i++) {
+                result.push({
+                    minion: minions[i],
+                    minionIndex: i
+                });
+            }
+            return result;
         },
         minionsWithInstanceToUse: function () {
             let result = [];

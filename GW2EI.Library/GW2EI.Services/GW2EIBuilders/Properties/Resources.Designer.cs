@@ -647,15 +647,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBarrierDistPlayer {
             get {
@@ -670,7 +670,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;p style=&quot;display: table-row;&quot;&gt;
         ///                {{ actor.name }} did {{ percentFormater3(barrierdist.contributedBarrier / barrierdist.totalBarrier) }} 
         ///                {{ isminion ? &quot;of its master&apos;s total&quot; : &apos;of their total&apos; }}
-        ///                {{ istarget ? &apos;Target&apos; : &apos;&apos; }} barrier ({{ numberFormater(barrierdist.contributedBarrier) }})
+        ///                {{ isTarget ? &apos;Target&apos; : &apos;&apos; }} barrier ({{ numberFormater(barrierdist.contributedBarrier) }})
         ///            &lt;/p&gt;
         ///        &lt;/div&gt;
         ///        &lt;table class=&quot;table table-sm table-str [rest of string was truncated]&quot;;.
@@ -684,15 +684,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBarrierTakenDistPlayer {
             get {
@@ -720,12 +720,15 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;
-        ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
-        ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; data-original-title=&quot;Buffs upkeep applied by each player to the selected player based on currently selected phase.&quot;
-        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase duratio [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;     
+        ///        &lt;div v-if=&quot;minionsWithInstanceToUse.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;minionStruct in minionsWithInstanceToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === minionStruct.minionIndex}&quot;
+        ///                        @click=&quot;minionIndex = [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffStatsPlayer {
             get {
@@ -830,11 +833,14 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
-        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
-        ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; data-original-title=&quot;Buffs volumes applied by each player to the selected player based on currently selected phase.&quot;
-        ///                       :class=&quot;{active: activeduration === 0}&quot;&gt;Phase durati [rest of string was truncated]&quot;;.
+        ///        &lt;div v-if=&quot;minionsWithInstanceToUse.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;minionStruct in minionsWithInstanceToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === minionStruct.minionIndex}&quot;
+        ///                        @click=&quot;minionIndex = mini [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffVolumeStatsPlayer {
             get {
@@ -965,7 +971,7 @@ namespace GW2EIBuilders.Properties {
         ///                    &lt;/a&gt;
         ///                &lt;/li&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{ [rest of string was truncated]&quot;;.
+        ///                    &lt;a class=&quot;nav-link&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorsStats {
             get {
@@ -981,7 +987,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Others&apos;)&quot; :buffarray=&quot;data.others&quot; /&gt;
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Conditions&apos;)&quot; :buffarray=&quot;data.conditions&quot; /&gt;
         ///            &lt;combat-replay-actor-buff v-if=&quot;isPresent(&apos;Shared&apos;)&quot; :buffarray=&quot;data.shared&quot; /&gt;
-        ///            &lt;combat-rep [rest of string was truncated]&quot;;.
+        ///            &lt;com [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorStats {
             get {
@@ -994,11 +1000,11 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;text-white&quot; @click=&quot;select&quot;&gt;
         ///        &lt;div class=&quot;actor-status&quot; :style=&quot;{&apos;background&apos;: getActorGradient(time, status), &apos;height&apos;: getActorHeight()}&quot;
         ///             :data-original-title=&quot;isTarget ? actor.name : (isMinion ? minionLabel : actor.name + &apos; - &apos; + actor.acc)&quot;&gt;
-        ///            &lt;p v-if=&quot;!isMinion || hasHealth&quot; class=&quot;mb-0 scale65 cr-status-percent text-left&quot;&gt;
+        ///            &lt;p class=&quot;mb-0 scale65 cr-status-percent text-left&quot;&gt;
         ///                {{ percentFormater2(getPercent(healths, time) / 100) }}
         ///            &lt;/p&gt;
         ///
-        ///            &lt;h6 class=&quot;text-center [rest of string was truncated]&quot;;.
+        ///            &lt;h6 class=&quot;text-center mb-0 ellipis align-se [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorStatus {
             get {
@@ -1187,15 +1193,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageDistPlayer {
             get {
@@ -1210,7 +1216,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;p style=&quot;display: table-row;&quot;&gt;
         ///                {{ actor.name }} did {{ percentFormater3(dmgdist.contributedDamage / dmgdist.totalDamage) }}
         ///                {{ isminion ? &quot;of its master&apos;s total&quot; : &quot;of their total&quot; }}
-        ///                {{ istarget ? &apos;Target&apos; :&apos;&apos; }} damage ({{ numberFormater(dmgdist.contributedDamage) }})
+        ///                {{ isTarget ? &apos;Target&apos; :&apos;&apos; }} damage ({{ numberFormater(dmgdist.contributedDamage) }})
         ///            &lt;/p&gt;
         ///            &lt;p v-if=&quot;hasBreakbarDamage &amp;&amp; dmgdist.contributedBreakbarDamage &gt; 0&quot; [rest of string was truncated]&quot;;.
         /// </summary>
@@ -1223,15 +1229,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;target.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{target.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{target.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in target.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageDistTarget {
             get {
@@ -1336,15 +1342,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageTakenDistPlayer {
             get {
@@ -1355,15 +1361,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;target.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{target.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{target.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in target.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDamageTakenDistTarget {
             get {
@@ -1645,15 +1651,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingDistPlayer {
             get {
@@ -1668,7 +1674,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;p style=&quot;display: table-row;&quot;&gt;
         ///                {{ actor.name }} did {{ percentFormater3(healingdist.contributedHealing  / healingdist.totalHealing) }}
         ///                {{ isminion ? &quot;of its master&apos;s total&quot; : &apos;of their total&apos; }}
-        ///                {{ istarget ? &apos;Target&apos; : &apos;&apos; }} healing ({{ numberFormater(healingdist.contributedHealing) }})
+        ///                {{ isTarget ? &apos;Target&apos; : &apos;&apos; }} healing ({{ numberFormater(healingdist.contributedHealing) }})
         ///            &lt;/p&gt;
         ///        &lt;/div&gt;
         ///        &lt;table class=&quot;table table-sm table-str [rest of string was truncated]&quot;;.
@@ -1742,15 +1748,15 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{player.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
-        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
-        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;(minion, mindex) in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === mindex}&quot;
+        ///                        @click=&quot;minionIndex = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///              [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingTakenDistPlayer {
             get {
@@ -1882,6 +1888,24 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplMechanicsTable {
             get {
                 return ResourceManager.GetString("tmplMechanicsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;source.minionIndex = -1&quot;&gt;{{source.actor.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;minionStruct in minionsToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: source.minionIndex === minionStruct.minionIndex}&quot;
+        ///                        @click=&quot;source.minionIndex = m [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplMinionNavTabs {
+            get {
+                return ResourceManager.GetString("tmplMinionNavTabs", resourceCulture);
             }
         }
         
@@ -2191,8 +2215,8 @@ namespace GW2EIBuilders.Properties {
         ///                                           :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/dps-graph-mode-selector-component&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
-        ///        &lt;!--&lt;div v-if=&quot;hasMinions&quot; class=&quot;d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85&quot;&gt;
-        ///        &lt;label cla [rest of string was truncated]&quot;;.
+        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;template v-for=&quot;(minion, minionInd [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
@@ -2203,19 +2227,18 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;h4 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h4&gt;
-        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;data&quot;&gt;&lt;/graph-component&gt;
+        ///        &lt;h4 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphName}}&lt;/h4&gt;
+        ///        &lt;graph-component :id=&quot;graphId&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
         ///
         ///&lt;script&gt;
         ///    Vue.component(&quot;player-minion-graph-tab-component&quot;, {
-        ///        props: [&quot;playerindex&quot;, &quot;phaseindex&quot;, &quot;miniongroupindex&quot;, &quot;minioninstanceindex&quot;, &quot;light&quot;],
+        ///        props: [&quot;playerindex&quot;, &quot;phaseindex&quot;, &quot;minionIndex&quot;, &quot;minionInstanceIndex&quot;, &quot;light&quot;],
         ///        template: `${template}`,
         ///        mixins: [graphComponent, encounterPhaseComponent],
         ///        data: function () {
-        ///            return {
-        ///              [rest of string was truncated]&quot;;.
+        ///            return  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabMinionGraph {
             get {
@@ -2266,14 +2289,14 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;minionsToUse.length &gt; 0&quot;&gt;
+        ///        &lt;div v-if=&quot;minionsWithInstanceToUse.length &gt; 0&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionMode === -1}&quot; @click=&quot;minionMode = -1&quot;&gt;{{actor.name}}&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === -1}&quot; @click=&quot;minionIndex = -1&quot;&gt;{{actor.name}}&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li v-for=&quot;minionStruct in minionsToUse&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionMode === minionStruct.minionIndex}&quot;
-        ///                        @click=&quot;minionMode = minionStruct.minionIndex&quot;&gt;{{minio [rest of string was truncated]&quot;;.
+        ///                &lt;li v-for=&quot;minionStruct in minionsWithInstanceToUse&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: minionIndex === minionStruct.minionIndex}&quot;
+        ///                        @click=&quot;minionIndex = minio [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSimpleRotationSelector {
             get {

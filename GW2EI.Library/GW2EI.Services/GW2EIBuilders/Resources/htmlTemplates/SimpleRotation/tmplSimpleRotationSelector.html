@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div v-if="minionsWithInstanceToUse.length > 0">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a class="nav-link" :class="{active: minionIndex === -1}" @click="minionIndex = -1">{{actor.name}}</a>
-                </li>
-                <li v-for="minionStruct in minionsWithInstanceToUse">
-                    <a class="nav-link" :class="{active: minionIndex === minionStruct.minionIndex}"
-                        @click="minionIndex = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
-                </li>
-            </ul>
-        </div>
+        <minion-nav-tab-component :source="this" :withInstances="true"></minion-nav-tab-component>
             <simplerotation-component
                 v-show="minionIndex === -1"
                 :actorIndex="actorIndex"
