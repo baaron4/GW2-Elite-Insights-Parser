@@ -79,7 +79,7 @@ internal class BuffsContainerDto
     public List<BuffData> TargetsDebuffUptimes;
     public List<BuffData> TargetsOtherBuffUptimes;
 
-    public List<List<MinionBuffsContainerDto>> MinionBuffs;
+    public List<List<MinionBuffsContainerDto?>> MinionBuffs;
 
     public BuffsContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
     {
@@ -158,15 +158,18 @@ internal class BuffsContainerDto
         MinionBuffs = new(log.Friendlies.Count);
         foreach (var friendly in log.Friendlies)
         {
-            var minionData = new List<MinionBuffsContainerDto>();
+            var minionData = new List<MinionBuffsContainerDto?>();
             IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
             foreach (Minions minionGroup in minionGroups)
             {
                 if (!minionGroup.IsWhiteListedForSomeStats)
                 {
-                    continue;
+                    minionData.Add(null);
+                } 
+                else
+                {
+                    minionData.Add(new MinionBuffsContainerDto(log, minionGroup, phase));
                 }
-                minionData.Add(new MinionBuffsContainerDto(log, minionGroup, phase));
             }
             MinionBuffs.Add(minionData);
         }

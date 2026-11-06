@@ -20,17 +20,19 @@ internal abstract class ActorChartDataDto
         for (int minionGroupIndex = 0; minionGroupIndex < minionGroups.Count; minionGroupIndex++)
         {
             Minions minionGroup = minionGroups[minionGroupIndex];
+            List<MinionChartDto> minionCharts;
             if (!minionGroup.IsWhiteListedForSomeStats)
             {
-                continue;
-            }
-
-            var minionCharts = new List<MinionChartDto>(minionGroup.MinionList.Count);
-            foreach (NPC minion in minionGroup.MinionList)
+                minionCharts = [];
+            } 
+            else
             {
-                minionCharts.Add(new MinionChartDto(log, phase, minion));
+                minionCharts = new List<MinionChartDto>(minionGroup.MinionList.Count);
+                foreach (NPC minion in minionGroup.MinionList)
+                {
+                    minionCharts.Add(new MinionChartDto(log, phase, minion));
+                }
             }
-
             MinionCharts.Add(minionCharts);
         }
     }
