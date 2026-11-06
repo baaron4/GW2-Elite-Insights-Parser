@@ -444,12 +444,17 @@ var minionTabulatedComponent = {
     data: function () {
         return {
             minionIndex: -1,
-            minionInstanceIndices: [],
+            minionInstanceIndices: {},
+            allowConsolidated: false, // For granular activation untill full support
         };
     },
     methods: {   
         getMinionInstanceIndexForMinionIndex: function(minionIndex) {
-            return this.minionInstanceIndices[minionIndex] || -1;
+            let index = this.minionInstanceIndices[minionIndex];
+            if (index === undefined) {
+                index = -1;
+            }
+            return index;
         },
         getSelectedDropdownValueForMinionIndex: function(minionIndex) {
             return minionIndex + ":" + this.getMinionInstanceIndexForMinionIndex(minionIndex);
@@ -460,7 +465,7 @@ var minionTabulatedComponent = {
         handleMinionChange: function (event) {
             const value = event.target.value;
             const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
-            this.minionInstanceIndices[minionIndex] = minionInstanceIndex;
+            this.$set(this.minionInstanceIndices, minionIndex, minionInstanceIndex);
         },
     },
     computed: {
@@ -491,14 +496,19 @@ var minionTabulatedComponent = {
             return result;
         },
         minionInstanceIndex: function () {
-            if (this.minionIndex < 0) {
+            const minionIndex = this.minionIndex;
+            if (minionIndex < 0) {
                 return -1;
             }
             if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
                 return 0;
             }
-            const index = this.getMinionInstanceIndexForMinionIndex(this.minionIndex);
-            if (index === - 1) {
+            // can't use getMinionInstanceIndexForMinionIndex, methods are not reactive
+            let index = this.minionInstanceIndices[minionIndex];
+            if (index === undefined) {
+                index = -1;
+            }
+            if (index === -1 && !this.allowConsolidated) {
                 // Until consolidated view is support, consolidate is first minion
                 return 0;
             }
