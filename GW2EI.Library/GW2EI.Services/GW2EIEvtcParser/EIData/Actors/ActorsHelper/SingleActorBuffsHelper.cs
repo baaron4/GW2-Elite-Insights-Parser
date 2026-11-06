@@ -76,7 +76,7 @@ partial class SingleActor
                     dict = [];
                     foreach (var pair in englobingDict)
                     {
-                        dict[pair.Key] = pair.Value.Where(x => x.Time >= creditedBy.FirstAware && x.Time <= creditedBy.LastAware).ToList();
+                        dict[pair.Key] = pair.Value.Where(x => creditedBy.InAwareTimes(x.Time)).ToList();
                     }
                 }
                 else
@@ -128,8 +128,15 @@ partial class SingleActor
         {
             curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
         }
+        foreach (var minions in GetMinions(log))
+        {
+            foreach (var minion in minions.MinionList)
+            {
+                curBuffRemoves.AddRange(log.CombatData.GetBuffRemoveAllDataBySrc(minion.AgentItem).Where(x => x.Time >= start && x.Time <= end));
+            }
+        }
         var nullDict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-        _buffRemoveAllByByIDAccelerator!.Set(start, end, null, nullDict);
+        _buffRemoveAllByByIDAccelerator.Set(start, end, null, nullDict);
         var dictByTo = curBuffRemoves.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in dictByTo)
         {
@@ -146,6 +153,14 @@ partial class SingleActor
         {
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem);
             PresentRemovedByBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
+            foreach (var minions in GetMinions(log))
+            {
+                foreach (var minion in minions.MinionList)
+                {
+                    allBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(minion.AgentItem);
+                    PresentRemovedByBuffIDs.UnionWith(allBuffRemoves.Where(x => InAwareTimes(x.Time)).Select(x => x.BuffID));
+                }
+            }
         }
         _buffRemoveAllByByIDAccelerator ??= new(AgentItem, log);
         var removedFromAgentItem = removedFrom?.AgentItem;
@@ -163,7 +178,7 @@ partial class SingleActor
                     dict = [];
                     foreach (var pair in englobingDict)
                     {
-                        dict[pair.Key] = pair.Value.Where(x => x.Time >= removedFrom.FirstAware && x.Time <= removedFrom.LastAware).ToList();
+                        dict[pair.Key] = pair.Value.Where(x => removedFrom.InAwareTimes(x.Time)).ToList();
                     }
                 }
                 else
@@ -258,7 +273,7 @@ partial class SingleActor
                     dict = [];
                     foreach (var pair in englobingDict)
                     {
-                        dict[pair.Key] = pair.Value.Where(x => x.Time >= removedBy.FirstAware && x.Time <= removedBy.LastAware).ToList();
+                        dict[pair.Key] = pair.Value.Where(x => removedBy.InAwareTimes(x.Time)).ToList();
                     }
                 }
                 else
