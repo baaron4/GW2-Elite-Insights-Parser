@@ -1,0 +1,59 @@
+<template>
+    <div>       
+        <div v-for="minionStruct in minionsWithInstanceToUse"
+            v-show="minionStruct.minionIndex === minionIndex && actor.minions[minionStruct.minionIndex].instances.length > 1">
+            <div class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
+                <select :value="getSelectedDropdownValueForMinionIndex(minionStruct.minionIndex)" class="form-control form-control-sm w-auto" @change="handleMinionChange">
+                    <option :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, -1)">Consolidated View</option>
+                    <option v-for="(minion, minionInstanceIndex) in actor.minions[minionStruct.minionIndex].instances"
+                        :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, minionInstanceIndex)">
+                        {{getMinionLabel(minionStruct.minionIndex, minionInstanceIndex, phaseIndex)}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("minion-instance-dropdown-component", {
+        props: ['source'],
+        template: `${template}`,
+        methods: {
+            getSelectedDropdownValueForMinionIndex: function(minionIndex) {
+                return this.source.getSelectedDropdownValueForMinionIndex(minionIndex);
+            },
+            getDropdownValueForMinionInstance: function(minionIndex, minionInstanceIndex) {
+                return this.source.getDropdownValueForMinionInstance(minionIndex, minionInstanceIndex);
+            },
+            handleMinionChange: function(event) {
+                return this.source.handleMinionChange(event);
+            },
+            getMinionLabel: function(minionIndex, minionInstanceIndex, phaseIndex) {
+                const phase = logData.phases[phaseIndex];
+                const minionInfo = this.actor.minions[minionIndex];
+                const minion = minionInfo.instances[minionInstanceIndex];
+                const isActive = Math.min(phase.end, minion.lastAware / 1000) - Math.max(phase.start, minion.firstAware / 1000) > 0;
+                return `
+                    ${minionInfo.name} # ${minionInstanceIndex + 1} (${
+                        isActive ? 'active' : 'inactive'
+                    })
+                `;
+            }
+        },
+        computed: {
+            phaseIndex: function() {
+                return this.source.phaseindex;
+            },
+            minionIndex: function() {
+                return this.source.minionIndex;
+            },
+            actor: function() {
+                return this.source.actor;
+            },
+            minionsWithInstanceToUse: function() {
+                return this.source.minionsWithInstanceToUse;
+            }
+        }
+    });
+</script>

@@ -162,6 +162,7 @@ public class HTMLAssets
             Properties.Resources.tmplMainView,
             //     
             Properties.Resources.tmplMinionNavTabs,
+            Properties.Resources.tmplMinionInstanceDropdown,
         };
         var res = new List<string>();
         foreach (string template in templates)
