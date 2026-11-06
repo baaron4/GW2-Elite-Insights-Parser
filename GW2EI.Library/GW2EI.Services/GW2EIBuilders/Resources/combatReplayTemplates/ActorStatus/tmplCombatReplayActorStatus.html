@@ -6,9 +6,9 @@
                 {{ percentFormater2(getPercent(healths, time) / 100) }}
             </p>
 
-            <h6 class="text-center mb-0 ellipis align-self-center">
-                <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
-                <img :src="actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16">
+            <h6 class="text-center mb-0 ellipis align-self-center d-flex align-items-center" style="height:100%">
+                <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16" style="margin: 2px 0;">
+                <img :src="isMinion ? minionInfo.icon : actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16" style="margin: 2px 0;">
                 {{isMinion ? minionLabel : actor.name}}
             </h6>
 
@@ -70,9 +70,11 @@
             },
             getActorHeight: function () {
                 if (this.isTarget) {
-                    return '35px';
+                    return '34px';
                 }
-
+                if (this.isMinion) {
+                    return '20px';
+                }
                 return '28px';
             }
         },

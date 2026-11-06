@@ -672,7 +672,7 @@ canvas {
     content: "";
     position: absolute;
     top: 0;
-    bottom: 19px;
+    bottom: 15px;
     left: 0;
     width: 2px;
     background-color: var(--spec-color);
@@ -680,7 +680,7 @@ canvas {
 }
 
 .cr-minion-branch-with-rotation::before {
-    bottom: 57px;
+    bottom: 53px;
 }
 
 .cr-minion-row .actor-status {
@@ -691,7 +691,7 @@ canvas {
     content: "";
     position: absolute;
     left: -15px;
-    top: 14px;
+    top: 10px;
     width: 15px;
     border-top: 2px solid var(--spec-color);
     pointer-events: none;
