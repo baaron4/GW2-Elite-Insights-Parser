@@ -2,18 +2,38 @@
     <div>
         <keep-alive>
             <dmgdist-target-component v-if="mode === 0" :key="'dist' + targetindex" :phaseindex="phaseindex"
-                :targetindex="targetindex"></dmgdist-target-component>
+                :targetindex="targetindex">
+            </dmgdist-target-component>
+        </keep-alive>
+        <keep-alive>
             <dmgtakendist-target-component v-if="mode === 1" :targetindex="targetindex" :key="'taken' + targetindex"
-                :phaseindex="phaseindex"></dmgtakendist-target-component>
-            <target-graph-tab-component v-for="(ph, id) in phases" v-if="mode === 2 && id === phaseindex" :key="id"
-                :targetindex="targetindex" :phaseindex="id" :light="light"></target-graph-tab-component>
-            <targetperplayer-graphs-tab-component v-for="(ph, id) in phases" v-if="mode === 5 && id === phaseindex" :key="id + 'perplayer'" 
-                :targetindex="targetindex" :phaseindex="id" :playerindex="playerindex" :light="light">
-            </targetperplayer-graphs-tab-component>
+                :phaseindex="phaseindex">
+            </dmgtakendist-target-component>
+        </keep-alive>
+        <div class="template-div">
+            <template v-for="(ph, id) in phases">
+                <keep-alive>
+                    <target-graph-tab-component v-if="mode === 2 && id === phaseindex" :key="id"
+                        :targetindex="targetindex" :phaseindex="id" :light="light">
+                    </target-graph-tab-component>
+                </keep-alive>
+                <keep-alive>
+                    <targetperplayer-graphs-tab-component in phases" v-if="mode === 5 && id === phaseindex"
+                        :key="id + 'perplayer'" :targetindex="targetindex" :phaseindex="id" :playerindex="playerindex"
+                        :light="light">
+                    </targetperplayer-graphs-tab-component>
+                </keep-alive>
+            </template>
+        </div>
+        <keep-alive>
             <simplerotation-selector-component v-if="mode === 3" :key="'rot' + targetindex" :actorindex="targetindex"
-                :phaseindex="phaseindex" :target="true"></simplerotation-selector-component>
+                :phaseindex="phaseindex" :target="true">
+            </simplerotation-selector-component>
+        </keep-alive>
+        <keep-alive>
             <target-buff-tab-component v-if="mode === 4" :key="'buffs' + targetindex" :targetindex="targetindex"
-                :phaseindex="phaseindex" :playerindex="playerindex"></target-buff-tab-component>
+                :phaseindex="phaseindex" :playerindex="playerindex">
+            </target-buff-tab-component>
         </keep-alive>
     </div>
 </template>

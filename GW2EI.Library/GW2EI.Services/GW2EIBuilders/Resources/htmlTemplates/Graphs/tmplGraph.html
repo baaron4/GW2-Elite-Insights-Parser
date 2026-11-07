@@ -21,77 +21,96 @@
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data', 'removerangecontrol'],
         template: `${template}`,
+        data: function () {
+            return {
+                properlyMountedOnce: false,
+            }
+        },
         computed: {
             queryID: function () {
                 return "#" + this.id;
             },
         },
-        mounted() {
-            const _this = this;
-            const layout = this.layout;    
-            var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout, plotlyConfig);
-            div.on('plotly_animated', function () {
-                $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
-                $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);
-                // to be safe
-                for (let yAxisIndex = 0; yAxisIndex < 8; yAxisIndex++) {
-                    let yAxisName = 'yaxis' + (yAxisIndex > 0 ? yAxisIndex : '');
-                    let yAxisDataName = 'y' + (yAxisIndex > 0 ? yAxisIndex : '');
-                    if (!_this.layout[yAxisName]) {
-                        continue;
-                    }
-                    if (_this.layout[yAxisName].autorange) {
-                        let minRange = Number.MAX_SAFE_INTEGER;
-                        let maxRange = Number.MIN_SAFE_INTEGER;
-                        for (let i = 0; i < _this.data.length; i++) {
-                            let curData = _this.data[i];
-                            if (yAxisIndex === 0) {
-                                if (curData.yaxis && curData.yaxis !== yAxisDataName) {
+        methods: {
+            attachEvents: function () {
+                const _this = this;
+                const layout = this.layout;
+                var div = document.querySelector(this.queryID);
+                if (!div) {
+                    return false;
+                }
+                Plotly.react(div, this.data, this.layout, plotlyConfig);
+                div.on('plotly_animated', function () {
+                    $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
+                    $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);
+                    // to be safe
+                    for (let yAxisIndex = 0; yAxisIndex < 8; yAxisIndex++) {
+                        let yAxisName = 'yaxis' + (yAxisIndex > 0 ? yAxisIndex : '');
+                        let yAxisDataName = 'y' + (yAxisIndex > 0 ? yAxisIndex : '');
+                        if (!_this.layout[yAxisName]) {
+                            continue;
+                        }
+                        if (_this.layout[yAxisName].autorange) {
+                            let minRange = Number.MAX_SAFE_INTEGER;
+                            let maxRange = Number.MIN_SAFE_INTEGER;
+                            for (let i = 0; i < _this.data.length; i++) {
+                                let curData = _this.data[i];
+                                if (yAxisIndex === 0) {
+                                    if (curData.yaxis && curData.yaxis !== yAxisDataName) {
+                                        continue;
+                                    }
+                                } else if (curData.yaxis !== yAxisDataName) {
                                     continue;
                                 }
-                            } else if (curData.yaxis !== yAxisDataName) {
-                                continue;
-                            }
-                            if (curData.y && curData.visible !== false && curData.visible !== "legendonly") {
-                                for (let j = 0; j < curData.y.length; j++) {
-                                    minRange = Math.min(minRange, curData.y[j]);
-                                    maxRange = Math.max(maxRange, curData.y[j]);
+                                if (curData.y && curData.visible !== false && curData.visible !== "legendonly") {
+                                    for (let j = 0; j < curData.y.length; j++) {
+                                        minRange = Math.min(minRange, curData.y[j]);
+                                        maxRange = Math.max(maxRange, curData.y[j]);
+                                    }
                                 }
                             }
+                            if (maxRange === Number.MIN_SAFE_INTEGER) {
+                                maxRange = 1;
+                                minRange = 0;
+                            }
+                            _this.layout[yAxisName].range[0] = 0;
+                            _this.layout[yAxisName].range[1] = maxRange * 1.06;
                         }
-                        if (maxRange === Number.MIN_SAFE_INTEGER) {
-                            maxRange = 1;
-                            minRange = 0;
-                        }
-                        _this.layout[yAxisName].range[0] = 0;
-                        _this.layout[yAxisName].range[1] = maxRange * 1.06;
                     }
-                }
-                Plotly.relayout(div, _this.layout);
-            });
-            div.on('plotly_hover', function () {
-                $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
-                $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);          
-            });
-            div.on('plotly_relayout', function (evt) {
-                div._relayoutCB && div._relayoutCB(evt);
-            });
-            $(this.queryID + 'xMin').on("input ", function () {
-                let value = Number.parseFloat($(this).val());
-                layout.xaxis.autorange = false;
-                layout.xaxis.range[0] = value;
-                layout.xaxis.range[1] = Math.max(Number.parseFloat($(_this.queryID + 'xMax').val()), value + 1e-6);
-                Plotly.relayout(div, _this.layout);
-            });
-            $(this.queryID + 'xMax').on("input ", function () {
-                let value = Number.parseFloat($(this).val());
-                layout.xaxis.autorange = false;
-                layout.xaxis.range[0] = Math.min(Number.parseFloat($(_this.queryID + 'xMin').val()), value - 1e-6);
-                layout.xaxis.range[1] = value;
-                Plotly.relayout(div, _this.layout);
-            });
-            layout.datarevision = new Date().getTime();
+                    Plotly.relayout(div, _this.layout);
+                });
+                div.on('plotly_hover', function () {
+                    $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
+                    $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);
+                });
+                div.on('plotly_relayout', function (evt) {
+                    layout._relayoutCB && layout._relayoutCB(evt);
+                });
+                $(this.queryID + 'xMin').on("input ", function () {
+                    let value = Number.parseFloat($(this).val());
+                    layout.xaxis.autorange = false;
+                    layout.xaxis.range[0] = value;
+                    layout.xaxis.range[1] = Math.max(Number.parseFloat($(_this.queryID + 'xMax').val()), value + 1e-6);
+                    Plotly.relayout(div, _this.layout);
+                });
+                $(this.queryID + 'xMax').on("input ", function () {
+                    let value = Number.parseFloat($(this).val());
+                    layout.xaxis.autorange = false;
+                    layout.xaxis.range[0] = Math.min(Number.parseFloat($(_this.queryID + 'xMin').val()), value - 1e-6);
+                    layout.xaxis.range[1] = value;
+                    Plotly.relayout(div, _this.layout);
+                });
+                layout.datarevision = new Date().getTime();
+                return true;
+            },
+        },
+        activated: function () {
+            if (!this.properlyMountedOnce) {
+                this.properlyMountedOnce = this.attachEvents();
+            }
+        },
+        mounted() {
+            this.properlyMountedOnce = this.attachEvents();
         },
         watch: {
             layout: {

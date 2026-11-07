@@ -81,9 +81,16 @@
         </div>
         <div>
             <keep-alive>
-                <main-view-component v-if="mode === 0" :key="'main-view'" :light="light"></main-view-component>
-                <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light"></combat-replay-ui-component>
-                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light"></healing-extension-view-component>            
+                <main-view-component v-if="mode === 0" :key="'main-view'" :light="light">
+                </main-view-component>   
+            </keep-alive>
+            <keep-alive>
+                <combat-replay-ui-component v-if="mode === 1" :mode="mode" :key="'combat-replay'" :light="light">
+                </combat-replay-ui-component>   
+            </keep-alive>
+            <keep-alive>
+                <healing-extension-view-component v-if="mode === 2" :mode="mode" :key="'healing-extension'" :light="light">
+                </healing-extension-view-component>            
             </keep-alive>
             <div v-show="mode === 2 && !healingExt" class="mt-3 mb-3">
                 <h2 class="text-center">

@@ -49,21 +49,43 @@
         </div>
         <keep-alive>
             <buff-stats-component v-if="tab < 4" :key="'buffs'" :type="tab" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></buff-stats-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </buff-stats-component>
+        </keep-alive>
+        <keep-alive>
             <gear-buff-table-component v-if="tab === 4" :key="'gearbuffs'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></gear-buff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </gear-buff-table-component>
+        </keep-alive>
+        <keep-alive>
             <nourishement-buff-table-component v-if="tab === 8" :key="'nourishments'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></nourishement-buff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </nourishement-buff-table-component>
+        </keep-alive>
+        <keep-alive>
             <enhancement-buff-table-component v-if="tab === 9" :key="'enhancements'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></enhancement-buff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </enhancement-buff-table-component>
+        </keep-alive>
+        <keep-alive>
             <otherconsumable-buff-table-component v-if="tab === 10" :key="'otherconsumables'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></otherconsumable-buff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </otherconsumable-buff-table-component>
+        </keep-alive>
+        <keep-alive>
             <conditions-table-component v-if="tab === 5" :key="'conditions'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></conditions-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </conditions-table-component>
+        </keep-alive>
+        <keep-alive>
             <debuff-table-component v-if="tab === 7" :key="'debuffs'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></debuff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </debuff-table-component>
+        </keep-alive>
+        <keep-alive>
             <personal-buff-table-component v-if="tab === 6" :key="'persbuffs'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></personal-buff-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </personal-buff-table-component>
         </keep-alive>
     </div>
 

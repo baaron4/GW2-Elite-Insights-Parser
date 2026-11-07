@@ -54,21 +54,6 @@
         created: function () {
             this.computeLayout();
         },
-        mounted: function () {
-            const div = document.getElementById(this.graphid);
-            const layout = this.layout;
-            const images = layout.images;
-            const _this = this;
-            div._relayoutCB = function(evt) {
-                const x0 = layout.xaxis.range[0];
-                const x1 = layout.xaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            }
-        },
         computed: {
             hGraph: function () {
                 return healingStatsExtension.playerHealingCharts[this.phaseindex][this.playerindex];
@@ -177,6 +162,17 @@
                 this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, false);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+                
+                const _this = this;
+                this.layout._relayoutCB = function(evt) {
+                    const x0 = this.xaxis.range[0];
+                    const x1 = this.xaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibily(this.images, x0, x1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
+                }
             },
             graphToUse: function () {
                 switch (this.graphhealingdata.healingmode) {

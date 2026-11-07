@@ -13,11 +13,18 @@
         </ul>
         <keep-alive>
             <outgoing-healing-stats-component v-if="tab === 0" :key="'healing'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activetargets="activetargets"></outgoing-healing-stats-component>
+                :playerindex="playerindex" :activetargets="activetargets">
+            </outgoing-healing-stats-component>
+        </keep-alive>
+        <keep-alive>
             <incoming-healing-stats-component v-if="tab === 1" :key="'incoming-healing'" :phaseindex="phaseindex"
-                :playerindex="playerindex"></incoming-healing-stats-component>
+                :playerindex="playerindex">
+            </incoming-healing-stats-component>
+        </keep-alive>
+        <keep-alive>
             <support-stats-component v-if="tab === 2" :key="'support-healing'" :phaseindex="phaseindex"
-                :playerindex="playerindex"></support-stats-component>
+                :playerindex="playerindex">
+            </support-stats-component>
         </keep-alive>
     </div>
 

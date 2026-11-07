@@ -16,11 +16,15 @@
                 </li>
             </ul>
         </div>
-        <keep-alive>
-            <hps-graph-component v-for="(phase, id) in phases" :key="'healgraph'+id" v-if="id === phaseindex"
-                :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
-            </hps-graph-component>
-        </keep-alive>
+        <div class="template-div">
+            <template v-for="(phase, id) in phases">
+                <keep-alive>
+                    <hps-graph-component  :key="'healgraph'+id" v-if="id === phaseindex"
+                        :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
+                    </hps-graph-component>
+                </keep-alive>
+            </template>
+        </div>
     </div>
 </template>
 

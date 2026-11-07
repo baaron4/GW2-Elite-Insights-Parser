@@ -28,11 +28,17 @@
             <dmgmodifier-table-component v-if="displaymode === 0" :key="'gear' + extraID" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
                 :id="'damage-modifier-item-table' + extraID" :playerindices="null" :modifiers="itemModifiers"
-                :modifiersdata="dmgModifiersItemStats" :sum="true"></dmgmodifier-table-component>
+                :modifiersdata="dmgModifiersItemStats" :sum="true">
+            </dmgmodifier-table-component>
+        </keep-alive>
+        <keep-alive>
             <dmgmodifier-table-component v-if="displaymode === 1" :key="'common' + extraID" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
                 :id="'damage-modifier-common-table' + extraID" :playerindices="null" :modifiers="commonModifiers"
-                :modifiersdata="dmgModifiersCommonStats" :sum="true"></dmgmodifier-table-component>
+                :modifiersdata="dmgModifiersCommonStats" :sum="true">
+            </dmgmodifier-table-component>
+        </keep-alive>
+        <keep-alive>
             <dmgmodifier-persstats-component v-if="displaymode === 2" :key="'pers' + extraID" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activetargets="activetargets" :mode="mode" :incoming="incoming">
             </dmgmodifier-persstats-component>

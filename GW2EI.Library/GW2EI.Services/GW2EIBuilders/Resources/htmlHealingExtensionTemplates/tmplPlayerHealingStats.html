@@ -1,13 +1,11 @@
 <template>
     <div>
-        <h3 v-for="player in players" :key="player.id" v-show="player.id === activeplayer"
-            class="text-center mt-2">
+        <h3 v-for="player in players" :key="player.id" v-show="player.id === activeplayer" class="text-center mt-2">
             <img :alt="player.profession" class="icon" :src="player.icon">
-            {{player.name}}       
-            <img v-if="playerIsRunningHealingExtension(player)"
-                            :src="UIIcons.GreenFlag" alt="Complete"
-                            class="icon" data-original-title="Complete Healing Data">
-        </h3> 
+            {{player.name}}
+            <img v-if="playerIsRunningHealingExtension(player)" :src="UIIcons.GreenFlag" alt="Complete" class="icon"
+                data-original-title="Complete Healing Data">
+        </h3>
         <ul class="nav nav-tabs" v-show="activeplayer > -1">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
@@ -31,7 +29,7 @@
             </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Graph</a>
-            </li>     
+            </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 8}" @click="tabmode = 8">
                     Boon Status
@@ -42,7 +40,7 @@
                     Simple
                     Rotation
                 </a>
-            </li>        
+            </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 4}" @click="tabmode = 4">
                     Advanced
@@ -55,11 +53,15 @@
                 </a>
             </li>
         </ul>
-        <keep-alive>
-            <player-healing-tab-component v-for="player in players" :key="'healing' + player.id"
-                v-if="player.id === activeplayer" :playerindex="player.id" :tabmode="tabmode"
-                :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-healing-tab-component>
-        </keep-alive>
+        <div>
+            <template v-for="player in players">
+                <keep-alive>
+                    <player-healing-tab-component :key="'healing' + player.id" v-if="player.id === activeplayer"
+                        :playerindex="player.id" :tabmode="tabmode" :phaseindex="phaseindex"
+                        :activetargets="activetargets" :light="light"></player-healing-tab-component>
+                </keep-alive>
+            </template>
+        </div>
         <div v-if="activeplayer === -1">
             <h3 class="text-center">No player selected</h3>
         </div>
@@ -104,11 +106,11 @@
                 tabmode: getDefaultPlayerHealingTabSubComponent()
             };
         },
-        computed: {   
+        computed: {
             players: function () {
                 return logData.players;
             },
-            hasBarrier: function() {
+            hasBarrier: function () {
                 return hasBarrierExtension();
             },
         }

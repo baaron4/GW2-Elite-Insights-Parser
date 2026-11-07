@@ -40,13 +40,25 @@
         </div>
         <keep-alive>
             <buff-volume-stats-component v-if="tab < 4" :key="'buffs-volume'" :type="tab" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></buff-volume-stats-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </buff-volume-stats-component>
+        </keep-alive>
+        <keep-alive>
             <gear-buff-volume-table-component v-if="tab === 4" :key="'gearbuffs-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></gear-buff-volume-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </gear-buff-volume-table-component>
+        </keep-alive>
+        <keep-alive>
             <conditions-volume-table-component v-if="tab === 5" :key="'conditions-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></conditions-volume-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </conditions-volume-table-component>
+        </keep-alive>
+        <keep-alive>
             <debuff-volume-table-component v-if="tab === 7" :key="'debuffs-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></debuff-volume-table-component>
+                :playerindex="playerindex" :activeduration="activeduration">
+            </debuff-volume-table-component>
+        </keep-alive>
+        <keep-alive>
             <personal-buff-volume-table-component v-if="tab === 6" :key="'persbuffs-volume'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></personal-buff-volume-table-component>
         </keep-alive>
