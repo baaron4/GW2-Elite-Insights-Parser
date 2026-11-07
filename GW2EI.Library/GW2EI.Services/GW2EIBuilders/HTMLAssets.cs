@@ -11,9 +11,9 @@ public class HTMLAssets
 
     internal readonly string EICSS;
 
-    private static readonly string[] separatorTemplate = ["<template>"];
+    private const string SeparatorTemplate = "<template>";
     private static readonly string[] separatorScript = ["<script>"];
-    private static readonly string[] separatorTemplateEnd = ["</template>"];
+    private const string SeparatorTemplateEnd = "</template>";
     private static readonly string[] separatorScriptENd = ["</script>"];
 
     public HTMLAssets()
@@ -78,7 +78,15 @@ public class HTMLAssets
         {
             throw new InvalidDataException("Not a template");
         }
-        string html = template.Split(separatorTemplate, StringSplitOptions.None)[1].Split(separatorTemplateEnd, StringSplitOptions.None)[0];
+        string html;
+        {
+            int startIndex = template.IndexOf(SeparatorTemplate, StringComparison.Ordinal);
+            int endIndex = template.LastIndexOf(SeparatorTemplateEnd, StringComparison.Ordinal);
+
+            int contentStartIndex = startIndex + SeparatorTemplate.Length;
+            int contentLength = endIndex - contentStartIndex;
+            html = template.Substring(contentStartIndex, contentLength);
+        }
         string js = template.Split(separatorScript, StringSplitOptions.None)[1].Split(separatorScriptENd, StringSplitOptions.None)[0];
         js = js.Replace("${template}", Regex.Replace(html, @"\t|\n|\r", ""));
         js = "{" + js + "}";

@@ -49,7 +49,9 @@ public class JsonRotation
         public double Quickness;
 
         /// <summary>	
-        /// If set, the skill was targeting the specified 
+        /// If set, the skill was targeting the specified.\n
+        /// If starts with "u", the following number is the <see cref="JsonActor.UniqueID"/>> of an actor in <see cref="JsonLog.Players"/> or <see cref="JsonLog.Targets"/>. \n
+        /// Otherwise name of the target will be in <see cref="JsonLog.AgentNameMap"/>.
         /// </summary>	
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Target = null;
