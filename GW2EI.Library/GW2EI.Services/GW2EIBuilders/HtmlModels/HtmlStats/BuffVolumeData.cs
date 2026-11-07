@@ -229,4 +229,26 @@ internal class BuffVolumeData
         IReadOnlyDictionary<long, BuffVolumeStatistics> buffs = target.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffVolumeData(buffs, log.StatisticsHelper.PresentBoons);
     }
+
+    public static BuffVolumeData BuildMinionBoonIncomingVolumeData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        IReadOnlyDictionary<long, BuffVolumeStatistics> buffVolumes = minion.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
+        return new BuffVolumeData(buffVolumes, log.StatisticsHelper.PresentBoons);
+    }
+
+    public static BuffVolumeData BuildMinionActiveBoonIncomingVolumeData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        IReadOnlyDictionary<long, BuffVolumeStatistics> buffVolumes = minion.GetActiveBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
+        return new BuffVolumeData(buffVolumes, log.StatisticsHelper.PresentBoons);
+    }
+
+    public static List<BuffVolumeData> BuildMinionBoonVolumeDictionaryData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        return BuildBuffVolumeDictionaryData(log, log.StatisticsHelper.PresentBoons, phase, minion);
+    }
+
+    public static List<BuffVolumeData> BuildMinionActiveBoonVolumeDictionaryData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        return BuildActiveBuffVolumeDictionaryData(log, log.StatisticsHelper.PresentBoons, phase, minion);
+    }
 }

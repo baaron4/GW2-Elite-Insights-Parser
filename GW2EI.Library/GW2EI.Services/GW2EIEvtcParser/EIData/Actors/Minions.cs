@@ -30,7 +30,12 @@ public class Minions : Actor
         _minionList.Add(minion);
     }
 
-    public bool IsUniquePerTimeFrame => RangerHelper.IsJuvenilePet(ReferenceAgentItem) ||
+    public string GetIcon()
+    {
+        return _minionList.FirstOrDefault()?.GetIcon() ?? string.Empty;
+    }
+
+    public bool IsWhiteListedForSomeStats => RangerHelper.IsJuvenilePet(ReferenceAgentItem) ||
             MechanistHelper.IsJadeMech(ReferenceAgentItem) ||
             NecromancerHelper.IsUniqueUndeadMinion(ReferenceAgentItem) ||
             RitualistHelper.IsSpiritMinion(ReferenceAgentItem);

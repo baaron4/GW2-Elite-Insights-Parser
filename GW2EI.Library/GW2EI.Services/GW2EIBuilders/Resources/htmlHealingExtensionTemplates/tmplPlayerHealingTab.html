@@ -20,7 +20,7 @@
                 </keep-alive>
                 <keep-alive>
                     <advancedrotation-component v-if="tabmode === 4 && id === phaseindex"
-                        :key="id + 'healingadvrot' + playerindex" :actorindex="playerindex" :phaseindex="id"
+                        :key="id + 'healingadvrot' + playerindex" :actorIndex="playerindex" :phaseindex="id"
                         :target="false" :light="light">
                     </advancedrotation-component>
                 </keep-alive>
@@ -33,7 +33,7 @@
         </keep-alive>
         <keep-alive>
             <simplerotation-selector-component v-if="tabmode === 3" :key="'healingrot' + playerindex"
-                :actorindex="playerindex" :phaseindex="phaseindex" :target="false">
+                :actorIndex="playerindex" :phaseindex="phaseindex" :target="false">
             </simplerotation-selector-component>
         </keep-alive>
         <keep-alive>

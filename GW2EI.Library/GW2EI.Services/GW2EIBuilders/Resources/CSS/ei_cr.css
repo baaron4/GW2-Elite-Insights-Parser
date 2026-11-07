@@ -655,3 +655,44 @@ canvas {
     text-align: center;
 }
 
+.actor-data.cr-player-with-minions {
+    border-bottom: none !important;
+}
+
+.cr-minion-branch {
+    position: relative;
+    margin: 1px 4px 5px 16px;
+    padding: 3px 0 3px 12px;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--spec-color) 15%, transparent), transparent 70% );
+}
+
+.cr-minion-branch::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 15px;
+    left: 0;
+    width: 2px;
+    background-color: var(--spec-color);
+    pointer-events: none;
+}
+
+.cr-minion-branch-with-rotation::before {
+    bottom: 53px;
+}
+
+.cr-minion-row .actor-status {
+    position: relative;
+}
+
+.cr-minion-row .actor-status::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 10px;
+    width: 15px;
+    border-top: 2px solid var(--spec-color);
+    pointer-events: none;
+}

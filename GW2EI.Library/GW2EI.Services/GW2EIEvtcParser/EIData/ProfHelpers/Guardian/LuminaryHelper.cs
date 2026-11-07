@@ -144,7 +144,7 @@ internal static class LuminaryHelper
                 {
                     if (weaponSwap.Time - radiantForgeWeaponCast.Time < ServerDelayConstant)
                     {
-                        weaponSwap.FlagAsSpecialBundleSwap();
+                        weaponSwap.FlagAsSpecialSwap();
                     }
                     else
                     {

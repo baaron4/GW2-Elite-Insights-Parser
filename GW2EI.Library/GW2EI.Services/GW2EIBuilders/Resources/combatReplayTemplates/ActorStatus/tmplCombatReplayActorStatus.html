@@ -1,15 +1,15 @@
 ﻿<template>
     <div class="text-white" @click="select">
         <div class="actor-status" :style="{'background': getActorGradient(time, status), 'height': getActorHeight()}"
-             :data-original-title="isTarget ? actor.name : actor.name + ' - ' + actor.acc">
+             :data-original-title="isTarget ? actor.name : (isMinion ? minionLabel : actor.name + ' - ' + actor.acc)">
             <p class="mb-0 scale65 cr-status-percent text-left">
                 {{ percentFormater2(getPercent(healths, time) / 100) }}
             </p>
 
-            <h6 class="text-center mb-0 ellipis align-self-center">
-                <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
-                <img :src="actor.icon" :alt="actor.profession" height="16" width="16">
-                {{actor.name}}
+            <h6 class="text-center mb-0 ellipis align-self-center d-flex align-items-center" style="height:100%">
+                <img v-for="(marker, _) in activeMarkers()" :src="marker.imageUrl" height="16" width="16" style="margin: 2px 0;">
+                <img :src="isMinion ? minionInfo.icon : actor.icon" :alt="isMinion ? minionInfo.name : actor.profession" height="16" width="16" style="margin: 2px 0;">
+                {{isMinion ? minionLabel : actor.name}}
             </h6>
 
             <p class="mb-0 scale65 ml-auto cr-status-percent text-right" :class="{'invisible-text': !hasBarrier}">
@@ -27,8 +27,8 @@
 
 <script>
     Vue.component("combat-replay-actor-status-component", {
-        mixins: [encounterPhaseComponent, numberComponent, tooltipSweepComponent],
-        props: ["isTarget", "actorIndex", "time"],
+        mixins: [encounterPhaseComponent, crActorComponent, numberComponent, tooltipSweepComponent],
+        props: ["time"],
         template: `${template}`,
         methods: {
             activeMarkers: function () {
@@ -70,9 +70,11 @@
             },
             getActorHeight: function () {
                 if (this.isTarget) {
-                    return '35px';
+                    return '34px';
                 }
-
+                if (this.isMinion) {
+                    return '20px';
+                }
                 return '28px';
             }
         },
@@ -82,20 +84,17 @@
                 var icon = crPData.getIcon(this.time);
                 return icon === deadIcon ? 0 : icon === downAllyIcon || icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
-            actor: function () {
-                if (this.isTarget) {
-                    return logData.targets[this.actorIndex];
-                }
-
-                return logData.players[this.actorIndex];
-            },
-            actorPhaseTargetIndex: function() {
+            actorPhaseTargetIndex: function () {
                 if (this.isTarget) {
                     return this.encounterPhase.targets.indexOf(this.actorIndex);
                 }
                 return -1;
             },
             healths: function () {
+                if (this.isMinion) {
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.actorIndex];
+                    return playerChart.minionCharts[this.minionIndex][this.minionInstanceIndex].healthStates || null;
+                }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {
                         return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].healthStates;
@@ -106,6 +105,10 @@
                 return graphData.phases[this.encounterPhase.id].players[this.actorIndex].healthStates;
             },
             barriers: function () {
+                if (this.isMinion) {
+                    const playerChart = graphData.phases[this.encounterPhase.id].players[this.actorIndex];
+                    return playerChart.minionCharts[this.minionIndex][this.minionInstanceIndex].barrierStates || null;
+                }
                 if (this.isTarget) {
                     if (this.actorPhaseTargetIndex > -1) {
                         return graphData.phases[this.encounterPhase.id].targets[this.actorPhaseTargetIndex].barrierStates;
@@ -129,12 +132,12 @@
                 return !!this.healths && this.healths.length > 0;
             },
             hasBarrier: function () {
-                return this.barriers && this.barriers.length > 0 ;
+                return this.barriers && this.barriers.length > 0;
             },
             hasBreakbar: function () {
                 return !!this.breakbar && this.breakbar.length > 0;
             },
-            
+
         }
     });
 </script>

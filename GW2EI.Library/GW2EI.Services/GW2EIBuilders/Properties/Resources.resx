@@ -370,6 +370,9 @@
   <data name="tmplPlayerTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplPlayerTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplPlayerTabMinionGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\Graphs\tmplPlayerTabMinionGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplPlayerTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\Graphs\tmplPlayerTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -457,6 +460,9 @@
   <data name="tmplPlayerHealingTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\Graphs\tmplPlayerHealingTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplPlayerHealingTabMinionGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\Graphs\tmplPlayerHealingTabMinionGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplBarrierDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplBarrierDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -465,5 +471,11 @@
   </data>
   <data name="tmplBarrierTakenDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplBarrierTakenDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplMinionNavTabs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\Utils\tmplMinionNavTabs.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplMinionInstanceDropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\Utils\tmplMinionInstanceDropdown.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

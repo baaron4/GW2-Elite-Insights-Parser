@@ -73,16 +73,17 @@ function findSkill(isBuff, id) {
 }
 
 function findTargetName(target, unknownIfNull = true) {
-    if (logData.npcMap[target]) {
-        return logData.npcMap[target];
+    let name = logData.npcMap[target];
+    if (name) {
+        return name;
     }
     if (target.startsWith("u")) {
         const id = Number.parseInt(target.slice(1));
         const actor = logData.players.find((actor) => actor.uniqueID == id) || logData.targets.find((actor) => actor.uniqueID == id);
-        return actor ? actor.name : unknownIfNull ? "unknown" : null;
-    } else {
-        return unknownIfNull ? "unknown" : null;
+        name = actor ? actor.name : null;
     }
+    logData.npcMap[target] = name;
+    return unknownIfNull && !name ? "unknown" : name;
 }
 
 function getTargetCacheID(activetargets) {

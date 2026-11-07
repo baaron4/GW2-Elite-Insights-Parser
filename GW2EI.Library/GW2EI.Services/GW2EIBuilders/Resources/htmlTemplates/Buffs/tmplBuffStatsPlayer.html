@@ -1,5 +1,6 @@
 <template>
-    <div>    
+    <div>     
+        <minion-nav-tab-component :source="this" :withInstances="true"></minion-nav-tab-component>
         <div :key="'activedurationplayer'" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
@@ -8,13 +9,14 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="activeduration = 1" data-original-title="Buffs upkeep applied by each player to the selected player based on currently selected phase. Removed dead and disconnected times."
-                        :class="{active: activeduration === 1 }">Phase active duration</a>
+                       :class="{active: activeduration === 1 }">Phase active duration</a>
                 </li>
             </ul>
-        </div>
+        </div>       
+        <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
         <div class="mt-1 mb-1">
             <buff-table-component :condition="false" :generation="true" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
-                :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-table-component>
+                                  :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-table-component>
         </div>
     </div>
 </template>
@@ -22,7 +24,7 @@
 <script>
     Vue.component("buff-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -35,8 +37,8 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
-            boonData: function () {
-                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
+            boonData: function() {
+                const id = this.getCacheID();
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
@@ -44,25 +46,48 @@
                 const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;
                 const players = getActivePlayersForPhase(this.encounterPhase);
+                let dictionaries = activeduration ? 
+                    this.buffsStatContainer.boonActiveDictionaries[this.playerindex] 
+                    : 
+                    this.buffsStatContainer.boonDictionaries[this.playerindex];
+                if (this.selectedMinion) {
+                    const minionInstanceIndex = this.minionInstanceIndex;
+                    dictionaries = activeduration ? 
+                        this.selectedMinionBuffs.boonActiveDictionaries[minionInstanceIndex] 
+                        : 
+                        this.selectedMinionBuffs.boonDictionaries[minionInstanceIndex];
+                }
                 for (let i = 0; i < players.length; i++) {
                     if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                         continue;
                     }
                     res.push({
                         player: players[i],
-                        data: activeduration ? this.buffsStatContainer.boonActiveDictionaries[this.playerindex][i] : this.buffsStatContainer.boonDictionaries[this.playerindex][i]
+                        data: dictionaries[i]
                     });
                 }
                 this.cacheBoon.set(id, res);
                 return res;
             },
-            boonSums: function () {
-                const id = this.phaseindex + '-' + this.activeduration;
+            boonSums: function() {
+                const id = this.getSumCacheID();
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
-                const activeduration = this.activeduration;
                 const res = [];
+                const activeduration = this.activeduration;
+                if (this.selectedMinion) {
+                    const minionInstanceIndex = this.minionInstanceIndex;
+                    const minionData = activeduration ? this.selectedMinionBuffs.boonActiveStats[minionInstanceIndex] : this.selectedMinionBuffs.boonStats[minionInstanceIndex];
+                    res.push({
+                        icon: this.selectedMinion.icon,
+                        name: this.selectedMinion.name,
+                        avg: minionData.avg,
+                        data: minionData.data
+                    });
+                    this.cacheBoonSums.set(id, res);
+                    return res;
+                }
                 const playerData = activeduration ? this.buffsStatContainer.boonActiveStats[this.playerindex] : this.buffsStatContainer.boonStats[this.playerindex];
                 const activeTimes = this.phase.playerActiveTimes;
                 if (activeduration && activeTimes[this.playerindex] < 1e-6) {
@@ -83,6 +108,6 @@
                 this.cacheBoonSums.set(id, res);
                 return res;
             },
-        }
+        },
     });
 </script>

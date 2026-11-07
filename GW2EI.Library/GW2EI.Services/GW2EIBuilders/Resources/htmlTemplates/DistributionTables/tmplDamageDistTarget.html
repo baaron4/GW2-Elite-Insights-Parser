@@ -1,19 +1,9 @@
 <template>
     <div>
-        <div v-if="target.minions.length > 0">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{target.name}}</a>
-                </li>
-                <li v-for="(minion, mindex) in target.minions">
-                    <a class="nav-link" :class="{active: distmode === mindex}"
-                        @click="distmode = mindex">{{minion.name}}</a>
-                </li>
-            </ul>
-        </div>
+        <minion-nav-tab-component :source="this" :withInstances="false"></minion-nav-tab-component>
         <damagedist-table-component :dmgdist="dmgdist" :tableid="'dmgdist-target-' + targetindex"
-            :actorindex="targetindex" :minionindex="distmode" 
-            :player="false" :istarget="false"
+            :actorIndex="targetindex" :minionIndex="minionIndex" 
+            :player="false" :isTarget="false"
             :phaseindex="phaseindex"></damagedist-table-component>
     </div>
 </template>
@@ -23,21 +13,20 @@
         props: ['targetindex',
             'phaseindex'
         ],
+        mixins: [minionTabulatedComponent],
         template: `${template}`,
-        data: function () {
-            return {
-                distmode: -1
-            };
-        },
         computed: {
+            actor: function() {
+                return this.target;
+            },
             target: function () {
                 return logData.targets[this.targetindex];
             },
             dmgdist: function () {
-                if (this.distmode === -1) {
+                if (this.minionIndex === -1) {
                     return this.target.details.dmgDistributions[this.phaseindex];
                 }
-                return this.target.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+                return this.target.minions[this.minionIndex].details.dmgDistributions[this.phaseindex];
             }
         },
     });
