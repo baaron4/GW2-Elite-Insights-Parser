@@ -59,7 +59,7 @@ function compileTemplates() {
         props: ["targetindex", "phaseindex", 'light', 'playerindex'],
         mixins: [encounterPhaseComponent],
         template : `      
-        <div>            
+        <div class="template-div">            
             <template v-for="(player, pId) in players">
                 <keep-alive>  
                     <targetperplayer-graph-tab-component  v-if="pId === playerindex"

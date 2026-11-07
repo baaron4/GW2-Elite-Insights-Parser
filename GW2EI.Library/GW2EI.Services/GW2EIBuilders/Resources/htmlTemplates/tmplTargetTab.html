@@ -10,7 +10,7 @@
                 :phaseindex="phaseindex">
             </dmgtakendist-target-component>
         </keep-alive>
-        <div>
+        <div class="template-div">
             <template v-for="(ph, id) in phases">
                 <keep-alive>
                     <target-graph-tab-component v-if="mode === 2 && id === phaseindex" :key="id"

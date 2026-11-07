@@ -6,7 +6,7 @@
                     @click="activeSeverityTab = navBar.index">{{navBar.name}}</a>
             </li>
         </ul>
-        <div>
+        <div class="template-div">
             <template v-for="table in allTables">
                 <keep-alive>
                     <mechanics-table-component :key="'mechanics' + table.phaseIndex + '-' + table.severity"

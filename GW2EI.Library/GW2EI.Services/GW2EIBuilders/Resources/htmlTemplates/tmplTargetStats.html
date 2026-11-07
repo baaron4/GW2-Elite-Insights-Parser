@@ -41,7 +41,7 @@
                 <a class="nav-link" :class="{active: mode === 4}" @click="mode = 4">Buff Status</a>
             </li>
         </ul>
-        <div>
+        <div class="template-div">
             <template v-for="target in targets">
                 <keep-alive>
                     <target-tab-component :key="target.id" v-if="simplephase.focus === target.id"

@@ -310,3 +310,7 @@ body.theme-slate {
 .left-0 {
     left: 0;
 }
+
+.template-div {
+    width: 100%;
+}
