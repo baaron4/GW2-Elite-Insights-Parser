@@ -830,23 +830,6 @@ internal static class ProfHelper
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
-
-        switch (minion.ID)
-        {
-            case (int)MinionID.JadeMech:
-                AddOffensiveBoonsDecorations(minion, master, log, replay);
-                var signetForceStatus = minion.GetBuffStatus(log, ForceSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 60, 15);
-                var signetConductingStatus = minion.GetBuffStatus(log, SuperconductingSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, 120, 15);
-                break;
-        }
-        if (RangerHelper.IsJuvenilePet(minion.AgentItem))
-        {
-            AddOffensiveBoonsDecorations(minion, master, log, replay);
-            var sicEmStatus = minion.GetBuffStatus(log, SicEmBuff).Where(x => x.Value > 0);
-            replay.Decorations.AddRotatedOverheadIcons(sicEmStatus, minion, SkillImages.SicEm, 90, 15);
-        }
         if (MesmerHelper.IsPhantasm(minion.AgentItem))
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
@@ -855,7 +838,7 @@ internal static class ProfHelper
             var chronoPhantasmaResummon = minion.GetBuffStatus(log, ChronophantasmaResummonBuff).Where(x => x.Value > 0);
             replay.Decorations.AddRotatedOverheadIconsWithValueAsText(chronoPhantasmaResummon, minion, TraitImages.Chronophantasma, 120, 15);
         }
-        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem) || RitualistHelper.IsSpiritMinion(minion.AgentItem))
+        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem))
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
         }
