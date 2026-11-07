@@ -1,19 +1,27 @@
 <template>
     <div>
-        <dps-graph-mode-selector-component :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
+        <minion-nav-tab-component :source="this" :withInstances="true"></minion-nav-tab-component>
+        <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
+        <dps-graph-mode-selector-component v-if="minionIndex === -1" :data="graphdata" :phaseduration="this.phase.end - this.phase.start"
                                            :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
         </dps-graph-mode-selector-component>
-        <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
-        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
-        <template v-for="(minion, minionIndex) in (player.minions || [])">
-            <player-minion-graph-tab-component v-for="(minionInstance, minionInstanceIndex) in minion.instances"
-                                               :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + minionIndex + '-' + minionInstanceIndex"
-                                               :playerindex="playerindex"
-                                               :phaseindex="phaseindex"
-                                               :minionIndex="minionIndex"
-                                               :minionInstanceIndex="minionInstanceIndex"
-                                               :light="light">
-            </player-minion-graph-tab-component>
+        <h3 v-if="minionIndex === -1" class="text-center mt-1 mb-1">{{graphname}}</h3>
+        <keep-alive>
+            <graph-component v-if="minionIndex === -1" :id="graphid" :layout="layout" :data="computeData"></graph-component>
+        </keep-alive>
+        <template v-for="minionStruct in minionsWithInstanceToUse">
+            <template v-for="(minionInstance, _minionInstanceIndex) in minionStruct.minion.instances">
+                <keep-alive>
+                    <player-minion-graph-tab-component v-if="minionIndex === minionStruct.minionIndex && (minionInstanceIndex === -1 || minionInstanceIndex === _minionInstanceIndex)"
+                                                       :key="'player-minion-graph-' + playerindex + '-' + phaseindex + '-' + minionStruct.minionIndex + '-' + _minionInstanceIndex"
+                                                       :playerindex="playerindex"
+                                                       :phaseindex="phaseindex"
+                                                       :minionIndex="minionStruct.minionIndex"
+                                                       :minionInstanceIndex="_minionInstanceIndex"
+                                                       :light="light">
+                    </player-minion-graph-tab-component>
+                </keep-alive>
+            </template>
         </template>
         <rotation-legend-component></rotation-legend-component>
     </div>
@@ -23,7 +31,7 @@
     Vue.component("player-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
-        mixins: [graphComponent, damageGraphComponent, encounterPhaseComponent],
+        mixins: [graphComponent, damageGraphComponent, encounterPhaseComponent, minionTabulatedComponent],
         data: function() {
             return {
                 playerOffset: 0,
@@ -79,6 +87,9 @@
             }
         },
         computed: {
+            actor: function () {
+                return this.player;
+            },
             playerGraphData: function() {
                 return this.graph.players[this.playerindex];
             },
