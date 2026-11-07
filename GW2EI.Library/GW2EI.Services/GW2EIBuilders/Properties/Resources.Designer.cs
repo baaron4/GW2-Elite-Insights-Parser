@@ -1692,7 +1692,8 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;/div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;healing-actors&quot;&gt;
         ///            &lt;div class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
-        ///                &lt;player-target-component :players=&quot;reactiveLogdata.players&quot; :phaseindex=&quot;activePhase&quot;&gt;&lt;/player-targe [rest of string was truncated]&quot;;.
+        ///                &lt;player-target-component :players=&quot;reactiveLogdata.players&quot;
+        ///                    :phaseindex=&quot;active [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingExtensionView {
             get {
@@ -1859,15 +1860,17 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div&gt;          
+        ///    &lt;div&gt;
         ///        &lt;ul v-if=&quot;showNavBar&quot; class=&quot;nav nav-tabs&quot;&gt;
         ///            &lt;li v-for=&quot;navBar in navBars&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: activeSeverityTab === navBar.index}&quot; @click=&quot;activeSeverityTab = navBar.index&quot;&gt;{{navBar.name}}&lt;/a&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: activeSeverityTab === navBar.index}&quot;
+        ///                    @click=&quot;activeSeverityTab = navBar.index&quot;&gt;{{navBar.name}}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;keep-alive&gt;
-        ///            &lt;mechanics-table-component v-for=&quot;table in allTables&quot; 
-        ///                :key=&quot;&apos;mechanics&apos; + table.phaseIndex + &apos;-&apos; + table.severity&quot; v-if=&quot;table.phaseIndex === p [rest of string was truncated]&quot;;.
+        ///        &lt;div&gt;
+        ///            &lt;template v-for=&quot;table in allTables&quot;&gt;
+        ///                &lt;keep-alive&gt;
+        ///                    &lt;mechanics-table-component :key=&quot;&apos;mechanics&apos; + table.phaseIndex + &apos;- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplMechanicsStats {
             get {
@@ -2080,15 +2083,14 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-show=&quot;player.id === activeplayer&quot;
-        ///            class=&quot;text-center mt-2&quot;&gt;
+        ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-show=&quot;player.id === activeplayer&quot; class=&quot;text-center mt-2&quot;&gt;
         ///            &lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;
-        ///            {{player.name}}       
-        ///            &lt;img v-if=&quot;playerIsRunningHealingExtension(player)&quot;
-        ///                            :src=&quot;UIIcons.GreenFlag&quot; alt=&quot;Complete&quot;
-        ///                            class=&quot;icon&quot; data-original-title=&quot;Complete Healing Data&quot;&gt;
-        ///        &lt;/h3&gt; 
-        ///        &lt; [rest of string was truncated]&quot;;.
+        ///            {{player.name}}
+        ///            &lt;img v-if=&quot;playerIsRunningHealingExtension(player)&quot; :src=&quot;UIIcons.GreenFlag&quot; alt=&quot;Complete&quot; class=&quot;icon&quot;
+        ///                data-original-title=&quot;Complete Healing Data&quot;&gt;
+        ///        &lt;/h3&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
+        ///          [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingStats {
             get {
@@ -2100,11 +2102,14 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;keep-alive&gt;
-        ///            &lt;healingdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;healingdist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
-        ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/healingdist-player-component&gt;
-        ///            &lt;healingtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;healingtaken&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
-        ///                :phaseindex=&quot;phaseindex&quot;&gt;&lt;/healingtakendist-player-component&gt;
-        ///            &lt;player-healin [rest of string was truncated]&quot;;.
+        ///            &lt;healingdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;healingdist&apos; + playerindex&quot;
+        ///                :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;
+        ///            &lt;/healingdist-player-component&gt;
+        ///        &lt;/keep-alive&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;healingtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;healingtaken&apos; + playerindex&quot;
+        ///                :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingTab {
             get {
@@ -2115,19 +2120,38 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;minion-nav-tab-component :source=&quot;this&quot; :withInstances=&quot;true&quot;&gt;&lt;/minion-nav-tab-component&gt;
+        ///        &lt;minion-instance-dropdown-component :source=&quot;this&quot;&gt;&lt;/minion-instance-dropdown-component&gt;
         ///        &lt;hps-graph-mode-selector-component :data=&quot;graphhealingdata&quot;
         ///            :phaseduration=&quot;this.phase.end - this.phase.start&quot; :phasehassubphases=&quot;!!this.phase.subPhases&quot; :column=&quot;false&quot;&gt;
         ///        &lt;/hps-graph-mode-selector-component&gt;
-        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
-        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
-        ///        &lt;rotation-legend-component&gt;&lt;/rotation-legend-component&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///        /// [rest of string was truncated]&quot;;.
+        ///        &lt;h3 v-if=&quot;minionIndex === -1&quot; class=&quot;text-c [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingTabGraph {
             get {
                 return ResourceManager.GetString("tmplPlayerHealingTabGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;h4 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphName}}&lt;/h4&gt;
+        ///        &lt;graph-component :id=&quot;graphId&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;player-healing-minion-graph-tab-component&quot;, {
+        ///        props: [&quot;playerindex&quot;, &quot;phaseindex&quot;, &quot;minionIndex&quot;, &quot;minionInstanceIndex&quot;, &quot;light&quot;],
+        ///        template: `${template}`,
+        ///        mixins: [graphComponent, encounterPhaseComponent],
+        ///        data: function () {
+        ///            [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerHealingTabMinionGraph {
+            get {
+                return ResourceManager.GetString("tmplPlayerHealingTabMinionGraph", resourceCulture);
             }
         }
         
@@ -2170,17 +2194,13 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column align-items-center justify-content-center&quot;&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;Players&apos; Rotation&lt;/h3&gt;
-        ///        &lt;keep-alive&gt;
-        ///            &lt;player-rotations-component v-for=&apos;(phase, index) in phases&apos; :key=&quot;&apos;rotations&apos; + index&quot;
-        ///                v-if=&quot;index === phaseindex&quot; :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot; :playerindex=&quot;playerindex&quot;&gt;
-        ///                &lt;/player-rotations-component&gt;
-        ///        &lt;/keep-alive&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///
-        ///    Vue.c [rest of string was truncated]&quot;;.
+        ///        &lt;div&gt;
+        ///            &lt;template v-for=&apos;(phase, index) in phases&apos;&gt;
+        ///                &lt;keep-alive&gt;
+        ///                    &lt;player-rotations-component :key=&quot;&apos;rotations&apos; + index&quot; v-if=&quot;index === phaseindex&quot;
+        ///                        :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///                    &lt;/player-rotations-component&gt;
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayersRotationTab {
             get {
@@ -2213,10 +2233,13 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;keep-alive&gt;
         ///            &lt;dmgdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;dist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
-        ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/dmgdist-player-component&gt;
-        ///            &lt;dmgtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;taken&apos; + playerindex&quot; 
-        ///                :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtakendist-player-component&gt;
-        ///            &lt;player-graph-tab-component v-for=&quot;(ph, id) [rest of string was truncated]&quot;;.
+        ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;
+        ///            &lt;/dmgdist-player-component&gt;
+        ///        &lt;/keep-alive&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;dmgtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;taken&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
+        ///                :phaseindex=&quot;phaseindex&quot;&gt;
+        ///            &lt;/dmgtakendist-pl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTab {
             get {
@@ -2227,12 +2250,11 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;dps-graph-mode-selector-component :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
+        ///        &lt;minion-nav-tab-component :source=&quot;this&quot; :withInstances=&quot;true&quot;&gt;&lt;/minion-nav-tab-component&gt;
+        ///        &lt;minion-instance-dropdown-component :source=&quot;this&quot;&gt;&lt;/minion-instance-dropdown-component&gt;
+        ///        &lt;dps-graph-mode-selector-component v-if=&quot;minionIndex === -1&quot; :data=&quot;graphdata&quot; :phaseduration=&quot;this.phase.end - this.phase.start&quot;
         ///                                           :phasehassubphases=&quot;!!this.phase.subPhases&quot; :ignorebreakbar=&quot;false&quot; :column=&quot;false&quot;&gt;
-        ///        &lt;/dps-graph-mode-selector-component&gt;
-        ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;{{graphname}}&lt;/h3&gt;
-        ///        &lt;graph-component :id=&quot;graphid&quot; :layout=&quot;layout&quot; :data=&quot;computeData&quot;&gt;&lt;/graph-component&gt;
-        ///        &lt;template v-for=&quot;(minion, minionInd [rest of string was truncated]&quot;;.
+        ///        &lt;/dps-graph-mod [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTabGraph {
             get {
@@ -2306,13 +2328,14 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;minion-nav-tab-component :source=&quot;this&quot; :withInstances=&quot;true&quot;&gt;&lt;/minion-nav-tab-component&gt;
-        ///            &lt;simplerotation-component
-        ///                v-show=&quot;minionIndex === -1&quot;
-        ///                :actorIndex=&quot;actorIndex&quot;
-        ///                :phaseindex=&quot;phaseindex&quot; :target=&quot;target&quot; :minionIndex=&quot;-1&quot;&gt;
-        ///            &lt;/simplerotation-component&gt;  
-        ///            &lt;simplerotation-component v-for=&quot;minionStruct in minionsWithInstanceToUse&quot; 
-        ///                v-show=&quot;minionIndex === minionStruct. [rest of string was truncated]&quot;;.
+        ///        &lt;minion-instance-dropdown-component :source=&quot;this&quot;&gt;&lt;/minion-instance-dropdown-component&gt;
+        ///
+        ///        &lt;simplerotation-component v-show=&quot;minionIndex === -1&quot; :actorIndex=&quot;actorIndex&quot;      
+        ///            :phaseindex=&quot;phaseindex&quot; :target=&quot;target&quot; 
+        ///            :minionIndex=&quot;-1&quot; :minionInstanceIndex=&quot;-1&quot;&gt;
+        ///        &lt;/simplerotation-component&gt;
+        ///
+        ///        &lt;div v-for=&quot;minionStruct in minion [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSimpleRotationSelector {
             get {
@@ -2374,8 +2397,8 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///        &lt;keep-alive&gt;
-        ///            &lt;buff-stats-target-component v-if=&quot;tab == 0&quot; :key=&quot;&apos;target-buff-tables&apos;&quot;:targetindex=&quot;targetindex&quot;
-        ///            :phaseinde [rest of string was truncated]&quot;;.
+        ///            &lt;buff-stats-target-component v-if=&quot;tab == 0&quot; :key=&quot;&apos;target-buff-tables&apos;&quot; :targetindex=&quot;targetindex&quot;
+        ///                :phas [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetBuffTab {
             get {
@@ -2460,10 +2483,14 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;keep-alive&gt;
         ///            &lt;dmgdist-target-component v-if=&quot;mode === 0&quot; :key=&quot;&apos;dist&apos; + targetindex&quot; :phaseindex=&quot;phaseindex&quot;
-        ///                :targetindex=&quot;targetindex&quot;&gt;&lt;/dmgdist-target-component&gt;
+        ///                :targetindex=&quot;targetindex&quot;&gt;
+        ///            &lt;/dmgdist-target-component&gt;
+        ///        &lt;/keep-alive&gt;
+        ///        &lt;keep-alive&gt;
         ///            &lt;dmgtakendist-target-component v-if=&quot;mode === 1&quot; :targetindex=&quot;targetindex&quot; :key=&quot;&apos;taken&apos; + targetindex&quot;
-        ///                :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtakendist-target-component&gt;
-        ///            &lt;target-graph-tab-component v-for=&quot;(ph, id) in phases&quot; v-if=&quot;mode === 2 &amp;&amp; id == [rest of string was truncated]&quot;;.
+        ///                :phaseindex=&quot;phaseindex&quot;&gt;
+        ///            &lt;/dmgtakendist-target-component&gt;
+        ///        &lt;/keep-aliv [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetTab {
             get {

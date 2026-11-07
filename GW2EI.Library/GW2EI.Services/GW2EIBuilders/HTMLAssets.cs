@@ -225,6 +225,7 @@ public class HTMLAssets
             Properties.Resources.tmplPlayerHealingStats,
             Properties.Resources.tmplPlayerHealingTab,
             Properties.Resources.tmplPlayerHealingTabGraph,
+            Properties.Resources.tmplPlayerHealingTabMinionGraph,
             Properties.Resources.tmplBarrierDistPlayer,
             Properties.Resources.tmplBarrierDistTable,
             Properties.Resources.tmplBarrierTakenDistPlayer
