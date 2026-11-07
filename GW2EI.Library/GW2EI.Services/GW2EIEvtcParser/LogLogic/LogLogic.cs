@@ -126,8 +126,8 @@ public abstract class LogLogic
                 ),
                 new MechanicGroup(
                     [
-                        new PlayerMissedBuffApplyEvent(SkillIDs.Quickness, Mech_PlayerMissedQuickness, new(Symbols.DiamondWide, Colors.Orange), new("Miss.Qck", "Triggered when an expected quickness provider has not given the player from their subgroup quickness at the same time as to others. False negatives are possible due to Lively Lute.", "Maybe Missed Quickness")),
-                        new PlayerMissedBuffApplyEvent(SkillIDs.Alacrity, Mech_PlayerMissedAlacrity, new(Symbols.DiamondWide, Colors.Purple), new("Miss.Alac", "Triggered when an expected alacrity provider has not given the player from their alacrity at the same time as to others", "Maybe Missed Alacrity")),
+                        new PlayerMissedBuffApplyEvent(SkillIDs.Quickness, Mech_PlayerMissedQuickness, new(Symbols.Pentagon, Colors.Orange), new("Miss.Qck", "Triggered when an expected quickness provider has not given the player from their subgroup quickness at the same time as to others. False negatives are possible due to Lively Lute.", "Maybe Missed Quickness")),
+                        new PlayerMissedBuffApplyEvent(SkillIDs.Alacrity, Mech_PlayerMissedAlacrity, new(Symbols.Pentagon, Colors.Purple), new("Miss.Alac", "Triggered when an expected alacrity provider has not given the player from their alacrity at the same time as to others", "Maybe Missed Alacrity")),
                     ]
                 ),
             ])
