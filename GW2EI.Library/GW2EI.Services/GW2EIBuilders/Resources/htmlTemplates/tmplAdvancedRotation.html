@@ -256,23 +256,6 @@
         created: function () {
             this.computeLayout();
         },
-        mounted: function () {
-            var div = document.getElementById(this.graphid);
-            var _this = this;          
-            div._relayoutCB = function(evt) {
-                var layout = _this.layout;
-                var images = layout.images;
-                var x0 = layout.xaxis.range[0];
-                var x1 = layout.xaxis.range[1];
-                var y0 = layout.yaxis.range[0];
-                var y1 = layout.yaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibilyInQuad(images, x0, x1, y0, y1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            }
-        },
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
@@ -287,8 +270,8 @@
                 return this.actor.details.rotation[this.phaseindex];
             }
         },
-        methods: {       
-            computeLayout: function() {
+        methods: {
+            computeLayout: function () {
                 var backUpXAxis = null;
                 if (this.layout) {
                     backUpXAxis = this.layout.xaxis;
@@ -301,6 +284,19 @@
                     this.layout.xaxis = backUpXAxis;
                 }
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+                const _this = this;
+                this.layout._relayoutCB = function (evt) {
+                    const images = this.images;
+                    const x0 = this.xaxis.range[0];
+                    const x1 = this.xaxis.range[1];
+                    const y0 = this.yaxis.range[0];
+                    const y1 = this.yaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibilyInQuad(images, x0, x1, y0, y1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
+                }
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();
