@@ -4,7 +4,7 @@
             v-show="minionStruct.minionIndex === minionIndex && actor.minions[minionStruct.minionIndex].instances.length > 1">
             <div class="d-flex flex-row justify-content-center align-items-center mt-1 mb-1 scale85">
                 <select :value="getSelectedDropdownValueForMinionIndex(minionStruct.minionIndex)" class="form-control form-control-sm w-auto" @change="handleMinionChange">
-                    <option :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, -1)">Consolidated View</option>
+                    <option v-if='source.allowConsolidated' :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, -1)">Consolidated View</option>
                     <option v-for="(minion, minionInstanceIndex) in actor.minions[minionStruct.minionIndex].instances"
                         :value="getDropdownValueForMinionInstance(minionStruct.minionIndex, minionInstanceIndex)">
                         {{getMinionLabel(minionStruct.minionIndex, minionInstanceIndex, phaseIndex)}}

@@ -454,6 +454,10 @@ var minionTabulatedComponent = {
             if (index === undefined) {
                 index = -1;
             }
+            if (index === -1 && !this.allowConsolidated) {
+                // Until consolidated view is support, consolidate is first minion
+                return 0;
+            }
             return index;
         },
         getSelectedDropdownValueForMinionIndex: function(minionIndex) {
@@ -500,10 +504,10 @@ var minionTabulatedComponent = {
             if (minionIndex < 0) {
                 return -1;
             }
+            // can't use getMinionInstanceIndexForMinionIndex, methods are not reactive
             if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
                 return 0;
             }
-            // can't use getMinionInstanceIndexForMinionIndex, methods are not reactive
             let index = this.minionInstanceIndices[minionIndex];
             if (index === undefined) {
                 index = -1;
