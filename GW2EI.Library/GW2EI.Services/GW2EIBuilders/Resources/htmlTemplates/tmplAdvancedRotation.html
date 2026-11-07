@@ -286,13 +286,12 @@
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
                 const _this = this;
                 this.layout._relayoutCB = function (evt) {
-                    const images = this.images;
                     const x0 = this.xaxis.range[0];
                     const x1 = this.xaxis.range[1];
                     const y0 = this.yaxis.range[0];
                     const y1 = this.yaxis.range[1];
                     //console.log("re-layout " + x0 + " " + x1);
-                    if (_this.updateVisibilyInQuad(images, x0, x1, y0, y1)) {
+                    if (_this.updateVisibilyInQuad(this.images, x0, x1, y0, y1)) {
                         this.datarevision = new Date().getTime();
                         //console.log("re-drawing");
                     }

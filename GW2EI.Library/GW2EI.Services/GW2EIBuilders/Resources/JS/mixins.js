@@ -726,10 +726,10 @@ var targetTabGraphComponent = {
             
             const _this = this;
             this.layout._relayoutCB = function (evt) {
-                var x0 = this.xaxis.range[0];
-                var x1 = this.xaxis.range[1];
+                const x0 = this.xaxis.range[0];
+                const x1 = this.xaxis.range[1];
                 //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
+                if (_this.updateVisibily(this.images, x0, x1)) {
                     this.datarevision = new Date().getTime();
                     //console.log("re-drawing");
                 }
