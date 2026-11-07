@@ -157,21 +157,6 @@
         created: function () {
             this.computeLayout();
         },
-        mounted: function () {
-            var div = document.getElementById(this.graphid);
-            var _this = this;  
-            div._relayoutCB = function(evt) {
-                var layout = _this.layout;
-                var images = layout.images;
-                var x0 = layout.xaxis.range[0];
-                var x1 = layout.xaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            }
-        },
         methods: {
             stopClickEvent: function (event) {
                 event.stopPropagation();
@@ -210,6 +195,16 @@
                         height: 62,
                         bgcolor: player.id === this.playerindex ? (this.light ? 'rgba(120, 240, 0, 0.5)' : 'rgba(50, 120, 0, 0.5)') : 'rgba(0,0,0,0)'
                     });
+                }
+                const _this = this;  
+                this.layout._relayoutCB = function(evt) {
+                    const x0 = this.xaxis.range[0];
+                    const x1 = this.xaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibily(this.images, x0, x1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
                 }
             },
         },

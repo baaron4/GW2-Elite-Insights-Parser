@@ -796,21 +796,6 @@ var targetTabGraphComponent = {
     created: function () {
         this.computeLayout();
     },
-    mounted: function () {
-        var div = document.getElementById(this.graphid);
-        var layout = this.layout;
-        var images = layout.images;
-        var _this = this;
-        div._relayoutCB = function (evt) {
-            var x0 = layout.xaxis.range[0];
-            var x1 = layout.xaxis.range[1];
-            //console.log("re-layout " + x0 + " " + x1);
-            if (_this.updateVisibily(images, x0, x1)) {
-                layout.datarevision = new Date().getTime();
-                //console.log("re-drawing");
-            }
-        }
-    },
     computed: {
         healthStates: function () {
             return this.graph.targets[this.phaseTargetIndex].healthStates;
@@ -870,7 +855,7 @@ var targetTabGraphComponent = {
     },
     methods: {
         computeLayout() {
-            var images = [];
+            const images = [];
             this.data = [];
             this.targetOffset += computeRotationData(this.rotationData, images, this.data, this.phase, this.target, 1);
             var oldOffset = this.targetOffset;
@@ -893,6 +878,17 @@ var targetTabGraphComponent = {
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, true);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
             this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            
+            const _this = this;
+            this.layout._relayoutCB = function (evt) {
+                const x0 = this.xaxis.range[0];
+                const x1 = this.xaxis.range[1];
+                //console.log("re-layout " + x0 + " " + x1);
+                if (_this.updateVisibily(this.images, x0, x1)) {
+                    this.datarevision = new Date().getTime();
+                    //console.log("re-drawing");
+                }
+            }
         },
         computeDPSData: function () {
             const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);

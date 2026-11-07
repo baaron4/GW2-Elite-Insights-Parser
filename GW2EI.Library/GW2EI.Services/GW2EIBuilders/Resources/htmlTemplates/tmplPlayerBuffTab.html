@@ -10,9 +10,13 @@
         </ul>
         <keep-alive>
             <buff-stats-player-component v-if="tab == 0" :key="'player-buff-tables'":phaseindex="phaseindex"
-                :playerindex="playerindex"></buff-stats-player-component>
+                :playerindex="playerindex">
+            </buff-stats-player-component>
+        </keep-alive>
+        <keep-alive>
             <buff-volume-stats-player-component v-if="tab == 1" :key="'player-buff-volume-tables'" :phaseindex="phaseindex"
-                :playerindex="playerindex"></buff-volume-stats-player-component>
+                :playerindex="playerindex">
+            </buff-volume-stats-player-component>
         </keep-alive>
     </div>
 

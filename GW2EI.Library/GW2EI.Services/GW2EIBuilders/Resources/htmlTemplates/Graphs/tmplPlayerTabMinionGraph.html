@@ -44,21 +44,6 @@
                 }
             }
         },
-        mounted: function () {
-            var div = document.getElementById(this.graphId);
-            var layout = this.layout;
-            var images = layout.images;
-            var _this = this;         
-            div._relayoutCB = function(evt) {
-                var x0 = layout.xaxis.range[0];
-                var x1 = layout.xaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            }
-        },
         created: function () {
             this.computeLayout();
         },
@@ -124,6 +109,17 @@
                 this.layout = getActorGraphLayout(images, color, hasBuffs, true);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+
+                const _this = this;         
+                this.layout._relayoutCB = function(evt) {
+                    const x0 = this.xaxis.range[0];
+                    const x1 = this.xaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibily(this.images, x0, x1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
+                }
             },
             computeDPSRelatedData: function () {
                 var cacheID = this.encounterPhase.id + '-' + getDPSGraphCacheID(0, 0, 0, [], this.phaseindex, null);

@@ -9,10 +9,14 @@
             </li>
         </ul>
         <keep-alive>
-            <buff-stats-target-component v-if="tab == 0" :key="'target-buff-tables'":targetindex="targetindex"
-            :phaseindex="phaseindex" :playerindex="playerindex"></buff-stats-target-component>
-            <buff-volume-stats-target-component v-if="tab == 1" :key="'target-buff-volume-tables'" :targetindex="targetindex"
-            :phaseindex="phaseindex" :playerindex="playerindex"></buff-volume-stats-target-component>
+            <buff-stats-target-component v-if="tab == 0" :key="'target-buff-tables'" :targetindex="targetindex"
+                :phaseindex="phaseindex" :playerindex="playerindex">
+            </buff-stats-target-component>
+        </keep-alive>
+        <keep-alive>
+            <buff-volume-stats-target-component v-if="tab == 1" :key="'target-buff-volume-tables'"
+                :targetindex="targetindex" :phaseindex="phaseindex" :playerindex="playerindex">
+            </buff-volume-stats-target-component>
         </keep-alive>
     </div>
 

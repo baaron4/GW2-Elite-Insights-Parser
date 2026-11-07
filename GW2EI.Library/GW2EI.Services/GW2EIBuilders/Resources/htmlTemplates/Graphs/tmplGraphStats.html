@@ -16,11 +16,15 @@
                 </li>
             </ul>
         </div>
-        <keep-alive>
-            <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseindex"
-                :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
-            </dps-graph-component>
-        </keep-alive>
+        <div>
+            <template>
+                <keep-alive v-for="(phase, id) in phases">
+                    <dps-graph-component :key="id" v-if="id === phaseindex"
+                        :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
+                    </dps-graph-component>
+                </keep-alive>
+            </template>
+        </div>
     </div>
 </template>
 

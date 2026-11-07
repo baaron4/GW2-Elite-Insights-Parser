@@ -71,21 +71,6 @@
         created: function () {
             this.computeLayout();
         },
-        mounted: function () {
-            var div = document.getElementById(this.graphid);
-            var layout = this.layout;
-            var images = layout.images;
-            var _this = this;         
-            div._relayoutCB = function(evt) {
-                var x0 = layout.xaxis.range[0];
-                var x1 = layout.xaxis.range[1];
-                //console.log("re-layout " + x0 + " " + x1);
-                if (_this.updateVisibily(images, x0, x1)) {
-                    layout.datarevision = new Date().getTime();
-                    //console.log("re-drawing");
-                }
-            }
-        },
         computed: {
             actor: function () {
                 return this.player;
@@ -157,14 +142,12 @@
         methods: {
             computeLayout() {
                 const color = this.light ? '#495057' : '#cccccc';
-                var images = [];
+                const images = [];
                 this.data = [];
-
                 this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
-                var oldOffset = this.playerOffset;
+                const oldOffset = this.playerOffset;
                 this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-                var hasBuffs = oldOffset !== this.playerOffset;
-
+                const hasBuffs = oldOffset !== this.playerOffset;
                 this.graphOffset = this.playerOffset;
                 this.playerOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
                 this.playerOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
@@ -225,6 +208,17 @@
                 this.layout = getActorGraphLayout(images, color, hasBuffs, false);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
                 this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+
+                const _this = this;
+                this.layout._relayoutCB = function(evt) {
+                    var x0 = this.xaxis.range[0];
+                    var x1 = this.xaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibily(this.images, x0, x1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
+                }
             },
             computeDPSData: function () {
                 const cacheID =  getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
