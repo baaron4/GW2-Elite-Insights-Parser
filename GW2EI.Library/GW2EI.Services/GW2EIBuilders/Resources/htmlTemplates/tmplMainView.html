@@ -42,26 +42,45 @@
         <keep-alive>
             <stat-tables-component v-if="tab === 0" :key="'stat-tables'"
                 :phaseindex="activePhase" :playerindex="activePlayer" 
-                :activetargets="activePhaseTargets"></stat-tables-component>
+                :activetargets="activePhaseTargets">
+            </stat-tables-component>
+        </keep-alive>
+        <keep-alive>
             <buff-tab-component v-if="tab === 1" :key="'buff-tables'"
-                :phaseindex="activePhase" :playerindex="activePlayer"></buff-tab-component>
+                :phaseindex="activePhase" :playerindex="activePlayer">
+            </buff-tab-component>
+        </keep-alive>
+        <keep-alive>
             <dmgmodifier-stats-container-component v-if="tab === 2" :key="'modifier'"
                 :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePhaseTargets">
             </dmgmodifier-stats-container-component>
+        </keep-alive>
+        <keep-alive>
             <mechanics-stats-component v-if="tab === 3" :key="'mechanics'"
-                :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component>
+                :phaseindex="activePhase" :playerindex="activePlayer">
+            </mechanics-stats-component>
+        </keep-alive>
+        <keep-alive>
             <graph-stats-component v-if="tab === 4" :key="'graph'"
                 :activetargets="activePhaseTargets" :phaseindex="activePhase" :playerindex="activePlayer"
-                :light="light"></graph-stats-component>
+                :light="light">
+            </graph-stats-component>
+        </keep-alive>
+        <keep-alive>
             <player-rotations-tab-component v-if="tab === 7" :key="'rotations'" :phaseindex="activePhase" 
             :light="light" :playerindex="activePlayer">
             </player-rotations-tab-component>
+        </keep-alive>
+        <keep-alive>
             <target-stats-component v-if="tab === 5" :key="'targets'" :playerindex="activePlayer"
                 :simplephase="reactiveLogdata.phases[activePhase]" :phaseindex="activePhase" :light="light">
             </target-stats-component>
+        </keep-alive>
+        <keep-alive>
             <player-stats-component v-if="tab === 6" :key="'players'"
                 :activeplayer="activePlayer" :phaseindex="activePhase" :activetargets="activePhaseTargets"
-                :light="light"></player-stats-component>
+                :light="light">
+            </player-stats-component>
         </keep-alive>
     </div>
 </template>

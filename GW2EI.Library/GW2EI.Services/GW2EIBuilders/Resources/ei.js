@@ -60,12 +60,14 @@ function compileTemplates() {
         mixins: [encounterPhaseComponent],
         template : `      
         <div>            
-            <keep-alive>  
-                <targetperplayer-graph-tab-component v-for="(player, pId) in players" v-if="pId === playerindex"
-                :key="phaseindex + 'perplayer' + pId" :targetindex="targetindex" :phaseindex="phaseindex" :light="light"
-                :playerindex="playerindex">
-                </targetperplayer-graph-tab-component>           
-            <keep-alive>
+            <template v-for="(player, pId) in players">
+                <keep-alive>  
+                    <targetperplayer-graph-tab-component  v-if="pId === playerindex"
+                    :key="phaseindex + 'perplayer' + pId" :targetindex="targetindex" :phaseindex="phaseindex" :light="light"
+                    :playerindex="playerindex">
+                    </targetperplayer-graph-tab-component>           
+                </keep-alive>
+            </template>
         </div>
         `,
         computed: {

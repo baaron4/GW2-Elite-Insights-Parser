@@ -19,17 +19,28 @@
         </ul>
         <keep-alive>
             <damage-stats-component v-if="tab === 0" :key="'damage'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activetargets="activetargets"></damage-stats-component>
+                :playerindex="playerindex" :activetargets="activetargets">
+            </damage-stats-component>
+        </keep-alive>
+        <keep-alive>
             <gameplay-stats-component v-if="tab === 1" :key="'gameplay'"
                 :phaseindex="phaseindex" :playerindex="playerindex">
             </gameplay-stats-component>
+        </keep-alive>
+        <keep-alive>
             <offensive-stats-component v-if="tab === 4" :key="'offensive'" 
                 :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets">
             </offensive-stats-component>
+        </keep-alive>
+        <keep-alive>
             <defense-stats-component v-if="tab === 2" :key="'defense'" :phaseindex="phaseindex"
-                :playerindex="playerindex"></defense-stats-component>
+                :playerindex="playerindex">
+            </defense-stats-component>
+        </keep-alive>
+        <keep-alive>
             <support-stats-component v-if="tab === 3" :key="'support'" :phaseindex="phaseindex"
-                :playerindex="playerindex"></support-stats-component>
+                :playerindex="playerindex">
+            </support-stats-component>
         </keep-alive>
     </div>
 

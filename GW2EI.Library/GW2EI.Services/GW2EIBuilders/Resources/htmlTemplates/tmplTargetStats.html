@@ -41,11 +41,15 @@
                 <a class="nav-link" :class="{active: mode === 4}" @click="mode = 4">Buff Status</a>
             </li>
         </ul>
-        <keep-alive>
-            <target-tab-component v-for="target in targets" :key="target.id" v-if="simplephase.focus === target.id"
-                :targetindex="target.id" :phaseindex="phaseindex" :playerindex="playerindex" :mode="mode"
-                :light="light"></target-tab-component>
-        </keep-alive>
+        <div>
+            <template v-for="target in targets">
+                <keep-alive>
+                    <target-tab-component :key="target.id" v-if="simplephase.focus === target.id"
+                        :targetindex="target.id" :phaseindex="phaseindex" :playerindex="playerindex" :mode="mode"
+                        :light="light"></target-tab-component>
+                </keep-alive>
+            </template>
+        </div>
     </div>
 </template>
 

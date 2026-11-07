@@ -1,16 +1,21 @@
 <template>
-    <div>          
+    <div>
         <ul v-if="showNavBar" class="nav nav-tabs">
             <li v-for="navBar in navBars">
-                <a class="nav-link" :class="{active: activeSeverityTab === navBar.index}" @click="activeSeverityTab = navBar.index">{{navBar.name}}</a>
+                <a class="nav-link" :class="{active: activeSeverityTab === navBar.index}"
+                    @click="activeSeverityTab = navBar.index">{{navBar.name}}</a>
             </li>
         </ul>
-        <keep-alive>
-            <mechanics-table-component v-for="table in allTables" 
-                :key="'mechanics' + table.phaseIndex + '-' + table.severity" v-if="table.phaseIndex === phaseindex && table.tabIndex === activeSeverityTab"
-                :phaseindex="table.phaseIndex" :playerindex="playerindex" :severity="table.severity">
-            </mechanics-table-component> 
-        </keep-alive>
+        <div>
+            <template v-for="table in allTables">
+                <keep-alive>
+                    <mechanics-table-component :key="'mechanics' + table.phaseIndex + '-' + table.severity"
+                        v-if="table.phaseIndex === phaseindex && table.tabIndex === activeSeverityTab"
+                        :phaseindex="table.phaseIndex" :playerindex="playerindex" :severity="table.severity">
+                    </mechanics-table-component>
+                </keep-alive>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -23,8 +28,8 @@
                 activeSeverityTab: 0,
             };
         },
-        computed: {       
-            allTables: function() {
+        computed: {
+            allTables: function () {
                 let tables = [];
                 for (let i = 0; i < this.phases.length; i++) {
                     for (let j = 0; j < this.navBars.length; j++) {
@@ -37,20 +42,20 @@
                 }
                 return tables;
             },
-            mechanicsBySeverity: function() {
+            mechanicsBySeverity: function () {
                 let toTest = [
-                    mechanicsForSeverity(MechanicSeverity.Sev0), 
-                    mechanicsForSeverity(MechanicSeverity.Sev1), 
-                    mechanicsForSeverity(MechanicSeverity.Sev2), 
-                    mechanicsForSeverity(MechanicSeverity.Sev3), 
+                    mechanicsForSeverity(MechanicSeverity.Sev0),
+                    mechanicsForSeverity(MechanicSeverity.Sev1),
+                    mechanicsForSeverity(MechanicSeverity.Sev2),
+                    mechanicsForSeverity(MechanicSeverity.Sev3),
                     mechanicsForSeverity(MechanicSeverity.Sev4)
                 ];
                 return toTest.filter(x => x.filter(y => y.playerMech || y.enemyMech).length > 0);
             },
-            showNavBar: function() {
+            showNavBar: function () {
                 return this.mechanicsBySeverity.length > 1;
             },
-            navBars: function() {
+            navBars: function () {
                 let bars = [];
                 for (let i = 0; i < this.mechanicsBySeverity.length; i++) {
                     let mechanicBySeverity = this.mechanicsBySeverity[i];
@@ -63,7 +68,7 @@
                 }
                 return bars;
             },
-            phases: function() {
+            phases: function () {
                 return logData.phases;
             }
         }
