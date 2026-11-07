@@ -830,6 +830,10 @@ internal static class ProfHelper
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (IsWhiteListedForSomeStats(minion.AgentItem))
+        {
+            return;
+        }
         if (MesmerHelper.IsPhantasm(minion.AgentItem))
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
@@ -842,6 +846,17 @@ internal static class ProfHelper
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
         }
+    }
+
+    /// <summary>
+    /// Whitelist: Health, Barrier, Graphs, Buffs, Volumes, Rotation.
+    /// </summary>
+    public static bool IsWhiteListedForSomeStats(AgentItem agent)
+    {
+        return RangerHelper.IsJuvenilePet(agent) ||
+            MechanistHelper.IsJadeMech(agent) ||
+            NecromancerHelper.IsUniqueUndeadMinion(agent) ||
+            RitualistHelper.IsSpiritMinion(agent);
     }
 
     public static void AdjustMinionName(AgentItem minion)

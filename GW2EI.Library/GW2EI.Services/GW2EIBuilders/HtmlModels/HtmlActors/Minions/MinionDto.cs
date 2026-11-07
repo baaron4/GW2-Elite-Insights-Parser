@@ -27,7 +27,7 @@ internal class MinionDto
     {
         var dto = BuildBasicMinionDto(minionGroup);
         dto.Details = MinionDetailsDto.BuildFriendlyMinionsData(log, minionGroup, used);
-        if (minionGroup.IsWhiteListedForSomeStats)
+        if (minionGroup.IsWhiteListed)
         {
             dto.Instances = new(minionGroup.MinionList.Count);
             foreach (var minion in minionGroup.MinionList)

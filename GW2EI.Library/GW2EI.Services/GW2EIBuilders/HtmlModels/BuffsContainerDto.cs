@@ -162,7 +162,7 @@ internal class BuffsContainerDto
             IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
             foreach (Minions minionGroup in minionGroups)
             {
-                if (!minionGroup.IsWhiteListedForSomeStats)
+                if (!minionGroup.IsWhiteListed)
                 {
                     minionData.Add(null);
                 } 

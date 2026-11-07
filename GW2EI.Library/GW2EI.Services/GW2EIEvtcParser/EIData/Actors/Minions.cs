@@ -35,10 +35,7 @@ public class Minions : Actor
         return _minionList.FirstOrDefault()?.GetIcon() ?? string.Empty;
     }
 
-    public bool IsWhiteListedForSomeStats => RangerHelper.IsJuvenilePet(ReferenceAgentItem) ||
-            MechanistHelper.IsJadeMech(ReferenceAgentItem) ||
-            NecromancerHelper.IsUniqueUndeadMinion(ReferenceAgentItem) ||
-            RitualistHelper.IsSpiritMinion(ReferenceAgentItem);
+    public bool IsWhiteListed => ProfHelper.IsWhiteListedForSomeStats(ReferenceAgentItem);
 
     #region DAMAGE
 

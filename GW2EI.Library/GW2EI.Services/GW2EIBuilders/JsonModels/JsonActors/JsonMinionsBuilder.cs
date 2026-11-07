@@ -20,7 +20,7 @@ internal static class JsonMinionsBuilder
         var jsonMinions = new JsonMinions
         {
             Id = minionGroup.ID,
-            IsUniquePerTimeFrame = minionGroup.IsWhiteListedForSomeStats,
+            IsUniquePerTimeFrame = minionGroup.IsWhiteListed,
         };
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         bool isEnemyMinion = !log.FriendlyAgents.Contains(minionGroup.Master.AgentItem);
@@ -97,7 +97,7 @@ internal static class JsonMinionsBuilder
         }
         //
         var minionCastEvents = minionGroup.GetIntersectingCastEvents(log);
-        if (minionCastEvents.Count > 0 && minionGroup.IsWhiteListedForSomeStats)
+        if (minionCastEvents.Count > 0 && minionGroup.IsWhiteListed)
         {
             jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), usedData).ToList();
         }
