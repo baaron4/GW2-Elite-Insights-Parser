@@ -63,7 +63,6 @@ public class JsonMechanics
     /// <summary>
     /// Internal cooldown of the mechanic, to be ignored if missing. EI considers the same mechanic triggering within internal cooldown to be the same mechanic.
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? InternalCooldown;
 
     /// <summary>
