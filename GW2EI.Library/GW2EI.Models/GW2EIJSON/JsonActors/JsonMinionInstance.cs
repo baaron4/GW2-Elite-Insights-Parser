@@ -68,7 +68,8 @@ public class JsonMinionInstance
     public IReadOnlyList<JsonBuffsUptime>? Buffs;
 
     /// <summary>
-    /// List of buff status on active time
+    /// List of buff status on active time \n
+    /// Only relevant for player minions
     /// </summary>
     /// <seealso cref="JsonBuffsUptime"/>
     public IReadOnlyList<JsonBuffsUptime>? BuffsActive;
@@ -79,8 +80,16 @@ public class JsonMinionInstance
     /// <seealso cref="JsonBuffVolumes"/>
     public IReadOnlyList<JsonBuffVolumes>? BuffVolumes;
     /// <summary>
-    /// List of buff volumes on active time
+    /// List of buff volumes on active time\n
+    /// Only relevant for player minions
     /// </summary>
     /// <seealso cref="JsonBuffVolumes"/>
     public IReadOnlyList<JsonBuffVolumes>? BuffVolumesActive;
+
+    /// <summary>
+    /// List of time during which the minion was active (not dead and not dc) \n
+    /// Only relevant for player minions \n
+    /// Length == number of phases
+    /// </summary>
+    public IReadOnlyList<long>? ActiveTimes;
 }

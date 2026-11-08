@@ -1,4 +1,5 @@
-﻿using GW2EIBuilders.JsonModels.JsonActorUtilities;
+﻿using System.Numerics;
+using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
@@ -12,7 +13,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonMinionInstanceBuilder
 {
 
-    public static JsonMinionInstance BuildJsonMinionInstance(SingleActor minion, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
+    public static JsonMinionInstance BuildJsonMinionInstance(SingleActor minion, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool friendly)
     {
         var jsonMinionInstance = new JsonMinionInstance
         {
@@ -24,9 +25,15 @@ internal static class JsonMinionInstanceBuilder
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
 
         jsonMinionInstance.Buffs = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, false);
-        jsonMinionInstance.BuffsActive = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, true);
         jsonMinionInstance.BuffVolumes = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, false);
-        jsonMinionInstance.BuffVolumesActive = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, true);
+        if (friendly)
+        {
+            jsonMinionInstance.BuffsActive = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, true);
+            jsonMinionInstance.BuffVolumesActive = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, true);
+            jsonMinionInstance.ActiveTimes = phases.Select(x => minion.GetActiveDuration(log, x.Start, x.End)).ToList();
+        }
+
+
 
         var minionCastEvents = minion.GetIntersectingCastEvents(log);
         if (minionCastEvents.Count > 0)

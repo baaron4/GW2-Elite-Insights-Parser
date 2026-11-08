@@ -157,7 +157,7 @@ internal static class JsonMinionsBuilder
             var instances = new List<JsonMinionInstance>(minionGroup.MinionList.Count);
             foreach (var minion in minionGroup.MinionList)
             {
-                instances.Add(JsonMinionInstanceBuilder.BuildJsonMinionInstance(minion, log, settings, usedData));
+                instances.Add(JsonMinionInstanceBuilder.BuildJsonMinionInstance(minion, log, settings, usedData, !isEnemyMinion));
             }
             if (instances.Count > 0)
             {
