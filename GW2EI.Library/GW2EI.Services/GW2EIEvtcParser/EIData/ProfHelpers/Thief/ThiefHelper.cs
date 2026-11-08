@@ -171,6 +171,15 @@ internal static class ThiefHelper
         return Minions.Contains(id);
     }
 
+    internal static bool IsThievesGuild(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return Minions.Contains(agentItem.ID);
+    }
+
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Thief;

@@ -21,7 +21,7 @@ internal abstract class ActorChartDataDto
         {
             Minions minionGroup = minionGroups[minionGroupIndex];
             List<MinionChartDto> minionCharts;
-            if (!minionGroup.IsWhiteListed)
+            if (!minionGroup.IsWhitelisted(log))
             {
                 minionCharts = [];
             } 

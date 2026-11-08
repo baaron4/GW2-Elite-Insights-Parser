@@ -35,7 +35,10 @@ public class Minions : Actor
         return _minionList.FirstOrDefault()?.GetIcon() ?? string.Empty;
     }
 
-    public bool IsWhiteListed => ProfHelper.IsWhiteListedForSomeStats(ReferenceAgentItem);
+    public bool IsWhitelisted(ParsedEvtcLog log)
+    {
+        return ProfHelper.IsWhiteListedForSomeStats(ReferenceAgentItem, log);
+    }
 
     #region DAMAGE
 

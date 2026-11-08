@@ -830,7 +830,7 @@ internal static class ProfHelper
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
-        if (IsWhiteListedForSomeStats(minion.AgentItem))
+        if (IsWhiteListedForSomeStats(minion.AgentItem, log))
         {
             return;
         }
@@ -851,12 +851,15 @@ internal static class ProfHelper
     /// <summary>
     /// Whitelist: Health, Barrier, Graphs, Buffs, Volumes, Rotation.
     /// </summary>
-    public static bool IsWhiteListedForSomeStats(AgentItem agent)
+    public static bool IsWhiteListedForSomeStats(AgentItem agent, ParsedEvtcLog log)
     {
-        return RangerHelper.IsJuvenilePet(agent) ||
+        return
+            (RangerHelper.IsSpirit(agent) && log.CombatData.GetGW2BuildEvent().Build < GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM) ||
+            RangerHelper.IsJuvenilePet(agent) ||
             MechanistHelper.IsJadeMech(agent) ||
             NecromancerHelper.IsUniqueUndeadMinion(agent) ||
-            RitualistHelper.IsSpiritMinion(agent);
+            RitualistHelper.IsSpiritMinion(agent) ||
+            ThiefHelper.IsThievesGuild(agent);
     }
 
     public static void AdjustMinionName(AgentItem minion)

@@ -268,6 +268,15 @@ internal static class RangerHelper
         return IsJuvenilePetID(agentItem.ID);
     }
 
+    internal static bool IsSpirit(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return SpiritIDs.Contains(agentItem.ID);
+    }
+
     internal static bool IsKnownMinionID(int id)
     {
         return IsJuvenilePetID(id) || SpiritIDs.Contains(id) || SpecialMinionIDs.Contains(id);

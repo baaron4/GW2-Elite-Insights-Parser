@@ -150,7 +150,7 @@ internal class BuffVolumesContainerDto
             IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
             foreach (Minions minionGroup in minionGroups)
             {
-                if (!minionGroup.IsWhiteListed)
+                if (!minionGroup.IsWhitelisted(log))
                 {
                     minionData.Add(null);
                 }
