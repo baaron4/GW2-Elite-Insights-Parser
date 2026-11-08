@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.31.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.32.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -259,13 +259,20 @@ Only for WvW logs. <br /></td></tr>
 IReadOnlyList&lt; string &gt;?&#160;</td><td class="memItemRight"><b>UploadLinks</b></td></tr>
 <tr class="memdesc:a477ca161dd29f98670a4af16be926c96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload links to dps.reports. <br /></td></tr>
 <tr class="memitem:ad098dd22fd0d4b2fbe7075bc6e826221" id="r_ad098dd22fd0d4b2fbe7075bc6e826221"><td class="memItemLeft">IReadOnlyDictionary&lt; string, <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html">SkillDesc</a> &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#ad098dd22fd0d4b2fbe7075bc6e826221">SkillMap</a></td></tr>
-<tr class="memdesc:ad098dd22fd0d4b2fbe7075bc6e826221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of skills' description, the key is in "'s' + id" format.  <br /></td></tr>
+<tr class="memdesc:ad098dd22fd0d4b2fbe7075bc6e826221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of skills' description, the key is in "'s' + id" format <br  />
+Negative ids are EI's custom skill ids.  <br /></td></tr>
 <tr class="memitem:aff37c8a04b211b1d7bba6dddf504613b" id="r_aff37c8a04b211b1d7bba6dddf504613b"><td class="memItemLeft">IReadOnlyDictionary&lt; string, <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html">BuffDesc</a> &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b">BuffMap</a></td></tr>
-<tr class="memdesc:aff37c8a04b211b1d7bba6dddf504613b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of buffs' description, the key is in "'b' + id" format.  <br /></td></tr>
+<tr class="memdesc:aff37c8a04b211b1d7bba6dddf504613b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of buffs' description, the key is in "'b' + id" format <br  />
+Negative ids are EI's custom buff ids.  <br /></td></tr>
 <tr class="memitem:a1274aefc792f7a61d807c02415606a4d" id="r_a1274aefc792f7a61d807c02415606a4d"><td class="memItemLeft">IReadOnlyDictionary&lt; string, <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html">DamageModDesc</a> &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#a1274aefc792f7a61d807c02415606a4d">DamageModMap</a></td></tr>
 <tr class="memdesc:a1274aefc792f7a61d807c02415606a4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of damage modifiers' description, the key is in "'d' + id" format.  <br /></td></tr>
 <tr class="memitem:a695ba5fe16190269d66870776a4e0520" id="r_a695ba5fe16190269d66870776a4e0520"><td class="memItemLeft">IReadOnlyDictionary&lt; string, TeamDesc &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#a695ba5fe16190269d66870776a4e0520">TeamMap</a></td></tr>
 <tr class="memdesc:a695ba5fe16190269d66870776a4e0520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of team id description, the key is in "'t' + id" format.  <br /></td></tr>
+<tr class="memitem:aff9452e27a8e3f03cc841aa90ce28b64" id="r_aff9452e27a8e3f03cc841aa90ce28b64"><td class="memItemLeft">IReadOnlyDictionary&lt; string, string &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#aff9452e27a8e3f03cc841aa90ce28b64">AgentNameMap</a></td></tr>
+<tr class="memdesc:aff9452e27a8e3f03cc841aa90ce28b64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of encountered agents, used for <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#adfef702aec495fd1c25e5d7073f27d18" title="If set, the skill was targeting the specified. If starts with &quot;u&quot;, the following number is the JsonAc...">JsonRotation.JsonSkill.Target</a> <br  />
+If key starts with "u", it matches a <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef" title="Unique EI ID of the actor.">JsonActor.UniqueID</a>, the corresponding result in the dictionary will also be an empty string. <br  />
+If key starts with "v", target is a volatile (gadget, structure, etc) species id. <br  />
+If key starts with "s", species id is stable.  <br /></td></tr>
 <tr class="memitem:aa753e843e65b1612429894bf8280c2be" id="r_aa753e843e65b1612429894bf8280c2be"><td class="memItemLeft">IReadOnlyDictionary&lt; string, IReadOnlyCollection&lt; long &gt; &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#aa753e843e65b1612429894bf8280c2be">PersonalBuffs</a></td></tr>
 <tr class="memdesc:aa753e843e65b1612429894bf8280c2be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dictionary of personal buffs. The key is the profession, the value is a list of buff ids.  <br /></td></tr>
 <tr class="memitem:a70ad201d4c58d2d8475d62766c081653" id="r_a70ad201d4c58d2d8475d62766c081653"><td class="memItemLeft">IReadOnlyDictionary&lt; string, IReadOnlyCollection&lt; long &gt; &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#a70ad201d4c58d2d8475d62766c081653">PersonalDamageMods</a></td></tr>
@@ -294,6 +301,26 @@ IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_ex
 <div class="textblock"><p>The root of the JSON. </p>
 <p>Use JsonLogSerializerContext or manually use an Tuple2ToExceptionConverterFactory instance with your (de)serializer. </p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="aff9452e27a8e3f03cc841aa90ce28b64" name="aff9452e27a8e3f03cc841aa90ce28b64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff9452e27a8e3f03cc841aa90ce28b64">&#9670;&#160;</a></span>AgentNameMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyDictionary&lt;string, string&gt;? GW2EIJSON.JsonLog.AgentNameMap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dictionary of encountered agents, used for <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#adfef702aec495fd1c25e5d7073f27d18" title="If set, the skill was targeting the specified. If starts with &quot;u&quot;, the following number is the JsonAc...">JsonRotation.JsonSkill.Target</a> <br  />
+If key starts with "u", it matches a <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef" title="Unique EI ID of the actor.">JsonActor.UniqueID</a>, the corresponding result in the dictionary will also be an empty string. <br  />
+If key starts with "v", target is a volatile (gadget, structure, etc) species id. <br  />
+If key starts with "s", species id is stable. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html" title="Describs the damage modifier item.">DamageModDesc</a></dd></dl>
+
+</div>
+</div>
 <a id="aff37c8a04b211b1d7bba6dddf504613b" name="aff37c8a04b211b1d7bba6dddf504613b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff37c8a04b211b1d7bba6dddf504613b">&#9670;&#160;</a></span>BuffMap</h2>
 
@@ -306,7 +333,8 @@ IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_ex
       </table>
 </div><div class="memdoc">
 
-<p>Dictionary of buffs' description, the key is in "'b' + id" format. </p>
+<p>Dictionary of buffs' description, the key is in "'b' + id" format <br  />
+Negative ids are EI's custom buff ids. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html" title="Describs the buff item.">BuffDesc</a></dd></dl>
 
 </div>
@@ -375,7 +403,7 @@ IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_ex
 </div><div class="memdoc">
 
 <p>Dictionary of personal buffs. The key is the profession, the value is a list of buff ids. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format.">BuffMap</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format  Negative ids are EI&#39;s custom buff ...">BuffMap</a></dd></dl>
 
 </div>
 </div>
@@ -443,7 +471,7 @@ IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_ex
 </div><div class="memdoc">
 
 <p>List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format.">BuffMap</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format  Negative ids are EI&#39;s custom buff ...">BuffMap</a></dd></dl>
 
 </div>
 </div>
@@ -463,7 +491,7 @@ IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_ex
 value[2] the index in <a class="el" href="#aba1a656991c7a29e4b8a9f0c75482744" title="The list of phases.">JsonLog.Phases</a> where the buffs are relevant, value[3], if present, indicates remaining duration (Only relevant for down and out achievements). <br  />
 value[2] is mainly relevant in instance logs, it can either point towards a specific Encounter phase for encounter specific buffs or to the Instance phase for buffs covering the whole instance, for example fractal instabilities. <br  />
 In boss logs, value[2] will always be the "Full Fight" phase. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format.">BuffMap</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#aff37c8a04b211b1d7bba6dddf504613b" title="Dictionary of buffs&#39; description, the key is in &quot;&#39;b&#39; + id&quot; format  Negative ids are EI&#39;s custom buff ...">BuffMap</a></dd></dl>
 
 </div>
 </div>
@@ -479,7 +507,8 @@ In boss logs, value[2] will always be the "Full Fight" phase. </p>
       </table>
 </div><div class="memdoc">
 
-<p>Dictionary of skills' description, the key is in "'s' + id" format. </p>
+<p>Dictionary of skills' description, the key is in "'s' + id" format <br  />
+Negative ids are EI's custom skill ids. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html" title="Describes the skill item.">SkillDesc</a></dd></dl>
 
 </div>

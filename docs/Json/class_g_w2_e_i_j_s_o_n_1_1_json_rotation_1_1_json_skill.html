@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.31.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.32.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -105,14 +105,29 @@ int&#160;</td><td class="memItemRight"><b>CastTime</b></td></tr>
 <tr class="memitem:a22cc207246b937fbffa30b1dcc9c6391" id="r_a22cc207246b937fbffa30b1dcc9c6391"><td class="memItemLeft"><a id="a22cc207246b937fbffa30b1dcc9c6391" name="a22cc207246b937fbffa30b1dcc9c6391"></a>
 int&#160;</td><td class="memItemRight"><b>Duration</b></td></tr>
 <tr class="memdesc:a22cc207246b937fbffa30b1dcc9c6391"><td class="mdescLeft">&#160;</td><td class="mdescRight">Duration of the animation, instant cast if 0. <br /></td></tr>
+<tr class="memitem:ae71aaa0790355f4836752553d49b08f7" id="r_ae71aaa0790355f4836752553d49b08f7"><td class="memItemLeft"><a id="ae71aaa0790355f4836752553d49b08f7" name="ae71aaa0790355f4836752553d49b08f7"></a>
+int?&#160;</td><td class="memItemRight"><b>ExpectedCastBarDuration</b></td></tr>
+<tr class="memdesc:ae71aaa0790355f4836752553d49b08f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expected cast bar duration of the skill. <br /></td></tr>
+<tr class="memitem:aa1a477c54eab24d3097aa6a7a4bfe2a0" id="r_aa1a477c54eab24d3097aa6a7a4bfe2a0"><td class="memItemLeft"><a id="aa1a477c54eab24d3097aa6a7a4bfe2a0" name="aa1a477c54eab24d3097aa6a7a4bfe2a0"></a>
+int?&#160;</td><td class="memItemRight"><b>ExpectedReturnControlDuration</b></td></tr>
+<tr class="memdesc:aa1a477c54eab24d3097aa6a7a4bfe2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expected duration after which control is returned to the caster. <br /></td></tr>
 <tr class="memitem:a7d431d88c398e69b3fef2041e429a931" id="r_a7d431d88c398e69b3fef2041e429a931"><td class="memItemLeft"><a id="a7d431d88c398e69b3fef2041e429a931" name="a7d431d88c398e69b3fef2041e429a931"></a>
 int&#160;</td><td class="memItemRight"><b>TimeGained</b></td></tr>
-<tr class="memdesc:a7d431d88c398e69b3fef2041e429a931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gained time from the animation, could be negative, which means time was lost. <br /></td></tr>
+<tr class="memdesc:a7d431d88c398e69b3fef2041e429a931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gained time from the animation, could be negative <br  />
+Strictly Negative indicates that the cast was interrupted, considered as time wasted <br  />
+Strictly Positive indicates that the after cast was interrupted, considered as time gained <br  />
+Zero indicates that the animation was fully executed, after cast included. <br /></td></tr>
 <tr class="memitem:a59d2216cf47657099df9f0e031cfd33e" id="r_a59d2216cf47657099df9f0e031cfd33e"><td class="memItemLeft"><a id="a59d2216cf47657099df9f0e031cfd33e" name="a59d2216cf47657099df9f0e031cfd33e"></a>
 double&#160;</td><td class="memItemRight"><b>Quickness</b></td></tr>
 <tr class="memdesc:a59d2216cf47657099df9f0e031cfd33e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><br  />
  Value between -1 (100% slow) and 1 (100% quickness) <br  />
 Prior arcdps activation update (nov 07 2019) this value can only be 0 or 1 <br /></td></tr>
+<tr class="memitem:adfef702aec495fd1c25e5d7073f27d18" id="r_adfef702aec495fd1c25e5d7073f27d18"><td class="memItemLeft"><a id="adfef702aec495fd1c25e5d7073f27d18" name="adfef702aec495fd1c25e5d7073f27d18"></a>
+string?&#160;</td><td class="memItemRight"><b>Target</b> = null</td></tr>
+<tr class="memdesc:adfef702aec495fd1c25e5d7073f27d18"><td class="mdescLeft">&#160;</td><td class="mdescRight"><br  />
+ If set, the skill was targeting the specified.<br  />
+If starts with "u", the following number is the <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef" title="Unique EI ID of the actor.">JsonActor.UniqueID</a>&gt; of an actor in <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a8f7d4b5ea5545c5d4339d3f74e0fd004" title="The list of players.">JsonLog.Players</a> or <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ada6e269761f3f560049150d1b0edb0dd" title="The list of targets.">JsonLog.Targets</a>. <br  />
+Otherwise name of the target will be in <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aff9452e27a8e3f03cc841aa90ce28b64" title="Dictionary of encountered agents, used for JsonRotation.JsonSkill.Target  If key starts with &quot;u&quot;,...">JsonLog.AgentNameMap</a>. <br /></td></tr>
 <tr class="memitem:a894c179723faa44040ad8fe99eb0b808" id="r_a894c179723faa44040ad8fe99eb0b808"><td class="memItemLeft"><a id="a894c179723faa44040ad8fe99eb0b808" name="a894c179723faa44040ad8fe99eb0b808"></a>
 bool?&#160;</td><td class="memItemRight"><b>IgnoreOnRotationRender</b> = null</td></tr>
 <tr class="memdesc:a894c179723faa44040ad8fe99eb0b808"><td class="mdescLeft">&#160;</td><td class="mdescRight"><br  />

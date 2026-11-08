@@ -1,5 +1,15 @@
 var NAVTREEINDEX4 =
 {
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a93cdf7072fcd876b2aaaa3210b7fd77b":[1,0,0,14,0,3],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aacd1c53fd8ca69668af2e220cd2d8b2d":[0,0,0,14,0,31],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aacd1c53fd8ca69668af2e220cd2d8b2d":[1,0,0,14,0,31],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ab4906a1cefcf4aa1854724bc07f95c9c":[0,0,0,14,0,13],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ab4906a1cefcf4aa1854724bc07f95c9c":[1,0,0,14,0,13],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#abc902e88f0d8b10a29932ed60af383a4":[0,0,0,14,0,32],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#abc902e88f0d8b10a29932ed60af383a4":[1,0,0,14,0,32],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac13b1dad85a76462662b862e18cfc319":[0,0,0,14,0,0],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac13b1dad85a76462662b862e18cfc319":[1,0,0,14,0,0],
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac58892411b7f5075a7ab0fc722edc261":[0,0,0,14,0,7],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ac58892411b7f5075a7ab0fc722edc261":[1,0,0,14,0,7],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ad0390ccbe3249654b1a90a03576ee7e6":[0,0,0,14,0,17],
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ad0390ccbe3249654b1a90a03576ee7e6":[1,0,0,14,0,17],

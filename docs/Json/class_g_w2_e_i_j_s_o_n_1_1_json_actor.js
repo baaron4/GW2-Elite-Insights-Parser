@@ -29,5 +29,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_actor =
     [ "TotalDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a5cc997075aeec95c417d68cd5fc72e35", null ],
     [ "TotalDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a9918a56cb8243b61a1ee8eb427d94573", null ],
     [ "TotalHealth", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a4d6e844feaeb74afb0992ae8c0c3e73a", null ],
-    [ "Toughness", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7086ebf5dc4a92579ce6b02970035dd1", null ]
+    [ "Toughness", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7086ebf5dc4a92579ce6b02970035dd1", null ],
+    [ "UniqueID", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef", null ]
 ];
