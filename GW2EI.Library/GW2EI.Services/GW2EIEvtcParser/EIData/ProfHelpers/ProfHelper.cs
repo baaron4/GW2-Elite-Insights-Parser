@@ -859,6 +859,7 @@ internal static class ProfHelper
             MechanistHelper.IsJadeMech(agent) ||
             NecromancerHelper.IsUniqueUndeadMinion(agent) ||
             RitualistHelper.IsSpiritMinion(agent) ||
+            ElementalistHelper.IsGlyphOfElementals(agent) ||
             ThiefHelper.IsThievesGuild(agent);
     }
 
