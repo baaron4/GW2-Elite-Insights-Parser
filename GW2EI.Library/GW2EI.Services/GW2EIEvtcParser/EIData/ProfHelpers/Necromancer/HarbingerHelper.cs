@@ -80,7 +80,13 @@ internal static class HarbingerHelper
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Meltdown
         new BuffOnActorDamageModifier(Mod_Meltdown, Meltdown, "Meltdown", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.Meltdown, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.July2026Balance),
+            .WithBuilds(GW2Builds.July2026Balance, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_Meltdown, Meltdown, "Meltdown", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.Meltdown, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_MeltdownStrike, Meltdown, "Meltdown", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.Meltdown, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_MeltdownCondition, Meltdown, "Meltdown", "7%", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.Meltdown, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

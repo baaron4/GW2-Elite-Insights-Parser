@@ -462,4 +462,6 @@ public static class DamageModifierIDs
     public const int Mod_StoneHeart_Evoker = 449;
     public const int Mod_UnscathedContender = 450;
     public const int Mod_ImbuedHaste = 451;
+    public const int Mod_MeltdownStrike = 452;
+    public const int Mod_MeltdownCondition = 453;
 }
