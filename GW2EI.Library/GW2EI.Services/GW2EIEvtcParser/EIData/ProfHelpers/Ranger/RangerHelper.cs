@@ -495,19 +495,26 @@ internal static class RangerHelper
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.June2022Balance),
+            .WithBuilds(GW2Builds.June2022Balance, GW2Builds.November2026Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.April2026Balancepocalypse),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking or against defiant", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_HuntersTactics, HuntersTacticsBuff, "Hunter's Tactics", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.HuntersTactics, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
         // - Light on your Feet
-        new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
 
         // Nature Magic
         // - Bountiful Hunter
-        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1% per boon (player and pet)", DamageSource.All, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1% per boon (player and pet)", DamageSource.All, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "2% per boon (player and pet, max 5)", DamageSource.All, 2.0, DamageType.Strike, DamageType.All, Source.Ranger, By5CappedStack, TraitImages.BountifulHunter, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1.5% per boon (player and pet, max 5)", DamageSource.All, 1.5, DamageType.Strike, DamageType.All, Source.Ranger, By5CappedStack, TraitImages.BountifulHunter, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.November2026Balance),
 
         // Wilderness Survival
         // - Survival Instincts
@@ -635,6 +642,7 @@ internal static class RangerHelper
         new Buff("Quick Draw", QuickDraw, Source.Ranger, BuffClassification.Other, TraitImages.QuickDraw),
         new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, TraitImages.LightOnYourFeet),
         new Buff("Poison Master", PoisonMasterBuff, Source.Ranger, BuffClassification.Other, TraitImages.PoisonMaster),
+        new Buff("Hunter's Tactics", HuntersTacticsBuff, Source.Ranger, BuffClassification.Other, TraitImages.HuntersTactics),
         // Mace
         new Buff("Force of Nature", ForceOfNature, Source.Ranger, BuffClassification.Other, BuffImages.ForceOfNature)
             .WithBuilds(GW2Builds.February2024NewWeapons),
