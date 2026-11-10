@@ -246,11 +246,11 @@ internal static class JsonPlayerBuilder
         return uptimes;
     }
 
-    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool usingActiveTime)
+    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
-        var buffs = phases.Select(phase => usingActiveTime ? player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End) : player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
-        var buffDictionaries = phases.Select(phase => usingActiveTime ? player.GetActiveBuffsDictionary(log, phase.Start, phase.End) : player.GetBuffsDictionary(log, phase.Start, phase.End)).ToList();
+        var buffs = phases.Select(phase => useActiveTime ? player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End) : player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
+        var buffDictionaries = phases.Select(phase => useActiveTime ? player.GetActiveBuffsDictionary(log, phase.Start, phase.End) : player.GetBuffsDictionary(log, phase.Start, phase.End)).ToList();
         var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])

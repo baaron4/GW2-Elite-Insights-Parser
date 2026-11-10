@@ -86,12 +86,12 @@ internal static class JsonNPCBuilder
         return jsonNPC;
     }
 
-    internal static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool usingActiveTime)
+    internal static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
-        var buffs = phases.Select(x => usingActiveTime ? npc.GetActiveBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+        var buffs = phases.Select(x => useActiveTime ? npc.GetActiveBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
         var res = new List<JsonBuffsUptime>(buffs[0].Count);
-        var buffDictionaries = phases.Select(x => usingActiveTime ? npc.GetActiveBuffsDictionary(log, x.Start, x.End) : npc.GetBuffsDictionary(log, x.Start, x.End)).ToList();
+        var buffDictionaries = phases.Select(x => useActiveTime ? npc.GetActiveBuffsDictionary(log, x.Start, x.End) : npc.GetBuffsDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];
@@ -117,12 +117,12 @@ internal static class JsonNPCBuilder
         }
         return res;
     }
-    internal static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, UsedJsonData usedData, bool usingActiveTime)
+    internal static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, UsedJsonData usedData, bool useActiveTime)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
-        var buffVolumes = phases.Select(x => usingActiveTime ? npc.GetActiveBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+        var buffVolumes = phases.Select(x => useActiveTime ? npc.GetActiveBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
         var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
-        var buffVolumeDictionaries = phases.Select(x => usingActiveTime ? npc.GetActiveBuffVolumesDictionary(log, x.Start, x.End) : npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();
+        var buffVolumeDictionaries = phases.Select(x => useActiveTime ? npc.GetActiveBuffVolumesDictionary(log, x.Start, x.End) : npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];
