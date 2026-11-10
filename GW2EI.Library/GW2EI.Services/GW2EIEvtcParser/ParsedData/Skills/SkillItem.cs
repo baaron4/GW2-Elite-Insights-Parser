@@ -92,7 +92,7 @@ public class SkillItem
 #if DEBUG
         Name = ID + "-" + Name;
 #endif
-        if (SkillItemOverrides.VersionedOverridenSkillIcons.TryGetValue(ID, out var versionedIcon) && versionedIcon.Build > gw2Build) 
+        if (SkillItemOverrides.VersionedOverridenSkillIcons.TryGetValue(ID, out var versionedIcon) && versionedIcon.Build > gw2Build)
         {
             Icon = versionedIcon.Icon;
         }
