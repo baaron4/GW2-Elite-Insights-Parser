@@ -22,7 +22,7 @@ internal class FraenirOfJormag : Bjora
                 .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(IceShockWaveFraenir, Mech_IceShockWaveFraenir, new (Symbols.Square, Colors.Red), new ("Ice Shock Wave", "Knocked by Ice Shock Wave", "Ice Shock Wave"), Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
-            new PlayerDstHealthDamageHitMechanic(IceArmSwingFraenir, Mech_IceArmSwingFraenir, new (Symbols.Pentagon, Colors.Orange), new ("IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing"), Sev0, 4000)
+            new PlayerDstHealthDamageHitMechanic(IceArmSwingFraenir, Mech_IceArmSwingFraenir, new (Symbols.Octagon, Colors.Orange), new ("IceArmSwing.CC", "Knocked by Ice Arm Swing", "Ice Arm Swing"), Sev0, 4000)
                 .UsingBuffChecker(Stability, false),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(FrozenMissile, Mech_FrozenMissile, new (Symbols.BowtieOpen, Colors.Orange), new ("FrozenMissile.CC", "Launched by Frozen Missile", "Frozen Missile"), Sev0, 4000)

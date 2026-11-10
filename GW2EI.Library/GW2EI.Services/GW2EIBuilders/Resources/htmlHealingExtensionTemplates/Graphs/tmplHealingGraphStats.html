@@ -16,7 +16,7 @@
                 </li>
             </ul>
         </div>
-        <div>
+        <div class="template-div">
             <template v-for="(phase, id) in phases">
                 <keep-alive>
                     <hps-graph-component  :key="'healgraph'+id" v-if="id === phaseindex"

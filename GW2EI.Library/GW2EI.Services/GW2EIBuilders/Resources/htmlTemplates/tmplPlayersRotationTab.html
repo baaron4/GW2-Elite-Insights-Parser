@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column align-items-center justify-content-center">
         <h3 class="text-center mt-1 mb-1">Players' Rotation</h3>
-        <div>
+        <div class="template-div">
             <template v-for='(phase, index) in phases'>
                 <keep-alive>
                     <player-rotations-component :key="'rotations' + index" v-if="index === phaseindex"

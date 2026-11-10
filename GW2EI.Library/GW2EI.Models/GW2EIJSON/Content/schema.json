@@ -704,6 +704,9 @@
           "instanceID": {
             "type": "integer"
           },
+          "uniqueID": {
+            "type": "integer"
+          },
           "teamID": {
             "type": "integer"
           },
@@ -985,6 +988,18 @@
                             "duration": {
                               "type": "integer"
                             },
+                            "expectedCastBarDuration": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "expectedReturnControlDuration": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
                             "timeGained": {
                               "type": "integer"
                             },
@@ -1000,6 +1015,12 @@
                                     "-Infinity"
                                   ]
                                 }
+                              ]
+                            },
+                            "target": {
+                              "type": [
+                                "string",
+                                "null"
                               ]
                             },
                             "ignoreOnRotationRender": {
@@ -3481,6 +3502,9 @@
           "instanceID": {
             "type": "integer"
           },
+          "uniqueID": {
+            "type": "integer"
+          },
           "teamID": {
             "type": "integer"
           },
@@ -4090,6 +4114,18 @@
             ]
           }
         }
+      }
+    },
+    "agentNameMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
       }
     },
     "personalBuffs": {
