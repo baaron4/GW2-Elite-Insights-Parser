@@ -811,6 +811,8 @@ public static class SkillIDs
     public const long IllusionOfLifeSkill = 10244;
     public const long SignetOfIllusions = 10246;
     public const long DisenchantingBolt = 10266;
+    public const long PhantasmalDisenchanterOld = 10267; // IDs switched with warden on Nov 2026
+    public const long PhantasmalWarden = 10267;
     public const long HideInShadows = 10269;
     public const long WindsOfChaosSkill = 10273;
     public const long IllusionaryCounterSkill = 10276;
@@ -819,6 +821,8 @@ public static class SkillIDs
     public const long IllusionaryRiposteSkill = 10280;
     public const long IllusionaryRiposteBuff = 10279;
     public const long IllusionaryRiposteHit = 10281;
+    public const long PhantasmalWardenOld = 10282; // IDs switched with disenchanter on Nov 2026
+    public const long PhantasmalDisenchanter = 10282;
     public const long IllusionaryUnload = 10284;
     public const long Diversion = 10287;
     public const long SpatialSurgeAdditional = 10294;
@@ -5852,8 +5856,6 @@ public static class SkillIDs
     public const long GrabPunch = 81344;
     #endregion
     #region TODO
-    public const long PhantasmalDisenchanterOld = 10267;
-    public const long PhantasmalWardenOld = 999999;
     #endregion TODO
 
 }
