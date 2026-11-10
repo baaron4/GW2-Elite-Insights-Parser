@@ -33,14 +33,12 @@ internal static class JsonMinionInstanceBuilder
             jsonMinionInstance.ActiveTimes = phases.Select(x => minion.GetActiveDuration(log, x.Start, x.End)).ToList();
         }
 
-
-
         var minionCastEvents = minion.GetIntersectingCastEvents(log);
         if (minionCastEvents.Count > 0)
         {
             jsonMinionInstance.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), usedData).ToList();
         }
-        //
+
         if (settings.RawFormatTimelineArrays)
         {
             IReadOnlyDictionary<long, BuffGraph> buffGraphs = minion.GetBuffGraphs(log);
