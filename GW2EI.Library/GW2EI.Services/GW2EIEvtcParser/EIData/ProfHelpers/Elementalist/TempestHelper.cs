@@ -37,7 +37,9 @@ internal static class TempestHelper
         new BuffOnActorDamageModifier(Mod_TranscendentTempestStrike, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_TranscendentTempestCondition, TranscendentTempest, "Transcendent Tempest", "20% after overload", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_TranscendentTempestCondition, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
         // Tempestuous Aria
         new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
@@ -46,7 +48,9 @@ internal static class TempestHelper
         new BuffOnActorDamageModifier(Mod_TempestuousAriaStrike, TempestuousAria, "Tempestuous Aria (Strike)", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_TempestuousAriaCondition, TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+            .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_TempestuousAriaCondition, TempestuousAria, "Tempestuous Aria (Condition)", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
