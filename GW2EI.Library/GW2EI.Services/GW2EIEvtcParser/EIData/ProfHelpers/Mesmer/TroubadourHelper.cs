@@ -53,9 +53,13 @@ internal static class TroubadourHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Mod_LoveSong, HarpPlaying, "Love Song", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.LoveSong, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.OctoberVoERelease),
+            .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.November2026Balance),
         new BuffOnActorDamageModifier(Mod_LoveSong, HarpPlaying, "Love Song", "-7%", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.LoveSong, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.OctoberVoERelease),
+            .WithBuilds(GW2Builds.OctoberVoERelease, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_LoveSong, HarpPlaying, "Love Song", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.LoveSong, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_LoveSong, HarpPlaying, "Love Song", "-7%", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Troubadour, ByPresence, TraitImages.LoveSong, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
