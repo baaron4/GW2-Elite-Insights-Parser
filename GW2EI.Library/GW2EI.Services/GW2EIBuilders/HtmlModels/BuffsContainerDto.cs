@@ -165,7 +165,7 @@ internal class BuffsContainerDto
                 if (!minionGroup.IsWhitelisted(log))
                 {
                     minionData.Add(null);
-                } 
+                }
                 else
                 {
                     minionData.Add(new MinionBuffsContainerDto(log, minionGroup, phase));
