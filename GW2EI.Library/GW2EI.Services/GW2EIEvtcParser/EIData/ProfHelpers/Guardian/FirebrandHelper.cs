@@ -2,11 +2,15 @@
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.InstantCastFinder;
 using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -160,9 +164,17 @@ internal static class FirebrandHelper
         return build >= GW2Builds.September2017PathOfFireRelease && _firebrandTomeAAs.Contains(id);
     }
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
+    // TODO: imbued haste placeholder
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [
+        new BuffOnActorDamageModifier(Mod_ImbuedHaste, Quickness, "Imbued Haste", "10% under Quickness", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Guardian, ByPresence, TraitImages.ImbuedHaste, DamageModifierMode.All)
+            .WithBuilds( GW2Builds.November2026Balance),
+     ];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [
+
+        new BuffOnActorDamageModifier(Mod_ImbuedHaste, Quickness, "Imbued Haste", "-10% under Quickness", DamageSource.Incoming, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.ImbuedHaste, DamageModifierMode.All)
+            .WithBuilds( GW2Builds.November2026Balance),
+    ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [

@@ -106,6 +106,7 @@ internal static class TraitImages
     public const string EmpoweredArmaments = "https://render.guildwars2.com/file/37424E9DD0A3ADC61DD56BB180C96201DB61099C/3679960.png";
     public const string ResoluteBlessing = "https://render.guildwars2.com/file/3580BB0C4F3E9BBC96080454BE9491CC934A6C55/3679956.png";
     public const string SovereignOfLight = "https://render.guildwars2.com/file/111A0EA54101D7C22F57070690139662D0BC5316/3679962.png";
+    public const string ImbuedHaste = "https://render.guildwars2.com/file/CD01F2B8C328AC37B760D0913F6D4DDDAC0477D2/1769950.png";
     #endregion
     #region Mesmer
     public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";

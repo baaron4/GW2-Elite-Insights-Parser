@@ -460,4 +460,6 @@ public static class DamageModifierIDs
     public const int Mod_EmpoweredNexusOfEternity = 447;
     public const int Mod_StoneHeart_EvokerToad = 448;
     public const int Mod_StoneHeart_Evoker = 449;
+    public const int Mod_UnscathedContender = 450;
+    public const int Mod_ImbuedHaste = 451;
 }

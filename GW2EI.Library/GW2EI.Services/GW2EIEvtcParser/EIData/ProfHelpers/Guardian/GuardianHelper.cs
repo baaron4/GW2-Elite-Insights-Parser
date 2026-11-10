@@ -163,13 +163,19 @@ internal static class GuardianHelper
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds( GW2Builds.February2023Balance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender (Aegis)", "7% under aegis", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW)
-            .WithBuilds( GW2Builds.April2026Balancepocalypse),
+            .WithBuilds( GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender (Aegis)", "5% under aegis", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
-            .WithBuilds( GW2Builds.April2026Balancepocalypse),
+            .WithBuilds( GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
+        new DamageLogDamageModifier(Mod_UnscathedContender, "Unscathed Contender", "12% if hp >=75% or under Aegis", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 75.0  || x.From.HasBuff(log, Aegis, x.Time), DamageModifierMode.PvE)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.November2026Balance),
+        new DamageLogDamageModifier(Mod_UnscathedContender, "Unscathed Contender", "10% if hp >=75% or under Aegis", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 75.0 || x.From.HasBuff(log, Aegis, x.Time), DamageModifierMode.sPvPWvW)
+            .UsingApproximate()
+            .WithBuilds(GW2Builds.November2026Balance),
         // - Power of the Virtuous
         new BuffOnActorDamageModifier(Mod_PowerOfTheVirtuous, NumberOfBoons, "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.PowerOfTheVirtuous,  DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -180,9 +186,11 @@ internal static class GuardianHelper
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.InspiredVirtue, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "0.5% per boon", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.InspiredVirtue, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.InspiredVirtue, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1.5% per boon (max 5)", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Guardian, By5CappedStack, TraitImages.InspiredVirtue, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
