@@ -5852,6 +5852,8 @@ public static class SkillIDs
     public const long GrabPunch = 81344;
     #endregion
     #region TODO
+    public const long PhantasmalDisenchanterOld = 10267;
+    public const long PhantasmalWardenOld = 999999;
     #endregion TODO
 
 }

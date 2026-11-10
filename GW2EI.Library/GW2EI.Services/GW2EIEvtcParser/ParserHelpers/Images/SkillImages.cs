@@ -362,6 +362,7 @@ internal static class SkillImages
     public const string FlyingCutter = "https://render.guildwars2.com/file/B0FE6EA92A310363CD26DA5CD81DCAB23A071D3A/2479385.png";
     public const string PhantasmalMage = "https://render.guildwars2.com/file/F05D9460F100725E43FD95072F497D28E16BF103/103730.png";
     public const string PhantasmalDisenchanter = "https://render.guildwars2.com/file/9B227C21B3AFF40C222C9031EBE00995F9B43423/103764.png";
+    public const string PhantasmalWarden = "https://render.guildwars2.com/file/4E08BB09C3E6BE013AE255D763A3EB7C99AE2644/103768.png";
     public const string SpatialSurge = "https://render.guildwars2.com/file/0F9E5C7DD5545290E3D41B5603FC0327EB9E6725/103615.png";
     public const string EherBolt = "https://render.guildwars2.com/file/D86BE93CF7CF021ABF757410EC52E038B15F1BB8/103770.png";
     public const string PhantasmalWhaler = "https://render.guildwars2.com/file/ED0BA8B7AC0F232E383E0F7E26E6E27FEAE9A1F3/103787.png";

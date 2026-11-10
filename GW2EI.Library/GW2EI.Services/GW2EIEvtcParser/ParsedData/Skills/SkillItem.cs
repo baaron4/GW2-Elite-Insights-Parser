@@ -75,7 +75,7 @@ public class SkillItem
     [Obsolete("Dont use this, testing only")] //TODO(Rennorb) @cleanup
     public SkillItem(bool swap) { ID = swap ? WeaponSwap : default; }
 
-    internal SkillItem(long ID, string name, GW2APIController apiController)
+    internal SkillItem(long ID, string name, GW2APIController apiController, ulong gw2Build)
     {
         this.ID = ID;
         Name = name.Replace("\0", "");
@@ -92,7 +92,11 @@ public class SkillItem
 #if DEBUG
         Name = ID + "-" + Name;
 #endif
-        if (SkillItemOverrides.OverridenSkillIcons.TryGetValue(ID, out var icon))
+        if (SkillItemOverrides.VersionedOverridenSkillIcons.TryGetValue(ID, out var versionedIcon) && versionedIcon.Build > gw2Build) 
+        {
+            Icon = versionedIcon.Icon;
+        }
+        else if (SkillItemOverrides.OverridenSkillIcons.TryGetValue(ID, out var icon))
         {
             Icon = icon;
         }

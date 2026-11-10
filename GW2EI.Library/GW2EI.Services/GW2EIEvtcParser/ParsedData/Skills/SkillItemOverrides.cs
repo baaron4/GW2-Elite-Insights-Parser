@@ -1594,6 +1594,14 @@ public static class SkillItemOverrides
         #endregion FinisherIcons
     };
 
+    internal static readonly Dictionary<long, (string Icon, ulong Build)> VersionedOverridenSkillIcons = new()
+    {
+        #region Mesmer
+        { PhantasmalDisenchanterOld, (SkillImages.PhantasmalDisenchanter, GW2Builds.November2026Balance) },
+        { PhantasmalWardenOld, (SkillImages.PhantasmalWarden, GW2Builds.November2026Balance) },
+        #endregion Mesmer
+    };
+
     internal static readonly Dictionary<long, ulong> NonCritableSkills = new()
     {
         { LightningStrike_SigilOfAir, GW2Builds.StartOfLife },

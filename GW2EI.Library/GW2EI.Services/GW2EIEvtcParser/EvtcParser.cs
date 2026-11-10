@@ -114,9 +114,9 @@ public class EvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
             var agentsList = ParseAgentData(reader, operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
-            var skillData = ParseSkillData(reader, operation, evtcVersion);
+            var rawSkillData = ParseSkillData(reader, operation, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
-            var (combatItems, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, evtcVersion);
+            var (combatItems, skillData, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, rawSkillData, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
             var (logData, agentData, playerList) = CompleteAgentsAndLogData(operation, agentsList, combatItems, arcdpsAgentRedirection, enabledExtensions, logStartOffset, logEndTime, newID, evtcVersion);
             if (useEIPreProcess)
@@ -491,9 +491,9 @@ public class EvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
             var agentsList = ParseAgentData(reader, operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
-            var skillData = ParseSkillData(reader, operation, evtcVersion);
+            var rawSkillData = ParseSkillData(reader, operation, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
-            var (combatItems, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, evtcVersion);
+            var (combatItems, skillData, arcdpsAgentRedirection, enabledExtensions, newID, mapID, logStartOffset, logEndTime, gw2Build) = ParseCombatList(reader, operation, revision, id, rawSkillData, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
             var (logData, agentData, playerList) = CompleteAgentsAndLogData(operation, agentsList, combatItems, arcdpsAgentRedirection, enabledExtensions, logStartOffset, logEndTime, newID, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
@@ -724,11 +724,11 @@ public class EvtcParser
     /// <param name="reader">Reads binary values from the evtc.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <param name="evtcVersion">Evtc version event.</param>
-    /// returns SkillData instance
-    private SkillData ParseSkillData(BinaryReader reader, ParserController operation, EvtcVersionEvent evtcVersion)
+    /// returns Dictionary of (id, name)
+    private static Dictionary<long, string> ParseSkillData(BinaryReader reader, ParserController operation, EvtcVersionEvent evtcVersion)
     {
         using var _t = new AutoTrace("Skill Data");
-        var skillData = new SkillData(_apiController, evtcVersion);
+        var skillData = new Dictionary<long, string>();
         // 4 bytes: player count
         uint skillCount = reader.ReadUInt32();
         operation.UpdateProgressWithCancellationCheck("Parsing: Skill Count " + skillCount);
@@ -741,7 +741,7 @@ public class EvtcParser
             // 64 bytes: name
             string name = GetString(reader, 64);
             //Save
-            skillData.Add(skillID, name);
+            skillData.TryAdd(skillID, name);
         }
         return skillData;
     }
@@ -926,12 +926,13 @@ public class EvtcParser
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <param name="revision">Combat item revision.</param>
     /// <param name="id">Trigger id of the log.</param>
+    /// <param name="rawSkills">Dictionary of (id, name) representing skill pool</param>
     /// <param name="evtcVersion">Evtc version event.</param>
     /// <exception cref="EvtcCombatEventException"></exception>
     /// <exception cref="TooShortException"></exception>
     /// <exception cref="TooLongException"></exception>
     /// returns (list of combat items, arc's agent redirection dictionary, dictionary of enabled extension, edited trigger id, map id, first time encountered in log, log end, gw2 build)
-    private (List<CombatItem>, Dictionary<ulong, ulong>, Dictionary<uint, ExtensionHandler>, ushort, int, long, long, ulong) ParseCombatList(BinaryReader reader, ParserController operation, byte revision, ushort id, EvtcVersionEvent evtcVersion)
+    private (List<CombatItem>, SkillData, Dictionary<ulong, ulong>, Dictionary<uint, ExtensionHandler>, ushort, int, long, long, ulong) ParseCombatList(BinaryReader reader, ParserController operation, byte revision, ushort id, IReadOnlyDictionary<long, string> rawSkills, EvtcVersionEvent evtcVersion)
     {
         using var _t = new AutoTrace("Combat List");
         // 64 bytes: each combat
@@ -1039,7 +1040,14 @@ public class EvtcParser
         {
             throw new TooLongException();
         }
-        return (combatItems, arcdpsAgentRedirection, enabledExtensions, id, mapID, logStartOffset, logEndTime, gw2Build);
+
+        var skillData = new SkillData(_apiController, evtcVersion, gw2Build);
+        foreach (var item in rawSkills)
+        {
+            skillData.Add(item.Key, item.Value);
+        }
+
+        return (combatItems, skillData, arcdpsAgentRedirection, enabledExtensions, id, mapID, logStartOffset, logEndTime, gw2Build);
     }
 
     /// <summary>
