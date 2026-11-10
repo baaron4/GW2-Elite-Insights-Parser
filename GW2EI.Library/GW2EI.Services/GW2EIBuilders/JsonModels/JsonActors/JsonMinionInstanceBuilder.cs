@@ -8,7 +8,7 @@ using static GW2EIBuilders.JsonModels.JsonLogBuilder;
 namespace GW2EIBuilders.JsonModels.JsonActors;
 
 /// <summary>
-/// Class corresponding to the regrouping of the same type of minions
+/// Class corresponding to a specific instance of <see cref="JsonMinionsBuilder"/>
 /// </summary>
 internal static class JsonMinionInstanceBuilder
 {
