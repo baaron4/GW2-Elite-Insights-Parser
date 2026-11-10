@@ -91,14 +91,14 @@ public class JsonMinions
 
     /// <summary>
     /// Rotation data \n
-    /// Deprecated as EI 3.33.0.0
+    /// Deprecated as of EI 3.33.0.0
     /// </summary>
     /// <seealso cref="JsonRotation"/>
     public IReadOnlyList<JsonRotation>? Rotation;
 
     /// <summary>
     /// If true, indicates that, for a given master, only one instance of minion can exist on a given time. \n
-    /// Deprecated as EI 3.33.0.0
+    /// Deprecated as of EI 3.33.0.0
     /// </summary>
     public bool? IsUniquePerTimeFrame;
 
