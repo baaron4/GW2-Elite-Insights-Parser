@@ -1,0 +1,30 @@
+<template>
+    <div>
+        <div v-if="minionsToUse.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: source.minionIndex === -1}" @click="source.minionIndex = -1">{{actor.name}}</a>
+                </li>
+                <li v-for="minionStruct in minionsToUse">
+                    <a class="nav-link" :class="{active: source.minionIndex === minionStruct.minionIndex}"
+                        @click="source.minionIndex = minionStruct.minionIndex">{{minionStruct.minion.name}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("minion-nav-tab-component", {
+        props: ['source', 'withInstances'],
+        template: `${template}`,
+        computed: {
+            actor: function() {
+                return this.source.actor;
+            },
+            minionsToUse: function() {
+                return this.withInstances ? this.source.minionsWithInstanceToUse : this.source.minionsToUse;
+            }
+        }
+    });
+</script>

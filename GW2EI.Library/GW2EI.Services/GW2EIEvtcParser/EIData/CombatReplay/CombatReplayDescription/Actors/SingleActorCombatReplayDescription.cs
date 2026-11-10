@@ -14,10 +14,16 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
     public readonly int ParentID;
     public readonly IReadOnlyList<float> Positions;
     public readonly IReadOnlyList<float> Angles;
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<long>? Dead { get; private set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<long>? Down { get; private set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<long>? Dc { get; private set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public readonly IReadOnlyList<long>? Hide;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<long>? BreakbarActive { get; private set; }
 
     public readonly long HitboxWidth;

@@ -4,12 +4,12 @@
             <p style="display: table-row;">
                 {{ actor.name }} did {{ percentFormater3(dmgdist.contributedDamage / dmgdist.totalDamage) }}
                 {{ isminion ? "of its master's total" : "of their total" }}
-                {{ istarget ? 'Target' :'' }} damage ({{ numberFormater(dmgdist.contributedDamage) }})
+                {{ isTarget ? 'Target' :'' }} damage ({{ numberFormater(dmgdist.contributedDamage) }})
             </p>
             <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
                 {{ actor.name }} did {{ percentFormater3(dmgdist.contributedBreakbarDamage / dmgdist.totalBreakbarDamage) }}
                 {{ isminion ? "of its master's total" : "of their total" }}
-                {{ istarget ? 'Target' :'' }} breakbar damage ({{ numberFormater1(dmgdist.contributedBreakbarDamage) }})
+                {{ isTarget ? 'Target' :'' }} breakbar damage ({{ numberFormater1(dmgdist.contributedBreakbarDamage) }})
             </p>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
@@ -287,7 +287,7 @@
 
 <script>
     Vue.component("damagedist-table-component", {
-        props: ["dmgdist", "tableid", "actorindex", "minionindex", "istarget", "phaseindex", "player"],
+        props: ["dmgdist", "tableid", "actorIndex", "minionIndex", "isTarget", "phaseindex", "player"],
         template: `${template}`,
         data: function () {
             return {
@@ -389,15 +389,15 @@
                 return logData.phases[this.phaseindex];
             },
             isminion: function() {
-                return this.minionindex > -1;
+                return this.minionIndex > -1;
             },
             actor: function() {
-                if (this.actorindex < 0) {
+                if (this.actorIndex < 0) {
                     return null;
                 }
-                var master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                var master = !this.player ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
                 if (this.isminion) {
-                    return master.minions[this.minionindex];
+                    return master.minions[this.minionIndex];
                 }
                 return master;
             },

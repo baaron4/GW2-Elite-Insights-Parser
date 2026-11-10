@@ -285,4 +285,26 @@ internal class BuffData
         IReadOnlyDictionary<long, BuffStatistics> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffData(buffs, log.StatisticsHelper.PresentTargetOtherBuffs, 0);
     }
+
+    public static BuffData BuildMinionBoonUptimeData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        IReadOnlyDictionary<long, BuffStatistics> buffs = minion.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+        return new BuffData(buffs, log.StatisticsHelper.PresentBoons, minion.GetGameplayStats(log, phase.Start, phase.End).AverageBoons);
+    }
+
+    public static BuffData BuildMinionActiveBoonUptimeData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        IReadOnlyDictionary<long, BuffStatistics> buffs = minion.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+        return new BuffData(buffs, log.StatisticsHelper.PresentBoons, minion.GetGameplayStats(log, phase.Start, phase.End).AverageActiveBoons);
+    }
+
+    public static List<BuffData> BuildMinionBoonDictionaryData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        return BuildBuffDictionaryData(log, log.StatisticsHelper.PresentBoons, phase, minion);
+    }
+
+    public static List<BuffData> BuildMinionActiveBoonDictionaryData(ParsedEvtcLog log, NPC minion, PhaseData phase)
+    {
+        return BuildActiveBuffDictionaryData(log, log.StatisticsHelper.PresentBoons, phase, minion);
+    }
 }

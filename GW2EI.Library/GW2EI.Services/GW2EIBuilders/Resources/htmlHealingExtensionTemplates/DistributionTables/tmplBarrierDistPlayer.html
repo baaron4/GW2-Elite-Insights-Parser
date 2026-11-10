@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div v-if="player.minions.length > 0">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
-                </li>
-                <li v-for="(minion, mindex) in player.minions">
-                    <a class="nav-link" :class="{active: distmode === mindex}"
-                        @click="distmode = mindex">{{minion.name}}</a>
-                </li>
-            </ul>
-        </div>
+        <minion-nav-tab-component :source="this" :withInstances="false"></minion-nav-tab-component>
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills scale85">
                 <li class="nav-item">
@@ -24,8 +14,8 @@
             </ul>
         </div>
         <barrierdist-table-component :barrierdist="targetmode === 0 ? barrierdist : barrierdisttarget"
-            :tableid="'barrierdist-' + playerindex" :actorindex="playerindex" :minionindex="distmode" 
-            :player="true" :istarget="targetmode === 1"
+            :tableid="'barrierdist-' + playerindex" :actorIndex="playerindex" :minionIndex="minionIndex" 
+            :player="true" :isTarget="targetmode === 1"
             :phaseindex="phaseindex"></barrierdist-table-component>
     </div>
 </template>
@@ -35,10 +25,10 @@
         props: ['playerindex',
             'phaseindex', 'activetargets'
         ],
+        mixins: [minionTabulatedComponent],
         template: `${template}`,
         data: function () {
             return {
-                distmode: -1,
                 targetmode: 1,
                 cacheTarget: new Map()
             };
@@ -47,23 +37,26 @@
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
+            actor: function() {
+                return this.player;
+            },
             player: function () {
                 return logData.players[this.playerindex];
             },
             barrierdist: function () {
-                if (this.distmode === -1) {
+                if (this.minionIndex === -1) {
                     return barrierStatsExtension.playerBarrierDetails[this.playerindex].barrierDistributions[this.phaseindex];
                 }
-                return barrierStatsExtension.playerBarrierDetails[this.playerindex].minions[this.distmode].barrierDistributions[this.phaseindex];
+                return barrierStatsExtension.playerBarrierDetails[this.playerindex].minions[this.minionIndex].barrierDistributions[this.phaseindex];
             },
             _barrierdisttarget: function() {
-                if (this.distmode === -1) {
+                if (this.minionIndex === -1) {
                     return barrierStatsExtension.playerBarrierDetails[this.playerindex].barrierDistributionsTargets[this.phaseindex];
                 }
-                return barrierStatsExtension.playerBarrierDetails[this.playerindex].minions[this.distmode].barrierDistributionsTargets[this.phaseindex];
+                return barrierStatsExtension.playerBarrierDetails[this.playerindex].minions[this.minionIndex].barrierDistributionsTargets[this.phaseindex];
             },
             barrierdisttarget: function () {
-                let cacheID = this.phaseindex + '-' + this.distmode + '-';
+                let cacheID = this.phaseindex + '-' + this.minionIndex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);

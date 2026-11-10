@@ -63,7 +63,7 @@ internal class PlayerDto : ActorDto
 
     }
 
-    public PlayerDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData) : base(actor, log, details, usedData)
+    public PlayerDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData used) : base(actor, log, details, used)
     {
         Group = actor.Group;
         Acc = actor.Account;
@@ -79,6 +79,12 @@ internal class PlayerDto : ActorDto
         NotInSquad = actor is not Player;
         WeaponSets = [];
         BuildWeaponSets(actor, log);
+        var minions = actor.GetMinions(log);
+        Minions = new(minions.Count);
+        for (var i = 0; i < minions.Count; i++)
+        {
+            Minions.Add(MinionDto.BuildPlayerMinionDto(minions[i], log, used));
+        }
     }
 
     private static void BuildWeaponSets((string mh, string oh) set, List<string> listToSet)

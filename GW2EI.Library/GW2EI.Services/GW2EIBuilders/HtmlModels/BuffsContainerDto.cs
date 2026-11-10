@@ -79,6 +79,8 @@ internal class BuffsContainerDto
     public List<BuffData> TargetsDebuffUptimes;
     public List<BuffData> TargetsOtherBuffUptimes;
 
+    public List<List<MinionBuffsContainerDto?>> MinionBuffs;
+
     public BuffsContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
     {
         StatisticsHelper statistics = log.StatisticsHelper;
@@ -151,6 +153,25 @@ internal class BuffsContainerDto
             TargetsBoonUptimes.Add(BuffData.BuildTargetBoonUptimeData(log, phase, target));
             TargetsDebuffUptimes.Add(BuffData.BuildTargetDebuffUptimeData(log, phase, target));
             TargetsOtherBuffUptimes.Add(BuffData.BuildTargetOtherBuffUptimeData(log, phase, target));
+        }
+
+        MinionBuffs = new(log.Friendlies.Count);
+        foreach (var friendly in log.Friendlies)
+        {
+            var minionData = new List<MinionBuffsContainerDto?>();
+            IReadOnlyList<Minions> minionGroups = friendly.GetMinions(log);
+            foreach (Minions minionGroup in minionGroups)
+            {
+                if (!minionGroup.IsWhitelisted(log))
+                {
+                    minionData.Add(null);
+                } 
+                else
+                {
+                    minionData.Add(new MinionBuffsContainerDto(log, minionGroup, phase));
+                }
+            }
+            MinionBuffs.Add(minionData);
         }
     }
 }

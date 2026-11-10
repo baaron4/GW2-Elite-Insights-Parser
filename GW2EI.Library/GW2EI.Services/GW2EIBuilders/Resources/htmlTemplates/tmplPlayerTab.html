@@ -20,7 +20,7 @@
                 </keep-alive>
                 <keep-alive>
                     <advancedrotation-component v-if="tabmode === 4 && id === phaseindex"
-                        :key="id + 'advrot' + playerindex" :actorindex="playerindex" :phaseindex="id" :target="false"
+                        :key="id + 'advrot' + playerindex" :actorIndex="playerindex" :phaseindex="id" :target="false"
                         :light="light">
                     </advancedrotation-component>
                 </keep-alive>
@@ -32,7 +32,7 @@
             </player-buff-tab-component>
         </keep-alive>
         <keep-alive>
-            <simplerotation-selector-component v-if="tabmode === 3" :key="'rot' + playerindex" :actorindex="playerindex"
+            <simplerotation-selector-component v-if="tabmode === 3" :key="'rot' + playerindex" :actorIndex="playerindex"
                 :phaseindex="phaseindex" :target="false">
             </simplerotation-selector-component>
         </keep-alive>

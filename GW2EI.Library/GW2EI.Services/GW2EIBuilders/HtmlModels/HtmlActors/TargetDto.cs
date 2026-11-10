@@ -19,7 +19,7 @@ internal class TargetDto : ActorDto
     private const int HPBarActive = 1;
     private const int HPBarUntouched = 2;
 
-    public TargetDto(SingleActor target, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData) : base(target, log, details, usedData)
+    public TargetDto(SingleActor target, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData used) : base(target, log, details, used)
     {
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;
@@ -71,6 +71,12 @@ internal class TargetDto : ActorDto
         else
         {
             HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
+        }
+        var minions = target.GetMinions(log);
+        Minions = new(minions.Count);
+        for (var i = 0; i < minions.Count; i++)
+        {
+            Minions.Add(MinionDto.BuildTargetMinionDto(minions[i], log, used));
         }
     }
 }

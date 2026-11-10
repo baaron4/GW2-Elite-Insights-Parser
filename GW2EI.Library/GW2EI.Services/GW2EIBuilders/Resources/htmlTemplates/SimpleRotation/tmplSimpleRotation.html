@@ -73,7 +73,7 @@
                 Skills <span class="caret"></span>
             </a>
             <img class="icon ml-2" :src="UIIcons.QuestionMark"
-                data-original-title="Use Skills dropdown to hide unwanted skills or click on a specific skill below to make all other skills transparent" />
+                 data-original-title="Use Skills dropdown to hide unwanted skills or click on a specific skill below to make all other skills transparent" />
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown min-wd-165px">
                 <li class="d-flex flex-column justify-content-center align-items-center mb-1">
                     <button type="button" class="btn btn-primary btn-sm rot-button"
@@ -90,9 +90,9 @@
                 <li v-for="(skill, index) in skillList" :key="index">
                     <div style="width: max-content;">
                         <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
-                            v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
+                               v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
                         <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                            class="rot-font">
+                               class="rot-font">
                             <img class="icon" :src="getSkill(skill.id).icon">
                             {{skill.name}}
                         </label>
@@ -100,26 +100,33 @@
                 </li>
             </ul>
         </div>
-        <span class="rot-skill" v-for="cast in rotation" :class="getCastClass(cast)" v-show="showSkill(cast)" @click="toggleHighlight(cast.skill)">
-            <img class="rot-icon" :class="getIconClass(cast)" :src="cast.skill.icon" :data-original-title="getTooltip(cast)" />
-        </span>
+        <div v-for="rotationGroup in rotationGroups" :key="rotationGroup.index" class="d-flex flex-row align-items-start mb-2">
+            <span v-if="minionIndex >= 0 && minionInstanceIndex === -1" class="rot-font mr-2" style="min-width: 90px; white-space: nowrap;">
+                Instance {{rotationGroup.index + 1}}
+            </span>
+            <div style="display: block;">
+                <span class="rot-skill" v-for="cast in rotationGroup.rotation" :class="getCastClass(cast)" v-show="showSkill(cast)" @click="toggleHighlight(cast.skill)">
+                    <img class="rot-icon" :class="getIconClass(cast)" :src="cast.skill.icon" :data-original-title="getTooltip(cast, rotationGroup)"/>
+                </span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     Vue.component("simplerotation-component", {
-        props: ["actorindex", "minionindex", "phaseindex", "target"],
+        props: ["actorIndex", "minionIndex", "minionInstanceIndex", "phaseindex", "target"],
         template: `${template}`,
         mixins: [UIIconsComponent],
-        data: function () {
+        data: function() {
             const selectedSkills = {};
             const phaseData = [];
             let hasInstantCastUnconditional = false;
             for (let phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
                 const skillList = [];
-                const castCounts = {};
-                const rotation = this.getRotationData(phaseIndex);
-                for (var i = 0; i < rotation.length; i++) {
+                const seenSkills = new Set();
+                const rotation = this.getRotationData(phaseIndex) ?? [];
+                for (let i = 0; i < rotation.length; i++) {
                     const rota = rotation[i];
                     const skillID = rota[1];
                     const skill = this.getSkill(skillID);
@@ -127,8 +134,8 @@
                     if (isInstant && skill.unconditionalProc) {
                         hasInstantCastUnconditional = true;
                     }
-                    if (!castCounts[skillID]) {
-                        castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
+                    if (!seenSkills.has(skillID)) {
+                        seenSkills.add(skillID);
                         if (!skill.isSwap) {
                             skillList.push({ name: skill.name, id: skillID });
                             selectedSkills['s' + skillID] = true;
@@ -144,7 +151,7 @@
                     }
                     return 0;
                 });
-                phaseData.push({ skillList: skillList, castCounts: castCounts });
+                phaseData.push({ skillList: skillList });
             }
             return {
                 autoattack: true,
@@ -168,19 +175,67 @@
             };
         },
         computed: {
-            rotation: function () {
-                var globalCast = 0;
-                var individualCasts = {};
-                return this.getRotationData(this.phaseindex).map((cast) => {
-                    var skillID = cast[1];
-                    if (typeof individualCasts[skillID] !== "number") {
-                        individualCasts[skillID] = 0;
+            rotation: function() {
+                return this.buildRotation(this.getRotationData(this.phaseindex)).rotation;
+            },
+            rotationGroups: function() {
+                if (this.minionIndex >= 0 && this.minionInstanceIndex === -1) {
+                    const instances = this.getActor().minions[this.minionIndex].instances ?? [];
+                    return instances.map((instance, index) => {
+                        const result = this.buildRotation(this.getRotationData(this.phaseindex, index));
+                        return {
+                            index: index,
+                            rotation: result.rotation,
+                            castCounts: result.castCounts
+                        };
+                    });
+                }
+                const result = this.buildRotation(this.getRotationData(this.phaseindex));
+                return [{
+                    index: this.minionInstanceIndex,
+                    rotation: result.rotation,
+                    castCounts: result.castCounts
+                }];
+            },
+            skillList: function () {
+                return this.phaseData[this.phaseindex].skillList;
+            },
+        },
+        methods: {
+            getActor: function () {
+                return this.target ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
+            },
+            getRotationData: function(phaseIndex, instanceIndex = this.minionInstanceIndex) {
+                if (this.minionIndex >= 0) {
+                    const instances = this.getActor().minions[this.minionIndex].instances ?? [];
+                    // Consolidated rotation
+                    if (instanceIndex === -1) {
+                        const rotation = [];
+                        for (const instance of instances) {
+                            rotation.push(...(instance.details.rotation[phaseIndex] ?? []));
+                        }
+                        return rotation;
                     }
+                    return instances[instanceIndex]?.details.rotation[phaseIndex] ?? []; // minion instance
+                }
+                return this.getActor().details.rotation[phaseIndex] ?? []; // player/target
+            },
+            buildRotation: function(rotationData) {
+                const orderedRotation = rotationData.slice().sort((x, y) => x[0] - y[0]);
+                const castCounts = {};
+                orderedRotation.forEach(cast => {
+                    const skillID = cast[1];
+                    castCounts[skillID] = (castCounts[skillID] || 0) + 1;
+                });
+                const individualCasts = {};
+                let globalCast = 0;
+                const rotation = orderedRotation.map(cast => {
+                    const skillID = cast[1];
+                    individualCasts[skillID] = (individualCasts[skillID] || 0) + 1;
                     globalCast++;
-                    individualCasts[skillID]++;
                     return {
                         time: cast[0],
-                        skill: this.getSkill(cast[1]),
+                        skill: this.getSkill(skillID),
                         duration: cast[2],
                         type: cast[3],
                         expected: cast[5],
@@ -190,21 +245,10 @@
                         individualCast: individualCasts[skillID]
                     };
                 });
-            },
-            skillList: function () {
-                return this.phaseData[this.phaseindex].skillList;
-            },
-            castCounts: function () {
-                return this.phaseData[this.phaseindex].castCounts;
-            },
-        },
-        methods: {
-            getActor: function() {
-                return this.target ? logData.targets[this.actorindex] : logData.players[this.actorindex];
-            },
-            getRotationData(phaseIndex) {
-                const minionIndex = this.minionindex;
-                return minionIndex >= 0 ? this.getActor().details.minions[minionIndex].rotation[phaseIndex] :  this.getActor().details.rotation[phaseIndex];
+                return {
+                    rotation: rotation,
+                    castCounts: castCounts
+                };
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();
@@ -267,10 +311,10 @@
                     'rot-instant': this.instantBorder && cast.type === RotationStatus.INSTANT
                 };
             },
-            getTooltip(cast) {
+            getTooltip(cast, rotationGroup) {
                 let tooltip = getCastTooltip(cast);
-                tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
-                tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
+                tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${rotationGroup.castCounts[cast.skill.id]}`;
+                tooltip += `<br>Skill cast ${cast.globalCast} of ${rotationGroup.rotation.length}`;
                 return tooltip;
             },
             setAllSelectedSkills(selected) {

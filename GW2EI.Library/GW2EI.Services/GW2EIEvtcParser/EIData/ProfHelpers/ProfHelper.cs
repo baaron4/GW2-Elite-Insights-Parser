@@ -830,22 +830,9 @@ internal static class ProfHelper
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
-
-        switch (minion.ID)
+        if (IsWhiteListedForSomeStats(minion.AgentItem, log))
         {
-            case (int)MinionID.JadeMech:
-                AddOffensiveBoonsDecorations(minion, master, log, replay);
-                var signetForceStatus = minion.GetBuffStatus(log, ForceSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 60, 15);
-                var signetConductingStatus = minion.GetBuffStatus(log, SuperconductingSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, 120, 15);
-                break;
-        }
-        if (RangerHelper.IsJuvenilePet(minion.AgentItem))
-        {
-            AddOffensiveBoonsDecorations(minion, master, log, replay);
-            var sicEmStatus = minion.GetBuffStatus(log, SicEmBuff).Where(x => x.Value > 0);
-            replay.Decorations.AddRotatedOverheadIcons(sicEmStatus, minion, SkillImages.SicEm, 90, 15);
+            return;
         }
         if (MesmerHelper.IsPhantasm(minion.AgentItem))
         {
@@ -855,10 +842,25 @@ internal static class ProfHelper
             var chronoPhantasmaResummon = minion.GetBuffStatus(log, ChronophantasmaResummonBuff).Where(x => x.Value > 0);
             replay.Decorations.AddRotatedOverheadIconsWithValueAsText(chronoPhantasmaResummon, minion, TraitImages.Chronophantasma, 120, 15);
         }
-        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem) || RitualistHelper.IsSpiritMinion(minion.AgentItem))
+        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem))
         {
             AddOffensiveBoonsDecorations(minion, master, log, replay);
         }
+    }
+
+    /// <summary>
+    /// Whitelist: Health, Barrier, Graphs, Buffs, Volumes, Rotation.
+    /// </summary>
+    public static bool IsWhiteListedForSomeStats(AgentItem agent, ParsedEvtcLog log)
+    {
+        return
+            (RangerHelper.IsSpirit(agent) && log.CombatData.GetGW2BuildEvent().Build < GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM) ||
+            RangerHelper.IsJuvenilePet(agent) ||
+            MechanistHelper.IsJadeMech(agent) ||
+            NecromancerHelper.IsUniqueUndeadMinion(agent) ||
+            RitualistHelper.IsSpiritMinion(agent) ||
+            ElementalistHelper.IsGlyphOfElementals(agent) ||
+            ThiefHelper.IsThievesGuild(agent);
     }
 
     public static void AdjustMinionName(AgentItem minion)
