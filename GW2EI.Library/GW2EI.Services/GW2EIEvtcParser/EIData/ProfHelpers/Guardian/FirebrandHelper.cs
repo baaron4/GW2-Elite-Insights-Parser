@@ -5,12 +5,10 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
-using static GW2EIEvtcParser.EIData.InstantCastFinder;
 using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
