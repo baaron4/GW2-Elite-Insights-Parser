@@ -284,6 +284,7 @@ internal static class TraitImages
     public const string ConsumeShadows = "https://render.guildwars2.com/file/0DE6EECA322FE219A7DF6FFA9EE04B975FA2E06B/2503646.png";
     public const string Executioner = "https://render.guildwars2.com/file/C44E0FC7EC5B1870214E24AD4144C55E110AD9C2/1012746.png";
     public const string FerociousStrikes = "https://render.guildwars2.com/file/519532119E92CFFF9375E2E3CFC4326B46659F63/1012737.png";
+    public const string OpportuneOpening = "https://render.guildwars2.com/file/E80BD3449E33470B1ECA0FF242CC6B031B459514/1012714.png";
     public const string FluidStrikes = "https://render.guildwars2.com/file/64A151F4F69F7F6E36986108224DA606660EDD64/1012725.png";
     public const string Hiddenkiller = "https://render.guildwars2.com/file/03E22FDC6642C0F4BFD197DA5470A97910EB1877/1012733.png";
     public const string InstantReflexes = "https://render.guildwars2.com/file/E80BD3449E33470B1ECA0FF242CC6B031B459514/1012714.png";

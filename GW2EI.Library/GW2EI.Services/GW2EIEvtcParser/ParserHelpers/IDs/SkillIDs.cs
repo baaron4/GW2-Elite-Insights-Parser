@@ -5856,6 +5856,7 @@ public static class SkillIDs
     public const long GrabPunch = 81344;
     #endregion
     #region TODO
+    public const long TwinFangsBuff = 999998;
     public const long HuntersTacticsBuff = 999999;
     #endregion TODO
 

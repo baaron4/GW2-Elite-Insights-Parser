@@ -28,7 +28,9 @@ internal static class DeadeyeHelper
         new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1.5% per boon",DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, TraitImages.Premeditation, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
         new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, TraitImages.Premeditation, DamageModifierMode.All)
-            .WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
+            .WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "2% per boon (max 5)", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Deadeye, By5CappedStack, TraitImages.Premeditation, DamageModifierMode.All)
+            .WithBuilds( GW2Builds.November2026Balance),
         // Iron Sight
         new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.All)
             .WithBuffOnActorFromFoe()

@@ -56,9 +56,13 @@ internal static class ThiefHelper
         new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.June2025Balance),
+            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.November2026Balance),
         new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "3% per condition on target", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.June2025Balance),
+            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.November2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "4% per condition on target (max 5)", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "3% per condition on target (max 5)", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.November2026Balance),
         // - Executioner
         new DamageLogDamageModifier(Mod_Executioner, "Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
 
@@ -81,6 +85,9 @@ internal static class ThiefHelper
         // - Fluid Strikes
         new BuffOnActorDamageModifier(Mod_FluidStrikes, FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.FluidStrikes, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+        // Place holder + complete list
+        new BuffOnFoeDamageModifier(Mod_OpportuneOpening, [Chilled, Crippled, Slow, Immobile], "Opportune Opening", "10% on movement-impaired target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.OpportuneOpening, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
 
         // Spear
         new BuffOnActorDamageModifier(Mod_DistractingThrow, DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, SkillImages.DistractingThrow, DamageModifierMode.PvE),
@@ -131,9 +138,11 @@ internal static class ThiefHelper
         // Traits
         new Buff("Hidden Killer", HiddenKiller, Source.Thief, BuffClassification.Other, TraitImages.Hiddenkiller),
         new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, TraitImages.LeadAttacks),
-        new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, TraitImages.InstantReflexes),
+        new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, TraitImages.InstantReflexes)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2026Balance),
         new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, TraitImages.FluidStrikes)
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+        new Buff("Twin Fangs", TwinFangsBuff, Source.Thief, BuffClassification.Other, TraitImages.FerociousStrikes),
         // Spear
         new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.DistractingThrow),
         new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, SkillImages.ShadowVeil),
