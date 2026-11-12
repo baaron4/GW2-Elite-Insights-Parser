@@ -739,11 +739,25 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
     {
         IEnumerable<BuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
         IEnumerable<BuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
+        var (deads, _, dcs, _)  = player.GetStatus(log);
         foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
         {
             long start = bae.Time;
             var removal = removals.FirstOrDefault(x => x.Time > start);
             long end = removal?.Time ?? log.LogData.EvtcLogEnd;
+            if (removal == null)
+            {
+                var dead = deads.FirstOrNull((in x) => x.Intersects(start, end));
+                if (dead != null)
+                {
+                    end = Math.Min(end, dead.Value.Start);
+                }
+                var dc = dcs.FirstOrNull((in x) => x.Intersects(start, end));
+                if (dc != null)
+                {
+                    end = Math.Min(end, dc.Value.Start);
+                }
+            }
             replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
         }
     }
