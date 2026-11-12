@@ -103,14 +103,17 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
-    {
-        return
-        [
+    internal static readonly HashSet<TargetID> EncounterSlublingIDs = 
+    [
             TargetID.Slubling1,
             TargetID.Slubling2,
             TargetID.Slubling3,
             TargetID.Slubling4,
+    ];
+
+    internal static readonly HashSet<TargetID> SlublingIDs = 
+    [
+            ..EncounterSlublingIDs,
             TargetID.EvolvedSlublingCave1,
             TargetID.EvolvedSlublingCave2,
             TargetID.EvolvedSlublingCave3,
@@ -119,6 +122,13 @@ internal class Slothasor : SalvationPass
             TargetID.SlublingCave2,
             TargetID.SlublingCave3,
             TargetID.SlublingCave4,
+    ];
+
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        return
+        [
+            ..SlublingIDs,
             TargetID.PoisonMushroom
         ];
     }
@@ -133,7 +143,10 @@ internal class Slothasor : SalvationPass
     }
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
-        return [(int)TargetID.PlayerSlubling];
+        return [
+            (int)TargetID.PlayerSlubling,
+            ..SlublingIDs.Select(x => (int)x)
+        ];
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -236,12 +249,32 @@ internal class Slothasor : SalvationPass
         }
     }
 
+    internal static void RenameSlublings(IReadOnlyList<SingleActor> trashMobs)
+    {
+        var slublings = trashMobs.Where(x => x.IsAnySpecies(SlublingIDs)).ToList();
+        slublings.SortByFirstAware();
+        var caveCount = 1;
+        var encounterCount = 1;
+        foreach (var slubling in slublings)
+        {
+            if (slubling.IsAnySpecies(EncounterSlublingIDs))
+            {
+                slubling.OverrideName(slubling.Character + " " + encounterCount++);
+            } 
+            else
+            {
+                slubling.OverrideName(slubling.Character + " " + caveCount++);
+            }
+        }
+    }
+
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindMushrooms(logData, agentData, combatData, extensions);
         FindSlublingTransformations(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        RenameSlublings(TrashMobs);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

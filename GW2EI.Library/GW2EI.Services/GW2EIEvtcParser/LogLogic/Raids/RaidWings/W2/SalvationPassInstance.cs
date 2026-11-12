@@ -230,6 +230,7 @@ internal class SalvationPassInstance : SalvationPass
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
+            ..Slothasor.SlublingIDs.Select(x => (int)x),
             (int)TargetID.PlayerSlubling,
             (int)TargetID.MatthiasSacrificeCrystal,
         ];
@@ -244,6 +245,7 @@ internal class SalvationPassInstance : SalvationPass
         BanditTrio.FindCageAndBombs(agentData, combatData);
         Matthias.FindSacrifices(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        Slothasor.RenameSlublings(TrashMobs);
         BanditTrio.RedirectInsectSwarmsToCustomMaster(bees, agentData);
         Matthias.ForceSacrificeHealth(Targets);
     }
