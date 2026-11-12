@@ -103,7 +103,7 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    internal static readonly HashSet<TargetID> EncounterSlublingIDs = 
+    internal static readonly HashSet<TargetID> EncounterSlublingIDs =
     [
             TargetID.Slubling1,
             TargetID.Slubling2,
@@ -111,7 +111,7 @@ internal class Slothasor : SalvationPass
             TargetID.Slubling4,
     ];
 
-    internal static readonly HashSet<TargetID> SlublingIDs = 
+    internal static readonly HashSet<TargetID> SlublingIDs =
     [
             ..EncounterSlublingIDs,
             TargetID.EvolvedSlublingCave1,
@@ -260,7 +260,7 @@ internal class Slothasor : SalvationPass
             if (slubling.IsAnySpecies(EncounterSlublingIDs))
             {
                 slubling.OverrideName(slubling.Character + " " + encounterCount++);
-            } 
+            }
             else
             {
                 slubling.OverrideName(slubling.Character + " " + caveCount++);
