@@ -375,6 +375,26 @@ internal class Slothasor : SalvationPass
                 var slothasorPhases = log.LogData.GetEncounterPhases(log, LogID);
                 replay.AddHideByEncounterPhases(slothasorPhases, log);
                 break;
+            case (int)TargetID.Slubling1:
+            case (int)TargetID.Slubling2:
+            case (int)TargetID.Slubling3:
+            case (int)TargetID.Slubling4:
+            case (int)TargetID.SlublingCave1:
+            case (int)TargetID.SlublingCave2:
+            case (int)TargetID.SlublingCave3:
+            case (int)TargetID.SlublingCave4:
+            case (int)TargetID.EvolvedSlublingCave1:
+            case (int)TargetID.EvolvedSlublingCave2:
+            case (int)TargetID.EvolvedSlublingCave3:
+            case (int)TargetID.EvolvedSlublingCave4:
+                if (log.CombatData.TryGetTransformationEventsBySrcWithGUID(target.AgentItem, TransformationGUIDs.EvolvedSlublingTransformation, out var transformations))
+                {
+                    foreach (var transformation in transformations)
+                    {
+                        replay.Decorations.AddOverheadIcon((transformation.Time, transformation.EndTime), target, ParserIcons.EnragedOverhead, 15);
+                    }
+                }
+                break;
             default:
                 break;
         }
