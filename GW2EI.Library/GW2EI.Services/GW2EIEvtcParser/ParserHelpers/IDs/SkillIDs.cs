@@ -5854,10 +5854,11 @@ public static class SkillIDs
     public const long ConstructOfGaldraFrontal = 81341;
     public const long FeatherField = 81342;
     public const long GrabPunch = 81344;
+    public const long FriendOfTheLuxons = 81390;
+    public const long HuntersTacticsBuff = 81421;
+    public const long TwinFangsBuff = 81447;
     #endregion
     #region TODO
-    public const long TwinFangsBuff = 999998;
-    public const long HuntersTacticsBuff = 999999;
     #endregion TODO
 
 }
