@@ -739,7 +739,7 @@ internal class OldLionsCourt : EndOfDragonsRaidEncounter
     {
         IEnumerable<BuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
         IEnumerable<BuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
-        var (deads, _, dcs, _)  = player.GetStatus(log);
+        var (deads, _, dcs, _) = player.GetStatus(log);
         foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
         {
             long start = bae.Time;
