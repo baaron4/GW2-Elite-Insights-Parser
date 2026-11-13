@@ -412,6 +412,21 @@ var buffComponent = {
     }
 };
 
+var buffPlayerWithActiveTimeComponent = {
+    methods: {
+        getPlayerWeight(playerIndex, active) {
+            if (!active) {
+                return 1;
+            }
+            return this.activeTimes[playerIndex];
+        }
+    },
+    computed: {
+        activeTimes: function() {
+            return this.phase.playerActiveTimes;
+        },
+    }
+};
 var buffPlayerMinionsComponent = {
     methods: {
         getCacheID: function() {
@@ -473,6 +488,9 @@ var minionTabulatedComponent = {
         },
     },
     computed: {
+        consolidatedMinionView: function() {
+            return this.minionIndex >= 0 && this.minionInstanceIndex === -1;
+        },
         minionsToUse: function () {
             let result = [];
             const actor = this.actor;
