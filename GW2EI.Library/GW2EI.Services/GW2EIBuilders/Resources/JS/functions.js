@@ -1442,3 +1442,7 @@ function initTheme() {
     }
     document.body.classList.add("theme-" + theme);
 }
+
+function getMinionLabel(baseName, index) {
+    return baseName + " # " + (index + 1);
+}

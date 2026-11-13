@@ -35,7 +35,7 @@
                 const minion = minionInfo.instances[minionInstanceIndex];
                 const isActive = Math.min(phase.end, minion.lastAware / 1000) - Math.max(phase.start, minion.firstAware / 1000) > 0;
                 return `
-                    ${minionInfo.name} # ${minionInstanceIndex + 1} (${
+                    ${getMinionLabel(minionInfo.name, minionInstanceIndex)} (${
                         isActive ? 'active' : 'inactive'
                     })
                 `;
