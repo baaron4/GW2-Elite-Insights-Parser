@@ -15,7 +15,7 @@
         </div>       
         <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
         <div class="mt-1 mb-1">
-            <buff-table-component :condition="false" :generation="true" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
+            <buff-table-component :condition="false" :generation="!consolidatedMinionView" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
                                   :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-table-component>
         </div>
     </div>
