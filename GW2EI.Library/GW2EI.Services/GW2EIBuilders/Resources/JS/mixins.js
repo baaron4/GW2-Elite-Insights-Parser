@@ -427,6 +427,26 @@ var buffPlayerWithActiveTimeComponent = {
         },
     }
 };
+
+var buffPlayerMinionsWithActiveTimeComponent = {
+    methods: {
+        getMinionInstanceWeight: function(instanceIndex, active) {
+            if (!active || this.minionIndex < 0) {
+                return 1;
+            }
+            return this.minionActiveTimes[instanceIndex];
+        },
+    },
+    computed: {
+        minionActiveTimes: function() {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.phase.playerMinionActiveTimes[this.playerindex][this.minionIndex];
+        },
+    }
+};
+
 var buffPlayerMinionsComponent = {
     methods: {
         getCacheID: function() {

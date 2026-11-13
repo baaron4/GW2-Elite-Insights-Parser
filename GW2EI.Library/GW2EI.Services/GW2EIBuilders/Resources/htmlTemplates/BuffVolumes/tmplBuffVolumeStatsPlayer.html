@@ -57,7 +57,7 @@
                         this.selectedMinionVolumeContainer.boonVolumeDictionaries[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
-                    if (!players[i] || (this.getPlayeWeight(i, activeduration) < 1e-6)) {
+                    if (!players[i] || (this.getPlayerWeight(i, activeduration) < 1e-6)) {
                         continue;
                     }
                     res.push({
@@ -87,7 +87,7 @@
                     return res;
                 }
                 const playerData = activeduration ? this.buffVolumesStatContainer.boonVolumeActiveStats[this.playerindex] : this.buffVolumesStatContainer.boonVolumeStats[this.playerindex];
-                const playerWeight = this.getPlayeWeight(this.playerindex, activeduration);
+                const playerWeight = this.getPlayerWeight(this.playerindex, activeduration);
                 if (playerWeight < 1e-6) {
                     res.push({
                         icon: this.player.icon,
