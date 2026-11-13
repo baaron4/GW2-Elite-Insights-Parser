@@ -96,14 +96,17 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
         switch (removeType)
         {
             case BuffRemove.All:
-                foreach (BuffStackItem stackItem in BuffStack)
+                if (removedStacks != BuffRemoveAllEvent.FullRemovalButIgnoreForWaste)
                 {
-                    WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                    if (stackItem.Extensions.Count != 0)
+                    foreach (BuffStackItem stackItem in BuffStack)
                     {
-                        foreach ((AgentItem src, long value) in stackItem.Extensions)
+                        WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
+                        if (stackItem.Extensions.Count != 0)
                         {
-                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
+                            foreach ((AgentItem src, long value) in stackItem.Extensions)
+                            {
+                                WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
+                            }
                         }
                     }
                 }

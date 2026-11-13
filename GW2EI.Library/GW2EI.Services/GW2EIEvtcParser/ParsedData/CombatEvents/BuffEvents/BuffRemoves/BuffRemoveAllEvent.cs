@@ -6,6 +6,7 @@ namespace GW2EIEvtcParser.ParsedData;
 public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
 {
     public const int FullRemoval = int.MaxValue;
+    public const int FullRemovalButIgnoreForWaste = int.MaxValue - 1;
 
     public readonly int RemovedStacks;
     private readonly int _lastRemovedDuration;
