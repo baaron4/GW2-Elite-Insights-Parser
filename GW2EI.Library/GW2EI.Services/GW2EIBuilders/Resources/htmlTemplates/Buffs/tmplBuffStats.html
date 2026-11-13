@@ -158,9 +158,9 @@
                         });
                     }
                 }
-                for (let k = 0; k < totalAvg.length; k++) {
-                    for (let j = 0; j < totalAvg[k].length; j++) {
-                        totalAvg[k][j] = this.round3(totalAvg[k][j] / totalCount);
+                for (let j = 0; j < totalAvg.length; j++) {
+                    for (let k = 0; k < totalAvg[j].length; k++) {
+                        totalAvg[j][k] = this.round3(totalAvg[j][k] / totalCount);
                     }
                 }
                 avg.push({

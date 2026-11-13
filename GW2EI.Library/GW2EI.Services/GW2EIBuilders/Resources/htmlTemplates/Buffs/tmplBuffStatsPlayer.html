@@ -78,9 +78,6 @@
                     this.buffsStatContainer.boonDictionaries[this.playerindex];
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.minionInstanceIndex;
-                    if (minionInstanceIndex < -1) {
-                        // consolidated view
-                    }
                     dictionaries = activeduration ? 
                         this.selectedMinionBuffs.boonActiveDictionaries[minionInstanceIndex] 
                         : 
@@ -106,7 +103,7 @@
                 const res = [];
                 const activeduration = this.activeduration;
                 if (this.consolidatedMinionView) {
-                    const minionsData = activeduration ? this.selectedMinionBuffs.boonActiveStats : minionsData.this.selectedMinionBuffs;
+                    const minionsData = activeduration ? this.selectedMinionBuffs.boonActiveStats : this.selectedMinionBuffs.boonStats;
                     let totalCount = 0;
                     let totalBoonAvg = 0;
                     let totalAvg = [];

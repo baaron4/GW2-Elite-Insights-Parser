@@ -9,7 +9,7 @@
 <script>
     Vue.component("conditions-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent],
+        mixins: [buffComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -68,22 +68,22 @@
                     for (let i = 0; i < groupeAvg.length; i++) {
                         if (groupeAvg[i]) {
                             for (let k = 0; k < groupeAvg[i].length; k++) {
-                                groupeAvg[i][k] = Math.round(1000 * groupeAvg[i][k] / groupCount[i]) / 1000;
+                                groupeAvg[i][k] = this.round3(groupeAvg[i][k] / groupCount[i]);
                             }
                             avg.push({
                                 name: "Group " + i,
                                 data: groupeAvg[i],
-                                avg: Math.round(1000 * groupConditionAvg[i] / groupCount[i]) / 1000
+                                avg: this.round3(groupConditionAvg[i] / groupCount[i])
                             });
                         }
                     }
                     for (let k = 0; k < totalAvg.length; k++) {
-                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                        totalAvg[k] = this.round3(totalAvg[k] / totalCount);
                     }
                     avg.push({
                         name: "Total",
                         data: totalAvg,
-                        avg: Math.round(1000 * totalConditionAvg / totalCount) / 1000
+                        avg: this.round3(totalConditionAvg / totalCount)
                     });
                     return [uptimes, avg];
                 };
