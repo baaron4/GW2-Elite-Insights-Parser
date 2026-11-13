@@ -181,11 +181,11 @@
                 var order = this.sortEdata.order === "asc" ? 1 : -1;
                 switch (this.sortEdata.key) {
                     case "Name":
-                        rows.sort((x,y) => order * x.enemy.localeCompare(y.enemy));
+                        rows.sort((x,y) => order * collatorWithNumerics.compare(x.enemy, y.enemy));
                         break;
                     case "Data":
                         var index = this.sortEdata.index;
-                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || x.enemy.localeCompare(y.enemy));
+                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || collatorWithNumerics.compare(x.enemy, y.enemy));
                         break;
                     default:
                         return null;

@@ -613,13 +613,13 @@ var sortedTableComponent = {
             sortdata.index = index;
         },
         sortByPlayerName: function (x, y) {
-            return x.player.name.localeCompare(y.player.name);
+            return collatorWithNumerics.compare(x.player.name, y.player.name);
         },
         sortByPlayerProfession: function (x, y) {
-            return x.player.profession.localeCompare(y.player.profession);
+            return collatorWithNumerics.compare(x.player.profession, y.player.profession);
         },
         sortByPlayerAccount: function (x, y) {
-            return x.player.acc.localeCompare(y.player.acc);
+            return collatorWithNumerics.compare(x.player.acc, y.player.acc);
         },
         getHeaderClassBase: function (sortdata, key, index) {
             index = index >= 0 ? index : -1;
@@ -668,7 +668,7 @@ var sortedDistributionComponent = {
             var order = this.sortdata.order === "asc" ? 1 : -1;
             switch (this.sortdata.key) {
                 case "Skill":
-                    rows.sort((x, y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 case "Data":
                     var sortFunc = x => {
@@ -682,7 +682,7 @@ var sortedDistributionComponent = {
                         }
                         return value;
                     };
-                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 default:
                     break;
