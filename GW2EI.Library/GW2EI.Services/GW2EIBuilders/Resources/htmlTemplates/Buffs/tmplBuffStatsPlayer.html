@@ -121,6 +121,11 @@
                             }
                         }
                     }
+                    for (let j = 0; j < totalAvg.length; j++) {
+                        for (let k = 0; k < totalAvg[j].length; k++) {
+                            totalAvg[j][k] = this.round3(totalAvg[j][k] / totalCount);
+                        }
+                    }
                     res.push({
                         name: "Total",
                         data: totalAvg,
