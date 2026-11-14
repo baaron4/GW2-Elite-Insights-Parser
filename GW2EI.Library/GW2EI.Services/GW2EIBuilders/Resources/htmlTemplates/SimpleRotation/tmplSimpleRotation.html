@@ -101,7 +101,7 @@
             </ul>
         </div>
         <div v-for="rotationGroup in rotationGroups" :key="rotationGroup.index" class="d-flex flex-row align-items-start mb-2">
-            <span v-if="minionIndex >= 0 && minionInstanceIndex === -1" class="rot-font mr-2" style="min-width: 90px; white-space: nowrap;">
+            <span v-if="consolidatedMinionView" class="rot-font mr-2" style="min-width: 90px; white-space: nowrap;">
                 Instance {{rotationGroup.index + 1}}
             </span>
             <div style="display: block;">
@@ -179,7 +179,7 @@
                 return this.buildRotation(this.getRotationData(this.phaseindex)).rotation;
             },
             rotationGroups: function() {
-                if (this.minionIndex >= 0 && this.minionInstanceIndex === -1) {
+                if (this.consolidatedMinionView) {
                     const instances = this.getActor().minions[this.minionIndex].instances ?? [];
                     return instances.map((instance, index) => {
                         const result = this.buildRotation(this.getRotationData(this.phaseindex, index));
@@ -260,14 +260,14 @@
                 return findSkill(false, id).isSwap;
             },
             showSkill: function (cast) {
-                var skill = cast.skill;
+                const skill = cast.skill;
                 if (skill.isSwap) {
                     return true;
                 }
                 if (!this.selectedSkills['s' + skill.id]) {
                     return false;
                 }
-                var aa = skill.aa;
+                const aa = skill.aa;
                 if (aa) {
                     if (!this.autoattack) {
                         return false;
@@ -276,7 +276,7 @@
                         return false;
                     }
                 }
-                var isInstant = cast.type === RotationStatus.INSTANT;
+                const isInstant = cast.type === RotationStatus.INSTANT;
                 if (isInstant) {
                     if (this.hideInstantCast) {
                         return false;
@@ -318,7 +318,7 @@
                 return tooltip;
             },
             setAllSelectedSkills(selected) {
-                for (var i = 0; i < this.skillList.length; i++) {
+                for (let i = 0; i < this.skillList.length; i++) {
                     this.selectedSkills['s' + this.skillList[i].id] = selected;
                 }
             },

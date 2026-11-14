@@ -25,13 +25,11 @@ public class JsonRotation
         /// <summary>
         /// Expected cast bar duration of the skill
         /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? ExpectedCastBarDuration;
 
         /// <summary>
         /// Expected duration after which control is returned to the caster
         /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? ExpectedReturnControlDuration;
 
         /// <summary>
@@ -53,13 +51,11 @@ public class JsonRotation
         /// If starts with "u", the following number is the <see cref="JsonActor.UniqueID"/>> of an actor in <see cref="JsonLog.Players"/> or <see cref="JsonLog.Targets"/>. \n
         /// Otherwise name of the target will be in <see cref="JsonLog.AgentNameMap"/>.
         /// </summary>	
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Target = null;
 
         /// <summary>	
         /// If true, the EI html will ignore this event when displaying rotations. The cast itself remains relevant for statistical purposes. This is only for visual convenience on rotation display. \n
         /// </summary>	
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IgnoreOnRotationRender = null;
     }
 

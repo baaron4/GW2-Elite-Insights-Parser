@@ -148,6 +148,7 @@ internal class PhaseDto
     public List<List<double[]>> MechanicStats;
     public List<List<double[]>> EnemyMechanicStats;
     public List<long> PlayerActiveTimes;
+    public List<List<List<long>>> PlayerMinionActiveTimes;
 
     public List<double>? MarkupLines;
     public List<AreaLabelDto>? MarkupAreas;
@@ -232,9 +233,30 @@ internal class PhaseDto
         }
 
         PlayerActiveTimes = new(log.Friendlies.Count);
+        PlayerMinionActiveTimes = new(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
             PlayerActiveTimes.Add(actor.GetActiveDuration(log, phase.Start, phase.End));
+            var minions = actor.GetMinions(log);
+            var minionActiveTimes = new List<List<long>>(minions.Count);
+            PlayerMinionActiveTimes.Add(minionActiveTimes);
+            foreach (var minionGroup in minions)
+            {
+                if (minionGroup.IsWhitelisted(log))
+                {
+                    var minionInstances = minionGroup.MinionList;
+                    var minionInstanceActiveTimes = new List<long>(minionInstances.Count);
+                    minionActiveTimes.Add(minionInstanceActiveTimes);
+                    foreach (var minion in minionInstances)
+                    {
+                        minionInstanceActiveTimes.Add(minion.GetActiveDuration(log, phase.Start, phase.End));
+                    }
+                } 
+                else
+                {
+                    minionActiveTimes.Add([]);
+                }
+            }
         }
 
         // add phase markup

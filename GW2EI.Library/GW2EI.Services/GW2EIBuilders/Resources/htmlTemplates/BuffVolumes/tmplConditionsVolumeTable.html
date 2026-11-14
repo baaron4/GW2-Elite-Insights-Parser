@@ -9,7 +9,7 @@
 <script>
     Vue.component("conditions-volume-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -22,19 +22,17 @@
                 if (this.cache.has(cacheID)) {
                     return this.cache.get(cacheID);
                 }
-                var activeduration = this.activeduration;
-                var activeTimes = this.phase.playerActiveTimes;
 
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
-                var getData = function (uptimesStats) {
-                    var uptimes = [];                    
-                    var avg = [],
+                const getData = function (uptimesStats) {
+                    const uptimes = [];                    
+                    const avg = [],
                         groupeAvg = [],
                         totalAvg = [];
-                    var groupCount = [],
+                    let groupCount = [],
                         totalCount = 0;
-                    for (var i = 0; i < players.length; i++) {
-                        var player = players[i];
+                    for (let i = 0; i < players.length; i++) {
+                        const player = players[i];
                         if (!player) {
                             continue;
                         }
@@ -43,28 +41,28 @@
                             data: uptimesStats[i]
                         });
                         
-                        if (activeduration && activeTimes[i] < 1e-6) {
+                        const playerWeight = this.getPlayerWeight(i, activeduration);
+                        if (playerWeight < 1e-6) {
                             continue;
                         }
                         if (player.notInSquad) {
                             continue;
                         }
-                        var playerWeight = activeduration ? activeTimes[i] : 1;
                         if (!groupeAvg[player.group]) {
                             groupeAvg[player.group] = [];
                             groupCount[player.group] = 0;
                         }
                         totalCount += playerWeight;
                         groupCount[player.group] += playerWeight;
-                        for (var j = 0; j < uptimesStats[i].data.length; j++) {
+                        for (let j = 0; j < uptimesStats[i].data.length; j++) {
                             totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
                             groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
                         }
                     }
-                    for (var i = 0; i < groupeAvg.length; i++) {
+                    for (let i = 0; i < groupeAvg.length; i++) {
                         if (groupeAvg[i]) {
-                            for (var k = 0; k < groupeAvg[i].length; k++) {
-                                groupeAvg[i][k] = Math.round(1000 * groupeAvg[i][k] / groupCount[i]) / 1000;
+                            for (let k = 0; k < groupeAvg[i].length; k++) {
+                                groupeAvg[i][k] = this.round3(groupeAvg[i][k] / groupCount[i]);
                             }
                             avg.push({
                                 name: "Group " + i,
@@ -72,8 +70,8 @@
                             });
                         }
                     }
-                    for (var k = 0; k < totalAvg.length; k++) {
-                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                    for (let k = 0; k < totalAvg.length; k++) {
+                        totalAvg[k] = this.round3( totalAvg[k] / totalCount);
                     }
                     avg.push({
                         name: "Total",
@@ -81,7 +79,7 @@
                     });
                     return [uptimes, avg];
                 };
-                var res;
+                let res;
                 if (this.activeduration) {
                     res = getData(this.buffVolumesStatContainer.conditionsVolumeActiveStats);
                 } else {

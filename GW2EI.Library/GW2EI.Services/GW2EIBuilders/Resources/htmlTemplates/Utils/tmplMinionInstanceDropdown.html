@@ -32,10 +32,10 @@
             getMinionLabel: function(minionIndex, minionInstanceIndex, phaseIndex) {
                 const phase = logData.phases[phaseIndex];
                 const minionInfo = this.actor.minions[minionIndex];
-                const minion = minionInfo.instances[minionInstanceIndex];
-                const isActive = Math.min(phase.end, minion.lastAware / 1000) - Math.max(phase.start, minion.firstAware / 1000) > 0;
+                const minionInstance = minionInfo.instances[minionInstanceIndex];
+                const isActive = isMinionInstanceActive(phase, minionInstance);
                 return `
-                    ${minionInfo.name} # ${minionInstanceIndex + 1} (${
+                    ${getMinionLabel(minionInfo.name, minionInstanceIndex)} (${
                         isActive ? 'active' : 'inactive'
                     })
                 `;

@@ -15,7 +15,7 @@
         </div>       
         <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
         <div class="mt-1 mb-1">
-            <buff-table-component :condition="false" :generation="true" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
+            <buff-table-component :condition="false" :generation="!consolidatedMinionView" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
                                   :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-table-component>
         </div>
     </div>
@@ -24,7 +24,7 @@
 <script>
     Vue.component("buff-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, buffPlayerMinionsWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -32,6 +32,9 @@
                 cacheBoon: new Map(),
                 cacheBoonSums: new Map(),
             };
+        },
+        created: function() {
+            this.allowConsolidated = true;
         },
         computed: {
             player: function() {
@@ -42,9 +45,26 @@
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
+                const phase = this.phase;
                 const res = [];
-                const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;
+                if (this.consolidatedMinionView) {
+                    const minionsData = activeduration ? this.selectedMinionBuffs.boonActiveStats : this.selectedMinionBuffs.boonStats;
+                    for (let i = 0; i < minionsData.length; i++) {
+                        const minionData = minionsData[i];
+                        res.push({
+                            player: {
+                                name: getMinionLabel(this.selectedMinion.name, i),
+                                profession: null,
+                                icon: this.selectedMinion.icon,
+                                group: null
+                            },
+                            data: minionData
+                        });
+                    }
+                    this.cacheBoon.set(id, res);
+                    return res;
+                }
                 const players = getActivePlayersForPhase(this.encounterPhase);
                 let dictionaries = activeduration ? 
                     this.buffsStatContainer.boonActiveDictionaries[this.playerindex] 
@@ -58,7 +78,7 @@
                         this.selectedMinionBuffs.boonDictionaries[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
-                    if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
+                    if (!players[i]) {
                         continue;
                     }
                     res.push({
@@ -76,6 +96,38 @@
                 }
                 const res = [];
                 const activeduration = this.activeduration;
+                if (this.consolidatedMinionView) {
+                    const minionsData = activeduration ? this.selectedMinionBuffs.boonActiveStats : this.selectedMinionBuffs.boonStats;
+                    let totalCount = 0;
+                    let totalBoonAvg = 0;
+                    let totalAvg = [];
+                    for (let i = 0; i < minionsData.length; i++) {
+                        const minionData = minionsData[i] ;
+                        const weight = this.getMinionInstanceWeight(i, activeduration);
+                        totalCount += weight;
+                        totalBoonAvg += weight * minionData.avg;
+                        for (let j = 0; j < minionData.data.length; j++) {
+                            if (!totalAvg[j]) {
+                                totalAvg[j] = [];
+                            }
+                            for (let k = 0; k < minionData.data[j].length; k++) {
+                                totalAvg[j][k] = (totalAvg[j][k] || 0) + weight * (minionData.data[j][k] || 0);
+                            }
+                        }
+                    }
+                    for (let j = 0; j < totalAvg.length; j++) {
+                        for (let k = 0; k < totalAvg[j].length; k++) {
+                            totalAvg[j][k] = this.round3(totalAvg[j][k] / totalCount);
+                        }
+                    }
+                    res.push({
+                        name: "Total",
+                        data: totalAvg,
+                        avg: this.round3(totalBoonAvg / totalCount)
+                    })
+                    this.cacheBoonSums.set(id, res);
+                    return res;
+                }
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.minionInstanceIndex;
                     const minionData = activeduration ? this.selectedMinionBuffs.boonActiveStats[minionInstanceIndex] : this.selectedMinionBuffs.boonStats[minionInstanceIndex];
@@ -87,10 +139,10 @@
                     });
                     this.cacheBoonSums.set(id, res);
                     return res;
+
                 }
                 const playerData = activeduration ? this.buffsStatContainer.boonActiveStats[this.playerindex] : this.buffsStatContainer.boonStats[this.playerindex];
-                const activeTimes = this.phase.playerActiveTimes;
-                if (activeduration && activeTimes[this.playerindex] < 1e-6) {
+                if (this.getPlayerWeight(this.playerindex, activeduration) < 1e-6) {
                     res.push({
                         icon: this.player.icon,
                         name: this.player.name,

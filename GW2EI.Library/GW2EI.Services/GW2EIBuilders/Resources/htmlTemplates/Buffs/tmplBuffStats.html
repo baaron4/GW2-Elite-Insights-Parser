@@ -57,7 +57,7 @@
 <script>
     Vue.component("buff-stats-component", {
         props: ['type', 'playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent, numberComponent],
+        mixins: [buffComponent, encounterPhaseComponent, numberComponent, buffPlayerWithActiveTimeComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -68,7 +68,6 @@
         methods: {
             getData: function (name, container) {
                 const activeduration = !!this.activeduration;
-                const activeTimes = this.phase.playerActiveTimes;
                 //
                 const activeString = (activeduration ? "Active" : "");
                 const uptimesStats = container[name + activeString + "Stats"];
@@ -115,10 +114,10 @@
                         player: player,
                         data: genSquadStats[i]
                     });
-                    if (activeduration && activeTimes[i] < 1e-6) {
+                    const playerWeight = this.getPlayerWeight(i, activeduration);
+                    if (playerWeight < 1e-6) {
                         continue;
                     }
-                    var playerWeight = activeduration ? activeTimes[i] : 1;
                     if (player.notInSquad) {
                         continue;
                     }
@@ -159,9 +158,9 @@
                         });
                     }
                 }
-                for (let k = 0; k < totalAvg.length; k++) {
-                    for (let j = 0; j < totalAvg[k].length; j++) {
-                        totalAvg[k][j] = this.round3(totalAvg[k][j] / totalCount);
+                for (let j = 0; j < totalAvg.length; j++) {
+                    for (let k = 0; k < totalAvg[j].length; k++) {
+                        totalAvg[j][k] = this.round3(totalAvg[j][k] / totalCount);
                     }
                 }
                 avg.push({

@@ -1442,3 +1442,11 @@ function initTheme() {
     }
     document.body.classList.add("theme-" + theme);
 }
+
+function getMinionLabel(baseName, index) {
+    return baseName + " # " + (index + 1);
+}
+
+function isMinionInstanceActive(phase, minionInstance) {
+    return Math.min(phase.end, minionInstance.lastAware / 1000) - Math.max(phase.start, minionInstance.firstAware / 1000) > 0;
+}

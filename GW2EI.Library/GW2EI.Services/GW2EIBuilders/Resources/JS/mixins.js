@@ -412,6 +412,41 @@ var buffComponent = {
     }
 };
 
+var buffPlayerWithActiveTimeComponent = {
+    methods: {
+        getPlayerWeight(playerIndex, active) {
+            if (!active) {
+                return 1;
+            }
+            return this.activeTimes[playerIndex];
+        }
+    },
+    computed: {
+        activeTimes: function() {
+            return this.phase.playerActiveTimes;
+        },
+    }
+};
+
+var buffPlayerMinionsWithActiveTimeComponent = {
+    methods: {
+        getMinionInstanceWeight: function(instanceIndex, active) {
+            if (!active || this.minionIndex < 0) {
+                return 1;
+            }
+            return this.minionActiveTimes[instanceIndex];
+        },
+    },
+    computed: {
+        minionActiveTimes: function() {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.phase.playerMinionActiveTimes[this.playerindex][this.minionIndex];
+        },
+    }
+};
+
 var buffPlayerMinionsComponent = {
     methods: {
         getCacheID: function() {
@@ -471,8 +506,16 @@ var minionTabulatedComponent = {
             const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
             this.$set(this.minionInstanceIndices, minionIndex, minionInstanceIndex);
         },
+        isSelectedMinionInstanceActive(phaseIndex, minionInstanceIndex) {
+            const phase = logData.phases[phaseIndex];
+            const minionInstance = this.selectedMinion.instances[minionInstanceIndex];
+            return isMinionInstanceActive(phase, minionInstance);
+        },
     },
     computed: {
+        consolidatedMinionView: function() {
+            return this.minionIndex >= 0 && this.minionInstanceIndex === -1;
+        },
         minionsToUse: function () {
             let result = [];
             const actor = this.actor;
@@ -595,13 +638,13 @@ var sortedTableComponent = {
             sortdata.index = index;
         },
         sortByPlayerName: function (x, y) {
-            return x.player.name.localeCompare(y.player.name);
+            return collatorWithNumerics.compare(x.player.name, y.player.name);
         },
         sortByPlayerProfession: function (x, y) {
-            return x.player.profession.localeCompare(y.player.profession);
+            return collatorWithNumerics.compare(x.player.profession, y.player.profession);
         },
         sortByPlayerAccount: function (x, y) {
-            return x.player.acc.localeCompare(y.player.acc);
+            return collatorWithNumerics.compare(x.player.acc, y.player.acc);
         },
         getHeaderClassBase: function (sortdata, key, index) {
             index = index >= 0 ? index : -1;
@@ -650,7 +693,7 @@ var sortedDistributionComponent = {
             var order = this.sortdata.order === "asc" ? 1 : -1;
             switch (this.sortdata.key) {
                 case "Skill":
-                    rows.sort((x, y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 case "Data":
                     var sortFunc = x => {
@@ -664,7 +707,7 @@ var sortedDistributionComponent = {
                         }
                         return value;
                     };
-                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 default:
                     break;

@@ -24,7 +24,7 @@
 <script>
     Vue.component("buff-volume-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent],
+        mixins: [buffComponent, buffPlayerMinionsComponent, minionTabulatedComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, buffPlayerMinionsWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -32,6 +32,9 @@
                 cacheBoon: new Map(),
                 cacheBoonSums: new Map(),
             };
+        },
+        created: function() {
+            this.allowConsolidated = true;
         },
         computed: {
             player: function() {
@@ -42,9 +45,26 @@
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
+                const phase = this.phase;
                 const res = [];
-                const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;
+                if (this.consolidatedMinionView) {
+                    const minionsData = activeduration ? this.selectedMinionVolumeContainer.boonVolumeActiveStats : this.selectedMinionVolumeContainer.boonVolumeStats;
+                    for (let i = 0; i < minionsData.length; i++) {
+                        const minionData = minionsData[i];
+                        res.push({
+                            player: {
+                                name: getMinionLabel(this.selectedMinion.name, i),
+                                profession: null,
+                                icon: this.selectedMinion.icon,
+                                group: null
+                            },
+                            data: minionData
+                        });
+                    }
+                    this.cacheBoon.set(id, res);
+                    return res;
+                }
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 let dictionaries = activeduration ? 
                     this.buffVolumesStatContainer.boonVolumeActiveDictionaries[this.playerindex] 
@@ -58,7 +78,7 @@
                         this.selectedMinionVolumeContainer.boonVolumeDictionaries[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
-                    if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
+                    if (!players[i]) {
                         continue;
                     }
                     res.push({
@@ -76,6 +96,28 @@
                 }
                 const res = [];
                 const activeduration = this.activeduration;
+                 if (this.consolidatedMinionView) {
+                    const minionsData = activeduration ? this.selectedMinionVolumeContainer.boonVolumeActiveStats : this.selectedMinionVolumeContainer.boonVolumeStats;
+                    let totalAvg = [];
+                    let totalCount = 0;
+                    for (let i = 0; i < minionsData.length; i++) {
+                        const minionData = minionsData[i] ;
+                        const weight = this.getMinionInstanceWeight(i, activeduration);
+                        totalCount += weight;
+                        for (let j = 0; j < minionData.data.length; j++) {                 
+                            totalAvg[j] = (totalAvg[j] || 0) + weight * (minionData.data[j][0] || 0);
+                        }
+                    }
+                    for (let j = 0; j < totalAvg.length; j++) {
+                        totalAvg[j] = this.round3(totalAvg[j] / totalCount);
+                    }
+                    res.push({
+                        name: "Total",
+                        data: totalAvg,
+                    })
+                    this.cacheBoonSums.set(id, res);
+                    return res;
+                }
                 if (this.selectedMinion) {
                     const minionInstanceIndex = this.minionInstanceIndex;
                     const minionData = activeduration ? this.selectedMinionVolumeContainer.boonVolumeActiveStats[minionInstanceIndex] : this.selectedMinionVolumeContainer.boonVolumeStats[minionInstanceIndex];
@@ -88,8 +130,8 @@
                     return res;
                 }
                 const playerData = activeduration ? this.buffVolumesStatContainer.boonVolumeActiveStats[this.playerindex] : this.buffVolumesStatContainer.boonVolumeStats[this.playerindex];
-                const activeTimes = this.phase.playerActiveTimes;
-                if (activeduration && activeTimes[this.playerindex] < 1e-6) {
+                const playerWeight = this.getPlayerWeight(this.playerindex, activeduration);
+                if (playerWeight < 1e-6) {
                     res.push({
                         icon: this.player.icon,
                         name: this.player.name,

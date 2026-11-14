@@ -1,4 +1,6 @@
-﻿namespace GW2EIJSON;
+﻿using System.Text.Json.Serialization;
+
+namespace GW2EIJSON;
 
 /// <summary>
 /// Class corresponding to the regrouping of the same type of minions
@@ -88,15 +90,17 @@ public class JsonMinions
     public IReadOnlyList<IReadOnlyList<JsonDamageDist>>? TotalDamageTakenDist;
 
     /// <summary>
-    /// Rotation data
+    /// Rotation data \n
+    /// Deprecated as of EI 3.33.0.0
     /// </summary>
     /// <seealso cref="JsonRotation"/>
     public IReadOnlyList<JsonRotation>? Rotation;
 
     /// <summary>
-    /// If true, indicates that, for a given master, only one instance of minion can exist on a given time.
+    /// If true, indicates that, for a given master, only one instance of minion can exist on a given time. \n
+    /// Deprecated as of EI 3.33.0.0
     /// </summary>
-    public bool IsUniquePerTimeFrame;
+    public bool? IsUniquePerTimeFrame;
 
     /// <summary>
     /// Healing stats data
@@ -112,4 +116,9 @@ public class JsonMinions
     /// </summary>
     /// <seealso cref="JsonActorCombatReplayData"/>
     public IReadOnlyList<JsonActorCombatReplayData>? CombatReplayData;
+    /// <summary>
+    /// Individual instance of a minion. \n
+    /// Only available for a select whitelisted minions.
+    /// </summary>
+    public IReadOnlyList<JsonMinionInstance>? Instances;
 }

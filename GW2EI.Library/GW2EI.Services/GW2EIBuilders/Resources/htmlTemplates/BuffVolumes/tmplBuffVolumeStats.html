@@ -58,7 +58,7 @@
 <script>
     Vue.component("buff-volume-stats-component", {
         props: ['type','playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -69,7 +69,6 @@
         methods: {
             getData: function (name, container) {
                 const activeduration = !!this.activeduration;
-                const activeTimes = this.phase.playerActiveTimes;
                 //
                 const activeString = (activeduration ? "Active" : "");
                 const incomingStats = container[name + "Volume" + activeString + "Stats"];
@@ -90,7 +89,7 @@
                 let totalCount = 0;
                 //
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
-                for (var i = 0; i < players.length; i++) {
+                for (let i = 0; i < players.length; i++) {
                     const player = players[i];
                     if (!player) {
                         continue;
@@ -115,10 +114,10 @@
                         player: player,
                         data: outgoingSquadStats[i]
                     });
-                    if (activeduration && activeTimes[i] < 1e-6) {
+                    const playerWeight = this.getPlayerWeight(i, activeduration);
+                    if (playerWeight < 1e-6) {
                         continue;
                     }
-                    var playerWeight = activeduration ? activeTimes[i] : 1;
                     if (player.notInSquad) {
                         continue;
                     }
@@ -136,7 +135,7 @@
                 for (let i = 0; i < groupAvg.length; i++) {
                     if (groupAvg[i]) {
                         for (let k = 0; k < groupAvg[i].length; k++) {
-                            groupAvg[i][k] = Math.round(1000 * groupAvg[i][k] / groupCount[i]) / 1000;
+                            groupAvg[i][k] = this.round3( groupAvg[i][k] / groupCount[i]);
                         }
                         avg.push({
                             name: "Group " + i,
@@ -145,7 +144,7 @@
                     }
                 }
                 for (let k = 0; k < totalAvg.length; k++) {
-                    totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                    totalAvg[k] = this.round3(totalAvg[k] / totalCount);
                 }
                 avg.push({
                     name: "Total",

@@ -39,8 +39,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
         switch (removeType)
         {
             case BuffRemove.All:
-                // remove all due to despawn event
-                if (removedStacks == BuffRemoveAllEvent.FullRemoval)
+                if (removedStacks == BuffRemoveAllEvent.FullRemovalButIgnoreForWaste)
                 {
                     Pool.ReleaseBuffStackItemsID(BuffStack);
                     BuffStack.Clear();

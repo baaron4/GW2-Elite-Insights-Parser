@@ -6,6 +6,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using static GW2EIBuilders.JsonModels.JsonLogBuilder;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIBuilders.JsonModels.JsonActors;
 
@@ -20,7 +21,6 @@ internal static class JsonMinionsBuilder
         var jsonMinions = new JsonMinions
         {
             Id = minionGroup.ID,
-            IsUniquePerTimeFrame = minionGroup.IsWhitelisted(log),
         };
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         bool isEnemyMinion = !log.FriendlyAgents.Contains(minionGroup.Master.AgentItem);
@@ -96,12 +96,6 @@ internal static class JsonMinionsBuilder
             jsonMinions.TotalTargetBreakbarDamage = totalTargetBreakbarDamage;
         }
         //
-        var minionCastEvents = minionGroup.GetIntersectingCastEvents(log);
-        if (minionCastEvents.Count > 0 && minionGroup.IsWhitelisted(log))
-        {
-            jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), usedData).ToList();
-        }
-        //
         var totalDamageDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
         var totalDamageTakenDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
         for (int i = 0; i < phases.Count; i++)
@@ -157,6 +151,18 @@ internal static class JsonMinionsBuilder
         if (log.CanCombatReplay)
         {
             jsonMinions.CombatReplayData = minionGroup.MinionList.Select(x => JsonActorCombatReplayDataBuilder.BuildJsonActorCombatReplayDataBuilder(x, log, settings)).ToList();
+        }
+        if (minionGroup.IsWhitelisted(log))
+        {
+            var instances = new List<JsonMinionInstance>(minionGroup.MinionList.Count);
+            foreach (var minion in minionGroup.MinionList)
+            {
+                instances.Add(JsonMinionInstanceBuilder.BuildJsonMinionInstance(minion, log, settings, usedData, !isEnemyMinion));
+            }
+            if (instances.Count > 0)
+            {
+                jsonMinions.Instances = instances;
+            }
         }
         return jsonMinions;
     }
