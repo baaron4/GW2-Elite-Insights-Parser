@@ -52,12 +52,6 @@
                     const minionsData = activeduration ? this.selectedMinionBuffs.boonActiveStats : this.selectedMinionBuffs.boonStats;
                     for (let i = 0; i < minionsData.length; i++) {
                         const minionData = minionsData[i];
-                        const weight = this.getMinionInstanceWeight(i, activeduration);
-                        const minionInstance = this.selectedMinion.instances[i];
-                        const isActive = Math.min(phase.end, minionInstance.lastAware / 1000) - Math.max(phase.start, minionInstance.firstAware / 1000) > 0;
-                        if (!isActive) {
-                            continue;
-                        }
                         res.push({
                             player: {
                                 name: getMinionLabel(this.selectedMinion.name, i),
@@ -84,7 +78,7 @@
                         this.selectedMinionBuffs.boonDictionaries[minionInstanceIndex];
                 }
                 for (let i = 0; i < players.length; i++) {
-                    if (!players[i] || (this.getPlayerWeight(i, activeduration) < 1e-6)) {
+                    if (!players[i]) {
                         continue;
                     }
                     res.push({

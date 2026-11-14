@@ -506,6 +506,11 @@ var minionTabulatedComponent = {
             const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
             this.$set(this.minionInstanceIndices, minionIndex, minionInstanceIndex);
         },
+        isSelectedMinionInstanceActive(phaseIndex, minionInstanceIndex) {
+            const phase = logData.phases[phaseIndex];
+            const minionInstance = this.selectedMinion.instances[minionInstanceIndex];
+            return isMinionInstanceActive(phase, minionInstance);
+        },
     },
     computed: {
         consolidatedMinionView: function() {
