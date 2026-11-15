@@ -161,8 +161,6 @@ internal static class FirebrandHelper
         var build = log.CombatData.GetGW2BuildEvent().Build;
         return build >= GW2Builds.September2017PathOfFireRelease && _firebrandTomeAAs.Contains(id);
     }
-
-    // TODO: imbued haste placeholder
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [
         new BuffOnActorDamageModifier(Mod_ImbuedHaste, Quickness, "Imbued Haste", "10% under Quickness", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Guardian, ByPresence, TraitImages.ImbuedHaste, DamageModifierMode.All)
             .WithBuilds( GW2Builds.November2026Balance),
