@@ -731,6 +731,7 @@ internal static class SkillImages
     public const string UnstableSkrittBomb = "https://render.guildwars2.com/file/0FBFB6FA27C9BEBD1872DAACDB040AEA71A616A9/3680208.png";
     public const string ForgedSurferDash = "https://render.guildwars2.com/file/696501BA136CA660BD22D0D0A3B19741D4A77529/3680211.png";
     public const string ZephyriteSunCrystal = "https://render.guildwars2.com/file/3C1B2075B7B164EB2ABE4F6650F553D40F689E53/3680218.png";
+    public const string ChakShield = "https://render.guildwars2.com/file/4506224EB1921800602CAD52B6B209960FE51153/3680209.png";
     public const string SummonKryptisTurret = "https://render.guildwars2.com/file/2DC92035E3A36CBCDB62C84E65BEF69BFA0BDD02/3680213.png";
     public const string MistburnMortar = "https://render.guildwars2.com/file/4519AE3A9032E03F2F14AAA1B5EEE10F1AF1EEAE/3680215.png";
     public const string ExaltedHammer = "https://render.guildwars2.com/file/57A193E75618661CE3F51DC44AC59F7BA72E6169/3680210.png";

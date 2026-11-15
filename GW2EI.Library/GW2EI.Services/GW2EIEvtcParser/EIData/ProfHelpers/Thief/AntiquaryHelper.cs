@@ -18,9 +18,13 @@ internal static class AntiquaryHelper
     [
         // Artifacts
         new EffectCastFinder(UnstableSkrittBombSkill, EffectGUIDs.AntiquaryUnstableSkrittBomb1),
-        // ChakShield4 can be absent even when the shield applies its damage and initiative refunds.
+        // Use the refund buff from release; beta logs require the original visual checks.
         new EffectCastFinder(ChakShield, EffectGUIDs.AntiquaryChakShield1)
-            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield3),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield3)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield4)
+            .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
+        new BuffGainCastFinder(ChakShield, ChakShieldBuff)
+            .WithBuilds(GW2Builds.OctoberVoERelease),
         // Double Edge
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossHead1),
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossTail1),
@@ -73,6 +77,7 @@ internal static class AntiquaryHelper
         // Backfire
         new Buff("Unstable Skritt Bomb", UnstableSkrittBombBuff, Source.Antiquary, BuffClassification.Other, SkillImages.UnstableSkrittBomb),
         // Artifacts
+        new Buff("Chak Shield", ChakShieldBuff, Source.Antiquary, BuffStackType.Stacking, 4, BuffClassification.Other, SkillImages.ChakShield),
         new Buff("Forged Surfer Dash", ForgedSurferDashBuff, Source.Antiquary, BuffClassification.Other, SkillImages.ForgedSurferDash),
         new Buff("Zephyrite Sun Crystal", ZephyriteSunCrystalBuff, Source.Antiquary, BuffStackType.Stacking, 2, BuffClassification.Other, SkillImages.ZephyriteSunCrystal),
         new Buff("Holo-Dancer Decoy", HoloDancerDecoyBuff, Source.Antiquary, BuffStackType.StackingConditionalLoss, 2, BuffClassification.Other, SkillImages.HoloDancerDecoy),
