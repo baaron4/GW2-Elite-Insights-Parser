@@ -16,82 +16,84 @@
                 cache: new Map()
             };
         },
+        methods: {
+            getData: function(uptimesStats) {
+                const activeduration = this.activeduration;
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
+
+                const uptimes = [];
+                const avg = [],
+                    groupeAvg = [],
+                    totalAvg = [];
+                let groupCount = [],
+                    totalCount = 0;
+                let groupConditionAvg = [],
+                    totalConditionAvg = 0;
+                for (let i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
+                    uptimes.push({
+                        player: player,
+                        data: uptimesStats[i]
+                    });
+
+                    const playerWeight = this.getPlayerWeight(i, activeduration);
+                    if (playerWeight < 1e-6) {
+                        continue;
+                    }
+                    if (player.notInSquad) {
+                        continue;
+                    }
+                    if (!groupeAvg[player.group]) {
+                        groupeAvg[player.group] = [];
+                        groupCount[player.group] = 0;
+                        groupConditionAvg[player.group] = 0;
+                    }
+                    totalCount += playerWeight;
+                    totalConditionAvg += playerWeight * uptimesStats[i].avg;
+                    groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
+                    groupCount[player.group] += playerWeight;
+                    for (let j = 0; j < uptimesStats[i].data.length; j++) {
+                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                        groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                    }
+                }
+                for (let i = 0; i < groupeAvg.length; i++) {
+                    if (groupeAvg[i]) {
+                        for (let k = 0; k < groupeAvg[i].length; k++) {
+                            groupeAvg[i][k] = this.round3(groupeAvg[i][k] / groupCount[i]);
+                        }
+                        avg.push({
+                            name: "Group " + i,
+                            data: groupeAvg[i],
+                            avg: this.round3(groupConditionAvg[i] / groupCount[i])
+                        });
+                    }
+                }
+                for (let k = 0; k < totalAvg.length; k++) {
+                    totalAvg[k] = this.round3(totalAvg[k] / totalCount);
+                }
+                avg.push({
+                    name: "Total",
+                    data: totalAvg,
+                    avg: this.round3(totalConditionAvg / totalCount)
+                });
+                return [uptimes, avg];
+            }
+        },
         computed: {
             buffData: function () {
                 const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
-                const activeduration = this.activeduration;
-
-                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
-                const getData = function (uptimesStats) {
-                    const uptimes = [];                    
-                    const avg = [],
-                        groupeAvg = [],
-                        totalAvg = [];
-                    let groupCount = [],
-                        totalCount = 0;
-                    let groupConditionAvg = [],
-                        totalConditionAvg = 0;
-                    for (let i = 0; i < players.length; i++) {
-                        const player = players[i];
-                        if (!player) {
-                            continue;
-                        }
-                        uptimes.push({
-                            player: player,
-                            data: uptimesStats[i]
-                        });
-                        
-                        const playerWeight = this.getPlayerWeight(i, activeduration);
-                        if (playerWeight < 1e-6) {
-                            continue;
-                        }
-                        if (player.notInSquad) {
-                            continue;
-                        }
-                        if (!groupeAvg[player.group]) {
-                            groupeAvg[player.group] = [];
-                            groupCount[player.group] = 0;
-                            groupConditionAvg[player.group] = 0;
-                        }
-                        totalCount += playerWeight;
-                        totalConditionAvg += playerWeight * uptimesStats[i].avg;
-                        groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
-                        groupCount[player.group] += playerWeight;
-                        for (let j = 0; j < uptimesStats[i].data.length; j++) {
-                            totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                        }
-                    }
-                    for (let i = 0; i < groupeAvg.length; i++) {
-                        if (groupeAvg[i]) {
-                            for (let k = 0; k < groupeAvg[i].length; k++) {
-                                groupeAvg[i][k] = this.round3(groupeAvg[i][k] / groupCount[i]);
-                            }
-                            avg.push({
-                                name: "Group " + i,
-                                data: groupeAvg[i],
-                                avg: this.round3(groupConditionAvg[i] / groupCount[i])
-                            });
-                        }
-                    }
-                    for (let k = 0; k < totalAvg.length; k++) {
-                        totalAvg[k] = this.round3(totalAvg[k] / totalCount);
-                    }
-                    avg.push({
-                        name: "Total",
-                        data: totalAvg,
-                        avg: this.round3(totalConditionAvg / totalCount)
-                    });
-                    return [uptimes, avg];
-                };
                 let res;
                 if (this.activeduration) {
-                    res = getData(this.buffsStatContainer.conditionsActiveStats);
+                    res = this.getData(this.buffsStatContainer.conditionsActiveStats);
                 } else {
-                    res = getData(this.buffsStatContainer.conditionsStats);
+                    res = this.getData(this.buffsStatContainer.conditionsStats);
                 }
                 this.cache.set(id, res);
                 return res;

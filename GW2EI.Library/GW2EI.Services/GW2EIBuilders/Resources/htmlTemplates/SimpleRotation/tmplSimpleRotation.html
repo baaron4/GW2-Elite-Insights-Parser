@@ -175,6 +175,9 @@
             };
         },
         computed: {
+            consolidatedMinionView: function() {
+                return this.minionIndex >= 0 && this.minionInstanceIndex === -1;
+            },
             rotation: function() {
                 return this.buildRotation(this.getRotationData(this.phaseindex)).rotation;
             },
