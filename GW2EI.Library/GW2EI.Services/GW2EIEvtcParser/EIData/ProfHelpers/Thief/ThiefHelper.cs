@@ -85,8 +85,8 @@ internal static class ThiefHelper
         // - Fluid Strikes
         new BuffOnActorDamageModifier(Mod_FluidStrikes, FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.FluidStrikes, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
-        // Place holder + complete list
-        new BuffOnFoeDamageModifier(Mod_OpportuneOpening, [Chilled, Crippled, Slow, Immobile], "Opportune Opening", "10% on movement-impaired target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.OpportuneOpening, DamageModifierMode.All)
+        // - Opportune Opening
+        new BuffOnFoeDamageModifier(Mod_OpportuneOpening, [Chilled, Crippled, Immobile, Fear, Taunt], "Opportune Opening", "5% on target with movement impairing conditions", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.OpportuneOpening, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2026Balance),
 
         // Spear
