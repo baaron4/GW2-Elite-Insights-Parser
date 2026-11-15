@@ -36,6 +36,9 @@ internal static class VindicatorHelper
             .WithBuilds(GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.September2023Balance),
+        // Friend of the Luxons
+        new BuffOnActorDamageModifier(Mod_FriendsOfTheLuxons, FriendOfTheLuxons, "Friend of the Luxons", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.FriendOfTheLuxons, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -57,6 +60,8 @@ internal static class VindicatorHelper
         new Buff("Forerunner of Death", ForerunnerOfDeath, Source.Vindicator, BuffClassification.Other, TraitImages.ForerunnerOfDeath),
         new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Friend of the Luxons", FriendOfTheLuxons, Source.Vindicator, BuffClassification.Other, TraitImages.FriendOfTheLuxons)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     public static bool IsLegendSwap(long id)
