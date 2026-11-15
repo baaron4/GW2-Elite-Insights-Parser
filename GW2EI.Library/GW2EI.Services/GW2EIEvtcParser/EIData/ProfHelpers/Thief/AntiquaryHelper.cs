@@ -18,9 +18,9 @@ internal static class AntiquaryHelper
     [
         // Artifacts
         new EffectCastFinder(UnstableSkrittBombSkill, EffectGUIDs.AntiquaryUnstableSkrittBomb1),
+        // ChakShield4 can be absent even when the shield applies its damage and initiative refunds.
         new EffectCastFinder(ChakShield, EffectGUIDs.AntiquaryChakShield1)
-            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield3)
-            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield4),
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.AntiquaryChakShield3),
         // Double Edge
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossHead1),
         new BuffGainCastFinder(CanachCoinToss, CanachCoinTossTail1),
