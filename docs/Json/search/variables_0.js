@@ -5,7 +5,7 @@ var searchData=
   ['activeclones_2',['ActiveClones',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ac28410be1b1096899f457d87a9751463',1,'GW2EIJSON::JsonPlayer']]],
   ['activecombatminions_3',['ActiveCombatMinions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a814d96740f4a94e4b6a4276d2e52eb63',1,'GW2EIJSON::JsonActor']]],
   ['activerangerpets_4',['ActiveRangerPets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2a40fb029e4a214cb3eccbbb5bc13dfe',1,'GW2EIJSON::JsonPlayer']]],
-  ['activetimes_5',['ActiveTimes',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#afa2cc79acd6c7badf8fdc6956771ed1d',1,'GW2EIJSON::JsonPlayer']]],
+  ['activetimes_5',['ActiveTimes',['../class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance.html#af10736baf047113c9a42bd0b05a46689',1,'GW2EIJSON.JsonMinionInstance.ActiveTimes'],['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#afa2cc79acd6c7badf8fdc6956771ed1d',1,'GW2EIJSON.JsonPlayer.ActiveTimes']]],
   ['actor_6',['Actor',['../class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html#a0798a326d98721471a1edb868e992630',1,'GW2EIJSON::JsonMechanics::JsonMechanic']]],
   ['actorbarrier_7',['ActorBarrier',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html#a584a0fec448b0d147c291b8d63414e78',1,'GW2EIJSON::EXTJsonBarrierStatistics::EXTJsonOutgoingBarrierStatistics']]],
   ['actorbps_8',['ActorBps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html#acfd40ec6c8fe5912ff5feb991ca36079',1,'GW2EIJSON::EXTJsonBarrierStatistics::EXTJsonOutgoingBarrierStatistics']]],

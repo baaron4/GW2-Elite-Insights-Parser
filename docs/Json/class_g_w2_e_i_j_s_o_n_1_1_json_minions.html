@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.32.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.33.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -104,7 +104,7 @@ string?&#160;</td><td class="memItemRight"><b>Name</b></td></tr>
 <tr class="memdesc:a3d8a6a8a5051bc5a944272a8f9e7e19f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the minion. <br /></td></tr>
 <tr class="memitem:a8e7fd0553c4811cee282f805ad518628" id="r_a8e7fd0553c4811cee282f805ad518628"><td class="memItemLeft"><a id="a8e7fd0553c4811cee282f805ad518628" name="a8e7fd0553c4811cee282f805ad518628"></a>
 int&#160;</td><td class="memItemRight"><b>Id</b></td></tr>
-<tr class="memdesc:a8e7fd0553c4811cee282f805ad518628"><td class="mdescLeft">&#160;</td><td class="mdescRight">Game ID of the minion. <br /></td></tr>
+<tr class="memdesc:a8e7fd0553c4811cee282f805ad518628"><td class="mdescLeft">&#160;</td><td class="mdescRight">Game speciesID of the minion. <br /></td></tr>
 <tr class="memitem:a49bf2ef630093b099a08b76239792568" id="r_a49bf2ef630093b099a08b76239792568"><td class="memItemLeft"><a id="a49bf2ef630093b099a08b76239792568" name="a49bf2ef630093b099a08b76239792568"></a>
 IReadOnlyList&lt; int &gt;?&#160;</td><td class="memItemRight"><b>TotalDamage</b></td></tr>
 <tr class="memdesc:a49bf2ef630093b099a08b76239792568"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Damage done by minions <br  />
@@ -151,10 +151,12 @@ Length == # of targets and the length of each sub array is equal to # of phases.
 <tr class="memdesc:a18abb41deff6e9c28ea5f86a62f00034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Damage Taken distribution array <br  />
 Length == # of phases.  <br /></td></tr>
 <tr class="memitem:a5154642da2c51a1b323b2506b4f95edb" id="r_a5154642da2c51a1b323b2506b4f95edb"><td class="memItemLeft">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html">JsonRotation</a> &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#a5154642da2c51a1b323b2506b4f95edb">Rotation</a></td></tr>
-<tr class="memdesc:a5154642da2c51a1b323b2506b4f95edb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation data.  <br /></td></tr>
-<tr class="memitem:af7f9150000064255fe1000b48fa96937" id="r_af7f9150000064255fe1000b48fa96937"><td class="memItemLeft"><a id="af7f9150000064255fe1000b48fa96937" name="af7f9150000064255fe1000b48fa96937"></a>
-bool&#160;</td><td class="memItemRight"><b>IsUniquePerTimeFrame</b></td></tr>
-<tr class="memdesc:af7f9150000064255fe1000b48fa96937"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, indicates that, for a given master, only one instance of minion can exist on a given time. <br /></td></tr>
+<tr class="memdesc:a5154642da2c51a1b323b2506b4f95edb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation data <br  />
+Deprecated as of EI 3.33.0.0.  <br /></td></tr>
+<tr class="memitem:a65d9eb5c35c79a18041f9fe7256d04b5" id="r_a65d9eb5c35c79a18041f9fe7256d04b5"><td class="memItemLeft"><a id="a65d9eb5c35c79a18041f9fe7256d04b5" name="a65d9eb5c35c79a18041f9fe7256d04b5"></a>
+bool?&#160;</td><td class="memItemRight"><b>IsUniquePerTimeFrame</b></td></tr>
+<tr class="memdesc:a65d9eb5c35c79a18041f9fe7256d04b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, indicates that, for a given master, only one instance of minion can exist on a given time. <br  />
+Deprecated as of EI 3.33.0.0. <br /></td></tr>
 <tr class="memitem:ac0b3c03b9014f2f971e4a9330391507c" id="r_ac0b3c03b9014f2f971e4a9330391507c"><td class="memItemLeft"><a id="ac0b3c03b9014f2f971e4a9330391507c" name="ac0b3c03b9014f2f971e4a9330391507c"></a>
 <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_minions_healing_stats.html">EXTJsonMinionsHealingStats</a>?&#160;</td><td class="memItemRight"><b>EXTHealingStats</b></td></tr>
 <tr class="memdesc:ac0b3c03b9014f2f971e4a9330391507c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Healing stats data. <br /></td></tr>
@@ -163,6 +165,10 @@ bool&#160;</td><td class="memItemRight"><b>IsUniquePerTimeFrame</b></td></tr>
 <tr class="memdesc:a49d80e80000b50aeae95f5b5a9e5f794"><td class="mdescLeft">&#160;</td><td class="mdescRight">Barrier stats data. <br /></td></tr>
 <tr class="memitem:ad9a3254a98918976ab946dcc008c97d5" id="r_ad9a3254a98918976ab946dcc008c97d5"><td class="memItemLeft">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html">JsonActorCombatReplayData</a> &gt;?&#160;</td><td class="memItemRight"><a class="el" href="#ad9a3254a98918976ab946dcc008c97d5">CombatReplayData</a></td></tr>
 <tr class="memdesc:ad9a3254a98918976ab946dcc008c97d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains combat replay related data for each individual minion instance.  <br /></td></tr>
+<tr class="memitem:aa4cc746e46ff2c6229e93f65fcaa2eb6" id="r_aa4cc746e46ff2c6229e93f65fcaa2eb6"><td class="memItemLeft"><a id="aa4cc746e46ff2c6229e93f65fcaa2eb6" name="aa4cc746e46ff2c6229e93f65fcaa2eb6"></a>
+IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance.html">JsonMinionInstance</a> &gt;?&#160;</td><td class="memItemRight"><b>Instances</b></td></tr>
+<tr class="memdesc:aa4cc746e46ff2c6229e93f65fcaa2eb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Individual instance of a minion. <br  />
+Only available for a select whitelisted minions. <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class corresponding to the regrouping of the same type of minions. </p>
@@ -196,7 +202,8 @@ bool&#160;</td><td class="memItemRight"><b>IsUniquePerTimeFrame</b></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Rotation data. </p>
+<p>Rotation data <br  />
+Deprecated as of EI 3.33.0.0. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_rotation.html" title="Class corresponding to a rotation.">JsonRotation</a></dd></dl>
 
 </div>

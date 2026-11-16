@@ -2,6 +2,7 @@ var annotated_dup =
 [
     [ "GW2EIJSON", "namespace_g_w2_e_i_j_s_o_n.html", [
       [ "JsonActor", "class_g_w2_e_i_j_s_o_n_1_1_json_actor.html", "class_g_w2_e_i_j_s_o_n_1_1_json_actor" ],
+      [ "JsonMinionInstance", "class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance.html", "class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance" ],
       [ "JsonMinions", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html", "class_g_w2_e_i_j_s_o_n_1_1_json_minions" ],
       [ "JsonNPC", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c" ],
       [ "JsonPlayer", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html", "class_g_w2_e_i_j_s_o_n_1_1_json_player" ],

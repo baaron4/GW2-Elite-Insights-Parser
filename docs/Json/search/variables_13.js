@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['uniqueid_0',['UniqueID',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef',1,'GW2EIJSON::JsonActor']]],
+  ['uniqueid_0',['UniqueID',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a3c693926905d9a19e748e5160cf6cfef',1,'GW2EIJSON.JsonActor.UniqueID'],['../class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance.html#a1323d17b0c7101449f953b5ab614edfb',1,'GW2EIJSON.JsonMinionInstance.UniqueID']]],
   ['unknownextended_1',['UnknownExtended',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a4cfc0ee472c8569238444cc5d04ec046',1,'GW2EIJSON.JsonBuffsUptime.JsonBuffsUptimeData.UnknownExtended'],['../class_g_w2_e_i_j_s_o_n_1_1_json_player_buffs_generation_1_1_json_buffs_generation_data.html#a702715f2b35526c6013392ebec5d4a78',1,'GW2EIJSON.JsonPlayerBuffsGeneration.JsonBuffsGenerationData.UnknownExtended']]],
   ['uploadlinks_2',['UploadLinks',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a477ca161dd29f98670a4af16be926c96',1,'GW2EIJSON::JsonLog']]],
   ['uptime_3',['Uptime',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a541ed00f55be5d988c3abc4323b4173c',1,'GW2EIJSON::JsonBuffsUptime::JsonBuffsUptimeData']]],

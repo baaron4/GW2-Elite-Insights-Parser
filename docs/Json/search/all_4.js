@@ -8,7 +8,7 @@ var searchData=
   ['encountermissingpreevent_5',['EncounterMissingPreEvent',['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#afbb48d4866e76a1f6ce8344377a49912',1,'GW2EIJSON::JsonPhase']]],
   ['encounterphase_6',['EncounterPhase',['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#acd6441d4cb0693f3c967aa23177646ee',1,'GW2EIJSON::JsonPhase']]],
   ['end_7',['End',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc',1,'GW2EIJSON.JsonActorCombatReplayData.End'],['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#aaf08c1505b75b98409ff29b96aa8e6a1',1,'GW2EIJSON.JsonPhase.End']]],
-  ['enemyplayer_8',['EnemyPlayer',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#aaccb118342bb867a368256c5a8d90850',1,'GW2EIJSON::JsonNPC']]],
+  ['enemyplayer_8',['EnemyPlayer',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a5ddb7d04eefe788f98e88d1c59df48b8',1,'GW2EIJSON::JsonNPC']]],
   ['evaded_9',['Evaded',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_dist.html#a68cbb180f4e2ded5f3252d4de0b7e7fb',1,'GW2EIJSON.JsonDamageDist.Evaded'],['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#af1dea7f6523746ef87dcd2f8d3022a77',1,'GW2EIJSON.JsonStatistics.JsonGameplayStats.Evaded']]],
   ['evadedcount_10',['EvadedCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#ae51ae3f652744b19f1309dfbd689768a',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
   ['expectedcastbarduration_11',['ExpectedCastBarDuration',['../class_g_w2_e_i_j_s_o_n_1_1_json_rotation_1_1_json_skill.html#ae71aaa0790355f4836752553d49b08f7',1,'GW2EIJSON::JsonRotation::JsonSkill']]],

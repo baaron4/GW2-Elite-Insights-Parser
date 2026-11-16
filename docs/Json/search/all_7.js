@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['hascommandertag_0',['HasCommanderTag',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66c207adcd20b26b2179ec82e1ba9e69',1,'GW2EIJSON::JsonPlayer']]],
+  ['hascommandertag_0',['HasCommanderTag',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a74d412fd2c05912002c1bce3f754f588',1,'GW2EIJSON::JsonPlayer']]],
   ['healed_1',['Healed',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_incoming_healing_statistics.html#aa02c37cf42f19412d843083aa0054a6f',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonIncomingHealingStatistics']]],
   ['healing_2',['Healing',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a02f1322d95ba4cae950a265c6f22c534',1,'GW2EIJSON.JsonActor.Healing'],['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#af5809449ba0327688a53f6f08fdbeece',1,'GW2EIJSON.EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics.Healing']]],
   ['healing1s_3',['Healing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#acfcf4f00095dda214482f8e075f4f25b',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
@@ -13,7 +13,7 @@ var searchData=
   ['health_10',['Health',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c_1_1_json_n_p_c_health_bar.html#a126a58873ebc2ed23c3c7dccd9f84769',1,'GW2EIJSON::JsonNPC::JsonNPCHealthBar']]],
   ['healthbars_11',['HealthBars',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#ab0bacde23a9f78f4d84c0a50d59bdef1',1,'GW2EIJSON::JsonNPC']]],
   ['healthpercentburned_12',['HealthPercentBurned',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#ab0842d6f5fec2ca25764c9fc771bdaa6',1,'GW2EIJSON::JsonNPC']]],
-  ['healthpercents_13',['HealthPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7f88b049d563616bab149f5a5c87c679',1,'GW2EIJSON::JsonActor']]],
+  ['healthpercents_13',['HealthPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7f88b049d563616bab149f5a5c87c679',1,'GW2EIJSON.JsonActor.HealthPercents'],['../class_g_w2_e_i_j_s_o_n_1_1_json_minion_instance.html#ae58216af0c70ba3d0173a916aa55378b',1,'GW2EIJSON.JsonMinionInstance.HealthPercents']]],
   ['hitboxheight_14',['HitboxHeight',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ac1d45d1c96b60c59e72819eeba87e1a5',1,'GW2EIJSON::JsonActor']]],
   ['hitboxwidth_15',['HitboxWidth',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a5b6f7c0c2b730e6f54e181dba74277a5',1,'GW2EIJSON::JsonActor']]],
   ['hitcount_16',['HitCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html#a52725f5dbf9b4e660a514f18b6f84302',1,'GW2EIJSON::JsonDamageModifierData::JsonDamageModifierItem']]],
