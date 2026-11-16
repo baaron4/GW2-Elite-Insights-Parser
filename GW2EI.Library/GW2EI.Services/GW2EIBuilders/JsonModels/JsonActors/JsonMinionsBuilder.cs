@@ -162,6 +162,14 @@ internal static class JsonMinionsBuilder
             {
                 jsonMinions.Instances = instances;
             }
+        } 
+        else
+        {
+            var minionCastEvents = minionGroup.GetIntersectingCastEvents(log);
+            if (minionCastEvents.Count > 0)
+            {
+                jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), usedData).ToList();
+            }
         }
         return jsonMinions;
     }

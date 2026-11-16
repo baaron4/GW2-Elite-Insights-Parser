@@ -89,7 +89,7 @@ public class JsonMinions
 
     /// <summary>
     /// Rotation data \n
-    /// Deprecated as of EI 3.33.0.0
+    /// Will not be defined if <see cref="JsonMinions.Instances"/> is defined.
     /// </summary>
     /// <seealso cref="JsonRotation"/>
     public IReadOnlyList<JsonRotation>? Rotation;
