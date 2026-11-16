@@ -162,6 +162,16 @@ function selectablePickingDraw(drawable) {
     }
 }
 
+function skillMechanicDraw(drawable) {
+    const settings = animator.displaySettings;
+    const skillMode = drawable.skillMode;
+
+    if ((skillMode.category & settings.skillMechanicsMask) &&
+        settings.selectedSkillMechanicIds.includes(skillMode.skillID)) {
+        drawable.draw();
+    }
+}
+
 class RenderablesBranch {
     constructor(start, end) {
         this.start = start;
@@ -317,6 +327,7 @@ class Animator {
             displaySquadMarkers: true,
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
+            selectedSkillMechanicIds: [],
             displayTrashMobs: true,
             useActorHitboxWidth: false,
             followSelected: false,
@@ -692,6 +703,7 @@ class Animator {
                 }
                 const decoration = new DecorationClass(decorationRendering);
                 if (decorationRendering.skillMode) {
+                    decoration.skillMode = decorationRendering.skillMode;
                     this.skillMechanicActorData.add(decoration);
                 } else {
                     this.mechanicActorData.add(decoration);
@@ -1657,7 +1669,7 @@ class Animator {
             }
 
             if (this.displaySettings.displaySkillMechanics) {
-                this.skillMechanicActorData.draw(standardDraw);
+                this.skillMechanicActorData.draw(skillMechanicDraw);
             }
 
 

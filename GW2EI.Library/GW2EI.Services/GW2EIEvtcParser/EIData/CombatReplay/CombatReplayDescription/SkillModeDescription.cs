@@ -23,6 +23,7 @@ public class SkillModeDescription
         {
             SkillItem skill = log.SkillData.Get(skillModeDescriptor.SkillID);
             usedSkills.TryAdd(skill.ID, skill);
+            SkillID = skillModeDescriptor.SkillID;
             IsBuff = false;
         }
         if (skillModeDescriptor.Owner != null)
