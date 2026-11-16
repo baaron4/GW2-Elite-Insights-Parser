@@ -52,8 +52,9 @@ internal static class JsonPlayerBuilder
         jsonPlayer.ActiveTimes = phases.Select(x => player.GetActiveDuration(log, x.Start, x.End)).ToList();
         if (player is Player p)
         {
-            jsonPlayer.HasCommanderTag = p.IsCommander(log);
-            jsonPlayer.CommanderTagStates = jsonPlayer.HasCommanderTag ? p.GetCommanderStatesNoTagValues(log).Select(x => new List<long>() { x.Start, x.End }).ToList() : null;
+            var isCommander = p.IsCommander(log);
+            jsonPlayer.HasCommanderTag = isCommander;
+            jsonPlayer.CommanderTagStates = isCommander ? p.GetCommanderStatesNoTagValues(log).Select(x => new List<long>() { x.Start, x.End }).ToList() : null;
         }
         //
         jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonAllySupport(player.GetToAllySupportStats(log, phase.Start, phase.End))).ToArray();
@@ -144,33 +145,29 @@ internal static class JsonPlayerBuilder
             jsonPlayer.TargetBreakbarDamage1S = null;
         }
         //
-        var selfBuffs = phases.Select(phase => player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
-        jsonPlayer.BuffUptimes = GetPlayerJsonBuffsUptime(player, selfBuffs, phases.Select(phase => player.GetBuffsDictionary(log, phase.Start, phase.End)).ToList(), log, settings, usedData);
-        jsonPlayer.SelfBuffs = GetPlayerBuffGenerations(selfBuffs, log, usedData);
-        jsonPlayer.GroupBuffs = GetPlayerBuffGenerations(phases.Select(phase => player.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.OffGroupBuffs = GetPlayerBuffGenerations(phases.Select(phase => player.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.SquadBuffs = GetPlayerBuffGenerations(phases.Select(phase => player.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, usedData);
+        jsonPlayer.BuffUptimes = GetPlayerJsonBuffsUptime(player, log, settings, usedData, false);
+        jsonPlayer.SelfBuffs = GetPlayerBuffGenerations(player, BuffEnum.Self, log, usedData, false);
+        jsonPlayer.GroupBuffs = GetPlayerBuffGenerations(player, BuffEnum.Group, log, usedData, false);
+        jsonPlayer.OffGroupBuffs = GetPlayerBuffGenerations(player, BuffEnum.OffGroup, log, usedData, false);
+        jsonPlayer.SquadBuffs = GetPlayerBuffGenerations(player, BuffEnum.Squad, log, usedData, false);
         //
-        var selfActiveBuffs = phases.Select(phase => player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
-        jsonPlayer.BuffUptimesActive = GetPlayerJsonBuffsUptime(player, selfActiveBuffs, phases.Select(phase => player.GetActiveBuffsDictionary(log, phase.Start, phase.End)).ToList(), log, settings, usedData);
-        jsonPlayer.SelfBuffsActive = GetPlayerBuffGenerations(selfActiveBuffs, log, usedData);
-        jsonPlayer.GroupBuffsActive = GetPlayerBuffGenerations(phases.Select(phase => player.GetActiveBuffs(BuffEnum.Group, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.OffGroupBuffsActive = GetPlayerBuffGenerations(phases.Select(phase => player.GetActiveBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.SquadBuffsActive = GetPlayerBuffGenerations(phases.Select(phase => player.GetActiveBuffs(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, usedData);
+        jsonPlayer.BuffUptimesActive = GetPlayerJsonBuffsUptime(player, log, settings, usedData, true);
+        jsonPlayer.SelfBuffsActive = GetPlayerBuffGenerations(player, BuffEnum.Self, log, usedData, true);
+        jsonPlayer.GroupBuffsActive = GetPlayerBuffGenerations(player, BuffEnum.Group, log, usedData, true);
+        jsonPlayer.OffGroupBuffsActive = GetPlayerBuffGenerations(player, BuffEnum.OffGroup, log, usedData, true);
+        jsonPlayer.SquadBuffsActive = GetPlayerBuffGenerations(player, BuffEnum.Squad, log, usedData, true);
         //
-        var selfBuffVolumes = phases.Select(phase => player.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
-        jsonPlayer.BuffVolumes = GetPlayerJsonBuffVolumes(player, selfBuffVolumes, phases.Select(phase => player.GetBuffVolumesDictionary(log, phase.Start, phase.End)).ToList(), log, settings, usedData);
-        jsonPlayer.SelfBuffVolumes = GetPlayerBuffOutgoingVolumes(selfBuffVolumes, log, usedData);
-        jsonPlayer.GroupBuffVolumes = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetBuffVolumes(BuffEnum.Group, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.OffGroupBuffVolumes = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.SquadBuffVolumes = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, usedData);
+        jsonPlayer.BuffVolumes = GetPlayerJsonBuffVolumes(player, log, settings, usedData, false);
+        jsonPlayer.SelfBuffVolumes = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Self, log, usedData, false);
+        jsonPlayer.GroupBuffVolumes = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Group, log, usedData, false);
+        jsonPlayer.OffGroupBuffVolumes = GetPlayerBuffOutgoingVolumes(player, BuffEnum.OffGroup, log, usedData, false);
+        jsonPlayer.SquadBuffVolumes = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Squad, log, usedData, false);
         //
-        var selfBuffActiveVolumes = phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
-        jsonPlayer.BuffVolumesActive = GetPlayerJsonBuffVolumes(player, selfBuffActiveVolumes, phases.Select(phase => player.GetActiveBuffVolumesDictionary(log, phase.Start, phase.End)).ToList(), log, settings, usedData);
-        jsonPlayer.SelfBuffVolumesActive = GetPlayerBuffOutgoingVolumes(selfBuffActiveVolumes, log, usedData);
-        jsonPlayer.GroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Group, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.OffGroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, usedData);
-        jsonPlayer.SquadBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, usedData);
+        jsonPlayer.BuffVolumesActive = GetPlayerJsonBuffVolumes(player, log, settings, usedData, true);
+        jsonPlayer.SelfBuffVolumesActive = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Self, log, usedData, true);
+        jsonPlayer.GroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Group, log, usedData, true);
+        jsonPlayer.OffGroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(player, BuffEnum.OffGroup, log, usedData, true);
+        jsonPlayer.SquadBuffVolumesActive = GetPlayerBuffOutgoingVolumes(player, BuffEnum.Squad, log, usedData, true);
         //
         IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log);
         if (consumables.Count > 0)
@@ -206,9 +203,10 @@ internal static class JsonPlayerBuilder
     }
 
     //TODO_PERF(Rennorb)
-    private static List<JsonPlayerBuffsGeneration>? GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, BuffStatistics>> buffs, ParsedEvtcLog log, UsedJsonData usedData)
+    private static List<JsonPlayerBuffsGeneration>? GetPlayerBuffGenerations(SingleActor player, BuffEnum type, ParsedEvtcLog log, UsedJsonData usedData, bool useActiveTime)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+        var buffs = phases.Select(phase => useActiveTime ? player.GetActiveBuffs(type, log, phase.Start, phase.End) : player.GetBuffs(type, log, phase.Start, phase.End)).ToList();
         var uptimes = new List<JsonPlayerBuffsGeneration>(buffs[0].Count);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
@@ -248,11 +246,13 @@ internal static class JsonPlayerBuilder
         return uptimes;
     }
 
-    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, List<IReadOnlyDictionary<long, BuffStatistics>> buffs, List<IReadOnlyDictionary<long, BuffByActorStatistics>> buffDictionaries, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
+    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime)
     {
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+        var buffs = phases.Select(phase => useActiveTime ? player.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End) : player.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
+        var buffDictionaries = phases.Select(phase => useActiveTime ? player.GetActiveBuffsDictionary(log, phase.Start, phase.End) : player.GetBuffsDictionary(log, phase.Start, phase.End)).ToList();
         var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
-        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];
@@ -297,9 +297,10 @@ internal static class JsonPlayerBuilder
     }
 
     //TODO_PERF(Rennorb)
-    private static List<JsonPlayerBuffOutgoingVolumes>? GetPlayerBuffOutgoingVolumes(List<IReadOnlyDictionary<long, BuffVolumeStatistics>> buffVolumes, ParsedEvtcLog log, UsedJsonData usedData)
+    private static List<JsonPlayerBuffOutgoingVolumes>? GetPlayerBuffOutgoingVolumes(SingleActor player, BuffEnum type, ParsedEvtcLog log, UsedJsonData usedData, bool useActiveTime)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+        var buffVolumes = phases.Select(phase => useActiveTime ? player.GetActiveBuffVolumes(type, log, phase.Start, phase.End) : player.GetBuffVolumes(type, log, phase.Start, phase.End)).ToList();
         var uptimes = new List<JsonPlayerBuffOutgoingVolumes>(buffVolumes[0].Count);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
@@ -339,11 +340,13 @@ internal static class JsonPlayerBuilder
         return uptimes;
     }
 
-    private static List<JsonBuffVolumes> GetPlayerJsonBuffVolumes(SingleActor player, List<IReadOnlyDictionary<long, BuffVolumeStatistics>> buffVolumes, List<IReadOnlyDictionary<long, BuffVolumeByActorStatistics>> buffVolumeDictionaries, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData)
+    private static List<JsonBuffVolumes> GetPlayerJsonBuffVolumes(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime)
     {
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
+        var buffVolumes = phases.Select(phase => useActiveTime ? player.GetActiveBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End) : player.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End)).ToList();
+        var buffVolumeDictionaries = phases.Select(phase => useActiveTime ? player.GetActiveBuffVolumesDictionary(log, phase.Start, phase.End) : player.GetBuffVolumesDictionary(log, phase.Start, phase.End)).ToList();
         var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
-        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];

@@ -1528,7 +1528,7 @@ internal class Qadim : MythwrightGambit
         {
             if (encounterPhase.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Count != 0)
                 {
                     instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityManipulateTheManipulator));
                 }

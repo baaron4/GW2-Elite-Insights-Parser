@@ -8,7 +8,7 @@ internal class InterpolationConnector : GeographicalConnector
 
     public InterpolationConnector(IReadOnlyList<ParametricPoint3D> positions, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
     {
-        if (!positions.Any())
+        if (positions.Count == 0)
         {
             throw new InvalidOperationException("Must at least have one point");
         }

@@ -51,13 +51,13 @@ internal static class JsonActorBuilder
         jsonActor.Defenses = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDefensesAll(actor.GetDefenseStats(log, phase.Start, phase.End))).ToArray();
         //
         var minionsList = actor.GetMinions(log);
-        if (minionsList.Any())
+        if (minionsList.Count != 0)
         {
             jsonActor.Minions = minionsList.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, usedData)).ToList();
         }
         //
         var casts = actor.GetIntersectingCastEvents(log);
-        if (casts.Any())
+        if (casts.Count != 0)
         {
             jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, casts.GroupBy(x => x.SkillID), usedData).ToList();
         }

@@ -1,0 +1,150 @@
+﻿<template>
+    <div>
+        <h4 class="text-center mt-1 mb-1">{{graphName}}</h4>
+        <graph-component :id="graphId" :layout="layout" :data="computeData"></graph-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("player-minion-graph-tab-component", {
+        props: ["playerindex", "phaseindex", "minionIndex", "minionInstanceIndex", "light"],
+        template: `${template}`,
+        mixins: [graphComponent, encounterPhaseComponent],
+        data: function () {
+            return {
+                minionOffset: 0,
+                graphOffset: 0,
+            };
+        },
+        watch: {
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.yaxis2.gridcolor = textColor;
+                    this.layout.yaxis2.color = textColor;
+                    this.layout.yaxis3.gridcolor = textColor;
+                    this.layout.yaxis3.color = textColor;
+                    this.layout.yaxis4.gridcolor = textColor;
+                    this.layout.yaxis4.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            },
+            encounters: {
+                deep: true,
+                handler: function () {
+                    this.computeLayout();
+                }
+            }
+        },
+        created: function () {
+            this.computeLayout();
+        },
+        computed: {
+            playerGraphData: function() {
+                return this.graph.players[this.playerindex];
+            },
+            minionGraphData: function() {
+                return this.playerGraphData.minionCharts[this.minionIndex][this.minionInstanceIndex];
+            },
+            healthGraph: function () {
+                return this.minionGraphData.healthStates;
+            },
+            barrierGraph: function () {
+                return this.minionGraphData.barrierStates;
+            },
+            player: function () {
+                return logData.players[this.playerindex];
+            },
+            minion: function () {
+                return this.player.minions[this.minionIndex];
+            },
+            minionInstance: function () {
+                return this.minion.instances[this.minionInstanceIndex];
+            },
+            graphId: function () {
+                return "player-minion-graph-" + this.playerindex + "-" + this.phaseindex + "-" + this.minionIndex + "-" + this.minionInstance.uniqueID;
+            },
+            graphName: function () {
+                var groupName = this.player.minions[this.minionIndex]?.name || "Minion";
+                return groupName + " #" + (this.minionInstanceIndex + 1) + " Graph";
+            },
+            computeData: function () {
+                this.layout.datarevision = new Date().getTime();
+                var res = this.data;
+                var data = this.computeDPSRelatedData();
+                // First 4 are empty slots, for out/inc damage, maybe in the future
+                var offset = 4;
+                for (var i = this.graphOffset; i < this.minionOffset; i++) {
+                    this.data[i].y = data[offset++];
+                }
+                return res;
+            }
+        },
+        methods: {
+            computeLayout: function () {
+                const color = this.light ? '#495057' : '#cccccc';
+                var images = [];
+                this.data = [];
+
+                this.minionOffset += computeRotationData(this.minionInstance.details.rotation[this.phaseindex], images, this.data, this.phase, this.minion, 1);
+                var oldOffset = this.minionOffset;
+                this.minionOffset += computeBuffData(this.minionInstance.details.boonGraph[this.phaseindex], this.data);
+                var hasBuffs = oldOffset !== this.minionOffset;
+
+                this.graphOffset = this.minionOffset;
+                this.minionOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
+                this.minionOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
+                this.minionOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
+                this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.minion, this.data, 'y3');
+                this.playerOffset += computePlayerHealthData(this.healthGraph, this.minion, this.data, 'y3');
+
+                this.layout = getActorGraphLayout(images, color, hasBuffs, true);
+                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
+                this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+
+                const _this = this;         
+                this.layout._relayoutCB = function(evt) {
+                    const x0 = this.xaxis.range[0];
+                    const x1 = this.xaxis.range[1];
+                    //console.log("re-layout " + x0 + " " + x1);
+                    if (_this.updateVisibily(this.images, x0, x1)) {
+                        this.datarevision = new Date().getTime();
+                        //console.log("re-drawing");
+                    }
+                }
+            },
+            computeDPSRelatedData: function () {
+                var cacheID = this.encounterPhase.id + '-' + getDPSGraphCacheID(0, 0, 0, [], this.phaseindex, null);
+                if (this.dataCache.has(cacheID)) {
+                    return this.dataCache.get(cacheID);
+                }
+                var res = [];
+                res.push(0); // total damage
+                res.push(0); // target damage
+                res.push(0); // cleave damage
+                res.push(0); // taken damage
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    addPointsToGraph(res, this.graph.targets[i].breakbarPercentStates, 100);
+                }
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    addPointsToGraph(res, this.graph.targets[i].barrierStates, 100);
+                }
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    addPointsToGraph(res, this.graph.targets[i].healthStates, 100);
+                }
+                addPointsToGraph(res, this.barrierGraph, 100);
+                addPointsToGraph(res, this.healthGraph, 100);
+                this.dataCache.set(cacheID, res);
+                return res;
+            },
+        }
+    });
+</script>

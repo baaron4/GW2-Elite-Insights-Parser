@@ -76,7 +76,7 @@ internal class River : HallOfChains
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> enervators = agentData.GetStableSpeciesByID(TargetID.Enervator);
-            if (!enervators.Any())
+            if (enervators.Count == 0)
             {
                 throw new MissingKeyActorsException("Enervators not found");
             }

@@ -660,7 +660,7 @@ internal class Adina : TheKeyOfAhdashim
                             start = end;
                         }
                     }
-                    if (!adinaPhases.Any())
+                    if (adinaPhases.Count == 0)
                     {
                         arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
                     }
@@ -695,7 +695,7 @@ internal class Adina : TheKeyOfAhdashim
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        if (log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

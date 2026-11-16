@@ -198,7 +198,7 @@ public sealed class ProgramHelper : IDisposable
         //
         builder.AddField("Log Duration", log.LogData.DurationString);
         //
-        if (log.LogData.Logic.GetInstanceBuffs(log).Any())
+        if (log.LogData.Logic.GetInstanceBuffs(log).Count != 0)
         {
             builder.AddField("Instance Buffs", string.Join("\n", log.LogData.Logic.GetInstanceBuffs(log).Where(x => x.AttachedPhase == log.LogData.GetMainPhase(log)).Select(x => (x.Stack > 1 ? x.Stack + " " : "") + x.Buff.Name)));
         }

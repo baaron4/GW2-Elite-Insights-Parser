@@ -20,7 +20,7 @@ public class BreakbarPhaseData : SubPhasePhaseData
     {
         if (target != null)
         {
-            if (Targets.Any())
+            if (Targets.Count != 0)
             {
                 throw new InvalidOperationException("Breakbar phases can only have one target");
             }

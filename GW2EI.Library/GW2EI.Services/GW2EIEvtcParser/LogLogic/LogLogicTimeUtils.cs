@@ -161,7 +161,7 @@ internal static class LogLogicTimeUtils
 
     internal static void SetSuccessByCombatExit(IReadOnlyList<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        if (!targets.Any())
+        if (targets.Count == 0)
         {
             return;
         }
@@ -213,7 +213,7 @@ internal static class LogLogicTimeUtils
 
     internal static void SetSuccessByDeath(IReadOnlyList<SingleActor> targets, CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler, bool all)
     {
-        if (!targets.Any())
+        if (targets.Count == 0)
         {
             return;
         }

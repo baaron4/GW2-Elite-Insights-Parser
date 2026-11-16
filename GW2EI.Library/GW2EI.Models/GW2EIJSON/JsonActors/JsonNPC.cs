@@ -80,7 +80,7 @@ public class JsonNPC : JsonActor
     /// <summary>
     /// Indicates that the JsonNPC is actually an enemy player
     /// </summary>
-    public bool EnemyPlayer;
+    public bool? EnemyPlayer;
 
     /// <summary>
     /// Array of double[2] that represents the breakbar percent of the actor \n

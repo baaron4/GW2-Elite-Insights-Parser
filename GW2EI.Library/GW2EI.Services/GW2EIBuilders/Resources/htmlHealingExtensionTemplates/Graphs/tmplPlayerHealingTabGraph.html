@@ -1,10 +1,30 @@
 <template>
     <div>
+        <minion-nav-tab-component :source="this" :withInstances="true"></minion-nav-tab-component>
+        <minion-instance-dropdown-component :source="this"></minion-instance-dropdown-component>
         <hps-graph-mode-selector-component :data="graphhealingdata"
             :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :column="false">
         </hps-graph-mode-selector-component>
-        <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
-        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
+        <h3 v-if="minionIndex === -1" class="text-center mt-1 mb-1">{{graphname}}</h3>
+        <keep-alive>
+            <graph-component v-if="minionIndex === -1" :id="graphid" :layout="layout" :data="computeData"></graph-component>
+        </keep-alive>
+        <div class="template-div">
+            <template v-for="minionStruct in minionsWithInstanceToUse">
+                <template v-for="(minionInstance, _minionInstanceIndex) in minionStruct.minion.instances">
+                    <keep-alive>
+                        <player-healing-minion-graph-tab-component v-if="minionIndex === minionStruct.minionIndex && (minionInstanceIndex === -1 || minionInstanceIndex === _minionInstanceIndex)"
+                                                        :key="'player-heal-minion-graph-' + playerindex + '-' + phaseindex + '-' + minionStruct.minionIndex + '-' + _minionInstanceIndex"
+                                                        :playerindex="playerindex"
+                                                        :phaseindex="phaseindex"
+                                                        :minionIndex="minionStruct.minionIndex"
+                                                        :minionInstanceIndex="_minionInstanceIndex"
+                                                        :light="light">
+                        </player-healing-minion-graph-tab-component>
+                    </keep-alive>
+                </template>
+            </template>
+        </div>
         <rotation-legend-component></rotation-legend-component>
     </div>
 </template>
@@ -14,7 +34,7 @@
     Vue.component("player-healing-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
-        mixins: [graphComponent, healingGraphComponent, encounterPhaseComponent],
+        mixins: [graphComponent, healingGraphComponent, encounterPhaseComponent, minionTabulatedComponent],
         data: function () {
             return {
                 playerOffset: 0,
@@ -55,6 +75,9 @@
             this.computeLayout();
         },
         computed: {
+            actor: function () {
+                return this.player;
+            },
             hGraph: function () {
                 return healingStatsExtension.playerHealingCharts[this.phaseindex][this.playerindex];
             },

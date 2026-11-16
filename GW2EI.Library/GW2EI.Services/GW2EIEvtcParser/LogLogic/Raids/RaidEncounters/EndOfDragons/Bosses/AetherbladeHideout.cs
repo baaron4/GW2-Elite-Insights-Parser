@@ -587,7 +587,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         {
             return phases;
         }
-        if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Any())
+        if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Count != 0)
         {
             HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
             if (lastHPUpdate != null)
@@ -1099,7 +1099,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         {
             if (encounterPhase.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Count != 0)
                 {
                     instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityTriangulation));
                 }

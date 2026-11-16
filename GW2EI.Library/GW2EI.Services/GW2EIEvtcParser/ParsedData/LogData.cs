@@ -115,7 +115,7 @@ public class LogData
         switch (targetID)
         {
             case TargetID.WorldVersusWorld:
-                if (agentData.GetStableSpeciesByID(TargetID.Desmina).Any())
+                if (agentData.GetStableSpeciesByID(TargetID.Desmina).Count != 0)
                 {
                     return new River((int)TargetID.DummyTarget);
                 }
@@ -307,7 +307,7 @@ public class LogData
                     case TargetID.AncientInvokedHydra:
                         return new Qadim((int)TargetID.Qadim);
                     case TargetID.VoidMelter:
-                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Any())
+                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Count != 0)
                         {
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }
@@ -331,7 +331,7 @@ public class LogData
                     case TargetID.GadgetTheDragonVoid1:
                     case TargetID.GadgetTheDragonVoid2:
                         // This will most likely require a chinese client version
-                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Any())
+                        if (agentData.GetStableSpeciesByID(TargetID.VoidAmalgamate).Count != 0)
                         {
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }

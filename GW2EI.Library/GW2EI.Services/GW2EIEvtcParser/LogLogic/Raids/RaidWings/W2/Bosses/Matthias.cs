@@ -94,7 +94,7 @@ internal class Matthias : SalvationPass
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
-        if (bloodstoneBisque.Any())
+        if (bloodstoneBisque.Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

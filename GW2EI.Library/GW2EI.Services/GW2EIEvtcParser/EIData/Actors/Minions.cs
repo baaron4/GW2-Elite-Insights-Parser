@@ -30,10 +30,15 @@ public class Minions : Actor
         _minionList.Add(minion);
     }
 
-    public bool IsUniquePerTimeFrame => RangerHelper.IsJuvenilePet(ReferenceAgentItem) ||
-            MechanistHelper.IsJadeMech(ReferenceAgentItem) ||
-            NecromancerHelper.IsUniqueUndeadMinion(ReferenceAgentItem) ||
-            RitualistHelper.IsSpiritMinion(ReferenceAgentItem);
+    public string GetIcon()
+    {
+        return _minionList.FirstOrDefault()?.GetIcon() ?? string.Empty;
+    }
+
+    public bool IsWhitelisted(ParsedEvtcLog log)
+    {
+        return ProfHelper.IsWhiteListedForSomeStats(ReferenceAgentItem, log);
+    }
 
     #region DAMAGE
 
@@ -163,15 +168,15 @@ public class Minions : Actor
         {
             return true;
         }
-        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log).Any())
+        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log).Count != 0)
         {
             return true;
         }
-        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log).Any())
+        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log).Count != 0)
         {
             return true;
         }
-        if (GetDamageEvents(null, log).Any())
+        if (GetDamageEvents(null, log).Count != 0)
         {
             return true;
         }

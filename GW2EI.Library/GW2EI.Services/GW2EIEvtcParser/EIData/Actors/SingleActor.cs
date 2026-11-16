@@ -67,7 +67,7 @@ public abstract partial class SingleActor : Actor
         {
             Health = -1;
             IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEventsBySrc(EnglobingAgentItem);
-            if (maxHpUpdates.Any())
+            if (maxHpUpdates.Count != 0)
             {
                 HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
                 long timeCheck = HalfAware;
@@ -634,6 +634,20 @@ public abstract partial class SingleActor : Actor
                 }
             }
             CastEvents.SortByTimeThenNegatedSwap();
+            // Ignore on rotation render when the first and last casts of a minion are weapon swaps
+            if (AgentItem.Master != null)
+            {
+                var firstCast = CastEvents.FirstOrDefault();
+                if (firstCast is WeaponSwapEvent wseFirst)
+                {
+                    wseFirst.FlagAsSpecialSwap();
+                }
+                var lastCast = CastEvents.LastOrDefault();
+                if (lastCast is WeaponSwapEvent wseLast)
+                {
+                    wseLast.FlagAsSpecialSwap();
+                }
+            }
         }
     }
     #endregion CAST

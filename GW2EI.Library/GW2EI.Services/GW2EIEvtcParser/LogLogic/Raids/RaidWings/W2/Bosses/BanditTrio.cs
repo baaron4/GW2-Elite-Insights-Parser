@@ -165,6 +165,11 @@ internal class BanditTrio : SalvationPass
         }
         var banditTrioNPCs = agentData.GetStableSpeciesByIDs([.. TrashMobsToCheck.ToArray(), TargetID.Berg, TargetID.Narella, TargetID.Zane]);
         long minFirstAware = banditTrioNPCs.Count > 0 ? banditTrioNPCs.Min(x => x.FirstAware - 2000) : long.MinValue;
+        var slothasor = agentData.GetStableSpeciesByID(TargetID.Slothasor).LastOrDefault();
+        if (slothasor != null)
+        {
+            minFirstAware = Math.Max(slothasor.LastAware + 5000, minFirstAware);
+        }
         long maxLastAware = banditTrioBosses.Count > 0 ? banditTrioBosses.Max(x => x.LastAware + 2000) : long.MaxValue;
         // Cage
         var cageMarkerGUID = combatData
@@ -424,7 +429,7 @@ internal class BanditTrio : SalvationPass
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        if (log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
+        if (log.CombatData.GetBuffData(EnvironmentallyFriendly).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

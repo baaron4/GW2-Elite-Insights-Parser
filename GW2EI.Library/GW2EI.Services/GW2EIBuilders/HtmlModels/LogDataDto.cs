@@ -121,7 +121,7 @@ internal class LogDataDto
             Region = ArcDPSEnums.RegionToString(region);
         }
         UploadLinks = [uploadLinks.DPSReportEILink];
-        if (log.LogMetadata.UsedExtensions.Any())
+        if (log.LogMetadata.UsedExtensions.Count != 0)
         {
             UsedExtensions = [];
             PlayersRunningExtensions = [];

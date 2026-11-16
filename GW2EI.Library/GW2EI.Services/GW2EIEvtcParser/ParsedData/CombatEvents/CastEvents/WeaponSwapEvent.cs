@@ -28,7 +28,7 @@ public class WeaponSwapEvent : CastEvent
         return IsSpecialBundleSwap;
     }
 
-    internal void FlagAsSpecialBundleSwap()
+    internal void FlagAsSpecialSwap()
     {
         IsSpecialBundleSwap = true;
     }

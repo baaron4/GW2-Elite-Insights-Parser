@@ -24,9 +24,9 @@ public class TransformationEvent : StatusEvent
     internal TransformationEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, TransformationGUIDEvent> transformationGUIDs) : base(evtcItem, agentData)
     {
         TransformationID = evtcItem.SkillID;
-        if (transformationGUIDs.TryGetValue(TransformationID, out var markerGUID))
+        if (transformationGUIDs.TryGetValue(TransformationID, out var transformationGUID))
         {
-            GUIDEvent = markerGUID;
+            GUIDEvent = transformationGUID;
         }
     }
 

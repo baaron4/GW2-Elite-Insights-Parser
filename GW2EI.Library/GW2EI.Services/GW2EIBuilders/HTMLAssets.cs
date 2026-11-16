@@ -159,6 +159,7 @@ public class HTMLAssets
             Properties.Resources.tmplGraphStats,
             Properties.Resources.tmplPlayerBuffTab,
             Properties.Resources.tmplPlayerTabGraph,
+            Properties.Resources.tmplPlayerTabMinionGraph,
             Properties.Resources.tmplPlayersRotation,
             Properties.Resources.tmplPlayersRotationTab,
             Properties.Resources.tmplRotationLegend,
@@ -167,6 +168,9 @@ public class HTMLAssets
             Properties.Resources.tmplTargetTabPerPlayerGraph,
             Properties.Resources.tmplTargetData,
             Properties.Resources.tmplMainView,
+            //     
+            Properties.Resources.tmplMinionNavTabs,
+            Properties.Resources.tmplMinionInstanceDropdown,
         };
         var res = new List<string>();
         foreach (string template in templates)
@@ -221,6 +225,7 @@ public class HTMLAssets
             Properties.Resources.tmplPlayerHealingStats,
             Properties.Resources.tmplPlayerHealingTab,
             Properties.Resources.tmplPlayerHealingTabGraph,
+            Properties.Resources.tmplPlayerHealingTabMinionGraph,
             Properties.Resources.tmplBarrierDistPlayer,
             Properties.Resources.tmplBarrierDistTable,
             Properties.Resources.tmplBarrierTakenDistPlayer

@@ -186,12 +186,12 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         if (!target.IsSpecies(TargetID.Deimos))
                         {
                             var prides = log.AgentData.GetStableSpeciesByID(TargetID.Pride);
-                            if (prides.Any())
+                            if (prides.Count != 0)
                             {
                                 end = Math.Max(prides.Max(x => x.LastAware), end);
                             }
                             var greeds = log.AgentData.GetStableSpeciesByID(TargetID.Greed);
-                            if (greeds.Any())
+                            if (greeds.Count != 0)
                             {
                                 end = Math.Max(greeds.Max(x => x.LastAware), end);
                             }

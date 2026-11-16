@@ -189,6 +189,7 @@ var encounterPhaseComponent = {
 var graphComponent = {
     data: function () {
         return {
+            data: [],
             layout: {},
             dpsCache: new Map(),
             dataCache: new Map(),
@@ -411,6 +412,203 @@ var buffComponent = {
     }
 };
 
+var buffPlayerWithActiveTimeComponent = {
+    methods: {
+        getPlayerWeight(playerIndex, active) {
+            if (!active) {
+                return 1;
+            }
+            return this.activeTimes[playerIndex];
+        }
+    },
+    computed: {
+        activeTimes: function() {
+            return this.phase.playerActiveTimes;
+        },
+    }
+};
+
+var buffPlayerMinionsWithActiveTimeComponent = {
+    methods: {
+        getMinionInstanceWeight: function(instanceIndex, active) {
+            if (!active || this.minionIndex < 0) {
+                return 1;
+            }
+            return this.minionActiveTimes[instanceIndex];
+        },
+    },
+    computed: {
+        minionActiveTimes: function() {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.phase.playerMinionActiveTimes[this.playerindex][this.minionIndex];
+        },
+    }
+};
+
+var buffPlayerMinionsComponent = {
+    methods: {
+        getCacheID: function() {
+            return this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration + '-' + this.minionIndex + '-' + this.minionInstanceIndex;
+        },
+        getSumCacheID: function() {
+            return this.phaseindex + '-' + this.activeduration + '-' + this.minionIndex + '-' + this.minionInstanceIndex;
+        },
+    },
+    computed: {
+        actor: function() {
+            return this.player;
+        },
+        selectedMinionVolumeContainer: function () {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.buffVolumesStatContainer.minionBuffVolumes[this.playerindex][this.minionIndex] ?? null;
+        },
+        selectedMinionBuffs: function () {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.buffsStatContainer.minionBuffs[this.playerindex][this.minionIndex] ?? null;
+        },
+    }
+};
+
+var minionTabulatedComponent = {
+    data: function () {
+        return {
+            minionIndex: -1,
+            minionInstanceIndices: {},
+            allowConsolidated: false, // For granular activation untill full support
+        };
+    },
+    methods: {   
+        getMinionInstanceIndexForMinionIndex: function(minionIndex) {
+            let index = this.minionInstanceIndices[minionIndex];
+            if (index === undefined) {
+                index = -1;
+            }
+            if (index === -1 && !this.allowConsolidated) {
+                // Until consolidated view is support, consolidate is first minion
+                return 0;
+            }
+            return index;
+        },
+        getSelectedDropdownValueForMinionIndex: function(minionIndex) {
+            return minionIndex + ":" + this.getMinionInstanceIndexForMinionIndex(minionIndex);
+        },
+        getDropdownValueForMinionInstance: function(minionIndex, minionInstanceIndex) {
+            return minionIndex + ":" + minionInstanceIndex;
+        },
+        handleMinionChange: function (event) {
+            const value = event.target.value;
+            const [minionIndex, minionInstanceIndex] = value.split(':').map(Number);
+            this.$set(this.minionInstanceIndices, minionIndex, minionInstanceIndex);
+        },
+        isSelectedMinionInstanceActive(phaseIndex, minionInstanceIndex) {
+            const phase = logData.phases[phaseIndex];
+            const minionInstance = this.selectedMinion.instances[minionInstanceIndex];
+            return isMinionInstanceActive(phase, minionInstance);
+        },
+    },
+    computed: {
+        consolidatedMinionView: function() {
+            return this.minionIndex >= 0 && this.minionInstanceIndex === -1;
+        },
+        minionsToUse: function () {
+            let result = [];
+            const actor = this.actor;
+            const minions = actor.minions;
+            for (let i = 0; i < minions.length; i++) {
+                result.push({
+                    minion: minions[i],
+                    minionIndex: i
+                });
+            }
+            return result;
+        },
+        minionsWithInstanceToUse: function () {
+            let result = [];
+            const actor = this.actor;
+            const minions = actor.minions;
+            for (let i = 0; i < minions.length; i++) {
+                if (actor.minions[i].instances) {
+                    result.push({
+                        minion: minions[i],
+                        minionIndex: i
+                    });
+                }
+            }
+            return result;
+        },
+        minionInstanceIndex: function () {
+            const minionIndex = this.minionIndex;
+            if (minionIndex < 0) {
+                return -1;
+            }
+            // can't use getMinionInstanceIndexForMinionIndex, methods are not reactive
+            if (!this.selectedMinion.instances || this.selectedMinion.instances.length === 1) {
+                return 0;
+            }
+            let index = this.minionInstanceIndices[minionIndex];
+            if (index === undefined) {
+                index = -1;
+            }
+            if (index === -1 && !this.allowConsolidated) {
+                // Until consolidated view is support, consolidate is first minion
+                return 0;
+            }
+            return index;
+        },
+        selectedMinion: function () {
+            if (this.minionIndex < 0) {
+                return null;
+            }
+            return this.actor.minions[this.minionIndex] ?? null;
+        },
+    },
+}
+
+var crActorComponent = {
+    props: ["actorIndex", "isTarget", "minionIndex", "minionInstanceIndex"],
+    computed: {
+        isMinion: function () {
+            return this.minionIndex != null && this.minionInstanceIndex != null;
+        },
+        minionOwner: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.isTarget ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
+        },
+        minionInstance: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.minionInfo.instances[this.minionInstanceIndex];
+        },
+        minionInfo: function () {
+            if (!this.isMinion) {
+                return null;
+            }
+            return this.minionOwner.minions[this.minionIndex];
+        },
+        minionLabel: function () {
+            if (!this.isMinion || !this.minionInfo) {
+                return "Minion";
+            }
+            return this.minionInfo.name + "#" + (this.minionInstanceIndex + 1);
+        },
+        actor: function () {
+            if (this.isMinion) {
+                return this.minionInstance;
+            }
+            return this.isTarget ? logData.targets[this.actorIndex] : logData.players[this.actorIndex];
+        },
+    }
+}
+
 var extensionPresentComponent = {
     methods: {
         playerIsRunningHealingExtension: function (playerData) {
@@ -440,13 +638,13 @@ var sortedTableComponent = {
             sortdata.index = index;
         },
         sortByPlayerName: function (x, y) {
-            return x.player.name.localeCompare(y.player.name);
+            return collatorWithNumerics.compare(x.player.name, y.player.name);
         },
         sortByPlayerProfession: function (x, y) {
-            return x.player.profession.localeCompare(y.player.profession);
+            return collatorWithNumerics.compare(x.player.profession, y.player.profession);
         },
         sortByPlayerAccount: function (x, y) {
-            return x.player.acc.localeCompare(y.player.acc);
+            return collatorWithNumerics.compare(x.player.acc, y.player.acc);
         },
         getHeaderClassBase: function (sortdata, key, index) {
             index = index >= 0 ? index : -1;
@@ -495,7 +693,7 @@ var sortedDistributionComponent = {
             var order = this.sortdata.order === "asc" ? 1 : -1;
             switch (this.sortdata.key) {
                 case "Skill":
-                    rows.sort((x, y) => order * (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 case "Data":
                     var sortFunc = x => {
@@ -509,7 +707,7 @@ var sortedDistributionComponent = {
                         }
                         return value;
                     };
-                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
+                    rows.sort((x, y) => order * (sortFunc(x) - sortFunc(y)) || (collatorWithNumerics.compare(this.getSkill(x).name, this.getSkill(y).name)));
                     break;
                 default:
                     break;

@@ -118,7 +118,12 @@ internal static class WarriorHelper
         new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "5% to movement-impaired foes", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.LegSpecialist, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2026Balancepocalypse),
         // - Empowered
-        new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.Empowered, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.Empowered, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "2% per boon (max 5)", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Warrior, By5CappedStack, TraitImages.Empowered, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "1.5% per boon (max 5)", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Warrior, By5CappedStack, TraitImages.Empowered, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.November2026Balance),
         // - Warrior's Cunning (Barrier)
         new DamageLogDamageModifier(Mod_WarriorsCunningBarrier, "Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
@@ -157,7 +162,10 @@ internal static class WarriorHelper
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "10% under swiftness", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.WarriorsSprint, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance),
         // - Destruction of the Empowered
-        new BuffOnFoeDamageModifier(Mod_DestructionOfTheEmpowered, NumberOfBoons, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByMultipliyingStack, TraitImages.DestructionOfTheEmpowered, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_DestructionOfTheEmpowered, NumberOfBoons, "Destruction of the Empowered", "3% per boon on target", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.DestructionOfTheEmpowered, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2026Balance),
+        new BuffOnFoeDamageModifier(Mod_DestructionOfTheEmpowered, NumberOfBoons, "Destruction of the Empowered", "4% per boon on target (max 5)", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Warrior, By5CappedStack, TraitImages.DestructionOfTheEmpowered, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
 
     ];
 

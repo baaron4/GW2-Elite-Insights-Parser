@@ -263,7 +263,7 @@ internal class FraenirOfJormag : Bjora
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        if (log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

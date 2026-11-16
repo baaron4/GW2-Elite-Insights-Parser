@@ -22,7 +22,6 @@ internal static class JsonRotationBuilder
             log.LogData.Logic.TargetAgents.Contains(target))
         {
             targetKey = "u" + target.UniqueID;
-            usedData.npcs.TryAdd(targetKey, null);
         }
         else if (target.IsNPC && !target.IsUnamedSpecies())
         {

@@ -24,7 +24,7 @@ internal class AngleInterpolationConnector : RotationConnector
     /// <exception cref="InvalidOperationException"></exception>
     public AngleInterpolationConnector(IReadOnlyList<ParametricPoint3D> originPoints, IReadOnlyList<ParametricPoint3D> destinationPoints, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
     {
-        if (!originPoints.Any() || !destinationPoints.Any())
+        if (originPoints.Count == 0 || destinationPoints.Count == 0)
         {
             throw new InvalidOperationException("Must at least have one point");
         }

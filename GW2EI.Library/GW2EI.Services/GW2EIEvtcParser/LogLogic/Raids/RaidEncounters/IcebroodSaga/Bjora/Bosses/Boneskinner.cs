@@ -100,7 +100,7 @@ internal class Boneskinner : Bjora
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        if (log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

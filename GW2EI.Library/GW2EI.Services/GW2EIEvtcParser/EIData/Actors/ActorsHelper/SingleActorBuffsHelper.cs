@@ -1060,7 +1060,7 @@ partial class SingleActor
                 activeCombatMinionsGraph.MergePresenceInto(minionsSegments);
             }
         }
-        if (activeCombatMinionsGraph.Values.Any())
+        if (activeCombatMinionsGraph.Values.Count != 0)
         {
             _buffGraphs[SkillIDs.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
         }

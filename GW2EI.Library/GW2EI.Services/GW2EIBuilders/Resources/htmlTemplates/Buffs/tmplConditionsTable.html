@@ -9,12 +9,79 @@
 <script>
     Vue.component("conditions-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent, encounterPhaseComponent],
+        mixins: [buffComponent, encounterPhaseComponent, buffPlayerWithActiveTimeComponent, numberComponent],
         template: `${template}`,
         data: function () {
             return {
                 cache: new Map()
             };
+        },
+        methods: {
+            getData: function(uptimesStats) {
+                const activeduration = this.activeduration;
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
+
+                const uptimes = [];
+                const avg = [],
+                    groupeAvg = [],
+                    totalAvg = [];
+                let groupCount = [],
+                    totalCount = 0;
+                let groupConditionAvg = [],
+                    totalConditionAvg = 0;
+                for (let i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
+                    uptimes.push({
+                        player: player,
+                        data: uptimesStats[i]
+                    });
+
+                    const playerWeight = this.getPlayerWeight(i, activeduration);
+                    if (playerWeight < 1e-6) {
+                        continue;
+                    }
+                    if (player.notInSquad) {
+                        continue;
+                    }
+                    if (!groupeAvg[player.group]) {
+                        groupeAvg[player.group] = [];
+                        groupCount[player.group] = 0;
+                        groupConditionAvg[player.group] = 0;
+                    }
+                    totalCount += playerWeight;
+                    totalConditionAvg += playerWeight * uptimesStats[i].avg;
+                    groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
+                    groupCount[player.group] += playerWeight;
+                    for (let j = 0; j < uptimesStats[i].data.length; j++) {
+                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                        groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                    }
+                }
+                for (let i = 0; i < groupeAvg.length; i++) {
+                    if (groupeAvg[i]) {
+                        for (let k = 0; k < groupeAvg[i].length; k++) {
+                            groupeAvg[i][k] = this.round3(groupeAvg[i][k] / groupCount[i]);
+                        }
+                        avg.push({
+                            name: "Group " + i,
+                            data: groupeAvg[i],
+                            avg: this.round3(groupConditionAvg[i] / groupCount[i])
+                        });
+                    }
+                }
+                for (let k = 0; k < totalAvg.length; k++) {
+                    totalAvg[k] = this.round3(totalAvg[k] / totalCount);
+                }
+                avg.push({
+                    name: "Total",
+                    data: totalAvg,
+                    avg: this.round3(totalConditionAvg / totalCount)
+                });
+                return [uptimes, avg];
+            }
         },
         computed: {
             buffData: function () {
@@ -22,77 +89,11 @@
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
-                const activeduration = this.activeduration;
-                const activeTimes = this.phase.playerActiveTimes;
-
-                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
-                var getData = function (uptimesStats) {
-                    var uptimes = [];                    
-                    var avg = [],
-                        groupeAvg = [],
-                        totalAvg = [];
-                    var groupCount = [],
-                        totalCount = 0;
-                    var groupConditionAvg = [],
-                        totalConditionAvg = 0;
-                    for (let i = 0; i < players.length; i++) {
-                        const player = players[i];
-                        if (!player) {
-                            continue;
-                        }
-                        uptimes.push({
-                            player: player,
-                            data: uptimesStats[i]
-                        });
-                        
-                        if (activeduration && activeTimes[i] < 1e-6) {
-                            continue;
-                        }
-                        if (player.notInSquad) {
-                            continue;
-                        }
-                        const playerWeight = activeduration ? activeTimes[i] : 1;
-                        if (!groupeAvg[player.group]) {
-                            groupeAvg[player.group] = [];
-                            groupCount[player.group] = 0;
-                            groupConditionAvg[player.group] = 0;
-                        }
-                        totalCount += playerWeight;
-                        totalConditionAvg += playerWeight * uptimesStats[i].avg;
-                        groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
-                        groupCount[player.group] += playerWeight;
-                        for (let j = 0; j < uptimesStats[i].data.length; j++) {
-                            totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                        }
-                    }
-                    for (let i = 0; i < groupeAvg.length; i++) {
-                        if (groupeAvg[i]) {
-                            for (let k = 0; k < groupeAvg[i].length; k++) {
-                                groupeAvg[i][k] = Math.round(1000 * groupeAvg[i][k] / groupCount[i]) / 1000;
-                            }
-                            avg.push({
-                                name: "Group " + i,
-                                data: groupeAvg[i],
-                                avg: Math.round(1000 * groupConditionAvg[i] / groupCount[i]) / 1000
-                            });
-                        }
-                    }
-                    for (let k = 0; k < totalAvg.length; k++) {
-                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
-                    }
-                    avg.push({
-                        name: "Total",
-                        data: totalAvg,
-                        avg: Math.round(1000 * totalConditionAvg / totalCount) / 1000
-                    });
-                    return [uptimes, avg];
-                };
                 let res;
                 if (this.activeduration) {
-                    res = getData(this.buffsStatContainer.conditionsActiveStats);
+                    res = this.getData(this.buffsStatContainer.conditionsActiveStats);
                 } else {
-                    res = getData(this.buffsStatContainer.conditionsStats);
+                    res = this.getData(this.buffsStatContainer.conditionsStats);
                 }
                 this.cache.set(id, res);
                 return res;

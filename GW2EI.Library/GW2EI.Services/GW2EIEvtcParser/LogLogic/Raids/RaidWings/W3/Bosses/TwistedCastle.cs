@@ -174,7 +174,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         {
             if (encounterPhase.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Count != 0)
                 {
                     instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityMildlyInsane));
                 }

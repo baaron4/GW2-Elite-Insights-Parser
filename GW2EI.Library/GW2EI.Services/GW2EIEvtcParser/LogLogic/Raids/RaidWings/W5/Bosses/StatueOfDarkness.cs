@@ -97,7 +97,7 @@ internal class StatueOfDarkness : HallOfChains
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> lightThieves = agentData.GetStableSpeciesByID(TargetID.LightThief);
-            if (lightThieves.Any())
+            if (lightThieves.Count != 0)
             {
                 startToUse = lightThieves.Min(x => x.FirstAware);
             }

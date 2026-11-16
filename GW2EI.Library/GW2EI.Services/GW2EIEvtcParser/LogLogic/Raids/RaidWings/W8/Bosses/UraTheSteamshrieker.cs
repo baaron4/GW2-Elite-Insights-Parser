@@ -382,7 +382,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 if ((swapEvent.SwappedFrom == WeaponSetIDs.KitSet || swapEvent.SwappedTo == WeaponSetIDs.KitSet) &&
                     deterrenceAppliesOnPicker.Any(x => x.IsAtTime(swapEvent)))
                 {
-                    swapEvent.FlagAsSpecialBundleSwap();
+                    swapEvent.FlagAsSpecialSwap();
                 }
             }
         }

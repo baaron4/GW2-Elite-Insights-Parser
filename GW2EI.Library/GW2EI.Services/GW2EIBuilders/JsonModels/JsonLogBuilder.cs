@@ -20,7 +20,7 @@ internal static class JsonLogBuilder
             Icon = skill.Icon,
             CanCrit = SkillItem.CanCrit(skill.ID, log.LogMetadata.GW2Build),
             IsSwap = skill.IsSwap,
-            IsInstantCast = log.CombatData.GetInstantCastData(skill.ID).Any(),
+            IsInstantCast = log.CombatData.GetInstantCastData(skill.ID).Count != 0,
             IsNotAccurate = log.SkillData.IsNotAccurate(skill.ID),
             IsGearProc = log.SkillData.IsGearProc(skill.ID),
             IsTraitProc = log.SkillData.IsTraitProc(skill.ID),
@@ -227,7 +227,7 @@ internal static class JsonLogBuilder
         var usedData = new UsedJsonData();
 
         var instanceBuffs = log.LogData.Logic.GetInstanceBuffs(log);
-        if (instanceBuffs.Any())
+        if (instanceBuffs.Count != 0)
         {
             var presentFractalInstabilities = new List<long>(3);
             var presentInstanceBuffs = new List<IReadOnlyList<long>>(instanceBuffs.Count);
@@ -269,11 +269,11 @@ internal static class JsonLogBuilder
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
         jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, usedData)).ToList();
         //
-        if (log.LogMetadata.LogErrors.Any())
+        if (log.LogMetadata.LogErrors.Count != 0)
         {
             jsonLog.LogErrors = new List<string>(log.LogMetadata.LogErrors);
         }
-        if (log.LogMetadata.UsedExtensions.Any())
+        if (log.LogMetadata.UsedExtensions.Count != 0)
         {
             var usedExtensions = new List<ExtensionDesc>();
             foreach (ExtensionHandler extension in log.LogMetadata.UsedExtensions)

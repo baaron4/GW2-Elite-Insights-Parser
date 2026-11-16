@@ -201,7 +201,7 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
             TargetID.EmbodimentOfRegret,
         ];
         var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIDs));
-        var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
+        var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Count != 0);
         phases[0].AddTargets(embodimentsKilled, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {

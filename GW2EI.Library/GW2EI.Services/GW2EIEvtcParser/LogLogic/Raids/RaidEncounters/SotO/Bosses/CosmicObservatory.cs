@@ -409,7 +409,7 @@ internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
             long end = Math.Min(log.LogData.LogEnd, group.Max(x =>
             {
                 long res = x.LastAware;
-                if (log.CombatData.GetDeadEvents(x).Any())
+                if (log.CombatData.GetDeadEvents(x).Count != 0)
                 {
                     res = log.CombatData.GetDeadEvents(x).Last().Time;
                 }

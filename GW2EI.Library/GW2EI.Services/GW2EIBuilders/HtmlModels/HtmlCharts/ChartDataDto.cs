@@ -10,7 +10,7 @@ internal class ChartDataDto
 
     private static List<double[]>? BuildGraphStates(IReadOnlyList<GenericSegment<double>> segments, PhaseData phase, bool nullable, double defaultState)
     {
-        if (!segments.Any())
+        if (segments.Count == 0)
         {
             return nullable ? null :
             [

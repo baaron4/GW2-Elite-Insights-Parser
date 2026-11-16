@@ -23,9 +23,10 @@ internal static class JsonWvWMapDataBuilder
         usedData.teams.UnionWith([wvwTeamsEvent.BlueTeamID, wvwTeamsEvent.GreenTeamID, wvwTeamsEvent.RedTeamID]);
 
         var wvwObjectiveStatusEvents = log.CombatData.GetWvWObjectStatusEvents();
+        var objectiveData = new List<JsonWvWMapData.JsonWvWObjectiveData>(wvwObjectiveStatusEvents.Count);
         foreach (var objectiveStatusEvent in wvwObjectiveStatusEvents)
         {
-            jsonWvWMapData.ObjectiveData.Add(new JsonWvWMapData.JsonWvWObjectiveData()
+            objectiveData.Add(new JsonWvWMapData.JsonWvWObjectiveData()
             {
                 MapID = objectiveStatusEvent.MapID,
                 ObjectiveID = objectiveStatusEvent.ObjectiveID,
@@ -34,6 +35,7 @@ internal static class JsonWvWMapDataBuilder
             }
             );
         }
+        jsonWvWMapData.ObjectiveData = objectiveData;
 
         return jsonWvWMapData;
     }

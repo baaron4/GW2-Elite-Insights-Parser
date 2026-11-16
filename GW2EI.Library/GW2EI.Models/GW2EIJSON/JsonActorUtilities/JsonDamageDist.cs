@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace GW2EIJSON;
+﻿namespace GW2EIJSON;
 
 /// <summary>
 /// Class corresponding a damage distribution
@@ -96,7 +94,6 @@ public class JsonDamageDist
     /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death. \n
     /// Only relevant for outgoing damage distribution, not incoming and for non minion actors.
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? DownContribution;
 
     /// <summary>

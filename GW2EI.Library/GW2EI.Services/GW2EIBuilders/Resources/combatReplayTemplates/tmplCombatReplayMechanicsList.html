@@ -338,7 +338,7 @@
                         // Sort enemies after players
                         return a.enemy ? 1 : -1;
                     }
-                    return a.name.localeCompare(b.name);
+                    return collatorWithNumerics.compare(a.name, b.name);
                 });
 
                 const mechanicsList = Object.values(mechanics);
@@ -347,7 +347,7 @@
                         // Sort enemies after players
                         return a.enemy ? 1 : -1;
                     }
-                    return a.name.localeCompare(b.name);
+                    return collatorWithNumerics.compare(a.name, b.name);
                 });
                 const result = {          
                     mechanicEvents: mechanicEvents,

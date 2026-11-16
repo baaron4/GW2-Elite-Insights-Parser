@@ -106,6 +106,7 @@ internal static class TraitImages
     public const string EmpoweredArmaments = "https://render.guildwars2.com/file/37424E9DD0A3ADC61DD56BB180C96201DB61099C/3679960.png";
     public const string ResoluteBlessing = "https://render.guildwars2.com/file/3580BB0C4F3E9BBC96080454BE9491CC934A6C55/3679956.png";
     public const string SovereignOfLight = "https://render.guildwars2.com/file/111A0EA54101D7C22F57070690139662D0BC5316/3679962.png";
+    public const string ImbuedHaste = "https://render.guildwars2.com/file/CD01F2B8C328AC37B760D0913F6D4DDDAC0477D2/1769950.png";
     #endregion
     #region Mesmer
     public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";
@@ -244,6 +245,7 @@ internal static class TraitImages
     public const string TargetedDestruction = "https://render.guildwars2.com/file/37B8029E4AFECE5A70A3D37DC763F61BCCCC1CA9/1029965.png";
     public const string SoothingBastion = "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png";
     public const string ForerunnerOfDeath = "https://render.guildwars2.com/file/2864D963D3FC9156E6F52FA95DD34C2DE30306BE/2491537.png";
+    public const string FriendOfTheLuxons = "https://render.guildwars2.com/file/5863F212529A39973D0ABB76010DAA11AADF2E5F/2491531.png";
     public const string SaintOfZuHeltzer = "https://render.guildwars2.com/file/42D514BF15A3F84ECECBACC7E05F95CAE03EBF6D/2491539.png";
     public const string VassalsOfTheEmpire = "https://render.guildwars2.com/file/955F334FAA12550A15127A6200CB7BDE4D41BD0A/2491538.png";
     public const string SwiftTermination = "https://render.guildwars2.com/file/B0A7D5466C0E20764CB5CA305BD21F35BEE96303/1029961.png";
@@ -283,6 +285,7 @@ internal static class TraitImages
     public const string ConsumeShadows = "https://render.guildwars2.com/file/0DE6EECA322FE219A7DF6FFA9EE04B975FA2E06B/2503646.png";
     public const string Executioner = "https://render.guildwars2.com/file/C44E0FC7EC5B1870214E24AD4144C55E110AD9C2/1012746.png";
     public const string FerociousStrikes = "https://render.guildwars2.com/file/519532119E92CFFF9375E2E3CFC4326B46659F63/1012737.png";
+    public const string OpportuneOpening = "https://render.guildwars2.com/file/E80BD3449E33470B1ECA0FF242CC6B031B459514/1012714.png";
     public const string FluidStrikes = "https://render.guildwars2.com/file/64A151F4F69F7F6E36986108224DA606660EDD64/1012725.png";
     public const string Hiddenkiller = "https://render.guildwars2.com/file/03E22FDC6642C0F4BFD197DA5470A97910EB1877/1012733.png";
     public const string InstantReflexes = "https://render.guildwars2.com/file/E80BD3449E33470B1ECA0FF242CC6B031B459514/1012714.png";

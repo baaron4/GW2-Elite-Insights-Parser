@@ -517,7 +517,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
-                        if (agentData.GetStableSpeciesByID(ChestID).Any())
+                        if (agentData.GetStableSpeciesByID(ChestID).Count != 0)
                         {
                             isSuccess = true;
                         }
@@ -2965,7 +2965,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             }
         }
         // fallback for late logs
-        if (combatData.GetEffectGUIDEventByGUID(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetStableSpeciesByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+        if (combatData.GetEffectGUIDEventByGUID(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetStableSpeciesByID(TargetID.VoidGoliath).Count != 0 || combatData.GetBuffData(VoidEmpowerment).Count != 0)
         {
             return LogData.Mode.CM;
         }
@@ -2986,7 +2986,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
             // Added a CM mode check because the eligibility had been bugged for some time and showed up in normal mode.
             if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
+                if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Count != 0)
                 {
                     instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityVoidwalker));
                 }

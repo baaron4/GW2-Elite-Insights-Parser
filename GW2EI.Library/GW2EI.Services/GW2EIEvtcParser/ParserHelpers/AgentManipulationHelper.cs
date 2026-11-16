@@ -434,7 +434,7 @@ public static class AgentManipulationHelper
         // Non squad Players
         {
             IReadOnlyList<AgentItem> nonSquadPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            if (nonSquadPlayerAgents.Any())
+            if (nonSquadPlayerAgents.Count != 0)
             {
                 var teamChangeDict = combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
                 IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);

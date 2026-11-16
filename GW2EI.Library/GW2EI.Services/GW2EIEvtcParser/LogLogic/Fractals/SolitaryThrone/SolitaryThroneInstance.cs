@@ -37,7 +37,7 @@ internal class SolitaryThroneInstance : SolitaryThrone
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, LogData.LogSuccessHandler successHandler)
     {
-        var lastEternalTyrant = agentData.GetStableSpeciesByID(TargetID.EternalTyrant).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Any());
+        var lastEternalTyrant = agentData.GetStableSpeciesByID(TargetID.EternalTyrant).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Count != 0);
         if (lastEternalTyrant != null)
         {
             var (success, end) = EternalTyrant.CheckSuccess(lastEternalTyrant, combatData);

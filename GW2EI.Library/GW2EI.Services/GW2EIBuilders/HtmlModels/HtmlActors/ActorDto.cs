@@ -22,10 +22,10 @@ internal abstract class ActorDto
     public bool IsEnglobed;
     public bool IsFirstEnglobed;
     public bool IsLastEnglobed;
-    public List<MinionDto> Minions;
+    public List<MinionDto> Minions = [];
     public ActorDetailsDto Details;
 
-    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData usedData)
+    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details, UsedHtmlData used)
     {
         Health = actor.GetHealth(log.CombatData);
         Condi = actor.Condition;
@@ -45,31 +45,13 @@ internal abstract class ActorDto
             IsFirstEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.First() == actor.AgentItem;
             IsLastEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.Last() == actor.AgentItem;
         }
-        var minions = actor.GetMinions(log);
-        Minions = new(minions.Count);
-        for (var i = 0; i < minions.Count; i++)
-        {
-            Minions.Add(new MinionDto()
-            {
-                Id = i,
-                Name = minions[i].Character
-            });
-            foreach (var minion in minions[i].MinionList)
-            {
-                usedData.npcs.TryAdd("u" + minion.UniqueID, minion.AgentItem);
-            }
-        }
     }
 
-    public static void AssembleNPCs(Dictionary<string, AgentItem?> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
+    public static void AssembleNPCs(Dictionary<string, AgentItem> npcs, Dictionary<string, string> dict, ParsedEvtcLog log)
     {
         dict.EnsureCapacity(dict.Count + npcs.Count);
         foreach (var (key, agent) in npcs)
         {
-            if (agent == null)
-            {
-                continue;
-            }
             if (key.StartsWith('u'))
             {
                 // used proper log name for ids that start with "u",

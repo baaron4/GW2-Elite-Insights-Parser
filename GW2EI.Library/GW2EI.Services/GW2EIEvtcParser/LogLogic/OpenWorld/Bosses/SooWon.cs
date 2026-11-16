@@ -219,7 +219,7 @@ internal class SooWon : OpenWorldLogic
         AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         IReadOnlyList<AgentItem> sooWons = agentData.GetVolatileSpeciesByID(TargetID.SooWonOW);
-        if (!sooWons.Any())
+        if (sooWons.Count == 0)
         {
             throw new MissingKeyActorsException("Soo-Won not found");
         }

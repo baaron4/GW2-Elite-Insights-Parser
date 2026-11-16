@@ -18,7 +18,7 @@ public class JsonPlayer : JsonActor
     /// <summary>
     /// Indicates if a player has a commander tag
     /// </summary>
-    public bool HasCommanderTag;
+    public bool? HasCommanderTag;
     /// <summary>
     /// If <see cref="HasCommanderTag"/> is true, will contain the states of the tag. \n
     /// Array of int[2] that represents the commander tag status \n
@@ -35,12 +35,12 @@ public class JsonPlayer : JsonActor
     /// <summary>
     /// Indicates that the JsonPlayer is actually a friendly NPC
     /// </summary>
-    public bool FriendlyNPC;
+    public bool? FriendlyNPC;
 
     /// <summary>
     /// Indicates that the JsonPlayer is not actually part of the squad
     /// </summary>
-    public bool NotInSquad;
+    public bool? NotInSquad;
 
     /// <summary>
     /// Guild id to be used to fetch from the official API
@@ -51,7 +51,7 @@ public class JsonPlayer : JsonActor
     /// Only relevant for instance logs. \n
     /// If true, indicates that the player has changed subgroups or specs during the log. A JsonPlayer representing each time frame will be present in the Json. Each instance will also have the same <see cref="JsonActor.InstanceID"/>
     /// </summary>
-    public bool IsEnglobed;
+    public bool? IsEnglobed;
 
     /// <summary>
     /// Weapons of the player \n

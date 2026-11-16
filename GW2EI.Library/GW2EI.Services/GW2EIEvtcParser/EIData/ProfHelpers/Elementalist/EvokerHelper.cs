@@ -96,7 +96,9 @@ internal static class EvokerHelper
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "15% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance, GW2Builds.April2026Balancepocalypse),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "10% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2026Balancepocalypse),
+            .WithBuilds(GW2Builds.April2026Balancepocalypse, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "12% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2026Balance),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "12% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.February2026GuardiansGladeReleaseAndPvPBalance, GW2Builds.July2026Balance),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "12% after familiar skill (Familiar's Focus)", DamageSource.NoPets, 12.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW)

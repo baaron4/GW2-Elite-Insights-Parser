@@ -84,7 +84,7 @@ internal class WhisperingShadow : Kinfall
 
     internal override LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (combatData.GetBuffApplyData(LifeFireCircleCM).Any())
+        if (combatData.GetBuffApplyData(LifeFireCircleCM).Count != 0)
         {
             return LogData.Mode.CM;
         }
@@ -376,7 +376,7 @@ internal class WhisperingShadow : Kinfall
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        if (log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             var lastEncounter = encounterPhases.LastOrDefault();

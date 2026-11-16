@@ -229,7 +229,7 @@ internal class Samarog : BastionOfThePenitent
             case (int)TargetID.SpearAggressionRevulsion:
                 var spearLifespan = new Segment(target.FirstAware, target.LastAware, 1);
                 replay.Decorations.Add(new CircleDecoration(240, spearLifespan, Colors.Orange, 0.1, new AgentConnector(target)));
-                if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Any())
+                if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Count != 0)
                 {
                     replay.Decorations.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
                 }

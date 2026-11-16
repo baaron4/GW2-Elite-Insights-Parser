@@ -257,18 +257,20 @@ public static class GW2Builds
     public const ulong April2026Balancepocalypse = 198816;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-05-12
-    public const long May2026NewRelicsAndOtter = 200514;
+    public const ulong May2026NewRelicsAndOtter = 200514;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-06-02
-    public const long June2026HotFix = 201671;
+    public const ulong June2026HotFix = 201671;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-07-15
-    public const long July2026Balance = 203989;
+    public const ulong July2026Balance = 203989;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-15
-    public const long September2026NexusOfEternitySolitaryThrone = 207032;
+    public const ulong September2026NexusOfEternitySolitaryThrone = 207032;
     // https://wiki.guildwars2.com/wiki/Game_updates/2026-09-29
-    public const long September2026PvPBalanceAndCMReleases = 207830;
+    public const ulong September2026PvPBalanceAndCMReleases = 207830;
+    // https://wiki.guildwars2.com/wiki/Game_updates/2026-11-10
+    public const ulong November2026Balance = 210144;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }

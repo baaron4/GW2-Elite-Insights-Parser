@@ -343,7 +343,6 @@ public class JsonLog
     /// Region on which the PoV is located. \n
     /// Unknown if missing. \n
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Region;
 
     /// <summary>
@@ -564,13 +563,11 @@ public class JsonLog
     /// Contains combat replay related meta data
     /// </summary>
     /// <seealso cref="JsonCombatReplayMetaData"/>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JsonCombatReplayMetaData? CombatReplayMetaData;
 
     /// <summary>
     /// WvW map data, only relevant for WvW logs. \n
     /// <see cref="JsonWvWMapData"/>>
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JsonWvWMapData? WvWMapData;
 }

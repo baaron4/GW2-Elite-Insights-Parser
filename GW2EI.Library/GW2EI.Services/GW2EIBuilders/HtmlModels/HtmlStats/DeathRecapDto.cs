@@ -30,7 +30,7 @@ internal class DeathRecapDto
     public static List<DeathRecapDto>? BuildDeathRecap(ParsedEvtcLog log, SingleActor actor)
     {
         IReadOnlyList<DeathRecap> recaps = actor.GetDeathRecaps(log);
-        if (!recaps.Any())
+        if (recaps.Count == 0)
         {
             return null;
         }

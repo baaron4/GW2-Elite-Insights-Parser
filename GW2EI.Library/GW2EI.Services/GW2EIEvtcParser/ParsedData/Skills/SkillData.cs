@@ -10,12 +10,17 @@ public class SkillData
     private readonly GW2EIGW2API.GW2APIController _apiController;
     public readonly long DodgeID;
     public readonly long GenericBreakbarID;
+
+    private readonly ulong _gw2Build;
+    private readonly EvtcVersionEvent _evtcVersionEvent;
     // Public Methods
 
-    internal SkillData(GW2EIGW2API.GW2APIController apiController, EvtcVersionEvent evtcVersion)
+    internal SkillData(GW2EIGW2API.GW2APIController apiController, EvtcVersionEvent evtcVersion, ulong gw2Build)
     {
         _apiController = apiController;
         (DodgeID, GenericBreakbarID) = SkillItem.GetArcDPSCustomIDs(evtcVersion);
+        _gw2Build = gw2Build;
+        _evtcVersionEvent = evtcVersion;
     }
 
     public SkillItem Get(long ID)
@@ -61,10 +66,7 @@ public class SkillData
 
     internal void Add(long id, string name)
     {
-        if (!_skills.ContainsKey(id))
-        {
-            _skills.Add(id, new SkillItem(id, name, _apiController));
-        }
+        _skills.TryAdd(id, new SkillItem(id, name, _apiController, _gw2Build));
     }
 
 }

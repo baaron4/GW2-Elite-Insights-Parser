@@ -245,7 +245,7 @@ internal class Arkk : ShatteredObservatory
             IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
             int counter = 0;
 
-            if (beDynamic.Any() && finalEncounter.Success)
+            if (beDynamic.Count != 0 && finalEncounter.Success)
             {
                 foreach (Player p in log.PlayerList)
                 {

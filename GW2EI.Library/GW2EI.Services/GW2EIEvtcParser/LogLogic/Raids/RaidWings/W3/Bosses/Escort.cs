@@ -248,7 +248,7 @@ internal class Escort : StrongholdOfTheFaithful
             }
             return LogData.StartStatus.Normal;
         }
-        else if (combatData.GetLogNPCUpdateEvents().Any())
+        else if (combatData.GetLogNPCUpdateEvents().Count != 0)
         {
             return LogData.StartStatus.NoPreEvent;
         }
@@ -304,7 +304,7 @@ internal class Escort : StrongholdOfTheFaithful
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any() || log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Count != 0 || log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Count != 0)
         {
             var encounterPhases = log.LogData.GetEncounterPhases(log, LogID);
             foreach (var encounterPhase in encounterPhases)

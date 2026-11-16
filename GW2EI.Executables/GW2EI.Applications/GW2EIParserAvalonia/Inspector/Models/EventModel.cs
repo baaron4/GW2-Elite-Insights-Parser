@@ -50,6 +50,11 @@ internal sealed class EventModel
             case CastEvent cast:
                 SkillId = cast.SkillID;
                 SkillName = cast.Skill.Name;
+                if (cast is EmoteEvent emote)
+                {
+                    GUIDStruct = emote.EmoteGUIDEvent.GetGUIDStruct();
+                    ContentID = emote.EmoteGUIDEvent.ContentID;
+                }
                 break;
 
             case SkillEvent skill:
@@ -70,6 +75,16 @@ internal sealed class EventModel
             case EffectEvent effect:
                 GUIDStruct = effect.GUIDEvent.GetGUIDStruct();
                 ContentID = effect.GUIDEvent.ContentID;
+                break;
+
+            case TransformationEvent transformation:
+                GUIDStruct = transformation.GUIDEvent.GetGUIDStruct();
+                ContentID = transformation.GUIDEvent.ContentID;
+                break;
+
+            case MarkerEvent marker:
+                GUIDStruct = marker.GUIDEvent.GetGUIDStruct();
+                ContentID = marker.GUIDEvent.ContentID;
                 break;
 
             case GadgetAnimationEvent gadgetAnimation:

@@ -374,20 +374,43 @@ internal static class ElementalistHelper
         }
     }
 
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> GlyphOfLesserElementals =
     [
         (int)MinionID.LesserAirElemental,
         (int)MinionID.LesserEarthElemental,
         (int)MinionID.LesserFireElemental,
         (int)MinionID.LesserIceElemental,
+    ];
+
+    private static readonly HashSet<int> GlyphOfElementals =
+    [
         (int)MinionID.AirElemental,
         (int)MinionID.EarthElemental,
         (int)MinionID.FireElemental,
         (int)MinionID.IceElemental,
     ];
+
+    internal static bool IsGlyphOfLesserElementals(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return GlyphOfLesserElementals.Contains(agentItem.ID);
+    }
+
+    internal static bool IsGlyphOfElementals(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return GlyphOfElementals.Contains(agentItem.ID);
+    }
+
     internal static bool IsKnownMinionID(int id)
     {
-        return Minions.Contains(id);
+        return GlyphOfLesserElementals.Contains(id) || GlyphOfElementals.Contains(id);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

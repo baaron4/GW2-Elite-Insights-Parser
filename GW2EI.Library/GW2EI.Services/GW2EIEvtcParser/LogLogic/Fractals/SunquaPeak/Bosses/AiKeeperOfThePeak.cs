@@ -486,7 +486,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         var finalEncounter = encountersWithDarkAi.LastOrDefault();
         if (finalEncounter != null && finalEncounter.Success)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Any())
+            if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Count != 0)
             {
                 int counter = 0;
                 foreach (Player p in log.PlayerList)
@@ -505,7 +505,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         foreach (var darkAiEncounter in encountersWithDarkAi)
         {
-            if (darkAiEncounter.Success && log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
+            if (darkAiEncounter.Success && log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Count != 0)
             {
                 instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, darkAiEncounter, AchievementEligibilityEnergyDispersal));
             }

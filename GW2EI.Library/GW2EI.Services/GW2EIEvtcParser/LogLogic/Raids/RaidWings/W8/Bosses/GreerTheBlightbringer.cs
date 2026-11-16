@@ -838,7 +838,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 // The buff elegibility remains on players even if Ereg is dead
                 var ereg = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
-                if (ereg != null && !log.CombatData.GetDeadEvents(ereg.AgentItem).Any())
+                if (ereg != null && log.CombatData.GetDeadEvents(ereg.AgentItem).Count == 0)
                 {
                     instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1, encounterPhase));
                 }

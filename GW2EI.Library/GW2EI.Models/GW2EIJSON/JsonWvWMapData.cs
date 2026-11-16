@@ -79,12 +79,12 @@ public class JsonWvWMapData
         /// "Ruins" \n
         /// "Castle"
         /// </summary>
-        public string ObjectiveType = "";
+        public string? ObjectiveType;
         /// <summary>
         /// Array of [TeamID, Time] representing the current ownership of the objective between current and next. \n
         /// If last element, ownership did not change until the end of the log.
         /// </summary>
-        public List<long[]> Owners = [];
+        public IReadOnlyList<long[]>? Owners = [];
     }
 
     /// <summary>
@@ -113,5 +113,5 @@ public class JsonWvWMapData
     /// </summary>
     public uint GreenTeamID;
 
-    public List<JsonWvWObjectiveData> ObjectiveData = [];
+    public IReadOnlyList<JsonWvWObjectiveData>? ObjectiveData = [];
 }

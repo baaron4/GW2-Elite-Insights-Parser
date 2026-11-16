@@ -392,7 +392,7 @@ internal class Xera : StrongholdOfTheFaithful
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
-        if (!agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _) && combatData.GetLogNPCUpdateEvents().Any())
+        if (!agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _) && combatData.GetLogNPCUpdateEvents().Count != 0)
         {
             return LogData.StartStatus.NoPreEvent;
         }

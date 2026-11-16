@@ -699,7 +699,7 @@ public abstract class LogLogic
         if (!successHandler.Success)
         {
             var targets = GetSuccessCheckTargets();
-            if (targets.Any())
+            if (targets.Count != 0)
             {
                 successHandler.SetSuccess(false, targets.Max(x => x.LastAware));
             }

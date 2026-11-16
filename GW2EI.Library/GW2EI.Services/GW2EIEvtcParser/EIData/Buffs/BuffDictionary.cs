@@ -122,30 +122,25 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
     public void Finalize(ParsedEvtcLog log, AgentItem agentItem, out HashSet<Buff> trackedBuffs)
     {
         // add buff remove all for each despawn events
-        long lastDespawn = agentItem.FirstAware;
         foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
         {
-            lastDespawn = dsp.Time;
             foreach (var pair in _buffIDToEvents)
             {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemovalButIgnoreForWaste, int.MaxValue));
             }
         }
-
-        if (agentItem.LastAware < log.LogData.LogEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
-        {
-            foreach (var pair in _buffIDToEvents)
-            {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
-            }
-        }
-
+        // Add also a clear before spawn, for safety
         foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
         {
             foreach (var pair in _buffIDToEvents)
             {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemovalButIgnoreForWaste, int.MaxValue));
             }
+        }
+        // Remove all buffs on tracking lost
+        foreach (var pair in _buffIDToEvents)
+        {
+            pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemovalButIgnoreForWaste, int.MaxValue));
         }
 
         trackedBuffs = new HashSet<Buff>(_buffIDToEvents.Count);

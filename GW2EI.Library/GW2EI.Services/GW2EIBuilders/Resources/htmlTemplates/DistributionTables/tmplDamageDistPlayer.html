@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div v-if="player.minions.length > 0">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
-                </li>
-                <li v-for="(minion, mindex) in player.minions">
-                    <a class="nav-link" :class="{active: distmode === mindex}"
-                        @click="distmode = mindex">{{minion.name}}</a>
-                </li>
-            </ul>
-        </div>
+        <minion-nav-tab-component :source="this" :withInstances="false"></minion-nav-tab-component>
         <div v-if="!targetless" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills scale85">
                 <li class="nav-item">
@@ -24,8 +14,8 @@
             </ul>
         </div>
         <damagedist-table-component :dmgdist="targetmode === 0 ? dmgdist : dmgdisttarget"
-            :tableid="'dmgdist-' + playerindex" :actorindex="playerindex" :minionindex="distmode" 
-            :player="true" :istarget="targetmode === 1"
+            :tableid="'dmgdist-' + playerindex" :actorIndex="playerindex" :minionIndex="minionIndex" 
+            :player="true" :isTarget="targetmode === 1"
             :phaseindex="phaseindex"></damagedist-table-component>
     </div>
 </template>
@@ -35,10 +25,10 @@
         props: ['playerindex',
             'phaseindex', 'activetargets'
         ],
+        mixins: [minionTabulatedComponent],
         template: `${template}`,
         data: function () {
             return {
-                distmode: -1,
                 targetless: logData.targetless,
                 targetmode: logData.targetless ? 0 : 1,
                 cacheTarget: new Map()
@@ -48,17 +38,26 @@
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
+            actor: function() {
+                return this.player;
+            },
             player: function () {
                 return logData.players[this.playerindex];
             },
             dmgdist: function () {
-                if (this.distmode === -1) {
+                if (this.minionIndex === -1) {
                     return this.player.details.dmgDistributions[this.phaseindex];
                 }
-                return this.player.details.minions[this.distmode].dmgDistributions[this.phaseindex];
+                return this.player.minions[this.minionIndex].details.dmgDistributions[this.phaseindex];
+            },
+            _dmgdisttarget: function() {  
+                if (this.minionIndex === -1) {
+                    return this.player.details.dmgDistributionsTargets[this.phaseindex];
+                }
+                return this.player.minions[this.minionIndex].details.dmgDistributionsTargets[this.phaseindex];
             },
             dmgdisttarget: function () {
-                let cacheID = this.phaseindex + '-' + this.distmode + '-';
+                let cacheID = this.phaseindex + '-' + this.minionIndex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
@@ -76,9 +75,7 @@
                 const rows = new Map();
                 for (let i = 0; i < this.activetargets.length; i++) {
                     const targetid = this.activetargets[i];
-                    const targetDist = this.distmode === -1 ?
-                        this.player.details.dmgDistributionsTargets[this.phaseindex][targetid] :
-                        this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][targetid];
+                    const targetDist = this._dmgdisttarget[targetid];
                     dist.contributedDamage += targetDist.contributedDamage;
                     dist.contributedBreakbarDamage += targetDist.contributedBreakbarDamage;
                     dist.contributedDownContribution += targetDist.contributedDownContribution;

@@ -38,7 +38,7 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
         foreach (TargetID targetID in allTargetIDs)
         {
             //TODO_PERF(Rennorb): invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
-            if (agentData.GetStableSpeciesByID(targetID).Any())
+            if (agentData.GetStableSpeciesByID(targetID).Count != 0)
             {
                 if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 5e5))
                 {

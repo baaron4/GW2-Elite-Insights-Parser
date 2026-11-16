@@ -472,7 +472,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 var kc = encounterPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.KeepConstruct));
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.GetDamageEvents(kc, log).Any())
+                    if (p.GetDamageEvents(kc, log).Count != 0)
                     {
                         hasHitKc++;
                     }

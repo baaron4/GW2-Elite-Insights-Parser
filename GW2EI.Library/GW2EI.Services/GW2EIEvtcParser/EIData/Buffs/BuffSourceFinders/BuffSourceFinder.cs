@@ -125,7 +125,7 @@ internal abstract class BuffSourceFinder
             return ParserHelper._unknownAgent;
         }
         // uncertainty due to essence of speed but not due to imperial impact
-        if (rangerSpecificCheck == Certainty.Uncertain && !imperialImpactAgents.Any())
+        if (rangerSpecificCheck == Certainty.Uncertain && imperialImpactAgents.Count == 0)
         {
             // the soulbeast
             return dst;

@@ -423,7 +423,7 @@ internal class Deimos : BastionOfThePenitent
     internal override LogData.StartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
-        if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
+        if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Count != 0)
         {
             return LogData.StartStatus.NoPreEvent;
         }

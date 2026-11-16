@@ -35,9 +35,11 @@ internal static class HeraldHelper
         new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1.0% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.June2024Balance, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1.5% per boon", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.sPvP)
-            .WithBuilds(GW2Builds.February2025Balance),
-        new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1.0% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.PvEsPvP)
-            .WithBuilds(GW2Builds.February2025Balance),
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1.0% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.November2026Balance),
+        new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "2.0% per boon (max 5)", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Herald, By5CappedStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
         // Burst of Strength
         new BuffOnActorDamageModifier(Mod_BurstOfStrength, BurstOfStrength, "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.BurstOfStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),

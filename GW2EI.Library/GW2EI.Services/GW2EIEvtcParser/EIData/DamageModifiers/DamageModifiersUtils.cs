@@ -32,6 +32,10 @@ internal static class DamageModifiersUtils
     /// When the modifier is active based on a missing buff.
     /// </summary>
     internal static readonly GainComputerByAbsence ByAbsence = new();
+    /// <summary>
+    /// When the modifier is increased by each stack of buff, for a maximum of 5. Additive.
+    /// </summary>
+    internal static readonly GainComputerByStackCapped By5CappedStack = new(5);
 
     internal static double VulnerabilityAdjuster(HealthDamageEvent dl, ParsedEvtcLog log)
     {

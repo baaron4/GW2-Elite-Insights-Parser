@@ -640,7 +640,10 @@
             }
           },
           "enemyPlayer": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "breakbarPercents": {
             "type": [
@@ -702,6 +705,9 @@
             "type": "integer"
           },
           "instanceID": {
+            "type": "integer"
+          },
+          "uniqueID": {
             "type": "integer"
           },
           "teamID": {
@@ -985,6 +991,18 @@
                             "duration": {
                               "type": "integer"
                             },
+                            "expectedCastBarDuration": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "expectedReturnControlDuration": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
                             "timeGained": {
                               "type": "integer"
                             },
@@ -1002,6 +1020,12 @@
                                 }
                               ]
                             },
+                            "target": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
                             "ignoreOnRotationRender": {
                               "type": [
                                 "boolean",
@@ -1015,7 +1039,10 @@
                   }
                 },
                 "isUniquePerTimeFrame": {
-                  "type": "boolean"
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
                 },
                 "extHealingStats": {
                   "type": [
@@ -1308,6 +1335,125 @@
                         ],
                         "items": {
                           "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      }
+                    }
+                  }
+                },
+                "instances": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "firstAware": {
+                        "type": "integer"
+                      },
+                      "lastAware": {
+                        "type": "integer"
+                      },
+                      "totalHealth": {
+                        "type": "integer"
+                      },
+                      "instanceID": {
+                        "type": "integer"
+                      },
+                      "uniqueID": {
+                        "type": "integer"
+                      },
+                      "rotation": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/minions/items/properties/rotation/items"
+                        }
+                      },
+                      "conditionsStates": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      },
+                      "boonsStates": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items/properties/states/items"
+                        }
+                      },
+                      "healthPercents": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+                        }
+                      },
+                      "barrierPercents": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/breakbarPercents/items"
+                        }
+                      },
+                      "buffs": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items"
+                        }
+                      },
+                      "buffsActive": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffs/items"
+                        }
+                      },
+                      "buffVolumes": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffVolumes/items"
+                        }
+                      },
+                      "buffVolumesActive": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "$ref": "#/properties/targets/items/properties/buffVolumes/items"
+                        }
+                      },
+                      "activeTimes": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "integer"
                         }
                       }
                     }
@@ -2040,7 +2186,10 @@
             "type": "integer"
           },
           "hasCommanderTag": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "commanderTagStates": {
             "type": [
@@ -2058,10 +2207,16 @@
             ]
           },
           "friendlyNPC": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "notInSquad": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "guildID": {
             "type": [
@@ -2070,7 +2225,10 @@
             ]
           },
           "isEnglobed": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "weapons": {
             "type": [
@@ -3481,6 +3639,9 @@
           "instanceID": {
             "type": "integer"
           },
+          "uniqueID": {
+            "type": "integer"
+          },
           "teamID": {
             "type": "integer"
           },
@@ -4092,6 +4253,18 @@
         }
       }
     },
+    "agentNameMap": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
     "personalBuffs": {
       "type": [
         "object",
@@ -4298,7 +4471,10 @@
           "type": "integer"
         },
         "objectiveData": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": [
               "object",
@@ -4312,10 +4488,16 @@
                 "type": "integer"
               },
               "objectiveType": {
-                "type": "string"
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "owners": {
-                "type": "array",
+                "type": [
+                  "array",
+                  "null"
+                ],
                 "items": {
                   "type": [
                     "array",
