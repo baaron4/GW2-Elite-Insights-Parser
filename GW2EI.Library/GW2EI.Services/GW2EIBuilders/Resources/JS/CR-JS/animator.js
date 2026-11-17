@@ -418,7 +418,8 @@ class Animator {
         setValueToLocalStorage("rotationStep", value);
     }
 
-    attachDOM(mainCanvasID, bgCanvasID, pickCanvasID) {
+    attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeDisplayID) {
+        this.timeSliderDisplay = document.getElementById(timeRangeDisplayID);
         // main canvas
         this.mainCanvas = document.getElementById(mainCanvasID);
         this.mainCanvas.style.width = this.mainCanvas.width + "px";
@@ -714,6 +715,10 @@ class Animator {
         }
     }
 
+    updateTextInput() {
+        this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
+    }
+
     updateInputTime(value, offset) {
         try {
             const cleanedString = value.replace(",", ".");
@@ -725,7 +730,7 @@ class Animator {
             const min = this.reactiveDataStatus.range.min;
             const max = this.reactiveDataStatus.range.max;
             this.reactiveDataStatus.time = Math.min(Math.max(ms, min), max);
-            animateCanvas(updateText);
+            animateCanvas(noUpdateTime);
         } catch (error) {
             console.error(error);
         }
@@ -1765,6 +1770,9 @@ function animateCanvas(noRequest) {
     }
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === firstTime && animator.backwards)) {
         animator.stopAnimate(true);
+    }
+    if (noRequest > updateText) {
+        animator.updateTextInput();
     }
     animator.draw();
     if (noRequest > noUpdateTime && animator.animation !== null) {
