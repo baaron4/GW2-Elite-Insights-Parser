@@ -2757,6 +2757,7 @@ public static class SkillIDs
     public const long MantraOfLiberation = 43357;
     public const long BladeRenewal = 43343;
     public const long WaterMinorAttunement = 43370;
+    public const long DeadeyesMark = 43390;
     public const long UnflinchingFortitudeBuff = 43401;
     public const long PathUses = 43410;
     public const long SandCascadeSkill = 43448;
