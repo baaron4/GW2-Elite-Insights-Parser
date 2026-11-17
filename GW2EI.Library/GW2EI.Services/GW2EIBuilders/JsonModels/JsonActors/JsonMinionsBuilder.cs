@@ -162,7 +162,7 @@ internal static class JsonMinionsBuilder
             {
                 jsonMinions.Instances = instances;
             }
-        } 
+        }
         else
         {
             var minionCastEvents = minionGroup.GetIntersectingCastEvents(log);
