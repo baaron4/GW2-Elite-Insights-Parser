@@ -719,8 +719,9 @@ class Animator {
         this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
     }
 
-    updateInputTime(value, offset) {
+    updateInputTime(offset) {
         try {
+            const value = this.timeSliderDisplay.value;
             const cleanedString = value.replace(",", ".");
             const parsedTime = parseFloat(cleanedString);
             if (isNaN(parsedTime) || !isFinite(parsedTime)) {

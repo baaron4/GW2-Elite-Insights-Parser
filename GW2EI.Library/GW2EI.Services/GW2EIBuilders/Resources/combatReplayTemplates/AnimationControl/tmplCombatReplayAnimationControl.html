@@ -341,11 +341,11 @@
             </div>
 
             <div class="d-flex align-items-center justify-content-center mt-1 mb-1">
-                <input style="width: 100px;" 
-                    class="form-control d-inline h-auto text-right" type="number" 
-                    step="0.001" :id="htmlElementIDs.timeRangeDisplayID"
-                           data-original-title="Time" value="0"
-                           @input="updateInputTime($event.target.value);">
+                <input style="width: 100px;" class="form-control d-inline h-auto text-right" type="number" 
+                           step="0.001" :id="htmlElementIDs.timeRangeDisplayID"
+                           data-original-title="Time" value="0.000"
+                           @input="updateInputTime()"
+                           @blur="updateTextInput()">
                 <div class="mr-auto">
                 </div>
                 <div @click="toggleAnimate();" style="width: 80px;"
@@ -1198,9 +1198,12 @@
                 const offset = this.range.min;
                 this.updateTime(min - offset);
             },
-            updateInputTime: function (value) {
+            updateInputTime: function () {
                 const offset = this.range.min;
-                animator.updateInputTime(value, offset);
+                animator.updateInputTime(offset);
+            },
+            updateTextInput: function () {
+                animator.updateTextInput();
             },
 
         },
