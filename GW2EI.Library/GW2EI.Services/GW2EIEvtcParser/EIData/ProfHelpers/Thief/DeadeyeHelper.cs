@@ -16,6 +16,8 @@ internal static class DeadeyeHelper
     [
         new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy)
             .UsingDstSpecChecker(Spec.Deadeye),
+        new BuffGainCastFinder(DeadeyesMark, DeadeyesGaze)
+            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
