@@ -16,13 +16,10 @@ internal static class DeadeyeHelper
     [
         // Gaze applications identify Mark casts; the recipient is the Deadeye and the source is the marked foe.
         new BuffGainCastFinder(DeadeyesMark, DeadeyesGaze)
-            .UsingToSpecChecker(Spec.Deadeye)
             .WithTarget()
             .WithBuilds(GW2Builds.July2026Balance),
         new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy)
             .UsingDstSpecChecker(Spec.Deadeye),
-        new BuffGainCastFinder(DeadeyesMark, DeadeyesGaze)
-            .WithBuilds(GW2Builds.November2026Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
