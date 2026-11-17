@@ -10,7 +10,7 @@ function compileCRTemplates() {
 };
 
 const noUpdateTime = -1;
-const updateText = -2;
+const noUpdateText = -2;
 const deadIcon = new Image();
 deadIcon.onload = function () {
     animateCanvas(noUpdateTime);
@@ -730,7 +730,7 @@ class Animator {
             const min = this.reactiveDataStatus.range.min;
             const max = this.reactiveDataStatus.range.max;
             this.reactiveDataStatus.time = Math.min(Math.max(ms, min), max);
-            animateCanvas(noUpdateTime);
+            animateCanvas(noUpdateText);
         } catch (error) {
             console.error(error);
         }
@@ -1771,7 +1771,7 @@ function animateCanvas(noRequest) {
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === firstTime && animator.backwards)) {
         animator.stopAnimate(true);
     }
-    if (noRequest > updateText) {
+    if (noRequest > noUpdateText) {
         animator.updateTextInput();
     }
     animator.draw();
