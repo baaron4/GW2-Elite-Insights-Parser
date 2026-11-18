@@ -932,7 +932,8 @@ public static class SkillIDs
     public const long StoneSpiritOld = 12547;
     public const long StormSpiritAura = 12548;
     public const long QuickeningZephyr = 12550;
-    public const long StrengthOfThePack = 12554;
+    public const long StrengthOfThePackBuff = 12554;
+    public const long StrengthOfThePackPetBuff = 12560;
     public const long NaturesRenewalAura = 12567;
     public const long SpiritOfNature = 12569;
     public const long AttackOfOpportunity = 12574;

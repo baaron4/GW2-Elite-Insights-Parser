@@ -56,6 +56,9 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(Mod_LesserSicEm, LesserSicEm, "Lesser Sic 'Em!", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE)
             .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.July2026Balance),
+        // Strength of the Pack (Merged)
+        new BuffOnActorDamageModifier(Mod_StrengthOfThePackMerged, [Stout, Deadly, Ferocious, Supportive, Versatile, StrengthOfThePackBuff], "Strength of the Pack! (Merged)", "10% while merged", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, new GainComputerByExactlyNStacksPresent(2), SkillImages.StrengthOfThePack, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
         // Twice as Vicious
         new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),

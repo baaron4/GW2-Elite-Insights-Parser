@@ -466,4 +466,6 @@ public static class DamageModifierIDs
     public const int Mod_MeltdownCondition = 453;
     public const int Mod_OpportuneOpening = 454;
     public const int Mod_FriendsOfTheLuxons = 455;
+    public const int Mod_StrengthOfThePackPet = 456;
+    public const int Mod_StrengthOfThePackMerged = 457;
 }

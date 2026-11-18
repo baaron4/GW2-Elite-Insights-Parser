@@ -433,6 +433,8 @@ internal static class RangerHelper
         new BuffOnActorDamageModifier(Mod_LesserSicEmPet, LesserSicEm, "Lesser Sic 'Em! (Pet)", "40%", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
             .WithBuffOnActorFromFoe()
             .WithBuilds(GW2Builds.January2026Balance),
+        new BuffOnActorDamageModifier(Mod_StrengthOfThePackPet, StrengthOfThePackPetBuff, "Strength of the Pack! (Pet)", "25%", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.StrengthOfThePack, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2026Balance),
         // - Frost Spirit
         new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
             .UsingSpecSpecificShared()
@@ -622,7 +624,8 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
-        new Buff("Strength of the Pack!", StrengthOfThePack, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
+        new Buff("Strength of the Pack!", StrengthOfThePackBuff, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
+        new Buff("Strength of the Pack! (Pet)", StrengthOfThePackPetBuff, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
         new Buff("Sic 'Em!", SicEmBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Lesser Sic 'Em!", LesserSicEm, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Sic 'Em! (PvP)", SicEmPvPBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
