@@ -162,13 +162,45 @@
     Vue.component("combat-replay-extra-decorations-component", {
         props: ["light"],
         template: `${template}`,
-        data: function () {
+        data: function () {  
+            const skills = [];
+            {
+                const renderables = animator.skillMechanicActorData;
+                const skillMap = new Map();
+
+                renderables.forEach(function (decoration) {
+                    const id = decoration.skillMode.skillID;
+                    const skill = logData.skillMap["s" + id];
+
+                    if (!skill) {
+                        return;
+                    }
+
+                    const categoryMask = decoration.skillMode.category;
+                    const existingSkill = skillMap.get(id);
+
+                    if (existingSkill) {
+                        existingSkill.categoryMask |= categoryMask;
+                    } else {
+                        const skillEntry = {
+                            id: skill.id,
+                            name: skill.name,
+                            icon: skill.icon,
+                            categoryMask: categoryMask
+                        };
+
+                        skillMap.set(id, skillEntry);
+                        skills.push(skillEntry);
+                    }
+                });
+            }
             return {
                 animationStatus: reactiveAnimationData,
-                showSkills: animator.skillMechanicActorData.any(),
+                showSkills: skills.length > 0,
                 showMechanics: animator.overheadActorData.any() || animator.mechanicActorData.any(),
                 showSquadMarkers: animator.squadMarkerData.any() || animator.overheadSquadMarkerData.any(),
                 showSecondaryNPCs: animator.trashMobData.any(),
+                skillList: skills,
                 selectedSkills: {},
             };
         },
@@ -222,39 +254,6 @@
                     res.push({ key: key, mask: SkillDecorationCategory[key] });
                 }
                 return res;
-            },
-            skillList: function () {
-                var renderables = animator.skillMechanicActorData;
-                var skillMap = new Map();
-                var skills = [];
-
-                renderables.forEach(function (decoration) {
-                    var id = decoration.skillMode.skillID;
-                    var skill = logData.skillMap["s" + id];
-
-                    if (!skill) {
-                        return;
-                    }
-
-                    var categoryMask = decoration.skillMode.category;
-                    var existingSkill = skillMap.get(id);
-
-                    if (existingSkill) {
-                        existingSkill.categoryMask |= categoryMask;
-                    } else {
-                        var skillEntry = {
-                            id: skill.id,
-                            name: skill.name,
-                            icon: skill.icon,
-                            categoryMask: categoryMask
-                        };
-
-                        skillMap.set(id, skillEntry);
-                        skills.push(skillEntry);
-                    }
-                });
-
-                return skills;
             },
         },
         mounted() {
