@@ -458,12 +458,14 @@ class MechanicDrawable {
         this.rotationMaster = null;
         this.dstRotationMaster = null;
         // Skill mode
-        this.ownerID = null;
-        this.owner = null;
-        this.category = 0;
+        this.skillMode = null;
         if (params.skillMode) {
-            this.ownerID = params.skillMode.owner.ownerID;
-            this.category = params.skillMode.category;
+            this.skillMode = {
+                owner: null,
+                ownerID: params.skillMode.owner.ownerID,
+                category: params.skillMode.category,
+                skillID: params.skillMode.skillID
+            };
         }
         //
         this.metadata = params._metadataContainer.get(params.metadataSignature);
@@ -542,7 +544,7 @@ class MechanicDrawable {
             } else if (this.master === null) {
                 this.master = animator.getActorData(masterID);
             }
-            if (!this.master || (!this.master.canDraw() && !this.ownerID )) {
+            if (!this.master || (!this.master.canDraw() && !this.skillMode )) {
                 return false;
             }
         }
@@ -554,7 +556,7 @@ class MechanicDrawable {
             } else if (this.rotationMaster === null) {
                 this.rotationMaster = animator.getActorData(masterID);
             }
-            if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
+            if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.skillMode)) {
                 return false;
             }
             if (this.rotationFetcher === masterToMasterRotationFetcher) {
@@ -565,28 +567,34 @@ class MechanicDrawable {
                 } else if (this.dstRotationMaster === null) {
                     this.dstRotationMaster = animator.getActorData(dstMasterID);
                 }
-                if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.ownerID)) {
+                if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.skillMode)) {
                     return false;
                 }
             }
         }
-        if (this.ownerID !== null) {
-            const ownerID = this.ownerID;
+        if (this.skillMode) {
+            const skillMode = this.skillMode;
+            const settings = animator.displaySettings;
+            const ownerID = skillMode.ownerID;
             const perParentArray = animator.agentDataPerParentID.get(ownerID);
-            if (perParentArray) {       
-                this.owner = perParentArray.filter(x => x.getPosition() != null)[0];
-            } else if (this.owner === null) {
-                this.owner = animator.getActorData(ownerID);
+            if (perParentArray) {
+                skillMode.owner = perParentArray.filter(x => x.getPosition() != null)[0];
+            } else if (skillMode.owner === null) {
+                skillMode.owner = animator.getActorData(ownerID);
             }
-            if (!this.owner) {
+            if (!skillMode.owner) {
                 return false;
             }
-            let renderMask = animator.displaySettings.skillMechanicsMask;
+            let renderMask = settings.skillMechanicsMask;
             let drawOnSelect = (renderMask & SkillDecorationCategory["Show On Select"]) > 0;
             renderMask &= ~SkillDecorationCategory["Show On Select"];
-            if ((this.category & renderMask) > 0) {
+            const selected = settings.selectedSkillMechanicIds.includes(skillMode.skillID);
+            if (!selected) {
+                return false;
+            }
+            if ((skillMode.category & renderMask) > 0) {
                 return true;
-            } else if (drawOnSelect && (this.owner.isSelected() || (this.owner.master && this.owner.master.isSelected()))) {
+            } else if (drawOnSelect && (skillMode.owner.isSelected() || (skillMode.owner.master && skillMode.owner.master.isSelected()))) {
                 return true;
             }
             return false;
