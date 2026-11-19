@@ -333,7 +333,7 @@ class NonSquadIconDrawable extends IconDrawable {
             if (!this._nameInDictInit) {
                 this._setNameInDict();
             }
-            if (this.useMasterDrawConditions && !animator.displaySettings.displayAllMinion) {
+            if (this.useMasterDrawConditions && !animator.displaySettings.displayAllMinions) {
                 return (this.master.isSelected() || this.isSelected()) && animator.displaySettings.displaySelectedMinions;
             }
         }
