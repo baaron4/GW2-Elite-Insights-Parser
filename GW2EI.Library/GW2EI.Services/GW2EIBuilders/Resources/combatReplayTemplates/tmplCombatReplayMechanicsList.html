@@ -3,11 +3,11 @@
         <div class="d-flex align-items-center mb-2 scale85">
             <input id="followTimeline" type="checkbox" v-model="followTimeline" class="mr-1" />
             <label for="followTimeline" class="mb-0 ml-1">Scroll with timeline</label>
-            <div v-if="!isTouchDevice"
+            <button v-if="!isTouchDevice"
                  @click="resetMechanic()" class="ml-3 btn btn-small"
                  :class="{'btn-dark': !light, 'btn-light': light}">
                  Reset Mechanic Selection
-            </div>
+            </button>
         </div>
         <div v-if="Object.keys(displayedSeverities).length > 0"class="d-flex align-items-center mb-2 scale75">
             <div v-for="displayedSeverity in displayedSeverities" class="form-check mb-2 mr-2">

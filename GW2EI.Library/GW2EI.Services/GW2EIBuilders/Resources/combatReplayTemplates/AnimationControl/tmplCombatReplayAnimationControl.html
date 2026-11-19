@@ -39,7 +39,7 @@
                         {{ hoveredActor }}
                     </div>
                 </div>
-                <div class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
+                <button class="btn btn-small opacity-90 m-2 scale-info" :class="{ 'btn-dark': !light, 'btn-light': light }">
                     <div class="d-flex flex-column justify-content-center align-items-center scale-container">
                         <div class="scale-ruler">
                             <div class="scale-line-container">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </button>
             </div>
         </div>
         <div class="d-flex align-items-center justify-content-between replay-controls-panel rounded" ref="canvasControls">
@@ -348,23 +348,23 @@
                            @blur="updateTextInput()">
                 <div class="mr-auto">
                 </div>
-                <div @click="toggleAnimate();" style="width: 80px;"
-                     class="btn btn-small"
+                <button @click="toggleAnimate();" style="width: 80px;"
+                     class="btn btn-small mr-1"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Play / pause animation">
                     {{ animated ? "&#9208 Pause" : "&#9654 Play" }}
-                </div>
-                <div @click="restartAnimate();" class="btn btn-small"
+                </button>
+                <button @click="restartAnimate();" class="btn btn-small mr-1"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Reset back to start">
                     &#8617;&#65039; Restart
-                </div>
-                <div @click="toggleBackwards();" style="width: 104px;"
+                </button>
+                <button @click="toggleBackwards();" style="width: 104px;"
                      class="btn btn-small"
                      :class="{'btn-dark': !light, 'btn-light': light}"
                      data-original-title="Play animation backwards/forwards">
                     {{ backwards ? "&#9654; Forwards" : "&#9664; Backwards" }}
-                </div>
+                </button>
                 <div class="ml-auto">
                 </div>
                 <combat-replay-time-speed-picker-component />
