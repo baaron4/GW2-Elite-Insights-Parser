@@ -177,6 +177,7 @@ internal static class FirebrandHelper
         new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, SkillImages.EpilogueAshesOfTheJust),
         new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, SkillImages.EpilogueEternalOasis),
         new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, SkillImages.EpilogueUnbrokenLines),
+        new Buff("Swift Scholar", SwiftScholar, Source.Firebrand, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Other, TraitImages.SwiftScholar),
         new Buff("Tome of Justice", TomeOfJusticeBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfJustice),
         new Buff("Tome of Courage", TomeOfCourageBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfCourage),
         new Buff("Tome of Resolve", TomeOfResolveBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfResolve),
