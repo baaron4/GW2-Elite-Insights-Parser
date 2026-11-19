@@ -696,3 +696,79 @@ canvas {
     border-top: 2px solid var(--spec-color);
     pointer-events: none;
 }
+
+.cr-settings-panel-anchor {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cr-settings-panel-buttons {
+    gap: 8px;
+}
+
+.cr-settings-panel {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    box-sizing: border-box;
+    width: max-content;
+    max-width: min(560px, calc(100vw - 2rem));
+    padding: 10px;
+    border: 1px solid #888;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.cr-settings-panel-skills {
+    max-height: min(65vh, 460px);
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.cr-skill-list {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    column-gap: 1rem;
+    row-gap: 0.2rem;
+    width: max-content;
+    min-width: 100%;
+}
+
+.cr-skill-entry {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    white-space: nowrap;
+}
+
+.cr-skill-entry input {
+    flex: 0 0 auto;
+    margin-right: 0.35rem;
+}
+
+.cr-skill-entry label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.cr-settings-panel-custom {
+    max-height: min(70vh, 420px);
+    overflow: auto;
+}
+
+.theme-slate .cr-settings-panel {
+    background-color: #272B30;
+    border-color: #555;
+}
+
+.theme-yeti .cr-settings-panel {
+    background-color: #FFFFFF;
+    border-color: #dee2e6;
+}

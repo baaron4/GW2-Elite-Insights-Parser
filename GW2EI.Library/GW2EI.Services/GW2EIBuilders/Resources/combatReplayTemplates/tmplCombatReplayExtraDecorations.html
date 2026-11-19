@@ -53,110 +53,116 @@
                 <label class="form-check-label" for="selectedMinionsCheck">Selected's Minions</label>
             </div>
         </div>
-        <div v-if="showSkills" class="d-flex flex-column justify-content-center align-items-center max-wd-500px">
-            <div class="dropdown mt-2">
-                <button type="button" class="form-control d-inline w-auto h-auto dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Skill Settings
-                </button>
-                <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown"
-                    style="width: max-content; max-width: calc(100vw - 2rem); overflow-x: auto;" @click.stop>
-                    <li class="mb-2 separator-border-bottom">
-                        <div class="font-weight-bold mb-1">
-                            Global Skill Settings
+        <div class="cr-settings-panel-anchor">
+            <ul class="nav nav-pills d-flex flex-row justify-content-center scale85 cr-settings-panel-buttons">
+                <li v-if="showSkills" class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: showPlayerSkillDecorationsPanel }" :aria-expanded="showPlayerSkillDecorationsPanel" @click.prevent.stop="togglePlayerSkillDecorationsPanel">
+                        Player Skill Decorations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel">
+                        Custom Decorations
+                    </a>
+                </li>
+            </ul>
+            <div v-if="showSkills && showPlayerSkillDecorationsPanel" class="cr-settings-panel cr-settings-panel-skills" @click.stop>
+                <div class="mb-2 separator-border-bottom">
+                    <div class="font-weight-bold mb-1">
+                        Global Skill Settings
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; width: max-content; max-width: 560px; margin: 0 auto;">
+                        <div class="form-check mb-2 mr-2" style="white-space: nowrap; flex: 0 0 auto;" v-for="skillCategory in skillCategories" :key="skillCategory.key">
+                            <input type="checkbox" class="form-check-input" :id="'skill-category-' + skillCategory.key"
+                                   :checked="(skillMechanicsMask & skillCategory.mask) > 0"
+                                   @change="toggleSkillCategoryMask(skillCategory.mask)" @click.stop>
+                            <label class="form-check-label" :for="'skill-category-' + skillCategory.key" @click.stop>
+                                {{skillCategory.key}}
+                            </label>
                         </div>
-                        <div style="display: flex; flex-wrap: wrap; justify-content: center; width: max-content; max-width: 560px; margin: 0 auto;">
-                            <div class="form-check mb-2 mr-2" style="white-space: nowrap; flex: 0 0 auto;" v-for="skillCategory in skillCategories" :key="skillCategory.key">
-                                <input type="checkbox" class="form-check-input" :id="'skill-category-' + skillCategory.key"
-                                       :checked="(skillMechanicsMask & skillCategory.mask) > 0"
-                                       @change="toggleSkillCategoryMask(skillCategory.mask)" @click.stop>
-                                <label class="form-check-label" :for="'skill-category-' + skillCategory.key" @click.stop>
-                                    {{skillCategory.key}}
-                                </label>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="mb-1">
-                        <div class="font-weight-bold mb-1">
-                            Single Skill Selector
-                        </div>
-                        <div class="d-flex flex-row justify-content-center align-items-center mb-2">
-                            <button type="button" class="btn btn-secondary btn-sm rot-button mr-2" @click.stop="setAllSelectedSkills(true)">
-                                Select all
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-sm rot-button" @click.stop="setAllSelectedSkills(false)">
-                                Deselect all
-                            </button>
-                        </div>
-                    </li>
-                    <li>
-                        <div style="display: grid; grid-template-columns: repeat(2, max-content); column-gap: 1rem; row-gap: 0.2rem;">
-                            <div v-for="skill in skillList" :key="skill.id" style="display: flex; align-items: center; width: max-content; white-space: nowrap;"
-                                 :style="{opacity: (skill.categoryMask & getAnimator().displaySettings.skillMechanicsMask) === 0 ? 0.35 : 1}">
-                                <input :id="'skill-decoration-' + skill.id" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectedSkillsChanged" @click.stop style="flex: 0 0 auto; margin-right: 0.35rem;">
-                                <label :for="'skill-decoration-' + skill.id" class="rot-font" style="display: inline-flex; align-items: center; margin-bottom: 0; white-space: nowrap;" @click.stop>
-                                    <img class="icon" :src="skill.icon" :alt="skill.name"> {{skill.name}}
-                                </label>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="d-flex flex-row justify-content-center" :class="{'ei-disabled': !animationStatus.selectedExtraDecorations}">
-            <div class="mr-3">
-                <h4>Range Selectors</h4>
-                <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle1Check"
-                           :checked="false" v-on:change="getAnimator().toggleRange(0, $event.target.checked)">
-                    <label class="form-check-label" for="circle1Check">Circle 1</label>
+                    </div>
                 </div>
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                    <span>Radius: </span>
-                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle1Text'"
-                                                 :placeholderValue="180"></custom-numberform-component>
+                <div class="mb-1">
+                    <div class="font-weight-bold mb-1">
+                        Single Skill Selector
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center mb-2">
+                        <button type="button" class="btn btn-secondary btn-sm rot-button mr-2" @click.stop="setAllSelectedSkills(true)">
+                            Select all
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm rot-button" @click.stop="setAllSelectedSkills(false)">
+                            Deselect all
+                        </button>
+                    </div>
                 </div>
-                <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle2Check"
-                           :checked="false" v-on:change="getAnimator().toggleRange(1, $event.target.checked)">
-                    <label class="form-check-label" for="circle2Check">Circle 2</label>
-                </div>
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                    <span>Radius: </span>
-                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle2Text'"
-                                                 :placeholderValue="360"></custom-numberform-component>
-                </div>
-                <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="circle3Check"
-                           :checked="false" v-on:change="getAnimator().toggleRange(2, $event.target.checked)">
-                    <label class="form-check-label" for="circle3Check">Circle 3</label>
-                </div>
-                <div class="d-flex flex-row justify-content-between align-items-center">
-                    <span>Radius: </span>
-                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle3Text'"
-                                                 :placeholderValue="720"></custom-numberform-component>
+                <div class="cr-skill-list">
+                    <div v-for="skill in skillList" :key="skill.id" class="cr-skill-entry"
+                         :style="{opacity: (skill.categoryMask & getAnimator().displaySettings.skillMechanicsMask) === 0 ? 0.35 : 1}">
+                        <input :id="'skill-decoration-' + skill.id" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectedSkillsChanged" @click.stop>
+                        <label :for="'skill-decoration-' + skill.id" class="rot-font">
+                            <img class="icon" :src="skill.icon" :alt="skill.name"> {{skill.name}}
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div class="ml-3">
-                <h4 data-original-title="Has an effect only when facing arrow are present">Cone Indicator</h4>
-                <div class="form-check mt-1 mb-2">
-                    <input type="checkbox" class="form-check-input" id="coneCheck"
-                           :checked="false" v-on:change="getAnimator().toggleConeDisplay($event.target.checked)">
-                    <label class="form-check-label" for="coneCheck">Display Cone</label>
-                </div>
-                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                    <span>Radius: </span>
-                    <custom-numberform-component class="wd-100px" :minValue="1" :id="'coneRadiusText'"
-                                                 :placeholderValue="360"></custom-numberform-component>
-                </div>
-                <div class="d-flex flex-row justify-content-between align-items-center mt-1">
-                    <span>Opening: </span>
-                    <custom-numberform-component class="wd-100px" :minValue="1" :maxValue="360" :id="'coneAngleText'"
-                                                 :placeholderValue="90"></custom-numberform-component>
+            <div v-show="showCustomDecorationsPanel" class="cr-settings-panel cr-settings-panel-custom" 
+                 data-original-title="Select an agent to enable this feature" @click.stop>
+                <div class="d-flex flex-row justify-content-center" :class="{'ei-disabled': !animationStatus.selectedExtraDecorations}">
+                    <div class="mr-3">
+                        <h4>Range Selectors</h4>
+                        <div class="form-check mt-1 mb-2">
+                            <input type="checkbox" class="form-check-input" id="circle1Check"
+                                   :checked="false" v-on:change="getAnimator().toggleRange(0, $event.target.checked)">
+                            <label class="form-check-label" for="circle1Check">Circle 1</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <span>Radius: </span>
+                            <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle1Text'"
+                                                         :placeholderValue="180"></custom-numberform-component>
+                        </div>
+                        <div class="form-check mt-1 mb-2">
+                            <input type="checkbox" class="form-check-input" id="circle2Check"
+                                   :checked="false" v-on:change="getAnimator().toggleRange(1, $event.target.checked)">
+                            <label class="form-check-label" for="circle2Check">Circle 2</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <span>Radius: </span>
+                            <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle2Text'"
+                                                         :placeholderValue="360"></custom-numberform-component>
+                        </div>
+                        <div class="form-check mt-1 mb-2">
+                            <input type="checkbox" class="form-check-input" id="circle3Check"
+                                   :checked="false" v-on:change="getAnimator().toggleRange(2, $event.target.checked)">
+                            <label class="form-check-label" for="circle3Check">Circle 3</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            <span>Radius: </span>
+                            <custom-numberform-component class="wd-100px" :minValue="1" :id="'circle3Text'"
+                                                         :placeholderValue="720"></custom-numberform-component>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <h4 data-original-title="Has an effect only when facing arrow are present">Cone Indicator</h4>
+                        <div class="form-check mt-1 mb-2">
+                            <input type="checkbox" class="form-check-input" id="coneCheck"
+                                   :checked="false" v-on:change="getAnimator().toggleConeDisplay($event.target.checked)">
+                            <label class="form-check-label" for="coneCheck">Display Cone</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                            <span>Radius: </span>
+                            <custom-numberform-component class="wd-100px" :minValue="1" :id="'coneRadiusText'"
+                                                         :placeholderValue="360"></custom-numberform-component>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center mt-1">
+                            <span>Opening: </span>
+                            <custom-numberform-component class="wd-100px" :minValue="1" :maxValue="360" :id="'coneAngleText'"
+                                                         :placeholderValue="90"></custom-numberform-component>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -204,6 +210,8 @@
                 skillMechanicsMask: animator.displaySettings.skillMechanicsMask,
                 skillList: skills,
                 selectedSkills: {},
+                showPlayerSkillDecorationsPanel: false,
+                showCustomDecorationsPanel: false,
             };
         },
         methods: {
@@ -234,6 +242,18 @@
                 settings.skillMechanicsMask ^= mask;
                 this.skillMechanicsMask = settings.skillMechanicsMask;
                 animateCanvas(noUpdateTime);
+            },
+            togglePlayerSkillDecorationsPanel: function () {
+                this.showPlayerSkillDecorationsPanel = !this.showPlayerSkillDecorationsPanel;
+                if (this.showPlayerSkillDecorationsPanel) {
+                    this.showCustomDecorationsPanel = false;
+                }
+            },
+            toggleCustomDecorationsPanel: function () {
+                this.showCustomDecorationsPanel = !this.showCustomDecorationsPanel;
+                if (this.showCustomDecorationsPanel) {
+                    this.showPlayerSkillDecorationsPanel = false;
+                }
             },
         },
         computed: {
