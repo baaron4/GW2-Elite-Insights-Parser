@@ -32,8 +32,8 @@ internal static class ThiefHelper
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new EffectCastFinder(ThousandNeedles, EffectGUIDs.EnemyAoE240)
-            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE1, 280)
-            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE2, 280)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE1, 280, 20)
+            .UsingSecondaryEffectSameSrcChecker(EffectGUIDs.ThiefThousandNeedlesAoE2, 280, 20)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
