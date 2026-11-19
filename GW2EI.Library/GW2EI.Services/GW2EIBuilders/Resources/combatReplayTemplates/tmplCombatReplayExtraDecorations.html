@@ -56,12 +56,12 @@
         <div class="cr-settings-panel-anchor">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85 cr-settings-panel-buttons">
                 <li v-if="showSkills" class="nav-item">
-                    <a href="#" class="nav-link" :class="{ active: showPlayerSkillDecorationsPanel }" :aria-expanded="showPlayerSkillDecorationsPanel" @click.prevent.stop="togglePlayerSkillDecorationsPanel">
+                    <a class="nav-link" :class="{ active: showPlayerSkillDecorationsPanel }" :aria-expanded="showPlayerSkillDecorationsPanel" @click.prevent.stop="togglePlayerSkillDecorationsPanel">
                         Player Skill Decorations
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel">
+                    <a class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel">
                         Custom Decorations
                     </a>
                 </li>
