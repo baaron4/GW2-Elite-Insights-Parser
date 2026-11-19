@@ -116,13 +116,15 @@ canvas {
     font-size: 14px;
     align-self: flex-start;
 }
+.combat-replay-status-container {
+    height: 905px;
+}
 
 .combat-replay-mechanics-list-container {
-    max-height: 810px;
     max-width: 500px;
 }
 
-.combat-actor-status-container {
+.combat-replay-actor-status-container {
     height: 810px;
     width: 250px;
 }
