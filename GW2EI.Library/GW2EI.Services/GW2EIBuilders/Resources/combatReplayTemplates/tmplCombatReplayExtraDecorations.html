@@ -61,7 +61,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel">
+                    <a class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel"
+                       data-original-title="Select an agent to enable this feature">
                         Custom Decorations
                     </a>
                 </li>
@@ -105,8 +106,7 @@
                     </div>
                 </div>
             </div>
-            <div v-show="showCustomDecorationsPanel" class="cr-settings-panel cr-settings-panel-custom" 
-                 data-original-title="Select an agent to enable this feature" @click.stop>
+            <div v-show="showCustomDecorationsPanel" class="cr-settings-panel cr-settings-panel-custom" @click.stop>
                 <div class="d-flex flex-row justify-content-center" :class="{'ei-disabled': !animationStatus.selectedExtraDecorations}">
                     <div class="mr-3">
                         <h4>Range Selectors</h4>
