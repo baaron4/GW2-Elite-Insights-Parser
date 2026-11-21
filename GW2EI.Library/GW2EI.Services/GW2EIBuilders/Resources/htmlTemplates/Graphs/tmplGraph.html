@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :id="id" class="d-flex flex-row justify-content-center"></div>
+        <div :id="id" :style="getGraphStyle()" class="d-flex flex-row justify-content-center"></div>
         <div v-if="!removerangecontrol" class="graph-rc">
             <div class="d-flex flex-row align-items-center">
                 <custom-numberform-component class="mr-1 wd-100px" :minValue="-1e6" :maxValue="1e6" :id="id+'xMin'"
@@ -32,6 +32,17 @@
             },
         },
         methods: {
+            getGraphStyle: function() {
+                if (this.layout.height) {
+                    return {
+                        'min-height': this.layout.height + 'px'
+                    }
+                } else {
+                    return {
+                        'min-height': '200px'
+                    }
+                }
+            },
             attachEvents: function () {
                 const _this = this;
                 const layout = this.layout;
