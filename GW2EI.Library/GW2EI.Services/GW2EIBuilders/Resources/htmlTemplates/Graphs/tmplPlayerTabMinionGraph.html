@@ -103,8 +103,8 @@
                 this.minionOffset += computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, 'y3');
                 this.minionOffset += computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, 'y3');
                 this.minionOffset += computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, 'y3');
-                this.playerOffset += computePlayerBarrierData(this.barrierGraph, this.minion, this.data, 'y3');
-                this.playerOffset += computePlayerHealthData(this.healthGraph, this.minion, this.data, 'y3');
+                this.minionOffset += computePlayerBarrierData(this.barrierGraph, this.minion, this.data, 'y3');
+                this.minionOffset += computePlayerHealthData(this.healthGraph, this.minion, this.data, 'y3');
 
                 this.layout = getActorGraphLayout(images, color, hasBuffs, true);
                 computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, color);
