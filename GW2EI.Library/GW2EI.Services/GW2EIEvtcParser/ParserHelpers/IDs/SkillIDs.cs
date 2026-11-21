@@ -3251,12 +3251,14 @@ public static class SkillIDs
     public const long NoMountUseWarclaw = 54938;
     public const long WarclawChainPull2 = 54953;
     public const long SandstormShroudDetonation = 54958;
-    public const long GlyphOfTheStarsCA = 55026;
+    public const long GlyphOfTheStarsCA = 55024;
+    public const long GlyphOfTheStarsCABuff = 55026;
     public const long JumpShotBounce = 55028;
     public const long FeelNoPainSavageInstinct = 55030;
     public const long UnyieldingSpirit = 55044;
     public const long GenerousAbundanceOther = 55047;
-    public const long GlyphOfTheStars = 55048;
+    public const long GlyphOfTheStars = 55046;
+    public const long GlyphOfTheStarsBuff = 55048;
     public const long SkyscaleBlastSkill = 55536;
     public const long SkyscaleSkill = 55715;
     public const long SkyscaleBlastDamage = 55716;

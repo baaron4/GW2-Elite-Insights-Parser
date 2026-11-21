@@ -9,13 +9,13 @@
                  Reset Mechanic Selection
             </button>
         </div>
-        <div v-if="Object.keys(displayedSeverities).length > 0"class="d-flex align-items-center mb-2 scale75">
+        <div v-if="hasCategories" class="d-flex align-items-center mb-2 scale75">
             <div v-for="displayedSeverity in displayedSeverities" class="form-check mb-2 mr-2">
                 <input :id="displayedSeverity.id" type="checkbox" v-model="displayedSeverity.display"/>
                 <label :for="displayedSeverity.id" class="mb-0">{{displayedSeverity.name}}</label>
             </div>
         </div>
-        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row w-100 scrollable-y">
+        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row w-100 scrollable-y" :style="getMechanicTableStyle()">
             <table class="table table-sm table-striped table-hover mb-0" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -168,6 +168,15 @@
                             event.mechanic.name === mechanic.mechanic.name)
                         .map(event => event.time + this.encounterPhase.start * 1000);
                 reactiveAnimationData.selectedMechanic.actorName = mechanic.actor.name;
+            },
+            getMechanicTableStyle: function() {
+                let baseHeight = 782;
+                if (!this.hasCategories) {
+                    baseHeight += 24;
+                }
+                return {
+                    'max-height': `${baseHeight}px`
+                };
             },
             stopClickEvent: function (event) {
                 event.stopPropagation();
@@ -379,6 +388,9 @@
             },
             displayedSeverities: function() {
                 return this.mechanicData.displayedSeverities;
+            },
+            hasCategories: function() {
+                return Object.keys(this.displayedSeverities).length > 0;
             },
             filteredMechanicEvents: function () {
                 return this.mechanicEvents.filter(function (event) {

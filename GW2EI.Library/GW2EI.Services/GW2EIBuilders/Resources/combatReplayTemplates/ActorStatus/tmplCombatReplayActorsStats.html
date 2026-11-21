@@ -27,7 +27,7 @@
         </div>
 
         <div class="d-flex">
-            <div class="combat-actor-status-container scrollable-y mr-2" :class="{'mt-2' : singleGroup}">
+            <div class="combat-replay-actor-status-container scrollable-y mr-2" :class="{'mt-2' : singleGroup}">
                 <fieldset v-for="(group, id) in groups" v-if="group"
                           :key="'player-group-' + id" class="border">
                     <legend v-if="!singleGroup" class="scale85 ml-1 px-1 w-auto">
@@ -57,7 +57,7 @@
                 </fieldset>
             </div>
 
-            <div class="combat-actor-status-container scrollable-y mt-2 ">
+            <div class="combat-replay-actor-status-container scrollable-y mt-2 ">
                 <fieldset class="border">
                     <combat-replay-actor-stats-component v-for="target in targets"
                                                          :class="{active: selectedactorid === target.uniqueID}"

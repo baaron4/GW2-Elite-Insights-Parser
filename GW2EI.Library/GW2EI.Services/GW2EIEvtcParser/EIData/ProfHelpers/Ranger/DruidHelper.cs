@@ -74,9 +74,9 @@ internal static class DruidHelper
             .WithBuilds(GW2Builds.HoTRelease, GW2Builds.July2026Balance),
         new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, SkillImages.GlyphOfUnityCelestialAvatar)
             .WithBuilds(GW2Builds.HoTRelease, GW2Builds.July2026Balance),
-        new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStars)
+        new Buff("Glyph of the Stars", GlyphOfTheStarsBuff, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStars)
             .WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
-        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStarsCelestialAvatar)
+        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCABuff, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStarsCelestialAvatar)
             .WithBuilds(GW2Builds.April2019Balance),
         new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.NaturalMender)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),

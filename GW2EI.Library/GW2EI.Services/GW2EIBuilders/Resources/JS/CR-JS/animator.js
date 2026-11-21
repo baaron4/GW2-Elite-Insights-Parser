@@ -317,6 +317,7 @@ class Animator {
             displaySquadMarkers: true,
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
+            selectedSkillMechanicIds: [],
             displayTrashMobs: true,
             useActorHitboxWidth: false,
             followSelected: false,
