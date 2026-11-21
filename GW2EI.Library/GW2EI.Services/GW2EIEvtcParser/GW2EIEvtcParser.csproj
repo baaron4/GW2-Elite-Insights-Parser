@@ -8,7 +8,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>0.91.0</Version>
-        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace;DebugMinions</Configurations>
         <DebugSymbols>true</DebugSymbols>
         <IsPackable>true</IsPackable>
         <PackageId>GuildWars2EliteInsights.GW2EIEvtcParser</PackageId>
@@ -21,6 +21,16 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DefineConstants>DEBUG</DefineConstants>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMinions|AnyCPU'">
+      <DefineConstants>DEBUG</DefineConstants>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMinions|AnyCPU'">
+        <DefineConstants>DEBUG;DEBUG_MINIONS</DefineConstants>
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
