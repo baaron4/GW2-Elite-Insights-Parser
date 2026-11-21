@@ -491,6 +491,8 @@ class Animator {
         this._rotationStep = getNumericalValueFromLocalStorage("rotationStep", 0.03);
         this._initMouseEvents();
         this._initTouchEvents();
+
+        this.draw();
     }
 
     _initActors(actors, decorationRenderings, decorationMetadata) {
@@ -1759,7 +1761,7 @@ class Animator {
 }
 
 function animateCanvas(noRequest) {
-    if (animator == null) {
+    if (!animator || !animator.mainCanvas) {
         return;
     }
     let lastTime = animator.reactiveDataStatus.range.max;
