@@ -186,8 +186,8 @@ internal static class ThiefHelper
         {
             return false;
         }
-        return ThieveGuilds.Contains(agentItem.ID) || 
-            DeadeyeHelper.IsThievesGuild(agentItem) || 
+        return ThieveGuilds.Contains(agentItem.ID) ||
+            DeadeyeHelper.IsThievesGuild(agentItem) ||
             DaredevilHelper.IsThievesGuild(agentItem) ||
             SpecterHelper.IsThievesGuild(agentItem) ||
             AntiquaryHelper.IsThievesGuild(agentItem);

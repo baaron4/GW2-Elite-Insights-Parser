@@ -105,7 +105,7 @@ internal static class AntiquaryHelper
         new Buff("Emergency Jade Shield (Backfired)", EmergencyJadeShieldBackfiredBuff, Source.Antiquary, BuffClassification.Other, SkillImages.EmergencyJadeShield),
 
     ];
-    private static readonly HashSet<int> ThievesGuild = 
+    private static readonly HashSet<int> ThievesGuild =
         [
         (int)MinionID.SkrittThievesGuild,
     ];
