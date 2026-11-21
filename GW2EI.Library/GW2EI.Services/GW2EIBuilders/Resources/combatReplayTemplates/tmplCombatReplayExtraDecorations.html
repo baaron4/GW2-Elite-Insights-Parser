@@ -67,7 +67,7 @@
                     </a>
                 </li>
             </ul>
-            <div v-if="showSkills && showPlayerSkillDecorationsPanel" class="cr-settings-panel cr-settings-panel-skills" @click.stop>
+            <div v-if="showSkills && showPlayerSkillDecorationsPanel" class="cr-settings-panel skill-controls-panel" @click.stop>
                 <div class="mb-2 separator-border-bottom">
                     <div class="font-weight-bold mb-1">
                         Global Skill Settings
@@ -84,26 +84,9 @@
                     </div>
                 </div>
                 <div class="mb-1">
-                    <div class="font-weight-bold mb-1">
-                        Single Skill Selector
-                    </div>
-                    <div class="d-flex flex-row justify-content-center align-items-center mb-2">
-                        <button type="button" class="btn btn-primary btn-sm rot-button mr-2" @click.stop="setAllSelectedSkills(true)">
-                            Select all
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm rot-button" @click.stop="setAllSelectedSkills(false)">
-                            Deselect all
-                        </button>
-                    </div>
-                </div>
-                <div class="cr-skill-list">
-                    <div v-for="skill in skillList" :key="skill.id" class="cr-skill-entry"
-                         :style="{opacity: (skill.categoryMask & getAnimator().displaySettings.skillMechanicsMask) === 0 ? 0.35 : 1}">
-                        <input :id="'skill-decoration-' + skill.id" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectedSkillsChanged" @click.stop>
-                        <label :for="'skill-decoration-' + skill.id" class="rot-font">
-                            <img class="icon" :src="skill.icon" :alt="skill.name"> {{skill.name}}
-                        </label>
-                    </div>
+                    <skill-picker-component :skill-list="skillList" :selected-skills="selectedSkills" input-id-prefix="skill-decoration-" :use-skill-id="true"
+                                            :opacity="getSkillPickerOpacity" :opacity-mask="skillMechanicsMask" :selection-changed="onSelectedSkillsChanged">
+                    </skill-picker-component>
                 </div>
             </div>
             <div v-show="showCustomDecorationsPanel" class="cr-settings-panel cr-settings-panel-custom" @click.stop>
@@ -169,7 +152,7 @@
     Vue.component("combat-replay-extra-decorations-component", {
         props: ["light"],
         template: `${template}`,
-        data: function () {  
+        data: function () {
             const skills = [];
             {
                 const renderables = animator.skillMechanicActorData;
@@ -218,6 +201,9 @@
             getAnimator: function () {
                 return animator;
             },
+            getSkillPickerOpacity: function (skill, mask) {
+                return (skill.categoryMask & mask) === 0 ? 0.35 : 1;
+            },
             setAllSelectedSkills: function (selected) {
                 var selectedSkills = {};
 
@@ -235,7 +221,7 @@
             },
             onSelectedSkillsChanged: function () {
                 this.getAnimator().displaySettings.selectedSkillMechanicIds = this.getSelectedSkillIds();
-                animateCanvas(noUpdateTime);
+                animateCanvas(noUpdateText);
             },
             toggleSkillCategoryMask: function (mask) {
                 const settings = this.getAnimator().displaySettings;
