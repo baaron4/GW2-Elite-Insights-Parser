@@ -853,6 +853,15 @@ internal static class ProfHelper
     /// </summary>
     public static bool IsWhiteListedForSomeStats(AgentItem agent, ParsedEvtcLog log)
     {
+#if DEBUG_MINIONS
+        var baseSpecs = new List<Spec>
+        {
+            Spec.Elementalist, Spec.Mesmer, Spec.Necromancer,
+            Spec.Thief, Spec.Ranger, Spec.Engineer,
+            Spec.Warrior, Spec.Revenant, Spec.Guardian
+        };
+        return baseSpecs.Any(x => ParserHelper.IsKnownMinionID(agent, x));
+#endif
         return
             (RangerHelper.IsSpirit(agent) && log.CombatData.GetGW2BuildEvent().Build < GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM) ||
             RangerHelper.IsJuvenilePet(agent) ||
