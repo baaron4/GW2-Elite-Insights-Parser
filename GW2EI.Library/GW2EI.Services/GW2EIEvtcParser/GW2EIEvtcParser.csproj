@@ -25,11 +25,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMinions|AnyCPU'">
-      <DefineConstants>DEBUG</DefineConstants>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMinions|AnyCPU'">
         <DefineConstants>DEBUG;DEBUG_MINIONS</DefineConstants>
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
