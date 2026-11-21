@@ -83,7 +83,7 @@ internal static class DeadeyeHelper
         new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, SkillImages.DeadeyesMark),
     ];
 
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> ThievesGuild =
     [
         (int)MinionID.DeadeyeHuman1,
         (int)MinionID.DeadeyeHuman2,
@@ -98,7 +98,15 @@ internal static class DeadeyeHelper
     ];
     internal static bool IsKnownMinionID(int id)
     {
-        return Minions.Contains(id);
+        return ThievesGuild.Contains(id);
+    }
+    internal static bool IsThievesGuild(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return ThievesGuild.Contains(agentItem.ID);
     }
 
 }

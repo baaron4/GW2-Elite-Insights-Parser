@@ -53,7 +53,7 @@ internal static class SpecterHelper
         new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, TraitImages.ConsumeShadows),
     ];
 
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> ThievesGuild =
     [
         (int)MinionID.SpecterHuman1,
         (int)MinionID.SpecterHuman2,
@@ -69,7 +69,16 @@ internal static class SpecterHelper
 
     internal static bool IsKnownMinionID(int id)
     {
-        return Minions.Contains(id);
+        return ThievesGuild.Contains(id);
+    }
+
+    internal static bool IsThievesGuild(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return ThievesGuild.Contains(agentItem.ID);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

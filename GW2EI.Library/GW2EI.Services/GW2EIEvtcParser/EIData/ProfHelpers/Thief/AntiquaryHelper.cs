@@ -105,17 +105,30 @@ internal static class AntiquaryHelper
         new Buff("Emergency Jade Shield (Backfired)", EmergencyJadeShieldBackfiredBuff, Source.Antiquary, BuffClassification.Other, SkillImages.EmergencyJadeShield),
 
     ];
-
+    private static readonly HashSet<int> ThievesGuild = 
+        [
+        (int)MinionID.SkrittThievesGuild,
+    ];
     private static readonly HashSet<int> Minions =
     [
         (int)MinionID.KryptisTurret,
         (int)MinionID.HoloDancer,
-        (int)MinionID.SkrittThievesGuild,
+        ..ThievesGuild,
     ];
 
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);
+    }
+
+
+    internal static bool IsThievesGuild(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.VolatileSpecies)
+        {
+            return false;
+        }
+        return ThievesGuild.Contains(agentItem.ID);
     }
 
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData, AgentData agentData)

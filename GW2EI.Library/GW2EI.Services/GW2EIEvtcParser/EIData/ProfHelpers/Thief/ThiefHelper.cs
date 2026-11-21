@@ -149,7 +149,7 @@ internal static class ThiefHelper
         new Buff("Shadow Veil (Stacks)", ShadowVeilBuffStacks, Source.Thief, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShadowVeil),
     ];
 
-    private static readonly HashSet<int> Minions =
+    private static readonly HashSet<int> ThieveGuilds =
     [
         (int)MinionID.ThiefUnknown1,
         (int)MinionID.ThiefUnknown2,
@@ -177,7 +177,7 @@ internal static class ThiefHelper
 
     internal static bool IsKnownMinionID(int id)
     {
-        return Minions.Contains(id);
+        return ThieveGuilds.Contains(id);
     }
 
     internal static bool IsThievesGuild(AgentItem agentItem)
@@ -186,7 +186,11 @@ internal static class ThiefHelper
         {
             return false;
         }
-        return Minions.Contains(agentItem.ID);
+        return ThieveGuilds.Contains(agentItem.ID) || 
+            DeadeyeHelper.IsThievesGuild(agentItem) || 
+            DaredevilHelper.IsThievesGuild(agentItem) ||
+            SpecterHelper.IsThievesGuild(agentItem) ||
+            AntiquaryHelper.IsThievesGuild(agentItem);
     }
 
     internal static void AdjustMinionName(AgentItem minion)
