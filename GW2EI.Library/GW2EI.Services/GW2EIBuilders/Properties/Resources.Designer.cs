@@ -100,7 +100,7 @@ namespace GW2EIBuilders.Properties {
         ///};
         ///
         ///const noUpdateTime = -1;
-        ///const updateText = -2;
+        ///const noUpdateText = -2;
         ///const deadIcon = new Image();
         ///deadIcon.onload = function () {
         ///    animateCanvas(noUpdateTime);
@@ -110,7 +110,7 @@ namespace GW2EIBuilders.Properties {
         ///    animateCanvas(noUpdateTime);
         ///};
         ///const downAllyIcon = new Image();
-        ///downAllyIcon.onl [rest of string was truncated]&quot;;.
+        ///downAllyIcon.o [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string animator {
             get {
@@ -590,6 +590,38 @@ namespace GW2EIBuilders.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .cr-settings-panel-skills {
+        ///    max-height: min(65vh, 460px);
+        ///    overflow-y: auto;
+        ///    overflow-x: auto;
+        ///}
+        ///
+        ///.rotation-skill-picker {
+        ///    width: max-content;
+        ///    max-width: min(560px, calc(100vw - 2rem));
+        ///}
+        ///
+        ///.rotation-skill-picker-collapsible {
+        ///    position: relative;
+        ///    display: block;
+        ///    width: 100%;
+        ///    text-align: left;
+        ///}
+        ///
+        ///.rotation-skill-picker-collapsible &gt; .dropdown-toggle {
+        ///    display: inline-block;
+        ///}
+        ///
+        ///.rotation-skill-picker-collapsible &gt; .rotation-skill-picker-panel {
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string skill_selector_css {
+            get {
+                return ResourceManager.GetString("skill-selector_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .table th {
         ///    border-top: 0;
         ///}
@@ -630,13 +662,14 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div class=&quot;rot-dropdown-pos&quot; style=&quot;margin-left: 145px;&quot;&gt;
-        ///            &lt;a href=&quot;#&quot; class=&quot;dropdown-toggle rot-font-dropdown&quot; data-toggle=&quot;dropdown&quot; title=&quot;Filter Skills&quot;&gt;
-        ///                Skills &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;
-        ///            &lt;/a&gt;
-        ///            &lt;img class=&quot;icon ml-2&quot; :src=&quot;UIIcons.QuestionMark&quot;
-        ///                data-original-title=&quot;Use Skills dropdown to hide unwanted skills&quot; /&gt;
-        ///            &lt;ul class=&quot;dropdown-menu p-2 font-weight-normal scrollabledropdown min-wd-16 [rest of string was truncated]&quot;;.
+        ///        &lt;div class=&quot;mb-2&quot;&gt;
+        ///            &lt;rotation-skill-picker-component :skill-list=&quot;skillList&quot;
+        ///                                             :selected-skills=&quot;selectedSkills&quot;
+        ///                                             input-id-prefix=&quot;advanced-rotation-player-&quot;
+        ///                                             :phase-index=&quot;phaseindex&quot;
+        ///                                             :scrollable=&quot;true&quot;
+        ///                                             :collapsible=&quot;true&quot;
+        ///                            [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplAdvancedRotation {
             get {
@@ -1056,12 +1089,12 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center max-wd-500px scale85&quot;&gt;           
+        ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center max-wd-500px scale85&quot;&gt;
         ///        &lt;h4&gt;General Settings&lt;/h4&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot;&gt;
         ///            &lt;div class=&quot;form-check mb-2 mr-2&quot; :data-original-title=&quot;&apos;Viewpoint will follow selected actor, as long as selected actor is drawn&apos;&quot;&gt;
-        ///                &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;followCheck&quot; 
-        ///                    :checked=&quot;getAnimator().displayS [rest of string was truncated]&quot;;.
+        ///                &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;followCheck&quot;
+        ///                       :checked=&quot;getAnimator().displaySettings.f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayExtraDecorations {
             get {
@@ -1075,9 +1108,9 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;div class=&quot;d-flex align-items-center mb-2 scale85&quot;&gt;
         ///            &lt;input id=&quot;followTimeline&quot; type=&quot;checkbox&quot; v-model=&quot;followTimeline&quot; class=&quot;mr-1&quot; /&gt;
         ///            &lt;label for=&quot;followTimeline&quot; class=&quot;mb-0 ml-1&quot;&gt;Scroll with timeline&lt;/label&gt;
-        ///            &lt;div v-if=&quot;!isTouchDevice&quot;
+        ///            &lt;button v-if=&quot;!isTouchDevice&quot;
         ///                 @click=&quot;resetMechanic()&quot; class=&quot;ml-3 btn btn-small&quot;
-        ///                 :class=&quot;{&apos;btn-dark&apos;: !light, &apos;btn-light [rest of string was truncated]&quot;;.
+        ///                 :class=&quot;{&apos;btn-dark&apos;: !light, &apos;btn-li [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayMechanicsList {
             get {
@@ -1111,7 +1144,7 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt; 
-        ///    &lt;div&gt;
+        ///    &lt;div class=&quot;combat-replay-status-container&quot;&gt;
         ///        &lt;ul v-if=&quot;showTabs&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center mb-1&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Actors&lt;/a&gt;
@@ -1120,8 +1153,7 @@ namespace GW2EIBuilders.Properties {
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Mechanics&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;div class=&quot;squad-details&quot;&gt;
-        ///            &lt;keep [rest of string was truncated]&quot;;.
+        ///        &lt;div cl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayStatusData {
             get {
@@ -1157,7 +1189,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;conditions-table-component&quot;, {
         ///        props: [&apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        mixins: [buffComponent, encounterPhaseComponent],        /// [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent, encounterPhaseComponent, b [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplConditionsTable {
             get {
@@ -1615,12 +1647,12 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div :id=&quot;id&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;&lt;/div&gt;
+        ///        &lt;div :id=&quot;id&quot; :style=&quot;getGraphStyle()&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;&lt;/div&gt;
         ///        &lt;div v-if=&quot;!removerangecontrol&quot; class=&quot;graph-rc&quot;&gt;
         ///            &lt;div class=&quot;d-flex flex-row align-items-center&quot;&gt;
         ///                &lt;custom-numberform-component class=&quot;mr-1 wd-100px&quot; :minValue=&quot;-1e6&quot; :maxValue=&quot;1e6&quot; :id=&quot;id+&apos;xMin&apos;&quot;
         ///                    :placeholderValue=&quot;0&quot;&gt;&lt;/custom-numberform-component&gt;
-        ///                &lt;custom-numberform-component class=&quot;wd-100px&quot; :minValue=&quot;-1e6&quot; :maxValue=&quot;1e6&quot; :id=&quot; [rest of string was truncated]&quot;;.
+        ///                &lt;custom-numberform-component class=&quot;wd-100px&quot; :minValue=&quot;-1 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGraph {
             get {
@@ -1867,10 +1899,10 @@ namespace GW2EIBuilders.Properties {
         ///                    @click=&quot;activeSeverityTab = navBar.index&quot;&gt;{{navBar.name}}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;div&gt;
+        ///        &lt;div class=&quot;template-div&quot;&gt;
         ///            &lt;template v-for=&quot;table in allTables&quot;&gt;
         ///                &lt;keep-alive&gt;
-        ///                    &lt;mechanics-table-component :key=&quot;&apos;mechanics&apos; + table.phaseIndex + &apos;- [rest of string was truncated]&quot;;.
+        ///                    &lt;mechanics-table-component :key=&quot;&apos;mechanics&apos; +  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplMechanicsStats {
             get {
@@ -2194,13 +2226,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column align-items-center justify-content-center&quot;&gt;
         ///        &lt;h3 class=&quot;text-center mt-1 mb-1&quot;&gt;Players&apos; Rotation&lt;/h3&gt;
-        ///        &lt;div&gt;
+        ///        &lt;div class=&quot;template-div&quot;&gt;
         ///            &lt;template v-for=&apos;(phase, index) in phases&apos;&gt;
         ///                &lt;keep-alive&gt;
         ///                    &lt;player-rotations-component :key=&quot;&apos;rotations&apos; + index&quot; v-if=&quot;index === phaseindex&quot;
         ///                        :phaseindex=&quot;phaseindex&quot; :light=&quot;light&quot; :playerindex=&quot;playerindex&quot;&gt;
-        ///                    &lt;/player-rotations-component&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///                    &lt;/player-rotat [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayersRotationTab {
             get {
@@ -2316,7 +2347,7 @@ namespace GW2EIBuilders.Properties {
         ///                       :class=&quot;{active: autoattack}&quot;&gt;Show auto attacks&lt;/a&gt;
         ///                &lt;/li&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;hideInterruptedAA = !hide [rest of string was truncated]&quot;;.
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;hideInterruptedAA = !hideInterrupt [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplSimpleRotation {
             get {
@@ -2340,6 +2371,22 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplSimpleRotationSelector {
             get {
                 return ResourceManager.GetString("tmplSimpleRotationSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div class=&quot;rotation-skill-picker&quot; :class=&quot;{&apos;rotation-skill-picker-collapsible&apos;: collapsible}&quot;&gt;
+        ///        &lt;a v-if=&quot;collapsible&quot; href=&quot;#&quot; class=&quot;dropdown-toggle rot-font-dropdown&quot;
+        ///           :aria-expanded=&quot;showPicker&quot; @click.prevent.stop=&quot;showPicker = !showPicker&quot;&gt;
+        ///            Skills &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;
+        ///        &lt;/a&gt;
+        ///        &lt;div v-if=&quot;!collapsible || showPicker&quot; class=&quot;rotation-skill-picker-panel&quot;
+        ///             :class=&quot;collapsible ? &apos;dropdown-menu p-2 font-weight-normal show&apos; : &apos;&apos;&quot; @clic [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplSkillPicker {
+            get {
+                return ResourceManager.GetString("tmplSkillPicker", resourceCulture);
             }
         }
         

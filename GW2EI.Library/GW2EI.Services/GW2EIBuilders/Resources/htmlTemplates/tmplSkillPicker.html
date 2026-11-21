@@ -1,0 +1,53 @@
+﻿<template>
+    <div class="skill-picker">
+        <div class="skill-picker-panel" @click.stop>
+            <div class="font-weight-bold mb-1">
+                Single Skill Selector
+            </div>
+            <div class="d-flex flex-row justify-content-center align-items-center mb-2">
+                <button type="button" class="btn btn-primary btn-sm rot-button mr-2" @click.stop="setAllSelectedSkills(true)">
+                    Select all
+                </button>
+                <button type="button" class="btn btn-primary btn-sm rot-button" @click.stop="setAllSelectedSkills(false)">
+                    Deselect all
+                </button>
+            </div>
+            <div class="skill-picker-list skill-picker-list-scrollable">
+                <div v-for="(skill, index) in skillList" :key="skill.id" class="skill-picker-entry" :style="{opacity: getOpacity(skill)}">
+                    <input :id="getInputId(skill, index)" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectionChanged(skill)" @click.stop>                    <label :for="getInputId(skill, index)" class="rot-font" @click.stop>
+                        <img class="icon" :src="skill.icon" :alt="skill.name"> {{skill.name}}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("skill-picker-component", {
+        props: ["skillList", "selectedSkills", "inputIdPrefix", "phaseIndex", "useSkillId", "opacity", "opacityMask", "selectionChanged"],
+        template: `${template}`,
+        methods: {
+            getInputId: function (skill, index) {
+                const suffix = this.useSkillId ? skill.id : index + '-' + this.phaseIndex;
+                return this.inputIdPrefix + suffix;
+            },
+            getOpacity: function(skill) {
+                return this.opacity ? this.opacity(skill, this.opacityMask) : 1;
+            },
+            onSelectionChanged: function (skill) {
+                if (this.selectionChanged) {
+                    this.selectionChanged(skill);
+                }
+            },
+            setAllSelectedSkills: function (selected) {
+                for (var i = 0; i < this.skillList.length; i++) {
+                    this.selectedSkills['s' + this.skillList[i].id] = selected;
+                }
+                if (this.selectionChanged) {
+                    this.selectionChanged();
+                }
+            }
+        }
+    });
+</script>

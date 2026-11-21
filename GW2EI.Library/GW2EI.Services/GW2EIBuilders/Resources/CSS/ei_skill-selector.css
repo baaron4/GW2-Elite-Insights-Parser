@@ -1,0 +1,83 @@
+﻿.skill-controls-panel {
+    max-height: min(65vh, 460px);
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.skill-picker {
+    width: max-content;
+    max-width: min(560px, calc(100vw - 2rem));
+    box-sizing: border-box;
+}
+
+.skill-picker-anchor {
+    position: relative;
+    z-index: 20;
+}
+
+.skill-picker-collapsible {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    width: max-content;
+    max-width: min(560px, calc(100vw - 2rem));
+    box-sizing: border-box;
+    text-align: left;
+    max-height: min(65vh, 460px);
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.skill-picker-collapsible > skill-picker-component {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+}
+
+.skill-picker-collapsible .skill-picker {
+    width: max-content;
+    max-width: 100%;
+}
+
+.skill-picker-collapsible .skill-picker-panel {
+    position: static;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.skill-picker-list {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    column-gap: 1rem;
+    row-gap: 0.2rem;
+    width: max-content;
+    min-width: 100%;
+}
+
+.skill-picker-list-scrollable {
+    max-height: none;
+    overflow: visible;
+}
+
+.skill-picker-entry {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    white-space: nowrap;
+}
+
+.skill-picker-entry input {
+    flex: 0 0 auto;
+    margin-right: 0.35rem;
+}
+
+.skill-picker-entry label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0;
+    white-space: nowrap;
+}

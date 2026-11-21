@@ -69,6 +69,7 @@ public class HTMLAssets
             ..Properties.Resources.images_css,
             ..Properties.Resources.rotation_css,
             ..Properties.Resources.scrollbar_css,
+            ..Properties.Resources.skill_selector_css,
             ..Properties.Resources.tables_css,
         ]);
     }
@@ -168,6 +169,7 @@ public class HTMLAssets
             Properties.Resources.tmplTargetTabPerPlayerGraph,
             Properties.Resources.tmplTargetData,
             Properties.Resources.tmplMainView,
+            Properties.Resources.tmplSkillPicker,
             //     
             Properties.Resources.tmplMinionNavTabs,
             Properties.Resources.tmplMinionInstanceDropdown,

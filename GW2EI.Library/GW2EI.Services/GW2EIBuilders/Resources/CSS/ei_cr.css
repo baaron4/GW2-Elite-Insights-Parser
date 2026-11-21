@@ -726,40 +726,6 @@ canvas {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.cr-settings-panel-skills {
-    max-height: min(65vh, 460px);
-    overflow-y: auto;
-    overflow-x: auto;
-}
-
-.cr-skill-list {
-    display: grid;
-    grid-template-columns: repeat(2, max-content);
-    column-gap: 1rem;
-    row-gap: 0.2rem;
-    width: max-content;
-    min-width: 100%;
-}
-
-.cr-skill-entry {
-    display: flex;
-    align-items: center;
-    width: max-content;
-    white-space: nowrap;
-}
-
-.cr-skill-entry input {
-    flex: 0 0 auto;
-    margin-right: 0.35rem;
-}
-
-.cr-skill-entry label {
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 0;
-    white-space: nowrap;
-}
-
 .cr-settings-panel-custom {
     max-height: min(70vh, 420px);
     overflow: auto;
