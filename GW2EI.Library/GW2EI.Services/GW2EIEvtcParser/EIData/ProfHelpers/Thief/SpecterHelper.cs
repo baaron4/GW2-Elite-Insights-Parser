@@ -55,16 +55,16 @@ internal static class SpecterHelper
 
     private static readonly HashSet<int> Minions =
     [
-        (int)MinionID.SpecterAsura1,
         (int)MinionID.SpecterHuman1,
-        (int)MinionID.SpecterAsura2,
-        (int)MinionID.SpecterSylvari1,
         (int)MinionID.SpecterHuman2,
-        (int)MinionID.SpecterNorn1,
+        (int)MinionID.SpecterAsura1,
+        (int)MinionID.SpecterAsura2,
         (int)MinionID.SpecterCharr1,
-        (int)MinionID.SpecterSylvari2,
         (int)MinionID.SpecterCharr2,
+        (int)MinionID.SpecterNorn1,
         (int)MinionID.SpecterNorn2,
+        (int)MinionID.SpecterSylvari1,
+        (int)MinionID.SpecterSylvari2,
     ];
 
     internal static bool IsKnownMinionID(int id)

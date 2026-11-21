@@ -879,6 +879,9 @@ internal static class ProfHelper
             case Spec.Mesmer:
                 MesmerHelper.AdjustMinionName(minion);
                 break;
+            case Spec.Thief:
+                ThiefHelper.AdjustMinionName(minion);
+                break;
             default:
                 break;
         }

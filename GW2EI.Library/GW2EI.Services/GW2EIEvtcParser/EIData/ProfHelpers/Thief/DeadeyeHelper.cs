@@ -85,16 +85,16 @@ internal static class DeadeyeHelper
 
     private static readonly HashSet<int> Minions =
     [
-        (int)MinionID.DeadeyeSylvari1,
         (int)MinionID.DeadeyeHuman1,
-        (int)MinionID.DeadeyeCharr1,
-        (int)MinionID.DeadeyeSylvari2,
+        (int)MinionID.DeadeyeHuman2,
         (int)MinionID.DeadeyeAsura1,
+        (int)MinionID.DeadeyeAsura2,
+        (int)MinionID.DeadeyeCharr1,
+        (int)MinionID.DeadeyeCharr2,
         (int)MinionID.DeadeyeNorn1,
         (int)MinionID.DeadeyeNorn2,
-        (int)MinionID.DeadeyeHuman2,
-        (int)MinionID.DeadeyeCharr2,
-        (int)MinionID.DeadeyeAsura2,
+        (int)MinionID.DeadeyeSylvari1,
+        (int)MinionID.DeadeyeSylvari2,
     ];
     internal static bool IsKnownMinionID(int id)
     {
