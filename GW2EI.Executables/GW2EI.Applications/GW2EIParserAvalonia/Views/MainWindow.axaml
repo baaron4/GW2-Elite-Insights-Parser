@@ -80,7 +80,7 @@
             <NumericUpDown
                 Value="{Binding SettingsViewModel.PopulateHourLimit, Mode=TwoWay}"
                 Minimum="0"
-                Maximum="24"
+                Maximum="86400000"
                 Width="150"
                 FormatString="0"
                 HorizontalContentAlignment="Right"
