@@ -14,7 +14,8 @@
             </div>
             <div class="skill-picker-list skill-picker-list-scrollable">
                 <div v-for="(skill, index) in skillList" :key="skill.id" class="skill-picker-entry" :style="{opacity: getOpacity(skill)}">
-                    <input :id="getInputId(skill, index)" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectionChanged(skill)" @click.stop>                    <label :for="getInputId(skill, index)" class="rot-font" @click.stop>
+                    <input :id="getInputId(skill, index)" type="checkbox" v-model="selectedSkills['s' + skill.id]" @change="onSelectionChanged(skill)" @click.stop>
+                    <label :for="getInputId(skill, index)" class="rot-font" @click.stop>
                         <img class="icon" :src="skill.icon" :alt="skill.name"> {{skill.name}}
                     </label>
                 </div>
