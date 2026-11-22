@@ -57,13 +57,13 @@
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85 cr-settings-panel-buttons">
                 <li v-if="showSkills" class="nav-item">
                     <a class="nav-link" :class="{ active: showPlayerSkillDecorationsPanel }" :aria-expanded="showPlayerSkillDecorationsPanel" @click.prevent.stop="togglePlayerSkillDecorationsPanel">
-                        Player Skill Decorations
+                        Player Skill Decorations {{ showPlayerSkillDecorationsPanel ? '&#9651;' : '&#9661;' }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" :class="{ active: showCustomDecorationsPanel }" :aria-expanded="showCustomDecorationsPanel" @click.prevent.stop="toggleCustomDecorationsPanel"
                        data-original-title="Select an agent to enable this feature">
-                        Custom Decorations
+                        Custom Decorations {{ showCustomDecorationsPanel ? '&#9651;' : '&#9661;' }}
                     </a>
                 </li>
             </ul>

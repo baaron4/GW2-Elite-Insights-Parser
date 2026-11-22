@@ -72,7 +72,7 @@
             <ul class="nav nav-pills d-flex flex-row scale85 cr-settings-panel-buttons">
                 <li class="nav-item">
                     <a class="nav-link" :class="{ active: showSkillPicker }" :aria-expanded="showSkillPicker" @click.prevent.stop="toggleSkillPicker">
-                        Skills
+                        Skills {{ showSkillPicker ? '&#9651;' : '&#9661;' }}
                     </a>
                 </li>
             </ul>
