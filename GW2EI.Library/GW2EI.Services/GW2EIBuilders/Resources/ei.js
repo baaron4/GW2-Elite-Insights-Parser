@@ -377,7 +377,7 @@ function checkImgurAccess() {
     });
 }
 
-window.onload = function () {
+const onload = function () {
     Vue.config.devtools = true;
     initTheme();
     checkImgurAccess().then(notBlocked => {
@@ -413,4 +413,27 @@ window.onload = function () {
         imgOfficialAPI.src = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
     })
     
+}
+
+window.onload = async () => {
+    if (doCompression) {
+        logData = await decompressBase64Brotli(_logData);
+        logData = JSON.parse(logData);
+
+        crData = await decompressBase64Brotli(_crData);
+        crData = JSON.parse(crData);
+
+        graphData = await decompressBase64Brotli(_graphData);
+        graphData = JSON.parse(graphData);
+
+        healingStatsExtension = await decompressBase64Brotli(_healingStatsExtension);
+        healingStatsExtension = JSON.parse(healingStatsExtension);
+
+        barrierStatsExtension = await decompressBase64Brotli(_barrierStatsExtension);
+        barrierStatsExtension = JSON.parse(barrierStatsExtension);
+        
+        onload();
+    } else {
+        onload();
+    }
 }

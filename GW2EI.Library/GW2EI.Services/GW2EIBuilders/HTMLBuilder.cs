@@ -53,7 +53,7 @@ public class HTMLBuilder
         byte[] bytes = Encoding.UTF8.GetBytes(s);
         using var msi = new MemoryStream(bytes);
         using var mso = new MemoryStream();
-        using (var gs = new GZipStream(mso, CompressionMode.Compress))
+        using (var gs = new BrotliStream(mso, CompressionLevel.Optimal))
         {
             msi.CopyTo(gs);
         }
@@ -172,7 +172,6 @@ public class HTMLBuilder
         html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
         // Compression stuff
-        html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
         html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
 
         _log.UpdateProgressWithCancellationCheck("HTML: building CSS");

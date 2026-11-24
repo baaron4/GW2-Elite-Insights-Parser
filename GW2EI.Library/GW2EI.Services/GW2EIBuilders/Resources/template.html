@@ -12,7 +12,6 @@
     <script src="https://cdn.plot.ly/plotly-4.1.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
-    <!--${CompressionRequire}-->
     <!--${CompressionUtils}-->
     <script>
         const _logData = '${logDataJson}';
@@ -26,13 +25,7 @@
         let graphData = _graphData;
         let healingStatsExtension = _healingStatsExtension;
         let barrierStatsExtension = _barrierStatsExtension;
-        if (window.pako) {
-            logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_logData))));
-            crData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_crData))));
-            graphData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_graphData))));
-            healingStatsExtension = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_healingStatsExtension))));
-            barrierStatsExtension = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_barrierStatsExtension))));
-        }
+        let doCompression = typeof decompressBase64Brotli !== "undefined";
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->
