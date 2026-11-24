@@ -20,7 +20,7 @@ internal class BuffData
             var buffVals = new BuffDataItem();
             Data.Add(buffVals);
 
-            if (buffs.TryGetValue(buff.ID, out var uptime))
+            if (buffs.TryGetValue(buff.ID, out var uptime) && uptime.Uptime > 0)
             {
                 buffVals.Add(uptime.Uptime);
                 if (uptime.Presence > 0)
@@ -28,6 +28,10 @@ internal class BuffData
                     buffVals.Add(uptime.Presence);
                 }
             }
+        }
+        if (Data.All(x => x.Count == 0))
+        {
+            Data = [];
         }
     }
 
@@ -38,8 +42,7 @@ internal class BuffData
         {
             if (buffs.TryGetValue(buff.ID, out var toUse) && toUse.GeneratedBy.ContainsKey(actor))
             {
-                Data.Add(
-                    [
+                BuffDataItem byActorData = [
                         toUse.GeneratedBy[actor],
                         toUse.OverstackedBy[actor],
                         toUse.WastedFrom[actor],
@@ -47,21 +50,17 @@ internal class BuffData
                         toUse.ExtensionBy[actor],
                         toUse.ExtendedFrom[actor],
                         toUse.GeneratedPresenceBy[actor]
-                    ]);
+                ];
+                Data.Add(byActorData.Any(x => x != 0) ? byActorData : []);
             }
             else
             {
-                Data.Add(
-                    [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    ]);
+                Data.Add([]);
             }
+        }
+        if (Data.All(x => x.Count == 0))
+        {
+            Data = [];
         }
     }
 
@@ -72,8 +71,7 @@ internal class BuffData
         {
             if (uptimes.TryGetValue(buff.ID, out var uptime))
             {
-                Data.Add(
-                    [
+                BuffDataItem byActorData = [
                         uptime.Generation,
                         uptime.Overstack,
                         uptime.Wasted,
@@ -81,21 +79,17 @@ internal class BuffData
                         uptime.ByExtension,
                         uptime.Extended,
                         uptime.GenerationPresence
-                    ]);
+                ];
+                Data.Add(byActorData.Any(x => x != 0) ? byActorData : []);
             }
             else
             {
-                Data.Add(
-                    [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    ]);
+                Data.Add([]);
             }
+        }
+        if (Data.All(x => x.Count == 0))
+        {
+            Data = [];
         }
     }
 
@@ -106,7 +100,7 @@ internal class BuffData
         {
             var boonVals = new BuffDataItem();
             Data.Add(boonVals);
-            if (uptimes.TryGetValue(buff.ID, out var uptime))
+            if (uptimes.TryGetValue(buff.ID, out var uptime) && uptime.Uptime > 0)
             {
                 boonVals.Add(uptime.Uptime);
                 if (uptime.Presence > 0)
@@ -117,6 +111,10 @@ internal class BuffData
             else
             {
                 boonVals.Add(0);
+            }
+            if (Data.All(x => x[0] == 0))
+            {
+                Data = [];
             }
         }
     }
