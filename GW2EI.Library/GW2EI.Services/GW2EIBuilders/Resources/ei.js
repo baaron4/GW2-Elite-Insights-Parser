@@ -220,6 +220,44 @@ function mainLoad() {
     if (!activeFound) {
         reactiveLogdata.players[0].active = true;
     }
+    // Adjust graphs
+    for (let phaseIndex = 0; phaseIndex < graphData.phases.length; phaseIndex++) {
+        const phaseGraphData = graphData.phases[phaseIndex];
+        function unwrapGraphDelta(graph) {
+            for (let i = 1; i < graph.length; i++) {
+                graph[i] = graph[i] + graph[i - 1];
+            }
+        }
+        const playerAttributes = ["damage", "powerDamage", "conditionDamage", "breakbarDamage"];
+        for (let playerIndex = 0; playerIndex < phaseGraphData.players.length; playerIndex++) {
+            const playerPhaseGraphData = phaseGraphData.players[playerIndex];
+            for (let attrID = 0; attrID < playerAttributes.length; attrID++) {
+                const attrGraph = playerPhaseGraphData[playerAttributes[attrID]];
+                if (attrGraph) {
+                    if (attrGraph.total) {
+                        unwrapGraphDelta(attrGraph.total);
+                    }
+                    if (attrGraph.taken) {
+                        unwrapGraphDelta(attrGraph.taken);
+                    }
+                    if (attrGraph.targets) {
+                        for (let j = 0; j < attrGraph.targets.length; j++) {
+                            if (attrGraph.targets[j]) {                     
+                                unwrapGraphDelta(attrGraph.targets[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (let targetIndex = 0; targetIndex < phaseGraphData.targets.length; targetIndex++) {       
+            const targetPhaseGraphData = phaseGraphData.targets[targetIndex];
+            unwrapGraphDelta(targetPhaseGraphData.total);
+            unwrapGraphDelta(targetPhaseGraphData.totalPower);
+            unwrapGraphDelta(targetPhaseGraphData.totalCondition);
+        }
+    }
+    //
     compileTemplates();
     if (!!crData) {
         compileCRTemplates();

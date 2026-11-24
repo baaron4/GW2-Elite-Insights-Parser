@@ -14,34 +14,34 @@ internal class PlayerChartDataDto : ActorChartDataDto
     {
         Damage = new PlayerDamageChartDto<int>()
         {
-            Total = p.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.All).Values,
-            Taken = p.GetDamageTakenGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.All).Values,
+            Total = p.GetDamageGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.All).Values,
+            Taken = p.GetDamageTakenGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.All).Values,
             Targets = new(phase.Targets.Count)
         };
         PowerDamage = new PlayerDamageChartDto<int>()
         {
-            Total = p.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power).Values,
-            Taken = p.GetDamageTakenGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power).Values,
+            Total = p.GetDamageGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power).Values,
+            Taken = p.GetDamageTakenGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power).Values,
             Targets = new(phase.Targets.Count)
         };
         ConditionDamage = new PlayerDamageChartDto<int>()
         {
-            Total = p.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition).Values,
-            Taken = p.GetDamageTakenGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition).Values,
+            Total = p.GetDamageGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition).Values,
+            Taken = p.GetDamageTakenGraphDelta(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition).Values,
             Targets = new(phase.Targets.Count)
         };
         BreakbarDamage = new PlayerDamageChartDto<double>()
         {
-            Total = p.GetBreakbarDamageGraph(log, phase.Start, phase.End, null)?.Values,
-            Taken = p.GetBreakbarDamageTakenGraph(log, phase.Start, phase.End, null)?.Values,
+            Total = p.GetBreakbarDamageGraphDelta(log, phase.Start, phase.End, null)?.Values,
+            Taken = p.GetBreakbarDamageTakenGraphDelta(log, phase.Start, phase.End, null)?.Values,
             Targets = new(phase.Targets.Count)
         };
         foreach (SingleActor target in phase.Targets.Keys)
         {
-            Damage.Targets.Add(p.GetDamageGraph(log, phase.Start, phase.End, target, ParserHelper.DamageType.All).Values);
-            PowerDamage.Targets.Add(p.GetDamageGraph(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power).Values);
-            ConditionDamage.Targets.Add(p.GetDamageGraph(log, phase.Start, phase.End, target, ParserHelper.DamageType.Condition).Values);
-            BreakbarDamage.Targets.Add(p.GetBreakbarDamageGraph(log, phase.Start, phase.End, target)?.Values);
+            Damage.Targets.Add(p.GetDamageGraphDelta(log, phase.Start, phase.End, target, ParserHelper.DamageType.All).Values);
+            PowerDamage.Targets.Add(p.GetDamageGraphDelta(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power).Values);
+            ConditionDamage.Targets.Add(p.GetDamageGraphDelta(log, phase.Start, phase.End, target, ParserHelper.DamageType.Condition).Values);
+            BreakbarDamage.Targets.Add(p.GetBreakbarDamageGraphDelta(log, phase.Start, phase.End, target)?.Values);
         }
     }
 
