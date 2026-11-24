@@ -11,7 +11,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonBuffsUptimeBuilder
 {
-    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
+    private static Dictionary<string, double>? ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
         var res = new Dictionary<string, double>(toConvert.Count);
         foreach (KeyValuePair<SingleActor, double> pair in toConvert)
@@ -21,7 +21,7 @@ internal static class JsonBuffsUptimeBuilder
                 res[pair.Key.Character] = pair.Value;
             }
         }
-        return res;
+        return res.Count > 0 ? res : null;
     }
 
     public static JsonBuffsUptimeData BuildJsonBuffsUptimeData(BuffStatistics buffs, BuffByActorStatistics buffsDictionary)
@@ -42,15 +42,15 @@ internal static class JsonBuffsUptimeBuilder
     }
 
 
-    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData)
+    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData, bool ignoreGraphs)
     {
         var jsonBuffsUptime = new JsonBuffsUptime
         {
             Id = buffID,
-            BuffData = buffData
+            BuffData = buffData.Select(x => x.Uptime > 0 || x.Presence > 0 ? x : null).ToList()
         };
         usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
-        if (settings.RawFormatTimelineArrays)
+        if (settings.RawFormatTimelineArrays && !ignoreGraphs)
         {
             jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
             IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.LogData.LogStart, log.LogData.LogEnd);

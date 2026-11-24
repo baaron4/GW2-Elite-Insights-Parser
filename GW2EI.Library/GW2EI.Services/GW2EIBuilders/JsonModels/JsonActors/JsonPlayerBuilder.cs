@@ -291,7 +291,7 @@ internal static class JsonPlayerBuilder
                     }
                 }
             }
-            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(player, pair.Key, log, settings, data, usedData));
+            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(player, pair.Key, log, settings, data, usedData, useActiveTime));
         }
         return res;
     }

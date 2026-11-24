@@ -113,7 +113,7 @@ internal static class JsonNPCBuilder
                     data.Add(value);
                 }
             }
-            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, usedData));
+            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, usedData, useActiveTime));
         }
         return res;
     }

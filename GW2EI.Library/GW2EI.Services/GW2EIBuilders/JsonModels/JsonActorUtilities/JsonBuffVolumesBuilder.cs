@@ -11,7 +11,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonBuffVolumesBuilder
 {
-    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
+    private static Dictionary<string, double>? ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
         var res = new Dictionary<string, double>(toConvert.Count);
         foreach (KeyValuePair<SingleActor, double> pair in toConvert)
@@ -21,7 +21,7 @@ internal static class JsonBuffVolumesBuilder
                 res[pair.Key.Character] = pair.Value;
             }
         }
-        return res;
+        return res.Count > 0 ? res : null;
     }
 
     public static JsonBuffVolumesData BuildJsonBuffVolumesData(BuffVolumeStatistics buffs, BuffVolumeByActorStatistics buffsDictionary)
@@ -43,7 +43,7 @@ internal static class JsonBuffVolumesBuilder
         var jsonBuffVolumes = new JsonBuffVolumes
         {
             Id = buffID,
-            BuffVolumeData = buffVolumeData
+            BuffVolumeData = buffVolumeData.Select(x => x.Incoming > 0 || x.IncomingByExtension > 0 || x.IncomingByUnknownExtension > 0 ? x : null).ToList()
         };
         usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
         return jsonBuffVolumes;
