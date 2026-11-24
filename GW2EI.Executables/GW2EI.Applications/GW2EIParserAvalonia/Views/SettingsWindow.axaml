@@ -326,6 +326,13 @@
                             Content="Compress raw files"
                             IsChecked="{Binding CompressRaw}" />
 
+                        <ComboBox ItemsSource="{Binding CompressionFormats}"
+                            SelectedItem="{Binding CompressRawFormat, Mode=TwoWay}"
+                            IsEnabled="{Binding CompressRaw}"
+                            MinWidth="120"
+                            VerticalAlignment="Center" />
+                        
+
                     </StackPanel>
                 </ScrollViewer>
 
