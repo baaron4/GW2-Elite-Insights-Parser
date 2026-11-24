@@ -59,7 +59,11 @@ internal static class JsonBuffsUptimeBuilder
                 var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<long>>>(buffDict.GeneratedBy.Count);
                 foreach (SingleActor source in buffDict.GeneratedBy.Keys)
                 {
-                    statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    var states = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    if (states.Count > 0)
+                    {
+                        statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    }
                 }
                 jsonBuffsUptime.StatesPerSource = statesPerSource;
             }

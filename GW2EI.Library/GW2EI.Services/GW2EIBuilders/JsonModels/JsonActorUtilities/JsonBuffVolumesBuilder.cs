@@ -16,7 +16,10 @@ internal static class JsonBuffVolumesBuilder
         var res = new Dictionary<string, double>(toConvert.Count);
         foreach (KeyValuePair<SingleActor, double> pair in toConvert)
         {
-            res[pair.Key.Character] = pair.Value;
+            if (pair.Value > 0)
+            {
+                res[pair.Key.Character] = pair.Value;
+            }
         }
         return res;
     }
