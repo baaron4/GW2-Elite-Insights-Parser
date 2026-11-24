@@ -68,37 +68,18 @@
                 </li>
             </ul>
         </div>
-        <div style="z-index: 1;" class="mb-4 mt-2">
-            <a href="#" class="dropdown-toggle rot-font-dropdown" data-toggle="dropdown" title="Filter Skills">
-                Skills <span class="caret"></span>
-            </a>
-            <img class="icon ml-2" :src="UIIcons.QuestionMark"
-                 data-original-title="Use Skills dropdown to hide unwanted skills or click on a specific skill below to make all other skills transparent" />
-            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown min-wd-165px">
-                <li class="d-flex flex-column justify-content-center align-items-center mb-1">
-                    <button type="button" class="btn btn-primary btn-sm rot-button"
-                            @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">
-                        Select all
-                    </button>
-                </li>
-                <li class="d-flex flex-column justify-content-center align-items-center mb-1 separator-border-bottom">
-                    <button type="button" class="btn btn-primary btn-sm rot-button"
-                            @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">
-                        Deselect all
-                    </button>
-                </li>
-                <li v-for="(skill, index) in skillList" :key="index">
-                    <div style="width: max-content;">
-                        <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
-                               v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
-                        <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                               class="rot-font">
-                            <img class="icon" :src="getSkill(skill.id).icon">
-                            {{skill.name}}
-                        </label>
-                    </div>
+        <div class="mb-2 skill-picker-anchor">
+            <ul class="nav nav-pills d-flex flex-row scale85 cr-settings-panel-buttons">
+                <li class="nav-item">
+                    <a class="nav-link" :class="{ active: showSkillPicker }" :aria-expanded="showSkillPicker" @click.prevent.stop="toggleSkillPicker">
+                        Skills {{ showSkillPicker ? '&#9651;' : '&#9661;' }}
+                    </a>
                 </li>
             </ul>
+            <div v-if="showSkillPicker" class="skill-picker-collapsible dropdown-menu p-2 font-weight-normal show">
+                <skill-picker-component :skill-list="skillList" :selected-skills="selectedSkills" input-id-prefix="smpl-rot-" :phase-index="phaseindex">
+                </skill-picker-component>
+            </div>
         </div>
         <div v-for="rotationGroup in rotationGroups" :key="rotationGroup.index" class="d-flex flex-row align-items-start mb-2">
             <span v-if="consolidatedMinionView" class="rot-font mr-2" style="min-width: 90px; white-space: nowrap;">
@@ -137,7 +118,7 @@
                     if (!seenSkills.has(skillID)) {
                         seenSkills.add(skillID);
                         if (!skill.isSwap) {
-                            skillList.push({ name: skill.name, id: skillID });
+                            skillList.push({ name: skill.name, id: skillID, icon: skill.icon });
                             selectedSkills['s' + skillID] = true;
                         }
                     }
@@ -172,6 +153,7 @@
                 highlightedSkill: null,
                 selectedSkills: selectedSkills,
                 phaseData: phaseData,
+                showSkillPicker: false,
             };
         },
         computed: {
@@ -327,7 +309,10 @@
             },
             toggleHighlight(skill) {
                 this.highlightedSkill = this.highlightedSkill !== skill.id ? skill.id : null;
-            }
+            },
+            toggleSkillPicker() {
+                this.showSkillPicker = !this.showSkillPicker;
+            },
         }
     });
 </script>
