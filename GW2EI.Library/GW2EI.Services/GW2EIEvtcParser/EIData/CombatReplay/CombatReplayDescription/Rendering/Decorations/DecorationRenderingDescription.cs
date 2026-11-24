@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class DecorationRenderingDescription : CombatReplayRenderingDescription
 {
-    public readonly string MetadataSignature;
+    public string MetadataSignature { get; set; }
     internal DecorationRenderingDescription(_DecorationRenderingData decoration, string metadataSignature)
     {
         Start = decoration.Lifespan.start;
