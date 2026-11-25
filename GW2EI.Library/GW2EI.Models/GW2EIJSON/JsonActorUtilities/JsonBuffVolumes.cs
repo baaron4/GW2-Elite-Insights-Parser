@@ -48,7 +48,7 @@ public class JsonBuffVolumes
     /// <summary>
     /// Array of buff volume data \n
     /// Length == # of phases \n
-    /// An index may yield null if the actor has no buff activity during the phase
+    /// An index may yield null if the actor is a <see cref="JsonMinionInstance"/> and has no buff activity during the phase
     /// </summary>
     /// <seealso cref="JsonBuffVolumesData"/>
     public IReadOnlyList<JsonBuffVolumesData?>? BuffVolumeData;

@@ -291,7 +291,7 @@ internal static class JsonPlayerBuilder
                     }
                 }
             }
-            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(player, pair.Key, log, settings, data, usedData, useActiveTime));
+            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(player, pair.Key, log, settings, data, usedData, useActiveTime, false));
         }
         return res;
     }
@@ -385,7 +385,7 @@ internal static class JsonPlayerBuilder
                     }
                 }
             }
-            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, usedData));
+            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, usedData, false));
         }
         return res;
     }

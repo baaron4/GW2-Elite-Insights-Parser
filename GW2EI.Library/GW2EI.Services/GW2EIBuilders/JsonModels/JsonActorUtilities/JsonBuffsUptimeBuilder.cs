@@ -21,7 +21,7 @@ internal static class JsonBuffsUptimeBuilder
                 res[pair.Key.Character] = pair.Value;
             }
         }
-        return res.Count > 0 ? res : null;
+        return res;
     }
 
     public static JsonBuffsUptimeData BuildJsonBuffsUptimeData(BuffStatistics buffs, BuffByActorStatistics buffsDictionary)
@@ -42,12 +42,12 @@ internal static class JsonBuffsUptimeBuilder
     }
 
 
-    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData, bool ignoreGraphs)
+    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData, bool ignoreGraphs, bool isMinion)
     {
         var jsonBuffsUptime = new JsonBuffsUptime
         {
             Id = buffID,
-            BuffData = buffData.Select(x => x.Uptime > 0 || x.Presence > 0 ? x : null).ToList()
+            BuffData = isMinion ? buffData.Select(x => x.Uptime > 0 || x.Presence > 0 ? x : null).ToList()! : buffData
         };
         usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
         if (settings.RawFormatTimelineArrays && !ignoreGraphs)
