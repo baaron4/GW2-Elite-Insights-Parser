@@ -1,27 +1,22 @@
 name: Auto Format for editorconfig
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    types: [closed]
-    branches: [ master ]
+  schedule:
+    - cron: '0 3 */3 * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   format:
-    if: |
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout master
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: master
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
@@ -35,4 +30,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: apply automatic dotnet format fixes"
-          branch: ${{ github.head_ref || github.ref_name }}
+          branch: master

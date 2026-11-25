@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Properties;
@@ -13,6 +14,7 @@ internal partial class SettingsViewModel : ObservableObject
     {
         _settings = settings;
     }
+    public IReadOnlyList<string> CompressionFormats { get; } = ["gzip", "brotli"];
 
     // General
     // - Log
@@ -132,6 +134,9 @@ internal partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     public partial bool CompressRaw { get; set; }
 
+    [ObservableProperty]
+    public partial string CompressRawFormat { get; set; }
+
     // Upload / Webhook
     [ObservableProperty]
     public partial bool UploadToDPSReports { get; set; }
@@ -219,6 +224,7 @@ internal partial class SettingsViewModel : ObservableObject
         IndentJSON = _settings.IndentJSON;
         RawTimelineArrays = _settings.RawTimelineArrays;
         CompressRaw = _settings.CompressRaw;
+        CompressRawFormat = _settings.CompressRawFormat;
 
         // Upload
         UploadToDPSReports = _settings.UploadToDPSReports;
@@ -288,6 +294,7 @@ internal partial class SettingsViewModel : ObservableObject
         Settings.Default.IndentJSON = IndentJSON;
         Settings.Default.RawTimelineArrays = RawTimelineArrays;
         Settings.Default.CompressRaw = CompressRaw;
+        Settings.Default.CompressRawFormat = CompressRawFormat;
 
         // Upload
         Settings.Default.UploadToDPSReports = UploadToDPSReports;
@@ -355,6 +362,7 @@ internal partial class SettingsViewModel : ObservableObject
         _settings.IndentJSON = IndentJSON;
         _settings.RawTimelineArrays = RawTimelineArrays;
         _settings.CompressRaw = CompressRaw;
+        _settings.CompressRawFormat = CompressRawFormat;
 
         // Upload
         _settings.UploadToDPSReports = UploadToDPSReports;

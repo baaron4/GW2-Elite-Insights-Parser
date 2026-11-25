@@ -220,6 +220,44 @@ function mainLoad() {
     if (!activeFound) {
         reactiveLogdata.players[0].active = true;
     }
+    // Adjust graphs
+    for (let phaseIndex = 0; phaseIndex < graphData.phases.length; phaseIndex++) {
+        const phaseGraphData = graphData.phases[phaseIndex];
+        function unwrapGraphDelta(graph) {
+            for (let i = 1; i < graph.length; i++) {
+                graph[i] = graph[i] + graph[i - 1];
+            }
+        }
+        const playerAttributes = ["damage", "powerDamage", "conditionDamage", "breakbarDamage"];
+        for (let playerIndex = 0; playerIndex < phaseGraphData.players.length; playerIndex++) {
+            const playerPhaseGraphData = phaseGraphData.players[playerIndex];
+            for (let attrID = 0; attrID < playerAttributes.length; attrID++) {
+                const attrGraph = playerPhaseGraphData[playerAttributes[attrID]];
+                if (attrGraph) {
+                    if (attrGraph.total) {
+                        unwrapGraphDelta(attrGraph.total);
+                    }
+                    if (attrGraph.taken) {
+                        unwrapGraphDelta(attrGraph.taken);
+                    }
+                    if (attrGraph.targets) {
+                        for (let j = 0; j < attrGraph.targets.length; j++) {
+                            if (attrGraph.targets[j]) {                     
+                                unwrapGraphDelta(attrGraph.targets[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (let targetIndex = 0; targetIndex < phaseGraphData.targets.length; targetIndex++) {       
+            const targetPhaseGraphData = phaseGraphData.targets[targetIndex];
+            unwrapGraphDelta(targetPhaseGraphData.total);
+            unwrapGraphDelta(targetPhaseGraphData.totalPower);
+            unwrapGraphDelta(targetPhaseGraphData.totalCondition);
+        }
+    }
+    //
     compileTemplates();
     if (!!crData) {
         compileCRTemplates();
@@ -339,7 +377,7 @@ function checkImgurAccess() {
     });
 }
 
-window.onload = function () {
+const onload = function () {
     Vue.config.devtools = true;
     initTheme();
     checkImgurAccess().then(notBlocked => {
@@ -375,4 +413,27 @@ window.onload = function () {
         imgOfficialAPI.src = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
     })
     
+}
+
+window.onload = async () => {
+    if (doCompression) {
+        logData = await decompressBase64Brotli(_logData);
+        logData = JSON.parse(logData);
+
+        crData = await decompressBase64Brotli(_crData);
+        crData = JSON.parse(crData);
+
+        graphData = await decompressBase64Brotli(_graphData);
+        graphData = JSON.parse(graphData);
+
+        healingStatsExtension = await decompressBase64Brotli(_healingStatsExtension);
+        healingStatsExtension = JSON.parse(healingStatsExtension);
+
+        barrierStatsExtension = await decompressBase64Brotli(_barrierStatsExtension);
+        barrierStatsExtension = JSON.parse(barrierStatsExtension);
+        
+        onload();
+    } else {
+        onload();
+    }
 }

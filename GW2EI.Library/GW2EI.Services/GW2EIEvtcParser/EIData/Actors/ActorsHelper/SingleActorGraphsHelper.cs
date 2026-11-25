@@ -5,12 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 partial class SingleActor
 {
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageList1S = [];
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageTakenList1S = [];
-
-    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageList1S;
-    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageTakenList1S;
-
+    #region STATES
     private IReadOnlyList<Segment>? _healthUpdates;
     private IReadOnlyList<Segment>? _breakbarPercentUpdates;
     private IReadOnlyList<Segment>? _barrierUpdates;
@@ -110,6 +105,49 @@ partial class SingleActor
         return res;
     }
 
+    private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
+    {
+        int foundIndex = segments.BinarySearchSegments(time, 0, segments.Count - 1);
+        if (foundIndex >= 0)
+        {
+            Segment found = segments[foundIndex];
+            if (found.ContainsPoint(time))
+            {
+                return found.Value;
+            }
+        }
+
+        return -1.0;
+    }
+
+    public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
+    {
+        IReadOnlyList<Segment> hps = GetHealthUpdates(log);
+        if (hps.Count == 0)
+        {
+            return -1.0;
+        }
+
+        return GetPercentValue(hps, time);
+    }
+
+    public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
+    {
+        IReadOnlyList<Segment> barriers = GetBarrierUpdates(log);
+        if (barriers.Count == 0)
+        {
+            return -1.0;
+        }
+
+        return GetPercentValue(barriers, time);
+    }
+    #endregion STATES
+    #region DAMAGE
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageList1S = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageTakenList1S = [];
+
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageListDelta1S = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageTakenListDelta1S = [];
     private static InterpolatedGraph<int> ComputeDamageGraph(IEnumerable<HealthDamageEvent> dls, long start, long end)
     {
         var graph = new InterpolatedGraph<int>(start, end, 1000);
@@ -156,6 +194,29 @@ partial class SingleActor
         return graph;
     }
 
+    public InterpolatedGraph<int> GetDamageGraphDelta(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    {
+        if (!_damageListDelta1S.TryGetValue(damageType, out var graphs))
+        {
+            graphs = new(AgentItem, log);
+            _damageList1S[damageType] = graphs;
+        }
+
+        if (!graphs.TryGetValue(start, end, target, out var graph))
+        {
+            var graph1S = GetDamageGraph(log, start, end, target, damageType);
+            graph = new InterpolatedGraph<int>(start, end, 1000);
+            var graphValue = graph._values;
+            for (int i = graph1S.Values.Count - 1; i > 0; i--)
+            {
+                graphValue[i] = graph1S.Values[i] - graph1S.Values[i - 1];
+            }
+            //
+            graphs.Set(start, end, target, graph);
+        }
+        return graph;
+    }
+
     public InterpolatedGraph<int> GetDamageTakenGraph(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
         if (!_damageTakenList1S.TryGetValue(damageType, out var graphs))
@@ -174,6 +235,36 @@ partial class SingleActor
         return graph;
     }
 
+    public InterpolatedGraph<int> GetDamageTakenGraphDelta(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    {
+        if (!_damageTakenListDelta1S.TryGetValue(damageType, out var graphs))
+        {
+            graphs = new(AgentItem, log);
+            _damageTakenListDelta1S[damageType] = graphs;
+        }
+
+        if (!graphs.TryGetValue(start, end, target, out var graph))
+        {
+            var graph1S = GetDamageTakenGraph(log, start, end, target, damageType);
+            graph = new InterpolatedGraph<int>(start, end, 1000);
+            var graphValue = graph._values;
+            for (int i = graph1S.Values.Count - 1; i > 0; i--)
+            {
+                graphValue[i] = graph1S.Values[i] - graph1S.Values[i - 1];
+            }
+            //
+            graphs.Set(start, end, target, graph);
+        }
+        return graph;
+    }
+    #endregion DAMAGE
+    #region BREAKBAR DAMAGE
+
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageList1S;
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageTakenList1S;
+
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageListDelta1S;
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageTakenListDelta1S;
     private static InterpolatedGraph<double> ComputeBreakbarDamageGraph(IEnumerable<BreakbarDamageEvent> dls, long start, long end)
     {
         var graph = new InterpolatedGraph<double>(start, end, 1000);
@@ -221,6 +312,32 @@ partial class SingleActor
         return brkDmgList;
     }
 
+    public InterpolatedGraph<double>? GetBreakbarDamageGraphDelta(ParsedEvtcLog log, long start, long end, SingleActor? target)
+    {
+        if (!log.CombatData.HasBreakbarDamageData)
+        {
+            return null;
+        }
+        _breakbarDamageListDelta1S ??= new(AgentItem, log);
+        if (_breakbarDamageListDelta1S.TryGetValue(start, end, target, out var res))
+        {
+            return res;
+        }
+
+        var brkDmgList1S = GetBreakbarDamageGraph(log, start, end, target);
+        if (brkDmgList1S == null)
+        {
+            return null;
+        }
+        var brkDmgList = new InterpolatedGraph<double>(start, end, 1000);
+        for (int i = brkDmgList1S.Values.Count - 1; i > 0; i--)
+        {
+            brkDmgList._values[i] = brkDmgList1S.Values[i] - brkDmgList1S.Values[i - 1];
+        }
+        _breakbarDamageListDelta1S.Set(start, end, target, brkDmgList);
+        return brkDmgList;
+    }
+
     public InterpolatedGraph<double>? GetBreakbarDamageTakenGraph(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
         if (!log.CombatData.HasBreakbarDamageData)
@@ -240,41 +357,31 @@ partial class SingleActor
         return brkDmgList;
     }
 
-    private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
+    public InterpolatedGraph<double>? GetBreakbarDamageTakenGraphDelta(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
-        int foundIndex = segments.BinarySearchSegments(time, 0, segments.Count - 1);
-        if (foundIndex >= 0)
+        if (!log.CombatData.HasBreakbarDamageData)
         {
-            Segment found = segments[foundIndex];
-            if (found.ContainsPoint(time))
-            {
-                return found.Value;
-            }
+            return null;
+        }
+        _breakbarDamageTakenListDelta1S ??= new(AgentItem, log);
+        if (_breakbarDamageTakenListDelta1S.TryGetValue(start, end, target, out var res))
+        {
+            return res;
         }
 
-        return -1.0;
-    }
-
-    public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
-    {
-        IReadOnlyList<Segment> hps = GetHealthUpdates(log);
-        if (hps.Count == 0)
+        var brkDmgList1S = GetBreakbarDamageTakenGraph(log, start, end, target);
+        if (brkDmgList1S == null)
         {
-            return -1.0;
+            return null;
         }
-
-        return GetPercentValue(hps, time);
-    }
-
-    public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
-    {
-        IReadOnlyList<Segment> barriers = GetBarrierUpdates(log);
-        if (barriers.Count == 0)
+        var brkDmgList = new InterpolatedGraph<double>(start, end, 1000);
+        for (int i = brkDmgList1S.Values.Count - 1; i > 0; i--)
         {
-            return -1.0;
+            brkDmgList._values[i] = brkDmgList1S.Values[i] - brkDmgList1S.Values[i - 1];
         }
-
-        return GetPercentValue(barriers, time);
+        _breakbarDamageTakenListDelta1S.Set(start, end, target, brkDmgList);
+        return brkDmgList;
     }
+    #endregion BREAKBAR DAMAGE
 
 }
