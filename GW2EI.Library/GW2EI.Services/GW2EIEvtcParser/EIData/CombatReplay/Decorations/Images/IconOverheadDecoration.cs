@@ -16,7 +16,7 @@ internal class IconOverheadDecoration : IconDecoration
         {
             return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
             return new IconOverheadDecorationMetadataDescription(this);
         }

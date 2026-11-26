@@ -9,7 +9,7 @@ internal static class JsonCombatReplayMetaDataBuilder
     public static JsonCombatReplayMetaData BuildJsonCombatReplayMetaData(ParsedEvtcLog log, RawFormatSettings settings)
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
-        var (actors, decorationRendering, decorationMetadata) = log.GetCombatReplayDescriptions([], []);
+        var (actors, decorationRendering, decorationMetadata) = log.GetCombatReplayDescriptions([], [], []);
         var mapDecorations = decorationRendering.OfType<ArenaDecorationRenderingDescription>().ToList();
         var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>(mapDecorations.Count);
         var jsonCR = new JsonCombatReplayMetaData()

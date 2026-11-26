@@ -20,7 +20,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
         {
             return "MP" + Height + Image.GetHashCode().ToString() + Width;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
             return new MovingPlatformDecorationMetadataDescription(this);
         }

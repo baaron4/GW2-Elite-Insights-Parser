@@ -1,26 +1,17 @@
 ﻿using static GW2EIEvtcParser.EIData.TextDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
 public class TextDecorationMetadataDescription : DecorationMetadataDescription
 {
+    public readonly int Color;
 
-    public string Color { get; private set; }
-
-    public string? BackgroundColor { get; private set; }
-    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration) : base(decoration)
+    public readonly int? BackgroundColor;
+    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration)
     {
         Type = Types.Text;
-        Color = decoration.Color;
-        BackgroundColor = decoration.BackgroundColor;
-    }
-
-    public override void ColorToToken(Dictionary<string, string> colorMap)
-    {
-        Color = GetToken(Color, colorMap);
-        if (BackgroundColor != null)
-        {
-            BackgroundColor = GetToken(BackgroundColor, colorMap);
-        }
+        Color = colorTokenHandler.GetColorIndex(decoration.Color);
+        BackgroundColor = decoration.BackgroundColor == null ? null : colorTokenHandler.GetColorIndex(decoration.BackgroundColor);
     }
 }

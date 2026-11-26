@@ -4,16 +4,11 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class FormDecorationMetadataDescription : AttachedDecorationMetadataDescription
 {
-    public string Color { get; private set; }
+    public readonly int Color;
 
-    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration) : base(decoration)
+    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration, ParsedEvtcLog.ColorTokenHandler colorTokenHandler) : base(decoration)
     {
-        Color = decoration.Color;
-    }
-
-    public override void ColorToToken(Dictionary<string, string> colorMap)
-    {
-        Color = GetToken(Color, colorMap);
+        Color = colorTokenHandler.GetColorIndex(decoration.Color);
     }
 
 }

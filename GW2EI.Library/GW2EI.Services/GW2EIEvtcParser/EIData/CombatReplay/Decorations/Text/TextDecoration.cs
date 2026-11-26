@@ -16,9 +16,9 @@ internal class TextDecoration : Decoration
             BackgroundColor = backgroundColor;
         }
 
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new TextDecorationMetadataDescription(this);
+            return new TextDecorationMetadataDescription(this, colorTokenHandler);
         }
 
         public override string GetSignature()

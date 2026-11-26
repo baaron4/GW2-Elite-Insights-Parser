@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.OverheadProgressBarDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -6,7 +7,7 @@ public class OverheadProgressBarDecorationMetadataDescription : ProgressBarDecor
 {
     public readonly uint PixelWidth;
     public readonly uint PixelHeight;
-    internal OverheadProgressBarDecorationMetadataDescription(OverheadProgressBarDecorationMetadata decoration) : base(decoration)
+    internal OverheadProgressBarDecorationMetadataDescription(OverheadProgressBarDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.ProgressBarOverhead;
         PixelWidth = decoration.PixelWidth;

@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.RectangleDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -7,7 +8,7 @@ public class RectangleDecorationMetadataDescription : FormDecorationMetadataDesc
     public readonly uint Height;
     public readonly uint Width;
 
-    internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration) : base(decoration)
+    internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.Rectangle;
         Width = decoration.Width;

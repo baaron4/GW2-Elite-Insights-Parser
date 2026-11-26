@@ -8,7 +8,7 @@ internal class CombatReplayDto
 {
     public List<CombatReplayRenderingDescription> DecorationRenderings { get; set; }
     public List<CombatReplayMetadataDescription> DecorationMetadata { get; set; }
-    public Dictionary<string, string> ColorMap { get; set; }
+    public Dictionary<int, string> ColorMap { get; set; }
     public List<SingleActorCombatReplayDescription> Actors { get; set; }
     public List<List<double>>? DefaultViewpoints { get; set; }
     public int[] Sizes { get; set; }
@@ -20,19 +20,7 @@ internal class CombatReplayDto
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
         ColorMap = [];
-        (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(used.skills, used.buffs);
-        foreach (var metadata in DecorationMetadata.OfType<DecorationMetadataDescription>())
-        {
-            string originalSignature = metadata.Signature;
-            metadata.ColorToToken(ColorMap);
-            foreach (var rendering in DecorationRenderings.OfType<DecorationRenderingDescription>())
-            {
-                if (rendering.MetadataSignature == originalSignature)
-                {
-                    rendering.MetadataSignature = metadata.Signature;
-                }
-            }
-        }
+        (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(used.skills, used.buffs, ColorMap);
         (int width, int height) = map.GetPixelMapSize();
         Sizes = [width, height];
         MapBounds = [map.MinX, map.MinY, map.MaxX, map.MaxY];

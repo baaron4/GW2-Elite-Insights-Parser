@@ -23,9 +23,9 @@ internal class DoughnutDecoration : FormDecoration
         {
             return "Dough" + OuterRadius + Color + InnerRadius;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new DoughnutDecorationMetadataDescription(this);
+            return new DoughnutDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class DoughnutDecorationRenderingData : FormDecorationRenderingData

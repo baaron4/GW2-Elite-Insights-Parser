@@ -19,9 +19,9 @@ internal class RectangleDecoration : FormDecoration
         {
             return "Rect" + Height + Color + Width;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new RectangleDecorationMetadataDescription(this);
+            return new RectangleDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class RectangleDecorationRenderingData : FormDecorationRenderingData

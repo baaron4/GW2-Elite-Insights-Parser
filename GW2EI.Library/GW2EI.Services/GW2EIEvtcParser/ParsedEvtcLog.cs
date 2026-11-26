@@ -210,15 +210,39 @@ public class ParsedEvtcLog : EvtcLog
         }
         return actor;
     }
+    internal class ColorTokenHandler
+    {
+        private readonly Dictionary<string, int> ColorToIndex = [];
 
+        public int GetColorIndex(string color)
+        {
+            if (!ColorToIndex.TryGetValue(color, out var index))
+            {
+                index = ColorToIndex.Count;
+                ColorToIndex[color] = index;
+            }
+            return index;
+        }
+
+        public void ReverseKeysAndValuesInto(Dictionary<int, string> colorMap)
+        {
+            colorMap.EnsureCapacity(ColorToIndex.Count);
+            foreach (var pair in ColorToIndex)
+            {
+                colorMap.TryAdd(pair.Value, pair.Key);
+            }
+        }
+    }
 
     public
         (
         List<SingleActorCombatReplayDescription> actors,
         List<CombatReplayRenderingDescription> decorationRendering,
         List<CombatReplayMetadataDescription> decorationMetadata
-        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<int, string> colorMap )
     {
+        var colorTokenHandler = new ColorTokenHandler();
+
         var map = LogData.Logic.GetCombatReplayMap(this);
         var actors = new List<SingleActorCombatReplayDescription>();
         var decorationRenderings = new List<CombatReplayRenderingDescription>();
@@ -253,8 +277,9 @@ public class ParsedEvtcLog : EvtcLog
         decorationRenderings.AddRange(LogData.Logic.GetCombatReplayArenaDecorationRenderableDescriptions(map, this));
         foreach (var pair in LogData.Logic.DecorationCache)
         {
-            decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());
+            decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription(colorTokenHandler));
         }
+        colorTokenHandler.ReverseKeysAndValuesInto(colorMap);
         return (actors, decorationRenderings, decorationMetadata);
     }
 }

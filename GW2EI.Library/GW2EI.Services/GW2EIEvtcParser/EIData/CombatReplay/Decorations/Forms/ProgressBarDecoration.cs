@@ -17,9 +17,9 @@ internal class ProgressBarDecoration : RectangleDecoration
         {
             return "Prog" + Height + Color + Width + SecondaryColor;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new ProgressBarDecorationMetadataDescription(this);
+            return new ProgressBarDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class ProgressBarDecorationRenderingData : RectangleDecorationRenderingData

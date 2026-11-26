@@ -18,9 +18,9 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         {
             return "OProg" + Color + Width + Height.ToString() + SecondaryColor + PixelWidth + PixelHeight.ToString();
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new OverheadProgressBarDecorationMetadataDescription(this);
+            return new OverheadProgressBarDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class OverheadProgressBarDecorationRenderingData : ProgressBarDecorationRenderingData

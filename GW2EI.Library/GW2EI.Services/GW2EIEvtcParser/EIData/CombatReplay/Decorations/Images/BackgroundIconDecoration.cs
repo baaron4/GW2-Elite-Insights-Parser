@@ -15,7 +15,7 @@ internal class BackgroundIconDecoration : ImageDecoration
         {
             return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
             return new BackgroundIconDecorationMetadataDescription(this);
         }

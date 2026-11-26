@@ -23,9 +23,9 @@ internal class CircleDecoration : FormDecoration
         {
             return "Cir" + Radius + Color + MinRadius;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new CircleDecorationMetadataDescription(this);
+            return new CircleDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class CircleDecorationRenderingData : FormDecorationRenderingData

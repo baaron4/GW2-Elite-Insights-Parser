@@ -1,15 +1,16 @@
-﻿using static GW2EIEvtcParser.EIData.Decoration;
+﻿using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EIData.Decoration;
 
 namespace GW2EIEvtcParser.EIData;
 
 public abstract class DecorationRenderingDescription : CombatReplayRenderingDescription
 {
-    public string MetadataSignature { get; set; }
+    public readonly ulong MetadataSignature;
     internal DecorationRenderingDescription(_DecorationRenderingData decoration, string metadataSignature)
     {
         Start = decoration.Lifespan.start;
         End = decoration.Lifespan.end;
-        MetadataSignature = metadataSignature;
+        MetadataSignature = metadataSignature.HashCyrb53();
         if (End <= Start)
         {
             // such things should be filtered way before coming here

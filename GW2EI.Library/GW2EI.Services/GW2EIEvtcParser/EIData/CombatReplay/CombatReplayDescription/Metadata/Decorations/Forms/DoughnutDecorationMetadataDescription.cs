@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.DoughnutDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -7,7 +8,7 @@ public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescr
     public readonly uint InnerRadius;
     public readonly uint OuterRadius;
 
-    internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
+    internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.Doughnut;
         OuterRadius = decoration.OuterRadius;

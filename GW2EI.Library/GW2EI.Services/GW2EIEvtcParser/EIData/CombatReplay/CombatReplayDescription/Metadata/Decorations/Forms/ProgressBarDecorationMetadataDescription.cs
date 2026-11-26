@@ -1,20 +1,14 @@
 ﻿using static GW2EIEvtcParser.EIData.ProgressBarDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
 public class ProgressBarDecorationMetadataDescription : RectangleDecorationMetadataDescription
 {
-
-    public string SecondaryColor { get; private set; }
-    internal ProgressBarDecorationMetadataDescription(ProgressBarDecorationMetadata decoration) : base(decoration)
+    public readonly int SecondaryColor;
+    internal ProgressBarDecorationMetadataDescription(ProgressBarDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.ProgressBar;
-        SecondaryColor = decoration.SecondaryColor;
-    }
-
-    public override void ColorToToken(Dictionary<string, string> colorMap)
-    {
-        base.ColorToToken(colorMap);
-        SecondaryColor = GetToken(SecondaryColor, colorMap);
+        SecondaryColor = colorTokenHandler.GetColorIndex(decoration.SecondaryColor);
     }
 }

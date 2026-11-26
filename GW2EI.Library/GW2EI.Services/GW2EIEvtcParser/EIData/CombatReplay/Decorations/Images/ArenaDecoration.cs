@@ -17,7 +17,7 @@ internal class ArenaDecoration : AttachedDecoration
             Width = width;
         }
 
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
             return new ArenaDecorationMetadataDescription(this);
         }

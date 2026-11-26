@@ -24,9 +24,9 @@ internal class LineDecoration : FormDecoration
         {
             return "Line" + Color + "Thickness" + Thickness + "WorldSize" + WorldSizeThickness;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
         {
-            return new LineDecorationMetadataDescription(this);
+            return new LineDecorationMetadataDescription(this, colorTokenHandler);
         }
     }
     public class LineDecorationRenderingData : FormDecorationRenderingData
