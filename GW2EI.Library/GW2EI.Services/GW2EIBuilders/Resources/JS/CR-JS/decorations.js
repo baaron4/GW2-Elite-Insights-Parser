@@ -13,8 +13,8 @@ class GenericMetadata {
 class TextMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
-        this.color = params.color;
-        this.backgroundColor = params.backgroundColor;
+        this.color = typeof params.color === "number" ? params.colorMap[params.color] : null;
+        this.backgroundColor = typeof params.backgroundColor === "number" ? params.colorMap[params.backgroundColor] : null;
     }
 }
 
@@ -104,7 +104,7 @@ class RectangleMetadata extends FormMetadata {
 class ProgressBarMetadata extends RectangleMetadata {
     constructor(params) {
         super(params);
-        this.secondaryColor = params.secondaryColor;
+        this.secondaryColor = typeof params.secondaryColor === "number" ? params.colorMap[params.secondaryColor] : null;
     }
 }
 

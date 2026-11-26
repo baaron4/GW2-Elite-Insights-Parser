@@ -498,11 +498,7 @@ class Animator {
     _initActors(actors, decorationRenderings, decorationMetadata, colorMap) {
         for (let i = 0; i < decorationMetadata.length; i++) {
             const metadata = decorationMetadata[i];
-            if (colorMap) {
-                metadata.color = colorMap[metadata.color] ?? metadata.color;
-                metadata.secondaryColor = colorMap[metadata.secondaryColor] ?? metadata.secondaryColor;
-                metadata.backgroundColor = colorMap[metadata.backgroundColor] ?? metadata.backgroundColor;
-            }
+            metadata.__colorMap = colorMap;
             let MetadataClass = null;
             switch (metadata.type) {
                 case Types.ActorOrientation:
