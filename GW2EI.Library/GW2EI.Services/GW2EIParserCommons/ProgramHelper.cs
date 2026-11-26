@@ -594,20 +594,46 @@ public sealed class ProgramHelper : IDisposable
         }
     }
     #region OUTPUTS
-    private static void CompressFile(string file, MemoryStream str, OperationController operation)
+
+    private enum CompressionFormat
+    {
+        GZIP,
+        Brotli
+    }
+
+    private static void CompressFile(string file, CompressionFormat format, MemoryStream str, OperationController operation)
     {
         // Create the compressed file.
         byte[] data = str.ToArray();
-        string outputFile = file + ".gz";
-        using (FileStream outFile =
-                    File.Create(outputFile))
+        string outputFile;
+        switch (format)
         {
-            using var Compress =
-                new GZipStream(outFile,
-                CompressionMode.Compress);
-            // Copy the source file into 
-            // the compression stream.
-            Compress.Write(data, 0, data.Length);
+            case CompressionFormat.GZIP:
+                outputFile = file + ".gz";
+                using (FileStream outFile =
+                            File.Create(outputFile))
+                {
+                    using var CompressGzip =
+                        new GZipStream(outFile,
+                        CompressionMode.Compress);
+                    // Copy the source file into 
+                    // the compression stream.
+                    CompressGzip.Write(data, 0, data.Length);
+                }
+                break;
+            case CompressionFormat.Brotli:
+            default:
+                outputFile = file + ".br";
+                using (FileStream outFile =
+                            File.Create(outputFile))
+                {
+                    using var CompressBr =
+                        new BrotliStream(outFile, CompressionLevel.Optimal);
+                    // Copy the source file into 
+                    // the compression stream.
+                    CompressBr.Write(data, 0, data.Length);
+                }
+                break;
         }
         operation.AddFile(outputFile);
     }
@@ -752,7 +778,7 @@ public sealed class ProgramHelper : IDisposable
 
                 if (str is MemoryStream msr)
                 {
-                    CompressFile(outputFile, msr, operation);
+                    CompressFile(outputFile, Settings.CompressRawFormat == "gzip" ? CompressionFormat.GZIP : CompressionFormat.Brotli, msr, operation);
                     operation.UpdateProgressWithCancellationCheck("Program: JSON compressed");
                 }
                 else

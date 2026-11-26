@@ -482,6 +482,21 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
 
     [global::System.Configuration.UserScopedSettingAttribute()]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("gzip")]
+    public string CompressRawFormat
+    {
+        get
+        {
+            return (string)this[nameof(CompressRawFormat)];
+        }
+        set
+        {
+            this[nameof(CompressRawFormat)] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Configuration.DefaultSettingValueAttribute("True")]
     public bool ComputeDamageModifiers
     {

@@ -56,6 +56,7 @@ public class ProgramSettings
     // JSON
     public bool RawTimelineArrays { get; set; } = true;
     public bool CompressRaw { get; set; } = false;
+    public string CompressRawFormat { get; set; } = "gzip";
     public bool IndentJSON { get; set; } = false;
     // Other
     public int MemoryLimit { get; set; } = 0;
@@ -106,6 +107,7 @@ public class ProgramSettings
         HtmlCompressJson = settings.HtmlCompressJson;
         RawTimelineArrays = settings.RawTimelineArrays;
         CompressRaw = settings.CompressRaw;
+        CompressRawFormat = settings.CompressRawFormat;
         IndentJSON = settings.IndentJSON;
         MemoryLimit = settings.MemoryLimit;
     }
