@@ -23,7 +23,7 @@ internal class RegularPolygonDecoration : FormDecoration
         {
             return "RegPol" + Radius + Color + NbPolygon;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
         {
             return new RegularPolygonDecorationMetadataDescription(this, colorTokenHandler);
         }

@@ -11,7 +11,7 @@ internal class ActorOrientationDecoration : AttachedDecoration
         {
             return "AO";
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
         {
             return new ActorOrientationDecorationMetadataDescription(this);
         }

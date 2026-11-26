@@ -8,7 +8,7 @@ public class RegularPolygonDecorationMetadataDescription : FormDecorationMetadat
     public readonly uint Radius;
     public readonly uint NbPolygon;
 
-    internal RegularPolygonDecorationMetadataDescription(RegularPolygonDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal RegularPolygonDecorationMetadataDescription(RegularPolygonDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.RegularPolygon;
         Radius = decoration.Radius;

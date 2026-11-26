@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 public class TextOverheadDecorationMetadataDescription : TextDecorationMetadataDescription
 {
 
-    internal TextOverheadDecorationMetadataDescription(TextDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal TextOverheadDecorationMetadataDescription(TextDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.TextOverhead;
     }

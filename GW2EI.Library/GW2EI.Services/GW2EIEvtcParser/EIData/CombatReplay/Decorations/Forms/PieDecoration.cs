@@ -25,7 +25,7 @@ internal class PieDecoration : CircleDecoration
         {
             return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
         {
             return new PieDecorationMetadataDescription(this, colorTokenHandler);
         }

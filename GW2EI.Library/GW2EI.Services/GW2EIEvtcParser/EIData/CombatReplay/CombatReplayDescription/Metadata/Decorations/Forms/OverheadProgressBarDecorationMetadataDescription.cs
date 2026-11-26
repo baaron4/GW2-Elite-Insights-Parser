@@ -7,7 +7,7 @@ public class OverheadProgressBarDecorationMetadataDescription : ProgressBarDecor
 {
     public readonly uint PixelWidth;
     public readonly uint PixelHeight;
-    internal OverheadProgressBarDecorationMetadataDescription(OverheadProgressBarDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal OverheadProgressBarDecorationMetadataDescription(OverheadProgressBarDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.ProgressBarOverhead;
         PixelWidth = decoration.PixelWidth;

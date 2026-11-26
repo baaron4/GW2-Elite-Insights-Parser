@@ -16,7 +16,7 @@ internal class TextOverheadDecoration : TextDecoration
         {
             return "TxtO" + Color + BackgroundColor ?? "";
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
         {
             return new TextOverheadDecorationMetadataDescription(this, colorTokenHandler);
         }

@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Decoration;
+﻿using static GW2EIEvtcParser.EIData.Decoration;
 
 namespace GW2EIEvtcParser.EIData;
 

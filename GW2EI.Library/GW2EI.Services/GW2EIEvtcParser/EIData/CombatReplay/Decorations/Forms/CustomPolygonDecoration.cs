@@ -15,7 +15,7 @@ internal class CustomPolygonDecoration : FormDecoration
         {
             return "CusPol" + Color;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
         {
             return new CustomPolygonDecorationMetadataDescription(this, colorTokenHandler);
         }

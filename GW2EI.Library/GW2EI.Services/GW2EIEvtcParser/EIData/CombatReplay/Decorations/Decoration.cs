@@ -9,7 +9,7 @@ public abstract class Decoration
 
         public abstract string GetSignature();
 
-        internal abstract DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.ColorTokenHandler colorTokenHandler);
+        internal abstract DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler);
 
     }
 

@@ -210,26 +210,26 @@ public class ParsedEvtcLog : EvtcLog
         }
         return actor;
     }
-    internal class ColorTokenHandler
+    internal class TokenHandler
     {
-        private readonly Dictionary<string, int> ColorToIndex = [];
+        private readonly Dictionary<string, int> ToIndex = [];
 
-        public int GetColorIndex(string color)
+        public int GetIndex(string token)
         {
-            if (!ColorToIndex.TryGetValue(color, out var index))
+            if (!ToIndex.TryGetValue(token, out var index))
             {
-                index = ColorToIndex.Count;
-                ColorToIndex[color] = index;
+                index = ToIndex.Count;
+                ToIndex[token] = index;
             }
             return index;
         }
 
-        public void ReverseKeysAndValuesInto(Dictionary<int, string> colorMap)
+        public void ReverseKeysAndValuesInto(Dictionary<int, string> tokenMap)
         {
-            colorMap.EnsureCapacity(ColorToIndex.Count);
-            foreach (var pair in ColorToIndex)
+            tokenMap.EnsureCapacity(ToIndex.Count);
+            foreach (var pair in ToIndex)
             {
-                colorMap.TryAdd(pair.Value, pair.Key);
+                tokenMap.TryAdd(pair.Value, pair.Key);
             }
         }
     }
@@ -241,7 +241,7 @@ public class ParsedEvtcLog : EvtcLog
         List<CombatReplayMetadataDescription> decorationMetadata
         ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<int, string> colorMap )
     {
-        var colorTokenHandler = new ColorTokenHandler();
+        var colorTokenHandler = new TokenHandler();
 
         var map = LogData.Logic.GetCombatReplayMap(this);
         var actors = new List<SingleActorCombatReplayDescription>();

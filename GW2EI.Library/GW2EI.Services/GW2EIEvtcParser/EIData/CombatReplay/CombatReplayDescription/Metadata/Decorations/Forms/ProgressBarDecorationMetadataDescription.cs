@@ -6,9 +6,9 @@ namespace GW2EIEvtcParser.EIData;
 public class ProgressBarDecorationMetadataDescription : RectangleDecorationMetadataDescription
 {
     public readonly int SecondaryColor;
-    internal ProgressBarDecorationMetadataDescription(ProgressBarDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal ProgressBarDecorationMetadataDescription(ProgressBarDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.ProgressBar;
-        SecondaryColor = colorTokenHandler.GetColorIndex(decoration.SecondaryColor);
+        SecondaryColor = colorTokenHandler.GetIndex(decoration.SecondaryColor);
     }
 }

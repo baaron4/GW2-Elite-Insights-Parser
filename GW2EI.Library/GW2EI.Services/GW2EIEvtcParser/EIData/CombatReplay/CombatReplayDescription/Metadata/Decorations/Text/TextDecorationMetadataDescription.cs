@@ -8,10 +8,10 @@ public class TextDecorationMetadataDescription : DecorationMetadataDescription
     public readonly int Color;
 
     public readonly int? BackgroundColor;
-    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration)
+    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration)
     {
         Type = Types.Text;
-        Color = colorTokenHandler.GetColorIndex(decoration.Color);
-        BackgroundColor = decoration.BackgroundColor == null ? null : colorTokenHandler.GetColorIndex(decoration.BackgroundColor);
+        Color = colorTokenHandler.GetIndex(decoration.Color);
+        BackgroundColor = decoration.BackgroundColor == null ? null : colorTokenHandler.GetIndex(decoration.BackgroundColor);
     }
 }

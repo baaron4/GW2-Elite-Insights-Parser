@@ -7,7 +7,7 @@ public class PieDecorationMetadataDescription : CircleDecorationMetadataDescript
 {
     public float OpeningAngle { get; set; }
 
-    internal PieDecorationMetadataDescription(PieDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal PieDecorationMetadataDescription(PieDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.Pie;
         OpeningAngle = decoration.OpeningAngle;

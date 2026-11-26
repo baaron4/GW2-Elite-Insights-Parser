@@ -8,7 +8,7 @@ public class CircleDecorationMetadataDescription : FormDecorationMetadataDescrip
     public readonly uint Radius;
     public readonly uint MinRadius;
 
-    internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration, ColorTokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
     {
         Type = Types.Circle;
         Radius = decoration.Radius;

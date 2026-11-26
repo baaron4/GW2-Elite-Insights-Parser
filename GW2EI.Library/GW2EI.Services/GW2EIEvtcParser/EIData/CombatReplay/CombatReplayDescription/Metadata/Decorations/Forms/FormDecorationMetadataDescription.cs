@@ -6,9 +6,9 @@ public abstract class FormDecorationMetadataDescription : AttachedDecorationMeta
 {
     public readonly int Color;
 
-    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration, ParsedEvtcLog.ColorTokenHandler colorTokenHandler) : base(decoration)
+    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration, ParsedEvtcLog.TokenHandler colorTokenHandler) : base(decoration)
     {
-        Color = colorTokenHandler.GetColorIndex(decoration.Color);
+        Color = colorTokenHandler.GetIndex(decoration.Color);
     }
 
 }
