@@ -13,8 +13,7 @@ class GenericMetadata {
 class TextMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
-        this.color = typeof params.color === "number" ? params.colorMap[params.color] : null;
-        this.backgroundColor = typeof params.backgroundColor === "number" ? params.colorMap[params.backgroundColor] : null;
+        this.backgroundColor = typeof params.backgroundColor === "number" ? params.__colorMap[params.backgroundColor] : null;
     }
 }
 
@@ -39,7 +38,7 @@ class ActorOrientationMetadata extends GenericAttachedMetadata {
 class FormMetadata extends GenericAttachedMetadata {
     constructor(params) {
         super(params);
-        this.color = params.color;
+        this.color = typeof params.color === "number" ? params.__colorMap[params.color] : null;
     }
 }
 
@@ -104,7 +103,7 @@ class RectangleMetadata extends FormMetadata {
 class ProgressBarMetadata extends RectangleMetadata {
     constructor(params) {
         super(params);
-        this.secondaryColor = typeof params.secondaryColor === "number" ? params.colorMap[params.secondaryColor] : null;
+        this.secondaryColor = typeof params.secondaryColor === "number" ? params.__colorMap[params.secondaryColor] : null;
     }
 }
 
