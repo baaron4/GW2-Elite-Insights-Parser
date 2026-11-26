@@ -5,13 +5,13 @@ namespace GW2EIEvtcParser.EIData;
 
 public class TextDecorationMetadataDescription : DecorationMetadataDescription
 {
-    public readonly int Color;
+    public readonly ulong Color;
 
-    public readonly int? BackgroundColor;
-    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration)
+    public readonly ulong? BackgroundColor;
+    internal TextDecorationMetadataDescription(TextDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Text;
-        Color = colorTokenHandler.GetIndex(decoration.Color);
-        BackgroundColor = decoration.BackgroundColor == null ? null : colorTokenHandler.GetIndex(decoration.BackgroundColor);
+        Color = stringToUlongHandler.GetColorIndex(decoration.Color);
+        BackgroundColor = decoration.BackgroundColor == null ? null : stringToUlongHandler.GetColorIndex(decoration.BackgroundColor);
     }
 }

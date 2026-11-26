@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -38,7 +39,7 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
     public Position[] Positions { get; set; }
 
 
-    internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)
+    internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature, StringToUlongHandler stringToUlongHandler) : base(decoration, metadataSignature, stringToUlongHandler)
     {
         Type = Types.MovingPlatform;
         Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>

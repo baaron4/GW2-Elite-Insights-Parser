@@ -8,7 +8,7 @@ internal class CombatReplayDto
 {
     public List<CombatReplayRenderingDescription> DecorationRenderings { get; set; }
     public List<CombatReplayMetadataDescription> DecorationMetadata { get; set; }
-    public Dictionary<int, string> ColorMap { get; set; }
+    public Dictionary<ulong, string> ColorMap { get; set; }
     public List<SingleActorCombatReplayDescription> Actors { get; set; }
     public List<List<double>>? DefaultViewpoints { get; set; }
     public int[] Sizes { get; set; }

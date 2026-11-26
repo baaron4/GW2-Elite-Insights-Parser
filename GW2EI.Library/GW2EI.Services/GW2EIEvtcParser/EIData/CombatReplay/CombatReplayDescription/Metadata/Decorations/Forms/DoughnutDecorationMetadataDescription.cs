@@ -8,7 +8,7 @@ public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescr
     public readonly uint InnerRadius;
     public readonly uint OuterRadius;
 
-    internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Doughnut;
         OuterRadius = decoration.OuterRadius;

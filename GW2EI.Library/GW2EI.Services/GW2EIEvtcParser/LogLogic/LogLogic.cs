@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.MechanicIDs;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -625,12 +626,12 @@ public abstract class LogLogic
         }
     }
 
-    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayArenaDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log)
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayArenaDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, StringToUlongHandler stringToUlongHandler)
     {
-        return ArenaDecorations.GetCombatReplayRenderableDescriptions(map, log, [], []);
+        return ArenaDecorations.GetCombatReplayRenderableDescriptions(map, log, [], [], stringToUlongHandler);
     }
 
-    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayEnvironmentDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayEnvironmentDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, StringToUlongHandler stringToUlongHandler)
     {
         if (EnvironmentDecorations == null)
         {
@@ -638,7 +639,7 @@ public abstract class LogLogic
             EnvironmentDecorations = new(DecorationCache);
             ComputeEnvironmentCombatReplayDecorations(log, EnvironmentDecorations);
         }
-        return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
+        return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs, stringToUlongHandler);
     }
 
     internal virtual LogData.Mode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)

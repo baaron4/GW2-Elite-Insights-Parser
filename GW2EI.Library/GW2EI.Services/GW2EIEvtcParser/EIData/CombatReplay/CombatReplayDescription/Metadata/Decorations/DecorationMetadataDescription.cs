@@ -1,5 +1,5 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Decoration;
+﻿using static GW2EIEvtcParser.EIData.Decoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -7,8 +7,8 @@ public abstract class DecorationMetadataDescription : CombatReplayMetadataDescri
 {
 
     public readonly ulong Signature;
-    internal DecorationMetadataDescription(_DecorationMetadata decoration) : base()
+    internal DecorationMetadataDescription(_DecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base()
     {
-        Signature = decoration.GetSignature().HashCyrb53();
+        Signature = stringToUlongHandler.GetSignatureIndex(decoration.GetSignature());
     }
 }

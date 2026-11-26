@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 public class CustomPolygonDecorationMetadataDescription : FormDecorationMetadataDescription
 {
 
-    internal CustomPolygonDecorationMetadataDescription(CustomPolygonDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal CustomPolygonDecorationMetadataDescription(CustomPolygonDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.CustomPolygon;
     }

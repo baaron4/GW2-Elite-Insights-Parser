@@ -210,26 +210,46 @@ public class ParsedEvtcLog : EvtcLog
         }
         return actor;
     }
-    internal class TokenHandler
+    internal class StringToUlongHandler
     {
-        private readonly Dictionary<string, int> ToIndex = [];
+        private readonly Dictionary<string, ulong> colorToIndex = [];
+        private readonly Dictionary<string, ulong> sigToIndex = [];
 
-        public int GetIndex(string token)
+        private const ulong JS_MaxSafeInteger = (1 << 53) - 1; // Number.MAX_SAFE_INTEGER in JS
+
+        public ulong GetColorIndex(string color)
         {
-            if (!ToIndex.TryGetValue(token, out var index))
+            if (!colorToIndex.TryGetValue(color, out var index))
             {
-                index = ToIndex.Count;
-                ToIndex[token] = index;
+                index = (ulong)colorToIndex.Count;
+                if (index > JS_MaxSafeInteger)
+                {
+                    throw new InvalidOperationException("Too many indices in Token Handler");
+                }
+                colorToIndex[color] = index;
+            }
+            return index;
+        }
+        public ulong GetSignatureIndex(string sig)
+        {
+            if (!sigToIndex.TryGetValue(sig, out var index))
+            {
+                index = (ulong)sigToIndex.Count;
+                if (index > JS_MaxSafeInteger)
+                {
+                    throw new InvalidOperationException("Too many indices in Token Handler");
+                }
+                sigToIndex[sig] = index;
             }
             return index;
         }
 
-        public void ReverseKeysAndValuesInto(Dictionary<int, string> tokenMap)
+        public void ReverseColorKeysAndValuesInto(Dictionary<ulong, string> colorMap)
         {
-            tokenMap.EnsureCapacity(ToIndex.Count);
-            foreach (var pair in ToIndex)
+            colorMap.EnsureCapacity(colorToIndex.Count);
+            foreach (var pair in colorToIndex)
             {
-                tokenMap.TryAdd(pair.Value, pair.Key);
+                colorMap.TryAdd(pair.Value, pair.Key);
             }
         }
     }
@@ -239,9 +259,9 @@ public class ParsedEvtcLog : EvtcLog
         List<SingleActorCombatReplayDescription> actors,
         List<CombatReplayRenderingDescription> decorationRendering,
         List<CombatReplayMetadataDescription> decorationMetadata
-        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<int, string> colorMap )
+        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<ulong, string> colorMap )
     {
-        var colorTokenHandler = new TokenHandler();
+        var stringToUlongHandler = new StringToUlongHandler();
 
         var map = LogData.Logic.GetCombatReplayMap(this);
         var actors = new List<SingleActorCombatReplayDescription>();
@@ -253,7 +273,7 @@ public class ParsedEvtcLog : EvtcLog
             if (!(actor.IsFakeActor || !actor.HasCombatReplayPositions(this)))
             {
                 actors.Add(actor.GetCombatReplayDescription(map, this));
-                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs, stringToUlongHandler));
             }
             foreach (Minions minions in actor.GetMinions(this))
             {
@@ -270,16 +290,16 @@ public class ParsedEvtcLog : EvtcLog
                 continue;
             }
             actors.Add(actor.GetCombatReplayDescription(map, this));
-            decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+            decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs, stringToUlongHandler));
 
         }
-        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayEnvironmentDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
-        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayArenaDecorationRenderableDescriptions(map, this));
+        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayEnvironmentDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs, stringToUlongHandler));
+        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayArenaDecorationRenderableDescriptions(map, this, stringToUlongHandler));
         foreach (var pair in LogData.Logic.DecorationCache)
         {
-            decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription(colorTokenHandler));
+            decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription(stringToUlongHandler));
         }
-        colorTokenHandler.ReverseKeysAndValuesInto(colorMap);
+        stringToUlongHandler.ReverseColorKeysAndValuesInto(colorMap);
         return (actors, decorationRenderings, decorationMetadata);
     }
 }

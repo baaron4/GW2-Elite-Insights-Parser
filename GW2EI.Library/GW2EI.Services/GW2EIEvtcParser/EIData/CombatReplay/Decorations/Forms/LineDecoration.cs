@@ -24,9 +24,9 @@ internal class LineDecoration : FormDecoration
         {
             return "Line" + Color + "Thickness" + Thickness + "WorldSize" + WorldSizeThickness;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new LineDecorationMetadataDescription(this, colorTokenHandler);
+            return new LineDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class LineDecorationRenderingData : FormDecorationRenderingData
@@ -43,9 +43,9 @@ internal class LineDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;

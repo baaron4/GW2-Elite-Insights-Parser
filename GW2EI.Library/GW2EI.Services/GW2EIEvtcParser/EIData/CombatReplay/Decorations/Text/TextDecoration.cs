@@ -16,9 +16,9 @@ internal class TextDecoration : Decoration
             BackgroundColor = backgroundColor;
         }
 
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new TextDecorationMetadataDescription(this, colorTokenHandler);
+            return new TextDecorationMetadataDescription(this, stringToUlongHandler);
         }
 
         public override string GetSignature()
@@ -77,9 +77,9 @@ internal class TextDecoration : Decoration
             SkillMode = skill;
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new TextDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new TextDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new TextDecorationMetadata DecorationMetadata => (TextDecorationMetadata)base.DecorationMetadata;

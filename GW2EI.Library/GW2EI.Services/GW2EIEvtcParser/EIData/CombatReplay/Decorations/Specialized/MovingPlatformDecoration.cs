@@ -20,18 +20,18 @@ internal class MovingPlatformDecoration : BackgroundDecoration
         {
             return "MP" + Height + Image.GetHashCode().ToString() + Width;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new MovingPlatformDecorationMetadataDescription(this);
+            return new MovingPlatformDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     internal class MovingPlatformDecorationRenderingData((long, long) lifespan) : BackgroundDecorationRenderingData(lifespan)
     {
         public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = [];
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature);
+            return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature, stringToUlongHandler);
         }
     }
     private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;

@@ -23,9 +23,9 @@ internal class CircleDecoration : FormDecoration
         {
             return "Cir" + Radius + Color + MinRadius;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new CircleDecorationMetadataDescription(this, colorTokenHandler);
+            return new CircleDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class CircleDecorationRenderingData : FormDecorationRenderingData
@@ -34,9 +34,9 @@ internal class CircleDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new CircleDecorationMetadata DecorationMetadata => (CircleDecorationMetadata)base.DecorationMetadata;

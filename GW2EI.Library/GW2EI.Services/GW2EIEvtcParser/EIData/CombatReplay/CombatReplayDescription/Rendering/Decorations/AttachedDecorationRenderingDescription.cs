@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.AttachedDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -9,7 +10,7 @@ public abstract class AttachedDecorationRenderingDescription : DecorationRenderi
     public readonly ConnectorDescription? RotationConnectedTo;
     public readonly SkillModeDescription? SkillMode = null;
 
-    internal AttachedDecorationRenderingDescription(ParsedEvtcLog log, AttachedDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(decoration, metadataSignature)
+    internal AttachedDecorationRenderingDescription(ParsedEvtcLog log, AttachedDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler) : base(decoration, metadataSignature, stringToUlongHandler)
     {
         ConnectedTo = decoration.ConnectedTo.GetConnectedTo(map, log);
         RotationConnectedTo = decoration.RotationConnectedTo?.GetConnectedTo(map, log);

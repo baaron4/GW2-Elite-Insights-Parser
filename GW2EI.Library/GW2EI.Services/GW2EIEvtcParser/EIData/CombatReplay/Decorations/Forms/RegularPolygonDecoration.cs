@@ -23,9 +23,9 @@ internal class RegularPolygonDecoration : FormDecoration
         {
             return "RegPol" + Radius + Color + NbPolygon;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new RegularPolygonDecorationMetadataDescription(this, colorTokenHandler);
+            return new RegularPolygonDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class RegularPolygonDecorationRenderingData : FormDecorationRenderingData
@@ -34,9 +34,9 @@ internal class RegularPolygonDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new RegularPolygonDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new RegularPolygonDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new RegularPolygonDecorationMetadata DecorationMetadata => (RegularPolygonDecorationMetadata)base.DecorationMetadata;

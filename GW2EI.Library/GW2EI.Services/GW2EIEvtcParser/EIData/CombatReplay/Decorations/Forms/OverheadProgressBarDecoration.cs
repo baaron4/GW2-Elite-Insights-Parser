@@ -18,9 +18,9 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         {
             return "OProg" + Color + Width + Height.ToString() + SecondaryColor + PixelWidth + PixelHeight.ToString();
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new OverheadProgressBarDecorationMetadataDescription(this, colorTokenHandler);
+            return new OverheadProgressBarDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class OverheadProgressBarDecorationRenderingData : ProgressBarDecorationRenderingData
@@ -29,9 +29,9 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new OverheadProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new OverheadProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new OverheadProgressBarDecorationMetadata DecorationMetadata => (OverheadProgressBarDecorationMetadata)base.DecorationMetadata;

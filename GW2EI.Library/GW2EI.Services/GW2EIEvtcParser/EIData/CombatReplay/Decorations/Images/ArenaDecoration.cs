@@ -17,9 +17,9 @@ internal class ArenaDecoration : AttachedDecoration
             Width = width;
         }
 
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ArenaDecorationMetadataDescription(this);
+            return new ArenaDecorationMetadataDescription(this, stringToUlongHandler);
         }
 
         public override string GetSignature()
@@ -33,9 +33,9 @@ internal class ArenaDecoration : AttachedDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ArenaDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new ArenaDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
 
         public override void UsingRotationConnector(RotationConnector? rotationConnectedTo)

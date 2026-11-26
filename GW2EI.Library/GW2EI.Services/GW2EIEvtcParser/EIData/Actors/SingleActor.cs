@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -438,9 +439,9 @@ public abstract partial class SingleActor : Actor
         return CombatReplay;
     }
 
-    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, StringToUlongHandler stringToUlongHandler)
     {
-        return GetCombatReplay(log).Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
+        return GetCombatReplay(log).Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs, stringToUlongHandler);
     }
 
     protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)

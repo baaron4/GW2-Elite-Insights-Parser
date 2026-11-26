@@ -9,7 +9,7 @@ public abstract class Decoration
 
         public abstract string GetSignature();
 
-        internal abstract DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler);
+        internal abstract DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler);
 
     }
 
@@ -21,7 +21,7 @@ public abstract class Decoration
         {
             Lifespan = (lifespan.start, lifespan.end);
         }
-        public abstract DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
+        internal abstract DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler);
     }
 
     internal readonly _DecorationMetadata DecorationMetadata;

@@ -25,9 +25,9 @@ internal class PieDecoration : CircleDecoration
         {
             return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new PieDecorationMetadataDescription(this, colorTokenHandler);
+            return new PieDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class PieDecorationRenderingData : CircleDecorationRenderingData
@@ -36,9 +36,9 @@ internal class PieDecoration : CircleDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new PieDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new PieDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new PieDecorationMetadata DecorationMetadata => (PieDecorationMetadata)base.DecorationMetadata;

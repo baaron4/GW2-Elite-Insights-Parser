@@ -17,9 +17,9 @@ internal class ProgressBarDecoration : RectangleDecoration
         {
             return "Prog" + Height + Color + Width + SecondaryColor;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ProgressBarDecorationMetadataDescription(this, colorTokenHandler);
+            return new ProgressBarDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class ProgressBarDecorationRenderingData : RectangleDecorationRenderingData
@@ -31,9 +31,9 @@ internal class ProgressBarDecoration : RectangleDecoration
             Progress = progress;
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new ProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
 
         public void UsingInterpolationMethod(InterpolationMethod method)

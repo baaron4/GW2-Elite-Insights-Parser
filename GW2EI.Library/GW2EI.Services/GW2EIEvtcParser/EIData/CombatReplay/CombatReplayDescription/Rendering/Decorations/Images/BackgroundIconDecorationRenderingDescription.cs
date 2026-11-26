@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.BackgroundIconDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -8,7 +9,7 @@ public class BackgroundIconDecorationRenderingDescription : ImageDecorationRende
 
     public readonly IReadOnlyList<float> Opacities;
     public readonly IReadOnlyList<float> Heights;
-    internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
+    internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler)
     {
         Type = Types.BackgroundIcon;
         IsMechanicOrSkill = false;

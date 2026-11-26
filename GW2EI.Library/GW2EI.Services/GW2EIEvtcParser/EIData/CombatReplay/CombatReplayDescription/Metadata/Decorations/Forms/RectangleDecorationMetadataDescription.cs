@@ -8,7 +8,7 @@ public class RectangleDecorationMetadataDescription : FormDecorationMetadataDesc
     public readonly uint Height;
     public readonly uint Width;
 
-    internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Rectangle;
         Width = decoration.Width;

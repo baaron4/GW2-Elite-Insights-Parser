@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.ImageDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -8,7 +9,7 @@ public abstract class ImageDecorationMetadataDescription : AttachedDecorationMet
     public readonly uint PixelSize;
     public readonly uint WorldSize;
 
-    internal ImageDecorationMetadataDescription(ImageDecorationMetadata decoration) : base(decoration)
+    internal ImageDecorationMetadataDescription(ImageDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Image = decoration.Image;
         PixelSize = decoration.PixelSize;

@@ -11,9 +11,9 @@ internal class ActorOrientationDecoration : AttachedDecoration
         {
             return "AO";
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ActorOrientationDecorationMetadataDescription(this);
+            return new ActorOrientationDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class ActorOrientationDecorationRenderingData : AttachedDecorationRenderingData
@@ -30,9 +30,9 @@ internal class ActorOrientationDecoration : AttachedDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
 

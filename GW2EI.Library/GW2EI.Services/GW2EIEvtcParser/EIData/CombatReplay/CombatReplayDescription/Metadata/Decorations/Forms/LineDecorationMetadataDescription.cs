@@ -8,7 +8,7 @@ public class LineDecorationMetadataDescription : FormDecorationMetadataDescripti
 
     public readonly bool WorldSizeThickness;
     public readonly uint Thickness;
-    internal LineDecorationMetadataDescription(LineDecorationMetadata decoration, TokenHandler colorTokenHandler) : base(decoration, colorTokenHandler)
+    internal LineDecorationMetadataDescription(LineDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Line;
         WorldSizeThickness = decoration.WorldSizeThickness;

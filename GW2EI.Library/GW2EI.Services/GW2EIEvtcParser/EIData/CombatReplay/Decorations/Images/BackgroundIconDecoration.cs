@@ -15,9 +15,9 @@ internal class BackgroundIconDecoration : ImageDecoration
         {
             return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
         }
-        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.TokenHandler colorTokenHandler)
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new BackgroundIconDecorationMetadataDescription(this);
+            return new BackgroundIconDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class BackgroundIconDecorationRenderingData : ImageDecorationRenderingData
@@ -33,9 +33,9 @@ internal class BackgroundIconDecoration : ImageDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, ParsedEvtcLog.StringToUlongHandler stringToUlongHandler)
         {
-            return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new BackgroundIconDecorationRenderingData DecorationRenderingData => (BackgroundIconDecorationRenderingData)base.DecorationRenderingData;
