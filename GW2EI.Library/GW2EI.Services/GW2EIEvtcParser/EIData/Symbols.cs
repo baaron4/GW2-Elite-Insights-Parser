@@ -7,9 +7,8 @@ internal class Symbol(string symbol)
 
 internal static class Symbols
 {
-    // Don't work
-    //public static Symbol Asterisk = new Symbol("asterisk");
-    //public static Symbol AsteriskOpen = new Symbol("asterisk-open");
+    public static Symbol Asterisk = new("asterisk");
+    public static Symbol AsteriskOpen = new("asterisk-open");
     public static Symbol Bowtie = new("bowtie");
     public static Symbol BowtieOpen = new("bowtie-open");
     public static Symbol X = new("x");
