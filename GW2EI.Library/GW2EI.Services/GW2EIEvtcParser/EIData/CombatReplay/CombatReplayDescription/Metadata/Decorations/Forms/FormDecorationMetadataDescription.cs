@@ -1,14 +1,15 @@
 ﻿using static GW2EIEvtcParser.EIData.FormDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
 public abstract class FormDecorationMetadataDescription : AttachedDecorationMetadataDescription
 {
-    public readonly string Color;
+    public readonly ulong Color;
 
-    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration) : base(decoration)
+    internal FormDecorationMetadataDescription(FormDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
-        Color = decoration.Color;
+        Color = stringToUlongHandler.GetColorIndex(decoration.Color);
     }
 
 }

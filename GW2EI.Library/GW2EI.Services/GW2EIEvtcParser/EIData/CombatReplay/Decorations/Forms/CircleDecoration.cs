@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -23,9 +24,9 @@ internal class CircleDecoration : FormDecoration
         {
             return "Cir" + Radius + Color + MinRadius;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new CircleDecorationMetadataDescription(this);
+            return new CircleDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class CircleDecorationRenderingData : FormDecorationRenderingData
@@ -34,9 +35,9 @@ internal class CircleDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new CircleDecorationMetadata DecorationMetadata => (CircleDecorationMetadata)base.DecorationMetadata;

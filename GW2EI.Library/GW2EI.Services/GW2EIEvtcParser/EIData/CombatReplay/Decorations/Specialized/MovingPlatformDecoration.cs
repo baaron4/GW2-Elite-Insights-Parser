@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -20,18 +21,18 @@ internal class MovingPlatformDecoration : BackgroundDecoration
         {
             return "MP" + Height + Image.GetHashCode().ToString() + Width;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new MovingPlatformDecorationMetadataDescription(this);
+            return new MovingPlatformDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     internal class MovingPlatformDecorationRenderingData((long, long) lifespan) : BackgroundDecorationRenderingData(lifespan)
     {
         public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = [];
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature);
+            return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature, stringToUlongHandler);
         }
     }
     private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;

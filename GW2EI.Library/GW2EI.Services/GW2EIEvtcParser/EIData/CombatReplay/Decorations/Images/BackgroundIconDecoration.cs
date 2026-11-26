@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -15,9 +16,9 @@ internal class BackgroundIconDecoration : ImageDecoration
         {
             return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new BackgroundIconDecorationMetadataDescription(this);
+            return new BackgroundIconDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class BackgroundIconDecorationRenderingData : ImageDecorationRenderingData
@@ -33,9 +34,9 @@ internal class BackgroundIconDecoration : ImageDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new BackgroundIconDecorationRenderingData DecorationRenderingData => (BackgroundIconDecorationRenderingData)base.DecorationRenderingData;

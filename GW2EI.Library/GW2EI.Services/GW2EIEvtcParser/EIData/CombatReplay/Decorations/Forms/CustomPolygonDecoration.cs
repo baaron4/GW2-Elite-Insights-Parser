@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -15,9 +16,9 @@ internal class CustomPolygonDecoration : FormDecoration
         {
             return "CusPol" + Color;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new CustomPolygonDecorationMetadataDescription(this);
+            return new CustomPolygonDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class CustomPolygonDecorationRenderingData : FormDecorationRenderingData
@@ -32,9 +33,9 @@ internal class CustomPolygonDecoration : FormDecoration
             Points = points;
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new CustomPolygonDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new CustomPolygonDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new CustomPolygonDecorationMetadata DecorationMetadata => (CustomPolygonDecorationMetadata)base.DecorationMetadata;

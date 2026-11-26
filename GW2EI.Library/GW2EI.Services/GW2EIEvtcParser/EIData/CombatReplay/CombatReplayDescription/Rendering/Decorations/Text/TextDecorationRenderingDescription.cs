@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.TextDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -13,7 +14,7 @@ public class TextDecorationRenderingDescription : DecorationRenderingDescription
     public readonly ConnectorDescription? RotationConnectedTo;
     public readonly SkillModeDescription? SkillMode = null;
 
-    internal TextDecorationRenderingDescription(ParsedEvtcLog log, TextDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(decoration, metadataSignature)
+    internal TextDecorationRenderingDescription(ParsedEvtcLog log, TextDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler) : base(decoration, metadataSignature, stringToUlongHandler)
     {
         Type = Types.Text;
         Text = decoration.Text;

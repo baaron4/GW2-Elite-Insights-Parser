@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -16,9 +17,9 @@ internal class TextDecoration : Decoration
             BackgroundColor = backgroundColor;
         }
 
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new TextDecorationMetadataDescription(this);
+            return new TextDecorationMetadataDescription(this, stringToUlongHandler);
         }
 
         public override string GetSignature()
@@ -77,9 +78,9 @@ internal class TextDecoration : Decoration
             SkillMode = skill;
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new TextDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new TextDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new TextDecorationMetadata DecorationMetadata => (TextDecorationMetadata)base.DecorationMetadata;

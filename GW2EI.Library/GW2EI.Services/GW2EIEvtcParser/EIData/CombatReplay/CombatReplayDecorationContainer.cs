@@ -3,6 +3,7 @@ using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Decoration;
 using static GW2EIEvtcParser.EIData.Trigonometry;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -51,12 +52,12 @@ internal class CombatReplayDecorationContainer
         Decorations.Capacity = (int)(Decorations.Capacity * 1.4f);
     }
 
-    public List<DecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public List<DecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, StringToUlongHandler stringToUlongHandler)
     {
         var result = new List<DecorationRenderingDescription>(Decorations.Count);
         foreach (var (constant, renderingData) in Decorations)
         {
-            result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature()));
+            result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature(), stringToUlongHandler));
         }
         return result;
     }

@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -8,7 +9,7 @@ public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationM
     public readonly int Height;
     public readonly int Width;
 
-    internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration) : base(decoration)
+    internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.MovingPlatform;
         Image = decoration.Image;

@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.PieDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -6,7 +7,7 @@ public class PieDecorationMetadataDescription : CircleDecorationMetadataDescript
 {
     public float OpeningAngle { get; set; }
 
-    internal PieDecorationMetadataDescription(PieDecorationMetadata decoration) : base(decoration)
+    internal PieDecorationMetadataDescription(PieDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Pie;
         OpeningAngle = decoration.OpeningAngle;

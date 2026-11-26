@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.CircleDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -7,7 +8,7 @@ public class CircleDecorationMetadataDescription : FormDecorationMetadataDescrip
     public readonly uint Radius;
     public readonly uint MinRadius;
 
-    internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration) : base(decoration)
+    internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.Circle;
         Radius = decoration.Radius;

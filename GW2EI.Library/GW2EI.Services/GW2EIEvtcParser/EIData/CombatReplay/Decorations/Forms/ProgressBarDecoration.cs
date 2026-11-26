@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Connector;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -17,9 +18,9 @@ internal class ProgressBarDecoration : RectangleDecoration
         {
             return "Prog" + Height + Color + Width + SecondaryColor;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new ProgressBarDecorationMetadataDescription(this);
+            return new ProgressBarDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class ProgressBarDecorationRenderingData : RectangleDecorationRenderingData
@@ -31,9 +32,9 @@ internal class ProgressBarDecoration : RectangleDecoration
             Progress = progress;
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new ProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new ProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
 
         public void UsingInterpolationMethod(InterpolationMethod method)

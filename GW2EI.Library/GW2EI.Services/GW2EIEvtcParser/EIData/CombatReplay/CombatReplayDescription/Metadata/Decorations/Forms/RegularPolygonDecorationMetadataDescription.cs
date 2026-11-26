@@ -1,4 +1,5 @@
 ﻿using static GW2EIEvtcParser.EIData.RegularPolygonDecoration;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -7,7 +8,7 @@ public class RegularPolygonDecorationMetadataDescription : FormDecorationMetadat
     public readonly uint Radius;
     public readonly uint NbPolygon;
 
-    internal RegularPolygonDecorationMetadataDescription(RegularPolygonDecorationMetadata decoration) : base(decoration)
+    internal RegularPolygonDecorationMetadataDescription(RegularPolygonDecorationMetadata decoration, StringToUlongHandler stringToUlongHandler) : base(decoration, stringToUlongHandler)
     {
         Type = Types.RegularPolygon;
         Radius = decoration.Radius;

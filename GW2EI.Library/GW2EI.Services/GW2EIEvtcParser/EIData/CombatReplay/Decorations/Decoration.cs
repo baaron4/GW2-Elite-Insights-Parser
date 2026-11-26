@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -9,7 +10,7 @@ public abstract class Decoration
 
         public abstract string GetSignature();
 
-        public abstract DecorationMetadataDescription GetCombatReplayMetadataDescription();
+        internal abstract DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler);
 
     }
 
@@ -21,7 +22,7 @@ public abstract class Decoration
         {
             Lifespan = (lifespan.start, lifespan.end);
         }
-        public abstract DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
+        internal abstract DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler);
     }
 
     internal readonly _DecorationMetadata DecorationMetadata;

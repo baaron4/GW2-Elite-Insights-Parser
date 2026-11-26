@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -17,9 +18,9 @@ internal class ArenaDecoration : AttachedDecoration
             Width = width;
         }
 
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new ArenaDecorationMetadataDescription(this);
+            return new ArenaDecorationMetadataDescription(this, stringToUlongHandler);
         }
 
         public override string GetSignature()
@@ -33,9 +34,9 @@ internal class ArenaDecoration : AttachedDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new ArenaDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new ArenaDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
 
         public override void UsingRotationConnector(RotationConnector? rotationConnectedTo)

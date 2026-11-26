@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -18,9 +19,9 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         {
             return "OProg" + Color + Width + Height.ToString() + SecondaryColor + PixelWidth + PixelHeight.ToString();
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new OverheadProgressBarDecorationMetadataDescription(this);
+            return new OverheadProgressBarDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class OverheadProgressBarDecorationRenderingData : ProgressBarDecorationRenderingData
@@ -29,9 +30,9 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new OverheadProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new OverheadProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new OverheadProgressBarDecorationMetadata DecorationMetadata => (OverheadProgressBarDecorationMetadata)base.DecorationMetadata;

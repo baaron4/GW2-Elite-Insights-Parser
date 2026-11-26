@@ -204,7 +204,7 @@ class RenderablesBranch {
         }
     }
 
-    forEach(cb) {  
+    forEach(cb) {
         for (let i = 0; i < this.renderables.length; i++) {
             cb(this.renderables[i]);
         }
@@ -263,7 +263,7 @@ class MappedRenderablesRoot extends RenderablesRoot {
     get(id) {
         return this.map.get(id);
     }
-    
+
     has(id) {
         return this.map.has(id);
     }
@@ -367,7 +367,7 @@ class Animator {
                 PollingRate = options.pollingRate;
             }
             if (options.actors) {
-                this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
+                this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata, options.colorMap);
             }
             if (options.defaultViewpoints) {
                 for (let i = 0; i < options.defaultViewpoints.length; i++) {
@@ -495,9 +495,10 @@ class Animator {
         this.draw();
     }
 
-    _initActors(actors, decorationRenderings, decorationMetadata) {
+    _initActors(actors, decorationRenderings, decorationMetadata, colorMap) {
         for (let i = 0; i < decorationMetadata.length; i++) {
             const metadata = decorationMetadata[i];
+            metadata.__colorMap = colorMap;
             let MetadataClass = null;
             switch (metadata.type) {
                 case Types.ActorOrientation:
@@ -782,7 +783,7 @@ class Animator {
         }
     }
 
-    _hideExtraDecorations() {   
+    _hideExtraDecorations() {
         this.selectedExtraDecorations = null;
         $('#circle1Text').val(180);
         $('#circle1Check').prop('checked', false);
@@ -843,8 +844,8 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
-    
-    _reselectIfEnglobed() {     
+
+    _reselectIfEnglobed() {
         if (this.selectedActor && this.selectedActor.parentID >= 0) {
             const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
             if (perParentArray) {
@@ -870,15 +871,15 @@ class Animator {
                     }
                 }
                 this.selectedActor = actor || this.selectedActor;
-                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;             
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
             }
         }
     }
 
     getSelectableActorData(actorId) {
-        return this.targetData.get(actorId) || this.playerData.get(actorId) || 
-                this.friendlyMobData.get(actorId) || this.friendlyPlayerData.get(actorId) || 
-                this.targetPlayerData.get(actorId);
+        return this.targetData.get(actorId) || this.playerData.get(actorId) ||
+            this.friendlyMobData.get(actorId) || this.friendlyPlayerData.get(actorId) ||
+            this.targetPlayerData.get(actorId);
     }
 
     getActorData(actorId) {
@@ -996,7 +997,7 @@ class Animator {
         if (defaultViewpoint) {
             const x = -canvas.width * defaultViewpoint.tx / 100;
             const y = -canvas.height * defaultViewpoint.ty / 100;
-            
+
             ctx.setTransform(1, 0, 0, 1, x, y);
             bgCtx.setTransform(1, 0, 0, 1, x, y);
         } else {
@@ -1029,7 +1030,7 @@ class Animator {
         return Math.max(maxX - minX, maxY - minY);
     }
 
-    _computeIGCoordinates(x, y) {        
+    _computeIGCoordinates(x, y) {
         const ctx = this.mainContext;
 
         const point = ctx.transformedPoint(x, y);
@@ -1088,7 +1089,7 @@ class Animator {
             clientY = CanvasTooltipData.posY;
             const x = Math.round(canvasX * resolutionMultiplier);
             const y = Math.round(canvasY * resolutionMultiplier);
-         
+
             CanvasTooltipData.updateRequested = false;
 
             if (x < 0 || y < 0 || x >= this.pickCanvas.width || y >= this.pickCanvas.height) {
@@ -1139,8 +1140,8 @@ class Animator {
         }
     }
 
-    rotate(delta, ptX, ptY) {    
-        const angle = delta * this._rotationStep;   
+    rotate(delta, ptX, ptY) {
+        const angle = delta * this._rotationStep;
         const ctx = this.mainContext;
         const bgCtx = this.bgContext;
 
@@ -1160,7 +1161,7 @@ class Animator {
         }
     }
 
-    rotateCenter(delta) {    
+    rotateCenter(delta) {
         this.rotate(delta, this.mainCanvas.clientWidth / 2, this.mainCanvas.clientHeight / 2)
     }
 
@@ -1482,7 +1483,7 @@ class Animator {
             }
             return result;
         };
-        
+
 
         const rotate = ctx.rotate;
         ctx.rotate = function (radians) {
@@ -1584,7 +1585,7 @@ class Animator {
         const mainCtx = this.mainContext;
         const mainTransform = mainCtx.getTransform();
         const ctx = this.pickContext;
-        const canvas = this.pickCanvas;       
+        const canvas = this.pickCanvas;
         if (pt) {
             ctx.save();
             {
@@ -1722,7 +1723,7 @@ class Animator {
                 const translateScale = 0.5 / resolutionMultiplier / this.globalScale
                 ctx.globalScale(this.globalScale * resolutionMultiplier, this.globalScale * resolutionMultiplier);
                 ctx.translate(this.mainCanvas.width * translateScale, this.mainCanvas.height * translateScale);
-                if (this.displaySettings.rotateSelected) {               
+                if (this.displaySettings.rotateSelected) {
                     const rot = this.selectedActor.getRotation();
                     const angle = rot != null ? ToRadians(rot + 90) : 0;
                     ctx.rotate(-angle);
@@ -1744,7 +1745,7 @@ class Animator {
     draw() {
         if (!this.mainCanvas) {
             return;
-        }    
+        }
         this._reselectIfEnglobed();
         //
         //this._drawPickCanvas();

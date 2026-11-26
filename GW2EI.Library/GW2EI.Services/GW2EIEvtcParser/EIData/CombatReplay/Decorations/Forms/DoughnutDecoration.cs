@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -23,9 +24,9 @@ internal class DoughnutDecoration : FormDecoration
         {
             return "Dough" + OuterRadius + Color + InnerRadius;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new DoughnutDecorationMetadataDescription(this);
+            return new DoughnutDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class DoughnutDecorationRenderingData : FormDecorationRenderingData
@@ -34,9 +35,9 @@ internal class DoughnutDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new DoughnutDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new DoughnutDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;

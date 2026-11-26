@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -19,9 +20,9 @@ internal class RectangleDecoration : FormDecoration
         {
             return "Rect" + Height + Color + Width;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new RectangleDecorationMetadataDescription(this);
+            return new RectangleDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class RectangleDecorationRenderingData : FormDecorationRenderingData
@@ -30,9 +31,9 @@ internal class RectangleDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new RectangleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new RectangleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;

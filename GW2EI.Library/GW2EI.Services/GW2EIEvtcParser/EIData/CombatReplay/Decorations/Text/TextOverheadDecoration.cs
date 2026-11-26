@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -16,9 +17,9 @@ internal class TextOverheadDecoration : TextDecoration
         {
             return "TxtO" + Color + BackgroundColor ?? "";
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new TextOverheadDecorationMetadataDescription(this);
+            return new TextOverheadDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class TextOverheadDecorationRenderingData : TextDecorationRenderingData
@@ -30,9 +31,9 @@ internal class TextOverheadDecoration : TextDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new TextOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new TextOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     public TextOverheadDecoration((long, long) lifespan, string text, uint fontSize, string color, AgentConnector connector) : base(new TextOverheadDecorationMetadata(color), new TextOverheadDecorationRenderingData(lifespan, text, fontSize, connector))

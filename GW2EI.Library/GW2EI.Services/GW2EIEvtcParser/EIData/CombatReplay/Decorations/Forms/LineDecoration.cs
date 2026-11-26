@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParsedEvtcLog;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -24,9 +25,9 @@ internal class LineDecoration : FormDecoration
         {
             return "Line" + Color + "Thickness" + Thickness + "WorldSize" + WorldSizeThickness;
         }
-        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
+        internal override DecorationMetadataDescription GetCombatReplayMetadataDescription(StringToUlongHandler stringToUlongHandler)
         {
-            return new LineDecorationMetadataDescription(this);
+            return new LineDecorationMetadataDescription(this, stringToUlongHandler);
         }
     }
     public class LineDecorationRenderingData : FormDecorationRenderingData
@@ -43,9 +44,9 @@ internal class LineDecoration : FormDecoration
         {
         }
 
-        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        internal override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature, StringToUlongHandler stringToUlongHandler)
         {
-            return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature, stringToUlongHandler);
         }
     }
     private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;
