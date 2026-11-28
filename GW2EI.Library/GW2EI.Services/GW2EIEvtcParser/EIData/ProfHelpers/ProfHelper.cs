@@ -869,7 +869,8 @@ internal static class ProfHelper
             NecromancerHelper.IsUniqueUndeadMinion(agent) ||
             RitualistHelper.IsSpiritMinion(agent) ||
             ElementalistHelper.IsGlyphOfElementals(agent) ||
-            ThiefHelper.IsThievesGuild(agent);
+            ThiefHelper.IsThievesGuild(agent) ||
+            MesmerHelper.IsPhantasm(agent);
     }
 
     public static void AdjustMinionName(AgentItem minion)

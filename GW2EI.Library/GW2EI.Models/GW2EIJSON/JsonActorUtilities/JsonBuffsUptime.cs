@@ -64,15 +64,17 @@ public class JsonBuffsUptime
 
     /// <summary>
     /// Array of buff data \n
-    /// Length == # of phases
+    /// Length == # of phases \n
+    /// An index may yield null if the actor is a <see cref="JsonMinionInstance"/> and has no buff activity during the phase
     /// </summary>
     /// <seealso cref="JsonBuffsUptimeData"/>
-    public IReadOnlyList<JsonBuffsUptimeData>? BuffData;
+    public IReadOnlyList<JsonBuffsUptimeData?>? BuffData;
 
     /// <summary>
     /// Array of int[2] that represents the number of buff \n
     /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
-    /// If i corresponds to the last element that means the status did not change for the remainder of the log
+    /// If i corresponds to the last element that means the status did not change for the remainder of the log \n
+    /// Will be null on "active" type stats as it'll be identical to non active ones
     /// </summary>
     public IReadOnlyList<IReadOnlyList<long>>? States;
 
@@ -81,7 +83,8 @@ public class JsonBuffsUptime
     /// Key corresponds to the name of the source \n
     /// Array of int[2] that represents the number of buff \n
     /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
-    /// If i corresponds to the last element that means the status did not change for the remainder of the log
+    /// If i corresponds to the last element that means the status did not change for the remainder of the log \n
+    /// Will be null on "active" type stats as it'll be identical to non active ones
     /// </summary>
     public IReadOnlyDictionary<string, IReadOnlyList<IReadOnlyList<long>>>? StatesPerSource;
 }

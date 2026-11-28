@@ -23,12 +23,12 @@ internal static class JsonMinionInstanceBuilder
         };
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
 
-        jsonMinionInstance.Buffs = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, false);
-        jsonMinionInstance.BuffVolumes = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, false);
+        jsonMinionInstance.Buffs = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, false, true);
+        jsonMinionInstance.BuffVolumes = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, false, true);
         if (friendly)
         {
-            jsonMinionInstance.BuffsActive = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, true);
-            jsonMinionInstance.BuffVolumesActive = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, true);
+            jsonMinionInstance.BuffsActive = JsonNPCBuilder.GetNPCJsonBuffsUptime(minion, log, settings, usedData, true, true);
+            jsonMinionInstance.BuffVolumesActive = JsonNPCBuilder.GetNPCJsonBuffVolumes(minion, log, usedData, true, true);
             jsonMinionInstance.ActiveTimes = phases.Select(x => minion.GetActiveDuration(log, x.Start, x.End)).ToList();
         }
 

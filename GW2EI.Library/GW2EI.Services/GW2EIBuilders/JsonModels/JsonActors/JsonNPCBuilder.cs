@@ -76,8 +76,8 @@ internal static class JsonNPCBuilder
         jsonNPC.BarrierPercent = barrierLeftPercent;
         jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeftPercent, log.LogData.LogEnd);
         //
-        jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, usedData, false);
-        jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, usedData, false);
+        jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, usedData, false, false);
+        jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, usedData, false, false);
         // Breakbar
         if (settings.RawFormatTimelineArrays)
         {
@@ -86,7 +86,7 @@ internal static class JsonNPCBuilder
         return jsonNPC;
     }
 
-    internal static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime)
+    internal static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, UsedJsonData usedData, bool useActiveTime, bool isMinion)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffs = phases.Select(x => useActiveTime ? npc.GetActiveBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
@@ -113,11 +113,11 @@ internal static class JsonNPCBuilder
                     data.Add(value);
                 }
             }
-            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, usedData));
+            res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, usedData, useActiveTime, isMinion));
         }
         return res;
     }
-    internal static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, UsedJsonData usedData, bool useActiveTime)
+    internal static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, UsedJsonData usedData, bool useActiveTime, bool isMinion)
     {
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffVolumes = phases.Select(x => useActiveTime ? npc.GetActiveBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End) : npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
@@ -144,7 +144,7 @@ internal static class JsonNPCBuilder
                     data.Add(value);
                 }
             }
-            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, usedData));
+            res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, usedData, isMinion));
         }
         return res;
     }

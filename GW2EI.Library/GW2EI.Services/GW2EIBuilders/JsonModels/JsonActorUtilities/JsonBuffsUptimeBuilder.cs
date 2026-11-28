@@ -11,12 +11,15 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonBuffsUptimeBuilder
 {
-    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
+    private static Dictionary<string, double>? ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
         var res = new Dictionary<string, double>(toConvert.Count);
         foreach (KeyValuePair<SingleActor, double> pair in toConvert)
         {
-            res[pair.Key.Character] = pair.Value;
+            if (pair.Value > 0)
+            {
+                res[pair.Key.Character] = pair.Value;
+            }
         }
         return res;
     }
@@ -39,15 +42,15 @@ internal static class JsonBuffsUptimeBuilder
     }
 
 
-    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData)
+    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, UsedJsonData usedData, bool ignoreGraphs, bool isMinion)
     {
         var jsonBuffsUptime = new JsonBuffsUptime
         {
             Id = buffID,
-            BuffData = buffData
+            BuffData = isMinion ? buffData.Select(x => x.Uptime > 0 || x.Presence > 0 ? x : null).ToList()! : buffData
         };
         usedData.buffs.TryAdd(buffID, log.Buffs.BuffsByIDs[buffID]);
-        if (settings.RawFormatTimelineArrays)
+        if (settings.RawFormatTimelineArrays && !ignoreGraphs)
         {
             jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
             IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.LogData.LogStart, log.LogData.LogEnd);
@@ -56,7 +59,11 @@ internal static class JsonBuffsUptimeBuilder
                 var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<long>>>(buffDict.GeneratedBy.Count);
                 foreach (SingleActor source in buffDict.GeneratedBy.Keys)
                 {
-                    statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    var states = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    if (states.Count > 0)
+                    {
+                        statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                    }
                 }
                 jsonBuffsUptime.StatesPerSource = statesPerSource;
             }
