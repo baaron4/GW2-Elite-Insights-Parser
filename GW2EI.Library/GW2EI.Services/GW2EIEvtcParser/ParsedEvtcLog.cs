@@ -259,7 +259,7 @@ public class ParsedEvtcLog : EvtcLog
         List<SingleActorCombatReplayDescription> actors,
         List<CombatReplayRenderingDescription> decorationRendering,
         List<CombatReplayMetadataDescription> decorationMetadata
-        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<ulong, string> colorMap )
+        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, Dictionary<ulong, string> colorMap)
     {
         var stringToUlongHandler = new StringToUlongHandler();
 
